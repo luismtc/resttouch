@@ -8,7 +8,10 @@ export class usrLogin {
 export class usrLogInResponse {
     constructor(
         public mensaje: string,
-        public token: string
+        public token: string,
+        public usuario: string,
+        public nombres: string,
+        public apellidos: string
     ) { }    
 }
 

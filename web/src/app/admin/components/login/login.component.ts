@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { usrLogin, Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { LocalstorageService } from '../../services/localstorage.service';
@@ -14,7 +15,11 @@ export class LoginComponent implements OnInit {
   private usr: usrLogin;
   private usuario: Usuario;
 
-  constructor(private usrSrvc: UsuarioService, private ls: LocalstorageService) {
+  constructor(
+    private usrSrvc: UsuarioService, 
+    private ls: LocalstorageService,
+    private router: Router
+  ) {
     this.usr = new usrLogin(null, null);
     this.usuario = new Usuario(null, null, null, null, null);
   }
@@ -25,10 +30,8 @@ export class LoginComponent implements OnInit {
   doLogin() {
     this.usrSrvc.login(this.usr).subscribe(res => {
       if (res.token) {
-        this.ls.set(GLOBAL.usrTokenVar, res.token, false);
-        this.usrSrvc.getAll().subscribe(lista => {
-          console.log(lista);
-        })
+        this.ls.set(GLOBAL.usrTokenVar, { token: res.token, usuario: res.usuario, nombres: res.nombres, apellidos: res.apellidos });
+        this.router.navigate(['/admin/dashboard']);
       } else {
         console.log(res);
       }

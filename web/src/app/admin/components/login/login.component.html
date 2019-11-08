@@ -1,5 +1,7 @@
 <div id="frmLogIn" class="d-flex justify-content-center">    
-    <div class="card align-self-center" style="width: 18rem;">
+    <div class="card align-self-center" style="width: 23rem;">
+        <img id="imgLogo" class="card-img-top" src="../../../../assets/img/logo.svg" alt="Rest-Touch">
+        <div class="dropdown-divider"></div>
         <div class="card-body">
             <h5 class="card-title">Ingreso</h5>
             <form #frmLogIn="ngForm" novalidate>
@@ -11,7 +13,7 @@
                     <label for="txtContrasenia">Contraseña</label>
                     <input type="password" class="form-control" id="txtContrasenia" name="txtContrasenia" [(ngModel)]="usr.contrasenia" placeholder="Ingrese su contraseña">
                 </div>
-                <button type="button" class="btn btn-primary" (click)="doLogin()">Ingresar</button>
+                <button type="button" class="btn btn-primary btn-block" (click)="doLogin()">Ingresar</button>
             </form>
         </div>
     </div>

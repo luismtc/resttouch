@@ -1,1 +1,16 @@
-<router-outlet></router-outlet>
+<mat-toolbar *ngIf="isLogged">
+    <mat-toolbar-row id="mtbHeader">
+        <button mat-icon-button>
+            <mat-icon (click)="toggleSidenav()">menu</mat-icon>
+        </button>
+        <app-header id="appHeader"></app-header>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-sidenav-container class="matSideNavContainer">
+    <mat-sidenav #sidenav mode="side" [(opened)]="opened" *ngIf="isLogged">
+        <app-menu></app-menu>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

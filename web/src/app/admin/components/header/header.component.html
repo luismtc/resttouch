@@ -1,0 +1,11 @@
+<nav id="navHeader" class="navbar navbar-light bg-light justify-content-between">
+    <span class="navbar-brand">
+        <img src="../../../../assets/img/minilogo.svg" width="30" height="30" alt="Rest-Touch">
+    </span>
+    <span style="flex: 1 1 auto;"></span>
+    <app-clock></app-clock>
+    <span style="flex: 1 1 auto;"></span>
+    <form class="form-inline">
+        <button class="btn btn-light btn-sm" type="button" (click)="LogOut()">{{usrInfo.usuario}} - Cerrar sesi&oacute;n</button>
+    </form>
+</nav>

@@ -21,24 +21,44 @@ export class UsuarioService {
     private ls: LocalstorageService
   ) {
     this.srvcErrHndl = new ServiceErrorHandler();
-    this.usrToken = this.ls.get(GLOBAL.usrTokenVar, false);
+    this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
 
   login(usr: usrLogin): Observable<usrLogInResponse> {
     const obj = {
       usr: usr.usuario,
       pwd: usr.contrasenia
-    };    
-    return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login.json`, JSON.stringify(obj), GLOBAL.httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    };
+
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+    
+    return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login.json`, JSON.stringify(obj), httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getAll(debaja: number = 0): Observable<Usuario> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.ls.get(GLOBAL.usrTokenVar, false)
+        'Authorization': this.usrToken
       })
     };
     return this.http.get<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/usuarios.json?debaja=${debaja}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  async checkUserToken() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken.json`, httpOptions).toPromise();
+    if (resp.valido) {
+      return resp.valido;
+    } else {
+      return false;
+    }
+  }
 }
