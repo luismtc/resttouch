@@ -1,3 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.fontFamily {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.bckDarkGrey {
+    background-color: #444444;
+}
+
+.bckGrey {
+    background-color: #858181;
+}
+
+.bckSemiDarkGrey {
+    background-color: #555555;
+}
+
+.bckSemiLightGrey {
+    background-color: #666666;
+}
+
+.bckLightGrey {
+    background-color: #fafafa;
+}
+
+.fontColorWhite {
+    color: white;
+}
+
+.fontColorBlack {
+    color: black;
+}
+
+.bckRed {
+    background-color: #DA332D;
+}
+
+.container-fluid{
+    padding-top: 10px;
+}
+
+button .mat-icon {
+    font-size: 48px;
+}
+
+.fullWidth {
+    width: 100%;
+}

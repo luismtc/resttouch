@@ -9,7 +9,7 @@ export class usrLogInResponse {
     constructor(
         public mensaje: string,
         public token: string,
-        public usuario: string,
+        public usrname: string,
         public nombres: string,
         public apellidos: string
     ) { }    
@@ -17,10 +17,11 @@ export class usrLogInResponse {
 
 export class Usuario {
     constructor(
-        public id: number,
+        public usuario: number,
         public nombres: string,
         public apellidos: string,
-        public usuario: string,
+        public usrname: string,
+        public contrasenia: string,
         public debaja: number
     ) { }
 }

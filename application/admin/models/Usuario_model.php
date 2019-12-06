@@ -11,7 +11,8 @@ class Usuario_model extends CI_Model
         $this->setColumnas();
     }
 
-    private function setColumnas(){
+    private function setColumnas()
+    {
         $this->load->model('Db_model');
         $this->columnas = $this->Db_model->getTableColumns($this->db->database, $this->tabla);
     }
@@ -20,9 +21,9 @@ class Usuario_model extends CI_Model
     {
         if ($credenciales) {
             $dbusr = $this->db
-                ->select('contrasenia, usuario, nombres, apellidos')
+                ->select('contrasenia, usrname, nombres, apellidos')
                 ->from($this->tabla)
-                ->where('usuario', $credenciales['usr'])
+                ->where('usrname', $credenciales['usr'])
                 ->where('debaja', 0)
                 ->get()
                 ->row();
@@ -37,7 +38,7 @@ class Usuario_model extends CI_Model
                     return array(
                         'mensaje' => 'El usuario tiene acceso.',
                         'token' => AUTHORIZATION::generateToken($tokenData),
-                        'usuario' => $dbusr->usuario,
+                        'usrname' => $dbusr->usrname,
                         'nombres' => $dbusr->nombres,
                         'apellidos' => $dbusr->apellidos
                     );
@@ -65,7 +66,7 @@ class Usuario_model extends CI_Model
     {
         $existe = -1;
         $dbusr = $this->db
-            ->select('id')
+            ->select('usuario')
             ->from($this->tabla)
             ->where('usuario', $usr)
             ->get()
@@ -93,13 +94,13 @@ class Usuario_model extends CI_Model
             } else {
                 return array(
                     'mensaje' => 'Este usuario ya existe.',
-                    'id' => $idusr
+                    'usuario' => $idusr
                 );
             }
         } else {
             return array(
                 'mensaje' => 'La información enviada no es correcta o está incompleta.',
-                'id' => null
+                'usuario' => null
             );
         }
     }
@@ -110,16 +111,16 @@ class Usuario_model extends CI_Model
             if (array_key_exists('contrasenia', $dataToUpdate)) {
                 $dataToUpdate['contrasenia'] = password_hash($dataToUpdate['contrasenia'], PASSWORD_BCRYPT, array('cost' => 12));
             }
-            $this->db->where('id', $id);
+            $this->db->where('usuario', $id);
             $this->db->update($this->tabla, $dataToUpdate);
             return array(
                 'mensaje' => 'Usuario actualizado con éxito.',
-                'id' => $id
+                'usuario' => $id
             );
         } else {
             return array(
                 'mensaje' => 'La información enviada no es correcta o está incompleta.',
-                'id' => null
+                'usuario' => null
             );
         }
     }
@@ -131,7 +132,22 @@ class Usuario_model extends CI_Model
         }
 
         return $this->db
-            ->select('id, usuario')
+            ->select('usuario, nombres, apellidos, usrname, debaja')
+            ->from($this->tabla)
+            ->get()
+            ->result();
+    }
+
+    function find($filtros = [])
+    {
+        if (count($filtros) > 0) {
+            foreach ($filtros as $key => $value) {
+                $this->db->where($key, $value);
+            }
+        }
+
+        return $this->db
+            ->select('usuario, nombres, apellidos, usrname, debaja')
             ->from($this->tabla)
             ->get()
             ->result();

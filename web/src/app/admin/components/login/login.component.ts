@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
     private router: Router
   ) {
     this.usr = new usrLogin(null, null);
-    this.usuario = new Usuario(null, null, null, null, null);
+    this.usuario = new Usuario(null, null, null, null, null, 0);
   }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   doLogin() {
     this.usrSrvc.login(this.usr).subscribe(res => {
       if (res.token) {
-        this.ls.set(GLOBAL.usrTokenVar, { token: res.token, usuario: res.usuario, nombres: res.nombres, apellidos: res.apellidos });
+        this.ls.set(GLOBAL.usrTokenVar, { token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos });
         this.router.navigate(['/admin/dashboard']);
       } else {
         console.log(res);

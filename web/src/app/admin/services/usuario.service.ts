@@ -35,17 +35,17 @@ export class UsuarioService {
         'Content-Type': 'application/json'
       })
     };
-    
+
     return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login.json`, JSON.stringify(obj), httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getAll(debaja: number = 0): Observable<Usuario> {
+  getAll(debaja: number = 0): Observable<Usuario[]> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/usuarios.json?debaja=${debaja}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios.json?debaja=${debaja}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   async checkUserToken() {
@@ -60,5 +60,32 @@ export class UsuarioService {
     } else {
       return false;
     }
+  }
+
+  get(filtros: any): Observable<Usuario[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.post<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios.json`, filtros, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  save(entidad: Usuario): Observable<Usuario> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+
+    if (entidad.usuario) {
+      return this.http.put<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/usuario.json?usuario=${entidad.usuario}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    } else {
+      if (!entidad.contrasenia) {
+        delete entidad.contrasenia;
+      }
+      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/usuario.json`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    }
+
   }
 }

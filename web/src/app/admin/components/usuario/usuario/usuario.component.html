@@ -1,0 +1,10 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <app-lista-usuario #lstUsuarioComponent (getUsuarioEv)="setUsuario($event)"></app-lista-usuario>
+        </div>
+        <div class="col">
+            <app-form-usuario [usuario]="usuario" (usrSavedEv)="refreshUserList()"></app-form-usuario>
+        </div>
+    </div>
+</div>

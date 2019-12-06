@@ -54,11 +54,24 @@ class Usuario extends Restserver
             $this->noAutorizado();
         }
     }
+    
+    public function usuarios_post()
+    {
+        if ($this->status_verification_request) {
+            $datos = $this->getValidData($this->post(), $this->Usuario_model->columnas);
+            $status = parent::HTTP_OK;
+            $nuevo = $this->Usuario_model->find($datos);
+            //if (!$nuevo['id']) { $status = parent::HTTP_NOT_FOUND; }
+            $this->response($nuevo, $status);
+        } else {
+            $this->noAutorizado();
+        }
+    }
 
     public function usuario_put()
     {
         if ($this->status_verification_request) {
-            $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+            $id = isset($_GET['usuario']) ? (int) $_GET['usuario'] : 0;
             $datos = $this->getValidData($this->put(), $this->Usuario_model->columnas);
             $status = parent::HTTP_OK;
             $nuevo = $this->Usuario_model->actualizar($id, $datos);

@@ -1,3 +1,15 @@
 <mat-nav-list>
-    <span mat-list-item>Aqu&iacute; va el men&uacute;</span>
+    <h4 mat-subheader>Menú</h4>
+    <mat-list-item>
+        <mat-icon mat-list-icon>home</mat-icon>
+        <a [routerLink]="['/admin/dashboard']" routerLinkActive="active" matLine (click)="itemClicked()">
+            Inicio
+        </a>
+    </mat-list-item>
+    <mat-list-item>
+        <mat-icon mat-list-icon>supervisor_account</mat-icon>
+        <a [routerLink]="['/admin/usuario']" routerLinkActive="active" matLine (click)="itemClicked()">
+            Usuarios
+        </a>
+    </mat-list-item>
 </mat-nav-list>
