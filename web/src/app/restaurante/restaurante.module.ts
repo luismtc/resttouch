@@ -20,13 +20,21 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDialogModule } from '@angular/material/dialog';
+
+import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 
 import { RestauranteRoutingModule } from './restaurante-routing.module';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
+import { MesaComponent } from './components/mesa/mesa.component';
+import { AbrirMesaComponent } from './components/abrir-mesa/abrir-mesa.component';
 
 
 @NgModule({
-  declarations: [TranAreasComponent],
+  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent],
+  entryComponents: [
+    AbrirMesaComponent
+  ],
   imports: [
     CommonModule,
     RestauranteRoutingModule,
@@ -48,7 +56,9 @@ import { TranAreasComponent } from './components/tran-areas/tran-areas.component
     MatToolbarModule,
     MatMenuModule,
     MatGridListModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDialogModule,
+    MatKeyboardModule
   ]
 })
 export class RestauranteModule { }

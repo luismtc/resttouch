@@ -1,11 +1,7 @@
 <mat-tab-group dynamicHeight backgroundColor="primary">
     <mat-tab *ngFor="let tabA of lstTabsAreas" label="{{tabA.nombre}}">
-        <div #matTabArea class="divMesa" (window:resize)="onResize($event)">
-            <h3>{{tabA.nombre}}</h3>
-            <h4>
-                Ancho: {{divSize.w}}<br/>
-                Alto: {{divSize.h}}<br/>
-            </h4>
+        <div #matTabArea class="divAreaMesa" (window:resize)="onResize($event)">
+            <app-mesa *ngFor="let m of tabA.mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)"></app-mesa>
         </div>
     </mat-tab>
 </mat-tab-group>

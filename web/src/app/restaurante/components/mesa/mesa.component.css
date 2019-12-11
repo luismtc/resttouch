@@ -1,0 +1,19 @@
+.divMesa {
+    background-image: url('../../../../assets/img/mesas/table_02.svg');
+    position: absolute;
+    text-align: right;
+    padding-top: 0;
+}
+
+span {
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.disponible {
+    background-color: lightgreen;
+}
+
+.ocupada {    
+    background-color: #da332d;
+}

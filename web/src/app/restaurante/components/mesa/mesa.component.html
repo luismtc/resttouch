@@ -1,0 +1,9 @@
+<div class="divMesa mat-elevation-z6" 
+    [ngClass]="{'disponible': +configuracion.estatus == 1, 'ocupada': +configuracion.estatus == 2}"
+    (click)="clickMesa()"
+    [style.width.px]="configuracion.tamanio" 
+    [style.height.px]="configuracion.tamanio" 
+    [style.left]="configuracion.posx" 
+    [style.top]="configuracion.posy">
+    <span>{{configuracion.numero}}</span>
+</div>

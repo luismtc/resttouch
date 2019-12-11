@@ -1,0 +1,41 @@
+<h1 mat-dialog-title>Abrir mesa</h1>
+<div mat-dialog-content>
+    <form #frmAbrirMesa="ngForm" (ngSubmit)="frmAbrirMesa.form.valid && onSubmit()" novalidate>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input type="text" matInput [matKeyboard]="'es'" darkTheme="true" cdkFocusInitial placeholder="Mesero" name="mesero" [(ngModel)]="data.mesero" required>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <mat-form-field>
+                        <input type="text" matInput [matKeyboard]="'es'" darkTheme="true" placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <mat-checkbox name="esEvento" [(ngModel)]="+data.esEvento">¿Es evento?</mat-checkbox>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    <mat-checkbox name="dividirCuentasPorSillas" [(ngModel)]="+data.dividirCuentasPorSillas">¿Dividir cuentas por silla?</mat-checkbox>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+    <button mat-icon-button (click)="cancelar()" color="warn">
+        <mat-icon>cancel_presentation</mat-icon>
+    </button>
+    <button mat-icon-button [mat-dialog-close]="data" [disabled]="!frmAbrirMesa.form.valid" color="accent">
+        <mat-icon>check_circle</mat-icon>
+    </button>
+</div>
