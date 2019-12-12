@@ -1,7 +1,18 @@
-<mat-tab-group dynamicHeight backgroundColor="primary">
-    <mat-tab *ngFor="let tabA of lstTabsAreas" label="{{tabA.nombre}}">
-        <div #matTabArea class="divAreaMesa" (window:resize)="onResize($event)">
-            <app-mesa *ngFor="let m of tabA.mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)"></app-mesa>
-        </div>
-    </mat-tab>
-</mat-tab-group>
+<mat-sidenav-container class="matSideNavContainer">
+    <mat-sidenav #rightSidenav mode="over" [(opened)]="openedRightPanel" position="end">
+        <app-tran-comanda></app-tran-comanda>
+        <hr/>
+        <button mat-icon-button type="button" color="accent" (click)="toggleRightSidenav()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-tab-group dynamicHeight backgroundColor="primary">
+            <mat-tab *ngFor="let tabA of lstTabsAreas" label="{{tabA.nombre}}">
+                <div #matTabArea class="divAreaMesa" (window:resize)="onResize($event)">
+                    <app-mesa *ngFor="let m of tabA.mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)"></app-mesa>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-sidenav-content>
+</mat-sidenav-container>

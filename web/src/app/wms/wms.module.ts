@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule }   from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { WmsModule } from '../wms/wms.module';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -23,29 +22,23 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTreeModule } from '@angular/material/tree';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 
-import { RestauranteRoutingModule } from './restaurante-routing.module';
-import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
-import { MesaComponent } from './components/mesa/mesa.component';
-import { AbrirMesaComponent } from './components/abrir-mesa/abrir-mesa.component';
-import { TranComandaComponent } from './components/tran-comanda/tran-comanda.component';
-import { ListaProductosComandaComponent } from './components/lista-productos-comanda/lista-productos-comanda.component';
+
+import { WmsRoutingModule } from './wms-routing.module';
+import { ListaProductoComponent } from './components/producto/lista-producto/lista-producto.component';
 
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent],
-  entryComponents: [
-    AbrirMesaComponent
-  ],
+  declarations: [ListaProductoComponent],
   imports: [
     CommonModule,
-    RestauranteRoutingModule,
+    WmsRoutingModule,
+    SharedModule,
     HttpClientModule,
     FormsModule,
-    SharedModule,
-    WmsModule,
     MatListModule,
     MatIconModule,
     MatFormFieldModule,
@@ -64,7 +57,11 @@ import { ListaProductosComandaComponent } from './components/lista-productos-com
     MatPaginatorModule,
     MatDialogModule,
     MatKeyboardModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatTreeModule
+  ],
+  exports: [
+    ListaProductoComponent
   ]
 })
-export class RestauranteModule { }
+export class WmsModule { }

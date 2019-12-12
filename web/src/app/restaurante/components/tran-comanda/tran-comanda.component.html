@@ -1,0 +1,43 @@
+<div class="container-fluid divFullSize">
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <h4>
+                {{mesaEnUso.area}} - Mesa #{{mesaEnUso.noMesa}}
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <button mat-raised-button type="button" color="accent" *ngFor="let cta of mesaEnUso.cuentas" (click)="setSelectedCuenta(cta.numero)">
+                {{cta.nombre}}
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center" style="padding: 0 !important;">
+            <h6>Productos</h6><br/>
+        </div>
+        <div class="col d-flex justify-content-center" style="padding: 0 !important;">
+            <h6 *ngIf="cuentaSeleccionada">Cuenta de {{cuentaSeleccionada}}</h6>
+            <h6 *ngIf="!cuentaSeleccionada">Por favor seleccione una cuenta. Gracias.</h6>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col overflow-auto mat-elevation-z3">
+            <app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>
+        </div>
+        <div class="col overflow-auto mat-elevation-z3">            
+            <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="noCuentaSeleccionada" (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <button mat-raised-button type="button" color="accent" (click)="printComanda()">
+                Comanda
+            </button>
+            <button mat-raised-button type="button" color="accent" (click)="printCuenta()" [disabled]="!cuentaSeleccionada">
+                Cuenta
+            </button>            
+        </div>
+    </div>
+</div>

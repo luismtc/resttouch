@@ -1,0 +1,13 @@
+.matSideNavContainer {
+    height: 100%;
+}
+
+.divFullSize {
+    width: 100%;
+    height: 650px;
+}
+
+.col {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}

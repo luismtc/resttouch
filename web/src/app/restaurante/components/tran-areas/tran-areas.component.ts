@@ -36,8 +36,10 @@ const lstAreas = [
 export class TranAreasComponent implements OnInit, AfterViewInit {
 
   private divSize: any = { h: 0, w: 0 };
+  public openedRightPanel: boolean;
 
   @ViewChild('matTabArea', { static: false }) pestania: ElementRef;
+  @ViewChild('rightSidenav', { static: false }) rightSidenav: any;
   public lstTabsAreas: any[] = [];
 
   constructor(
@@ -61,9 +63,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     this.setDivSize();
   }
 
-  onClickMesa(m: any) {
-    if (+m.mesaSelected.estatus == 1) {
-      this.openAbrirMesaDialog();
+  onClickMesa(m: any) {    
+    switch(+m.mesaSelected.estatus) {
+      case 1: this.openAbrirMesaDialog(); break;
+      case 2: this.toggleRightSidenav(); break;      
     }
   }
 
@@ -78,6 +81,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         console.log(result);
       }
     });
+  }
+
+  toggleRightSidenav() {
+    this.rightSidenav.toggle();
   }
 
 }
