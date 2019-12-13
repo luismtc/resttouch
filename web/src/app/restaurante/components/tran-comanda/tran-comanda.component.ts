@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 
 const infoMesaTest = {
   area: 'Area 01',
@@ -16,6 +17,7 @@ interface productoSelected {
   noCuenta?: number;
   cantidad: number;
   impreso: boolean;
+  precio?: number;
 }
 
 @Component({
@@ -28,8 +30,14 @@ export class TranComandaComponent implements OnInit {
   @Input() mesaEnUso: any;
   private lstProductosSeleccionados: productoSelected[];
   private lstProductosDeCuenta: productoSelected[];
+  private lstProductosAImprimir: productoSelected[];
   private cuentaSeleccionada: string = null;
   private noCuentaSeleccionada: number = null;
+  private showPortalComanda: boolean = false;
+  private showPortalCuenta: boolean = false;
+  private windowConfig: WindowConfiguration;
+  private noComanda: number = 0;
+  private sumCuenta: number = 0;
 
   constructor() { }
 
@@ -49,6 +57,14 @@ export class TranComandaComponent implements OnInit {
     this.setLstProductosDeCuenta();
   }
 
+  setSumaCuenta(lista: productoSelected[]) {
+    let suma:number = 0.00;
+    for(let i = 0; i < lista.length; i++) {
+      suma += (lista[i].precio * lista[i].cantidad);
+    }
+    this.sumCuenta = suma;
+  }
+
   setLstProductosDeCuenta() {
     this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => p.noCuenta == this.noCuentaSeleccionada);
   }
@@ -58,7 +74,7 @@ export class TranComandaComponent implements OnInit {
       const idx = this.lstProductosSeleccionados.findIndex(p => p.id == producto.id && p.noCuenta == this.noCuentaSeleccionada && p.impreso == false);
 
       if (idx < 0) {
-        this.lstProductosSeleccionados.push({ id: producto.id, nombre: producto.nombre, noCuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false });
+        this.lstProductosSeleccionados.push({ id: producto.id, nombre: producto.nombre, noCuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false, precio: producto.precio });
       } else {
         this.lstProductosSeleccionados[idx].cantidad++;
       }
@@ -77,13 +93,18 @@ export class TranComandaComponent implements OnInit {
   }
 
   printComanda() {
-    const productosAImprimir = this.lstProductosDeCuenta.filter(p => !p.impreso);
-    console.log('Imprimiendo...', productosAImprimir);
+    this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => !p.impreso);
     this.lstProductosDeCuenta.map(p => p.impreso = true);
+    this.noComanda = Math.floor(Math.random() * 100);
+    this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
+    this.showPortalComanda = true;
   }
 
   printCuenta() {
-    console.log(`Imprimiendo cuenta de ${this.cuentaSeleccionada}`, this.lstProductosDeCuenta.filter(p => p.impreso));
+    this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => p.impreso);
+    this.setSumaCuenta(this.lstProductosAImprimir);
+    this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
+    this.showPortalCuenta = true;
   }
 
 }

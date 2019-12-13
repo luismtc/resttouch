@@ -1,7 +1,8 @@
 <mat-list class="fullWidth" [style.height]="listHeight">
     <mat-list-item *ngFor="let p of listaProductos; let i = index;" [ngClass]="{'noImpreso': !p.impreso}">
         <span>{{p.cantidad}}&nbsp;{{p.nombre}}</span>
-        <span class="spacer"></span>   
+        <span class="spacer"></span>
+        <span>{{(p.cantidad * p.precio) | number: '1.2-2'}}</span>&nbsp;
         <button mat-icon-button (click)="removeProducto(p, i)" color="warn" style="font-size: 14pt;" *ngIf="!p.impreso">
             <mat-icon>remove_circle</mat-icon>
         </button>

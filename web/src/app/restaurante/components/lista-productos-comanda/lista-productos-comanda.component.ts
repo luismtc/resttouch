@@ -6,6 +6,7 @@ interface productoSelected {
   noCuenta?: number;
   cantidad: number;
   impreso: boolean;
+  precio?: number;
 }
 
 @Component({
