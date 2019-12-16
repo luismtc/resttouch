@@ -7,6 +7,9 @@ interface productoSelected {
   cantidad: number;
   impreso: boolean;
   precio?: number;
+  notas?: string;
+  showInputNotas: boolean;
+  itemListHeight: string;
 }
 
 @Component({
@@ -38,6 +41,19 @@ export class ListaProductosComandaComponent implements OnInit {
   deleteProductoFromList = (idx: number) => {
     this.listaProductos.splice(idx, 1);
     this.productoRemovedEv.emit(this.listaProductos);
+  }
+
+  toggleShowInputNotas(p: productoSelected) {
+    p.showInputNotas = !p.showInputNotas;
+    if(p.showInputNotas){
+      p.itemListHeight = '140px';
+    } else {
+      p.itemListHeight = '70px';      
+    }
+  }
+
+  doAction(ev: string) {
+    console.log(ev);
   }
 
 }

@@ -25,6 +25,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
 import { RestauranteRoutingModule } from './restaurante-routing.module';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
@@ -32,12 +33,13 @@ import { MesaComponent } from './components/mesa/mesa.component';
 import { AbrirMesaComponent } from './components/abrir-mesa/abrir-mesa.component';
 import { TranComandaComponent } from './components/tran-comanda/tran-comanda.component';
 import { ListaProductosComandaComponent } from './components/lista-productos-comanda/lista-productos-comanda.component';
+import { UnirCuentaComponent } from './components/unir-cuenta/unir-cuenta.component';
 
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent],
+  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent],
   entryComponents: [
-    AbrirMesaComponent
+    AbrirMesaComponent, UnirCuentaComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +66,8 @@ import { ListaProductosComandaComponent } from './components/lista-productos-com
     MatPaginatorModule,
     MatDialogModule,
     MatKeyboardModule,
-    MatSidenavModule
+    MatSidenavModule,
+    EcoFabSpeedDialModule
   ]
 })
 export class RestauranteModule { }

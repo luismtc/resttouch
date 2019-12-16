@@ -34,13 +34,14 @@
     </div>
     <div class="row">
         <div class="col d-flex justify-content-center">
-            <button mat-raised-button type="button" color="accent" (click)="printComanda()"
-                [disabled]="!cuentaSeleccionada">
+            <button mat-raised-button type="button" color="accent" (click)="printComanda()" [disabled]="!cuentaSeleccionada">
                 Comanda
             </button>
-            <button mat-raised-button type="button" color="accent" (click)="printCuenta()"
-                [disabled]="!cuentaSeleccionada">
+            <button mat-raised-button type="button" color="accent" (click)="printCuenta()" [disabled]="!cuentaSeleccionada">
                 Cuenta
+            </button>
+            <button mat-raised-button type="button" color="accent" (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2">
+                Unir cuentas
             </button>
         </div>
     </div>
@@ -48,22 +49,27 @@
 <app-window *ngIf="showPortalComanda && cuentaSeleccionada" [windowConfig]="windowConfig">
     <div class="row">
         <div class="col" style="text-align: center; border-bottom: solid 1px black; padding: 0; font-Weight: bold;">
-            <span style="font-size: 14pt;">Rest-Touch Pro</span><br/>
-            <span style="font-size: 16pt;">Comanda #{{noComanda}}</span><br/>
+            <span style="font-size: 14pt;">Rest-Touch Pro</span><br />
+            <span style="font-size: 16pt;">Comanda #{{noComanda}}</span><br />
             <span style="font-size: 16pt;">{{cuentaSeleccionada}}</span>
         </div>
     </div>
     <div class="row">
         <div class="col">
             <table class="table">
-                <tr *ngFor="let p of lstProductosAImprimir">
-                    <td>{{p.cantidad}}</td>
-                    <td>{{p.nombre}}</td>
-                </tr>
+                <ng-container *ngFor="let p of lstProductosAImprimir">
+                    <tr>
+                        <td>{{p.cantidad}}</td>
+                        <td>{{p.nombre}}</td>
+                    </tr>
+                    <tr *ngIf="p.notas || p.notas.length > 0 || p.notas != ''">
+                        <td colspan="2" style="padding-left: 15px;"><p>{{p.notas}}</p></td>
+                    </tr>
+                </ng-container>
             </table>
         </div>
     </div>
-    <hr/>
+    <hr />
     <div class="d-flex justify-content-end">
         <button mat-raised-button type="button" color="accent" (click)="this.showPortalComanda = false">Cerrar</button>
     </div>
@@ -71,7 +77,7 @@
 <app-window *ngIf="showPortalCuenta && cuentaSeleccionada" [windowConfig]="windowConfig">
     <div class="row">
         <div class="col" style="text-align: center; border-bottom: solid 1px black; padding: 0; font-Weight: bold;">
-            <span style="font-size: 14pt;">Rest-Touch Pro</span><br/>
+            <span style="font-size: 14pt;">Rest-Touch Pro</span><br />
             <span style="font-size: 16pt;">Cuenta {{cuentaSeleccionada}}</span>
         </div>
     </div>
@@ -86,13 +92,15 @@
                 <tfoot>
                     <tr>
                         <td colspan="2" style="width: 75%; text-align: right; font-weight: bold;">TOTAL: </td>
-                        <td style="width: 25%; text-align: right; font-weight: bold; border-top: solid 1px black; border-bottom: double 5px black;">{{sumCuenta | number:'1.2-2'}}</td>                        
+                        <td
+                            style="width: 25%; text-align: right; font-weight: bold; border-top: solid 1px black; border-bottom: double 5px black;">
+                            {{sumCuenta | number:'1.2-2'}}</td>
                     </tr>
                 </tfoot>
             </table>
         </div>
     </div>
-    <hr/>
+    <hr />
     <div style="text-align: end; align-items: flex-end;">
         <button mat-raised-button type="button" color="accent" (click)="this.showPortalCuenta = false">Cerrar</button>
     </div>

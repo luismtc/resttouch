@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
+import { MatDialog } from '@angular/material/dialog';
+
+import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 
 const infoMesaTest = {
   area: 'Area 01',
@@ -18,6 +21,9 @@ interface productoSelected {
   cantidad: number;
   impreso: boolean;
   precio?: number;
+  notas?: string;
+  showInputNotas: boolean;
+  itemListHeight: string;
 }
 
 @Component({
@@ -39,7 +45,9 @@ export class TranComandaComponent implements OnInit {
   private noComanda: number = 0;
   private sumCuenta: number = 0;
 
-  constructor() { }
+  constructor(
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     this.mesaEnUso = infoMesaTest;
@@ -58,8 +66,8 @@ export class TranComandaComponent implements OnInit {
   }
 
   setSumaCuenta(lista: productoSelected[]) {
-    let suma:number = 0.00;
-    for(let i = 0; i < lista.length; i++) {
+    let suma: number = 0.00;
+    for (let i = 0; i < lista.length; i++) {
       suma += (lista[i].precio * lista[i].cantidad);
     }
     this.sumCuenta = suma;
@@ -74,7 +82,10 @@ export class TranComandaComponent implements OnInit {
       const idx = this.lstProductosSeleccionados.findIndex(p => p.id == producto.id && p.noCuenta == this.noCuentaSeleccionada && p.impreso == false);
 
       if (idx < 0) {
-        this.lstProductosSeleccionados.push({ id: producto.id, nombre: producto.nombre, noCuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false, precio: producto.precio });
+        this.lstProductosSeleccionados.push({
+          id: producto.id, nombre: producto.nombre, noCuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false, precio: producto.precio,
+          notas: '', showInputNotas: false, itemListHeight: '70px'
+        });
       } else {
         this.lstProductosSeleccionados[idx].cantidad++;
       }
@@ -105,6 +116,20 @@ export class TranComandaComponent implements OnInit {
     this.setSumaCuenta(this.lstProductosAImprimir);
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
     this.showPortalCuenta = true;
+  }
+
+  unirCuentas() {
+    const unirCuentaRef = this.dialog.open(UnirCuentaComponent, {
+      width: '55%',
+      data: { lstProductosSeleccionados: this.lstProductosSeleccionados, mesaEnUso: this.mesaEnUso }
+    });
+
+    unirCuentaRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.lstProductosSeleccionados = result;
+        this.setLstProductosDeCuenta();
+      }
+    });
   }
 
 }
