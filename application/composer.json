@@ -1,5 +1,5 @@
 {
-    "name": "admin/application",
+    "name": "Restouch",
     "description": "Restouch",
     "require": {
         "chriskacerguis/codeigniter-restserver": "^3.0"
