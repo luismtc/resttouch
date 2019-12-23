@@ -1,0 +1,88 @@
+<h1 mat-dialog-title>Cobrar cuenta de {{data.cuenta}}</h1>
+<div mat-dialog-content style="height: 650px;">
+  <div class="row">
+    <div class="col mat-elevation-z4 overflow-auto colHeight">
+      <table class="table table-sm table-borderless table-striped">
+        <tbody>
+          <tr *ngFor="let p of inputData.productosACobrar; let i = index;">
+            <td>{{p.cantidad}}&nbsp;{{p.nombre}}</td>
+            <td class="text-right">{{(p.cantidad * p.precio) | number: '1.2-2'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col mat-elevation-z4 overflow-auto colHeight">
+      <form #frmFormasPago="ngForm" novalidate>
+        <mat-form-field class="fullWidth">
+          <mat-label>Forma de pago</mat-label>
+          <mat-select name="forma_pago" [(ngModel)]="formaPago.forma_pago" cdkFocusInitial required>
+            <mat-option *ngFor="let fp of lstFormasPago" [value]="fp.forma_pago">
+              {{fp.descripcion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="fullWidth">
+          <input matInput placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
+        </mat-form-field>
+        <div class="btn-group d-flex justify-content-end" role="group">
+          <button mat-icon-button type="button" color="accent" (click)="addFormaPago()"
+            [disabled]="!frmFormasPago.form.valid || inputData.saldo <= 0">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </form>
+      <hr />
+      <table class="table table-sm">
+        <tbody>
+          <tr *ngFor="let fpCta of formasPagoDeCuenta; let i = index">
+            <td>{{fpCta.forma_pago.descripcion}}</td>
+            <td class="text-right">{{fpCta.monto | number:'1.2-2'}}</td>
+            <td class="text-center">
+              <button mat-icon-button type="button" color="warn" (click)="delFormaPago(i)">
+                <mat-icon>delete_forever</mat-icon>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col overflow-auto d-flex justify-content-end">
+      <table class="table table-sm table-borderless">
+        <tbody>
+          <tr class="propina">
+            <td class="text-right" style="max-width: 15%;">
+              <mat-form-field>
+                <input matInput placeholder="% propina" name="monto" type="number"
+                  [(ngModel)]="inputData.porcentajePropina" (keyup.enter)="calculaPropina()">
+              </mat-form-field>
+            </td>
+            <td class="text-right" style="max-width: 15%;">
+              <mat-form-field>
+                <input matInput placeholder="Propina" name="monto" type="number"
+                  [(ngModel)]="inputData.montoPropina" (keyup.enter)="calculaPorcentajePropina()">
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right font-weight-bold">TOTAL DE CUENTA:</td>
+            <td class="text-right font-weight-bold totalCuenta" style="max-width: 15%;">{{inputData.totalDeCuenta | number:'1.2-2'}}</td>
+          </tr>
+          <tr>
+            <td class="text-right font-weight-bold">PENDIENTE:</td>
+            <td class="text-right font-weight-bold" style="max-width: 15%;">
+              <span
+                [ngClass]="{'saldo-pendiente': +inputData.saldo > 0, 'saldo-exacto': +inputData.saldo == 0, 'saldo-extra': +inputData.saldo < 0 }">{{inputData.saldo | number:'1.2-2'}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-end">
+  <button mat-raised-button color="accent" (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="accent" [mat-dialog-close]="data"
+    [disabled]="formasPagoDeCuenta.length == 0 || +inputData.saldo > 0">Terminar</button>
+</div>

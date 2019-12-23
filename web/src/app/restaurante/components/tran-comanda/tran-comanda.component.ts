@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
+import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 
 const infoMesaTest = {
   area: 'Area 01',
@@ -46,7 +48,8 @@ export class TranComandaComponent implements OnInit {
   private sumCuenta: number = 0;
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -130,6 +133,28 @@ export class TranComandaComponent implements OnInit {
         this.setLstProductosDeCuenta();
       }
     });
+  }
+
+  cobrarCuenta() {
+    const productosACobrar = this.lstProductosDeCuenta.filter(p => p.impreso);
+    if (productosACobrar.length > 0) {
+      const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
+        width: '650px',
+        data: { 
+          cuenta: this.cuentaSeleccionada, 
+          productosACobrar: productosACobrar,
+          porcentajePropina: 10
+        }
+      });
+
+      cobrarCtaRef.afterClosed().subscribe(res => {
+        if (res) {
+          console.log(res);
+        }
+      });
+    } else {
+      this._snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
+    }
   }
 
 }

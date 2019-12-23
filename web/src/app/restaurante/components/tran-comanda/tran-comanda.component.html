@@ -43,6 +43,9 @@
             <button mat-raised-button type="button" color="accent" (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2">
                 Unir cuentas
             </button>
+            <button mat-raised-button type="button" color="accent" (click)="cobrarCuenta()" [disabled]="!cuentaSeleccionada">
+                Cobrar cuenta
+            </button>
         </div>
     </div>
 </div>

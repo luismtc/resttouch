@@ -1,0 +1,31 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.totalCuenta {
+    border-top: solid 1px black;
+    border-bottom: double 5px black;
+}
+
+.colHeight {
+    height: 400px;
+}
+
+.saldo-pendiente {
+    color: #DA332D;
+    border-bottom: double 5px #DA332D;
+}
+
+.saldo-extra {
+    color: skyblue;
+    border-bottom: double 5px skyblue;
+}
+
+.saldo-exacto {
+    color: green;
+    border-bottom: double 5px green;
+}
+
+.propina {
+    font-style: italic;
+}
