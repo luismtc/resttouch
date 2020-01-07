@@ -41,6 +41,32 @@ class Catalogo_model extends CI_Model {
 
 		return $this->getCatalogo($qry, $args);
 	}
+
+	public function getTipoMovimiento($args=[])
+	{
+		if (isset($args["tipo_movimiento"])) {
+			$this->db->where("tipo_movimiento", $args["tipo_movimiento"]);
+		}
+
+		$qry = $this->db
+		->order_by("descripcion")
+		->get("tipo_movimiento");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getDocumentoTipo($args=[])
+	{
+		if (isset($args["documento_tipo"])) {
+			$this->db->where("documento_tipo", $args["documento_tipo"]);
+		}
+
+		$qry = $this->db
+		//->order_by()
+		->get("documento_tipo");
+
+		return $this->getCatalogo($qry, $args);
+	}
 }
 
 /* End of file Catalogo_model.php */

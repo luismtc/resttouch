@@ -39,6 +39,21 @@ class Catalogo extends CI_Controller {
 		]));
 	}
 
+	public function get_tipo_movimiento()
+	{
+		$this->output
+		->set_output(json_encode([
+			"tipo_movimiento" => $this->Catalogo_model->getTipoMovimiento($_GET)
+		]));
+	}
+
+	public function get_documento_tipo()
+	{
+		$this->output
+		->set_output(json_encode([
+			"documento_tipo" => $this->Catalogo_model->getDocumentoTipo($_GET)
+		]));
+	}
 }
 
 /* End of file Catalogo.php */
