@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule }   from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
-import { WmsModule } from '../wms/wms.module';
-import { PosModule } from '../pos/pos.module';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,28 +26,21 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
-import { RestauranteRoutingModule } from './restaurante-routing.module';
-import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
-import { MesaComponent } from './components/mesa/mesa.component';
-import { AbrirMesaComponent } from './components/abrir-mesa/abrir-mesa.component';
-import { TranComandaComponent } from './components/tran-comanda/tran-comanda.component';
-import { ListaProductosComandaComponent } from './components/lista-productos-comanda/lista-productos-comanda.component';
-import { UnirCuentaComponent } from './components/unir-cuenta/unir-cuenta.component';
+import { PosRoutingModule } from './pos-routing.module';
+import { CobrarPedidoComponent } from './components/cobrar-pedido/cobrar-pedido.component';
 
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent],
+  declarations: [CobrarPedidoComponent],
   entryComponents: [
-    AbrirMesaComponent, UnirCuentaComponent
+    CobrarPedidoComponent
   ],
   imports: [
     CommonModule,
-    RestauranteRoutingModule,
+    PosRoutingModule,
     HttpClientModule,
     FormsModule,
     SharedModule,
-    WmsModule,
-    PosModule,
     MatListModule,
     MatIconModule,
     MatFormFieldModule,
@@ -70,6 +61,7 @@ import { UnirCuentaComponent } from './components/unir-cuenta/unir-cuenta.compon
     MatKeyboardModule,
     MatSidenavModule,
     EcoFabSpeedDialModule
-  ]
+  ],
+  exports: [CobrarPedidoComponent]
 })
-export class RestauranteModule { }
+export class PosModule { }
