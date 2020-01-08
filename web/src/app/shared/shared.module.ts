@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,8 +23,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { FilterPipe } from './pipes/filter.pipe';
-import { WindowComponent } from './components/window/window.component'
+import { WindowComponent } from './components/window/window.component';
 
+const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { WindowComponent } from './components/window/window.component'
   imports: [
     CommonModule,
     PortalModule,
+    SocketIoModule.forRoot(config),
     MatListModule,
     MatIconModule,
     MatFormFieldModule,

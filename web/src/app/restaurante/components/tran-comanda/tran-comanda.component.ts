@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Socket } from 'ngx-socket-io';
+import { SignalRService } from '../../../shared/services/signal-r.service';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
@@ -23,6 +25,7 @@ interface productoSelected {
   cantidad: number;
   impreso: boolean;
   precio?: number;
+  total?: number;
   notas?: string;
   showInputNotas: boolean;
   itemListHeight: string;
@@ -49,13 +52,17 @@ export class TranComandaComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private socket: Socket,
+    private signalRSrvc: SignalRService
   ) { }
 
   ngOnInit() {
     this.mesaEnUso = infoMesaTest;
     this.resetLstProductosSeleccionados();
     this.resetLstProductosDeCuenta();
+    this.signalRSrvc.startConnection(`restaurante_01`);
+    // this.signalRSrvc.addBroadcastDataListener();
   }
 
   resetLstProductosSeleccionados = () => this.lstProductosSeleccionados = [];
@@ -87,10 +94,11 @@ export class TranComandaComponent implements OnInit {
       if (idx < 0) {
         this.lstProductosSeleccionados.push({
           id: producto.id, nombre: producto.nombre, noCuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false, precio: producto.precio,
-          notas: '', showInputNotas: false, itemListHeight: '70px'
+          notas: '', showInputNotas: false, itemListHeight: '70px', total: 1 * producto.precio
         });
       } else {
         this.lstProductosSeleccionados[idx].cantidad++;
+        this.lstProductosSeleccionados[idx].total = this.lstProductosSeleccionados[idx].cantidad * this.lstProductosSeleccionados[idx].precio;
       }
 
       this.setLstProductosDeCuenta();
@@ -112,6 +120,22 @@ export class TranComandaComponent implements OnInit {
     this.noComanda = Math.floor(Math.random() * 100);
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
     this.showPortalComanda = true;
+    // this.socket.emit("print:comanda", `Imprimiendo comanda de ${this.cuentaSeleccionada}`);
+    this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
+      Tipo: 'Comanda', 
+      Nombre: this.cuentaSeleccionada, 
+      Numero: this.noComanda, 
+      DetalleCuenta: this.lstProductosAImprimir,
+      Total: null
+    })}`);
+  }
+
+  private sumaDetalle = (detalle: productoSelected[]) => {
+    let total = 0.00;
+    for(let i = 0; i < detalle.length; i++){
+      total += detalle[i].total || 0.00;
+    }
+    return total;
   }
 
   printCuenta() {
@@ -119,6 +143,14 @@ export class TranComandaComponent implements OnInit {
     this.setSumaCuenta(this.lstProductosAImprimir);
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
     this.showPortalCuenta = true;
+    // this.socket.emit("print:cuenta", `Imprimiendo cuenta de ${this.cuentaSeleccionada}`);
+    this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
+      Tipo: 'Cuenta', 
+      Nombre: this.cuentaSeleccionada, 
+      Numero: null, 
+      DetalleCuenta: this.lstProductosAImprimir,
+      Total: this.sumaDetalle(this.lstProductosAImprimir)
+    })}`);
   }
 
   unirCuentas() {
@@ -150,6 +182,7 @@ export class TranComandaComponent implements OnInit {
       cobrarCtaRef.afterClosed().subscribe(res => {
         if (res) {
           console.log(res);
+          this.socket.emit('print:doccontable', JSON.stringify(res));
         }
       });
     } else {

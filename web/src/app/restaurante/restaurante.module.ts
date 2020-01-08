@@ -5,6 +5,7 @@ import { FormsModule }   from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { WmsModule } from '../wms/wms.module';
 import { PosModule } from '../pos/pos.module';
+//import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -36,6 +37,7 @@ import { TranComandaComponent } from './components/tran-comanda/tran-comanda.com
 import { ListaProductosComandaComponent } from './components/lista-productos-comanda/lista-productos-comanda.component';
 import { UnirCuentaComponent } from './components/unir-cuenta/unir-cuenta.component';
 
+//const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
   declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent],
@@ -50,6 +52,7 @@ import { UnirCuentaComponent } from './components/unir-cuenta/unir-cuenta.compon
     SharedModule,
     WmsModule,
     PosModule,
+    //SocketIoModule.forRoot(config),
     MatListModule,
     MatIconModule,
     MatFormFieldModule,
