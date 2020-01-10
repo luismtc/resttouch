@@ -15,7 +15,9 @@ class Categoria extends CI_Controller {
 	public function guardar($id = "") 
 	{
 		$cat = new Categoria_model($id);
-		$exito = $cat->guardar($_POST);
+		$req = json_decode(file_get_contents('php://input'), true);
+
+		$exito = $cat->guardar($req);
 		$datos = ["exito" => $exito];
 
 		if($exito) {
