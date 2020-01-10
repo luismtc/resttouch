@@ -8,7 +8,7 @@ class Categoria extends CI_Controller {
         parent::__construct();
         $this->load->model('Categoria_model');
         $this->output
-			 ->set_content_type("application/json", "UTF-8");
+		->set_content_type("application/json", "UTF-8");
 	}
 
 
@@ -16,18 +16,23 @@ class Categoria extends CI_Controller {
 	{
 		$cat = new Categoria_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
+		$datos = ['exito' => false];
+		if ($this->input->method() == 'post') {
+			$datos['exito'] = $cat->guardar($req);;
 
-		$exito = $cat->guardar($req);
-		$datos = ["exito" => $exito];
+			if($dato['exito']) {
+				$datos['mensaje'] = "Datos Actualizados con Exito";
+			} else {
+				$datos['mensaje'] = $cat->getMensaje();
+			}	
 
-		if($exito) {
-			$datos['mensaje'] = "Datos Actualizados con Exito";
 		} else {
-			$datos['mensaje'] = $cat->getMensaje();
+			$datos['mensaje'] = "Parametros Invalidos";
 		}
+		
 
 		$this->output
-			 ->set_output(json_encode($datos));
+		->set_output(json_encode($datos));
 	}
 
 	public function buscar()
@@ -35,8 +40,8 @@ class Categoria extends CI_Controller {
 		$datos = $this->Categoria_model->buscar($_GET);
 
 		$this->output
-			 ->set_content_type("application/json")
-			 ->set_output(json_encode($datos));
+		->set_content_type("application/json")
+		->set_output(json_encode($datos));
 	}
 }
 
