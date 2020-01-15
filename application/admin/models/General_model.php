@@ -119,7 +119,7 @@ class General_model extends CI_Model {
 		$tmp = $this->db
 					->get($this->_tabla);
 
-		if(isset($args['uno'])) {
+		if(isset($args['_uno'])) {
 			return $tmp->row();
 		}
 
