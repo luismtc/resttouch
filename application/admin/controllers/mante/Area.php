@@ -40,11 +40,13 @@ class Area extends CI_Controller {
 		$datos = [];
 		if(is_array($areas)) {
 			foreach ($areas as $row) {
-				$row->mesas = $this->Mesa_model->buscar(['area' => $row->area]);
+				$area = new Area_model($row->area);
+				$row->mesas = $area->get_mesas();
 				$datos[] = $row;
 			}
 		} else {
-			$areas->mesas = $this->Mesa_model->buscar(['area' => $areas->area]);
+			$area = new Area_model($areas->area);
+			$areas->mesas = $area->get_mesas();
 			$datos[] = $areas;
 		}
 

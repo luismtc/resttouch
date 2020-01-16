@@ -16,6 +16,13 @@ class Area_model extends General_Model {
 			$this->cargar($id);
 		}
 	}
+
+	public function get_mesas() {
+		return $this->db
+					->where("area", $this->area)
+					->get("resttouch.mesa")
+					->result();
+	}
 }
 
 /* End of file Area_model.php */
