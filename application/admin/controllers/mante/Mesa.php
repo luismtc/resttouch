@@ -20,7 +20,7 @@ class Mesa extends CI_Controller {
 
 			$datos['exito'] = $mesa->guardar($req);;
 
-			if($dato['exito']) {
+			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
 			} else {
 				$datos['mensaje'] = $mesa->getMensaje();

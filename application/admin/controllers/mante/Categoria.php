@@ -20,7 +20,7 @@ class Categoria extends CI_Controller {
 		if ($this->input->method() == 'post') {
 			$datos['exito'] = $cat->guardar($req);;
 
-			if($dato['exito']) {
+			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
 			} else {
 				$datos['mensaje'] = $cat->getMensaje();
