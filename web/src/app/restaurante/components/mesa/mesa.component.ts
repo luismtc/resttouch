@@ -7,20 +7,18 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 })
 export class MesaComponent implements OnInit {
 
-  @Input() numero: number = 0;
   @Input() configuracion: any = {
     numero: 0,
-    tamanio: '48',
-    posx: '0%',
-    posy: '0%'
+    tamanio: 48,
+    posx: 0.0000,
+    posy: 0.0000
   };
 
   @Output() onClickMesa = new EventEmitter();
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   clickMesa() {
     this.onClickMesa.emit({ mesaSelected: this.configuracion });

@@ -9,6 +9,7 @@ class Mesa_model extends General_Model {
 	public $posx;
 	public $posy;
 	public $tamanio;
+	public $estatus;
 
 	public function __construct($id = "")
 	{

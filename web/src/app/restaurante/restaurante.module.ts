@@ -36,11 +36,14 @@ import { AbrirMesaComponent } from './components/abrir-mesa/abrir-mesa.component
 import { TranComandaComponent } from './components/tran-comanda/tran-comanda.component';
 import { ListaProductosComandaComponent } from './components/lista-productos-comanda/lista-productos-comanda.component';
 import { UnirCuentaComponent } from './components/unir-cuenta/unir-cuenta.component';
+import { ListaAreaComponent } from './components/area/lista-area/lista-area.component';
+import { FormAreaComponent } from './components/area/form-area/form-area.component';
+import { AreaComponent } from './components/area/area/area.component';
 
 //const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent],
+  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent
   ],

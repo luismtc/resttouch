@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Socket } from 'ngx-socket-io';
+//import { Socket } from 'ngx-socket-io';
 import { SignalRService } from '../../../shared/services/signal-r.service';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
@@ -53,7 +53,7 @@ export class TranComandaComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
-    private socket: Socket,
+    //private socket: Socket,
     private signalRSrvc: SignalRService
   ) { }
 
@@ -182,7 +182,7 @@ export class TranComandaComponent implements OnInit {
       cobrarCtaRef.afterClosed().subscribe(res => {
         if (res) {
           console.log(res);
-          this.socket.emit('print:doccontable', JSON.stringify(res));
+          //this.socket.emit('print:doccontable', JSON.stringify(res));
         }
       });
     } else {

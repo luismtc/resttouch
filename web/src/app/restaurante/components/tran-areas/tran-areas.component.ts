@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AbrirMesaComponent } from '../abrir-mesa/abrir-mesa.component';
+import { Area } from '../../interfaces/area';
+import { AreaService } from '../../services/area.service';
 
+/*
 const tam = 72;
-
 const lstAreas = [
   {
     area: 1,
@@ -27,6 +29,7 @@ const lstAreas = [
     mesas: []
   },
 ];
+*/
 
 @Component({
   selector: 'app-tran-areas',
@@ -40,18 +43,25 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   @ViewChild('matTabArea', { static: false }) pestania: ElementRef;
   @ViewChild('rightSidenav', { static: false }) rightSidenav: any;
-  public lstTabsAreas: any[] = [];
+  public lstTabsAreas: Area[] = [];
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public areaSrvc: AreaService
   ) { }
 
   ngOnInit() {
-    this.lstTabsAreas = lstAreas;
+    this.loadAreas();
   }
 
   ngAfterViewInit() {
-    setTimeout(() => this.setDivSize());
+    setTimeout(() => this.setDivSize(), 500);
+  }
+
+  loadAreas = () => {
+    this.areaSrvc.get().subscribe((res) => {
+      this.lstTabsAreas = res;
+    });
   }
 
   private setDivSize() {
