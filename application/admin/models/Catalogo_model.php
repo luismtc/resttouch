@@ -5,11 +5,11 @@ class Catalogo_model extends CI_Model {
 
 	private function getCatalogo($datos, $args)
 	{
-		if ($datos->num_rows() > 0) {
-			return isset($args["uno"]) ? $datos->row() : $datos->result();
-		}
+		//if ($datos->num_rows() > 0) {
+		return isset($args["_uno"]) ? $datos->row() : $datos->result();
+		//}
 
-		return false;
+		//return false;
 	}
 
 	public function getFormaPago($args=[])
@@ -89,6 +89,19 @@ class Catalogo_model extends CI_Model {
 		$qry = $this->db
 		->order_by("razon_social")
 		->get("proveedor");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getArticulo($args = [])
+	{
+		if (isset($args["articulo"])) {
+			$this->db->where("articulo", $args["articulo"]);
+		}
+
+		$qry = $this->db
+		->order_by("articulo")
+		->get("articulo");
 
 		return $this->getCatalogo($qry, $args);
 	}
