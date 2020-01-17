@@ -29,10 +29,13 @@ import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 
 import { WmsRoutingModule } from './wms-routing.module';
 import { ListaProductoComponent } from './components/producto/lista-producto/lista-producto.component';
+import { ListaIngresoComponent } from './components/ingreso/lista-ingreso/lista-ingreso.component';
+import { FormIngresoComponent } from './components/ingreso/form-ingreso/form-ingreso.component';
+import { IngresoComponent } from './components/ingreso/ingreso/ingreso.component';
 
 
 @NgModule({
-  declarations: [ListaProductoComponent],
+  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent],
   imports: [
     CommonModule,
     WmsRoutingModule,
