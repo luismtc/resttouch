@@ -1,1 +1,12 @@
-<p>ingreso works!</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <!--<app-lista-ingreso #lstUsuarioComponent (getUsuarioEv)="setUsuario($event)"></app-lista-ingreso>-->
+            <app-lista-ingreso #lstIngreso></app-lista-ingreso>
+        </div>
+        <div class="col">
+            <!--<app-form-ingreso [usuario]="usuario" (usrSavedEv)="refreshUserList()"></app-form-ingreso>-->
+            <app-form-ingreso></app-form-ingreso>
+        </div>
+    </div>
+</div>

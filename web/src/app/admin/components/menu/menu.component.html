@@ -13,6 +13,12 @@
         </a>
     </mat-list-item>
     <mat-list-item>
+        <mat-icon mat-list-icon>trending_up</mat-icon>
+        <a [routerLink]="['/wms/ingresos']" routerLinkActive="active" matLine (click)="itemClicked()">
+            Ingresos
+        </a>
+    </mat-list-item>
+    <mat-list-item>
         <mat-icon mat-list-icon>supervisor_account</mat-icon>
         <a [routerLink]="['/admin/usuario']" routerLinkActive="active" matLine (click)="itemClicked()">
             Usuarios
