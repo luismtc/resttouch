@@ -67,6 +67,31 @@ class Catalogo_model extends CI_Model {
 
 		return $this->getCatalogo($qry, $args);
 	}
+
+	public function getBodega($args = []){
+		if (isset($args["bodega"])) {
+			$this->db->where("bodega", $args["bodega"]);
+		}
+
+		$qry = $this->db
+		->order_by("descripcion")
+		->get("bodega");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getProveedor($args = [])
+	{
+		if (isset($args["proveedor"])) {
+			$this->db->where("proveedor", $args["proveedor"]);
+		}
+
+		$qry = $this->db
+		->order_by("razon_social")
+		->get("proveedor");
+
+		return $this->getCatalogo($qry, $args);
+	}
 }
 
 /* End of file Catalogo_model.php */
