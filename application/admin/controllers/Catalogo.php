@@ -54,6 +54,22 @@ class Catalogo extends CI_Controller {
 			"documento_tipo" => $this->Catalogo_model->getDocumentoTipo($_GET)
 		]));
 	}
+
+	public function get_bodega()
+	{
+		$this->output
+		->set_output(json_encode([
+			"bodega" => $this->Catalogo_model->getBodega($_GET)
+		]));
+	}
+
+	public function get_proveedor()
+	{
+		$this->output
+		->set_output(json_encode([
+			"proveedor" => $this->Catalogo_model->getProveedor($_GET)
+		]));
+	}
 }
 
 /* End of file Catalogo.php */
