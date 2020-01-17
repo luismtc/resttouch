@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ListaIngresoComponent } from '../lista-ingreso/lista-ingreso.component';
+import { Ingreso } from '../../../interfaces/ingreso';
 
 @Component({
   selector: 'app-ingreso',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class IngresoComponent implements OnInit {
 
-  constructor() { }
+  public ingreso: Ingreso;
+  @ViewChild('lstIngreso', { static: false }) lstIngresoComponent: ListaIngresoComponent;
+
+  constructor() {
+    this.ingreso = { ingreso: null, tipo_movimiento: null };
+  }
 
   ngOnInit() {
   }
 
+  setIngreso = (ing: Ingreso) => this.ingreso = ing;
+
+  refreshIngresoList = () => {}
 }
