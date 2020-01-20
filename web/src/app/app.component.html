@@ -11,6 +11,6 @@
         <app-menu (elementClicked)="toggleSidenav()"></app-menu>
     </mat-sidenav>
     <mat-sidenav-content>
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="checkIfUserIsLogged()"></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

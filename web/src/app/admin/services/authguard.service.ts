@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { Router, CanActivate } from '@angular/router';
 import { UsuarioService } from './usuario.service';
 
 @Injectable({
@@ -9,16 +9,10 @@ export class AuthguardService implements CanActivate {
 
   constructor(private usrSrvc: UsuarioService, private router: Router) { }
 
-  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    let url: string = state.url;
-    const d = await this.checkLogin(url);
-    return d;    
-  }
-
-  async checkLogin(url: string){
+  async canActivate(): Promise<boolean> {
     const valido = await this.usrSrvc.checkUserToken();
-    if(valido){
-      return valido;
+    if (valido) {
+      return true;
     } else {
       this.router.navigate(['/admin/login']);
       return false;
