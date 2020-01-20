@@ -27,6 +27,11 @@ export class AppComponent implements OnInit{
     await this.checkIfUserIsLogged();
   }
 
+  private goToLogin = () => {
+    this.isLogged = false;
+    this.router.navigate(['/admin/login']);        
+  }
+
   async checkIfUserIsLogged() {
     const usrData = this.ls.get(GLOBAL.usrTokenVar);
     if (usrData) {
@@ -34,15 +39,14 @@ export class AppComponent implements OnInit{
         const valido = await this.usrSrvc.checkUserToken();
         if (valido) {
           this.isLogged = true;
-          this.router.navigate(['/admin/dashboard']);
         } else {
-          this.isLogged = false;
+          this.goToLogin();
         }
       } else {
-        this.isLogged = false;
+        this.goToLogin();
       }
     } else {
-      this.isLogged = false;
+      this.goToLogin();
     }
   }
 

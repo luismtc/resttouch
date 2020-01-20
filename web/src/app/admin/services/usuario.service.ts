@@ -24,6 +24,10 @@ export class UsuarioService {
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
 
+  private setToken() {
+    this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
+  }
+
   login(usr: usrLogin): Observable<usrLogInResponse> {
     const obj = {
       usr: usr.usuario,
@@ -49,17 +53,21 @@ export class UsuarioService {
   }
 
   async checkUserToken() {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken.json`, httpOptions).toPromise();
-    if (resp.valido) {
-      return resp.valido;
-    } else {
-      return false;
+    this.setToken();
+    if (this.usrToken) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Authorization': this.usrToken
+        })
+      };
+      const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken.json`, httpOptions).toPromise();
+      if (resp.valido) {
+        return resp.valido;
+      } else {
+        return false;
+      }
     }
+    return false;
   }
 
   get(filtros: any): Observable<Usuario[]> {

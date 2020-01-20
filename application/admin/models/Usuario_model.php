@@ -21,7 +21,7 @@ class Usuario_model extends CI_Model
     {
         if ($credenciales) {
             $dbusr = $this->db
-                ->select('contrasenia, usrname, nombres, apellidos')
+                ->select('contrasenia, usrname, nombres, apellidos, sede')
                 ->from($this->tabla)
                 ->where('usrname', $credenciales['usr'])
                 ->where('debaja', 0)
@@ -40,7 +40,8 @@ class Usuario_model extends CI_Model
                         'token' => AUTHORIZATION::generateToken($tokenData),
                         'usrname' => $dbusr->usrname,
                         'nombres' => $dbusr->nombres,
-                        'apellidos' => $dbusr->apellidos
+                        'apellidos' => $dbusr->apellidos,
+                        'sede' => $dbusr->sede
                     );
                 } else {
                     return array(
