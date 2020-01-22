@@ -33,4 +33,13 @@ export class AreaService {
     };
     return this.http.get<Area[]>(`${GLOBAL.url}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  save(entidad: Area) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };    
+    return this.http.post<Area>(`${GLOBAL.url}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
 }
