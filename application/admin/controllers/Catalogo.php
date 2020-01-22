@@ -64,6 +64,12 @@ class Catalogo extends CI_Controller {
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getArticulo($_GET)));
 	}
+
+	public function get_usuario()
+	{
+		$this->output
+		->set_output(json_encode($this->Catalogo_model->getUsuario($_GET)));
+	}
 }
 
 /* End of file Catalogo.php */
