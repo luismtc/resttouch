@@ -70,6 +70,26 @@ class Catalogo extends CI_Controller {
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getUsuario($_GET)));
 	}
+
+	public function get_lista_articulo()
+	{
+		$this->load->model('Categoria_model');
+		$articulo = $this->Catalogo_model->getArticulo($_GET);
+		$datos = [];
+		foreach ($articulo as $row) {
+			$grupo = $this->Catalogo_model->getCategoriaGrupo([
+				"categoria_grupo" => $row->categoria_grupo,
+				"_uno" => true
+			]);
+			
+			$row->categoria_grupo = $grupo;
+
+			$datos[] = $row;
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
 }
 
 /* End of file Catalogo.php */

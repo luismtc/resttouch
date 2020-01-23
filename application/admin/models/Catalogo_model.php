@@ -122,6 +122,48 @@ class Catalogo_model extends CI_Model {
 
 		return $this->getCatalogo($qry, $args);
 	}
+
+	public function getCategoriaGrupo($args = [])
+	{
+		if(count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if ($key != '_uno') {
+					$this->db->where($key, $row);
+				}
+			}
+		}
+
+		$qry = $this->db
+		->order_by("categoria_grupo")
+		->get("categoria_grupo");
+
+		$grupo = $this->getCatalogo($qry, $args);
+
+		$datos = [];
+		if (is_array($grupo)) {
+			foreach ($grupo as $row) {
+				$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
+					"categoria_grupo_grupo" => $row->categoria_grupo
+				]);
+				$row->categoria = $this->Categoria_model->buscar([
+					"categoria" => $row->categoria,
+					"_uno" => true
+				]);
+				$datos[] = $row;
+			}
+		} else if(is_object($grupo)) {
+			$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo([
+				"categoria_grupo_grupo" => $grupo->categoria_grupo
+			]);
+			$grupo->categoria = $this->Categoria_model->buscar([
+				"categoria" => $grupo->categoria,
+				"_uno" => true
+			]);
+			$datos[] = $grupo;
+		}
+
+		return $datos;
+	}
 }
 
 /* End of file Catalogo_model.php */
