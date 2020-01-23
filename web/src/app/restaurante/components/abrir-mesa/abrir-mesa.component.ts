@@ -9,7 +9,10 @@ interface ICuenta {
 }
 
 interface DialogData {
+  nombreArea: string;
+  area: number;
   mesa: number;
+  numero: number;
   mesero: string;
   comensales: string;
   esEvento: boolean;

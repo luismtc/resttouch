@@ -85,8 +85,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   private openAbrirMesaDialog(m: any) {
     this.mesaSeleccionada = {
-      area: this.tabArea.textLabel,
-      mesa: +m.numero,
+      nombreArea: this.tabArea.textLabel,
+      area: +m.area,
+      mesa: +m.mesa,
+      numero: +m.numero,
       mesero: '',
       comensales: '1',
       esEvento: false,
@@ -94,7 +96,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       cuentas: [
         {
           numero: 1,
-          nombre: '1',
+          nombre: 'Única',
           productos: []
         }
       ]
@@ -109,6 +111,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     abrirMesaRef.afterClosed().subscribe(result => {
       if (result) {
         this.mesaSeleccionada = result;
+        //console.log(JSON.stringify(this.mesaSeleccionada));
         this.toggleRightSidenav();
       }
     });
