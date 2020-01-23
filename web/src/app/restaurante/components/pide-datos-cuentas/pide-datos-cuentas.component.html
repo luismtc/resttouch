@@ -11,7 +11,8 @@
             <th mat-header-cell *matHeaderCellDef>Nombre</th>
             <td mat-cell *matCellDef="let element">
                 <mat-form-field class="fullWidth">
-                    <input matInput name="nombre" [(ngModel)]="element.nombre" required>
+                    <!--<input type="text" matInput [matKeyboard]="'es'" darkTheme="true" placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>-->
+                    <input type="text" matInput name="nombre" [matKeyboard]="'es'" darkTheme="true" [(ngModel)]="element.nombre" required>
                 </mat-form-field>
             </td>
         </ng-container>
