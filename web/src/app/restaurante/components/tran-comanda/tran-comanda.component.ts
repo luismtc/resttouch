@@ -18,6 +18,23 @@ const infoMesaTest = {
   ]
 };
 
+/*
+    this.mesaSeleccionada = {
+      mesa: +m.numero,
+      mesero: '',
+      comensales: '1',
+      esEvento: false,
+      dividirCuentasPorSillas: false,
+      cuentas: [
+        {
+          numero: 1,
+          nombre: '1',
+          productos: []
+        }
+      ]
+    }
+*/
+
 interface productoSelected {
   id: number;
   nombre: string;
@@ -58,7 +75,8 @@ export class TranComandaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.mesaEnUso = infoMesaTest;
+    // this.mesaEnUso = infoMesaTest;
+    this.mesaEnUso = { cuentas: [] };
     this.resetLstProductosSeleccionados();
     this.resetLstProductosDeCuenta();
     this.signalRSrvc.startConnection(`restaurante_01`);

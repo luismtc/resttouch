@@ -25,17 +25,17 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <mat-checkbox name="dividirCuentasPorSillas" [(ngModel)]="+data.dividirCuentasPorSillas">¿Dividir cuentas por silla?</mat-checkbox>
+                    <mat-checkbox name="dividirCuentasPorSillas" [(ngModel)]="+data.dividirCuentasPorSillas" [disabled]="+data.comensales <= 1">¿Dividir cuentas?</mat-checkbox>
                 </div>
             </div>
         </div>
     </form>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-end">
-    <button mat-icon-button (click)="cancelar()" color="warn">
+    <button mat-icon-button (click)="terminar()" color="warn">
         <mat-icon>cancel_presentation</mat-icon>
     </button>
-    <button mat-icon-button [mat-dialog-close]="data" [disabled]="!frmAbrirMesa.form.valid" color="accent">
+    <button mat-icon-button (click)="terminar(data)" [disabled]="!frmAbrirMesa.form.valid" color="accent">
         <mat-icon>check_circle</mat-icon>
     </button>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTab } from '@angular/material/tabs';
 import { AbrirMesaComponent } from '../abrir-mesa/abrir-mesa.component';
 import { Area } from '../../interfaces/area';
 import { AreaService } from '../../services/area.service';
@@ -43,7 +44,9 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   @ViewChild('matTabArea', { static: false }) pestania: ElementRef;
   @ViewChild('rightSidenav', { static: false }) rightSidenav: any;
+  @ViewChild('tabArea', { static: false }) tabArea: MatTab;
   public lstTabsAreas: Area[] = [];
+  public mesaSeleccionada: any;
 
   constructor(
     public dialog: MatDialog,
@@ -55,7 +58,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => this.setDivSize(), 500);
+    setTimeout(() => this.setDivSize(), 600);
   }
 
   loadAreas = () => {
@@ -73,22 +76,40 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     this.setDivSize();
   }
 
-  onClickMesa(m: any) {    
-    switch(+m.mesaSelected.estatus) {
-      case 1: this.openAbrirMesaDialog(); break;
-      case 2: this.toggleRightSidenav(); break;      
+  onClickMesa(m: any) {
+    switch (+m.mesaSelected.estatus) {
+      case 1: this.openAbrirMesaDialog(m.mesaSelected); break;
+      case 2: this.toggleRightSidenav(); break;
     }
   }
 
-  private openAbrirMesaDialog() {
+  private openAbrirMesaDialog(m: any) {
+    this.mesaSeleccionada = {
+      area: this.tabArea.textLabel,
+      mesa: +m.numero,
+      mesero: '',
+      comensales: '1',
+      esEvento: false,
+      dividirCuentasPorSillas: false,
+      cuentas: [
+        {
+          numero: 1,
+          nombre: '1',
+          productos: []
+        }
+      ]
+    };
+
     const abrirMesaRef = this.dialog.open(AbrirMesaComponent, {
       width: '55%',
-      data: { mesero: '', comensales: '1', esEvento: false, dividirCuentasPorSillas: false }
+      disableClose: true,
+      data: this.mesaSeleccionada
     });
 
     abrirMesaRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log(result);
+        this.mesaSeleccionada = result;
+        this.toggleRightSidenav();
       }
     });
   }
@@ -96,5 +117,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   toggleRightSidenav() {
     this.rightSidenav.toggle();
   }
+
+  cerrandoRightSideNav = () => this.mesaSeleccionada = { cuentas: [] };
 
 }

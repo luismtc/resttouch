@@ -39,13 +39,14 @@ import { UnirCuentaComponent } from './components/unir-cuenta/unir-cuenta.compon
 import { ListaAreaComponent } from './components/area/lista-area/lista-area.component';
 import { FormAreaComponent } from './components/area/form-area/form-area.component';
 import { AreaComponent } from './components/area/area/area.component';
+import { PideDatosCuentasComponent } from './components/pide-datos-cuentas/pide-datos-cuentas.component';
 
 //const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent],
+  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent],
   entryComponents: [
-    AbrirMesaComponent, UnirCuentaComponent
+    AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent
   ],
   imports: [
     CommonModule,
