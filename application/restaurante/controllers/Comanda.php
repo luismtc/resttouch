@@ -46,12 +46,11 @@ class Comanda extends CI_Controller {
 					if (count($req['cuentas']) > 0) {
 						foreach ($req['cuentas'] as $row) {
 							$cuenta = new Cuenta_model();
-							if(isset($row['numero'])){
-								$cuenta->cargar($row['numero']);
+							if(isset($row['cuenta'])){
+								$cuenta->cargar($row['cuenta']);
 							}
 
 							$row['comanda'] = $comanda->comanda;
-							$row['cuenta'] = $row['numero'];
 							
 							$cuenta->guardar($row);
 							if(count($row['productos']) > 0) {

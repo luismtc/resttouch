@@ -6,6 +6,7 @@ class Cuenta_model extends General_Model {
 	public $cuenta;
 	public $comanda;
 	public $nombre;
+	public $numero;
 
 	public function __construct($id = '')
 	{
