@@ -59,6 +59,7 @@ class Comanda_model extends General_Model {
 
 	public function getDetalle($args = [])
 	{
+		$args['comanda'] = $this->comanda;
 		$det = $this->Dcomanda_model->buscar($args);
 		$datos = [] ;
 		if(is_array($det)) {
@@ -77,10 +78,31 @@ class Comanda_model extends General_Model {
 	}
 
 	public function getCuentas(){
-		return $this->db
+		$cuentas = [];
+		$tmp = $this->db
 		->where("comanda", $this->comanda)
-		->get("restaurante.cuenta")
+		->get("resttouch.cuenta")
 		->result();
+
+		foreach ($tmp as $row) {
+			$cta = new Cuenta_model($row->cuenta);
+			$row->detalle = $cta->getDetalle();
+			$cuentas[] = $row;
+		}
+
+		return $cuentas;
+	}
+
+	public function getComanda()
+	{
+		$tmp = $this->db
+		->where("comanda", $this->comanda)
+		->get("resttouch.comanda")
+		->row();
+
+		$tmp->cuentas = $this->getCuentas();
+
+		return $tmp;
 	}
 
 }
