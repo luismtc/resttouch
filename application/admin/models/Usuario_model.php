@@ -143,14 +143,21 @@ class Usuario_model extends CI_Model
     {
         if (count($filtros) > 0) {
             foreach ($filtros as $key => $value) {
-                $this->db->where($key, $value);
+                if($key != "_uno"){                    
+                    $this->db->where($key, $value);
+                }
             }
         }
 
-        return $this->db
-            ->select('usuario, nombres, apellidos, usrname, debaja')
+        $tmp = $this->db
+            ->select('usuario, nombres, apellidos, usrname, debaja, sede')
             ->from($this->tabla)
-            ->get()
-            ->result();
+            ->get();
+
+        if(isset($filtros['_uno'])){
+            return $tmp->row();
+        }
+
+        return $tmp->result();
     }
 }

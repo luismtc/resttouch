@@ -65,11 +65,12 @@ class General_model extends CI_Model {
 		$tmp = $this->db
 		->get($this->_tabla)
 		->row();
-
-		$var = $this->_llave;
-		$this->_pk = $tmp->$var;
-
-		$this->setDatos($tmp);
+		
+		if($tmp){
+			$var = $this->_llave;
+			$this->_pk = $tmp->$var;
+			$this->setDatos($tmp);
+		}
 	}
 
 	public function guardar($args=[])
@@ -112,7 +113,9 @@ class General_model extends CI_Model {
 	{
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
-				$this->db->where($key, $row);
+				if($key != "_uno"){
+					$this->db->where($key, $row);
+				}
 			}	
 		}
 
