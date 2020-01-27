@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Cuenta_model extends General_Model {
 
 	public $cuenta;
-	public $forma_pago;
 	public $comanda;
 	public $nombre;
 
