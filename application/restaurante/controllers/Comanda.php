@@ -17,7 +17,8 @@ class Comanda extends CI_Controller {
 			"Dcomanda_model", 
 			"Cuenta_model", 
 			"Dcuenta_model",
-			"Usuario_model"
+			"Usuario_model",
+			"Mesa_model"
 		]);
 
 		$this->output
@@ -31,46 +32,57 @@ class Comanda extends CI_Controller {
 		$datos = ["exito" => false];
 
 		if ($this->input->method() == 'post') {
-			$usu = $this->Usuario_model->find(['usuario' => $req['mesero'], "_uno" => true]);
-			$comanda = new Comanda_model($req['comanda']);
-			$req['usuario'] = $usu->usuario;
-			$req['sede'] = $usu->sede;
-			$datos['exito'] = $comanda->guardar($req);
+			if (isset($req['mesa']) && isset($req['comanda']) && isset($req['cuentas'])) {
 
-			
+				$usu = $this->Usuario_model->find(['usuario' => $req['mesero'], "_uno" => true]);
 
-			if (empty($req['comanda'])) {
-				$comanda->setMesa($req['mesa']);
-			}
+				if ($usu) {
+					$comanda = new Comanda_model($req['comanda']);
+					$mesa = new Mesa_model($req['mesa']);
+					$req['usuario'] = $usu->usuario;
+					$req['sede'] = $usu->sede;
+					$datos['exito'] = $comanda->guardar($req);
 
-			if (count($req['cuentas']) > 0) {
-				foreach ($req['cuentas'] as $row) {
-					$cuenta = new Cuenta_model();
-					if(isset($row['numero'])){
-						$cuenta->cargar($row['numero']);
+					if (empty($req['comanda'])) {
+						$comanda->setMesa($req['mesa']);
+						$mesa->guardar(["estatus" => 2]);
 					}
 
-					$row['comanda'] = $comanda->comanda;
-					$row['cuenta'] = $row['numero'];
-					
-					$cuenta->guardar($row);
-					if(count($row['productos']) > 0) {
-						foreach ($row['productos'] as $prod) {
-							$det = $comanda->guardarDetalle($prod);
+					if (count($req['cuentas']) > 0) {
+						foreach ($req['cuentas'] as $row) {
+							$cuenta = new Cuenta_model();
+							if(isset($row['numero'])){
+								$cuenta->cargar($row['numero']);
+							}
 
-							$cuenta->guardarDetalle([
-								'detalle_comanda' => $det->detalle_comanda
-							]);
+							$row['comanda'] = $comanda->comanda;
+							$row['cuenta'] = $row['numero'];
+							
+							$cuenta->guardar($row);
+							if(count($row['productos']) > 0) {
+								foreach ($row['productos'] as $prod) {
+									$det = $comanda->guardarDetalle($prod);
+
+									$cuenta->guardarDetalle([
+										'detalle_comanda' => $det->detalle_comanda
+									]);
+								}
+							}
 						}
-					}
+						$datos['exito'] = true;
+						$datos['comanda'] = $comanda->getComanda();
+					}			
+
+					if($datos['exito']) {
+						$datos['mensaje'] = "Datos Actualizados con Exito";
+					} 
+					
+				} else {
+					$datos['mensaje'] = "Mesero Invalido";
 				}
-				$datos['exito'] = true;
-			}			
-
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-			} 
-
+			} else {
+				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
+			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}

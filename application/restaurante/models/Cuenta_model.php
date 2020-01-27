@@ -31,6 +31,16 @@ class Cuenta_model extends General_Model {
 		return $result;
 	}
 
+	public function getDetalle($args = [])
+	{
+		return $this->db
+		->join("resttouch.detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")
+		->where("a.cuenta_cuenta", $this->cuenta)
+		->get("resttouch.detalle_cuenta a")
+		->result();
+	}
+
+
 }
 
 /* End of file Cuenta_model.php */
