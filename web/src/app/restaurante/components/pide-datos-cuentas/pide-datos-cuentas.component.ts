@@ -3,11 +3,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { Cuenta } from '../../interfaces/cuenta';
+
+/*
 interface ICuenta {
   numero: number;
   nombre: string;
   productos: any[];
 }
+*/
 
 @Component({
   selector: 'app-pide-datos-cuentas',
@@ -17,11 +21,11 @@ interface ICuenta {
 export class PideDatosCuentasComponent implements OnInit {
 
   public displayedColumns: string[] = ['numero', 'nombre'];
-  public dataSource: MatTableDataSource<ICuenta>;
+  public dataSource: MatTableDataSource<Cuenta>;
 
   constructor(
     public dialogRef: MatDialogRef<PideDatosCuentasComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ICuenta[],
+    @Inject(MAT_DIALOG_DATA) public data: Cuenta[],
     private _snackBar: MatSnackBar
   ) { }
 
@@ -29,7 +33,7 @@ export class PideDatosCuentasComponent implements OnInit {
     this.setTableDataSource();
   }
 
-  todosConNombre(ctas: ICuenta[]): number {
+  todosConNombre(ctas: Cuenta[]): number {
     for (let i = 0; i < ctas.length; i++) {
       if (!ctas[i].nombre) {
         return i;
@@ -38,7 +42,7 @@ export class PideDatosCuentasComponent implements OnInit {
     return -1;
   }
 
-  terminar = (obj: ICuenta[]) => {
+  terminar = (obj: Cuenta[]) => {
     const tcn = this.todosConNombre(obj);
     if (tcn < 0) {
       this.dialogRef.close(obj);

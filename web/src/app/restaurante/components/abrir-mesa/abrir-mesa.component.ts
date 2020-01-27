@@ -2,12 +2,17 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PideDatosCuentasComponent } from '../pide-datos-cuentas/pide-datos-cuentas.component';
 
+//import { Cuenta } from '../../interfaces/cuenta';
+import { Comanda } from '../../interfaces/comanda';
+
+/*
 interface ICuenta {
   numero: number;
   nombre: string;
   productos: any[];
 }
-
+*/
+/*
 interface DialogData {
   nombreArea: string;
   area: number;
@@ -19,6 +24,7 @@ interface DialogData {
   dividirCuentasPorSillas: boolean;
   cuentas: ICuenta[]
 }
+*/
 
 @Component({
   selector: 'app-abrir-mesa',
@@ -29,15 +35,14 @@ export class AbrirMesaComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AbrirMesaComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    @Inject(MAT_DIALOG_DATA) public data: Comanda,
     public dialogDatosCuentas: MatDialog
   ) { }
 
   ngOnInit() {
-    // console.log(this.data);
   }
 
-  pedirDatosDeCuentas(obj: DialogData) {
+  pedirDatosDeCuentas(obj: Comanda) {
 
     const pideDatosCuentasRef = this.dialogDatosCuentas.open(PideDatosCuentasComponent, {
       width: '50%',
@@ -52,7 +57,7 @@ export class AbrirMesaComponent implements OnInit {
 
   }
 
-  terminar(obj: DialogData = null) {
+  terminar(obj: Comanda = null) {
     if (!obj) {
       this.dialogRef.close();
     } else {
