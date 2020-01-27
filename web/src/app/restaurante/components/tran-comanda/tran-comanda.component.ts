@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
+import { Cuenta } from '../../interfaces/cuenta';
 
 /*
 const infoMesaTest = {
@@ -39,7 +40,7 @@ const infoMesaTest = {
 interface productoSelected {
   id: number;
   nombre: string;
-  noCuenta?: number;
+  cuenta?: number;
   cantidad: number;
   impreso: boolean;
   precio?: number;
@@ -80,6 +81,7 @@ export class TranComandaComponent implements OnInit {
     this.mesaEnUso = { cuentas: [] };
     this.resetLstProductosSeleccionados();
     this.resetLstProductosDeCuenta();
+    this.noComanda = this.mesaEnUso.comanda || 0;
     //this.signalRSrvc.startConnection(`restaurante_01`);
     // this.signalRSrvc.addBroadcastDataListener();
   }
@@ -88,7 +90,7 @@ export class TranComandaComponent implements OnInit {
   resetLstProductosDeCuenta = () => this.lstProductosDeCuenta = [];
 
   setSelectedCuenta(noCuenta: number) {
-    const ctaSel = this.mesaEnUso.cuentas.find((c: any) => c.numero === noCuenta);
+    const ctaSel = this.mesaEnUso.cuentas.find((c: Cuenta) => c.numero === noCuenta);
     this.cuentaSeleccionada = ctaSel.nombre;
     this.noCuentaSeleccionada = noCuenta;
     this.setLstProductosDeCuenta();
@@ -103,16 +105,16 @@ export class TranComandaComponent implements OnInit {
   }
 
   setLstProductosDeCuenta() {
-    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => p.noCuenta == this.noCuentaSeleccionada);
+    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => p.cuenta == this.noCuentaSeleccionada);
   }
 
   addProductoSelected(producto: any) {
     if (this.noCuentaSeleccionada) {
-      const idx = this.lstProductosSeleccionados.findIndex(p => p.id == producto.id && p.noCuenta == this.noCuentaSeleccionada && p.impreso == false);
+      const idx = this.lstProductosSeleccionados.findIndex(p => p.id == producto.id && p.cuenta == this.noCuentaSeleccionada && p.impreso == false);
 
       if (idx < 0) {
         this.lstProductosSeleccionados.push({
-          id: producto.id, nombre: producto.nombre, noCuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false, precio: producto.precio,
+          id: producto.id, nombre: producto.nombre, cuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false, precio: producto.precio,
           notas: '', showInputNotas: false, itemListHeight: '70px', total: 1 * producto.precio
         });
       } else {
@@ -125,7 +127,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   updProductosCuenta(nvaLista: productoSelected[] = []) {
-    let lstTemp: productoSelected[] = this.lstProductosSeleccionados.filter(p => p.noCuenta != this.noCuentaSeleccionada);
+    let lstTemp: productoSelected[] = this.lstProductosSeleccionados.filter(p => p.cuenta != this.noCuentaSeleccionada);
     if (nvaLista.length > 0) {
       this.lstProductosSeleccionados = lstTemp.concat(nvaLista);
     } else {
@@ -151,7 +153,7 @@ export class TranComandaComponent implements OnInit {
   printComanda() {
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => !p.impreso);
     this.lstProductosDeCuenta.map(p => p.impreso = true);
-    this.noComanda = Math.floor(Math.random() * 100);
+    this.noComanda = this.mesaEnUso.comanda;
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
     this.showPortalComanda = true;
 

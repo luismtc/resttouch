@@ -7,6 +7,6 @@ export interface Comanda {
     comensales: number;
     esEvento: boolean;
     dividirCuentasPorSillas: boolean;
-    comanda: number;
+    comanda?: number;
     cuentas: Cuenta[];
 }

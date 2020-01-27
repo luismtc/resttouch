@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTab } from '@angular/material/tabs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AbrirMesaComponent } from '../abrir-mesa/abrir-mesa.component';
 import { Area } from '../../interfaces/area';
 import { AreaService } from '../../services/area.service';
+import { Comanda } from '../../interfaces/comanda';
+import { ComandaService } from '../../services/comanda.service';
 
 /*
 const tam = 72;
@@ -50,7 +53,9 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   constructor(
     public dialog: MatDialog,
-    public areaSrvc: AreaService
+    private _snackBar: MatSnackBar,
+    public areaSrvc: AreaService,
+    public comandaSrvc: ComandaService
   ) { }
 
   ngOnInit() {
@@ -72,9 +77,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     this.divSize.h = this.pestania.nativeElement.offsetHeight;
   }
 
-  onResize(event: any) {
-    this.setDivSize();
-  }
+  onResize = (event: any) => this.setDivSize();
 
   onClickMesa(m: any) {
     switch (+m.mesaSelected.estatus) {
@@ -91,6 +94,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       numero: +m.numero,
       mesero: '',
       comensales: '1',
+      comanda: 0,
       esEvento: false,
       dividirCuentasPorSillas: false,
       cuentas: [
@@ -108,18 +112,24 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       data: this.mesaSeleccionada
     });
 
-    abrirMesaRef.afterClosed().subscribe(result => {
+    abrirMesaRef.afterClosed().subscribe((result: Comanda) => {
       if (result) {
         this.mesaSeleccionada = result;
-        //console.log(JSON.stringify(this.mesaSeleccionada));
-        this.toggleRightSidenav();
+        // console.log(JSON.stringify(this.mesaSeleccionada));
+        this.comandaSrvc.save(this.mesaSeleccionada).subscribe(res => {
+          console.log(res);
+          if (res.exito) {
+            this.mesaSeleccionada = res.comanda;
+            this.toggleRightSidenav();
+          } else {
+            this._snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+          }
+        });
       }
     });
   }
 
-  toggleRightSidenav() {
-    this.rightSidenav.toggle();
-  }
+  toggleRightSidenav = () => this.rightSidenav.toggle();
 
   cerrandoRightSideNav = () => this.mesaSeleccionada = { cuentas: [] };
 

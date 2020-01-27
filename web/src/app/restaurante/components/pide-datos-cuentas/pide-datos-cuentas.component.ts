@@ -47,7 +47,7 @@ export class PideDatosCuentasComponent implements OnInit {
     if (tcn < 0) {
       this.dialogRef.close(obj);
     } else {
-      this._snackBar.open(`Favor ingresar nombre a la cuenta #${obj[tcn].numero}...`, 'Cuentas', { duration: 5000 });
+      this._snackBar.open(`Favor ingresar nombre a la cuenta #${obj[tcn].cuenta}...`, 'Cuentas', { duration: 5000 });
     }
   }
 
@@ -56,6 +56,7 @@ export class PideDatosCuentasComponent implements OnInit {
   agregarFila() {
     this.data.push(
       {
+        cuenta: 0,
         numero: this.data.length + 1,
         nombre: null,
         productos: []

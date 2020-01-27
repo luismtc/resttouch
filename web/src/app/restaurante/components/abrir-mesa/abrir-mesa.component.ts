@@ -2,8 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PideDatosCuentasComponent } from '../pide-datos-cuentas/pide-datos-cuentas.component';
 
-//import { Cuenta } from '../../interfaces/cuenta';
+import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda } from '../../interfaces/comanda';
+import { Usuario } from '../../../admin/models/usuario';
+import { UsuarioService } from '../../../admin/services/usuario.service';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
+import { GLOBAL } from '../../../shared/global';
 
 /*
 interface ICuenta {
@@ -33,13 +37,26 @@ interface DialogData {
 })
 export class AbrirMesaComponent implements OnInit {
 
+  public lstMeseros: Usuario[] = [];
+
   constructor(
     public dialogRef: MatDialogRef<AbrirMesaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Comanda,
-    public dialogDatosCuentas: MatDialog
+    public dialogDatosCuentas: MatDialog,
+    public usuarioSrvc: UsuarioService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.loadMeseros();
+  }
+
+  loadMeseros = () => {
+    this.usuarioSrvc.get({ debaja: 0, sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0), esmesero: 1 }).subscribe(res => {
+      if (res) {
+        this.lstMeseros = res;
+      }
+    });
   }
 
   pedirDatosDeCuentas(obj: Comanda) {
@@ -50,7 +67,7 @@ export class AbrirMesaComponent implements OnInit {
       data: obj.cuentas
     });
 
-    pideDatosCuentasRef.afterClosed().subscribe((result: any) => {
+    pideDatosCuentasRef.afterClosed().subscribe((result: Cuenta[]) => {
       obj.cuentas = result;
       this.dialogRef.close(obj);
     });

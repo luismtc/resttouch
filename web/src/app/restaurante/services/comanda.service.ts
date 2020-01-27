@@ -31,7 +31,7 @@ export class ComandaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Comanda[]>(`${GLOBAL.url}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Comanda[]>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Comanda) {
@@ -40,6 +40,6 @@ export class ComandaService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<Comanda>(`${GLOBAL.url}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

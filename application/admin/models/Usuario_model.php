@@ -150,7 +150,7 @@ class Usuario_model extends CI_Model
         }
 
         $tmp = $this->db
-            ->select('usuario, nombres, apellidos, usrname, debaja, sede')
+            ->select('usuario, nombres, apellidos, usrname, debaja, sede, esmesero')
             ->from($this->tabla)
             ->get();
 
