@@ -30,7 +30,8 @@ class Comanda_model extends General_Model {
 			b.estatus")
 		->join("resttouch.mesa b", "a.mesa = b.mesa")
 		->where("a.comanda", $this->comanda)
-		->get("resttouch.comanda_has_mesa a");
+		->get("resttouch.comanda_has_mesa a")
+		->row();
 	}
 
 	public function setMesa($mesa)
@@ -86,7 +87,7 @@ class Comanda_model extends General_Model {
 
 		foreach ($tmp as $row) {
 			$cta = new Cuenta_model($row->cuenta);
-			$row->detalle = $cta->getDetalle();
+			$row->productos = $cta->getDetalle();
 			$cuentas[] = $row;
 		}
 
@@ -100,8 +101,11 @@ class Comanda_model extends General_Model {
 		->get("resttouch.comanda")
 		->row();
 
-		$tmp->cuentas = $this->getCuentas();
+		$mesa = $this->getMesas();
 
+		$tmp->mesa = $mesa->mesa;
+		$tmp->area = $mesa->area;
+		$tmp->cuentas = $this->getCuentas();
 		return $tmp;
 	}
 
