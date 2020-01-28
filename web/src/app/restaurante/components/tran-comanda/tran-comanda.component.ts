@@ -90,7 +90,7 @@ export class TranComandaComponent implements OnInit {
   resetLstProductosDeCuenta = () => this.lstProductosDeCuenta = [];
 
   setSelectedCuenta(noCuenta: number) {
-    const ctaSel = this.mesaEnUso.cuentas.find((c: Cuenta) => c.numero === noCuenta);
+    const ctaSel = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +noCuenta);
     this.cuentaSeleccionada = ctaSel.nombre;
     this.noCuentaSeleccionada = noCuenta;
     this.setLstProductosDeCuenta();
