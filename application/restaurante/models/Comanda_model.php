@@ -102,9 +102,8 @@ class Comanda_model extends General_Model {
 		->row();
 
 		$mesa = $this->getMesas();
-
-		$tmp->mesa = $mesa->mesa;
-		$tmp->area = $mesa->area;
+		$mesa->area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
+		$tmp->mesa = $mesa;		
 		$tmp->cuentas = $this->getCuentas();
 		return $tmp;
 	}

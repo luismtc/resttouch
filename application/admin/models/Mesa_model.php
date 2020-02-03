@@ -20,6 +20,24 @@ class Mesa_model extends General_Model {
 			$this->cargar($id);
 		}
 	}
+
+	public function get_comanda($args = []){
+
+		if(isset($args['estatus'])) {
+			$this->db->where("b.estatus", 1);
+		}
+
+		return $this->db
+		->select("
+			b.comanda,
+			b.usuario,
+			b.sede,
+			b.estatus")
+		->join("resttouch.comanda b", "a.comanda = b.comanda")
+		->where("a.mesa", $this->mesa)		
+		->get("resttouch.comanda_has_mesa a")
+		->row();
+	}
 }
 
 /* End of file Mesa_model.php */

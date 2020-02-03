@@ -13,7 +13,8 @@ class Comanda extends CI_Controller {
 			"Cuenta_model", 
 			"Dcuenta_model",
 			"Usuario_model",
-			"Mesa_model"
+			"Mesa_model",
+			"Area_model"
 		]);
 
 		$this->output
@@ -79,6 +80,19 @@ class Comanda extends CI_Controller {
 			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
+	function get_comanda($mesa){
+		$mesa = new Mesa_model($mesa);
+		$tmp = $mesa->get_comanda(["estatus" => 1]);
+		$datos = [];
+		if($tmp) {
+			$comanda = new Comanda_model($tmp->comanda);
+			$datos = $comanda->getComanda();
 		}
 
 		$this->output

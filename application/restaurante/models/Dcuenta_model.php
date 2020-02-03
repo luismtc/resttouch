@@ -17,6 +17,13 @@ class Dcuenta_model extends General_Model {
 		}
 	}
 
+	public function getArticulo() {
+		return $this->db
+					->where("articulo", $this->articulo)
+					->get("resttouch.articulo")
+					->row();
+	}
+	
 }
 
 /* End of file Dcuenta_model.php */
