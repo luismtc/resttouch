@@ -5,14 +5,21 @@
             <div class="col">
                 <div class="form-group">
                     <mat-form-field>
-                        <input type="text" matInput [matKeyboard]="'es'" darkTheme="true" cdkFocusInitial placeholder="Mesero" name="mesero" [(ngModel)]="data.mesero" required>
+                        <!--<input type="text" matInput [matKeyboard]="'es'" darkTheme="true" cdkFocusInitial placeholder="Mesero" name="mesero" [(ngModel)]="data.mesero" required>-->
+                        <mat-label>Mesero</mat-label>
+                        <mat-select name="mesero" [(ngModel)]="data.mesero">
+                            <mat-option *ngFor="let usr of lstMeseros" [value]="usr.usuario">
+                                {{usr.nombres}} {{usr.apellidos}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group">
                     <mat-form-field>
-                        <input type="text" matInput [matKeyboard]="'es'" darkTheme="true" placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>
+                        <input type="text" matInput [matKeyboard]="'es'" darkTheme="true" placeholder="# Comensales"
+                            name="comensales" [(ngModel)]="data.comensales" required>
                     </mat-form-field>
                 </div>
             </div>
@@ -25,7 +32,8 @@
             </div>
             <div class="col">
                 <div class="form-group">
-                    <mat-checkbox name="dividirCuentasPorSillas" [(ngModel)]="+data.dividirCuentasPorSillas" [disabled]="+data.comensales <= 1">¿Dividir cuentas?</mat-checkbox>
+                    <mat-checkbox name="dividirCuentasPorSillas" [(ngModel)]="+data.dividirCuentasPorSillas"
+                        [disabled]="+data.comensales <= 1">¿Dividir cuentas?</mat-checkbox>
                 </div>
             </div>
         </div>

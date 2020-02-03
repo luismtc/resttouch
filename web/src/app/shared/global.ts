@@ -1,6 +1,9 @@
+//const urlBase = `${window.location.hostname}/resttouch`;
+const urlBase = 'http://localhost/resttouch';
 export const GLOBAL = {
-    //url: `${window.location.hostname}/resttouch/index.php`,
-    url: `http://localhost/resttouch/index.php`,
-    //url: `https://6553cac0.ngrok.io/resttouch/index.php`,
+    url: `${urlBase}/index.php`,
+    urlAppRestaurante: `${urlBase}/restaurante.php`,
+    urlCatalogos: `${urlBase}/index.php/catalogo`,
+    urlMantenimientos: `${urlBase}/index.php/mante`,
     usrTokenVar: 'rttoken'
 }

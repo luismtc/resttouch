@@ -23,6 +23,7 @@ export class Usuario {
         public apellidos: string,
         public usrname: string,
         public contrasenia: string,
+        public sede: number,
         public debaja: number
     ) { }
 }
