@@ -19,6 +19,12 @@
         </a>
     </mat-list-item>
     <mat-list-item>
+        <mat-icon mat-list-icon>fastfood</mat-icon>
+        <a [routerLink]="['/wms/articulos']" routerLinkActive="active" matLine (click)="itemClicked()">
+            Artículos
+        </a>
+    </mat-list-item>
+    <mat-list-item>
         <mat-icon mat-list-icon>trending_up</mat-icon>
         <a [routerLink]="['/wms/ingresos']" routerLinkActive="active" matLine (click)="itemClicked()">
             Ingresos

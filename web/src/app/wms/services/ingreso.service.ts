@@ -14,7 +14,7 @@ import * as qs from 'qs';
 export class IngresoService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'mante/area';
+  private areaUrl: string = 'area';
   private usrToken: string = null;
 
   constructor(
@@ -31,7 +31,7 @@ export class IngresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Ingreso[]>(`${GLOBAL.url}/${this.moduleUrl}/get_ingresos?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Ingreso[]>(`${GLOBAL.urlMantenimientos}/${this.areaUrl}/get_ingresos?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getIngresosDePrueba(): Observable<Ingreso[]> {

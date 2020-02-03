@@ -1,0 +1,100 @@
+<div class="row">
+    <div class="col-10" *ngIf="!showCategoriasForm">
+        <div class="btn-group d-flex justify-content-center" role="group">
+            <button mat-button type="button" color="accent" (click)="showCategoriasForm = true; resetCategoria();">
+                <mat-icon class="iconFontSize">expand_more</mat-icon>&nbsp;Categorías y sub-categorías
+            </button>
+        </div>        
+    </div>
+    <div class="col-10" *ngIf="showCategoriasForm">
+        <div class="btn-group d-flex justify-content-center" role="group">
+            <button mat-button type="button" color="accent" (click)="showCategoriasForm = false; resetCategoria();">
+                <mat-icon class="iconFontSize">expand_less</mat-icon>&nbsp;Categorías y sub-categorías
+            </button>
+        </div>        
+    </div>
+</div>
+<div class="row" *ngIf="showCategoriasForm">
+    <div class="col-10">
+        <form #frmCategoria="ngForm" novalidate>
+            <div class="form-group" *ngIf="!editCategoriaMode">
+                <mat-form-field class="fullWidth">
+                    <mat-label>Categoría</mat-label>
+                    <mat-select name="categoria" [(ngModel)]="categoria" (selectionChange)="onCategoriaSelected($event)">
+                        <mat-option *ngFor="let cat of categorias" [value]="cat">
+                            {{cat.descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group" *ngIf="editCategoriaMode">
+                <mat-form-field class="fullWidth">
+                    <input matInput placeholder="Descripcion de la categoría" name="descripcion" [(ngModel)]="categoria.descripcion" [required]="editCategoriaMode">
+                </mat-form-field>                                
+            </div>
+        </form>
+    </div>
+    <div class="col-2">
+        <div class="btn-group d-flex justify-content-end" role="group">
+            <button mat-icon-button type="button" color="accent" (click)="editCategoriaMode = true;" *ngIf="!editCategoriaMode && +categoria.categoria > 0">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button type="button" color="accent" (click)="resetCategoria(); editCategoriaMode = true;" *ngIf="!editCategoriaMode">
+                <mat-icon>add</mat-icon>
+            </button>         
+            <button mat-icon-button type="button" color="accent" (click)="onSubmitCategoria()" [disabled]="!frmCategoria.form.valid" *ngIf="editCategoriaMode">
+                <mat-icon>save</mat-icon>
+            </button>               
+            <button mat-icon-button type="button" color="warn" (click)="resetCategoria()" *ngIf="editCategoriaMode">
+                <mat-icon>cancel</mat-icon>
+            </button>            
+        </div>
+    </div>
+</div>
+<div class="row" *ngIf="showCategoriasForm">
+    <div class="col-10">
+        <form #frmCategoriaGrupo="ngForm" novalidate>
+            <div class="form-group">
+                <mat-form-field class="fullWidth">
+                    <mat-label>Sub-categoría Padre</mat-label>
+                    <mat-select name="categoriaGrupoPadre" [(ngModel)]="categoriaGrupo.categoria_grupo_grupo" (selectionChange)="onSubCategoriaPadreSelected($event)">
+                        <mat-option *ngFor="let subcatpadre of categoriasGruposPadre" [value]="subcatpadre.categoria_grupo">
+                            {{(subcatpadre.antecesores ? (subcatpadre.antecesores + ' - ') : '') + subcatpadre.descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group" *ngIf="!editSubCategoriaMode">
+                <mat-form-field class="fullWidth">
+                    <mat-label>Sub-categoría</mat-label>
+                    <mat-select name="categoriaGrupo" [(ngModel)]="categoriaGrupo">
+                        <mat-option *ngFor="let subcat of categoriasGrupos" [value]="subcat">
+                            {{(subcat.antecesores ? (subcat.antecesores + ' - ') : '') + subcat.descripcion}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-group" *ngIf="editSubCategoriaMode">
+                <mat-form-field class="fullWidth">
+                    <input matInput placeholder="Descripcion de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" [required]="editCategoriaMode">
+                </mat-form-field>                                
+            </div>
+        </form>
+    </div>
+    <div class="col-2">
+        <div class="btn-group d-flex justify-content-end" role="group">
+            <button mat-icon-button type="button" color="accent" (click)="editSubCategoriaMode = true;" *ngIf="!editSubCategoriaMode && +categoriaGrupo.categoria_grupo > 0">
+                <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button type="button" color="accent" (click)="resetCategoriaGrupo(); editSubCategoriaMode = true;" *ngIf="!editSubCategoriaMode">
+                <mat-icon>add</mat-icon>
+            </button>         
+            <button mat-icon-button type="button" color="accent" (click)="onSubmitSubCategoria()" [disabled]="!frmCategoriaGrupo.form.valid" *ngIf="editSubCategoriaMode">
+                <mat-icon>save</mat-icon>
+            </button>               
+            <button mat-icon-button type="button" color="warn" (click)="resetCategoriaGrupo()" *ngIf="editSubCategoriaMode">
+                <mat-icon>cancel</mat-icon>
+            </button>            
+        </div>        
+    </div>
+</div>
