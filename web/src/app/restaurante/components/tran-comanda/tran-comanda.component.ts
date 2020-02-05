@@ -8,6 +8,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 import { Cuenta } from '../../interfaces/cuenta';
+import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
+
+import { ComandaService } from '../../services/comanda.service';
 
 /*
 const infoMesaTest = {
@@ -57,42 +60,58 @@ interface productoSelected {
 })
 export class TranComandaComponent implements OnInit {
 
-  @Input() mesaEnUso: any;
-  private lstProductosSeleccionados: productoSelected[];
-  private lstProductosDeCuenta: productoSelected[];
-  private lstProductosAImprimir: productoSelected[];
-  private cuentaSeleccionada: string = null;
-  private noCuentaSeleccionada: number = null;
-  private showPortalComanda: boolean = false;
-  private showPortalCuenta: boolean = false;
-  private windowConfig: WindowConfiguration;
-  private noComanda: number = 0;
-  private sumCuenta: number = 0;
+  @Input() mesaEnUso: ComandaGetResponse;
+  public lstProductosSeleccionados: productoSelected[];
+  public lstProductosDeCuenta: productoSelected[];
+  public lstProductosAImprimir: productoSelected[];
+  //public noCuentaSeleccionada: number = null;
+  public showPortalComanda: boolean = false;
+  public showPortalCuenta: boolean = false;
+  public windowConfig: WindowConfiguration;
+  public noComanda: number = 0;
+  public sumCuenta: number = 0;
+  public cuentaActiva: Cuenta;
 
   constructor(
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
+    public comandaSrvc: ComandaService,
     //private socket: Socket,
     //private signalRSrvc: SignalRService
   ) { }
 
   ngOnInit() {
     // this.mesaEnUso = infoMesaTest;
-    this.mesaEnUso = { cuentas: [] };
+    this.resetMesaEnUso();
     this.resetLstProductosSeleccionados();
     this.resetLstProductosDeCuenta();
+    this.resetCuentaActiva();
     this.noComanda = this.mesaEnUso.comanda || 0;
+    this.llenaProductosSeleccionados();    
     //this.signalRSrvc.startConnection(`restaurante_01`);
     // this.signalRSrvc.addBroadcastDataListener();
   }
 
+  resetMesaEnUso = () => this.mesaEnUso = {
+    comanda: null, usuario: null, sede: null, estatus: null, 
+    mesa: { 
+      mesa: null, 
+      area: { area: null, sede: null, area_padre: null, nombre: null }, 
+      numero: null, posx: null, posy: null, tamanio: null, estatus: null 
+    },
+    cuentas: []    
+  };
   resetLstProductosSeleccionados = () => this.lstProductosSeleccionados = [];
   resetLstProductosDeCuenta = () => this.lstProductosDeCuenta = [];
+  resetCuentaActiva = () => this.cuentaActiva = { cuenta: null, numero: null, nombre: null, productos: [] };
+
+  llenaProductosSeleccionados = () => {
+    this.mesaEnUso.cuentas.forEach(c => c.productos.forEach(p => this.lstProductosSeleccionados.push(p)));
+    console.log('PRODUCTOS DE TODAS LAS CUENTAS = ', this.lstProductosSeleccionados);
+  }
 
   setSelectedCuenta(noCuenta: number) {
-    const ctaSel = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +noCuenta);
-    this.cuentaSeleccionada = ctaSel.nombre;
-    this.noCuentaSeleccionada = noCuenta;
+    this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +noCuenta);
     this.setLstProductosDeCuenta();
   }
 
@@ -105,16 +124,16 @@ export class TranComandaComponent implements OnInit {
   }
 
   setLstProductosDeCuenta() {
-    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => p.cuenta == this.noCuentaSeleccionada);
+    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => p.cuenta == +this.cuentaActiva.numero);
   }
 
   addProductoSelected(producto: any) {
-    if (this.noCuentaSeleccionada) {
-      const idx = this.lstProductosSeleccionados.findIndex(p => p.id == producto.id && p.cuenta == this.noCuentaSeleccionada && p.impreso == false);
+    if (+this.cuentaActiva.numero) {
+      const idx = this.lstProductosSeleccionados.findIndex(p => p.id == producto.id && p.cuenta == +this.cuentaActiva.numero && p.impreso == false);
 
       if (idx < 0) {
         this.lstProductosSeleccionados.push({
-          id: producto.id, nombre: producto.nombre, cuenta: this.noCuentaSeleccionada, cantidad: 1, impreso: false, precio: producto.precio,
+          id: producto.id, nombre: producto.nombre, cuenta: +this.cuentaActiva.numero, cantidad: 1, impreso: false, precio: producto.precio,
           notas: '', showInputNotas: false, itemListHeight: '70px', total: 1 * producto.precio
         });
       } else {
@@ -127,7 +146,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   updProductosCuenta(nvaLista: productoSelected[] = []) {
-    let lstTemp: productoSelected[] = this.lstProductosSeleccionados.filter(p => p.cuenta != this.noCuentaSeleccionada);
+    let lstTemp: productoSelected[] = this.lstProductosSeleccionados.filter(p => p.cuenta != +this.cuentaActiva.numero);
     if (nvaLista.length > 0) {
       this.lstProductosSeleccionados = lstTemp.concat(nvaLista);
     } else {
@@ -139,7 +158,7 @@ export class TranComandaComponent implements OnInit {
     let tmp: any[] = [];
     for (let i = 0; i < prods.length; i++) {
       tmp.push({
-        id: prods[i].id,
+        articulo: prods[i].id,
         cantidad: prods[i].cantidad,
         precio: prods[i].precio,
         total: prods[i].total,
@@ -156,20 +175,35 @@ export class TranComandaComponent implements OnInit {
     this.noComanda = this.mesaEnUso.comanda;
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
     this.showPortalComanda = true;
-
+    /*
     const dataComanda = {
-      area: this.mesaEnUso.area,
-      mesa: this.mesaEnUso.mesa,
-      cuenta: this.noCuentaSeleccionada,
+      area: this.mesaEnUso.mesa.area.nombre,
+      mesa: this.mesaEnUso.mesa.numero,
+      cuenta: +this.cuentaActiva.numero,
       comanda: this.noComanda,
       productos: this.prepProductosComanda(this.lstProductosAImprimir)
     };
-    console.log(dataComanda, JSON.stringify(dataComanda));
-    // this.socket.emit("print:comanda", `Imprimiendo comanda de ${this.cuentaSeleccionada}`);
+    */
+    this.cuentaActiva.productos = this.prepProductosComanda(this.lstProductosDeCuenta);
+    const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +this.cuentaActiva.cuenta);
+    if (idxCta > -1) {
+      this.mesaEnUso.cuentas[idxCta] = this.cuentaActiva;
+      const objCmd: Comanda = {
+        area: this.mesaEnUso.mesa.area.area,
+        mesa: this.mesaEnUso.mesa.mesa,
+        mesero: this.mesaEnUso.usuario,
+        comanda: this.mesaEnUso.comanda,
+        cuentas: this.mesaEnUso.cuentas
+      };      
+      this.comandaSrvc.save(objCmd).subscribe(res => {
+        console.log(res);
+      });      
+    }
+    // this.socket.emit("print:comanda", `Imprimiendo comanda de ${this.cuentaActiva.nombre}`);
     /*
     this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
       Tipo: 'Comanda', 
-      Nombre: this.cuentaSeleccionada, 
+      Nombre: this.cuentaActiva.nombre, 
       Numero: this.noComanda, 
       DetalleCuenta: this.lstProductosAImprimir,
       Total: null
@@ -177,7 +211,7 @@ export class TranComandaComponent implements OnInit {
     */
   }
 
-  private sumaDetalle = (detalle: productoSelected[]) => {
+  sumaDetalle = (detalle: productoSelected[]) => {
     let total = 0.00;
     for (let i = 0; i < detalle.length; i++) {
       total += detalle[i].total || 0.00;
@@ -190,11 +224,11 @@ export class TranComandaComponent implements OnInit {
     this.setSumaCuenta(this.lstProductosAImprimir);
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
     this.showPortalCuenta = true;
-    // this.socket.emit("print:cuenta", `Imprimiendo cuenta de ${this.cuentaSeleccionada}`);
+    // this.socket.emit("print:cuenta", `Imprimiendo cuenta de ${this.cuentaActiva.nombre}`);
     /*
     this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
       Tipo: 'Cuenta', 
-      Nombre: this.cuentaSeleccionada, 
+      Nombre: this.cuentaActiva.nombre, 
       Numero: null, 
       DetalleCuenta: this.lstProductosAImprimir,
       Total: this.sumaDetalle(this.lstProductosAImprimir)
@@ -222,7 +256,7 @@ export class TranComandaComponent implements OnInit {
       const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
         width: '650px',
         data: {
-          cuenta: this.cuentaSeleccionada,
+          cuenta: this.cuentaActiva.nombre,
           productosACobrar: productosACobrar,
           porcentajePropina: 10
         }

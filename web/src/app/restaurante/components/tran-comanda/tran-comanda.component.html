@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col d-flex justify-content-center">
             <h4>
-                {{mesaEnUso.nombreArea}} - Mesa #{{mesaEnUso.numero}}
+                {{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}
             </h4>
         </div>
     </div>
@@ -19,8 +19,8 @@
             <h6>Productos</h6><br />
         </div>
         <div class="col d-flex justify-content-center" style="padding: 0 !important;">
-            <h6 *ngIf="cuentaSeleccionada">Cuenta de {{cuentaSeleccionada}}</h6>
-            <h6 *ngIf="!cuentaSeleccionada">Por favor seleccione una cuenta. Gracias.</h6>
+            <h6 *ngIf="cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</h6>
+            <h6 *ngIf="!cuentaActiva.nombre">Por favor seleccione una cuenta. Gracias.</h6>
         </div>
     </div>
     <div class="row">
@@ -28,33 +28,33 @@
             <app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>
         </div>
         <div class="col overflow-auto mat-elevation-z3">
-            <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="noCuentaSeleccionada"
+            <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero"
                 (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>
     </div>
     <div class="row">
         <div class="col d-flex justify-content-center">
-            <button mat-raised-button type="button" color="accent" (click)="printComanda()" [disabled]="!cuentaSeleccionada">
+            <button mat-raised-button type="button" color="accent" (click)="printComanda()" [disabled]="!cuentaActiva.nombre">
                 Comanda
             </button>
-            <button mat-raised-button type="button" color="accent" (click)="printCuenta()" [disabled]="!cuentaSeleccionada">
+            <button mat-raised-button type="button" color="accent" (click)="printCuenta()" [disabled]="!cuentaActiva.nombre">
                 Cuenta
             </button>
             <button mat-raised-button type="button" color="accent" (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2">
                 Unir cuentas
             </button>
-            <button mat-raised-button type="button" color="accent" (click)="cobrarCuenta()" [disabled]="!cuentaSeleccionada">
+            <button mat-raised-button type="button" color="accent" (click)="cobrarCuenta()" [disabled]="!cuentaActiva.nombre">
                 Cobrar cuenta
             </button>
         </div>
     </div>
 </div>
-<app-window *ngIf="showPortalComanda && cuentaSeleccionada" [windowConfig]="windowConfig">
+<app-window *ngIf="showPortalComanda && cuentaActiva.nombre" [windowConfig]="windowConfig">
     <div class="row">
         <div class="col" style="text-align: center; border-bottom: solid 1px black; padding: 0; font-Weight: bold;">
             <span style="font-size: 14pt;">Rest-Touch Pro</span><br />
             <span style="font-size: 16pt;">Comanda #{{noComanda}}</span><br />
-            <span style="font-size: 16pt;">{{cuentaSeleccionada}}</span>
+            <span style="font-size: 16pt;">{{cuentaActiva.nombre}}</span>
         </div>
     </div>
     <div class="row">
@@ -77,11 +77,11 @@
         <button mat-raised-button type="button" color="accent" (click)="this.showPortalComanda = false">Cerrar</button>
     </div>
 </app-window>
-<app-window *ngIf="showPortalCuenta && cuentaSeleccionada" [windowConfig]="windowConfig">
+<app-window *ngIf="showPortalCuenta && cuentaActiva.nombre" [windowConfig]="windowConfig">
     <div class="row">
         <div class="col" style="text-align: center; border-bottom: solid 1px black; padding: 0; font-Weight: bold;">
             <span style="font-size: 14pt;">Rest-Touch Pro</span><br />
-            <span style="font-size: 16pt;">Cuenta {{cuentaSeleccionada}}</span>
+            <span style="font-size: 16pt;">Cuenta {{cuentaActiva.nombre}}</span>
         </div>
     </div>
     <div class="row">

@@ -1,6 +1,6 @@
 <mat-sidenav-container class="matSideNavContainer">
     <mat-sidenav #rightSidenav mode="over" [(opened)]="openedRightPanel" (closedStart)="cerrandoRightSideNav()" position="end">
-        <app-tran-comanda [mesaEnUso]="mesaSeleccionada"></app-tran-comanda>
+        <app-tran-comanda #snTranComanda [mesaEnUso]="mesaSeleccionada"></app-tran-comanda>
         <hr/>
         <button mat-icon-button type="button" color="accent" (click)="toggleRightSidenav()">
             <mat-icon>close</mat-icon>
