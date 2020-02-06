@@ -74,18 +74,13 @@ class Catalogo extends CI_Controller {
 	public function get_lista_articulo()
 	{
 		$this->load->model('Categoria_model');
-		$cat = $this->Categoria_model->buscar($_GET);
-		$articulo = $this->Catalogo_model->getArticulo($_GET);
+		$cat = $this->Categoria_model->buscar($_GET);		
 		$datos = [];
 		foreach ($cat as $row) {
-
-
-
 			$grupo = $this->Catalogo_model->getCategoriaGrupo([
 				"categoria" => $row->categoria				
 			]);
 			$row->categoria_grupo = $grupo;
-			//$row->categoria_grupo = $grupo;
 
 			$datos[] = $row;
 		}

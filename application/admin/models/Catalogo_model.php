@@ -95,8 +95,12 @@ class Catalogo_model extends CI_Model {
 
 	public function getArticulo($args = [])
 	{
-		if (isset($args["articulo"])) {
-			$this->db->where("articulo", $args["articulo"]);
+		if(count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if ($key != '_uno') {
+					$this->db->where($key, $row);
+				}
+			}
 		}
 
 		$qry = $this->db
@@ -142,11 +146,11 @@ class Catalogo_model extends CI_Model {
 		$datos = [];
 		if (is_array($grupo)) {
 			foreach ($grupo as $row) {
-				
-				$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
-					"categoria_grupo_grupo" => $row->categoria_grupo
-				]);
-				
+				if ($row->categoria_grupo != 1) {
+					$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
+						"categoria_grupo_grupo" => $row->categoria_grupo
+					]);
+				}
 				$row->articulo = $this->Catalogo_model->getArticulo([
 					'categoria_grupo' => $row->categoria_grupo
 				]);
