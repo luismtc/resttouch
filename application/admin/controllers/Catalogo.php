@@ -71,9 +71,10 @@ class Catalogo extends CI_Controller {
 		->set_output(json_encode($this->Catalogo_model->getUsuario($_GET)));
 	}
 
-	public function get_lista_articulo()
+	public function get_lista_articulo($sede)
 	{
 		$this->load->model('Categoria_model');
+		$_GET['sede'] = $sede;
 		$cat = $this->Categoria_model->buscar($_GET);		
 		$datos = [];
 		foreach ($cat as $row) {
