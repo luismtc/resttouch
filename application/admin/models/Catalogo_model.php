@@ -146,11 +146,11 @@ class Catalogo_model extends CI_Model {
 		$datos = [];
 		if (is_array($grupo)) {
 			foreach ($grupo as $row) {
-				if ($row->categoria_grupo != 1) {
-					$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
-						"categoria_grupo_grupo" => $row->categoria_grupo
-					]);
-				}
+				
+				$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
+					"categoria_grupo_grupo" => $row->categoria_grupo
+				]);
+				
 				$row->articulo = $this->Catalogo_model->getArticulo([
 					'categoria_grupo' => $row->categoria_grupo
 				]);
