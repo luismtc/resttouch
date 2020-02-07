@@ -2,14 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 
-interface nodoProducto {
-  id: number;
-  nombre: string;
-  precio?: number;
-  hijos?: nodoProducto[];
-}
+import { ArbolArticulos, NodoProducto } from '../../../interfaces/articulo';
+import { ArticuloService } from '../../../services/articulo.service';
 
-const TREE_DATA: nodoProducto[] = [
+const TREE_DATA: NodoProducto[] = [
   {
     id: 1,
     nombre: 'Bebidas',
@@ -63,22 +59,35 @@ export class ListaProductoComponent implements OnInit {
   @Input() treeHeight: string = '450px';
   @Output() productoClickedEv = new EventEmitter();
 
-  treeControl = new NestedTreeControl<nodoProducto>(node => node.hijos);
-  dataSource = new MatTreeNestedDataSource<nodoProducto>();
+  treeControl = new NestedTreeControl<NodoProducto>(node => node.hijos);
+  dataSource = new MatTreeNestedDataSource<NodoProducto>();
+  public arbol: NodoProducto[];
 
-  constructor() {
-    this.dataSource.data = TREE_DATA;
+  constructor(
+    private articuloSrvc: ArticuloService
+  ) {
+    //this.dataSource.data = TREE_DATA;
   }
 
   ngOnInit() {
+    this.loadArbolArticulos();
   }
 
-  hasChild = (_: number, node: nodoProducto) => !!node.hijos && node.hijos.length > 0;
+  hasChild = (_: number, node: NodoProducto) => !!node.hijos && node.hijos.length > 0;
 
-  tieneHijos = (node: nodoProducto) => !!node.hijos && node.hijos.length > 0;
+  tieneHijos = (node: NodoProducto) => !!node.hijos && node.hijos.length > 0;
 
-  onProductoClicked(producto: nodoProducto) {
+  onProductoClicked(producto: NodoProducto) {
     this.productoClickedEv.emit(producto);
   }
 
+  loadArbolArticulos() {
+    this.articuloSrvc.getArbolArticulos(1).subscribe(res => {
+      if (res) {
+        this.arbol = this.articuloSrvc.convertToArbolNodoProducto(res);
+        //console.log(this.arbol);
+        this.dataSource.data = this.arbol;
+      }
+    });
+  }
 }
