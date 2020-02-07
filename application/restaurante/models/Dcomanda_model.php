@@ -6,6 +6,11 @@ class Dcomanda_model extends General_Model {
 	public $detalle_comanda;
 	public $comanda;
 	public $articulo;
+	public $cantidad;
+	public $precio;
+	public $impreso;
+	public $total;
+	public $notas;
 
 	public function __construct($id = '')
 	{

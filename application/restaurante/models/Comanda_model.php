@@ -6,6 +6,7 @@ class Comanda_model extends General_Model {
 	public $comanda;
 	public $usuario;
 	public $sede;
+	public $estatus;
 
 	public function __construct($id = '')
 	{
