@@ -35,6 +35,7 @@ class Cuenta extends CI_Controller {
 					$total+= ($row->cantidad * $row->precio);
 				}
 
+				$total += $req->propina_monto;
 				if($total == $req->total) {
 					$exito = true;
 					foreach ($req->forma_pago as $row) {
