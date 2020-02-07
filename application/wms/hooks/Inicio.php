@@ -4,16 +4,11 @@ if (!defined( 'BASEPATH')) exit('No direct script access allowed');
 
 class Inicio
 {
-    
-    public function __construct()
+    public function verificarSesion()
     {
     	$this->ci =& get_instance();
     	$this->ci->load->helper(['jwt', 'authorization']);
     	$this->libres = ['/resttouch/index.php/usuario/login.json'];
-    }
-
-    public function verificarSesion()
-    {
         if(!in_array($_SERVER['REQUEST_URI'], $this->libres)) {
         	$headers = $this->ci->input->request_headers();
         	$response = ['mensaje' => '¡Acceso no autorizado!', 'valido' => false];
@@ -46,5 +41,13 @@ class Inicio
 			 	exit();	 	
 			}
         }
+    }
+
+    public function headers()
+    {
+    	header('Access-Control-Allow-Origin: *');
+		header('Access-Control-Allow-Headers: Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+		header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
+		header('Allow: GET, POST, OPTIONS, PUT, DELETE');
     }
 }

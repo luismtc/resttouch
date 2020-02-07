@@ -18,3 +18,11 @@ $hook['post_controller_constructor'] = array(
 	'filepath' => 'hooks',
 	'params'   => array()
 );
+
+$hook['pre_controller'] = array(
+	'class'    => 'Inicio',
+	'function' => 'headers',
+	'filename' => 'Inicio.php',
+	'filepath' => 'hooks',
+	'params'   => array()
+);
