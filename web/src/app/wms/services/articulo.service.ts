@@ -101,11 +101,10 @@ export class ArticuloService {
           np[np.length - 1].hijos.push({
             id: art.articulo,
             nombre: art.descripcion,
-            precio: 0.01,
+            precio: art.precio,
             hijos: null
           });
         }
-
       }
 
       if (!!grp.categoria_grupo_grupo && grp.categoria_grupo_grupo.length > 0) {

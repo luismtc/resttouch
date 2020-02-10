@@ -13,7 +13,7 @@ export class ProductoComponent implements OnInit {
   @ViewChild('lstProducto', { static: false }) lstProductoComponent: ListaProductoComponent;
   
   constructor() {
-    this.articulo = { articulo: null, categoria_grupo: null, presentacion: null, descripcion: null  };
+    this.articulo = { articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null  };
   }
 
   ngOnInit() {

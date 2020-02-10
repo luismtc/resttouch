@@ -3,6 +3,7 @@ export interface Articulo {
     categoria_grupo: number;
     presentacion: number;
     descripcion: string;
+    precio: number;
 }
 
 export interface ArbolCategoriaGrupo {
