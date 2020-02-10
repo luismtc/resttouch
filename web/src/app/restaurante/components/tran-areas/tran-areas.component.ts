@@ -9,33 +9,6 @@ import { AreaService } from '../../services/area.service';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { ComandaService } from '../../services/comanda.service';
 
-/*
-const tam = 72;
-const lstAreas = [
-  {
-    area: 1,
-    nombre: 'Area 01',
-    mesas: [
-      { numero: 1, posx: '1%', posy: '1%', tamanio: tam, estatus: 1 },
-      { numero: 2, posx: '10%', posy: '10%', tamanio: tam, estatus: 1 },
-      { numero: 3, posx: '20%', posy: '5%', tamanio: tam, estatus: 2 },
-      { numero: 4, posx: '30%', posy: '35%', tamanio: tam, estatus: 1 },
-      { numero: 5, posx: '2.5%', posy: '25%', tamanio: tam, estatus: 1 },
-    ]
-  },
-  {
-    area: 2,
-    nombre: 'Area 02',
-    mesas: []
-  },
-  {
-    area: 3,
-    nombre: 'Area 03',
-    mesas: []
-  },
-];
-*/
-
 @Component({
   selector: 'app-tran-areas',
   templateUrl: './tran-areas.component.html',
@@ -105,9 +78,13 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   setEstatusMesa = (m: any, estatus: number) => {
+    console.log('Mesa = ', m);
+    console.log('Estatus solicitado = ', estatus);
     const idxArea = this.lstTabsAreas.findIndex(a => +a.area === +m.area);
+    console.log(`Area = ${idxArea}`);
     if (idxArea > -1) {
       const idxMesa = this.lstTabsAreas[idxArea].mesas.findIndex(m => +m.mesa === +m.mesa);
+      console.log(`Mesa = ${idxMesa}`);
       if (idxMesa > -1) {
         this.lstTabsAreas[idxArea].mesas[idxMesa].estatus = estatus;
       }
@@ -125,6 +102,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       comanda: 0,
       esEvento: false,
       dividirCuentasPorSillas: false,
+      estatus: 1,
       cuentas: [
         {
           numero: 1,
@@ -145,7 +123,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         this.mesaSeleccionadaToOpen = result;
         // console.log(JSON.stringify(this.mesaSeleccionada));
         this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
-          console.log(res);
+          //console.log(res);
           if (res.exito) {
             this.mesaSeleccionada = res.comanda;
             this.setEstatusMesa(m, +res.comanda.mesa.estatus);
@@ -171,7 +149,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
       if (res) {
         this.mesaSeleccionada = res;
-        this.snTrancomanda.llenaProductosSeleccionados();
+        this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
         this.toggleRightSidenav();
       } else {
         this._snackBar.open(`Problema al mostrar la comanda de la mesa #${obj.numero}`, 'ERROR', { duration: 5000 });

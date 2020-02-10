@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
-import { FormaPago } from '../interfaces/forma-pago';
+import { Cobro } from '../interfaces/cobro';
 import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -11,10 +11,10 @@ import * as qs from 'qs';
 @Injectable({
   providedIn: 'root'
 })
-export class FormaPagoService {
+export class CobroService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'catalogo';
+  private moduleUrl: string = 'cuenta';
   private usrToken: string = null;
 
   constructor(
@@ -25,12 +25,12 @@ export class FormaPagoService {
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
 
-  get(fltr: any = {}): Observable<FormaPago[]> {
+  save(entidad: Cobro): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
-    return this.http.get<FormaPago[]>(`${GLOBAL.url}/${this.moduleUrl}/get_forma_pago?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
-  }  
+    };    
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cobrar/${entidad.cuenta}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
 }

@@ -1,8 +1,11 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { FormaPago } from '../../interfaces/forma-pago';
+import { Cobro } from '../../interfaces/cobro';
 import { FormaPagoService } from '../../services/forma-pago.service';
+import { CobroService } from '../../services/cobro.service';
 
 @Component({
   selector: 'app-cobrar-pedido',
@@ -12,14 +15,16 @@ import { FormaPagoService } from '../../services/forma-pago.service';
 export class CobrarPedidoComponent implements OnInit {
 
   @Input() inputData: any = {};
-  private lstFormasPago: FormaPago[] = [];
-  private formaPago: any = {};
-  private formasPagoDeCuenta: any[] = [];
+  public lstFormasPago: FormaPago[] = [];
+  public formaPago: any = {};
+  public formasPagoDeCuenta: any[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<CobrarPedidoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public formaPagoSrvc: FormaPagoService
+    private _snackBar: MatSnackBar,
+    public formaPagoSrvc: FormaPagoService,
+    public cobroSrvc: CobroService
   ) { }
 
   ngOnInit() {
@@ -56,8 +61,8 @@ export class CobrarPedidoComponent implements OnInit {
 
   loadFormasPago = () => {
     this.formaPagoSrvc.get({ activo: 1 }).subscribe((res: any) => {
-      if (!!res.forma_pago && res.forma_pago.length > 0) {
-        this.lstFormasPago = res.forma_pago;
+      if (!!res && res.length > 0) {
+        this.lstFormasPago = res;
       }
     });
   }
@@ -70,7 +75,7 @@ export class CobrarPedidoComponent implements OnInit {
     this.actualizaSaldo();
   }
 
-  delFormaPago = (idx: number) => {    
+  delFormaPago = (idx: number) => {
     this.formasPagoDeCuenta.splice(idx, 1);
     this.actualizaSaldo();
   }
@@ -83,4 +88,30 @@ export class CobrarPedidoComponent implements OnInit {
   }
 
   cancelar = () => this.dialogRef.close();
+
+  cobrar = () => {
+    const objCobro: Cobro = {
+      cuenta: this.inputData.idcuenta,
+      forma_pago: [],
+      total: this.inputData.totalDeCuenta + this.inputData.montoPropina,
+      propina_monto: this.inputData.montoPropina,
+      propina_porcentaje: this.inputData.porcentajePropina
+    };
+    for (let i = 0; i < this.formasPagoDeCuenta.length; i++) {
+      objCobro.forma_pago.push({
+        forma_pago: +this.formasPagoDeCuenta[i].forma_pago.forma_pago,
+        monto: this.formasPagoDeCuenta[i].monto
+      });
+    }
+    console.log(objCobro);
+    this.cobroSrvc.save(objCobro).subscribe(res => {
+      if (res.exito) {
+        console.log(res);
+        this._snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
+        this.dialogRef.close(res.cuenta);
+      } else {
+        this._snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 3000 });
+      }
+    });
+  };
 }

@@ -12,34 +12,6 @@ import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 
 import { ComandaService } from '../../services/comanda.service';
 
-/*
-const infoMesaTest = {
-  area: 'Area 01',
-  noMesa: 1,
-  cuentas: [
-    { numero: 1, nombre: 'Juan' },
-    { numero: 2, nombre: 'Pedro' },
-    { numero: 3, nombre: 'Pablo' }
-  ]
-};
-*/
-/*
-    this.mesaSeleccionada = {
-      mesa: +m.numero,
-      mesero: '',
-      comensales: '1',
-      esEvento: false,
-      dividirCuentasPorSillas: false,
-      cuentas: [
-        {
-          numero: 1,
-          nombre: '1',
-          productos: []
-        }
-      ]
-    }
-*/
-
 interface productoSelected {
   id: number;
   nombre: string;
@@ -81,33 +53,48 @@ export class TranComandaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.mesaEnUso = infoMesaTest;
     this.resetMesaEnUso();
     this.resetLstProductosSeleccionados();
     this.resetLstProductosDeCuenta();
     this.resetCuentaActiva();
     this.noComanda = this.mesaEnUso.comanda || 0;
-    this.llenaProductosSeleccionados();    
+    this.llenaProductosSeleccionados();
     //this.signalRSrvc.startConnection(`restaurante_01`);
     // this.signalRSrvc.addBroadcastDataListener();
   }
 
   resetMesaEnUso = () => this.mesaEnUso = {
-    comanda: null, usuario: null, sede: null, estatus: null, 
-    mesa: { 
-      mesa: null, 
-      area: { area: null, sede: null, area_padre: null, nombre: null }, 
-      numero: null, posx: null, posy: null, tamanio: null, estatus: null 
+    comanda: null, usuario: null, sede: null, estatus: null,
+    mesa: {
+      mesa: null,
+      area: { area: null, sede: null, area_padre: null, nombre: null },
+      numero: null, posx: null, posy: null, tamanio: null, estatus: null
     },
-    cuentas: []    
+    cuentas: []
   };
   resetLstProductosSeleccionados = () => this.lstProductosSeleccionados = [];
   resetLstProductosDeCuenta = () => this.lstProductosDeCuenta = [];
   resetCuentaActiva = () => this.cuentaActiva = { cuenta: null, numero: null, nombre: null, productos: [] };
 
-  llenaProductosSeleccionados = () => {
-    this.mesaEnUso.cuentas.forEach(c => c.productos.forEach(p => this.lstProductosSeleccionados.push(p)));
-    console.log('PRODUCTOS DE TODAS LAS CUENTAS = ', this.lstProductosSeleccionados);
+  llenaProductosSeleccionados = (conQueMesa: ComandaGetResponse = this.mesaEnUso) => {
+    for (let i = 0; i < conQueMesa.cuentas.length; i++) {
+      let cta = conQueMesa.cuentas[i];
+      for (let j = 0; j < cta.productos.length; j++) {
+        let p = cta.productos[j];
+        this.lstProductosSeleccionados.push({
+          id: +p.articulo.articulo,
+          nombre: p.articulo.descripcion,
+          cuenta: +p.numero_cuenta || 1,
+          cantidad: +p.cantidad || 1,
+          impreso: (+p.impreso === 1) || true,
+          precio: parseFloat(p.precio) || 10.00,
+          total: parseFloat(p.total) || (parseFloat(p.cantidad) * parseFloat(p.precio)),
+          notas: p.notas || '',
+          showInputNotas: false,
+          itemListHeight: '70px'
+        });
+      }
+    }
   }
 
   setSelectedCuenta(noCuenta: number) {
@@ -194,10 +181,10 @@ export class TranComandaComponent implements OnInit {
         mesero: this.mesaEnUso.usuario,
         comanda: this.mesaEnUso.comanda,
         cuentas: this.mesaEnUso.cuentas
-      };      
+      };
       this.comandaSrvc.save(objCmd).subscribe(res => {
         console.log(res);
-      });      
+      });
     }
     // this.socket.emit("print:comanda", `Imprimiendo comanda de ${this.cuentaActiva.nombre}`);
     /*
@@ -257,6 +244,7 @@ export class TranComandaComponent implements OnInit {
         width: '650px',
         data: {
           cuenta: this.cuentaActiva.nombre,
+          idcuenta: this.cuentaActiva.cuenta,
           productosACobrar: productosACobrar,
           porcentajePropina: 10
         }
@@ -265,6 +253,7 @@ export class TranComandaComponent implements OnInit {
       cobrarCtaRef.afterClosed().subscribe(res => {
         if (res) {
           console.log(res);
+          this.cambiarEstatusCuenta(res);
           //this.socket.emit('print:doccontable', JSON.stringify(res));
         }
       });
@@ -273,4 +262,8 @@ export class TranComandaComponent implements OnInit {
     }
   }
 
+  cambiarEstatusCuenta = (obj: any) => {
+    const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +obj.cuenta);
+    this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada === 1;
+  }
 }
