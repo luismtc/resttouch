@@ -4,6 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Compra_model extends General_Model {
 
 	public $orden_compra;
+	public $proveedor;
+	public $fecha;
+	public $usuario;
+	public $notas;
 
 	public function __construct($id = "")
 	{
@@ -13,6 +17,14 @@ class Compra_model extends General_Model {
 		if(!empty($id)) {
 			$this->cargar($id);
 		}
+	}
+
+	public function getProveedor()
+	{
+		return $this->db
+					->where("proveedor", $this->proveedor)
+					->get("resttouch.proveedor")
+					->row();
 	}
 
 	public function setDetalle(Array $args, $id = "")

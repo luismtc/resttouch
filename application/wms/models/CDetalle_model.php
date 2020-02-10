@@ -6,6 +6,9 @@ class CDetalle_model extends General_Model {
 	public $orden_compra_detalle;
 	public $orden_compra;
 	public $articulo;
+	public $cantidad;
+	public $monto;
+	public $total;
 
 	public function __construct($id = "")
 	{
