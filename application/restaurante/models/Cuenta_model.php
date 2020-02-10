@@ -9,7 +9,7 @@ class Cuenta_model extends General_Model {
 	public $numero;
 	public $propina_monto = 0;
 	public $propina_porcentaje = 0;
-	public $cerrada;
+	public $cerrada = 0;
 
 	public function __construct($id = '')
 	{
