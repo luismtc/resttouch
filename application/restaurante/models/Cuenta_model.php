@@ -7,8 +7,8 @@ class Cuenta_model extends General_Model {
 	public $comanda;
 	public $nombre;
 	public $numero;
-	public $propina_monto;
-	public $propina_porcentaje;
+	public $propina_monto = 0;
+	public $propina_porcentaje = 0;
 	public $cerrada;
 
 	public function __construct($id = '')
