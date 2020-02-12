@@ -48,7 +48,7 @@ class Ingreso_model extends General_Model {
 	public function getBodegaOrigen()
 	{
 		return $this->db
-					->where("bodega_origen", $this->bodega_origen)
+					->where("bodega", $this->bodega_origen)
 					->get("resttouch.bodega")
 					->row();
 	}
