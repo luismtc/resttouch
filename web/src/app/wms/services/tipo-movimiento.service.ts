@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
-import { Proveedor } from '../interfaces/proveedor';
+import { TipoMovimiento } from '../interfaces/tipo-movimiento';
 import { LocalstorageService } from '../../admin/services/localstorage.service';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProveedorService {
+export class TipoMovimientoService {
 
   private srvcErrHndl: ServiceErrorHandler;
   private usrToken: string = null;
@@ -24,12 +24,12 @@ export class ProveedorService {
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
 
-  get(fltr: any = {}): Observable<Proveedor[]> {
+  get(fltr: any = {}): Observable<TipoMovimiento[]> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Proveedor[]>(`${GLOBAL.urlCatalogos}/get_proveedor?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<TipoMovimiento[]>(`${GLOBAL.urlCatalogos}/get_tipo_movimiento?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

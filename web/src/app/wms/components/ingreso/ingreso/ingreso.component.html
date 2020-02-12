@@ -4,7 +4,7 @@
             <app-lista-ingreso #lstIngreso (getIngresoEv)="setIngreso($event)"></app-lista-ingreso>
         </div>
         <div class="col">
-            <app-form-ingreso [ingreso]="ingreso" (ingresoSavedEv)="refreshIngresoList()"></app-form-ingreso>
+            <app-form-ingreso #frmIngreso [ingreso]="ingreso" (ingresoSavedEv)="refreshIngresoList()"></app-form-ingreso>
         </div>
     </div>
 </div>

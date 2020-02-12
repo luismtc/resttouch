@@ -32,7 +32,7 @@ export class ListaIngresoComponent implements OnInit {
   }
 
   loadIngresos = () => {
-    this.ingresoSrvc.getIngresosDePrueba().subscribe(lst => {
+    this.ingresoSrvc.get().subscribe(lst => {
       if (lst) {
         if (lst.length > 0) {
           this.lstIngresos = lst;
@@ -43,17 +43,17 @@ export class ListaIngresoComponent implements OnInit {
     });
   }
 
-  getIngreso = (id: number) => {
-    this.getIngresoEv.emit(this.lstIngresos.filter(i => i.ingreso === id)[0]);
-    /*
-    this.ingresoSrvc.getIngresosDePrueba().subscribe(lst => {
-      if (lst) {
-        if (lst.length > 0) {
-          this.getIngresoEv.emit(lst[0]);
-        }
-      }
-    });        
-    */
+  getIngreso = (obj: any) => {
+    this.getIngresoEv.emit({
+      ingreso: obj.ingreso,
+      tipo_movimiento: obj.tipo_movimiento.tipo_movimiento,
+      fecha: obj.fecha,
+      bodega_origen: !!obj.bodega_origen && !!obj.bodega_origen.bodega ? obj.bodega_origen.bodega : null,
+      bodega: obj.bodega.bodega,
+      usuario: obj.usuario.usuario,
+      comentario: obj.comentario,
+      proveedor: obj.proveedor.proveedor
+    });
   }
 
 }
