@@ -21,6 +21,7 @@ class Ingreso extends CI_Controller {
 
 			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
+				$datos['ingreso'] = $ing;
 			} else {
 				$datos['mensaje'] = implode("<br>", $ing->getMensaje());
 			}	
@@ -38,11 +39,14 @@ class Ingreso extends CI_Controller {
 		$this->load->model('IDetalle_Model');
 		$ing = new Ingreso_model($ingreso);
 		$req = json_decode(file_get_contents('php://input'), true);
+		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $ing->setDetalle($req, $id);;
+			$det = $ing->setDetalle($req, $id);;
 
-			if($datos['exito']) {
+			if($det) {
+				$datos['exito'] = true;
 				$datos['mensaje'] = "Datos Actualizados con Exito";
+				$datos['detalle'] = $det;
 			} else {
 				$datos['mensaje'] = implode("<br>", $ing->getMensaje());
 			}	
@@ -64,6 +68,8 @@ class Ingreso extends CI_Controller {
 				$row->tipo_movimiento = $tmp->getTipoMovimiento();
 				$row->proveedor = $tmp->getProveedor();
 				$row->bodega = $tmp->getBodega();
+				$row->bodega_origen = $tmp->getBodegaOrigen();
+				$row->usuario = $tmp->getUsuario();
 				$datos[] = $row;
 			}
 		} else if($ingreso){

@@ -45,15 +45,33 @@ class Ingreso_model extends General_Model {
 					->row();
 	}
 
+	public function getBodegaOrigen()
+	{
+		return $this->db
+					->where("bodega_origen", $this->bodega_origen)
+					->get("resttouch.bodega")
+					->row();
+	}
+
+	public function getUsuario()
+	{
+		return $this->db
+					->where("usuario", $this->usuario)
+					->get("resttouch.usuario")
+					->row();
+	}
+
 	public function setDetalle(Array $args, $id = "")
 	{
 		$det = new IDetalle_Model($id);
 		$args['ingreso'] = $this->ingreso;
 		$result = $det->guardar($args);
 
-		if(!$result) {
-			$this->mensaje = $det->getMensaje();
+		if($result) {
+			return $det;
 		}
+
+		$this->mensaje = $det->getMensaje();
 
 		return $result;
 	}
