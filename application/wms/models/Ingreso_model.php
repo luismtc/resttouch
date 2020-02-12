@@ -5,10 +5,12 @@ class Ingreso_model extends General_Model {
 
 	public $ingreso;
 	public $tipo_movimiento;
-	public $proveedor;
+	public $fecha;
 	public $bodega;
-	public $nota;
-	public $referencia;
+	public $usuario;
+	public $bodega_origen;
+	public $comentario;
+	public $proveedor;
 
 	public function __construct($id = "")
 	{
