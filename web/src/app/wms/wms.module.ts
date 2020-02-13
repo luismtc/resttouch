@@ -35,10 +35,13 @@ import { IngresoComponent } from './components/ingreso/ingreso/ingreso.component
 import { ProductoComponent } from './components/producto/producto/producto.component';
 import { FormProductoComponent } from './components/producto/form-producto/form-producto.component';
 import { CategoriaProductoComponent } from './components/producto/categoria-producto/categoria-producto.component';
+import { EgresoComponent } from './components/egreso/egreso/egreso.component';
+import { ListaEgresoComponent } from './components/egreso/lista-egreso/lista-egreso.component';
+import { FormEgresoComponent } from './components/egreso/form-egreso/form-egreso.component';
 
 
 @NgModule({
-  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent],
+  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent],
   imports: [
     CommonModule,
     WmsRoutingModule,

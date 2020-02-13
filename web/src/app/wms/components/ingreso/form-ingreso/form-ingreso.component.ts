@@ -17,7 +17,6 @@ import { BodegaService } from '../../../services/bodega.service';
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloService } from '../../../services/articulo.service';
 
-
 @Component({
   selector: 'app-form-ingreso',
   templateUrl: './form-ingreso.component.html',

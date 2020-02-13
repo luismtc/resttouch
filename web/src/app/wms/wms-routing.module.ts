@@ -3,10 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthguardService as AuthGuard } from '../admin/services/authguard.service';
 
 import { IngresoComponent } from './components/ingreso/ingreso/ingreso.component';
+import { EgresoComponent } from './components/egreso/egreso/egreso.component';
 import { ProductoComponent } from './components/producto/producto/producto.component';
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
+  { path: 'egresos', component: EgresoComponent, canActivate: [AuthGuard] },
   { path: 'articulos', component: ProductoComponent, canActivate: [AuthGuard] }
 ];
 

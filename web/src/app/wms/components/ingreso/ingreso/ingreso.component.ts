@@ -6,7 +6,6 @@ import { ListaIngresoComponent } from '../lista-ingreso/lista-ingreso.component'
 import { FormIngresoComponent } from '../form-ingreso/form-ingreso.component';
 import { Ingreso } from '../../../interfaces/ingreso';
 
-
 @Component({
   selector: 'app-ingreso',
   templateUrl: './ingreso.component.html',
