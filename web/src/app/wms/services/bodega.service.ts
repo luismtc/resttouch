@@ -14,7 +14,6 @@ import * as qs from 'qs';
 export class BodegaService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'catalogo';
   private usrToken: string = null;
 
   constructor(
@@ -31,6 +30,6 @@ export class BodegaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Bodega[]>(`${GLOBAL.url}/${this.moduleUrl}/get_bodega?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Bodega[]>(`${GLOBAL.urlCatalogos}/get_bodega?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

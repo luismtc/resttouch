@@ -3,6 +3,6 @@ export interface DetalleIngreso {
     ingreso: number;
     articulo: number;
     cantidad: number;
-    costo_unitario: number;
-    costo_total: number;
+    precio_unitario: number;
+    precio_total: number;
 }
