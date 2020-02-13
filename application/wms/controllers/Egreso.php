@@ -84,7 +84,6 @@ class Egreso extends CI_Controller {
 				$tmp = new Egreso_model($row->egreso);
 				$row->tipo_movimiento = $tmp->getTipoMovimiento();
 				$row->bodega = $tmp->getBodega();
-				$row->bodega_origen = $tmp->getBodegaOrigen();
 				$row->usuario = $tmp->getUsuario();
 				$datos[] = $row;
 			}
