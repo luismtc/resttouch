@@ -7,6 +7,7 @@ class Compra_model extends General_Model {
 	public $proveedor;
 	public $fecha;
 	public $usuario;
+	public $estatus_movimiento;
 	public $notas;
 
 	public function __construct($id = "")
@@ -33,9 +34,11 @@ class Compra_model extends General_Model {
 		$args['orden_compra'] = $this->orden_compra;
 		$result = $det->guardar($args);
 
-		if(!$result) {
-			$this->mensaje = $det->getMensaje();
+		if($result) {
+			return $det;
 		}
+
+		$this->mensaje = $det->getMensaje();
 
 		return $result;
 	}

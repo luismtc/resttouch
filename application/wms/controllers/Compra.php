@@ -19,15 +19,18 @@ class Compra extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $ocs->guardar($req);
+			if (empty($id) || $ocs->estatus_movimiento == 1) {
+				$datos['exito'] = $ocs->guardar($req);
 
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['compra'] = $ocs;
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['compra'] = $ocs;
+				} else {
+					$datos['mensaje'] = implode("<br>", $ocs->getMensaje());
+				}		
 			} else {
-				$datos['mensaje'] = implode("<br>", $ocs->getMensaje());
+				$datos['mensaje'] = "Solo se pueden modificar ordenes en estatus abierto";
 			}	
-
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
@@ -42,10 +45,12 @@ class Compra extends CI_Controller {
 		$ocs = new Compra_model($orden);
 		$req = json_decode(file_get_contents('php://input'), true);
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $ocs->setDetalle($req, $id);;
+			$det = $ocs->setDetalle($req, $id);;
 
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";				
+			if($det) {
+				$datos['exito'] = true;
+				$datos['mensaje'] = "Datos Actualizados con Exito";		
+				$datos['detalle'] = $det;		
 			} else {
 				$datos['mensaje'] = implode("<br>", $ocs->getMensaje());
 			}	
