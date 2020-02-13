@@ -45,6 +45,7 @@ class Compra_model extends General_Model {
 
 	public function getDetalle($args = [])
 	{
+		$args['orden_compra'] = $this->orden_compra;
 		$det = $this->CDetalle_model->buscar($args);
 		$datos = [] ;
 		if(is_array($det)) {

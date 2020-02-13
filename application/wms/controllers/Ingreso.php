@@ -17,14 +17,18 @@ class Ingreso extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $ing->guardar($req);
+			if (empty($id) || $ing->estatus_movimiento == 1) {				
+				$datos['exito'] = $ing->guardar($req);
 
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['ingreso'] = $ing;
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['ingreso'] = $ing;
+				} else {
+					$datos['mensaje'] = implode("<br>", $ing->getMensaje());
+				}
 			} else {
-				$datos['mensaje'] = implode("<br>", $ing->getMensaje());
-			}	
+				$datos['mensaje'] = "Solo puede editar ingresos en estatus Abierto";
+			}
 
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
@@ -41,15 +45,19 @@ class Ingreso extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$det = $ing->setDetalle($req, $id);;
+			if ($ing->estatus_movimiento == 1) {
+				$det = $ing->setDetalle($req, $id);;
 
-			if($det) {
-				$datos['exito'] = true;
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['detalle'] = $det;
+				if($det) {
+					$datos['exito'] = true;
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['detalle'] = $det;
+				} else {
+					$datos['mensaje'] = implode("<br>", $ing->getMensaje());
+				}	
 			} else {
-				$datos['mensaje'] = implode("<br>", $ing->getMensaje());
-			}	
+				$datos['mensaje'] = "Solo puede editar ingresos en estatus Abierto";
+			}
 
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";

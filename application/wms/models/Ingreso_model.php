@@ -11,6 +11,7 @@ class Ingreso_model extends General_Model {
 	public $bodega_origen;
 	public $comentario;
 	public $proveedor;
+	public $estatus_movimiento;
 
 	public function __construct($id = "")
 	{
@@ -78,6 +79,7 @@ class Ingreso_model extends General_Model {
 
 	public function getDetalle($args = [])
 	{
+		$args['ingreso'] = $this->ingreso;
 		$det = $this->IDetalle_Model->buscar($args);
 		$datos = [] ;
 		if(is_array($det)) {
