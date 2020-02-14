@@ -63,6 +63,38 @@ class Compra_model extends General_Model {
 		return $datos;
 	}
 
+	public function generarIngreso($args =[])
+	{
+		$ing = new Ingreso_model();
+		$datos = [
+			'tipo_movimiento' => $args['tipo_movimiento'],
+			'fecha' => date('Y-m-d H:i:s'),
+			'bodega' => $args['bodega'],
+			'usuario' => $this->usuario,
+			'comentario' => $this->notas,
+			'proveedor' => $this->proveedor,
+			'estatus_movimiento' => 2
+		];
+
+		if($ing->guardar($datos)) {
+			foreach ($this->getDetalle() as $row) {
+				$row->articulo = $row->articulo->articulo;
+				$row->precio_unitario = $row->monto;
+				$row->precio_total = $row->total;
+				$det = $ing->setDetalle((array) $row);				
+			}
+			$this->db
+				 ->set("ingreso", $ing->ingreso)
+				 ->set("orden_compra", $this->orden_compra)
+				 ->insert("resttouch.ingreso_has_orden_compra");
+			return $ing;
+		} else {
+			$this->mensaje = $det->getMensaje();
+		}
+
+		return false;
+	}
+
 }
 
 /* End of file Compra_model.php */

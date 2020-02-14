@@ -8,7 +8,9 @@ class Compra extends CI_Controller {
         parent::__construct();
         $this->load->model([
         	'Compra_model',
-        	'CDetalle_model'
+        	'CDetalle_model',
+        	'Ingreso_model',
+        	'IDetalle_Model'
         ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -21,7 +23,15 @@ class Compra extends CI_Controller {
 		if ($this->input->method() == 'post') {
 			if (empty($id) || $ocs->estatus_movimiento == 1) {
 				$datos['exito'] = $ocs->guardar($req);
-
+				if ($ocs->estatus_movimiento == 2) {
+					$ing = $ocs->generarIngreso($req);
+					if ($ing) {
+						$ing->detalle = $ing->getDetalle();
+						$datos['ingreso'] = $ing;
+					} else {
+						$datos['exito'] = false;
+					}
+				}
 				if($datos['exito']) {
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['compra'] = $ocs;
