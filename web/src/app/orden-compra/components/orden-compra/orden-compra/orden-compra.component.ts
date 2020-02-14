@@ -20,7 +20,7 @@ export class OrdenCompraComponent implements OnInit {
     private ls: LocalstorageService
   ) {
     this.ordenCompra = {
-      orden_compra: null, proveedor: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), notas: null, estatus_movimiento: 1
+      orden_compra: null, proveedor: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), notas: null, estatus_movimiento: 1, bodega: null, tipo_movimiento: null
     };
   }
 

@@ -5,4 +5,6 @@ export interface OrdenCompra {
     usuario: number;
     notas: string;
     estatus_movimiento?: number;
+    tipo_movimiento?: number;
+    bodega?: number;
 }

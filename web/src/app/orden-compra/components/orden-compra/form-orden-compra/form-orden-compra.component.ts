@@ -11,6 +11,10 @@ import { Proveedor } from '../../../../wms/interfaces/proveedor';
 import { ProveedorService } from '../../../../wms/services/proveedor.service';
 import { Articulo } from '../../../../wms/interfaces/articulo';
 import { ArticuloService } from '../../../../wms/services/articulo.service';
+import { TipoMovimiento } from '../../../../wms/interfaces/tipo-movimiento';
+import { TipoMovimientoService } from '../../../../wms/services/tipo-movimiento.service';
+import { Bodega } from '../../../../wms/interfaces/bodega';
+import { BodegaService } from '../../../../wms/services/bodega.service';
 
 @Component({
   selector: 'app-form-orden-compra',
@@ -31,19 +35,25 @@ export class FormOrdenCompraComponent implements OnInit {
   public dataSource: MatTableDataSource<DetalleOrdenCompra>;
   public proveedores: Proveedor[] = [];
   public articulos: Articulo[] = [];
+  public tiposMovimiento: TipoMovimiento[] = [];
+  public bodegas: Bodega[] = [];
 
   constructor(
     private _snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private ordenCompraSrvc: OrdenCompraService,
     private proveedorSrvc: ProveedorService,
-    private articuloSrvc: ArticuloService
+    private articuloSrvc: ArticuloService,
+    private tipoMovimientoSrvc: TipoMovimientoService,
+    private bodegaSrvc: BodegaService
   ) { }
 
   ngOnInit() {
     this.resetOrdenCompra();
     this.loadProveedores();
     this.loadArticulos();
+    this.loadBodegas();
+    this.loadTiposMovimiento();
   }
 
   loadProveedores = () => {
@@ -54,9 +64,25 @@ export class FormOrdenCompraComponent implements OnInit {
     });
   }
 
+  loadTiposMovimiento = () => {
+    this.tipoMovimientoSrvc.get().subscribe(res => {
+      if (res) {
+        this.tiposMovimiento = res;
+      }
+    });
+  }
+
+  loadBodegas = () => {
+    this.bodegaSrvc.get().subscribe(res => {
+      if (res) {
+        this.bodegas = res;
+      }
+    });
+  }
+
   resetOrdenCompra = () => {
     this.ordenCompra = {
-      orden_compra: null, proveedor: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), notas: null, estatus_movimiento: 1
+      orden_compra: null, proveedor: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), notas: null, estatus_movimiento: 1, bodega: null, tipo_movimiento: null
     }
     this.resetDetalleOrdenCompra();
   }
@@ -132,4 +158,8 @@ export class FormOrdenCompraComponent implements OnInit {
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesOrdenCompra);
 
+  generarIngreso = () => {
+    this.ordenCompra.estatus_movimiento = 2;
+    this.onSubmit();
+  }
 }
