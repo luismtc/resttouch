@@ -1,3 +1,11 @@
-<div>
-    <h3>Dashboard</h3>
+<div class="container d-flex justify-content-center align-items-center" style="height: 400px !important; overflow-y: hidden !important;">
+    <div class="d-flex flex-row" *ngFor="let fila of appMenu">
+        <div class="mat-elevation-z2 divBtnSize" *ngFor="let boton of fila.boton">
+            <a mat-button class="divBtnSize" [routerLink]="boton.url" (click)="handleClick(boton.rol)">
+                <mat-icon class="lnkIconBoton">{{boton.icono}}</mat-icon>
+                <br/>
+                <span class="lnkBoton">{{boton.descripcion}}</span>
+            </a>
+        </div>
+    </div>
 </div>

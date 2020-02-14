@@ -7,6 +7,35 @@ import { LocalstorageService } from '../services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 
+export interface IAppMenu {
+  modulo: number;
+  descripcion: string;
+  icono: string;
+  url?: string;
+  rol?: string;
+}
+
+export interface IBtnModulo {
+  boton: IAppMenu[]
+}
+
+const APPMENU: IBtnModulo[] = [
+  {
+    boton: [
+      { modulo: 1, descripcion: 'Cuenta', icono: 'person', url: '/admin/dashboard' },
+      { modulo: 2, descripcion: 'POS', icono: 'restaurant', url: '/restaurante/tranareas' },
+      { modulo: 3, descripcion: 'WMS', icono: 'store', url: '/wms/ingresos' },
+    ]
+  },
+  {
+    boton: [
+      { modulo: 4, descripcion: 'OCS', icono: 'account_balance_wallet', url: '/ordcomp/ordcomp' },
+      { modulo: 5, descripcion: 'ADMIN', icono: 'supervisor_account', url: '/admin/dashboard' },
+      { modulo: 6, descripcion: 'Salir', icono: 'power_settings_new', url: '/admin/login', rol: 'LOGOUT' }
+    ]
+  }
+];
+
 @Injectable({
   providedIn: 'root'
 })
@@ -95,5 +124,9 @@ export class UsuarioService {
       return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/usuario.json`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
     }
 
+  }
+
+  getUserAppMenu(): IBtnModulo[] {
+    return APPMENU;
   }
 }

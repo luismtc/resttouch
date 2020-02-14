@@ -10,3 +10,25 @@
 button .mat-icon{
     font-size: 24px;
 }
+
+.btnApp {
+    width: 96px;
+    height: 96px;
+    /*
+    vertical-align: middle !important;
+    text-align: center !important;
+    */
+}
+
+.btnCell {
+    width: 33.33% !important;
+    vertical-align: middle !important;
+    text-align: center !important;
+}
+
+::ng-deep .mat-menu-panel {
+    width: 800px !important;
+    height: 500px !important;
+    padding: 0 5px !important;
+    /*overflow-y: auto;*/
+}

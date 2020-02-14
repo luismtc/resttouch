@@ -5,17 +5,58 @@
         <app-clock></app-clock>
         <span class="spacer"></span>
         <button mat-button [matMenuTriggerFor]="menu">
-            {{usrInfo.usuario}}&nbsp;<mat-icon>keyboard_arrow_down</mat-icon>
+            {{usrInfo.usuario}}&nbsp;<mat-icon>apps</mat-icon>
         </button>
-        <mat-menu #menu="matMenu">
+        <mat-menu #menu="matMenu" xPosition="before">
+            <div class="d-flex flex-row" *ngFor="let fila of appMenu">
+                <div class="p-2" *ngFor="let boton of fila.boton">
+                    <!--class="d-flex align-items-center"-->
+                    <a mat-button [routerLink]="boton.url" (click)="handleClick(boton.rol)">
+                        <mat-icon>{{boton.icono}}</mat-icon><br/>
+                        <span>{{boton.descripcion}}</span>
+                    </a>
+                </div>
+                <!--
+                <div class="p-2">
+                    <a mat-menu-item (click)="LogOut()" class="d-flex align-items-center">
+                        <mat-icon>power_settings_new</mat-icon>
+                        <span>Salir</span>
+                    </a>
+                </div>
+                -->
+            </div>
+            <!--
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td class="d-flex justify-content-center">
+                        <a mat-menu-item class="btnApp">
+                            <mat-icon>person</mat-icon><br/>
+                            <span>Perfil</span>
+                        </a>
+                    </td>
+                    <td class="btnCell">
+                    </td>
+                    <td class="btnCell">
+                        <a mat-menu-item (click)="LogOut()" class="btnApp">
+                            <mat-icon>power_settings_new</mat-icon><br/>
+                            <span>Salir</span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+            -->
+            <!--
             <button mat-menu-item type="button">
                 <mat-icon>person</mat-icon>
                 <span>Perfil</span>
             </button>
+            -->
+            <!--
             <button mat-menu-item type="button" (click)="LogOut()">
                 <mat-icon>power_settings_new</mat-icon>
                 <span>Cerrar sesión</span>
             </button>
+            -->
         </mat-menu>
     </mat-toolbar-row>
 </mat-toolbar>
