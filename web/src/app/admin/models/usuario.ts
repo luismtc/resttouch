@@ -25,6 +25,7 @@ export class Usuario {
         public usrname: string,
         public contrasenia: string,
         public sede: number,
+        public esmesero: number,
         public debaja: number
     ) { }
 }
