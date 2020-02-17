@@ -3,6 +3,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Usuario } from '../../../models/usuario';
 import { UsuarioService } from '../../../services/usuario.service';
+import { Sede } from '../../../interfaces/sede';
+import { SedeService } from '../../../services/sede.service';
 
 @Component({
   selector: 'app-form-usuario',
@@ -13,22 +15,33 @@ export class FormUsuarioComponent implements OnInit {
 
   @Input() usuario: Usuario;
   @Output() usrSavedEv = new EventEmitter();
+  public sedes: Sede[] = [];
 
   constructor(
     private _snackBar: MatSnackBar,
-    private usuarioSrvc: UsuarioService
+    private usuarioSrvc: UsuarioService,
+    private sedeSrvc: SedeService
   ) { }
 
   ngOnInit() {
+    this.loadSedes();
+  }
+
+  loadSedes = () => {
+    this.sedeSrvc.get().subscribe(res => {
+      if (res) {
+        this.sedes = res;
+      }
+    })
   }
 
   resetUsuario() {
-    this.usuario = new Usuario(null, null, null, null, null, null, 0);
+    this.usuario = new Usuario(null, null, null, null, null, null, 0, 0);
   }
 
   onSubmit() {
     this.usuarioSrvc.save(this.usuario).subscribe((res) => {
-      if(res){
+      if (res) {
         this.resetUsuario();
         this.usrSavedEv.emit();
         this._snackBar.open('Grabado con éxito.', 'Usuario', { duration: 5000 });
