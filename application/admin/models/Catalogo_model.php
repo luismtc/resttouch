@@ -169,6 +169,15 @@ class Catalogo_model extends CI_Model {
 
 		return $datos;
 	}
+
+	public function getSede($args=[])
+	{
+		$qry = $this->db
+		->order_by("nombre")
+		->get("sede");
+
+		return $this->getCatalogo($qry, $args);
+	}
 }
 
 /* End of file Catalogo_model.php */
