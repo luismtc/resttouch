@@ -57,7 +57,7 @@ class Turno_model extends General_model {
 					->where("usuario_tipo", $args['usuario_tipo'])
 					->get("resttouch.turno_has_usuario");
 
-		if($tmp->num_rows() == 0)
+		if($tmp->num_rows() == 0) {
 			$this->db
 				 ->set("turno", $this->turno)
 				 ->set("usuario", $args['usuario'])
