@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Categoria } from '../../../interfaces/categoria';
@@ -7,6 +7,7 @@ import { ArticuloService } from '../../../services/articulo.service';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 
+/*
 const SUB_CATEGORIAS: CategoriaGrupo[] = [
   {
     categoria_grupo: 1, categoria: 1, categoria_grupo_grupo: null, descripcion: 'Coca-cola', receta: 0, antecesores: null
@@ -24,6 +25,7 @@ const SUB_CATEGORIAS: CategoriaGrupo[] = [
     categoria_grupo: 5, categoria: 1, categoria_grupo_grupo: 2, descripcion: 'Zacapa', receta: 0, antecesores: 'Alcohólicas'
   },
 ];
+*/
 
 @Component({
   selector: 'app-categoria-producto',
@@ -32,6 +34,9 @@ const SUB_CATEGORIAS: CategoriaGrupo[] = [
 })
 export class CategoriaProductoComponent implements OnInit {
 
+  @Output() categoriaGrupoSvd = new EventEmitter();
+  @Output() onChangeSubCategoriaEv = new EventEmitter();
+  
   public categoria: Categoria;
   public categorias: Categoria[] = [];
   public categoriaGrupo: CategoriaGrupo;
@@ -64,7 +69,7 @@ export class CategoriaProductoComponent implements OnInit {
       categoria: this.categoria.categoria,
       categoria_grupo_grupo: null,
       descripcion: null,
-      receta: null,
+      receta: 0,
       antecesores: null
     };
     this.editSubCategoriaMode = false;
@@ -84,8 +89,8 @@ export class CategoriaProductoComponent implements OnInit {
   loadSubCategorias = (idcategoria: number) => {
     this.articuloSrvc.getCategoriasGrupos({ categoria: +idcategoria }).subscribe(res => {
       if (res) {
-        this.categoriasGruposPadre = res;
-        this.categoriasGrupos = res;
+        this.categoriasGruposPadre = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
+        this.categoriasGrupos = this.categoriasGruposPadre;
       }
     });
   }
@@ -93,8 +98,11 @@ export class CategoriaProductoComponent implements OnInit {
   onSubCategoriaPadreSelected = (obj: any) => this.loadSubCategoriasSubcategorias(+obj.value);
 
   loadSubCategoriasSubcategorias = (idsubcat: number) => {
-    console.log(`IDSUBCAT = ${idsubcat}`);
-    this.categoriasGrupos = this.categoriasGruposPadre.filter(sc => sc.categoria_grupo_grupo == idsubcat)
+    this.articuloSrvc.getCategoriasGrupos({ categoria_grupo_grupo: idsubcat }).subscribe(res => {
+      if (res) {
+        this.categoriasGrupos = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
+      }
+    });
   }
 
   onSubmitCategoria = () => {
@@ -103,6 +111,7 @@ export class CategoriaProductoComponent implements OnInit {
         this.editCategoriaMode = false;
         this.resetCategoria();
         this.loadCategorias();
+        this.categoriaGrupoSvd.emit();
         this._snackBar.open('Grabada con éxito.', 'Categoría', { duration: 5000 });
       } else {
         this._snackBar.open(`ERROR: ${res.mensaje}`, 'Categoría', { duration: 5000 });
@@ -110,7 +119,18 @@ export class CategoriaProductoComponent implements OnInit {
     })
   }
 
+  onSubCategoriaSelected = (obj: any) => this.onChangeSubCategoriaEv.emit(+obj.value.categoria_grupo);
+
   onSubmitSubCategoria = () => {
-    console.log(this.categoriaGrupo);
+    this.articuloSrvc.saveCategoriaGrupo(this.categoriaGrupo).subscribe(res => {
+      if (res.exito) {
+        this.resetCategoriaGrupo();
+        this.loadSubCategorias(+this.categoria.categoria);
+        this.categoriaGrupoSvd.emit();
+        this._snackBar.open('Grabada con éxito.', 'Sub - Categoría', { duration: 5000 });
+      } else {
+        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sub - Categoría', { duration: 5000 });
+      }
+    })
   }
 }

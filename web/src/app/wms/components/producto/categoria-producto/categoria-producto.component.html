@@ -67,7 +67,7 @@
             <div class="form-group" *ngIf="!editSubCategoriaMode">
                 <mat-form-field class="fullWidth">
                     <mat-label>Sub-categoría</mat-label>
-                    <mat-select name="categoriaGrupo" [(ngModel)]="categoriaGrupo">
+                    <mat-select name="categoriaGrupo" [(ngModel)]="categoriaGrupo" (selectionChange)="onSubCategoriaSelected($event)">
                         <mat-option *ngFor="let subcat of categoriasGrupos" [value]="subcat">
                             {{subcat.descripcion}}
                         </mat-option>

@@ -1,3 +1,6 @@
+import { Categoria } from './categoria';
+import { Articulo } from './articulo';
+
 export interface CategoriaGrupo {
     categoria_grupo: number;
     categoria: number;
@@ -5,4 +8,13 @@ export interface CategoriaGrupo {
     descripcion: string;
     receta: number;
     antecesores?: string;
+}
+
+export interface CategoriaGrupoResponse {
+    categoria_grupo: number;
+    categoria: Categoria;
+    categoria_grupo_grupo: CategoriaGrupoResponse[];
+    descripcion: string;
+    receta: number;
+    articulo: Articulo[];
 }

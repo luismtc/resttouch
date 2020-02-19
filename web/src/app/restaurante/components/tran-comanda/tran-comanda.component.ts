@@ -23,6 +23,8 @@ interface productoSelected {
   notas?: string;
   showInputNotas: boolean;
   itemListHeight: string;
+  detalle_comanda?: number;
+  detalle_cuenta?: number;
 }
 
 @Component({
@@ -77,10 +79,12 @@ export class TranComandaComponent implements OnInit {
   resetCuentaActiva = () => this.cuentaActiva = { cuenta: null, numero: null, nombre: null, productos: [] };
 
   llenaProductosSeleccionados = (conQueMesa: ComandaGetResponse = this.mesaEnUso) => {
+    this.lstProductosSeleccionados = [];
     for (let i = 0; i < conQueMesa.cuentas.length; i++) {
       let cta = conQueMesa.cuentas[i];
       for (let j = 0; j < cta.productos.length; j++) {
         let p = cta.productos[j];
+        //console.log(p);
         this.lstProductosSeleccionados.push({
           id: +p.articulo.articulo,
           nombre: p.articulo.descripcion,
@@ -91,7 +95,9 @@ export class TranComandaComponent implements OnInit {
           total: parseFloat(p.total) || (parseFloat(p.cantidad) * parseFloat(p.precio)),
           notas: p.notas || '',
           showInputNotas: false,
-          itemListHeight: '70px'
+          itemListHeight: '70px',
+          detalle_comanda: +p.detalle_comanda,
+          detalle_cuenta: +p.detalle_cuenta
         });
       }
     }
@@ -142,6 +148,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   prepProductosComanda(prods: productoSelected[]) {
+    //console.log(prods);
     let tmp: any[] = [];
     for (let i = 0; i < prods.length; i++) {
       tmp.push({
@@ -150,7 +157,9 @@ export class TranComandaComponent implements OnInit {
         precio: prods[i].precio,
         total: prods[i].total,
         notas: prods[i].notas,
-        impreso: true
+        impreso: true,
+        detalle_comanda: prods[i].detalle_comanda,
+        detalle_cuenta: prods[i].detalle_cuenta,
       });
     }
     return tmp;
@@ -182,8 +191,15 @@ export class TranComandaComponent implements OnInit {
         comanda: this.mesaEnUso.comanda,
         cuentas: this.mesaEnUso.cuentas
       };
+      //console.log(objCmd);
       this.comandaSrvc.save(objCmd).subscribe(res => {
-        console.log(res);
+        if (res.exito) {
+          this.llenaProductosSeleccionados(res.comanda);
+          this.setSelectedCuenta(this.cuentaActiva.numero);
+          this._snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+        } else {
+          this._snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });          
+        }
       });
     }
     // this.socket.emit("print:comanda", `Imprimiendo comanda de ${this.cuentaActiva.nombre}`);

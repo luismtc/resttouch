@@ -1,17 +1,15 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-5">
-            <app-categoria-producto></app-categoria-producto>
+            <app-categoria-producto (categoriaGrupoSvd)="refreshArticuloList($event)" (onChangeSubCategoriaEv)="setArticuloCategoriaGrupo($event)"></app-categoria-producto>
         </div>
     </div>
     <div class="row">
         <div class="col-5">
-            <!--<app-lista-ingreso #lstIngreso (getIngresoEv)="setIngreso($event)"></app-lista-ingreso>-->
             <app-lista-producto #lstProducto [treeHeight]="'100%'" (productoClickedEv)="setArticulo($event)"></app-lista-producto>
         </div>
         <div class="col">
-            <!--<app-form-ingreso [ingreso]="ingreso" (ingresoSavedEv)="refreshIngresoList()"></app-form-ingreso>-->
-            <app-form-producto></app-form-producto>
+            <app-form-producto #frmProducto [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)" ></app-form-producto>
         </div>
     </div>
 </div>

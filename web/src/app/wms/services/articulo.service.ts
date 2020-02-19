@@ -3,8 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Categoria } from '../interfaces/categoria';
-import { CategoriaGrupo } from '../interfaces/categoria-grupo';
-import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo } from '../interfaces/articulo';
+import { CategoriaGrupo, CategoriaGrupoResponse } from '../interfaces/categoria-grupo';
+import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo, ArticuloResponse } from '../interfaces/articulo';
 import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -16,6 +16,7 @@ import * as qs from 'qs';
 export class ArticuloService {
 
   private srvcErrHndl: ServiceErrorHandler;
+  private articuloUrl: string = 'articulo';
   private categoriaUrl: string = 'categoria';
   private categoriaGrupoUrl: string = 'cgrupo';
   private usrToken: string = null;
@@ -46,13 +47,26 @@ export class ArticuloService {
     return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/guardar${+entidad.categoria > 0 ? ('/' + entidad.categoria) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getCategoriasGrupos(fltr: any = {}): Observable<CategoriaGrupo[]> {
+  getCategoriasGrupos(fltr: any = {}): Observable<CategoriaGrupoResponse[]> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<CategoriaGrupo[]>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<CategoriaGrupoResponse[]>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  adaptCategoriaGrupoResponse(lista: CategoriaGrupoResponse[]): CategoriaGrupo[] {
+    let lst: CategoriaGrupo[] = [];
+    lista.forEach(item => lst.push({
+      categoria_grupo: +item.categoria_grupo,
+      categoria: +item.categoria.categoria,
+      categoria_grupo_grupo: !!item.categoria_grupo_grupo && item.categoria_grupo_grupo.length > 0 ? +item.categoria_grupo_grupo[0].categoria_grupo : null,
+      descripcion: item.descripcion,
+      receta: +item.receta,
+      antecesores: null
+    }));
+    return lst;
   }
 
   saveCategoriaGrupo(entidad: CategoriaGrupo) {
@@ -61,7 +75,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo)  : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulos(fltr: any = {}): Observable<Articulo[]> {
@@ -71,6 +85,15 @@ export class ArticuloService {
       })
     };
     return this.http.get<Articulo[]>(`${GLOBAL.urlCatalogos}/get_articulo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getArticulo(fltr: any = {}): Observable<ArticuloResponse[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<ArticuloResponse[]>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArbolArticulos(idsede: number): Observable<ArbolArticulos[]> {
@@ -135,6 +158,15 @@ export class ArticuloService {
     }
 
     return arbol;
+  }
+
+  saveArticulo(entidad: Articulo){
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar${entidad.articulo ? ('/' + entidad.articulo)  : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));    
   }
 
 }

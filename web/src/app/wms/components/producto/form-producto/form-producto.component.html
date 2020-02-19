@@ -1,1 +1,40 @@
-<p>form-producto works!</p>
+<mat-card class="mat-elevation-z4 fullWidth">
+    <mat-card-title>
+        <h4>
+            Artículo {{!!articulo.articulo ? articulo.descripcion: ''}}
+            <button mat-icon-button type="button" color="accent" (click)="showArticuloForm = true;" *ngIf="!showArticuloForm">
+                <mat-icon class="iconFontSize">expand_more</mat-icon>
+            </button>
+            <button mat-icon-button type="button" color="accent" (click)="showArticuloForm = false;" *ngIf="showArticuloForm">
+                <mat-icon class="iconFontSize">expand_less</mat-icon>
+            </button>
+        </h4>
+    </mat-card-title>
+    <mat-card-content>
+        <form #frmArticulo="ngForm" *ngIf="showArticuloForm" (ngSubmit)="frmArticulo.form.valid && onSubmit()" novalidate>            
+            <div class="form-group">
+                <mat-form-field class="fullWidth">
+                    <input matInput type="text" placeholder="Descripcion" name="descripcion" [(ngModel)]="articulo.descripcion" required>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="fullWidth">
+                    <input matInput type="number" placeholder="Precio" name="precio" [(ngModel)]="articulo.precio" required>
+                </mat-form-field>
+            </div>
+            <div class="form-group">
+                <mat-form-field class="fullWidth">
+                    <input matInput type="text" placeholder="Presentacion" name="presentacion" [(ngModel)]="articulo.presentacion">
+                </mat-form-field>
+            </div>
+            <div class="btn-group d-flex justify-content-end" role="group">
+                <button mat-icon-button type="submit" color="accent" [disabled]="!frmArticulo.form.valid || !articulo.categoria_grupo">
+                    <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button type="button" color="accent" (click)="resetArticulo()" *ngIf="articulo.articulo">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
