@@ -50,19 +50,20 @@ class Comanda extends CI_Controller {
 							if(isset($row['cuenta'])){
 								$cuenta->cargar($row['cuenta']);
 							}
-
-							$row['comanda'] = $comanda->comanda;
+							if ($cuenta->cerrada == 0) {
+								$row['comanda'] = $comanda->comanda;
 							
-							$cuenta->guardar($row);
-							if(count($row['productos']) > 0) {
-								foreach ($row['productos'] as $prod) {
-									$det = $comanda->guardarDetalle($prod);
+								$cuenta->guardar($row);
+								if(count($row['productos']) > 0) {
+									foreach ($row['productos'] as $prod) {
+										$det = $comanda->guardarDetalle($prod);
 
-									$cuenta->guardarDetalle([
-										'detalle_comanda' => $det->detalle_comanda
-									]);
-								}
-							}
+										$cuenta->guardarDetalle([
+											'detalle_comanda' => $det->detalle_comanda
+										]);
+									}
+								}	
+							}							
 						}
 						$datos['exito'] = true;
 						$datos['comanda'] = $comanda->getComanda();
