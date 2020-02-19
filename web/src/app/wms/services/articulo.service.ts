@@ -17,7 +17,7 @@ export class ArticuloService {
 
   private srvcErrHndl: ServiceErrorHandler;
   private categoriaUrl: string = 'categoria';
-  private categoriaGrupoUrl: string = 'categoria_grupo';
+  private categoriaGrupoUrl: string = 'cgrupo';
   private usrToken: string = null;
 
   constructor(

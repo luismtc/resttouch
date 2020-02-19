@@ -59,7 +59,7 @@
                     <mat-label>Sub-categoría Padre</mat-label>
                     <mat-select name="categoriaGrupoPadre" [(ngModel)]="categoriaGrupo.categoria_grupo_grupo" (selectionChange)="onSubCategoriaPadreSelected($event)">
                         <mat-option *ngFor="let subcatpadre of categoriasGruposPadre" [value]="subcatpadre.categoria_grupo">
-                            {{(subcatpadre.antecesores ? (subcatpadre.antecesores + ' - ') : '') + subcatpadre.descripcion}}
+                            {{subcatpadre.descripcion}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -69,7 +69,7 @@
                     <mat-label>Sub-categoría</mat-label>
                     <mat-select name="categoriaGrupo" [(ngModel)]="categoriaGrupo">
                         <mat-option *ngFor="let subcat of categoriasGrupos" [value]="subcat">
-                            {{(subcat.antecesores ? (subcat.antecesores + ' - ') : '') + subcat.descripcion}}
+                            {{subcat.descripcion}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>

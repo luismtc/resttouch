@@ -82,8 +82,12 @@ export class CategoriaProductoComponent implements OnInit {
   onCategoriaSelected = (obj: any) => this.loadSubCategorias(+obj.value.categoria);
 
   loadSubCategorias = (idcategoria: number) => {
-    this.categoriasGruposPadre = SUB_CATEGORIAS.filter(sc => sc.categoria == idcategoria);
-    this.categoriasGrupos = this.categoriasGruposPadre;
+    this.articuloSrvc.getCategoriasGrupos({ categoria: +idcategoria }).subscribe(res => {
+      if (res) {
+        this.categoriasGruposPadre = res;
+        this.categoriasGrupos = res;
+      }
+    });
   }
 
   onSubCategoriaPadreSelected = (obj: any) => this.loadSubCategoriasSubcategorias(+obj.value);
