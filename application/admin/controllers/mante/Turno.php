@@ -51,6 +51,8 @@ class Turno extends CI_Controller {
 
 				if($datos['exito']){
 					$datos['mensaje'] = "Datos Actualizados con Exito";
+				} else {
+					$datos['mensaje'] = "Nada que actualizar";
 				}
 			} else {
 				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
@@ -58,6 +60,9 @@ class Turno extends CI_Controller {
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
+
+		$this->output
+		->set_output(json_encode($datos));
 	}
 
 	public function guardar_turno_tipo($id = "")
@@ -84,6 +89,10 @@ class Turno extends CI_Controller {
 
 	public function get_turno_tipo()
 	{
+		if (count($_GET) == 0) {
+			$_GET['activo'] = 1;
+		}
+		
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($this->TurnoTipo_model->buscar($_GET)));
@@ -96,15 +105,13 @@ class Turno extends CI_Controller {
 
 		if(is_array($tmp)) {
 			foreach ($tmp as $row) {
-				$turno = new Turno_model($row->articulo);
-				$row->categoria_grupo = $turno->getCategoriaGrupo();
-				$row->presentacion = $turno->getPresentacion();
+				$turno = new Turno_model($row->turno);	
+				$row->turno_tipo = $turno->getTurnoTipo();			
 				$datos[] = $row;
 			}
 		} else if(is_object($tmp)) {
-			$turno = new Turno_model($tmp->articulo);
-			$tmp->categoria_grupo = $turno->getCategoriaGrupo();
-			$tmp->presentacion = $turno->getPresentacion();
+			$turno = new Turno_model($tmp->turno);
+			$tmp->turno_tipo = $turno->getTurnoTipo();
 			$datos = $tmp;
 		}
 

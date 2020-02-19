@@ -22,15 +22,30 @@ class Cliente extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
+			$req['nit'] = str_replace("-", "", $req['nit']);
+			$continuar = true;
+			if (empty($id)) {
+				$tmpClt = $this->Cliente_model->buscar([
+					"nit" => $req['nit'],
+					"_uno" => true
+				]);
 
-			$datos['exito'] = $clt->guardar($req);
+				if ($tmpClt) {
+					$continuar = false;
+				}
+			}
+			if ($continuar) {				
+				$datos['exito'] = $clt->guardar($req);
 
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['cliente'] = $clt;
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['cliente'] = $clt;
+				} else {
+					$datos['mensaje'] = $clt->getMensaje();
+				}	
 			} else {
-				$datos['mensaje'] = $clt->getMensaje();
-			}	
+				$datos['mensaje'] = "Ya existe un cliente con este nit";
+			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}

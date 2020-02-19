@@ -41,6 +41,10 @@ class Fpago extends CI_Controller {
 
 	public function buscar()
 	{
+		if (count($_GET) == 0) {
+			$_GET['activo'] = 1;
+		}
+		
 		$datos = $this->Fpago_model->buscar($_GET);
 
 		$this->output
