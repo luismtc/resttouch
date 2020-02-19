@@ -129,6 +129,8 @@ class Catalogo_model extends CI_Model {
 
 	public function getCategoriaGrupo($args = [])
 	{
+		$raiz = isset($args['raiz']);
+		unset($args['raiz']);
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if ($key != '_uno') {
@@ -147,9 +149,16 @@ class Catalogo_model extends CI_Model {
 		if (is_array($grupo)) {
 			foreach ($grupo as $row) {
 				
-				$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
-					"categoria_grupo_grupo" => $row->categoria_grupo
-				]);
+				if ($raiz) {
+					$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
+						"categoria_grupo" => $row->categoria_grupo_grupo,
+						"raiz" => true
+					]);
+				} else {
+					$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
+						"categoria_grupo_grupo" => $row->categoria_grupo
+					]);
+				}				
 				
 				$row->articulo = $this->Catalogo_model->getArticulo([
 					'categoria_grupo' => $row->categoria_grupo
@@ -161,9 +170,17 @@ class Catalogo_model extends CI_Model {
 				$datos[] = $row;
 			}
 		} else if(is_object($grupo)) {
-			$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo([
-				"categoria_grupo_grupo" => $grupo->categoria_grupo
-			]);
+			if ($raiz) {
+				$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo([
+					"categoria_grupo" => $grupo->categoria_grupo_grupo,
+					"raiz" => true
+				]);
+			} else {
+				$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo([
+					"categoria_grupo_grupo" => $grupo->categoria_grupo
+				]);
+			}
+				
 			$grupo->articulo = $this->Catalogo_model->getArticulo([
 				'categoria_grupo' => $grupo->categoria_grupo
 			]);

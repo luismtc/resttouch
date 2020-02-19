@@ -48,12 +48,14 @@ public function __construct()
 			foreach ($tmp as $row) {
 				$datos[] = $this->Catalogo_model->getCategoriaGrupo([
 					"categoria_grupo" => $row->categoria_grupo,
+					"raiz" => true,
 					"_uno" => true
 				]);
 			}
 		} else if(is_object($tmp)) {
 			$datos = $this->Catalogo_model->getCategoriaGrupo([
-				"categoria_grupo" => $tmp->categoria_grupo
+				"categoria_grupo" => $tmp->categoria_grupo,
+				"raiz" => true,
 			]);
 		}
  
