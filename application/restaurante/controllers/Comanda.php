@@ -57,10 +57,10 @@ class Comanda extends CI_Controller {
 								if(count($row['productos']) > 0) {
 									foreach ($row['productos'] as $prod) {
 										$det = $comanda->guardarDetalle($prod);
-
+										$id = isset($prod['detalle_cuenta']) ? $prod['detalle_cuenta'] : '';
 										$cuenta->guardarDetalle([
 											'detalle_comanda' => $det->detalle_comanda
-										]);
+										], $id);
 									}
 								}	
 							}							
