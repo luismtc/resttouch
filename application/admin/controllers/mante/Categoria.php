@@ -23,7 +23,7 @@ class Categoria extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $cat->guardar($req);;
+			$datos['exito'] = $cat->guardar($req);
 
 			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
