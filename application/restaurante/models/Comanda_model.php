@@ -46,8 +46,9 @@ class Comanda_model extends General_Model {
 
 	}
 
-	public function guardarDetalle(Array $args, $id = '')
+	public function guardarDetalle(Array $args)
 	{
+		$id = isset($args['detalle_comanda']) ? $args['detalle_comanda'] : '';
 		$det = new Dcomanda_model($id);
 		$args['comanda'] = $this->comanda;
 		$result = $det->guardar($args);
