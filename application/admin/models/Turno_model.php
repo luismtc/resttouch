@@ -89,7 +89,8 @@ class Turno_model extends General_model {
 		foreach ($tmp as $row) {
 			$row->usuario = $this->Usuario_model->find(["usuario" => $row->usuario, "_uno" => true]);
 			$row->usuario_tipo = $this->Catalogo_model->getTipoUsuario([
-				"usuario_tipo" => $row->usuario_tipo
+				"usuario_tipo" => $row->usuario_tipo,
+				"_uno" => true
 			]);
 			$datos[] = $row;
 		}
