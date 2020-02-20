@@ -24,13 +24,18 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { WindowComponent } from './components/window/window.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 //const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
   declarations: [
     FilterPipe,
-    WindowComponent
+    WindowComponent,
+    ConfirmDialogComponent
+  ],
+  entryComponents: [
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +62,8 @@ import { WindowComponent } from './components/window/window.component';
   ],
   exports: [
     FilterPipe,
-    WindowComponent
+    WindowComponent,
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule { }

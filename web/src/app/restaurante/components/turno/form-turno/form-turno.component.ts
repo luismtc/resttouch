@@ -3,6 +3,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material';
 import * as moment from 'moment';
 
 import { TipoTurno } from '../../../interfaces/tipo-turno';
@@ -42,7 +44,8 @@ export class FormTurnoComponent implements OnInit {
     private tipoTurnoSrvc: TipoTurnoService,
     private turnoSrvc: TurnoService,
     private usuarioTipoSrvc: UsuarioTipoService,
-    private usuarioSrvc: UsuarioService
+    private usuarioSrvc: UsuarioService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -83,8 +86,7 @@ export class FormTurnoComponent implements OnInit {
     this.resetDetalleTurno();
   }
 
-  onSubmit = () => {
-    //console.log(this.turno); return;
+  saveInfoTurno = () => {
     this.turnoSrvc.save(this.turno).subscribe(res => {
       if (res.exito) {
         this.turnoSavedEv.emit();
@@ -95,6 +97,24 @@ export class FormTurnoComponent implements OnInit {
         this._snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
       }
     });
+  }
+
+  onSubmit = () => {
+    if(!!this.turno.fin) {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: "400px",
+        data: new ConfirmDialogModel('Cerrar turno', 'La fecha de finalización cerrará el turno. ¿Desea continuar?', 'Sí', 'No')
+      });
+
+      dialogRef.afterClosed().subscribe(res => {
+        if (res) {
+          this.saveInfoTurno();          
+        }
+      });
+
+    } else {
+      this.saveInfoTurno();
+    }    
   }
 
   resetDetalleTurno = () => this.detalleTurno = { turno: !!this.turno.turno ? this.turno.turno : null, usuario: null, usuario_tipo: null }
