@@ -25,6 +25,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
@@ -40,11 +42,14 @@ import { ListaAreaComponent } from './components/area/lista-area/lista-area.comp
 import { FormAreaComponent } from './components/area/form-area/form-area.component';
 import { AreaComponent } from './components/area/area/area.component';
 import { PideDatosCuentasComponent } from './components/pide-datos-cuentas/pide-datos-cuentas.component';
+import { TurnoComponent } from './components/turno/turno/turno.component';
+import { ListaTurnoComponent } from './components/turno/lista-turno/lista-turno.component';
+import { FormTurnoComponent } from './components/turno/form-turno/form-turno.component';
 
 //const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent],
+  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent, FormTurnoComponent],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent
   ],
@@ -76,7 +81,12 @@ import { PideDatosCuentasComponent } from './components/pide-datos-cuentas/pide-
     MatDialogModule,
     MatKeyboardModule,
     MatSidenavModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     EcoFabSpeedDialModule
+  ],
+  providers: [
+    MatNativeDateModule
   ]
 })
 export class RestauranteModule { }

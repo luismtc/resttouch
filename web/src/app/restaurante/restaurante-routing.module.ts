@@ -4,10 +4,13 @@ import { AuthguardService as AuthGuard } from '../admin/services/authguard.servi
 
 import { AreaComponent } from './components/area/area/area.component';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
+import { TurnoComponent } from './components/turno/turno/turno.component';
+
 
 const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
   { path: 'tranareas', component: TranAreasComponent, canActivate: [AuthGuard] },
+  { path: 'turno', component: TurnoComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

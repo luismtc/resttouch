@@ -1,0 +1,10 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <app-lista-turno #lstTurno (getTurnoEv)="setTurno($event)"></app-lista-turno>
+        </div>
+        <div class="col">
+            <app-form-turno #frmTurno [turno]="turno" (turnoSavedEv)="refreshTurnoList()"></app-form-turno>
+        </div>
+    </div>
+</div>

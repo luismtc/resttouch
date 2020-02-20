@@ -2,6 +2,7 @@
 const urlBase = 'http://localhost/resttouch';
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
+    dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
     dateFormat: 'DD/MM/YYYY',
     dateTimeFormat: 'DD/MM/YYYY HH:mm:ss',
     url: `${urlBase}/index.php`,

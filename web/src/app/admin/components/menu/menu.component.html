@@ -7,6 +7,12 @@
         </a>
     </mat-list-item>
     <mat-list-item>
+        <mat-icon mat-list-icon>schedule</mat-icon>
+        <a [routerLink]="['/restaurante/turno']" routerLinkActive="active" matLine (click)="itemClicked()">
+            Turnos
+        </a>
+    </mat-list-item>
+    <mat-list-item>
         <mat-icon mat-list-icon>settings</mat-icon>
         <a [routerLink]="['/restaurante/mantareas']" routerLinkActive="active" matLine (click)="itemClicked()">
             Mantenimiento de áreas
