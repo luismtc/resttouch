@@ -70,6 +70,45 @@ class Turno_model extends General_model {
 		return false;
 	}
 
+	public function getUsuarios($args = [])
+	{
+		$datos = [];
+		if(count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if ($key != '_uno') {
+					$this->db->where($key, $row);
+				}
+			}
+		}
+		$tmp = $this->db
+					->where("turno", $this->turno)
+					->where("anulado", 0)
+					->get("turno_has_usuario")
+					->result();
+
+		foreach ($tmp as $row) {
+			$row->usuario = $this->Usuario_model->find(["usuario" => $row->usuario, "_uno" => true]);
+			$row->usuario_tipo = $this->Catalogo_model->getTipoUsuario([
+				"usuario_tipo" => $row->usuario_tipo
+			]);
+			$datos[] = $row;
+		}
+
+		return $datos;;
+	}
+
+	public function anularUsuario($args)
+	{
+		$this->db
+			 ->set("anulado", 1)
+			 ->where("turno", $this->turno)
+			 ->where("usuario", $args['usuario'])
+			 ->where("usuario_tipo", $args['usuario_tipo'])
+			 ->update("resttouch.turno_has_usuario");
+
+		return $this->db->affected_rows() > 0;
+	}
+
 }
 
 /* End of file Turno_model.php */

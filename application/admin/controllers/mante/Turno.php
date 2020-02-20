@@ -65,6 +65,39 @@ class Turno extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function anular_usuario($turno)
+	{
+		$turno = new Turno_model($turno);
+		$req = json_decode(file_get_contents('php://input'), true);
+		$datos = ['exito' => false];
+		if ($this->input->method() == 'post') {
+			if (isset($req['usuario']) && isset($req['usuario_tipo'])) {			
+				$datos['exito'] = $turno->anularUsuario($req);
+				if($datos['exito']){
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+				} else {
+					$datos['mensaje'] = "Nada que actualizar";
+				}
+			} else {
+				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
+	public function buscar_usuario($turno)
+	{
+		$this->load->model(['Usuario_model', 'Catalogo_model']);
+		$turno = new Turno_model($turno);			
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode($turno->getUsuarios($_GET)));
+	}
+
 	public function guardar_turno_tipo($id = "")
 	{
 		$turno = new TurnoTipo_model($id);

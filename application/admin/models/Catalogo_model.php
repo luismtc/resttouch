@@ -205,6 +205,14 @@ class Catalogo_model extends CI_Model {
 
 	public function getTipoUsuario($args=[])
 	{
+		if(count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if ($key != '_uno') {
+					$this->db->where($key, $row);
+				}
+			}
+		}
+
 		$qry = $this->db
 		->order_by("descripcion")
 		->get("usuario_tipo");
