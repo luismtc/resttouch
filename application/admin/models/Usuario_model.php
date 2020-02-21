@@ -31,6 +31,7 @@ class Usuario_model extends CI_Model
             if (isset($dbusr)) {
                 if (password_verify($credenciales['pwd'], $dbusr->contrasenia)) {
                     $tokenData = array(
+                        'idusuario' => $dbusr->usuario,
                         'usuario' => $credenciales['usr'],
                         'inicia' => date('Y-m-d H:i:s'),
                         'hasta' => date('Y-m-d H:i:s', strtotime('+12 hours'))
