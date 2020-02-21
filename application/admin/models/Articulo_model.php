@@ -8,6 +8,7 @@ class Articulo_model extends General_model {
 	public $presentacion;
 	public $descripcion;
 	public $precio;
+	public $bien_servicio;
 
 	public function __construct($id = "")
 	{

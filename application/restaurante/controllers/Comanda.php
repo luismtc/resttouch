@@ -33,46 +33,53 @@ class Comanda extends CI_Controller {
 				$usu = $this->Usuario_model->find(['usuario' => $req['mesero'], "_uno" => true]);
 
 				if ($usu) {
+					$turno = $this->Turno_model->getTurno(['abierto' => true, "_uno" => true]);
 					$comanda = new Comanda_model($req['comanda']);
 					$mesa = new Mesa_model($req['mesa']);
 					$req['usuario'] = $usu->usuario;
 					$req['sede'] = $usu->sede;
-					$datos['exito'] = $comanda->guardar($req);
 
-					if (empty($req['comanda'])) {
-						$comanda->setMesa($req['mesa']);
-						$mesa->guardar(["estatus" => 2]);
-					}
+					if ($turno) {
+						$req['turno'] = $turno->turno;
+						$datos['exito'] = $comanda->guardar($req);
 
-					if (count($req['cuentas']) > 0) {
-						foreach ($req['cuentas'] as $row) {
-							$cuenta = new Cuenta_model();
-							if(isset($row['cuenta'])){
-								$cuenta->cargar($row['cuenta']);
-							}
-							if ($cuenta->cerrada == 0) {
-								$row['comanda'] = $comanda->comanda;
-							
-								$cuenta->guardar($row);
-								if(count($row['productos']) > 0) {
-									foreach ($row['productos'] as $prod) {
-										$det = $comanda->guardarDetalle($prod);
-										$id = isset($prod['detalle_cuenta']) ? $prod['detalle_cuenta'] : '';
-										$cuenta->guardarDetalle([
-											'detalle_comanda' => $det->detalle_comanda
-										], $id);
-									}
-								}	
-							}							
+						if (empty($req['comanda'])) {
+							$comanda->setMesa($req['mesa']);
+							$mesa->guardar(["estatus" => 2]);
 						}
-						$datos['exito'] = true;
-						$datos['comanda'] = $comanda->getComanda();
-					}			
 
-					if($datos['exito']) {
-						$datos['mensaje'] = "Datos Actualizados con Exito";
-					} 
-					
+						if (count($req['cuentas']) > 0) {
+							foreach ($req['cuentas'] as $row) {
+								$cuenta = new Cuenta_model();
+								if(isset($row['cuenta'])){
+									$cuenta->cargar($row['cuenta']);
+								}
+								if ($cuenta->cerrada == 0) {
+									$row['comanda'] = $comanda->comanda;
+								
+									$cuenta->guardar($row);
+									if(count($row['productos']) > 0) {
+										foreach ($row['productos'] as $prod) {
+											$det = $comanda->guardarDetalle($prod);
+											$id = isset($prod['detalle_cuenta']) ? $prod['detalle_cuenta'] : '';
+											$cuenta->guardarDetalle([
+												'detalle_comanda' => $det->detalle_comanda
+											], $id);
+										}
+									}	
+								}							
+							}
+							$datos['exito'] = true;
+							$datos['comanda'] = $comanda->getComanda();
+						}			
+
+						if($datos['exito']) {
+							$datos['mensaje'] = "Datos Actualizados con Exito";
+						} 
+
+					} else {
+						$datos['mensaje'] = "No existe ningun turno abierto";
+					}
 				} else {
 					$datos['mensaje'] = "Mesero Invalido";
 				}

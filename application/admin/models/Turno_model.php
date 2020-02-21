@@ -33,10 +33,21 @@ class Turno_model extends General_model {
 			$this->db->where('turno', $args['turno']);
 		}
 
-		if(isset($args['inicio']) && isset($args['fin'])) {
+		if (isset($args['sede'])) {
+			$this->db->where('sede', $args['sede']);
+		}
+
+		if(isset($args['inicio'])) {
 			$this->db
-				 ->where('inicio >=', $args['inicio'])
-				 ->where('fin <=', $args['fin']);
+				 ->where('inicio', $args['inicio']);
+		}
+
+		if (isset($args['fin'])) {
+			$this->db->where('fin', $args['fin']);
+		}
+
+		if (isset($args['abierto'])) {
+			$this->db->where('fin is null');
 		}
 
 		$tmp = $this->db
