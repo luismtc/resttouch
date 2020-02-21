@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: 'restaurante', loadChildren:'./restaurante/restaurante.module#RestauranteModule' },
   { path: 'wms', loadChildren:'./wms/wms.module#WmsModule' },
   { path: 'ordcomp', loadChildren:'./orden-compra/orden-compra.module#OrdenCompraModule' },
+  { path: 'pos', loadChildren:'./pos/pos.module#PosModule' },
   { path: '', redirectTo: 'admin/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];

@@ -1,0 +1,10 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <app-lista-cliente #lstCliente (getClienteEv)="setCliente($event)"></app-lista-cliente>
+        </div>
+        <div class="col">
+            <app-form-cliente #frmCliente [cliente]="cliente" (clienteSavedEv)="refreshClienteList()"></app-form-cliente>
+        </div>
+    </div>
+</div>

@@ -28,10 +28,13 @@ import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
 import { PosRoutingModule } from './pos-routing.module';
 import { CobrarPedidoComponent } from './components/cobrar-pedido/cobrar-pedido.component';
+import { FormaPagoComponent } from './components/formaPago/forma-pago/forma-pago.component';
+import { ListaFormaPagoComponent } from './components/formaPago/lista-forma-pago/lista-forma-pago.component';
+import { FormFormaPagoComponent } from './components/formaPago/form-forma-pago/form-forma-pago.component';
 
 
 @NgModule({
-  declarations: [CobrarPedidoComponent],
+  declarations: [CobrarPedidoComponent, FormaPagoComponent, ListaFormaPagoComponent, FormFormaPagoComponent],
   entryComponents: [
     CobrarPedidoComponent
   ],

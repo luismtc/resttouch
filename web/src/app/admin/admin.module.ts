@@ -32,12 +32,15 @@ import { MenuComponent } from './components/menu/menu.component';
 import { UsuarioComponent } from './components/usuario/usuario/usuario.component';
 import { ListaUsuarioComponent } from './components/usuario/lista-usuario/lista-usuario.component';
 import { FormUsuarioComponent } from './components/usuario/form-usuario/form-usuario.component';
+import { ClienteComponent } from './components/cliente/cliente/cliente.component';
+import { ListaClienteComponent } from './components/cliente/lista-cliente/lista-cliente.component';
+import { FormClienteComponent } from './components/cliente/form-cliente/form-cliente.component';
 
 
 
 @NgModule({
   declarations: [
-    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective, UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent
+    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective, UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent, FormClienteComponent
   ],
   imports: [
     CommonModule,
