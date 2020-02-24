@@ -21,14 +21,18 @@ class Factura extends CI_Controller {
 
 	public function guardar()
 	{
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			if (true) {
-
+			if (isset($req['cliente']) && isset($req['moneda']) && isset($req['factura_serie']) && isset($req['certificador_fel'])) {
+				$req['usuario'] = $data->idusuario;
 				$fac = new Factura_model();
 				$result = $fac->guardar($req);
-
+				$fac->cargarEmpresa();
+				$pimpuesto = $fac->empresa->porcentaje_iva +1;
 				if($result) {
 					foreach ($req['cuentas'] as $row) {
 						$cta = new Cuenta_model($row['cuenta']);
@@ -36,12 +40,20 @@ class Factura extends CI_Controller {
 							$det->bien_servicio = $det->articulo->bien_servicio;
 							$det->articulo = $det->articulo->articulo;
 							$det->precio_unitario = $det->precio;
-							$det->monto_base = number_format($det->total / 1.12, 2);
-							$det->monto_iva = $det->total - $det->monto_base;
-
+							$det->monto_base = number_format($det->total / $pimpuesto, 2);
+							$det->monto_iva = $det->total - $det->monto_base;	
 							$fac->setDetalle((array) $det);
 						}
 					}
+					$fac->cargarFacturaSerie();
+					$fac->cargarMoneda();
+					$fac->cargarReceptor();
+					$fac->procesar_factura();
+					$resp = $fac->enviar();
+					$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+
+					$datos['exito'] = true;
+					$datos['factura'] = $fac;
 				}
 
 			} else {
@@ -56,7 +68,7 @@ class Factura extends CI_Controller {
 		->set_output(json_encode($datos));	
 	}
 
-	public function test($fact)
+	/*public function test($fact)
 	{
 		$fac = new Factura_model($fact);
 		$fac->cargarFacturaSerie();
@@ -64,23 +76,14 @@ class Factura extends CI_Controller {
 		$fac->cargarMoneda();
 		$fac->cargarReceptor();
 		$fac->procesar_factura();
-		/*
-			GT.000000123456.FEL2019
-			nit 000000123456
-			clave de usuario FEL2019
-			CONTRASEÑA Eh14%46_
-			vigencia 19/03/2020
-		*/
-		$ch = curl_init("https://felgttestaws.digifact.com.gt/felapi/FelRequest?NIT=000000123456&TIPO=CERTIFICATE_DTE_XML_TOSIGN");
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $fac->getXml());
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
-		curl_setopt($ch, CURLOPT_USERAGENT, "C807");
-		$res = curl_exec($ch);
-		curl_close($ch);
+		$resp = $fac->enviar();
 
-	}
+		echo "<pre>";
+		print_r ($resp);
+		echo "</pre>";
+		$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+
+	}*/
 }
 
 /* End of file Factura.php */

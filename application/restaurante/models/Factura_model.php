@@ -7,10 +7,10 @@ class Factura_model extends General_model {
 	public $usuario;
 	public $factura_serie;
 	public $cliente;
-	public $numero_factura;
-	public $serie_factura;
+	public $numero_factura = '100001';
+	public $serie_factura = 'A';
 	public $fecha_factura;
-	public $fel_uuid;
+	public $fel_uuid = "cf7187e0-5720-11ea-be9e-6c4b904b04e3";
 	public $fel_uuid_anulacion;
 	public $moneda;
 	public $certificador_fel;
@@ -33,11 +33,19 @@ class Factura_model extends General_model {
 		$args['factura'] = $this->factura;
 		$result = $det->guardar($args);
 
-		if(!$result) {
-			$this->mensaje = $det->getMensaje();
-		}
+		if($result) {
 
-		return $det;
+			$this->db
+				 ->set("detalle_factura", $det->detalle_factura)
+				 ->set("detalle_cuenta", $args['detalle_cuenta'])
+				 ->insert("detalle_factura_detalle_cuenta");
+
+			return $det;
+		} else {
+			$this->mensaje = $det->getMensaje();
+
+			return false;			
+		}		
 	}
 
 	public function getDetalle()
@@ -138,7 +146,7 @@ class Factura_model extends General_model {
 		$emisor->setAttribute('AfiliacionIVA', 'GEN');
 		$emisor->setAttribute('CodigoEstablecimiento', 1);
 		$emisor->setAttribute('CorreoEmisor', $this->empresa->correo_emisor);
-		$emisor->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
+		$emisor->setAttribute('NITEmisor', str_replace('-','','1000000000K'));
 		$emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
 		$emisor->setAttribute('NombreEmisor', $this->empresa->nombre);
 
@@ -302,6 +310,84 @@ class Factura_model extends General_model {
 	public function getXml()
 	{
 		return $this->xml->saveXML();
+	}
+
+	public function enviar($args=array())
+	{
+		$vinculo = "https://signer-emisores.feel.com.gt/sign_solicitud_firmas/firma_xml";
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $vinculo);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+		curl_setopt($ch, CURLOPT_POST, 1);
+		$datos = array(
+			"llave" => "9c748d9bcf1455655b9e9a5c34525570",
+			"archivo" => base64_encode(html_entity_decode($this->xml->saveXML())),
+			"codigo" => "1000000000K",
+			"alias" => "DEMO_FEL",
+			"es_anulacion" => "N"
+		);
+		
+		# Datos que recibe el web service para obtener firma para el documento
+		# Debe pasar por el servidor gacela.c807.com por cuestiones de versión de PHP
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
+
+		$jsonFirma = json_decode(curl_exec($ch));
+		curl_close($ch);
+		# para imprimir errores
+		
+		if ($jsonFirma->resultado) {
+			$vinculo = "https://certificador.feel.com.gt/fel/certificacion/dte";
+			# Datos para el envío del documento para la ceritificación por SAT
+			$datos = array(
+				"correo_copia" => "",
+				"nit_emisor"   => str_replace('-','','1000000000K'),
+				"xml_dte"      => $jsonFirma->archivo
+			);
+
+			
+			# $prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
+			$prefijo = 'VT';
+			$identificador = "{$prefijo}-{$this->factura}";
+			
+
+			$params = array(
+				'llave' => "9c748d9bcf1455655b9e9a5c34525570",
+				'datos' => json_encode($datos),
+				'usuario' => "DEMO_FEL",
+				'identificador' => $identificador
+			);
+
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $vinculo);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_POST, 1);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				"Content-Type: application/json",
+				"Usuario: C807",
+				"llave: E5DC9FFBA5F3653E27DF2FC1DCAC824D",
+				"identificador: " . $identificador
+			));
+
+			$query = curl_exec($ch);
+
+			curl_close($ch);
+
+			return $query;
+		} else {
+			return $jsonFirma;
+		}
+	}
+
+	public function setBitacoraFel($args = [])
+	{
+		$this->db->set('factura', $this->factura)
+				 ->set('resultado', $args['resultado'])
+				 ->set('usuario', $this->usuario)
+				 ->insert('factura_fel');
+
+		return $this->db->affected_rows() > 0;
 	}
 
 }

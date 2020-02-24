@@ -23,14 +23,24 @@ class Turno extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $turno->guardar($req);		
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['turno'] = $turno;
-			} else {
-				$datos['mensaje'] = $turno->getMensaje();
-			}	
+			$continuar = true;
+			if (empty($id)) {
+				$tmp = $this->Turno_model->getTurno(['abierto' => true, "_uno" => true]);
+				if($tmp) {
+					$continuar = false;
+					$datos['mensaje'] = "Ya existe un turno abierto";
+				}
+			}
 
+			if($continuar) {
+				$datos['exito'] = $turno->guardar($req);		
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['turno'] = $turno;
+				} else {
+					$datos['mensaje'] = $turno->getMensaje();
+				}
+			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
@@ -134,7 +144,7 @@ class Turno extends CI_Controller {
 	public function buscar()
 	{
 		$datos = [];
-		$tmp = $this->Turno_model->buscar($_GET);
+		$tmp = $this->Turno_model->getTurno($_GET);
 
 		if(is_array($tmp)) {
 			foreach ($tmp as $row) {
