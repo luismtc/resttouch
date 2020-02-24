@@ -23,6 +23,7 @@ class Acceso_model extends General_model {
 	public function getUsuario()
 	{
 		return $this->db
+					->select("usuario, nombres")
 					->where("usuario", $this->usuario)
 					->get("usuario")
 					->row();
