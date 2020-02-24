@@ -237,6 +237,38 @@ class Catalogo_model extends CI_Model {
 
 		return $this->getCatalogo($qry, $args);
 	}
+
+	public function getMoneda($args = [])
+	{
+		if (isset($args['moneda'])) {
+			$this->db->where('moneda', $args['moneda']);
+		}
+
+		$qry = $this->db
+		->order_by("moneda")
+		->get("moneda");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getFacturaSerie($args = [])
+	{
+		if (isset($args['factura_serie'])) {
+			$this->db->where('factura_serie', $args['factura_serie']);
+		}
+
+		$qry = $this->db
+		->select("
+			factura_serie,
+			serie,
+			correlativo,
+			tipo")
+		->where("activo", 1)
+		->order_by("factura_serie")
+		->get("factura_serie");
+
+		return $this->getCatalogo($qry, $args);
+	}
 }
 
 /* End of file Catalogo_model.php */

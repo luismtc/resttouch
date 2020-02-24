@@ -129,6 +129,18 @@ class Catalogo extends CI_Controller {
 		$this->output
 		->set_output(json_encode($datos));
 	}
+
+	public function get_moneda()
+	{
+		$this->output
+		->set_output(json_encode($this->Catalogo_model->getMoneda($_GET)));
+	}
+
+	public function get_factura_serie()
+	{
+		$this->output
+		->set_output(json_encode($this->Catalogo_model->getFacturaSerie($_GET)));
+	}
 }
 
 /* End of file Catalogo.php */
