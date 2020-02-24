@@ -102,6 +102,33 @@ class Catalogo extends CI_Controller {
 		$this->output
 		->set_output(json_encode($datos));
 	}
+
+	public function get_modulo()
+	{
+		$this->output
+		->set_output(json_encode($this->Catalogo_model->getModulo($_GET)));
+	}
+
+	public function get_sub_modulo($modulo)
+	{		
+		$menu = $this->config->item("menu");
+		$datos = $menu[$modulo]['submodulo'];
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
+	public function get_opcion($modulo, $submodulo)
+	{
+		$menu = $this->config->item("menu");
+		$datos = [];
+		if (isset($menu[$modulo]) && isset($menu[$modulo]['submodulo'][$submodulo])) {
+			$datos = $menu[$modulo]['submodulo'][$submodulo]['opciones'];	
+		}		
+		
+		$this->output
+		->set_output(json_encode($datos));
+	}
 }
 
 /* End of file Catalogo.php */

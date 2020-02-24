@@ -196,6 +196,11 @@ class Catalogo_model extends CI_Model {
 
 	public function getSede($args=[])
 	{
+
+		if (isset($args['sede'])) {
+			$this->db->where('sede', $args['sede']);
+		}
+
 		$qry = $this->db
 		->order_by("nombre")
 		->get("sede");
@@ -216,6 +221,19 @@ class Catalogo_model extends CI_Model {
 		$qry = $this->db
 		->order_by("descripcion")
 		->get("usuario_tipo");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getModulo($args = [])
+	{
+		if (isset($args['modulo'])) {
+			$this->db->where('modulo', $args['modulo']);
+		}
+
+		$qry = $this->db
+		->order_by("descripcion")
+		->get("modulo");
 
 		return $this->getCatalogo($qry, $args);
 	}
