@@ -6,6 +6,7 @@ class Factura extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->add_package_path('application/facturacion');
 		$this->load->model([
 			'Dfactura_model',
 			'Usuario_model',
@@ -70,7 +71,7 @@ class Factura extends CI_Controller {
 		->set_output(json_encode($datos));	
 	}
 
-	/*public function test($fact)
+	public function test($fact)
 	{
 		$fac = new Factura_model($fact);
 		$fac->cargarFacturaSerie();
@@ -85,7 +86,7 @@ class Factura extends CI_Controller {
 		echo "</pre>";
 		$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
 
-	}*/
+	}
 }
 
 /* End of file Factura.php */
