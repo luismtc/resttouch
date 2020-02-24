@@ -19,13 +19,20 @@ class Turno extends CI_Controller {
 
 	public function guardar($id = "") 
 	{
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$turno = new Turno_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 			$continuar = true;
 			if (empty($id)) {
-				$tmp = $this->Turno_model->getTurno(['abierto' => true, "_uno" => true]);
+				$tmp = $this->Turno_model->getTurno([
+					"sede" => $data->sede
+					'abierto' => true, 
+					"_uno" => true
+				]);
 				if($tmp) {
 					$continuar = false;
 					$datos['mensaje'] = "Ya existe un turno abierto";
