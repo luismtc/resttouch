@@ -30,19 +30,26 @@ class Usuario extends Restserver
         $status = parent::HTTP_OK;
         $logged = $this->Usuario_model->logIn($credenciales);
         
-        if (!empty($logged['token'])) {
+        if (!empty($logged['token'])) {            
             $datos = [];
+            $tmp = [];
             $menu = $this->config->item("menu");
             $args = ['activo' => 1, 'usuario' => $logged['idusr']];            
             $acceso = $this->Acceso_model->buscar($args);    
             foreach ($acceso as $row) {
-                $datos[$row->modulo]['nombre'] = $menu[$row->modulo]['nombre'];
+                $tmp[$row->modulo]['nombre'] = $menu[$row->modulo]['nombre'];
 
-                $datos[$row->modulo]['submodulo'][$row->submodulo]['nombre'] = $menu[$row->modulo]['submodulo'][$row->submodulo]['nombre'];
+                $tmp[$row->modulo]['submodulo'][$row->submodulo]['nombre'] = $menu[$row->modulo]['submodulo'][$row->submodulo]['nombre'];
 
-                $datos[$row->modulo]['submodulo'][$row->submodulo]['opciones'][] = $menu[$row->modulo]['submodulo'][$row->submodulo]['opciones'][$row->opcion];
+                $tmp[$row->modulo]['submodulo'][$row->submodulo]['opciones'][] = $menu[$row->modulo]['submodulo'][$row->submodulo]['opciones'][$row->opcion];
             }
-            $logged['acceso'] = $datos;
+
+            foreach ($tmp as $row) {
+                $row['submodulo'] = array_values($row['submodulo']);
+                $datos[] = $row;
+            }
+            
+            $logged['acceso'] = array_values($datos);
         }
         //if (!$logged['token']) { $status = parent::HTTP_NOT_FOUND; }
         $this->response($logged, $status);
