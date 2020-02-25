@@ -32,6 +32,7 @@ class Factura extends CI_Controller {
 				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
 				$req['usuario'] = $data->idusuario;
 				$req['certificador_fel'] = $sede->certificador_fel;
+				
 				$fac = new Factura_model();
 				$result = $fac->guardar($req);
 				$fac->cargarEmpresa();
@@ -52,11 +53,25 @@ class Factura extends CI_Controller {
 					$fac->cargarMoneda();
 					$fac->cargarReceptor();
 					$fac->procesar_factura();
-					$resp = $fac->enviar();
+					$fac->cargarCertificadorFel();
+					$funcion = $fac->certificador_fel->metodo_factura;
+					$resp = $fac->$funcion();
 					$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
-
-					$datos['exito'] = true;
-					$datos['factura'] = $fac;
+					if (!empty($fac->numero_factura)) {
+						$fact = new Factura_model($fac->factura);
+						$fact->guardar([
+							"numero_factura" => $fac->numero_factura,
+							"serie_factura" => $fac->serie_factura,
+							"fel_uuid" => $fac->fel_uuid
+						]);
+						$datos['exito'] = true;
+						$datos['factura'] = $fact;
+						$datos['mensaje'] = "Datos actualizados con exito";	
+					} else {
+						$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";			
+					}
+				} else {
+					$datos['mensaje'] = "Ocurrio un error al guardar la factura, intente nuevamente";	
 				}
 
 			} else {
@@ -71,7 +86,7 @@ class Factura extends CI_Controller {
 		->set_output(json_encode($datos));	
 	}
 
-	public function test($fact)
+	/*public function test($fact)
 	{
 		$fac = new Factura_model($fact);
 		$fac->cargarFacturaSerie();
@@ -79,14 +94,11 @@ class Factura extends CI_Controller {
 		$fac->cargarMoneda();
 		$fac->cargarReceptor();
 		$fac->procesar_factura();
-		$resp = $fac->enviar();
+		$resp = $fac->enviarDigiFact();
 
-		echo "<pre>";
-		print_r ($resp);
-		echo "</pre>";
-		$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+		
 
-	}
+	}*/
 }
 
 /* End of file Factura.php */

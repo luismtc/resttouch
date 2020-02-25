@@ -6,7 +6,17 @@ class Factura extends CI_Controller {
 	public function __construct()
 	{
         parent::__construct();
-        $this->load->model(['Factura_model', 'Dfactura_model']);
+        $this->load->add_package_path('application/admin');
+        $this->load->add_package_path('application/restaurante');
+        $this->load->model([
+			'Dfactura_model',
+			'Usuario_model',
+			'Catalogo_model',
+			'Cuenta_model',
+			'Dcomanda_model',
+			'Dcuenta_model',
+			'Factura_model'
+		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -103,18 +113,37 @@ class Factura extends CI_Controller {
 
 	public function facturar($factura)
 	{
-		$fac = new Factura_model($factura);
-		$fac->cargarFacturaSerie();
-		$fac->cargarEmpresa();
-		$fac->cargarMoneda();
-		$fac->cargarReceptor();
-		$fac->procesar_factura();
-		$resp = $fac->enviar();
-		$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
-		$datos['exito' => true, 'mensaje' => 'Datos actualizados con exito', 'factura' => $fac];
+		$datos = ['exito' => false];
+		if ($this->input->method() == 'post') {
+			$fac = new Factura_model($factura);
+			$fac->cargarFacturaSerie();
+			$fac->cargarEmpresa();
+			$fac->cargarMoneda();
+			$fac->cargarReceptor();
+			$fac->procesar_factura();
+			$fac->cargarCertificadorFel();
+			$funcion = $fac->certificador_fel->metodo_factura;
+			$resp = $fac->$funcion();
+			$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+			if (!empty($fac->numero_factura)) {
+				$fact = new Factura_model($fac->factura);
+				$fact->guardar([
+					"numero_factura" => $fac->numero_factura,
+					"serie_factura" => $fac->serie_factura,
+					"fel_uuid" => $fac->fel_uuid
+				]);
+				$datos['exito'] = true;
+				$datos['factura'] = $fact;
+				$datos['mensaje'] = "Datos actualizados con exito";	
+			} else {
+				$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
 		$this->output
 		->set_content_type("application/json")
-		->set_output(json_encode());	
+		->set_output(json_encode($datos));	
 	}
 
 }

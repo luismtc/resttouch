@@ -7,10 +7,10 @@ class Factura_model extends General_model {
 	public $usuario;
 	public $factura_serie;
 	public $cliente;
-	public $numero_factura = '100001';
-	public $serie_factura = 'A';
+	public $numero_factura ;
+	public $serie_factura;
 	public $fecha_factura;
-	public $fel_uuid = "cf7187e0-5720-11ea-be9e-6c4b904b04e3";
+	public $fel_uuid;
 	public $fel_uuid_anulacion;
 	public $moneda;
 	public $certificador_fel;
@@ -62,6 +62,14 @@ class Factura_model extends General_model {
 			$datos[] = $row;
 		}
 		return $datos;
+	}
+
+	public function cargarCertificadorFel()
+	{
+		$this->certificador_fel = $this->db
+									   ->where("certificador_fel", $this->certificador_fel)
+									   ->get("certificador_fel")
+									   ->row();
 	}
 
 	public function cargarFacturaSerie()
@@ -146,7 +154,7 @@ class Factura_model extends General_model {
 		$emisor->setAttribute('AfiliacionIVA', 'GEN');
 		$emisor->setAttribute('CodigoEstablecimiento', 1);
 		$emisor->setAttribute('CorreoEmisor', $this->empresa->correo_emisor);
-		$emisor->setAttribute('NITEmisor', str_replace('-','','1000000000K'));
+		$emisor->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
 		$emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
 		$emisor->setAttribute('NombreEmisor', $this->empresa->nombre);
 
@@ -345,7 +353,6 @@ class Factura_model extends General_model {
 				"xml_dte"      => $jsonFirma->archivo
 			);
 
-			
 			# $prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
 			$prefijo = 'VT';
 			$identificador = "{$prefijo}-{$this->factura}";
@@ -378,6 +385,36 @@ class Factura_model extends General_model {
 		} else {
 			return $jsonFirma;
 		}
+	}
+
+	public function enviarDigiFact($args = [])
+	{
+		$this->load->helper('api');
+		$link = $this->certificador_fel->vinculo_factura;		
+		$nit = str_repeat("0", 12-strlen($this->empresa->nit)).$this->empresa->nit;
+		$datos = array(
+			"Username" => "{$this->empresa->pais_iso_dos}.{$nit}.{$this->certificador_fel->usuario}",
+			"Password" => $this->certificador_fel->llave
+		);
+		
+		$jsonToken = json_decode(post_request($link, json_encode($datos)));
+
+		if(isset($jsonToken->Token)) {
+			$link = $this->certificador_fel->vinculo_firma.$nit;
+			$header = ["Authorization: {$jsonToken->Token}"];
+			$datos = html_entity_decode($this->xml->saveXML());
+			$res = json_decode(post_request($link, $datos, $header));
+
+			if($res->Codigo == 1) {
+				$this->numero_factura = $res->Serie;
+				$this->serie_factura = $res->NUMERO;
+				$this->fel_uuid = $res->Autorizacion;
+			}
+			
+			return $res;
+		}
+
+		return $jsonToken;
 	}
 
 	public function setBitacoraFel($args = [])

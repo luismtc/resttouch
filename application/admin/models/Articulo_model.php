@@ -36,6 +36,43 @@ class Articulo_model extends General_model {
 					->row();
 	}
 
+	public function guardarReceta(Array $args, $id = '')
+	{
+		$rec = Receta_model($id);
+		$args['receta'] = $this->articulo;
+		$result = $rec->guardar($args);
+
+		if($result) {
+			return $rec;
+		}
+
+		$this->mensaje = $rec->getMensaje();
+
+		return $result;
+	}
+
+	public function getReceta($args = [])
+	{
+		$args['receta'] = $this->articulo;
+		$det = $this->Receta_model->buscar($args);
+		$datos = [] ;
+		if(is_array($det)) {
+			foreach ($det as $row) {
+				$detalle = new Receta_model($row->egreso_detalle);
+				$row->articulo = $detalle->getArticulo();
+				$row->medida = $detalle->getMedida();
+				$datos[] = $row;
+			}
+		} else if($det) {
+			$detalle = new Receta_model($det->egreso_detalle);
+			$det->articulo = $detalle->getArticulo();
+			$det->medida = $detalle->getMedida();
+			$datos[] = $det;
+		}
+
+		return $datos;
+	}
+
 }
 
 /* End of file Articulo_model.php */

@@ -11,7 +11,7 @@ class Articulo extends CI_Controller {
 	public function __construct()
 	{
         parent::__construct();
-        $this->load->model('Articulo_model');
+        $this->load->model(['Articulo_model', 'Receta_model']);
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -23,7 +23,7 @@ class Articulo extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $art->guardar($req);;
+			$datos['exito'] = $art->guardar($req);
 
 			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
@@ -63,6 +63,37 @@ class Articulo extends CI_Controller {
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));
+	}
+
+	public function guardar_receta($articulo, $id='')
+	{
+		$art = new Articulo_model($articulo);
+		$req = json_decode(file_get_contents('php://input'), true);
+		$datos = ['exito' => false];
+		if ($this->input->method() == 'post') {
+			$det = $art->guardarReceta($req, $id);
+			if($det) {
+				$datos['exito'] = true;
+				$datos['mensaje'] = "Datos Actualizados con Exito";
+				$datos['detalle'] = $det;
+			} else {
+				$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+			}	
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}		
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
+	public function buscar_receta($id)
+	{
+		$art = new Articulo_model($id);
+
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode($art->getReceta($_GET)));
 	}
 }
 
