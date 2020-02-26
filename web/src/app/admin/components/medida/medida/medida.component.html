@@ -1,0 +1,10 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-5">
+            <app-lista-medida #lstMedida (getMedidaEv)="setMedida($event)" ></app-lista-medida>
+        </div>
+        <div class="col">
+            <app-form-medida #frmMedida [medida]="medida" (medidaSavedEv)="refreshMedidaList()"></app-form-medida>
+        </div>
+    </div>
+</div>

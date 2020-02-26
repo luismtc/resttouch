@@ -6,12 +6,14 @@ import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { UsuarioComponent } from './components/usuario/usuario/usuario.component';
 import { ClienteComponent } from './components/cliente/cliente/cliente.component';
+import { MedidaComponent } from './components/medida/medida/medida.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {path: 'usuario', component: UsuarioComponent, canActivate: [AuthGuard]},
-  {path: 'cliente', component: ClienteComponent, canActivate: [AuthGuard]}
+  {path: 'cliente', component: ClienteComponent, canActivate: [AuthGuard]},
+  {path: 'medida', component: MedidaComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
