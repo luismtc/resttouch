@@ -257,7 +257,7 @@ export class TranComandaComponent implements OnInit {
     const productosACobrar = this.lstProductosDeCuenta.filter(p => p.impreso);
     if (productosACobrar.length > 0) {
       const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
-        width: '650px',
+        width: '95%',
         data: {
           cuenta: this.cuentaActiva.nombre,
           idcuenta: this.cuentaActiva.cuenta,
@@ -268,7 +268,7 @@ export class TranComandaComponent implements OnInit {
 
       cobrarCtaRef.afterClosed().subscribe(res => {
         if (res) {
-          console.log(res);
+          //console.log(res);
           this.cambiarEstatusCuenta(res);
           //this.socket.emit('print:doccontable', JSON.stringify(res));
         }

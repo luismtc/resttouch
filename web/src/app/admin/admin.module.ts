@@ -66,7 +66,7 @@ import { FormClienteComponent } from './components/cliente/form-cliente/form-cli
     MatPaginatorModule
   ],
   exports: [
-    HeaderComponent, MenuComponent
+    HeaderComponent, MenuComponent, ListaClienteComponent
   ]
 })
 export class AdminModule { }

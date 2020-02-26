@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule }   from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { AdminModule } from '../admin/admin.module';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -44,6 +45,7 @@ import { FormFormaPagoComponent } from './components/formaPago/form-forma-pago/f
     HttpClientModule,
     FormsModule,
     SharedModule,
+    AdminModule,
     MatListModule,
     MatIconModule,
     MatFormFieldModule,
