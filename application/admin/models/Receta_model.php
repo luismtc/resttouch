@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Receta_model extends CI_Model {
+class Receta_model extends General_model {
 
 	public $articulo_detalle;
 	public $receta;

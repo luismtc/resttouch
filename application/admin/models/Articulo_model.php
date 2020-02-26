@@ -38,7 +38,7 @@ class Articulo_model extends General_model {
 
 	public function guardarReceta(Array $args, $id = '')
 	{
-		$rec = Receta_model($id);
+		$rec = new Receta_model($id);
 		$args['receta'] = $this->articulo;
 		$result = $rec->guardar($args);
 
@@ -72,6 +72,18 @@ class Articulo_model extends General_model {
 
 		return $datos;
 	}
+
+	/*public function actualizarExistencia()
+	{
+		$ingresos = $this->db
+						 ->select()
+						 ->where()
+						 ->get()
+						 ->row(); //total ingresos
+		$egresos = $this->db;//total egresos wms
+		$comandas = $this->db;//total ventas comanda
+		$facturas = $this->db;//total ventas factura manual
+	}*/
 
 }
 
