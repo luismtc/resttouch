@@ -13,7 +13,8 @@ export class usrLogInResponse {
         public nombres: string,
         public apellidos: string,
         public sede: number,
-        public idusr: number
+        public idusr: number,
+        public acceso: any
     ) { }    
 }
 

@@ -3,6 +3,8 @@ import { LocalstorageService } from './admin/services/localstorage.service';
 import { GLOBAL } from './shared/global';
 import { UsuarioService } from './admin/services/usuario.service';
 import { Router } from '@angular/router';
+import { AccesoUsuario, SubModulo, NodoAppMenu } from './admin/interfaces/acceso-usuario';
+import { AppMenuService } from './admin/services/app-menu.service';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +19,13 @@ export class AppComponent implements OnInit{
   isLogged: boolean = false;
   opened: boolean;
 
+  public usrAppMenu: AccesoUsuario[] = [];
+
   constructor(
     private ls: LocalstorageService,
     private usrSrvc: UsuarioService,
-    private router: Router
+    private router: Router,
+    private appMenuSrvc: AppMenuService
   ) { }
 
   async ngOnInit() {
@@ -29,6 +34,7 @@ export class AppComponent implements OnInit{
 
   private goToLogin = () => {
     this.isLogged = false;
+    this.usrAppMenu = [];
     this.router.navigate(['/admin/login']);        
   }
 
@@ -39,6 +45,9 @@ export class AppComponent implements OnInit{
         const valido = await this.usrSrvc.checkUserToken();
         if (valido) {
           this.isLogged = true;
+          this.usrAppMenu = this.usrSrvc.getAppMenu();
+          this.appMenuSrvc.updData(this.usrAppMenu);
+          //console.log(this.usrAppMenu);
         } else {
           this.goToLogin();
         }

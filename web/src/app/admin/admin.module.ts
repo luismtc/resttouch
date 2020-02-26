@@ -20,6 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTreeModule } from '@angular/material/tree';
 
 import { SidebarDirective } from './directives/sidebar.directive';
 
@@ -66,7 +67,8 @@ import { FormMedidaComponent } from './components/medida/form-medida/form-medida
     MatToolbarModule,
     MatMenuModule,
     MatGridListModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTreeModule
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent

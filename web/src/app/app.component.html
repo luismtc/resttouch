@@ -7,7 +7,7 @@
     </mat-toolbar-row>
 </mat-toolbar>
 <mat-sidenav-container class="matSideNavContainer">
-    <mat-sidenav #sidenav mode="over" [(opened)]="opened" *ngIf="isLogged" position="start">
+    <mat-sidenav #sidenav mode="over" [(opened)]="opened" *ngIf="isLogged" position="start" style="width: 25% !important;">
         <app-menu (elementClicked)="toggleSidenav()"></app-menu>
     </mat-sidenav>
     <mat-sidenav-content>

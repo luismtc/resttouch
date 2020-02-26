@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { usrLogin, usrLogInResponse, Usuario } from '../models/usuario';
+import { AccesoUsuario, SubModulo, NodoAppMenu } from '../interfaces/acceso-usuario';
 import { LocalstorageService } from '../services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -126,7 +127,13 @@ export class UsuarioService {
 
   }
 
-  getUserAppMenu(): IBtnModulo[] {
-    return APPMENU;
+  getUserAppMenu = (): IBtnModulo[] => APPMENU;
+
+  getAppMenu = (): AccesoUsuario[] => this.ls.get(GLOBAL.usrTokenVar).acceso || [];
+
+  transformSubModule = (subModulos: SubModulo[]): NodoAppMenu[] => {
+    let objMenu: NodoAppMenu[] = [];
+    subModulos.forEach(sm => objMenu.push({ nombre: sm.nombre, link: null, hijos: sm.opciones }));
+    return objMenu;
   }
 }

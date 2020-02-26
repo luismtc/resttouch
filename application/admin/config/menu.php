@@ -3,22 +3,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['menu'] = [
 	1 => [
-		'nombre' => 'Configuración',
+		'nombre' => 'ADMIN',
 		'submodulo' => [
 			1 => [
 				'nombre' => 'Mantenimiento',
 				'opciones' => [
 					1 => [
 						'nombre' => 'Cliente',
-						'link' => '/admin/mante/cliente'
+						'link' => '/admin/cliente'
 					],
 					2 => [
 						'nombre' => 'Artículos',
-						'link' => '/admin/mante/articulo'
+						'link' => '/wms/articulos'
 					],
 					3 => [
 						'nombre' => 'Áreas',
-						'link' => '/admin/mante/areas'
+						'link' => '/restaurante/mantareas'
 					]
 				]
 			]
@@ -32,7 +32,7 @@ $config['menu'] = [
 				'opciones' => [
 					1 => [
 						'nombre' => 'Área',
-						'link' => '/pos/trans/area'
+						'link' => '/restaurante/tranareas'
 					]
 				]
 			]
