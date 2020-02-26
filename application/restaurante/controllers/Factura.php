@@ -65,11 +65,11 @@ class Factura extends CI_Controller {
 							"fel_uuid" => $fac->fel_uuid
 						]);
 						$datos['exito'] = true;
-						$datos['factura'] = $fact;
 						$datos['mensaje'] = "Datos actualizados con exito";	
-					} else {
+					} else {						
 						$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";			
 					}
+					$datos['factura'] = $fact;
 				} else {
 					$datos['mensaje'] = "Ocurrio un error al guardar la factura, intente nuevamente";	
 				}

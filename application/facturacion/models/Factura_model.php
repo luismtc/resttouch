@@ -34,11 +34,12 @@ class Factura_model extends General_model {
 		$result = $det->guardar($args);
 
 		if($result) {
-
-			$this->db
-				 ->set("detalle_factura", $det->detalle_factura)
-				 ->set("detalle_cuenta", $args['detalle_cuenta'])
-				 ->insert("detalle_factura_detalle_cuenta");
+			if (isset($args['detalle_cuenta'])) {				
+				$this->db
+					 ->set("detalle_factura", $det->detalle_factura)
+					 ->set("detalle_cuenta", $args['detalle_cuenta'])
+					 ->insert("detalle_factura_detalle_cuenta");
+			}
 
 			return $det;
 		} else {

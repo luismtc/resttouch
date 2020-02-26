@@ -15,7 +15,8 @@ class Factura extends CI_Controller {
 			'Cuenta_model',
 			'Dcomanda_model',
 			'Dcuenta_model',
-			'Factura_model'
+			'Factura_model',
+			'Articulo_model'
 		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -23,11 +24,17 @@ class Factura extends CI_Controller {
 
 	public function guardar($id = '')
 	{
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$fac = new Factura_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 			if (empty($id) || empty($fac->numero_factura)) {				
+				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
+				$req['usuario'] = $data->idusuario;
+				$req['certificador_fel'] = $sede->certificador_fel;				
 				$datos['exito'] = $fac->guardar($req);
 
 				if($datos['exito']) {
@@ -55,6 +62,12 @@ class Factura extends CI_Controller {
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 			if (empty($fac->numero_factura)) {
+				$fac->cargarEmpresa();
+				$pimpuesto = $fac->empresa->porcentaje_iva +1;
+				$art = new Articulo_model($req['articulo']);
+				$req['monto_base'] = number_format($req['total'] / $pimpuesto, 2);
+				$req['monto_iva'] = $req['total'] - $req['monto_base'];
+				$req['bien_servicio'] = $art->bien_servicio;
 				$det = $fac->setDetalle($req, $id);;
 
 				if($det) {
@@ -82,18 +95,31 @@ class Factura extends CI_Controller {
 		if(is_array($facturas)) {
 			foreach ($facturas as $row) {
 				$tmp = new Factura_model($row->factura);
-				$row->tipo_movimiento = $tmp->getTipoMovimiento();
-				$row->proveedor = $tmp->getProveedor();
-				$row->bodega = $tmp->getBodega();
-				$row->bodega_origen = $tmp->getBodegaOrigen();
-				$row->usuario = $tmp->getUsuario();
+				$tmp->cargarReceptor();
+				$tmp->cargarMoneda();
+				$tmp->cargarCertificadorFel();
+				$row->cliente = $tmp->receptor;
+				$row->factura_serie = $this->Catalogo_model->getFacturaSerie(["factura_serie" => $tmp->factura_serie, "_uno" => true]);
+				$row->certificador_fel = $tmp->certificador_fel;
+				$row->moneda = $tmp->moneda;
+				$row->usuario = $this->Usuario_model->find([
+					'usuario' => $tmp->usuario, "_uno" => true
+				]);
 				$datos[] = $row;
 			}
-		} else if($factura){
+		} else if($facturas){
 			$tmp = new Factura_model($facturas->factura);
-			$facturas->tipo_movimiento = $tmp->getTipoMovimiento();
-			$facturas->proveedor = $tmp->getProveedor();
-			$facturas->bodega = $tmp->getBodega();
+			$tmp = new Factura_model($facturas->factura);
+			$tmp->cargarReceptor();
+			$tmp->cargarMoneda();
+			$tmp->cargarCertificadorFel();
+			$facturas->cliente = $tmp->receptor;
+			$facturas->factura_serie = $this->Catalogo_model->getFacturaSerie(["factura_serie" => $tmp->factura_serie, "_uno" => true]);
+			$facturas->certificador_fel = $tmp->certificador_fel;
+			$facturas->moneda = $tmp->moneda;
+			$facturas->usuario = $this->Usuario_model->find([
+				'usuario' => $tmp->usuario, "_uno" => true
+			]);
 			$datos[] = $facturas;
 		}
 
