@@ -69,8 +69,12 @@ class Catalogo_model extends CI_Model {
 	}
 
 	public function getBodega($args = []){
-		if (isset($args["bodega"])) {
-			$this->db->where("bodega", $args["bodega"]);
+		if(count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if ($key != '_uno') {
+					$this->db->where($key, $row);
+				}
+			}
 		}
 
 		$qry = $this->db
@@ -266,6 +270,18 @@ class Catalogo_model extends CI_Model {
 		->where("activo", 1)
 		->order_by("factura_serie")
 		->get("factura_serie");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getCertificadorFel($args = []) {
+		if (isset($args['certificador_fel'])) {
+			$this->db->where('certificador_fel', $args['certificador_fel']);
+		}
+
+		$qry = $this->db
+		->order_by("certificador_fel")
+		->get("certificador_fel");
 
 		return $this->getCatalogo($qry, $args);
 	}
