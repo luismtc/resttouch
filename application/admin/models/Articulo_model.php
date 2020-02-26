@@ -58,13 +58,13 @@ class Articulo_model extends General_model {
 		$datos = [] ;
 		if(is_array($det)) {
 			foreach ($det as $row) {
-				$detalle = new Receta_model($row->egreso_detalle);
+				$detalle = new Receta_model($row->articulo_detalle);
 				$row->articulo = $detalle->getArticulo();
 				$row->medida = $detalle->getMedida();
 				$datos[] = $row;
 			}
 		} else if($det) {
-			$detalle = new Receta_model($det->egreso_detalle);
+			$detalle = new Receta_model($det->articulo_detalle);
 			$det->articulo = $detalle->getArticulo();
 			$det->medida = $detalle->getMedida();
 			$datos[] = $det;
@@ -73,17 +73,30 @@ class Articulo_model extends General_model {
 		return $datos;
 	}
 
-	/*public function actualizarExistencia()
+	public function actualizarExistencia()
 	{
 		$ingresos = $this->db
-						 ->select()
-						 ->where()
-						 ->get()
+						 ->select("
+						 	")
+						 ->where("articulo")
+						 ->get("ingreso_detalle")
 						 ->row(); //total ingresos
-		$egresos = $this->db;//total egresos wms
-		$comandas = $this->db;//total ventas comanda
-		$facturas = $this->db;//total ventas factura manual
-	}*/
+		$egresos = $this->db
+						->select()
+						->where("articulo")
+						->get("egreso_detalle")
+						->row();//total egresos wms
+		$comandas = $this->db
+						 ->select()
+						 ->where("articulo")
+						 ->get("detalle_comanda")
+						 ->row();//total ventas comanda
+		$facturas = $this->db
+						 ->select()
+						 ->where("articulo")
+						 ->get("detalle_factura")
+						 ->row();//total ventas factura manual
+	}
 
 }
 
