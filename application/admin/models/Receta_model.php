@@ -8,7 +8,7 @@ class Receta_model extends CI_Model {
 	public $racionable = 0;
 	public $articulo;
 	public $cantidad;
-	public $medida
+	public $medida;
 
 	public function __construct($id = "")
 	{
