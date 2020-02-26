@@ -6,6 +6,7 @@ export interface Articulo {
     presentacion: number;
     descripcion: string;
     precio: number;
+    bien_servicio?: string;
 }
 
 export interface ArticuloResponse {

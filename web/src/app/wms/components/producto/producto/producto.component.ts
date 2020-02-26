@@ -18,7 +18,7 @@ export class ProductoComponent implements OnInit {
   constructor(
     private articuloSrvc: ArticuloService
   ) {
-    this.articulo = { articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null  };
+    this.articulo = { articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null, bien_servicio: 'B'  };
   }
 
   ngOnInit() {
@@ -34,7 +34,9 @@ export class ProductoComponent implements OnInit {
           presentacion: obj.presentacion,
           descripcion: obj.descripcion,
           precio: +obj.precio          
-        }
+        };
+        this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
+        this.frmProductoComponent.resetReceta();
       }
     });
   }
