@@ -49,8 +49,15 @@ class Factura_model extends General_model {
 		}		
 	}
 
-	public function getDetalle()
+	public function getDetalle($args = [])
 	{
+		if (count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if($key != "_uno"){
+					$this->db->where($key, $row);
+				}
+			}	
+		}
 		$datos = [];
 		$tmp = $this->db
 		->where("factura", $this->factura)
