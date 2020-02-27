@@ -27,26 +27,57 @@ class Factura_model extends General_model {
 		}
 	}
 
-	public function setDetalle($args)
+	public function setDetalle($args, $id="")
 	{
-		$det = new Dfactura_model();
+		$det = new Dfactura_model($id);
 		$args['factura'] = $this->factura;
-		$result = $det->guardar($args);
-
-		if($result) {
-			if (isset($args['detalle_cuenta'])) {				
-				$this->db
-					 ->set("detalle_factura", $det->detalle_factura)
-					 ->set("detalle_cuenta", $args['detalle_cuenta'])
-					 ->insert("detalle_factura_detalle_cuenta");
-			}
-
-			return $det;
+		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+		$validar = (!isset($args['detalle_cuenta']) || !empty($menu));
+		$cantidad = 0;
+		$articulo = null;
+		if (empty($id)) {
+			$articulo = $args['articulo'];
+			$cantidad = $args['cantidad'];
 		} else {
-			$this->mensaje = $det->getMensaje();
+			if($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']){
+				$articulo = $det->articulo;
+				$cantidad = $args['cantidad'] - $det->cantidad;
+			} else if($det->articulo != $args['articulo']){				
+				$articulo = $args['articulo'];
+				$cantidad = $args['cantidad'];
+			} else {
+				$articulo = $args['articulo'];
+				$validar = false;
+			}
+		}
+		$art = new Articulo_model($articulo);
+		$oldart = new Articulo_model($det->articulo);
 
-			return false;			
-		}		
+		if (isset($args['detalle_cuenta']) ||empty($menu) || !$validar || $art->existencias >= $cantidad) {
+			$result = $det->guardar($args);
+
+			if($result) {
+				if (isset($args['detalle_cuenta'])) {				
+					$this->db
+						 ->set("detalle_factura", $det->detalle_factura)
+						 ->set("detalle_cuenta", $args['detalle_cuenta'])
+						 ->insert("detalle_factura_detalle_cuenta");
+				}
+				$art->actualizarExistencia();
+				if ($oldart->articulo) {					
+					$oldart->actualizarExistencia();
+				}
+				return $det;
+			} else {
+				$this->mensaje = $det->getMensaje();
+
+				return false;			
+			}	
+		} else {
+			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
+		}
+		
+		return false;
 	}
 
 	public function getDetalle($args = [])

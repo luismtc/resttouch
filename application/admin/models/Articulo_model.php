@@ -9,6 +9,7 @@ class Articulo_model extends General_model {
 	public $descripcion;
 	public $precio;
 	public $bien_servicio;
+	public $existencias;
 
 	public function __construct($id = "")
 	{
@@ -77,25 +78,34 @@ class Articulo_model extends General_model {
 	{
 		$ingresos = $this->db
 						 ->select("
-						 	")
-						 ->where("articulo")
+						 	sum(ifnull(cantidad, 0)) as total")
+						 ->where("articulo", $this->articulo)
 						 ->get("ingreso_detalle")
 						 ->row(); //total ingresos
+
 		$egresos = $this->db
-						->select()
-						->where("articulo")
+						->select("sum(ifnull(cantidad, 0)) as total")
+						->where("articulo", $this->articulo)
 						->get("egreso_detalle")
 						->row();//total egresos wms
+
 		$comandas = $this->db
-						 ->select()
-						 ->where("articulo")
+						 ->select("sum(ifnull(cantidad, 0)) as total")
+						 ->where("articulo", $this->articulo)
 						 ->get("detalle_comanda")
 						 ->row();//total ventas comanda
+
 		$facturas = $this->db
-						 ->select()
-						 ->where("articulo")
-						 ->get("detalle_factura")
+						 ->select("sum(ifnull(a.cantidad, 0)) as total")
+						 ->join("detalle_factura_detalle_cuenta b", "a.detalle_factura = b.detalle_factura", "left")
+						 ->where("articulo", $this->articulo)
+						 ->where("b.detalle_factura_detalle_cuenta is null")
+						 ->get("detalle_factura a")
 						 ->row();//total ventas factura manual
+
+		$exist = $ingresos->total - ($egresos->total + $comandas->total + $facturas->total);
+
+		return $this->guardar(['existencias' => $exist]);
 	}
 
 }

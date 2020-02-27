@@ -40,15 +40,17 @@ class Ingreso extends CI_Controller {
 	}
 
 	public function guardar_detalle($ingreso, $id = '') {
-		$this->load->model('IDetalle_Model');
+		$this->load->model(['IDetalle_Model', 'Articulo_model']);
 		$ing = new Ingreso_model($ingreso);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 			if ($ing->estatus_movimiento == 1) {
+				$art = new Articulo_model($req['articulo']);
 				$det = $ing->setDetalle($req, $id);;
 
 				if($det) {
+					$art->actualizarExistencia();
 					$datos['exito'] = true;
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['detalle'] = $det;

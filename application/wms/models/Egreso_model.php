@@ -48,16 +48,47 @@ class Egreso_model extends General_Model {
 	public function setDetalle(Array $args, $id = "")
 	{
 		$det = new EDetalle_Model($id);
-		$args['egreso'] = $this->egreso;
-		$result = $det->guardar($args);
-
-		if($result) {
-			return $det;
+		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+		$validar = true;
+		$cantidad = 0;
+		$articulo = null;
+		if (empty($id)) {
+			$articulo = $args['articulo'];
+			$cantidad = $args['cantidad'];
+		} else {
+			if($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']){
+				$articulo = $det->articulo;
+				$cantidad = $args['cantidad'] - $det->cantidad;
+			} else if($det->articulo != $args['articulo']){				
+				$articulo = $args['articulo'];
+				$cantidad = $args['cantidad'];
+			} else {
+				$articulo = $args['articulo'];
+				$validar = false;
+			}
 		}
+		$art = new Articulo_model($articulo);
+		$oldart = new Articulo_model($det->articulo);
+		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
+			$args['egreso'] = $this->egreso;
+			$result = $det->guardar($args);
 
-		$this->mensaje = $det->getMensaje();
+			if($result) {
+				$art->actualizarExistencia();
+				if ($oldart->articulo) {					
+					$oldart->actualizarExistencia();
+				}
+				return $det;
+			}
 
-		return $result;
+			$this->mensaje = $det->getMensaje();
+
+			return $result;	
+		} else {
+			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
+		}
+		
+		return false;
 	}
 
 	public function getDetalle($args = [])

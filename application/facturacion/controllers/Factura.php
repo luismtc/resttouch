@@ -68,8 +68,8 @@ class Factura extends CI_Controller {
 				$req['monto_base'] = number_format($req['total'] / $pimpuesto, 2);
 				$req['monto_iva'] = $req['total'] - $req['monto_base'];
 				$req['bien_servicio'] = $art->bien_servicio;
-				$det = $fac->setDetalle($req, $id);;
-
+				$det = $fac->setDetalle($req, $id);
+				
 				if($det) {
 					$datos['exito'] = true;
 					$datos['mensaje'] = "Datos Actualizados con Exito";
