@@ -36,8 +36,19 @@ class Presentacion extends CI_Controller {
 
 	public function buscar()
 	{
-		$datos = $this->Presentacion_model->buscar($_GET);
-
+		$tmp = $this->Presentacion_model->buscar($_GET);
+		$datos = [];
+		if(is_array($tmp)) {
+			foreach ($tmp as $row) {
+				$pres = new Presentacion_model($row->presentacion);
+				$row->medida = $pres->getMedida();
+				$datos[] = $row;
+			}
+		} else if($tmp){
+			$pres = new Compra_model($tmp->presentacion);
+			$tmp->medida = $pres->getMedida();
+			$datos[] = $tmp;
+		}
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));

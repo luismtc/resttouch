@@ -18,6 +18,14 @@ class Presentacion_model extends General_model {
 		}
 	}
 
+	public function getMedida()
+	{
+		return $this->db
+					->where("medida", $this->medida)
+					->get("medida")
+					->row();
+	}
+
 }
 
 /* End of file Presentacion_model.php */
