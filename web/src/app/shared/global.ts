@@ -10,5 +10,6 @@ export const GLOBAL = {
     urlCatalogos: `${urlBase}/index.php/catalogo`,
     urlMantenimientos: `${urlBase}/index.php/mante`,
     urlWms: `${urlBase}/wms.php`,
+    urlFacturacion: `${urlBase}/facturacion.php`,
     usrTokenVar: 'rttoken'
 }

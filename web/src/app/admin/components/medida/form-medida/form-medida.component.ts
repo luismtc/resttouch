@@ -29,7 +29,7 @@ export class FormMedidaComponent implements OnInit {
 
   onSubmit = () => {
     this.medidaSrvc.save(this.medida).subscribe(res => {
-      console.log(res);
+      //console.log(res);
       if (res.exito) {
         this.medidaSavedEv.emit();
         this.resetMedida();

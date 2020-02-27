@@ -32,10 +32,13 @@ import { CobrarPedidoComponent } from './components/cobrar-pedido/cobrar-pedido.
 import { FormaPagoComponent } from './components/formaPago/forma-pago/forma-pago.component';
 import { ListaFormaPagoComponent } from './components/formaPago/lista-forma-pago/lista-forma-pago.component';
 import { FormFormaPagoComponent } from './components/formaPago/form-forma-pago/form-forma-pago.component';
+import { FacturaManualComponent } from './components/facturaManual/factura-manual/factura-manual.component';
+import { ListaFacturaManualComponent } from './components/facturaManual/lista-factura-manual/lista-factura-manual.component';
+import { FormFacturaManualComponent } from './components/facturaManual/form-factura-manual/form-factura-manual.component';
 
 
 @NgModule({
-  declarations: [CobrarPedidoComponent, FormaPagoComponent, ListaFormaPagoComponent, FormFormaPagoComponent],
+  declarations: [CobrarPedidoComponent, FormaPagoComponent, ListaFormaPagoComponent, FormFormaPagoComponent, FacturaManualComponent, ListaFacturaManualComponent, FormFacturaManualComponent],
   entryComponents: [
     CobrarPedidoComponent
   ],

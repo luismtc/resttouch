@@ -1,4 +1,17 @@
 export interface Factura {
+    factura: number;
+    usuario?: number;
+    factura_serie: number;
+    cliente: number;
+    numero_factura?: string;
+    serie_factura?: string;
+    fecha_factura: string;
+    fel_uuid?: string;
+    fel_uuid_anulacion?: string;
+    moneda: number;
+    certificador_fel?: number;
+    exenta: number;
+    notas: string;
 }
 
 interface ctaFactReq {

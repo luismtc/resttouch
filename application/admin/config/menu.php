@@ -19,6 +19,10 @@ $config['menu'] = [
 					3 => [
 						'nombre' => 'Áreas',
 						'link' => '/restaurante/mantareas'
+					],
+					4 => [
+						'nombre' => 'Presentaciones',
+						'link' => '/admin/presentacion'
 					]
 				]
 			]
@@ -33,6 +37,10 @@ $config['menu'] = [
 					1 => [
 						'nombre' => 'Área',
 						'link' => '/restaurante/tranareas'
+					],
+					2 => [
+						'nombre' => 'Factura manual',
+						'link' => '/pos/factman'
 					]
 				]
 			]

@@ -39,12 +39,15 @@ import { FormClienteComponent } from './components/cliente/form-cliente/form-cli
 import { MedidaComponent } from './components/medida/medida/medida.component';
 import { ListaMedidaComponent } from './components/medida/lista-medida/lista-medida.component';
 import { FormMedidaComponent } from './components/medida/form-medida/form-medida.component';
+import { PresentacionComponent } from './components/presentacion/presentacion/presentacion.component';
+import { ListaPresentacionComponent } from './components/presentacion/lista-presentacion/lista-presentacion.component';
+import { FormPresentacionComponent } from './components/presentacion/form-presentacion/form-presentacion.component';
 
 
 
 @NgModule({
   declarations: [
-    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective, UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent, FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent
+    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective, UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent, FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent, ListaPresentacionComponent, FormPresentacionComponent
   ],
   imports: [
     CommonModule,
