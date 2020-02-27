@@ -10,7 +10,9 @@ class Egreso extends CI_Controller {
         	'Egreso_model', 
         	'EDetalle_model',
         	'Ingreso_model',
-        	'IDetalle_Model'
+        	'IDetalle_Model',
+        	'Articulo_model',
+        	'Catalogo_model'
         ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -53,18 +55,21 @@ class Egreso extends CI_Controller {
 	public function guardar_detalle($egreso, $id = '') {
 		$egr = new Egreso_model($egreso);
 		$req = json_decode(file_get_contents('php://input'), true);
-		$datos = ['exito' => false];
+		$datos = ['exito' => false];		
 		if ($this->input->method() == 'post') {
 			if ($egr->estatus_movimiento == 1) {
+				$art = new Articulo_model($req['articulo']);				
 				$det = $egr->setDetalle($req, $id);;
 
 				if($det) {
+					$art->actualizarExistencia();
 					$datos['exito'] = true;
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['detalle'] = $det;
 				} else {
 					$datos['mensaje'] = implode("<br>", $egr->getMensaje());
-				}	
+				}
+					
 			} else {
 				$datos['mensaje'] = "Solo puede editar egresos en estatus Abierto";
 			}

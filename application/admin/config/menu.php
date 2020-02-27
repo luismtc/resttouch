@@ -37,5 +37,33 @@ $config['menu'] = [
 				]
 			]
 		]
+	],
+	3 => [
+		'nombre' => 'Facturacion',
+		'submodulo' => [
+			1 => [
+				'nombre' => 'Transacción',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Área',
+						'link' => '/restaurante/tranareas'
+					]
+				]
+			]
+		]
+	],
+	4 => [
+		'nombre' => 'WMS',
+		'submodulo' => [
+			1 => [
+				'nombre' => 'Transacción',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Ingresos',
+						'link' => '/restaurante/tranareas'
+					]
+				]
+			]
+		]
 	]
 ];
