@@ -3,7 +3,7 @@ import { WindowConfiguration } from '../../../shared/interfaces/window-configura
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 //import { Socket } from 'ngx-socket-io';
-//import { SignalRService } from '../../../shared/services/signal-r.service';
+import { SignalRService } from '../../../shared/services/signal-r.service';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
@@ -51,7 +51,7 @@ export class TranComandaComponent implements OnInit {
     private _snackBar: MatSnackBar,
     public comandaSrvc: ComandaService,
     //private socket: Socket,
-    //private signalRSrvc: SignalRService
+    private signalRSrvc: SignalRService
   ) { }
 
   ngOnInit() {
@@ -61,8 +61,8 @@ export class TranComandaComponent implements OnInit {
     this.resetCuentaActiva();
     this.noComanda = this.mesaEnUso.comanda || 0;
     this.llenaProductosSeleccionados();
-    //this.signalRSrvc.startConnection(`restaurante_01`);
-    // this.signalRSrvc.addBroadcastDataListener();
+    this.signalRSrvc.startConnection(`restaurante_01`);
+    //this.signalRSrvc.addBroadcastDataListener();
   }
 
   resetMesaEnUso = () => this.mesaEnUso = {
@@ -203,15 +203,14 @@ export class TranComandaComponent implements OnInit {
       });
     }
     // this.socket.emit("print:comanda", `Imprimiendo comanda de ${this.cuentaActiva.nombre}`);
-    /*
+    
     this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
       Tipo: 'Comanda', 
       Nombre: this.cuentaActiva.nombre, 
       Numero: this.noComanda, 
       DetalleCuenta: this.lstProductosAImprimir,
       Total: null
-    })}`);
-    */
+    })}`);    
   }
 
   sumaDetalle = (detalle: productoSelected[]) => {
@@ -228,15 +227,14 @@ export class TranComandaComponent implements OnInit {
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
     this.showPortalCuenta = true;
     // this.socket.emit("print:cuenta", `Imprimiendo cuenta de ${this.cuentaActiva.nombre}`);
-    /*
+    
     this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
       Tipo: 'Cuenta', 
       Nombre: this.cuentaActiva.nombre, 
       Numero: null, 
       DetalleCuenta: this.lstProductosAImprimir,
       Total: this.sumaDetalle(this.lstProductosAImprimir)
-    })}`);
-    */
+    })}`);    
   }
 
   unirCuentas() {
