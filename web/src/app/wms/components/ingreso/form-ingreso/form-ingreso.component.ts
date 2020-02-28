@@ -25,6 +25,7 @@ import { ArticuloService } from '../../../services/articulo.service';
 export class FormIngresoComponent implements OnInit {
 
   @Input() ingreso: Ingreso;
+  @Input() saveToDB: boolean = true;
   @Output() ingresoSavedEv = new EventEmitter();
 
   public showIngresoForm: boolean = true;
@@ -146,6 +147,16 @@ export class FormIngresoComponent implements OnInit {
       }
     });
   }
+
+  addToDetail = () => {
+    this.detallesIngreso.push(this.detalleIngreso);
+    this.resetDetalleIngreso();
+    this.updateTableDataSource();    
+  }
+
+  removeFromDetail = (idarticulo: number) => this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo), 1);
+
+  getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesIngreso);
 

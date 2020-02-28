@@ -25,6 +25,7 @@ import { ArticuloService } from '../../../services/articulo.service';
 export class FormEgresoComponent implements OnInit {
 
   @Input() egreso: Egreso;
+  @Input() saveToDB: boolean = true;
   @Output() egresoSavedEv = new EventEmitter();
 
   public showEgresoForm: boolean = true;
@@ -157,12 +158,25 @@ export class FormEgresoComponent implements OnInit {
     //console.log(this.detalleEgreso);
     this.egresoSrvc.saveDetalle(this.detalleEgreso).subscribe(res => {
       //console.log(res);
-      if (res) {
+      if (res.exito) {
         this.loadDetalleEgreso();
         this.resetDetalleEgreso();
+        this._snackBar.open('Egreso guardado con éxito...', 'Egreso', { duration: 3000 });
+      } else {
+        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Egreso', { duration: 3000 });
       }
     });
   }
+
+  addToDetail = () => {
+    this.detallesEgreso.push(this.detalleEgreso);
+    this.resetDetalleEgreso();
+    this.updateTableDataSource();    
+  }
+
+  removeFromDetail = (idarticulo: number) => this.detallesEgreso.splice(this.detallesEgreso.findIndex(de => +de.articulo === +idarticulo), 1);
+
+  getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesEgreso);
 

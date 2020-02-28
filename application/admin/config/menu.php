@@ -47,14 +47,14 @@ $config['menu'] = [
 		]
 	],
 	3 => [
-		'nombre' => 'Facturacion',
+		'nombre' => 'FACT',
 		'submodulo' => [
 			1 => [
 				'nombre' => 'Transacción',
 				'opciones' => [
 					1 => [
-						'nombre' => 'Área',
-						'link' => '/restaurante/tranareas'
+						'nombre' => 'Formas de pago',
+						'link' => '/pos/fpago'
 					]
 				]
 			]
@@ -68,7 +68,15 @@ $config['menu'] = [
 				'opciones' => [
 					1 => [
 						'nombre' => 'Ingresos',
-						'link' => '/restaurante/tranareas'
+						'link' => '/wms/ingresos'
+					],
+					2 => [
+						'nombre' => 'Egresos',
+						'link' => '/wms/egresos'
+					],
+					3 => [
+						'nombre' => 'Transformaciones',
+						'link' => '/wms/transformaciones'
 					]
 				]
 			]

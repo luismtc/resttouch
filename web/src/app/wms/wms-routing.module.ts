@@ -5,11 +5,13 @@ import { AuthguardService as AuthGuard } from '../admin/services/authguard.servi
 import { IngresoComponent } from './components/ingreso/ingreso/ingreso.component';
 import { EgresoComponent } from './components/egreso/egreso/egreso.component';
 import { ProductoComponent } from './components/producto/producto/producto.component';
+import { TransformacionComponent } from './components/transformacion/transformacion.component';
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
   { path: 'egresos', component: EgresoComponent, canActivate: [AuthGuard] },
-  { path: 'articulos', component: ProductoComponent, canActivate: [AuthGuard] }
+  { path: 'articulos', component: ProductoComponent, canActivate: [AuthGuard] },
+  { path: 'transformaciones', component: TransformacionComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

@@ -1,0 +1,19 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <div class="btn-group d-flex justify-content-end" role="group">
+                <button mat-flat-button type="button" color="accent" (click)="transformar()">
+                    Transformar
+                </button>
+            </div>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col">
+            <app-form-egreso #frmEgreso [(egreso)]="egreso" [saveToDB]="false" (egresoSavedEv)="doSomething()"></app-form-egreso>
+        </div>
+        <div class="col">
+            <app-form-ingreso #frmIngreso [(ingreso)]="ingreso" [saveToDB]="false" (ingresoSavedEv)="doSomething()"></app-form-ingreso>            
+        </div>
+    </div>
+</div>
