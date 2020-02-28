@@ -11,7 +11,8 @@ class Conversor extends CI_Controller {
         	'EDetalle_model',
         	'Ingreso_model',
         	'IDetalle_Model',
-        	'Catalogo_model'
+        	'Catalogo_model',
+        	'Articulo_model'
         ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
