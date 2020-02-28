@@ -16,6 +16,7 @@ import { Proveedor } from '../../../interfaces/proveedor';
 import { ProveedorService } from '../../../services/proveedor.service';
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloService } from '../../../services/articulo.service';
+import { TransformacionService } from '../../../services/transformacion.service';
 
 @Component({
   selector: 'app-form-egreso',
@@ -48,6 +49,7 @@ export class FormEgresoComponent implements OnInit {
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
     private proveedorSrvc: ProveedorService,
+    private transformacionSrvc: TransformacionService
   ) { }
 
   ngOnInit() {

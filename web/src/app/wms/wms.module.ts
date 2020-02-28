@@ -40,6 +40,7 @@ import { ListaEgresoComponent } from './components/egreso/lista-egreso/lista-egr
 import { FormEgresoComponent } from './components/egreso/form-egreso/form-egreso.component';
 import { TransformacionComponent } from './components/transformacion/transformacion.component';
 
+import { TransformacionService } from './services/transformacion.service';
 
 @NgModule({
   declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent],
@@ -69,6 +70,9 @@ import { TransformacionComponent } from './components/transformacion/transformac
     MatKeyboardModule,
     MatSidenavModule,
     MatTreeModule
+  ],
+  providers: [
+    TransformacionService
   ],
   exports: [
     ListaProductoComponent

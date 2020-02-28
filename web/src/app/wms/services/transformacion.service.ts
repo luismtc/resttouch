@@ -4,7 +4,7 @@ import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Transformacion } from '../interfaces/transformacion';
 import { LocalstorageService } from '../../admin/services/localstorage.service';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 // import * as qs from 'qs';
 
