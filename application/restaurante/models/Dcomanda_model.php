@@ -8,7 +8,7 @@ class Dcomanda_model extends General_Model {
 	public $articulo;
 	public $cantidad;
 	public $precio;
-	public $impreso;
+	public $impreso = false;
 	public $total;
 	public $notas;
 
@@ -23,10 +23,19 @@ class Dcomanda_model extends General_Model {
 	}
 
 	public function getArticulo() {
-		return $this->db
+		$datos = [];
+		$tmp = $this->db
 					->where("articulo", $this->articulo)
 					->get("resttouch.articulo")
 					->row();
+		$tmp->impresora = $this->db
+		->select("b.*")
+		->join("impresora b", "b.impresora = a.impresora")
+		->where("a.categoria_grupo", $tmp->categoria_grupo)
+		->get("categoria_grupo a")
+		->row();
+
+		return $tmp;
 	}
 }
 
