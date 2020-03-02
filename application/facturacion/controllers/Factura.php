@@ -65,8 +65,13 @@ class Factura extends CI_Controller {
 				$fac->cargarEmpresa();
 				$pimpuesto = $fac->empresa->porcentaje_iva +1;
 				$art = new Articulo_model($req['articulo']);
-				$req['monto_base'] = number_format($req['total'] / $pimpuesto, 2);
-				$req['monto_iva'] = $req['total'] - $req['monto_base'];
+				if ($fac->exenta) {
+					$req['monto_base'] = $req['total'];
+				} else {
+					$req['monto_base'] = number_format($req['total'] / $pimpuesto, 2);
+				}
+				
+				$req['monto_iva'] = $req['total'] - $req['monto_base'];	
 				$req['bien_servicio'] = $art->bien_servicio;
 				$det = $fac->setDetalle($req, $id);
 				
@@ -149,7 +154,6 @@ class Factura extends CI_Controller {
 			$fac->procesar_factura();
 			$fac->cargarCertificadorFel();
 			$funcion = $fac->certificador_fel->metodo_factura;
-			//echo "<pre>"; print_r($fac->xml->saveXML()); echo "</pre>"; die();
 			$resp = $fac->$funcion();
 			$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
 			if (!empty($fac->numero_factura)) {
@@ -159,8 +163,10 @@ class Factura extends CI_Controller {
 					"serie_factura" => $fac->serie_factura,
 					"fel_uuid" => $fac->fel_uuid
 				]);
+				$fac->cargarSede();
+				$fac->detalle = $fac->getDetalle();
 				$datos['exito'] = true;
-				$datos['factura'] = $fact;
+				$datos['factura'] = $fac;
 				$datos['mensaje'] = "Datos actualizados con exito";	
 			} else {
 				$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";
@@ -168,6 +174,60 @@ class Factura extends CI_Controller {
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode($datos));	
+	}
+
+	public function anular($factura)
+	{
+		$datos = ['exito' => false];
+		if ($this->input->method() == 'post') {
+			$fac = new Factura_model($factura);
+			$fac->cargarFacturaSerie();
+			$fac->cargarEmpresa();
+			$fac->cargarMoneda();
+			$fac->cargarReceptor();
+			$fac->cargarCertificadorFel();
+			$fac->procesarAnulacion($_POST);
+			$funcion = $fac->certificador_fel->metodo_anulacion;
+			
+			$resp = $fac->$funcion();
+
+			$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+			if (!empty($fac->fel_uuid_anulacion)) {
+				$fact = new Factura_model($fac->factura);
+				$fact->guardar([
+					"fel_uuid_anulacion" => $fac->fel_uuid_anulacion
+				]);
+				$datos['exito'] = true;
+				$datos['factura'] = $fact;
+				$datos['mensaje'] = "Datos actualizados con exito";	
+			} else {
+				$datos['mensaje'] = "Ocurrio un error al anular la factura, intente nuevamente";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode($datos));
+	}
+
+	public function imprimir($factura)
+	{
+		$datos = [];
+		$fac = new Factura_model($factura);
+		$fac->cargarFacturaSerie();
+		$fac->cargarEmpresa();
+		$fac->cargarSede();
+		$fac->cargarMoneda();
+		$fac->cargarReceptor();
+		$fac->cargarCertificadorFel();
+		$fac->serie->xmldte = '';
+		$fac->serie->xmldte_anulacion = '';
+		$fac->detalle = $fac->getDetalle();
+		$datos['factura'] = $fac;
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));	
