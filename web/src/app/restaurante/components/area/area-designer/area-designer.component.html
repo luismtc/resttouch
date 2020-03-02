@@ -1,0 +1,21 @@
+<div class="container-fluid diseniador">
+    <div class="row" style="height: 50px;">
+        <div class="col">
+            <div class="btn-group d-flex justify-content-center" role="group">
+                <button mat-flat-button type="button" color="accent" (click)="addTable()">
+                    Agregar mesa
+                </button>
+                <button mat-flat-button type="button" color="accent" (click)="terminar()">
+                    Terminar
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="divAreaPosicionamiento" class="col areaPosicionamiento">
+            <div cdkDrag *ngFor="let m of mesas" id="{{+m.numero}}" (cdkDragEnded)="dragEnded($event)">
+                <app-mesa [configuracion]="m" (onClickMesa)="onClickMesa($event)"></app-mesa>
+            </div>            
+        </div>
+    </div>
+</div>

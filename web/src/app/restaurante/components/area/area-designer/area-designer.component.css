@@ -1,0 +1,15 @@
+.diseniador {
+    width: 750px;
+    height: 650px;
+    overflow: hidden !important;
+    padding: 0 !important;
+    /*border: dashed 1px #c7c7c749;*/
+}
+
+.areaPosicionamiento {
+    width: 750px;
+    height: 600px;
+    overflow: hidden !important;
+    background-color: #c7c7c749;
+    padding: 0 !important;
+}

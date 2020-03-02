@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
+import { AreaDesignerComponent } from '../area-designer/area-designer.component';
 
 import { Area } from '../../../interfaces/area';
 import { AreaService } from '../../../services/area.service';
@@ -15,11 +17,12 @@ export class FormAreaComponent implements OnInit {
 
   @Input() entidad: Area;
   @Output() entidadSavedEv = new EventEmitter();
-  private sedeUsr: number = 0;
-  private lstAreas: Area[] = [];
+  public sedeUsr: number = 0;
+  public lstAreas: Area[] = [];
 
   constructor(
     private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
     private entidadSrvc: AreaService,
     private ls: LocalstorageService
   ) { }
@@ -42,6 +45,20 @@ export class FormAreaComponent implements OnInit {
         this.resetEntidad();
         this.loadAreas();
         this.entidadSavedEv.emit();        
+      }
+    });
+  }
+
+  openDesigner = () => {
+    const areaDesignerRef = this.dialog.open(AreaDesignerComponent, {
+      width: '900px',
+      disableClose: false,
+      data: { area: +this.entidad.area, mesas: this.entidad.mesas || [] }
+    });
+
+    areaDesignerRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        console.log(result);      
       }
     });
   }

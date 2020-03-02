@@ -27,6 +27,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
@@ -45,13 +46,14 @@ import { PideDatosCuentasComponent } from './components/pide-datos-cuentas/pide-
 import { TurnoComponent } from './components/turno/turno/turno.component';
 import { ListaTurnoComponent } from './components/turno/lista-turno/lista-turno.component';
 import { FormTurnoComponent } from './components/turno/form-turno/form-turno.component';
+import { AreaDesignerComponent } from './components/area/area-designer/area-designer.component';
 
 //const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent, FormTurnoComponent],
+  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent, FormTurnoComponent, AreaDesignerComponent],
   entryComponents: [
-    AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent
+    AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent
   ],
   imports: [
     CommonModule,
@@ -83,7 +85,8 @@ import { FormTurnoComponent } from './components/turno/form-turno/form-turno.com
     MatSidenavModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    EcoFabSpeedDialModule
+    EcoFabSpeedDialModule,
+    DragDropModule
   ],
   providers: [
     MatNativeDateModule

@@ -25,7 +25,10 @@
             <div class="btn-group d-flex justify-content-end" role="group">
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmEntidad.form.valid">
                     <mat-icon>save</mat-icon>
-                </button>
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button mat-flat-button type="button" color="accent" (click)="openDesigner()" *ngIf="entidad.area">
+                    Diseñar
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button mat-icon-button type="button" color="accent" (click)="resetEntidad()" *ngIf="entidad.area">
                     <mat-icon>add</mat-icon>
                 </button>
