@@ -82,10 +82,12 @@
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmDetalleTurno.form.valid || !!turno.fin">
                     <mat-icon>save</mat-icon>
                 </button>
+                <!--
                 <button mat-icon-button type="button" color="accent" (click)="resetDetalleIngreso()"
                     *ngIf="detalleTurno.ingreso_detalle">
                     <mat-icon>add</mat-icon>
                 </button>
+                -->
             </div>
         </form>
         <hr *ngIf="detallesTurno.length > 0"/>

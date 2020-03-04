@@ -84,7 +84,8 @@ export class FormIngresoComponent implements OnInit {
 
   resetIngreso = () => {
     this.ingreso = { 
-      ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), comentario: null, proveedor: null
+      ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), comentario: null, proveedor: null,
+      estatus_movimiento: 1
     };
     this.resetDetalleIngreso();
   }

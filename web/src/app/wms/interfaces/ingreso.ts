@@ -7,4 +7,5 @@ export interface Ingreso {
     bodega_origen?: number;
     comentario: string;
     proveedor: number;
+    estatus_movimiento?: number;
 }

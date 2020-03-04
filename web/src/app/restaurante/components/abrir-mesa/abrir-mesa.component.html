@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Abrir mesa</h1>
 <div mat-dialog-content>
-    <form #frmAbrirMesa="ngForm" (ngSubmit)="frmAbrirMesa.form.valid && onSubmit()" novalidate>
+    <form #frmAbrirMesa="ngForm" (ngSubmit)="frmAbrirMesa.form.valid" novalidate>
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -18,7 +18,7 @@
             <div class="col">
                 <div class="form-group">
                     <mat-form-field>
-                        <input type="text" matInput [matKeyboard]="'es'" darkTheme="true" placeholder="# Comensales"
+                        <input type="text" matInput matKeyboard darkTheme="true" placeholder="# Comensales"
                             name="comensales" [(ngModel)]="data.comensales" required>
                     </mat-form-field>
                 </div>

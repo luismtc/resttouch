@@ -12,8 +12,8 @@ import { GLOBAL } from '../../../shared/global';
 })
 export class LoginComponent implements OnInit {
 
-  private usr: usrLogin;
-  private usuario: Usuario;
+  public usr: usrLogin;
+  public usuario: Usuario;
 
   constructor(
     private usrSrvc: UsuarioService, 

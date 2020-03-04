@@ -30,8 +30,8 @@ interface datosCuentas {
 })
 export class UnirCuentaComponent implements OnInit {
 
-  private cuentaDe: number = null;
-  private cuentaA: number = null;
+  public cuentaDe: number = null;
+  public cuentaA: number = null;
 
   constructor(
     public dialogRef: MatDialogRef<UnirCuentaComponent>,
