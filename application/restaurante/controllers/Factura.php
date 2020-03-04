@@ -44,7 +44,11 @@ class Factura extends CI_Controller {
 							$det->bien_servicio = $det->articulo->bien_servicio;
 							$det->articulo = $det->articulo->articulo;
 							$det->precio_unitario = $det->precio;
-							$det->monto_base = number_format($det->total / $pimpuesto, 2);
+							if ($fac->exenta) {
+								$det->monto_base = $det->total;
+							} else {
+								$det->monto_base = number_format($det->total / $pimpuesto, 2);
+							}
 							$det->monto_iva = $det->total - $det->monto_base;	
 							$fac->setDetalle((array) $det);
 						}
@@ -59,6 +63,8 @@ class Factura extends CI_Controller {
 					$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
 					if (!empty($fac->numero_factura)) {
 						$fact = new Factura_model($fac->factura);
+						$fac->cargarSede();
+						$fac->detalle = $fac->getDetalle();
 						$fact->guardar([
 							"numero_factura" => $fac->numero_factura,
 							"serie_factura" => $fac->serie_factura,
@@ -69,7 +75,7 @@ class Factura extends CI_Controller {
 					} else {						
 						$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";			
 					}
-					$datos['factura'] = $fact;
+					$datos['factura'] = $fac;
 				} else {
 					$datos['mensaje'] = "Ocurrio un error al guardar la factura, intente nuevamente";	
 				}

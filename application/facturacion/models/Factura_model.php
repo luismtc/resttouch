@@ -16,6 +16,7 @@ class Factura_model extends General_model {
 	public $certificador_fel;
 	public $exenta = false;
 	public $notas;
+	public $sede;
 
 	public function __construct($id = '')
 	{
@@ -120,15 +121,20 @@ class Factura_model extends General_model {
 	}
 
 	public function cargarEmpresa()
-	{
-		$usu = $this->Usuario_model->find(['usuario' => $this->usuario, "_uno" => true]);
-
+	{		
 		$this->empresa = $this->db
 							  ->select("b.*")
 							  ->join("resttouch.empresa b", "b.empresa = a.empresa")
-							  ->where("a.sede", $usu->sede)
+							  ->where("a.sede", $this->sede)
 							  ->get("resttouch.sede a")
 							  ->row();
+	}
+
+	public function cargarSede() {
+		$this->sedeFactura = $this->db								  
+								  ->where("sede", $this->sede)
+								  ->get("resttouch.sede")
+								  ->row();
 	}
 
 	public function cargarReceptor()
@@ -254,10 +260,10 @@ class Factura_model extends General_model {
         	$impuestos = $this->crearElemento('dte:Impuestos');
 	        $impuesto = $this->crearElemento('dte:Impuesto');
 	        $impuesto->appendChild($this->crearElemento('dte:NombreCorto', 'IVA'));
-	        $impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta===true?2:1)));
+	        $impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta==1?2:1)));
 
 	        
-        	if ($this->exenta === true) {
+        	if ($this->exenta) {
         		$valorBase = $row->total;
 	        	$valorIva = 0;
         	} else {
@@ -352,6 +358,33 @@ class Factura_model extends General_model {
 		$this->set_receptor();
 		$this->set_servicios_propios();		
 		$this->set_frases();
+		$this->esAnulacion = 'N';
+	}
+
+	public function procesarAnulacion($args = [])
+	{
+		$comentario = 'ERROR DE EMISIÓN';
+		if(isset($args['comentario'])) {
+			$comentario = $args['comentario'];
+		}
+
+		$this->esAnulacion = "S";
+
+		$this->iniciar_xml(2);
+		$this->fecha_factura.=date("\TH:i:s");
+		$DatosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);
+		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $this->fecha_factura);
+		$DatosGenerales->setAttribute('FechaHoraAnulacion', date("Y-m-d\TH:i:s"));
+
+		$DatosGenerales->setAttribute('IDReceptor', str_replace('-','',($this->exenta?'CF':$this->receptor->nit)));
+		$DatosGenerales->setAttribute('MotivoAnulacion', substr($comentario, 0, 255));
+		$DatosGenerales->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
+		$DatosGenerales->setAttribute('NumeroDocumentoAAnular', $this->fel_uuid);
+		$this->certificador_fel->vinculo_firma = $this->certificador_fel->vinculo_anulacion;
+	}
+
+	public function anularInfile() {
+
 	}
 
 	public function getXml()
@@ -372,7 +405,7 @@ class Factura_model extends General_model {
 			"archivo" => base64_encode(html_entity_decode($this->xml->saveXML())),
 			"codigo" => "1000000000K",
 			"alias" => "DEMO_FEL",
-			"es_anulacion" => "N"
+			"es_anulacion" => $this->esAnulacion
 		);
 		
 		# Datos que recibe el web service para obtener firma para el documento
@@ -392,8 +425,8 @@ class Factura_model extends General_model {
 				"xml_dte"      => $jsonFirma->archivo
 			);
 
-			# $prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
-			$prefijo = 'VT';
+			$prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
+			#$prefijo = 'VT';
 			$identificador = "{$prefijo}-{$this->factura}";
 			
 
@@ -444,12 +477,14 @@ class Factura_model extends General_model {
 			$datos = html_entity_decode($this->xml->saveXML());
 			$res = json_decode(post_request($link, $datos, $header));
 
-			if($res->Codigo == 1) {
+			if($res->Codigo == 1 && $this->esAnulacion === 'N') {
 				$this->numero_factura = $res->Serie;
 				$this->serie_factura = $res->NUMERO;
 				$this->fel_uuid = $res->Autorizacion;
+			} else if ($this->esAnulacion === 'S') {
+				$this->fel_uuid_anulacion = $res->Autorizacion;
 			}
-			
+
 			return $res;
 		}
 
