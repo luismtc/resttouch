@@ -44,6 +44,15 @@ export class FacturaService {
     return this.http.get<Factura[]>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/buscar_factura?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  imprimir(idfactura: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/imprimir/${idfactura}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   save(entidad: Factura): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({

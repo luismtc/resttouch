@@ -25,7 +25,7 @@ export class SignalRService {
 
   //addTransferDataListener = () => this.hubConnection.on('ReceiveMessage', (data) => console.log(data));
 
-  broadcastData = (grpName: string, data: any) => this.hubConnection.invoke('SendMessage', grpName, data).catch((err) => console.log(`ERROR: ${err}.`));
+  broadcastData = (grpName: string, data: any, metodo: string = 'SendMessage') => this.hubConnection.invoke(metodo, grpName, data).catch((err) => console.log(`ERROR: ${err}.`));
 
   //addBroadcastDataListener = () => this.hubConnection.on('SendMessage', (data) => console.log(data));
 }

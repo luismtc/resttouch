@@ -62,6 +62,9 @@
                 <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="firmarFactura()">
                     <!--<mat-icon>save</mat-icon>-->Firmar
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || detallesFactura.length === 0" (click)="imprimirFactura()">
+                    <!--<mat-icon>save</mat-icon>-->Imprimir
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button mat-icon-button type="button" color="accent" (click)="resetFactura()" *ngIf="factura.factura">
                     <mat-icon>add</mat-icon>
                 </button>

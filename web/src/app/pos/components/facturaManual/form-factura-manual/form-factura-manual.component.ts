@@ -5,6 +5,7 @@ import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
+import { SignalRService } from '../../../../shared/services/signal-r.service';
 
 import { Factura } from '../../../interfaces/factura';
 import { DetalleFactura } from '../../../interfaces/detalle-factura';
@@ -47,7 +48,8 @@ export class FormFacturaManualComponent implements OnInit {
     private facturaSerieSrvc: FacturaSerieService,
     private clienteSrvc: ClienteService,
     private monedaSrvc: MonedaService,
-    private articuloSrvc: ArticuloService
+    private articuloSrvc: ArticuloService,
+    private signalRSrvc: SignalRService
   ) { }
 
   ngOnInit() {
@@ -56,6 +58,7 @@ export class FormFacturaManualComponent implements OnInit {
     this.loadClientes();
     this.loadMonedas();
     this.loadArticulos();
+    this.signalRSrvc.startConnection(`restaurante_01`);
   }
 
   loadFacturaSeries = () => {
@@ -135,6 +138,49 @@ export class FormFacturaManualComponent implements OnInit {
         });
       }
     });
+  }
+
+  procesaDetalleFactura = (detalle: any[]) => {
+    let detFact: any[] = [];
+    detalle.forEach(d => detFact.push({
+      Cantidad: +d.cantidad,
+      Descripcion: d.articulo.descripcion,
+      Total: +d.total
+    }));
+    return detFact;
+  }
+
+  getTotalDetalle = (detalle: any[]): Number => {
+    let suma: number = 0.00;
+    detalle.forEach(d => suma += +d.total);
+    return suma;
+  }
+
+  imprimirFactura = () => {
+    //console.log(this.factura);
+    this.facturaSrvc.imprimir(+this.factura.factura).subscribe(res => {
+      if (res.factura) {
+        this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
+          NombreEmpresa: res.factura.empresa.nombre,
+          NitEmpresa: res.factura.empresa.nit,
+          SedeEmpresa: res.factura.sedeFactura.nombre,
+          DireccionEmpresa: res.factura.empresa.direccion,
+          Fecha: moment(res.factura.fecha_factura).format(GLOBAL.dateFormat),
+          Nit: res.factura.receptor.nit,
+          Nombre: res.factura.receptor.nombre,
+          Direccion: res.factura.receptor.direccion,
+          Serie: res.factura.serie_factura,
+          Numero: res.factura.numero_factura,
+          Total: this.getTotalDetalle(res.factura.detalle),
+          NoAutorizacion: res.factura.fel_uuid,
+          NombreCertificador: res.factura.certificador_fel.nombre,
+          DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
+        })}`, 'SendFactura');
+        this._snackBar.open(`Imprimiendo factura ${this.factura.serie_factura}-${this.factura.numero_factura}`, 'Impresión', { duration: 3000 });
+      } else {
+        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 3000 });
+      }
+    })
   }
 
   loadArticulos = () => {
