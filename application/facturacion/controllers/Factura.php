@@ -34,7 +34,8 @@ class Factura extends CI_Controller {
 			if (empty($id) || empty($fac->numero_factura)) {				
 				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
 				$req['usuario'] = $data->idusuario;
-				$req['certificador_fel'] = $sede->certificador_fel;				
+				$req['certificador_fel'] = $sede->certificador_fel;	
+				$req['sede'] = $data->sede;
 				$datos['exito'] = $fac->guardar($req);
 
 				if($datos['exito']) {
