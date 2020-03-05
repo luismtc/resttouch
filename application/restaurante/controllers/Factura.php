@@ -31,6 +31,7 @@ class Factura extends CI_Controller {
 			if (isset($req['cliente']) && isset($req['moneda']) && isset($req['factura_serie'])) {
 				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
 				$req['usuario'] = $data->idusuario;
+				$req['sede'] = $data->sede;
 				$req['certificador_fel'] = $sede->certificador_fel;
 				
 				$fac = new Factura_model();

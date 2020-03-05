@@ -8,6 +8,7 @@ class Turno_model extends General_model {
 	public $turno_tipo;
 	public $inicio;
 	public $fin;
+	public $sede;
 
 	public function __construct($id = "")
 	{

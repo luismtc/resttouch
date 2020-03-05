@@ -1,11 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
-header('Allow: GET, POST, OPTIONS, PUT, DELETE');
-
 class Turno extends CI_Controller {
 
 	public function __construct()
@@ -29,7 +24,7 @@ class Turno extends CI_Controller {
 			$continuar = true;
 			if (empty($id)) {
 				$tmp = $this->Turno_model->getTurno([
-					"sede" => $data->sede
+					"sede" => $data->sede,
 					'abierto' => true, 
 					"_uno" => true
 				]);
@@ -40,6 +35,7 @@ class Turno extends CI_Controller {
 			}
 
 			if($continuar) {
+				$req['sede'] = $data->sede;
 				$datos['exito'] = $turno->guardar($req);		
 				if($datos['exito']) {
 					$datos['mensaje'] = "Datos Actualizados con Exito";
