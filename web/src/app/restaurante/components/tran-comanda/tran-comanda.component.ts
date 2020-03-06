@@ -278,6 +278,6 @@ export class TranComandaComponent implements OnInit {
 
   cambiarEstatusCuenta = (obj: any) => {
     const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +obj.cuenta);
-    this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada === 1;
+    this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada;
   }
 }

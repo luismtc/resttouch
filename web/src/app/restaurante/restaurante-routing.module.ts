@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
   { path: 'tranareas', component: TranAreasComponent, canActivate: [AuthGuard] },
   { path: 'turno', component: TurnoComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
 @NgModule({

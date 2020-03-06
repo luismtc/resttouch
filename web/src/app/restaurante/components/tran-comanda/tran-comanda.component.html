@@ -8,7 +8,7 @@
     </div>
     <div class="row">
         <div class="col d-flex justify-content-center">
-            <button mat-raised-button type="button" color="accent" *ngFor="let cta of mesaEnUso.cuentas" [disabled]="cta.cerrada"
+            <button mat-raised-button type="button" color="accent" *ngFor="let cta of mesaEnUso.cuentas" [disabled]="+cta.cerrada == 1"
                 (click)="setSelectedCuenta(cta.numero)">
                 {{cta.nombre}}
             </button>

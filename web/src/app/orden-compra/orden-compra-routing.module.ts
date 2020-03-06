@@ -6,6 +6,7 @@ import { OrdenCompraComponent } from './components/orden-compra/orden-compra/ord
 
 const routes: Routes = [
   { path: 'ordcomp', component: OrdenCompraComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
 @NgModule({

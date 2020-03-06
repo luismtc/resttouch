@@ -2,6 +2,6 @@ export interface Cuenta {
     cuenta: number;
     numero: number;
     nombre: string;
-    cerrada?: boolean;
+    cerrada?: number;
     productos: any[];
 }

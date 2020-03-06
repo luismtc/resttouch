@@ -8,6 +8,7 @@ import { FacturaManualComponent } from './components/facturaManual/factura-manua
 const routes: Routes = [
   { path: 'fpago', component: FormaPagoComponent, canActivate: [AuthGuard] },
   { path: 'factman', component: FacturaManualComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
 @NgModule({

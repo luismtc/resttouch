@@ -62,7 +62,7 @@
                 <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="firmarFactura()">
                     <!--<mat-icon>save</mat-icon>-->Firmar
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || detallesFactura.length === 0" (click)="imprimirFactura()">
+                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || detallesFactura.length === 0" (click)="imprimirFactura()">
                     <!--<mat-icon>save</mat-icon>-->Imprimir
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button mat-icon-button type="button" color="accent" (click)="resetFactura()" *ngIf="factura.factura">
@@ -90,7 +90,7 @@
             <div class="form-group">
                 <mat-form-field class="fullWidth">
                     <mat-label>Artículo</mat-label>
-                    <mat-select name="articulo" [(ngModel)]="detalleFactura.articulo" required>
+                    <mat-select name="articulo" [(ngModel)]="detalleFactura.articulo" (selectionChange)="setPrecioUnitario($event)" required>
                         <mat-option *ngFor="let a of articulos" [value]="a.articulo">
                             {{a.descripcion}}
                         </mat-option>

@@ -12,6 +12,7 @@ const routes: Routes = [
   { path: 'egresos', component: EgresoComponent, canActivate: [AuthGuard] },
   { path: 'articulos', component: ProductoComponent, canActivate: [AuthGuard] },
   { path: 'transformaciones', component: TransformacionComponent, canActivate: [AuthGuard] },
+  { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
 @NgModule({
