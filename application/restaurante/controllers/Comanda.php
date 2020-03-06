@@ -29,7 +29,9 @@ class Comanda extends CI_Controller {
 	{
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ["exito" => false];
-
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		if ($this->input->method() == 'post') {
 			if (isset($req['mesa']) && isset($req['comanda']) && isset($req['cuentas'])) {
 
@@ -39,7 +41,11 @@ class Comanda extends CI_Controller {
 				]);
 
 				if ($usu) {
-					$turno = $this->Turno_model->getTurno(['abierto' => true, "_uno" => true]);
+					$turno = $this->Turno_model->getTurno([
+						"sede" => $data->sede,
+						'abierto' => true, 
+						"_uno" => true
+					]);
 					$comanda = new Comanda_model($req['comanda']);
 					$mesa = new Mesa_model($req['mesa']);
 					$req['usuario'] = $usu->usuario;
@@ -53,6 +59,20 @@ class Comanda extends CI_Controller {
 							$comanda->setMesa($req['mesa']);
 							$mesa->guardar(["estatus" => 2]);
 						}
+
+						if (count($req['cuentas']) > 0) {
+							foreach ($req['cuentas'] as $row) {
+								$cuenta = new Cuenta_model();
+								if(isset($row['cuenta']) && !empty($row['cuenta'])){
+									$cuenta->cargar($row['cuenta']);
+								}
+								if ($cuenta->cerrada == 0) {
+									$row['comanda'] = $comanda->comanda;
+									$cuenta->guardar($row);	
+								}							
+							}
+							$datos['exito'] = true;
+						}	
 
 						if($datos['exito']) {
 							$datos['mensaje'] = "Datos Actualizados con Exito";
@@ -78,7 +98,7 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
-	public function guardar_detalle($com, $cuenta='')
+	public function guardar_detalle($com, $cuenta)
 	{
 		$comanda = new Comanda_model($com);
 		$cuenta = new Cuenta_model($cuenta);
@@ -87,27 +107,21 @@ class Comanda extends CI_Controller {
 		$datos = ["exito" => false];
 		if ($this->input->method() == 'post') {
 			if ($cuenta->cerrada == 0) {
-				$req['comanda'] = $comanda->comanda;
-				$cuenta->guardar($req);
-				if(isset($req['productos'])) {									
-					foreach ($req['productos'] as $prod) {
-						$det = $comanda->guardarDetalle($prod);
-						$id = isset($prod['detalle_cuenta']) ? $prod['detalle_cuenta'] : '';
-						if ($det) {
-							$cuenta->guardarDetalle([
-								'detalle_comanda' => $det->detalle_comanda
-							], $id);	
-							$datos['exito'] = true;
-						} else {
-							$datos['exito'] = false;
-							break;							
-						}					
-					}
-					if ($datos['exito']) {
-						$datos['comanda'] = $comanda->getComanda();	
-					} else {
-						$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-					}
+				
+				$det = $comanda->guardarDetalle($req);
+				$id = isset($req['detalle_cuenta']) ? $req['detalle_cuenta'] : '';
+				if ($det) {
+					$cuenta->guardarDetalle([
+						'detalle_comanda' => $det->detalle_comanda
+					], $id);	
+					$datos['exito'] = true;
+				} else {
+					$datos['exito'] = false;						
+				}	
+				if ($datos['exito']) {
+					$datos['comanda'] = $comanda->getComanda();	
+				} else {
+					$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
 				}
 
 			} else {

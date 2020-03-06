@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Turno_model extends General_model {
 
 	public $turno;
-	public $fecha;
 	public $turno_tipo;
 	public $inicio;
 	public $fin;

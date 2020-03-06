@@ -10,7 +10,8 @@ class Cuenta extends CI_Controller {
 			"Comanda_model", 
 			"Dcomanda_model", 
 			"Cuenta_model", 
-			"Dcuenta_model"
+			"Dcuenta_model",
+			"Mesa_model"
 		]);
 
 		$this->output
@@ -31,36 +32,52 @@ class Cuenta extends CI_Controller {
 				$cta = new Cuenta_model($cuenta);
 				$det = $cta->getDetalle();
 				$total = 0;
-				foreach ($det as $row) {
-					$total+= ($row->cantidad * $row->precio);
-				}
-
-				$total += $req->propina_monto;
-				if($total == $req->total) {
-					$exito = true;
-					foreach ($req->forma_pago as $row) {
-						if(!$cta->cobrar($row)) {
-							$exito = false;
-						} 	
-					}			
-
-					if ($exito) {
-						$cta->guardar([
-							"cerrada" => 1,
-							"propina_monto" => $req->propina_monto,
-							"propina_porcentaje" => $req->propina_porcentaje
-						]);
-						$datos['exito'] = true;
-						$datos['mensaje'] = "Cobro realizado exitosamente";
-						$datos['cuenta'] = $cta;							
-					} else {
-						$datos['mensaje'] = "Ocurrio un error al realizar el cobro, intentelo nuevamente";
+				if ($cta->cerrada == 0) {
+					foreach ($det as $row) {
+						$total+= ($row->cantidad * $row->precio);
 					}
 
-				} else {
-					$datos['mensaje'] = "El monto no conincide con el total de la cuenta";
-				}
+					$total += $req->propina_monto;
+					if($total == $req->total) {
+						$exito = true;
+						foreach ($req->forma_pago as $row) {
+							if(!$cta->cobrar($row)) {
+								$exito = false;
+							} 	
+						}			
 
+						if ($exito) {
+							$cta->guardar([
+								"cerrada" => 1,
+								"propina_monto" => $req->propina_monto,
+								"propina_porcentaje" => $req->propina_porcentaje
+							]);
+							$com = new Comanda_model($cta->comanda);
+							$cuentas = $com->getCuentas();
+							$cerrada = 0;
+							foreach ($cuentas as $row) {
+								if ($row->cerrada == 1) {
+									$cerrada++;
+								}
+							}
+							if ($cerrada == count($cuentas)) {
+								$tmp = $com->getMesas();
+								$mesa = new Mesa_model($tmp->mesa);
+								$mesa->guardar(["estatus" => 1]);
+							}
+							$datos['exito'] = true;
+							$datos['mensaje'] = "Cobro realizado exitosamente";
+							$datos['cuenta'] = $cta;							
+						} else {
+							$datos['mensaje'] = "Ocurrio un error al realizar el cobro, intentelo nuevamente";
+						}
+
+					} else {
+						$datos['mensaje'] = "El monto no conincide con el total de la cuenta";
+					}	
+				} else {
+					$datos['mensaje'] = "La cuenta ya esta cerrada";
+				}			
 			} else {
 				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
 			}
