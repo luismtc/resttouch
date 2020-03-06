@@ -7,6 +7,8 @@ import { ArticuloDetalle } from '../../../interfaces/articulo-detalle';
 import { ArticuloService } from '../../../services/articulo.service';
 import { Medida } from '../../../../admin/interfaces/medida';
 import { MedidaService } from '../../../../admin/services/medida.service';
+import { Presentacion } from '../../../../admin/interfaces/presentacion';
+import { PresentacionService } from '../../../../admin/services/presentacion.service';
 
 @Component({
   selector: 'app-form-producto',
@@ -19,6 +21,7 @@ export class FormProductoComponent implements OnInit {
   @Output() articuloSvd = new EventEmitter();
   public showArticuloForm: boolean = true;
   public medidas: Medida[] = [];
+  public presentaciones: Presentacion[] = [];
   public articulos: Articulo[] = [];
   public recetas: ArticuloDetalle[] = [];
   public receta: ArticuloDetalle;
@@ -29,13 +32,15 @@ export class FormProductoComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private articuloSrvc: ArticuloService,
-    private medidaSrvc: MedidaService
+    private medidaSrvc: MedidaService,
+    private presentacionSrvc: PresentacionService
   ) { }
 
   ngOnInit() {
     this.resetArticulo();
     this.loadMedidas();
     this.loadArticulos();
+    this.loadPresentaciones();
   }
 
   resetArticulo = () => {
@@ -72,6 +77,14 @@ export class FormProductoComponent implements OnInit {
     this.medidaSrvc.get().subscribe(res => {
       if (res) {
         this.medidas = res;
+      }
+    });
+  }
+
+  loadPresentaciones = () => {
+    this.presentacionSrvc.get().subscribe(res => {
+      if (res) {
+        this.presentaciones = res;
       }
     });
   }

@@ -24,7 +24,12 @@
             </div>
             <div class="form-group">
                 <mat-form-field class="fullWidth">
-                    <input matInput type="text" placeholder="Presentacion" name="presentacion" [(ngModel)]="articulo.presentacion">
+                    <mat-label>Presentación</mat-label>
+                    <mat-select name="presentacion" [(ngModel)]="articulo.presentacion">
+                        <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
+                            {{p.descripcion}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div class="btn-group d-flex justify-content-end" role="group">

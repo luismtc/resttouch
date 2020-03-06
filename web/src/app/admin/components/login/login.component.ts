@@ -25,6 +25,16 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.checkIfLogged();
+  }
+
+  checkIfLogged = async () => {
+    const valido = await this.usrSrvc.checkUserToken();
+    if (valido) {
+      this.router.navigate(['/admin/dashboard']);
+    } else {
+      this.router.navigate(['/admin/login']);
+    }
   }
 
   doLogin() {

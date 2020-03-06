@@ -191,6 +191,14 @@ export class FormFacturaManualComponent implements OnInit {
     });
   }
 
+  setPrecioUnitario = (obj: any) => {
+    const idxArticulo = this.articulos.findIndex(a => +a.articulo === +obj.value);
+    if (idxArticulo > -1) {
+      this.detalleFactura.precio_unitario = +this.articulos[idxArticulo].precio;
+      this.detalleFactura.total = +this.detalleFactura.precio_unitario * +this.detalleFactura.cantidad;
+    }
+  }
+
   resetDetalleFactura = () => this.detalleFactura = {
     detalle_factura: null, factura: (this.factura.factura || 0), articulo: null, cantidad: 1, precio_unitario: null, total: null
   };
