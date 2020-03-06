@@ -52,13 +52,42 @@ class Comanda_model extends General_Model {
 		$id = isset($args['detalle_comanda']) ? $args['detalle_comanda'] : '';
 		$det = new Dcomanda_model($id);
 		$args['comanda'] = $this->comanda;
-		$result = $det->guardar($args);
-
-		if(!$result) {
-			$this->mensaje = $det->getMensaje();
+		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+		$validar = true;
+		$cantidad = 0;
+		$articulo = null;
+		if (empty($id)) {
+			$articulo = $args['articulo'];
+			$cantidad = $args['cantidad'];
+		} else {
+			if($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']){
+				$articulo = $det->articulo;
+				$cantidad = $args['cantidad'] - $det->cantidad;
+			} else if($det->articulo != $args['articulo']){				
+				$articulo = $args['articulo'];
+				$cantidad = $args['cantidad'];
+			} else {
+				$articulo = $args['articulo'];
+				$validar = false;
+			}
 		}
+		$art = new Articulo_model($articulo);
+		$oldart = new Articulo_model($det->articulo);
+		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
+			$result = $det->guardar($args);
+			if($result) {
+				$art->actualizarExistencia();
+				if ($oldart->articulo) {					
+					$oldart->actualizarExistencia();
+				}
+				return $det;
+			}
+			$this->mensaje = $det->getMensaje();
 
-		return $det;
+			return $result;	
+		} else {
+			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
+		}
 	}
 
 	public function getDetalle($args = [])
