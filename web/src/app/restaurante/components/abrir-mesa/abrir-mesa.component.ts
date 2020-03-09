@@ -38,6 +38,7 @@ interface DialogData {
 export class AbrirMesaComponent implements OnInit {
 
   public lstMeseros: Usuario[] = [];
+  public esMovil: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AbrirMesaComponent>,
@@ -48,6 +49,7 @@ export class AbrirMesaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadMeseros();
   }
 

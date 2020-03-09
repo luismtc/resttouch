@@ -108,15 +108,26 @@
                 </mat-form-field>
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleEgreso.cantidad"
+                        (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
+                        required>
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleEgreso.cantidad"
                         (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                         required>
                 </mat-form-field>
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput placeholder="Costo unitario" name="precio_unitario"
+                        [(ngModel)]="detalleEgreso.precio_unitario"
+                        (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
+                        required>
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
                         [(ngModel)]="detalleEgreso.precio_unitario"
                         (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                         required>

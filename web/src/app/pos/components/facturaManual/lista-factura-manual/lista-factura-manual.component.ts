@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { LocalstorageService } from '../../../../admin/services/localstorage.service';
+import { GLOBAL } from '../../../../shared/global';
 
 import { Factura } from '../../../interfaces/factura';
 import { FacturaService } from '../../../services/factura.service';
@@ -14,16 +16,19 @@ export class ListaFacturaManualComponent implements OnInit {
 
   public displayedColumns: string[] = ['factura'];
   public dataSource: MatTableDataSource<Factura>;
+  public esMovil: boolean = false;
 
   public lstFacturas: Factura[];
   @Output() getFacturaEv = new EventEmitter();
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
-    private facturaSrvc: FacturaService
+    private facturaSrvc: FacturaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadFacturas();
   }
 

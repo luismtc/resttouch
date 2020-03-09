@@ -7,8 +7,11 @@
     <mat-card-content>
         <form #frmFormaPago="ngForm" (ngSubmit)="frmFormaPago.form.valid && onSubmit()" novalidate>
             <div class="form-group">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="formaPago.descripcion" required>
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Descripcion" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="formaPago.descripcion" required>
                 </mat-form-field>
             </div>
             <div class="form-group">

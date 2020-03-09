@@ -7,26 +7,6 @@ import { ArticuloService } from '../../../services/articulo.service';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 
-/*
-const SUB_CATEGORIAS: CategoriaGrupo[] = [
-  {
-    categoria_grupo: 1, categoria: 1, categoria_grupo_grupo: null, descripcion: 'Coca-cola', receta: 0, antecesores: null
-  },
-  {
-    categoria_grupo: 2, categoria: 1, categoria_grupo_grupo: null, descripcion: 'Alcohólicas', receta: 0, antecesores: null
-  },
-  {
-    categoria_grupo: 3, categoria: 2, categoria_grupo_grupo: null, descripcion: 'Pastas', receta: 0, antecesores: null
-  },
-  {
-    categoria_grupo: 4, categoria: 2, categoria_grupo_grupo: 3, descripcion: 'Alfredo', receta: 0, antecesores: 'Pastas'
-  },
-  {
-    categoria_grupo: 5, categoria: 1, categoria_grupo_grupo: 2, descripcion: 'Zacapa', receta: 0, antecesores: 'Alcohólicas'
-  },
-];
-*/
-
 @Component({
   selector: 'app-categoria-producto',
   templateUrl: './categoria-producto.component.html',
@@ -45,6 +25,7 @@ export class CategoriaProductoComponent implements OnInit {
   public editCategoriaMode = false;
   public editSubCategoriaMode = false;
   public showCategoriasForm = false;
+  public esMovil: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -53,6 +34,7 @@ export class CategoriaProductoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetCategoria();
     this.loadCategorias();
   }

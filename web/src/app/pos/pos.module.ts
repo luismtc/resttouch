@@ -26,6 +26,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
+import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
 
 import { PosRoutingModule } from './pos-routing.module';
 import { CobrarPedidoComponent } from './components/cobrar-pedido/cobrar-pedido.component';
@@ -68,7 +69,8 @@ import { FormFacturaManualComponent } from './components/facturaManual/form-fact
     MatDialogModule,
     MatKeyboardModule,
     MatSidenavModule,
-    EcoFabSpeedDialModule
+    EcoFabSpeedDialModule,
+    NgVirtualKeyboardModule
   ],
   exports: [CobrarPedidoComponent]
 })

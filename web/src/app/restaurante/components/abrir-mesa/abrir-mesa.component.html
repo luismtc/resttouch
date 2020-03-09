@@ -17,9 +17,17 @@
             </div>
             <div class="col">
                 <div class="form-group">
+                    <!--
                     <mat-form-field>
-                        <input type="text" matInput matKeyboard darkTheme="true" placeholder="# Comensales"
-                            name="comensales" [(ngModel)]="data.comensales" required>
+                        <input type="text" matInput matKeyboard darkTheme="true" placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>
+                    </mat-form-field>
+                    -->
+                    <mat-form-field *ngIf="!esMovil">
+                        <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="# Comensales"
+                            placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="esMovil">
+                        <input type="text" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>
                     </mat-form-field>
                 </div>
             </div>

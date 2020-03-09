@@ -28,8 +28,11 @@
                 </mat-form-field>
             </div>
             <div class="form-group" *ngIf="editCategoriaMode">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput placeholder="Descripcion de la categoría" name="descripcion" [(ngModel)]="categoria.descripcion" [required]="editCategoriaMode">
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Descripcion de la categoría" placeholder="Descripcion de la categoría" name="descripcion" [(ngModel)]="categoria.descripcion" [required]="editCategoriaMode">
                 </mat-form-field>                                
             </div>
         </form>
@@ -75,8 +78,11 @@
                 </mat-form-field>
             </div>
             <div class="form-group" *ngIf="editSubCategoriaMode">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput placeholder="Descripcion de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" [required]="editCategoriaMode">
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Descripcion de la sub - categoría" placeholder="Descripcion de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" [required]="editCategoriaMode">
                 </mat-form-field>                                
             </div>
         </form>

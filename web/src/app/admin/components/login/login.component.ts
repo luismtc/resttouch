@@ -37,11 +37,19 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  esMovil = (): boolean => {
+    let estoyEnMovil: boolean = false, ua = navigator.userAgent;
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
+      estoyEnMovil = true;
+    }
+    return estoyEnMovil;
+  }
+
   doLogin() {
     this.usrSrvc.login(this.usr).subscribe(res => {
       if (res.token) {
         this.ls.set(GLOBAL.usrTokenVar, { 
-          token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, idusr: +res.idusr, acceso: res.acceso
+          token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso
         });
         this.router.navigate(['/admin/dashboard']);
       } else {

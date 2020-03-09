@@ -37,6 +37,7 @@ export class FormTurnoComponent implements OnInit {
   public tiposTurno: TipoTurno[] = [];
   public tiposUsuario: UsuarioTipo[] = [];
   public usuarios: Usuario[] = [];
+  public esMovil: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -49,6 +50,7 @@ export class FormTurnoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetTurno();
     this.loadTiposTurno();
     this.loadTiposUsuario();

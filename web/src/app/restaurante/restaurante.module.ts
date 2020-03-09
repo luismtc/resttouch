@@ -32,6 +32,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
+import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
+
 import { RestauranteRoutingModule } from './restaurante-routing.module';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
 import { MesaComponent } from './components/mesa/mesa.component';
@@ -86,7 +88,8 @@ import { AreaDesignerComponent } from './components/area/area-designer/area-desi
     MatDatepickerModule,
     MatNativeDateModule,
     EcoFabSpeedDialModule,
-    DragDropModule
+    DragDropModule,
+    NgVirtualKeyboardModule
   ],
   providers: [
     MatNativeDateModule

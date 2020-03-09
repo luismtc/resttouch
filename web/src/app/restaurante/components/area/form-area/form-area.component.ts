@@ -19,6 +19,7 @@ export class FormAreaComponent implements OnInit {
   @Output() entidadSavedEv = new EventEmitter();
   public sedeUsr: number = 0;
   public lstAreas: Area[] = [];
+  public esMovil: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -29,6 +30,7 @@ export class FormAreaComponent implements OnInit {
 
   ngOnInit() {
     this.sedeUsr = this.ls.get(GLOBAL.usrTokenVar).sede || 0;
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetEntidad();
     this.loadAreas();
   }

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GLOBAL } from '../../../shared/global';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import * as moment from 'moment';
 
 import { FormaPago } from '../../interfaces/forma-pago';
@@ -24,6 +25,7 @@ export class CobrarPedidoComponent implements OnInit {
   public formaPago: any = {};
   public formasPagoDeCuenta: any[] = [];
   public factReq: FacturaRequest;
+  public esMovil: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<CobrarPedidoComponent>,
@@ -31,10 +33,12 @@ export class CobrarPedidoComponent implements OnInit {
     private _snackBar: MatSnackBar,
     public formaPagoSrvc: FormaPagoService,
     public cobroSrvc: CobroService,
-    public facturaSrvc: FacturaService
+    public facturaSrvc: FacturaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.processData();
     this.loadFormasPago();
     this.resetFactReq();

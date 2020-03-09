@@ -37,6 +37,7 @@ export class FormOrdenCompraComponent implements OnInit {
   public articulos: Articulo[] = [];
   public tiposMovimiento: TipoMovimiento[] = [];
   public bodegas: Bodega[] = [];
+  public esMovil: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -49,6 +50,7 @@ export class FormOrdenCompraComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetOrdenCompra();
     this.loadProveedores();
     this.loadArticulos();

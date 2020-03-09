@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
 import { SignalRService } from '../../../../shared/services/signal-r.service';
+import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 
 import { Factura } from '../../../interfaces/factura';
 import { DetalleFactura } from '../../../interfaces/detalle-factura';
@@ -40,6 +41,7 @@ export class FormFacturaManualComponent implements OnInit {
   public articulos: Articulo[] = [];
   public displayedColumns: string[] = ['articulo', 'cantidad', 'precio_unitario', 'total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleFactura>;
+  public esMovil: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -49,10 +51,12 @@ export class FormFacturaManualComponent implements OnInit {
     private clienteSrvc: ClienteService,
     private monedaSrvc: MonedaService,
     private articuloSrvc: ArticuloService,
-    private signalRSrvc: SignalRService
+    private signalRSrvc: SignalRService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetFactura();
     this.loadFacturaSeries();
     this.loadClientes();

@@ -39,6 +39,7 @@ export class FormIngresoComponent implements OnInit {
   public proveedores: Proveedor[] = [];  
   public bodegas: Bodega[] = [];
   public articulos: Articulo[] = [];
+  public esMovil: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -51,6 +52,7 @@ export class FormIngresoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetIngreso();
     this.loadTiposMovimiento();
     this.loadProveedores();

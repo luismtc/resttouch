@@ -23,8 +23,11 @@
                 </mat-form-field>
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput placeholder="Notas" name="notas" [(ngModel)]="ordenCompra.notas">
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Notas" placeholder="Notas" name="notas" [(ngModel)]="ordenCompra.notas">
                 </mat-form-field>
             </div>
             <div class="form-group">
@@ -88,15 +91,26 @@
                 </mat-form-field>
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleOrdenCompra.cantidad"
+                        (change)="detalleOrdenCompra.total = +detalleOrdenCompra.monto * +detalleOrdenCompra.cantidad"
+                        required>
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleOrdenCompra.cantidad"
                         (change)="detalleOrdenCompra.total = +detalleOrdenCompra.monto * +detalleOrdenCompra.cantidad"
                         required>
                 </mat-form-field>
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth">
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput placeholder="Monto" name="monto"
+                        [(ngModel)]="detalleOrdenCompra.monto"
+                        (change)="detalleOrdenCompra.total = +detalleOrdenCompra.monto * +detalleOrdenCompra.cantidad"
+                        required>
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Monto" placeholder="Monto" name="monto"
                         [(ngModel)]="detalleOrdenCompra.monto"
                         (change)="detalleOrdenCompra.total = +detalleOrdenCompra.monto * +detalleOrdenCompra.cantidad"
                         required>

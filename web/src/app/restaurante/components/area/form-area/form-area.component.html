@@ -5,8 +5,11 @@
     <mat-card-content>
         <form #frmEntidad="ngForm" (ngSubmit)="frmEntidad.form.valid && onSubmit()" novalidate>
             <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput placeholder="Nombre" name="nombre" [(ngModel)]="entidad.nombre" required>
+                <mat-form-field class="fullWidth" *ngIf="esMovil">
+                    <input type="text" matInput placeholder="Nombre" name="nombre" [(ngModel)]="entidad.nombre" required>
+                </mat-form-field>
+                <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                    <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Nombre" placeholder="Nombre" name="nombre" [(ngModel)]="entidad.nombre" required>
                 </mat-form-field>
             </div>
             <div class="form-group">

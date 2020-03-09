@@ -25,7 +25,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
-
+import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
 
 import { WmsRoutingModule } from './wms-routing.module';
 import { ListaProductoComponent } from './components/producto/lista-producto/lista-producto.component';
@@ -69,7 +69,8 @@ import { TransformacionService } from './services/transformacion.service';
     MatDialogModule,
     MatKeyboardModule,
     MatSidenavModule,
-    MatTreeModule
+    MatTreeModule,
+    NgVirtualKeyboardModule
   ],
   providers: [
     TransformacionService

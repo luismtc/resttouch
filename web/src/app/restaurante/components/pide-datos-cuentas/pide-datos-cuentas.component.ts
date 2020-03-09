@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
+import { GLOBAL } from '../../../shared/global';
 
 import { Cuenta } from '../../interfaces/cuenta';
 
@@ -22,14 +24,17 @@ export class PideDatosCuentasComponent implements OnInit {
 
   public displayedColumns: string[] = ['numero', 'nombre'];
   public dataSource: MatTableDataSource<Cuenta>;
+  public esMovil: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<PideDatosCuentasComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Cuenta[],
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.setTableDataSource();
   }
 

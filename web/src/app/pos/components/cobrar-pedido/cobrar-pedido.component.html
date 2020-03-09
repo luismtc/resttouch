@@ -24,8 +24,11 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="fullWidth">
+        <mat-form-field class="fullWidth" *ngIf="esMovil">
           <input matInput placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
+        </mat-form-field>
+        <mat-form-field class="fullWidth" *ngIf="!esMovil">
+          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Monto" placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
         </mat-form-field>
         <div class="btn-group d-flex justify-content-end" role="group">
           <button mat-icon-button type="button" color="accent" (click)="addFormaPago()"
@@ -56,14 +59,22 @@
         <tbody>
           <tr class="propina">
             <td class="text-right" style="max-width: 15%;">
-              <mat-form-field>
+              <mat-form-field *ngIf="esMovil">
                 <input matInput placeholder="% propina" name="monto" type="number"
+                  [(ngModel)]="inputData.porcentajePropina" (keyup.enter)="calculaPropina()">
+              </mat-form-field>
+              <mat-form-field *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="% propina" placeholder="% propina" name="monto" type="number"
                   [(ngModel)]="inputData.porcentajePropina" (keyup.enter)="calculaPropina()">
               </mat-form-field>
             </td>
             <td class="text-right" style="max-width: 15%;">
-              <mat-form-field>
+              <mat-form-field *ngIf="esMovil">
                 <input matInput placeholder="Propina" name="monto" type="number"
+                  [(ngModel)]="inputData.montoPropina" (keyup.enter)="calculaPorcentajePropina()">
+              </mat-form-field>
+              <mat-form-field *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Propina" placeholder="Propina" name="monto" type="number"
                   [(ngModel)]="inputData.montoPropina" (keyup.enter)="calculaPorcentajePropina()">
               </mat-form-field>
             </td>

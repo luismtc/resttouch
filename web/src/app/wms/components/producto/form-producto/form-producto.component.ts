@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { LocalstorageService } from '../../../../admin/services/localstorage.service';
+import { GLOBAL } from '../../../../shared/global';
 
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloDetalle } from '../../../interfaces/articulo-detalle';
@@ -28,15 +30,18 @@ export class FormProductoComponent implements OnInit {
   public showDetalleForm: boolean = true;
   public displayedColumns: string[] = ['articulo', 'cantidad', 'medida', 'editItem'];
   public dataSource: MatTableDataSource<ArticuloDetalle>;
+  public esMovil: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
+    private ls: LocalstorageService,
     private articuloSrvc: ArticuloService,
     private medidaSrvc: MedidaService,
     private presentacionSrvc: PresentacionService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetArticulo();
     this.loadMedidas();
     this.loadArticulos();
