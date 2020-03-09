@@ -25,6 +25,7 @@ export class CobrarPedidoComponent implements OnInit {
   public formaPago: any = {};
   public formasPagoDeCuenta: any[] = [];
   public factReq: FacturaRequest;
+  public clienteSelected: Cliente;
   public esMovil: boolean = false;
 
   constructor(
@@ -105,7 +106,10 @@ export class CobrarPedidoComponent implements OnInit {
 
   cancelar = () => this.dialogRef.close();
 
-  setClienteFacturar = (obj: Cliente) => this.factReq.cliente = +obj.cliente;
+  setClienteFacturar = (obj: Cliente) => { 
+    this.clienteSelected = obj;
+    this.factReq.cliente = +obj.cliente; 
+  };
 
   cobrar = () => {
     const objCobro: Cobro = {

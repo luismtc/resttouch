@@ -1,4 +1,9 @@
-<h1 mat-dialog-title>Cobrar cuenta de {{data.cuenta}}</h1>
+<h1 mat-dialog-title>
+  Cobrar cuenta de {{data.cuenta}}
+  <small *ngIf="clienteSelected && !!clienteSelected.cliente">
+     - Factura a nombre de {{clienteSelected.nombre}}
+  </small>
+</h1>
 <div mat-dialog-content style="height: 650px;">
   <div class="row">
     <div class="col-5 mat-elevation-z4 overflow-auto colHeight">
