@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
+import { GLOBAL } from '../../../shared/global';
 
 interface productoSelected {
   id: number;
@@ -23,10 +25,14 @@ export class ListaProductosComandaComponent implements OnInit {
   @Input() noCuenta: number = null;
   @Input() listHeight: string = '450px';
   @Output() productoRemovedEv = new EventEmitter();
+  public esMovil: boolean = false;
 
-  constructor() { }
+  constructor(
+    private ls: LocalstorageService
+  ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   removeProducto = (p: productoSelected, idx: number) => {

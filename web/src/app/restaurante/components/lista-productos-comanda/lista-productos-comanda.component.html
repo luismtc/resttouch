@@ -24,8 +24,11 @@
             </eco-fab-speed-dial>
         </div>
         <div matLine class="fullWidth">
-            <mat-form-field class="fullWidth" *ngIf="p.showInputNotas">
+            <mat-form-field class="fullWidth" *ngIf="p.showInputNotas && esMovil">
                 <input matInput placeholder="Notas de producto" [(ngModel)]="p.notas" (keyup.enter)="toggleShowInputNotas(p)">
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="p.showInputNotas && !esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Notas de producto" placeholder="Notas de producto" [(ngModel)]="p.notas" (keyup.enter)="toggleShowInputNotas(p)">
             </mat-form-field>
         </div>
     </mat-list-item>
