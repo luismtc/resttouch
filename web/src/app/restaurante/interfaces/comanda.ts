@@ -5,8 +5,8 @@ export interface Comanda {
     mesa: number;
     mesero: number;
     comensales?: number;
-    esEvento?: boolean;
-    dividirCuentasPorSillas?: boolean;
+    esEvento?: number;
+    dividirCuentasPorSillas?: number;
     comanda?: number;
     cuentas: Cuenta[];
 }

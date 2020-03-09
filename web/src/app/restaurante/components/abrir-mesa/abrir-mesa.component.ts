@@ -67,4 +67,6 @@ export class AbrirMesaComponent implements OnInit {
     }
   }
 
+  toNumber = (valor: any): number => +valor;
+
 }
