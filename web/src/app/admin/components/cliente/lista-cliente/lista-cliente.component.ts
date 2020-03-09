@@ -1,9 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Cliente } from '../../../interfaces/cliente';
 import { ClienteService } from '../../../services/cliente.service';
+import { FormClienteDialogComponent } from '../form-cliente-dialog/form-cliente-dialog.component';
 
 @Component({
   selector: 'app-lista-cliente',
@@ -16,10 +18,12 @@ export class ListaClienteComponent implements OnInit {
   public dataSource: MatTableDataSource<Cliente>;
 
   public lstClientes: Cliente[];
+  @Input() showAddButton: boolean = false;
   @Output() getClienteEv = new EventEmitter();
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
+    public dialogAddCliente: MatDialog,
     private clienteSrvc: ClienteService
   ) { }
 
@@ -47,4 +51,18 @@ export class ListaClienteComponent implements OnInit {
     this.getClienteEv.emit(obj);
   }
 
+  agregarCliente = () => {
+    const addClienteRef = this.dialogAddCliente.open(FormClienteDialogComponent, {
+      width: '50%',
+      data: { esDialogo: true }
+    });
+
+    addClienteRef.afterClosed().subscribe(result => {
+      if (result) {
+        //console.log(result);
+        this.loadClientes();
+        this.getCliente(result);
+      }
+    });
+  }
 }

@@ -21,8 +21,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { SidebarDirective } from './directives/sidebar.directive';
+import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { LoginComponent } from './components/login/login.component';
@@ -42,12 +44,16 @@ import { FormMedidaComponent } from './components/medida/form-medida/form-medida
 import { PresentacionComponent } from './components/presentacion/presentacion/presentacion.component';
 import { ListaPresentacionComponent } from './components/presentacion/lista-presentacion/lista-presentacion.component';
 import { FormPresentacionComponent } from './components/presentacion/form-presentacion/form-presentacion.component';
+import { FormClienteDialogComponent } from './components/cliente/form-cliente-dialog/form-cliente-dialog.component';
 
 
 
 @NgModule({
   declarations: [
-    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective, UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent, FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent, ListaPresentacionComponent, FormPresentacionComponent
+    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective, UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent, FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent, ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent
+  ],
+  entryComponents: [
+    FormClienteComponent, FormClienteDialogComponent
   ],
   imports: [
     CommonModule,
@@ -71,10 +77,12 @@ import { FormPresentacionComponent } from './components/presentacion/form-presen
     MatMenuModule,
     MatGridListModule,
     MatPaginatorModule,
-    MatTreeModule
+    MatTreeModule,
+    MatDialogModule,
+    NgVirtualKeyboardModule
   ],
   exports: [
-    HeaderComponent, MenuComponent, ListaClienteComponent
+    HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent
   ]
 })
 export class AdminModule { }

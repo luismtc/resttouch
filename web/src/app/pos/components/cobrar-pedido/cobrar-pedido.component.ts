@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GLOBAL } from '../../../shared/global';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
@@ -35,7 +35,7 @@ export class CobrarPedidoComponent implements OnInit {
     public formaPagoSrvc: FormaPagoService,
     public cobroSrvc: CobroService,
     public facturaSrvc: FacturaService,
-    private ls: LocalstorageService
+    private ls: LocalstorageService,
   ) { }
 
   ngOnInit() {

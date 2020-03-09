@@ -9,27 +9,6 @@ import { UsuarioService } from '../../../admin/services/usuario.service';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 
-/*
-interface ICuenta {
-  numero: number;
-  nombre: string;
-  productos: any[];
-}
-*/
-/*
-interface DialogData {
-  nombreArea: string;
-  area: number;
-  mesa: number;
-  numero: number;
-  mesero: string;
-  comensales: string;
-  esEvento: boolean;
-  dividirCuentasPorSillas: boolean;
-  cuentas: ICuenta[]
-}
-*/
-
 @Component({
   selector: 'app-abrir-mesa',
   templateUrl: './abrir-mesa.component.html',
