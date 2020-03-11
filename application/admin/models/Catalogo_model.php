@@ -111,7 +111,30 @@ class Catalogo_model extends CI_Model {
 		->order_by("articulo")
 		->get("articulo");
 
-		return $this->getCatalogo($qry, $args);
+		$tmp = $this->getCatalogo($qry, $args);
+
+		if (is_array($tmp)) {
+			$datos = [];
+			foreach ($tmp as $row) {
+				$row->impresora = $this->db
+					->select("b.*")
+					->join("impresora b", "b.impresora = a.impresora")
+					->where("a.categoria_grupo", $row->categoria_grupo)
+					->get("categoria_grupo a")
+					->row();
+				$datos[] = $row;
+			}
+			$tmp = $datos;
+		} else if($tmp) {
+			$tmp->impresora = $this->db
+				->select("b.*")
+				->join("impresora b", "b.impresora = a.impresora")
+				->where("a.categoria_grupo", $tmp->categoria_grupo)
+				->get("categoria_grupo a")
+				->row();
+		}
+
+		return $tmp;
 	}
 
 	public function getUsuario($args = [])
