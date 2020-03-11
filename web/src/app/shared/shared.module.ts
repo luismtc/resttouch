@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
-//import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,7 +26,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { WindowComponent } from './components/window/window.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
-//const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
   imports: [
     CommonModule,
     PortalModule,
-    //SocketIoModule.forRoot(config),
+    SocketIoModule.forRoot(config),
     MatListModule,
     MatIconModule,
     MatFormFieldModule,

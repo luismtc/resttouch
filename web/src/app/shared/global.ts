@@ -1,5 +1,6 @@
-//const urlBase = `http://192.168.168.88/resttouch`;
-const urlBase = 'http://localhost/resttouch';
+const urlBase = `http://192.168.168.88/resttouch`;
+//const urlBase = 'http://localhost/resttouch';
+//const urlBase = 'http://192.168.51.14/resttouch';
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',

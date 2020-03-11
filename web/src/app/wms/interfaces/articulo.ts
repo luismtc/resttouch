@@ -1,4 +1,5 @@
 import { CategoriaGrupo } from './categoria-grupo';
+import { Impresora } from '../../admin/interfaces/impresora';
 
 export interface Articulo {
     articulo: number;
@@ -7,6 +8,7 @@ export interface Articulo {
     descripcion: string;
     precio: number;
     bien_servicio?: string;
+    impresora?: Impresora;
 }
 
 export interface ArticuloResponse {
@@ -37,5 +39,6 @@ export interface NodoProducto {
     id: number;
     nombre: string;
     precio?: number;
+    impresora?: Impresora;
     hijos?: NodoProducto[];
 }

@@ -147,6 +147,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   loadComandaMesa = (obj: any) => {
     this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
+      //console.log(res); return;
       if (res) {
         this.mesaSeleccionada = res;
         this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
