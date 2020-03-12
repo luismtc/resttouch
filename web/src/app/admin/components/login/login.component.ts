@@ -49,7 +49,8 @@ export class LoginComponent implements OnInit {
     this.usrSrvc.login(this.usr).subscribe(res => {
       if (res.token) {
         this.ls.set(GLOBAL.usrTokenVar, { 
-          token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso
+          token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso,
+          sede_uuid: res.sede_uuid
         });
         this.router.navigate(['/admin/dashboard']);
       } else {

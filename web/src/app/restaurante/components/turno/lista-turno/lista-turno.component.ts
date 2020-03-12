@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-//import { GLOBAL } from '../../../../shared/global';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 //import * as moment from 'moment';
 
 import { Turno } from '../../../interfaces/turno';
@@ -22,6 +23,7 @@ export class ListaTurnoComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
+    private ls: LocalstorageService,
     private turnoSrvc: TurnoService
   ) { }
 
@@ -34,7 +36,7 @@ export class ListaTurnoComponent implements OnInit {
   }
 
   loadTurnos = () => {
-    this.turnoSrvc.get().subscribe(lst => {
+    this.turnoSrvc.get({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(lst => {
       if (lst) {
         if (lst.length > 0) {
           this.lstTurnos = lst;

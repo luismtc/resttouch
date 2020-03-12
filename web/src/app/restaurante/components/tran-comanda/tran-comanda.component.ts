@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 //import { SignalRService } from '../../../shared/services/signal-r.service';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
+import { GLOBAL } from '../../../shared/global';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
@@ -54,6 +56,7 @@ export class TranComandaComponent implements OnInit {
     public comandaSrvc: ComandaService,
     private socket: Socket,
     //private signalRSrvc: SignalRService
+    private ls: LocalstorageService,
   ) { }
 
   ngOnInit() {
@@ -65,6 +68,9 @@ export class TranComandaComponent implements OnInit {
     this.llenaProductosSeleccionados();
     //this.signalRSrvc.startConnection(`restaurante_01`);
     //this.signalRSrvc.addBroadcastDataListener();
+    if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
+      this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+    }    
   }
 
   resetMesaEnUso = () => this.mesaEnUso = {

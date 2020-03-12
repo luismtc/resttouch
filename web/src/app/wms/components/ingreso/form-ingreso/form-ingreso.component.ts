@@ -77,7 +77,7 @@ export class FormIngresoComponent implements OnInit {
   }
 
   loadBodegas = () => {
-    this.bodegaSrvc.get().subscribe(res => {
+    this.bodegaSrvc.get({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
       if (res) {
         this.bodegas = res;
       }
@@ -141,6 +141,7 @@ export class FormIngresoComponent implements OnInit {
 
   onSubmitDetail = () => {
     this.detalleIngreso.ingreso = this.ingreso.ingreso;
+    this.detalleIngreso.precio_total = +this.detalleIngreso.cantidad * +this.detalleIngreso.precio_unitario;
     //console.log(this.detalleIngreso);
     this.ingresoSrvc.saveDetalle(this.detalleIngreso).subscribe(res => {
       //console.log(res);

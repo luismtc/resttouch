@@ -58,7 +58,7 @@ export class CategoriaProductoComponent implements OnInit {
   }
 
   loadCategorias = () => {
-    this.articuloSrvc.getCategorias().subscribe(res => {
+    this.articuloSrvc.getCategorias({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
       //console.log(res);
       if (res) {
         this.categorias = res;

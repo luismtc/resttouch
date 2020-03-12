@@ -14,6 +14,7 @@ export class usrLogInResponse {
         public apellidos: string,
         public sede: number,
         public idusr: number,
+        public sede_uuid: string,
         public acceso: any
     ) { }    
 }

@@ -27,6 +27,10 @@ $config['menu'] = [
 					5 => [
 						'nombre' => 'Usuario',
 						'link' => '/admin/usuario'
+					],
+					6 => [
+						'nombre' => 'Medidas',
+						'link' => '/admin/medida'
 					]
 				]
 			]
@@ -85,6 +89,20 @@ $config['menu'] = [
 					3 => [
 						'nombre' => 'Transformaciones',
 						'link' => '/wms/transformaciones'
+					]
+				]
+			]
+		]
+	],
+	5 => [
+		'nombre' => 'OC',
+		'submodulo' => [
+			1 => [
+				'nombre' => 'Transacción',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Órdenes de compra',
+						'link' => '/ordcomp/ordcomp'
 					]
 				]
 			]

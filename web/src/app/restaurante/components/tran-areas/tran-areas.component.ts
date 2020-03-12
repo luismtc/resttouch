@@ -2,6 +2,9 @@ import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angula
 import { MatDialog } from '@angular/material/dialog';
 import { MatTab } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../shared/global';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
+
 import { AbrirMesaComponent } from '../abrir-mesa/abrir-mesa.component';
 import { TranComandaComponent } from '../tran-comanda/tran-comanda.component';
 import { Area } from '../../interfaces/area';
@@ -30,6 +33,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   constructor(
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
+    private ls: LocalstorageService,
     public areaSrvc: AreaService,
     public comandaSrvc: ComandaService
   ) { }
@@ -57,7 +61,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   };
 
   loadAreas = () => {
-    this.areaSrvc.get().subscribe((res) => {
+    this.areaSrvc.get({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe((res) => {
       this.lstTabsAreas = res;
     });
   }
