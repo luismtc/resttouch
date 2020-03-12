@@ -21,8 +21,18 @@ class Usuario_model extends CI_Model
     {
         if ($credenciales) {
             $dbusr = $this->db
-                ->select('usuario, contrasenia, usrname, nombres, apellidos, sede')
-                ->from($this->tabla)
+                ->select("
+                    a.usuario, 
+                    a.contrasenia, 
+                    a.usrname, 
+                    a.nombres, 
+                    a.apellidos, 
+                    a.sede,
+                    CONCAT(d.admin_llave, '-', c.empresa, '-', b.sede) AS sede_uuid")
+                ->from("{$this->tabla} a")
+                ->join("sede b", "b.sede = a.sede")
+                ->join("empresa c", "c.empresa = b.empresa")
+                ->join("corporacion d", "d.corporacion = c.corporacion")
                 ->where('usrname', $credenciales['usr'])
                 ->where('debaja', 0)
                 ->get()
@@ -44,7 +54,8 @@ class Usuario_model extends CI_Model
                         'nombres' => $dbusr->nombres,
                         'apellidos' => $dbusr->apellidos,
                         'sede' => $dbusr->sede,
-                        'idusr' => $dbusr->usuario
+                        'idusr' => $dbusr->usuario,
+                        'sede_uuid' => $dbusr->sede_uuid
                     );
                 } else {
                     return array(
