@@ -17,6 +17,8 @@ import { ProveedorService } from '../../../services/proveedor.service';
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloService } from '../../../services/articulo.service';
 import { TransformacionService } from '../../../services/transformacion.service';
+import { Presentacion } from '../../../../admin/interfaces/presentacion';
+import { PresentacionService } from '../../../../admin/services/presentacion.service';
 
 @Component({
   selector: 'app-form-egreso',
@@ -34,12 +36,13 @@ export class FormEgresoComponent implements OnInit {
 
   public detallesEgreso: DetalleEgreso[] = [];
   public detalleEgreso: DetalleEgreso;
-  public displayedColumns: string[] = ['articulo', 'cantidad', 'precio_unitario', 'precio_total', 'editItem'];
+  public displayedColumns: string[] = ['articulo', 'presentacion', 'cantidad', 'precio_unitario', 'precio_total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleEgreso>;
   public tiposMovimiento: TipoMovimiento[] = [];
   public bodegas: Bodega[] = [];
   public articulos: Articulo[] = [];
   public proveedores: Proveedor[] = [];
+  public presentaciones: Presentacion[] = [];
   public esMovil: boolean = false;
   
   constructor(
@@ -50,7 +53,8 @@ export class FormEgresoComponent implements OnInit {
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
     private proveedorSrvc: ProveedorService,
-    private transformacionSrvc: TransformacionService
+    private transformacionSrvc: TransformacionService,
+    private presentacionSrvc: PresentacionService
   ) { }
 
   ngOnInit() {
@@ -60,6 +64,7 @@ export class FormEgresoComponent implements OnInit {
     this.loadBodegas();
     this.loadArticulos();
     this.loadProveedores();
+    this.loadPresentaciones();
   }
 
   loadTiposMovimiento = () => {
@@ -71,7 +76,7 @@ export class FormEgresoComponent implements OnInit {
   }
 
   loadBodegas = () => {
-    this.bodegaSrvc.get().subscribe(res => {
+    this.bodegaSrvc.get({ sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe(res => {
       if (res) {
         this.bodegas = res;
       }
@@ -82,6 +87,14 @@ export class FormEgresoComponent implements OnInit {
     this.proveedorSrvc.get().subscribe(res => {
       if (res) {
         this.proveedores = res;
+      }
+    });
+  }
+
+  loadPresentaciones = () => {
+    this.presentacionSrvc.get().subscribe(res => {
+      if (res) {
+        this.presentaciones = res;
       }
     });
   }
@@ -127,7 +140,7 @@ export class FormEgresoComponent implements OnInit {
   }
 
   resetDetalleEgreso = () => this.detalleEgreso = { 
-    egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null, precio_unitario: null, precio_total: null 
+    egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
   };
 
   loadDetalleEgreso = (idegreso: number = +this.egreso.egreso) => {
@@ -150,7 +163,8 @@ export class FormEgresoComponent implements OnInit {
           articulo: res[0].articulo.articulo,
           cantidad: +res[0].cantidad,
           precio_unitario: +res[0].precio_unitario,
-          precio_total: +res[0].precio_total
+          precio_total: +res[0].precio_total,
+          presentacion: res[0].presentacion.presentacion
         };
         this.showDetalleEgresoForm = true;
       }      
@@ -181,6 +195,8 @@ export class FormEgresoComponent implements OnInit {
   removeFromDetail = (idarticulo: number) => this.detallesEgreso.splice(this.detallesEgreso.findIndex(de => +de.articulo === +idarticulo), 1);
 
   getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
+  
+  getDescripcionPresentacion = (idpresentacion: number) => this.presentaciones.find(p => +p.presentacion === +idpresentacion).descripcion || '';
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesEgreso);
 

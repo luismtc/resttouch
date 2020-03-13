@@ -16,6 +16,8 @@ import { Bodega } from '../../../interfaces/bodega';
 import { BodegaService } from '../../../services/bodega.service';
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloService } from '../../../services/articulo.service';
+import { Presentacion } from '../../../../admin/interfaces/presentacion';
+import { PresentacionService } from '../../../../admin/services/presentacion.service';
 
 @Component({
   selector: 'app-form-ingreso',
@@ -33,12 +35,13 @@ export class FormIngresoComponent implements OnInit {
 
   public detallesIngreso: DetalleIngreso[] = [];
   public detalleIngreso: DetalleIngreso;
-  public displayedColumns: string[] = ['articulo', 'cantidad', 'costo_unitario', 'costo_total', 'deleteItem'];
+  public displayedColumns: string[] = ['articulo', 'presentacion', 'cantidad', 'costo_unitario', 'costo_total', 'deleteItem'];
   public dataSource: MatTableDataSource<DetalleIngreso>;
   public tiposMovimiento: TipoMovimiento[] = [];
   public proveedores: Proveedor[] = [];  
   public bodegas: Bodega[] = [];
   public articulos: Articulo[] = [];
+  public presentaciones: Presentacion[] = [];
   public esMovil: boolean = false;
 
   constructor(
@@ -48,7 +51,8 @@ export class FormIngresoComponent implements OnInit {
     private proveedorSrvc: ProveedorService,
     private tipoMovimientoSrvc: TipoMovimientoService,
     private bodegaSrvc: BodegaService,
-    private articuloSrvc: ArticuloService
+    private articuloSrvc: ArticuloService,
+    private presentacinSrvc: PresentacionService
   ) { }
 
   ngOnInit() {
@@ -58,6 +62,7 @@ export class FormIngresoComponent implements OnInit {
     this.loadProveedores();
     this.loadBodegas();
     this.loadArticulos();
+    this.loadPresentaciones();
   }
 
   loadTiposMovimiento = () => {
@@ -80,6 +85,14 @@ export class FormIngresoComponent implements OnInit {
     this.bodegaSrvc.get({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
       if (res) {
         this.bodegas = res;
+      }
+    });
+  }
+
+  loadPresentaciones = () => {
+    this.presentacinSrvc.get().subscribe(res => {
+      if (res) {
+        this.presentaciones = res;
       }
     });
   }
@@ -109,7 +122,7 @@ export class FormIngresoComponent implements OnInit {
   }
 
   resetDetalleIngreso = () => this.detalleIngreso = { 
-    ingreso_detalle: null, ingreso: (!!this.ingreso.ingreso ? this.ingreso.ingreso : null), articulo: null, cantidad: null, precio_unitario: null, precio_total: null 
+    ingreso_detalle: null, ingreso: (!!this.ingreso.ingreso ? this.ingreso.ingreso : null), articulo: null, cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
   };
 
   loadDetalleIngreso = (idingreso: number = +this.ingreso.ingreso) => {
@@ -132,7 +145,8 @@ export class FormIngresoComponent implements OnInit {
           articulo: res[0].articulo.articulo,
           cantidad: +res[0].cantidad,
           precio_unitario: +res[0].precio_unitario,
-          precio_total: +res[0].precio_total
+          precio_total: +res[0].precio_total,
+          presentacion: res[0].presentacion.presentacion
         };
         this.showDetalleIngresoForm = true;
       }      
@@ -161,6 +175,8 @@ export class FormIngresoComponent implements OnInit {
   removeFromDetail = (idarticulo: number) => this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo), 1);
 
   getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
+  
+  getDescripcionPresentacion = (idpresentacion: number) => this.presentaciones.find(p => +p.presentacion === +idpresentacion).descripcion || '';
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesIngreso);
 

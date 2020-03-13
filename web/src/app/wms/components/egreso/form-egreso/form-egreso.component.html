@@ -2,79 +2,73 @@
     <mat-card-title>
         <h4>
             Egreso{{!!egreso.egreso ? (' No. ' + egreso.egreso) : ''}}
-            <button mat-icon-button type="button" color="accent" (click)="showEgresoForm = true;" *ngIf="!showEgresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showEgresoForm = true;"
+                *ngIf="!showEgresoForm">
                 <mat-icon class="iconFontSize">expand_more</mat-icon>
             </button>
-            <button mat-icon-button type="button" color="accent" (click)="showEgresoForm = false;" *ngIf="showEgresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showEgresoForm = false;"
+                *ngIf="showEgresoForm">
                 <mat-icon class="iconFontSize">expand_less</mat-icon>
             </button>
         </h4>
     </mat-card-title>
     <mat-card-content>
         <form #frmEgreso="ngForm" *ngIf="showEgresoForm" (ngSubmit)="frmEgreso.form.valid && onSubmit()" novalidate>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Tipo de movimiento</mat-label>
-                    <mat-select name="tipo_movimiento" [(ngModel)]="egreso.tipo_movimiento" required>
-                        <mat-option *ngFor="let tm of tiposMovimiento" [value]="tm.tipo_movimiento">
-                            {{tm.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="egreso.fecha" required>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Bodega</mat-label>
-                    <mat-select name="bodega" [(ngModel)]="egreso.bodega" required>
-                        <mat-option *ngFor="let bode of bodegas" [value]="bode.bodega">
-                            {{bode.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group" *ngIf="saveToDB">
-                <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+egreso.traslado">¿Es traslado?</mat-checkbox>
-            </div>
-            <div class="form-group" *ngIf="+egreso.traslado == 1">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Tipo de movimiento destino</mat-label>
-                    <mat-select name="tipo_movimiento_destino" [(ngModel)]="egreso.tipo_movimiento_destino" [required]="+egreso.traslado == 1">
-                        <mat-option *ngFor="let tmD of tiposMovimiento" [value]="tmD.tipo_movimiento">
-                            {{tmD.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group" *ngIf="+egreso.traslado == 1">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Proveedor</mat-label>
-                    <mat-select name="proveedor" [(ngModel)]="egreso.proveedor" [required]="+egreso.traslado == 1">
-                        <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
-                            ({{prov.nit}}) {{prov.razon_social}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group" *ngIf="+egreso.traslado == 1">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Bodega destino</mat-label>
-                    <mat-select name="bodega_destino" [(ngModel)]="egreso.bodega_destino" [required]="+egreso.traslado == 1">
-                        <mat-option *ngFor="let bodeDest of bodegas" [value]="bodeDest.bodega">
-                            {{bodeDest.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+            <mat-form-field class="fullWidth">
+                <mat-label>Tipo de movimiento</mat-label>
+                <mat-select name="tipo_movimiento" [(ngModel)]="egreso.tipo_movimiento" required>
+                    <mat-option *ngFor="let tm of tiposMovimiento" [value]="tm.tipo_movimiento">
+                        {{tm.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="egreso.fecha" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Bodega</mat-label>
+                <mat-select name="bodega" [(ngModel)]="egreso.bodega" required>
+                    <mat-option *ngFor="let bode of bodegas" [value]="bode.bodega">
+                        {{bode.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+egreso.traslado">¿Es traslado?</mat-checkbox>
+            <mat-form-field class="fullWidth">
+                <mat-label>Tipo de movimiento destino</mat-label>
+                <mat-select name="tipo_movimiento_destino" [(ngModel)]="egreso.tipo_movimiento_destino"
+                    [required]="+egreso.traslado == 1">
+                    <mat-option *ngFor="let tmD of tiposMovimiento" [value]="tmD.tipo_movimiento">
+                        {{tmD.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Proveedor</mat-label>
+                <mat-select name="proveedor" [(ngModel)]="egreso.proveedor" [required]="+egreso.traslado == 1">
+                    <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
+                        ({{prov.nit}}) {{prov.razon_social}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Bodega destino</mat-label>
+                <mat-select name="bodega_destino" [(ngModel)]="egreso.bodega_destino"
+                    [required]="+egreso.traslado == 1">
+                    <mat-option *ngFor="let bodeDest of bodegas" [value]="bodeDest.bodega">
+                        {{bodeDest.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="saveToDB">
+                <button mat-icon-button type="submit" color="accent"
+                    [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
+                    *ngIf="saveToDB">
                     <mat-icon>save</mat-icon>
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" (click)="confirmarEgreso()" *ngIf="egreso.egreso && detallesEgreso.length > 0" [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0">Confirmar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button mat-flat-button type="button" color="accent" (click)="confirmarEgreso()"
+                    *ngIf="egreso.egreso && detallesEgreso.length > 0"
+                    [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0">Confirmar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button mat-icon-button type="button" color="accent" (click)="resetEgreso()" *ngIf="egreso.egreso">
                     <mat-icon>add</mat-icon>
                 </button>
@@ -87,57 +81,69 @@
     <mat-card-title>
         <h4>
             Detalle del egreso {{saveToDB ? 'No.' : ''}} {{egreso.egreso}}
-            <button mat-icon-button type="button" color="accent" (click)="showDetalleEgresoForm = true;" *ngIf="!showDetalleEgresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showDetalleEgresoForm = true;"
+                *ngIf="!showDetalleEgresoForm">
                 <mat-icon class="iconFontSize">expand_more</mat-icon>
             </button>
-            <button mat-icon-button type="button" color="accent" (click)="showDetalleEgresoForm = false;" *ngIf="showDetalleEgresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showDetalleEgresoForm = false;"
+                *ngIf="showDetalleEgresoForm">
                 <mat-icon class="iconFontSize">expand_less</mat-icon>
             </button>
         </h4>
     </mat-card-title>
     <mat-card-content>
-        <form #frmDetalleEgreso="ngForm" *ngIf="showDetalleEgresoForm" (ngSubmit)="frmDetalleEgreso.form.valid && onSubmitDetail()" novalidate>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Artículo</mat-label>
-                    <mat-select name="articulo" [(ngModel)]="detalleEgreso.articulo" required>
-                        <mat-option *ngFor="let a of articulos" [value]="a.articulo">
-                            {{a.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
-                    <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleEgreso.cantidad"
-                        (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
-                        required>
-                </mat-form-field>
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleEgreso.cantidad"
-                        (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
-                        required>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
-                    <input matInput placeholder="Costo unitario" name="precio_unitario"
-                        [(ngModel)]="detalleEgreso.precio_unitario"
-                        (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
-                        required>
-                </mat-form-field>
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
-                        [(ngModel)]="detalleEgreso.precio_unitario"
-                        (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
-                        required>
-                </mat-form-field>
-            </div>
+        <form #frmDetalleEgreso="ngForm" *ngIf="showDetalleEgresoForm"
+            (ngSubmit)="frmDetalleEgreso.form.valid && onSubmitDetail()" novalidate>
+            <mat-form-field class="fullWidth">
+                <mat-label>Artículo</mat-label>
+                <mat-select name="articulo" [(ngModel)]="detalleEgreso.articulo" required>
+                    <mat-option *ngFor="let a of articulos" [value]="a.articulo">
+                        {{a.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Presentación</mat-label>
+                <mat-select name="presentacion" [(ngModel)]="detalleEgreso.presentacion" required>
+                    <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
+                        {{p.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleEgreso.cantidad"
+                    (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
+                    required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
+                    ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
+                    [(ngModel)]="detalleEgreso.cantidad"
+                    (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
+                    required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput placeholder="Costo unitario" name="precio_unitario"
+                    [(ngModel)]="detalleEgreso.precio_unitario"
+                    (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
+                    required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
+                    ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
+                    [(ngModel)]="detalleEgreso.precio_unitario"
+                    (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
+                    required>
+            </mat-form-field>
             <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="saveToDB">
+                <button mat-icon-button type="submit" color="accent"
+                    [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
+                    *ngIf="saveToDB">
                     <mat-icon>save</mat-icon>
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="addToDetail()" [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
+                <button mat-icon-button type="button" color="accent" (click)="addToDetail()"
+                    [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
+                    *ngIf="!saveToDB">
                     <mat-icon>add</mat-icon>
                 </button>
                 <button mat-icon-button type="button" color="accent" (click)="resetDetalleEgreso()"
@@ -146,11 +152,19 @@
                 </button>
             </div>
         </form>
-        <hr *ngIf="detallesEgreso.length > 0"/>
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z4 full-width" *ngIf="detallesEgreso.length > 0">
+        <hr *ngIf="detallesEgreso.length > 0" />
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z4 full-width"
+            *ngIf="detallesEgreso.length > 0">
             <ng-container matColumnDef="articulo">
                 <th mat-header-cell *matHeaderCellDef>Artículo</th>
-                <td mat-cell *matCellDef="let element" class="text-wrap">{{saveToDB ? element.articulo.descripcion : getDescripcionArticulo(element.articulo)}}</td>
+                <td mat-cell *matCellDef="let element" class="text-wrap">
+                    {{saveToDB ? element.articulo.descripcion : getDescripcionArticulo(element.articulo)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="articulo">
+                <th mat-header-cell *matHeaderCellDef>Presentación</th>
+                <td mat-cell *matCellDef="let element" class="text-wrap">
+                    {{saveToDB ? element.presentacion.descripcion : getDescripcionPresentacion(element.presentacion)}}
+                </td>
             </ng-container>
             <ng-container matColumnDef="cantidad">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Cantidad</th>
@@ -158,7 +172,8 @@
             </ng-container>
             <ng-container matColumnDef="precio_unitario">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Costo Unitario</th>
-                <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_unitario | number:'1.2-2'}}</td>
+                <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_unitario | number:'1.2-2'}}
+                </td>
             </ng-container>
             <ng-container matColumnDef="precio_total">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Costo Total</th>
@@ -167,10 +182,13 @@
             <ng-container matColumnDef="editItem">
                 <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td mat-cell *matCellDef="let element" class="text-wrap">
-                    <button mat-icon-button type="button" color="accent" (click)="getDetalleEgreso(element.egreso, element.egreso_detalle)" [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="saveToDB">
+                    <button mat-icon-button type="button" color="accent"
+                        (click)="getDetalleEgreso(element.egreso, element.egreso_detalle)"
+                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="saveToDB">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button type="button" color="accent" (click)="removeFromDetail(element.articulo)" [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
+                    <button mat-icon-button type="button" color="accent" (click)="removeFromDetail(element.articulo)"
+                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>

@@ -5,4 +5,5 @@ export interface DetalleIngreso {
     cantidad: number;
     precio_unitario: number;
     precio_total: number;
+    presentacion?: number;
 }

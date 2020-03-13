@@ -2,71 +2,64 @@
     <mat-card-title>
         <h4>
             Ingreso{{!!ingreso.ingreso ? (' No. ' + ingreso.ingreso) : ''}}
-            <button mat-icon-button type="button" color="accent" (click)="showIngresoForm = true;" *ngIf="!showIngresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showIngresoForm = true;"
+                *ngIf="!showIngresoForm">
                 <mat-icon class="iconFontSize">expand_more</mat-icon>
             </button>
-            <button mat-icon-button type="button" color="accent" (click)="showIngresoForm = false;" *ngIf="showIngresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showIngresoForm = false;"
+                *ngIf="showIngresoForm">
                 <mat-icon class="iconFontSize">expand_less</mat-icon>
             </button>
         </h4>
     </mat-card-title>
     <mat-card-content>
         <form #frmIngreso="ngForm" *ngIf="showIngresoForm" (ngSubmit)="frmIngreso.form.valid && onSubmit()" novalidate>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Tipo de movimiento</mat-label>
-                    <mat-select name="tipo_movimiento" [(ngModel)]="ingreso.tipo_movimiento" required>
-                        <mat-option *ngFor="let tm of tiposMovimiento" [value]="tm.tipo_movimiento">
-                            {{tm.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="ingreso.fecha" required>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Bodega</mat-label>
-                    <mat-select name="bodega" [(ngModel)]="ingreso.bodega" required>
-                        <mat-option *ngFor="let bode of bodegas" [value]="bode.bodega">
-                            {{bode.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group" *ngIf="saveToDB">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Bodega de origen</mat-label>
-                    <mat-select name="bodega_origen" [(ngModel)]="ingreso.bodega_origen">
-                        <mat-option *ngFor="let bodeO of bodegas" [value]="bodeO.bodega">
-                            {{bodeO.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Proveedor</mat-label>
-                    <mat-select name="proveedor" [(ngModel)]="ingreso.proveedor" required>
-                        <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
-                            ({{prov.nit}}) {{prov.razon_social}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
-                    <input matInput placeholder="Comentarios" name="comentario" [(ngModel)]="ingreso.comentario">
-                </mat-form-field>
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Comentarios" placeholder="Comentarios" name="comentario" [(ngModel)]="ingreso.comentario">
-                </mat-form-field>
-            </div>
+            <mat-form-field class="fullWidth">
+                <mat-label>Tipo de movimiento</mat-label>
+                <mat-select name="tipo_movimiento" [(ngModel)]="ingreso.tipo_movimiento" required>
+                    <mat-option *ngFor="let tm of tiposMovimiento" [value]="tm.tipo_movimiento">
+                        {{tm.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="ingreso.fecha" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Bodega</mat-label>
+                <mat-select name="bodega" [(ngModel)]="ingreso.bodega" required>
+                    <mat-option *ngFor="let bode of bodegas" [value]="bode.bodega">
+                        {{bode.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Bodega de origen</mat-label>
+                <mat-select name="bodega_origen" [(ngModel)]="ingreso.bodega_origen">
+                    <mat-option *ngFor="let bodeO of bodegas" [value]="bodeO.bodega">
+                        {{bodeO.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Proveedor</mat-label>
+                <mat-select name="proveedor" [(ngModel)]="ingreso.proveedor" required>
+                    <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
+                        ({{prov.nit}}) {{prov.razon_social}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput placeholder="Comentarios" name="comentario" [(ngModel)]="ingreso.comentario">
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
+                    ng-virtual-keyboard-placeholder="Comentarios" placeholder="Comentarios" name="comentario"
+                    [(ngModel)]="ingreso.comentario">
+            </mat-form-field>
             <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmIngreso.form.valid" *ngIf="saveToDB">
+                <button mat-icon-button type="submit" color="accent" [disabled]="!frmIngreso.form.valid"
+                    *ngIf="saveToDB">
                     <mat-icon>save</mat-icon>
                 </button>
                 <button mat-icon-button type="button" color="accent" (click)="resetIngreso()" *ngIf="ingreso.ingreso">
@@ -81,57 +74,67 @@
     <mat-card-title>
         <h4>
             Detalle del ingreso {{saveToDB ? 'No.' : ''}} {{ingreso.ingreso}}
-            <button mat-icon-button type="button" color="accent" (click)="showDetalleIngresoForm = true;" *ngIf="!showDetalleIngresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showDetalleIngresoForm = true;"
+                *ngIf="!showDetalleIngresoForm">
                 <mat-icon class="iconFontSize">expand_more</mat-icon>
             </button>
-            <button mat-icon-button type="button" color="accent" (click)="showDetalleIngresoForm = false;" *ngIf="showDetalleIngresoForm">
+            <button mat-icon-button type="button" color="accent" (click)="showDetalleIngresoForm = false;"
+                *ngIf="showDetalleIngresoForm">
                 <mat-icon class="iconFontSize">expand_less</mat-icon>
             </button>
         </h4>
     </mat-card-title>
     <mat-card-content>
         <form #frmDetalleIngreso="ngForm" *ngIf="showDetalleIngresoForm" (ngSubmit)="frmDetalleIngreso.form.valid && onSubmitDetail()" novalidate>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Artículo</mat-label>
-                    <mat-select name="articulo" [(ngModel)]="detalleIngreso.articulo" required>
-                        <mat-option *ngFor="let a of articulos" [value]="a.articulo">
-                            {{a.descripcion}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
-                    <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleIngreso.cantidad"
-                        (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
-                        required>
-                </mat-form-field>
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleIngreso.cantidad"
-                        (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
-                        required>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
-                    <input matInput placeholder="Costo unitario" name="precio_unitario"
-                        [(ngModel)]="detalleIngreso.precio_unitario"
-                        (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
-                        required>
-                </mat-form-field>
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
-                        [(ngModel)]="detalleIngreso.precio_unitario"
-                        (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
-                        required>
-                </mat-form-field>
-            </div>
+            <mat-form-field class="fullWidth">
+                <mat-label>Artículo</mat-label>
+                <mat-select name="articulo" [(ngModel)]="detalleIngreso.articulo" required>
+                    <mat-option *ngFor="let a of articulos" [value]="a.articulo">
+                        {{a.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Presentación</mat-label>
+                <mat-select name="presentacion" [(ngModel)]="detalleIngreso.presentacion" required>
+                    <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
+                        {{p.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleIngreso.cantidad"
+                    (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
+                    required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
+                    ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
+                    [(ngModel)]="detalleIngreso.cantidad"
+                    (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
+                    required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput placeholder="Costo unitario" name="precio_unitario"
+                    [(ngModel)]="detalleIngreso.precio_unitario"
+                    (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
+                    required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
+                    ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
+                    [(ngModel)]="detalleIngreso.precio_unitario"
+                    (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
+                    required>
+            </mat-form-field>
             <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmDetalleIngreso.form.valid" *ngIf="saveToDB">
+                <button mat-icon-button type="submit" color="accent" [disabled]="!frmDetalleIngreso.form.valid"
+                    *ngIf="saveToDB">
                     <mat-icon>save</mat-icon>
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="addToDetail()" [disabled]="!frmDetalleIngreso.form.valid || [2, 3].indexOf(+ingreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
+                <button mat-icon-button type="button" color="accent" (click)="addToDetail()"
+                    [disabled]="!frmDetalleIngreso.form.valid || [2, 3].indexOf(+ingreso.estatus_movimiento) >= 0"
+                    *ngIf="!saveToDB">
                     <mat-icon>add</mat-icon>
                 </button>
                 <button mat-icon-button type="button" color="accent" (click)="resetDetalleIngreso()"
@@ -140,11 +143,19 @@
                 </button>
             </div>
         </form>
-        <hr *ngIf="detallesIngreso.length > 0"/>
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z4 full-width" *ngIf="detallesIngreso.length > 0">
+        <hr *ngIf="detallesIngreso.length > 0" />
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z4 full-width"
+            *ngIf="detallesIngreso.length > 0">
             <ng-container matColumnDef="articulo">
                 <th mat-header-cell *matHeaderCellDef>Artículo</th>
-                <td mat-cell *matCellDef="let element" class="text-wrap">{{saveToDB ? element.articulo.descripcion : getDescripcionArticulo(element.articulo)}}</td>
+                <td mat-cell *matCellDef="let element" class="text-wrap">
+                    {{saveToDB ? element.articulo.descripcion : getDescripcionArticulo(element.articulo)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="presentacion">
+                <th mat-header-cell *matHeaderCellDef>Presentación</th>
+                <td mat-cell *matCellDef="let element" class="text-wrap">
+                    {{saveToDB ? element.presentacion.descripcion : getDescripcionPresentacion(element.presentacion)}}
+                </td>
             </ng-container>
             <ng-container matColumnDef="cantidad">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Cantidad</th>
@@ -152,7 +163,8 @@
             </ng-container>
             <ng-container matColumnDef="costo_unitario">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Costo Unitario</th>
-                <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_unitario | number:'1.2-2'}}</td>
+                <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_unitario | number:'1.2-2'}}
+                </td>
             </ng-container>
             <ng-container matColumnDef="costo_total">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Costo Total</th>
@@ -161,10 +173,12 @@
             <ng-container matColumnDef="deleteItem">
                 <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td mat-cell *matCellDef="let element" class="text-wrap">
-                    <button mat-icon-button type="button" color="accent" (click)="getDetalleIngreso(element.ingreso, element.ingreso_detalle)" *ngIf="saveToDB">
+                    <button mat-icon-button type="button" color="accent"
+                        (click)="getDetalleIngreso(element.ingreso, element.ingreso_detalle)" *ngIf="saveToDB">
                         <mat-icon>edit</mat-icon>
                     </button>
-                    <button mat-icon-button type="button" color="accent" (click)="removeFromDetail(element.articulo)" [disabled]="[2, 3].indexOf(+ingreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
+                    <button mat-icon-button type="button" color="accent" (click)="removeFromDetail(element.articulo)"
+                        [disabled]="[2, 3].indexOf(+ingreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
                         <mat-icon>delete</mat-icon>
                     </button>
                 </td>
