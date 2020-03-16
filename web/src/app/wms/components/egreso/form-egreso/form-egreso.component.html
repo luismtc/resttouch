@@ -60,7 +60,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <div class="btn-group d-flex justify-content-end" role="group">
+            <div align="end">
                 <button mat-icon-button type="submit" color="accent"
                     [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
                     *ngIf="saveToDB">
@@ -135,7 +135,7 @@
                     (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                     required>
             </mat-form-field>
-            <div class="btn-group d-flex justify-content-end" role="group">
+            <div align="end">
                 <button mat-icon-button type="submit" color="accent"
                     [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
                     *ngIf="saveToDB">

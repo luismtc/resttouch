@@ -57,7 +57,7 @@
                     ng-virtual-keyboard-placeholder="Comentarios" placeholder="Comentarios" name="comentario"
                     [(ngModel)]="ingreso.comentario">
             </mat-form-field>
-            <div class="btn-group d-flex justify-content-end" role="group">
+            <div align="end">
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmIngreso.form.valid"
                     *ngIf="saveToDB">
                     <mat-icon>save</mat-icon>
@@ -127,7 +127,7 @@
                     (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                     required>
             </mat-form-field>
-            <div class="btn-group d-flex justify-content-end" role="group">
+            <div align="end">
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmDetalleIngreso.form.valid"
                     *ngIf="saveToDB">
                     <mat-icon>save</mat-icon>

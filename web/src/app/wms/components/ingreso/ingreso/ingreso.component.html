@@ -1,3 +1,4 @@
+<!--
 <div class="container-fluid">
     <div class="row">
         <div class="col-5">
@@ -8,3 +9,12 @@
         </div>
     </div>
 </div>
+-->
+<mat-grid-list [cols]="breakpoint" [rowHeight]="tamFila" (window:resize)="onWindowResize($event)">
+    <mat-grid-tile>
+        <app-lista-ingreso #lstIngreso (getIngresoEv)="setIngreso($event)"></app-lista-ingreso>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <app-form-ingreso #frmIngreso [ingreso]="ingreso" (ingresoSavedEv)="refreshIngresoList()"></app-form-ingreso>
+    </mat-grid-tile>
+</mat-grid-list>

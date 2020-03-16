@@ -11,6 +11,7 @@ import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
+import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
 
 import { ComandaService } from '../../services/comanda.service';
@@ -49,6 +50,7 @@ export class TranComandaComponent implements OnInit {
   public noComanda: number = 0;
   public sumCuenta: number = 0;
   public cuentaActiva: Cuenta;
+  public detalleComanda: DetalleComanda;
 
   constructor(
     public dialog: MatDialog,
