@@ -74,15 +74,4 @@ class Restserver extends REST_Controller
 		$this->response($response, $status);
 		exit();
 	}
-
-	public function getValidData($data, $columnas)
-	{
-		$datos = [];
-		foreach ($data as $key => $value) {
-			if (in_array($key, $columnas)) {
-				$datos[$key] = $value;
-			}
-		}
-		return $datos;
-	}
 }

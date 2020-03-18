@@ -77,25 +77,40 @@ class Usuario_model extends CI_Model
         }
     }
 
-    private function checkUserExists($usr)
+    private function checkUserExists($usr, $sede)
     {
         $existe = -1;
         $dbusr = $this->db
             ->select('usuario')
             ->from($this->tabla)
-            ->where('usuario', $usr)
-            ->get()
-            ->row();
-        if (isset($dbusr)) {
-            $existe = (int) $dbusr->id;
+            ->where('usrname', $usr)
+            ->where('sede', $sede)
+            ->get();
+        if ($dbusr->num_rows() > 0) {
+            $user = $dbusr->row();
+            $existe = (int) $user->usuario;
         }
+
         return $existe;
+    }
+
+    public function getValidData($data, $columnas)
+    {
+        $datos = [];
+        foreach ($data as $key => $value) {
+            if (in_array($key, $columnas)) {
+                $datos[$key] = $value;
+            }
+        }
+        return $datos;
     }
 
     function crear($dataToInsert = null)
     {
+        $dataToInsert = $this->getValidData($dataToInsert, $this->columnas);
+
         if ($dataToInsert) {
-            $idusr = $this->checkUserExists($dataToInsert['usuario']);
+            $idusr = $this->checkUserExists($dataToInsert['usrname'], $dataToInsert['sede']);
             if ($idusr < 0) {
                 if (array_key_exists('contrasenia', $dataToInsert)) {
                     $dataToInsert['contrasenia'] = password_hash($dataToInsert['contrasenia'], PASSWORD_BCRYPT, array('cost' => 12));
@@ -122,6 +137,7 @@ class Usuario_model extends CI_Model
 
     function actualizar($id = 0, $dataToUpdate = null)
     {
+        $dataToUpdate = $this->getValidData($dataToUpdate, $this->columnas);
         if ($dataToUpdate) {
             if (array_key_exists('contrasenia', $dataToUpdate)) {
                 $dataToUpdate['contrasenia'] = password_hash($dataToUpdate['contrasenia'], PASSWORD_BCRYPT, array('cost' => 12));
