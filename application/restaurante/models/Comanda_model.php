@@ -60,15 +60,17 @@ class Comanda_model extends General_Model {
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
 		} else {
-			if($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']){
-				$articulo = $det->articulo;
-				$cantidad = $args['cantidad'] - $det->cantidad;
-			} else if($det->articulo != $args['articulo']){				
-				$articulo = $args['articulo'];
-				$cantidad = $args['cantidad'];
-			} else {
-				$articulo = $args['articulo'];
-				$validar = false;
+			if (isset($args['articulo'])) {
+				if($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']){
+					$articulo = $det->articulo;
+					$cantidad = $args['cantidad'] - $det->cantidad;
+				} else if($det->articulo != $args['articulo']){				
+					$articulo = $args['articulo'];
+					$cantidad = $args['cantidad'];
+				} else {
+					$articulo = $args['articulo'];
+					$validar = false;
+				}
 			}
 		}
 		$art = new Articulo_model($articulo);
@@ -76,9 +78,11 @@ class Comanda_model extends General_Model {
 		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
 			$result = $det->guardar($args);
 			if($result) {
-				$art->actualizarExistencia();
-				if ($oldart->articulo) {					
-					$oldart->actualizarExistencia();
+				if (isset($args['articulo'])) {
+					$art->actualizarExistencia();
+					if ($oldart->articulo) {					
+						$oldart->actualizarExistencia();
+					}
 				}
 				return $det;
 			}

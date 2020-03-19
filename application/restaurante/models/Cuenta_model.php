@@ -21,6 +21,18 @@ class Cuenta_model extends General_Model {
 		}
 	}
 
+	public function imprimirDetalle()
+	{
+		$com = new Comanda_model($this->comanda);
+		foreach ($this->getDetalle() as $row) {
+
+			$com->guardarDetalle([
+				'detalle_comanda' => $row->detalle_comanda,
+				'impreso' => 1
+			]);
+		}
+	}
+
 	public function guardarDetalle(Array $args, $id = '')
 	{
 		$det = new Dcuenta_model($id);

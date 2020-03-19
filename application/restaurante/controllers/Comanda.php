@@ -148,6 +148,22 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function imprimir($idCta)
+	{
+		$cta = new Cuenta_model($idCta);
+		$cta->imprimirDetalle();
+		$com = new Comanda_model($cta->comanda);
+		$datos = [
+			'exito' => true, 
+			'mensaje' => 'Datos Actualizados con exito',
+			'comanda' => $com->getComanda()
+		];
+
+		$this->output
+		->set_output(json_encode($datos));
+		
+	}
+
 }
 
 /* End of file Comanda.php */
