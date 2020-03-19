@@ -28,7 +28,7 @@
             <app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>
         </div>
         <div class="col overflow-auto mat-elevation-z3">
-            <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero"
+            <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero" [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta"
                 (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>
     </div>

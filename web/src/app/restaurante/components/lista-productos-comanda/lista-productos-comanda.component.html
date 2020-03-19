@@ -1,5 +1,5 @@
 <mat-list class="fullWidth" [style.height]="listHeight">
-    <mat-list-item *ngFor="let p of listaProductos; let i = index;" [ngClass]="{'noImpreso': !p.impreso}" [style.height]="p.itemListHeight">
+    <mat-list-item *ngFor="let p of listaProductos; let i = index;" [ngClass]="{'noImpreso': +p.impreso === 0}" [style.height]="p.itemListHeight">
         <div matLine class="fullWidth d-flex justify-content-between">
             <span>{{p.cantidad}}&nbsp;{{p.nombre}}</span>
             <span class="spacer"></span>

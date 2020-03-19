@@ -92,11 +92,10 @@ class Usuario extends CI_Controller
         
         $nuevo = $this->Usuario_model->find($datos);
         
-        $this->output
-        ->set_output(json_encode($nuevo));
+        $this->output->set_output(json_encode($nuevo));
     }
 
     public function checktoken_get(){
-        $this->response(['valido' => $this->status_verification_request ? true : false]);
+        $this->output->set_output(json_encode(['valido' => true]));
     }
 }

@@ -1,6 +1,6 @@
 export interface DetalleComanda {
-    detalle_cuenta: number;
-    detalle_comanda: number;
+    detalle_cuenta?: number;
+    detalle_comanda?: number;
     articulo: number;
     cantidad: number;
     precio: number;

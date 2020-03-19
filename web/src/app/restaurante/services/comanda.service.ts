@@ -53,13 +53,28 @@ export class ComandaService {
     return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar${entidad.comanda ? ('/' + entidad.comanda) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  saveDetalle(idcomanda: number, detalle: DetalleComanda) {
+  saveDetalle(idcomanda: number, idcuenta: number, detalle: DetalleComanda) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
     };
-    const urlComplement = detalle.detalle_comanda && detalle.detalle_cuenta  ? `/${detalle.detalle_cuenta}` : '';
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_detalle/${idcomanda}${urlComplement}`, detalle, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));    
+    // const urlComplement = detalle.detalle_comanda && detalle.detalle_cuenta  ? `/${detalle.detalle_cuenta}` : '';
+    return this.http
+      .post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_detalle/${idcomanda}/${idcuenta}`, detalle, httpOptions)
+      .pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  setProductoImpreso(idcuenta: number = 0) {
+    console.log(`Cambiando cuenta: ${idcuenta}...`);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/imprimir/${idcuenta}`,
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

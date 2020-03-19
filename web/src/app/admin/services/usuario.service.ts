@@ -17,7 +17,7 @@ export interface IAppMenu {
 }
 
 export interface IBtnModulo {
-  boton: IAppMenu[]
+  boton: IAppMenu[];
 }
 
 const APPMENU: IBtnModulo[] = [
@@ -70,7 +70,7 @@ export class UsuarioService {
       })
     };
 
-    return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login.json`, JSON.stringify(obj), httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login`, JSON.stringify(obj), httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getAll(debaja: number = 0): Observable<Usuario[]> {
@@ -90,7 +90,7 @@ export class UsuarioService {
           'Authorization': this.usrToken
         })
       };
-      const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken.json`, httpOptions).toPromise();
+      const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken_get`, httpOptions).toPromise();
       if (resp.valido) {
         return resp.valido;
       } else {

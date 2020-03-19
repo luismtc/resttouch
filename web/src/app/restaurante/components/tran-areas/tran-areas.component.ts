@@ -82,8 +82,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   setEstatusMesa = (m: any, estatus: number) => {
-    console.log('Mesa = ', m);
-    console.log('Estatus solicitado = ', estatus);
+    // console.log('Mesa = ', m);
+    // console.log('Estatus solicitado = ', estatus);
     const idxArea = this.lstTabsAreas.findIndex(a => +a.area === +m.area);
     console.log(`Area = ${idxArea}`);
     if (idxArea > -1) {
@@ -127,7 +127,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         this.mesaSeleccionadaToOpen = result;
         // console.log(JSON.stringify(this.mesaSeleccionada));
         this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
-          //console.log(res);
+          // console.log(res);
           if (res.exito) {
             this.mesaSeleccionada = res.comanda;
             this.setEstatusMesa(m, +res.comanda.mesa.estatus);
