@@ -24,4 +24,15 @@ export class MesaComponent implements OnInit {
     this.onClickMesa.emit({ mesaSelected: this.configuracion });
   }
 
+  dragEnded = (obj: any) => {
+    // console.log(obj);
+    const item = obj.source.element.nativeElement;
+    const distancia = obj.distance;
+    console.log(`TOP = ${item.offsetTop + distancia.y}\nLEFT = ${item.offsetLeft + distancia.x}`);
+    // console.log(this.configuracion);
+    this.configuracion.posx = (item.offsetLeft + distancia.x) * 100 / 750;
+    this.configuracion.posy = (item.offsetTop + distancia.y) * 100 / 600;
+    // console.log(this.configuracion);
+  }
+
 }

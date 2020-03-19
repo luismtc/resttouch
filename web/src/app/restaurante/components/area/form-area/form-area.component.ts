@@ -40,27 +40,27 @@ export class FormAreaComponent implements OnInit {
   resetEntidad = () => this.entidad = { area: null, sede: this.sedeUsr, nombre: null, mesas: [] };
 
   onSubmit = () => {
-    //console.log(this.entidad); return;
+    // console.log(this.entidad); return;
     this.entidadSrvc.save(this.entidad).subscribe(res => {
       if (res) {
         this._snackBar.open('Guardado con éxito...', 'Guardar', { duration: 3000 });
         this.resetEntidad();
         this.loadAreas();
-        this.entidadSavedEv.emit();        
+        this.entidadSavedEv.emit();
       }
     });
   }
 
   openDesigner = () => {
     const areaDesignerRef = this.dialog.open(AreaDesignerComponent, {
-      width: '900px',
+      width: '800px',
       disableClose: false,
       data: { area: +this.entidad.area, mesas: this.entidad.mesas || [] }
     });
 
     areaDesignerRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        console.log(result);      
+        console.log(result);
       }
     });
   }

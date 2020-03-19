@@ -1,4 +1,4 @@
-<div class="divMesa mat-elevation-z6" 
+<div cdkDrag (cdkDragEnded)="dragEnded($event)" cdkDragBoundary=".areaPosicionamiento" class="divMesa mat-elevation-z6" 
     [ngClass]="{'disponible': +configuracion.estatus == 1, 'ocupada': +configuracion.estatus == 2}"
     (click)="clickMesa()"
     [style.width.px]="configuracion.tamanio" 

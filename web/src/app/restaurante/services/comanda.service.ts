@@ -66,7 +66,6 @@ export class ComandaService {
   }
 
   setProductoImpreso(idcuenta: number = 0) {
-    console.log(`Cambiando cuenta: ${idcuenta}...`);
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
