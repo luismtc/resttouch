@@ -6,12 +6,10 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmMedida="ngForm" (ngSubmit)="frmMedida.form.valid && onSubmit()" novalidate>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="medida.descripcion" required>
-                </mat-form-field>
-            </div>            
-            <div class="btn-group d-flex justify-content-end" role="group">
+            <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="medida.descripcion" required>
+            </mat-form-field>
+            <div align="end">
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmMedida.form.valid">
                     <mat-icon>save</mat-icon>
                 </button>

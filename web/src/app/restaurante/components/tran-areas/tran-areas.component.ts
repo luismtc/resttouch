@@ -117,7 +117,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     };
 
     const abrirMesaRef = this.dialog.open(AbrirMesaComponent, {
-      width: '55%',
+      width: '250px',
       disableClose: true,
       data: this.mesaSeleccionadaToOpen
     });

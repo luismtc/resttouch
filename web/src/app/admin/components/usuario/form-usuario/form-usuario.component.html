@@ -4,43 +4,30 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmUsuario="ngForm" (ngSubmit)="frmUsuario.form.valid && onSubmit()" novalidate>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput placeholder="Nombres" name="nombres" [(ngModel)]="usuario.nombres" required>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput placeholder="Apellidos" name="apellidos" [(ngModel)]="usuario.apellidos" required>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" required>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <input matInput type="password" placeholder="Contraseña" name="contrasenia" [(ngModel)]="usuario.contrasenia">
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-form-field class="fullWidth">
-                    <mat-label>Sede</mat-label>
-                    <mat-select name="sede" [(ngModel)]="usuario.sede">
-                        <mat-option *ngFor="let s of sedes" [value]="s.sede">
-                            {{s.nombre}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="form-group">
-                <mat-checkbox name="debaja" [(ngModel)]="+usuario.debaja" class="fontFamily">De baja</mat-checkbox>
-            </div>
-            <div class="form-group">
-                <mat-checkbox name="esmesero" [(ngModel)]="+usuario.esmesero" class="fontFamily">Es mesero</mat-checkbox>
-            </div>
-            <div class="btn-group d-flex justify-content-end" role="group">
+            <mat-form-field class="fullWidth">
+                <input matInput placeholder="Nombres" name="nombres" [(ngModel)]="usuario.nombres" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput placeholder="Apellidos" name="apellidos" [(ngModel)]="usuario.apellidos" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="password" placeholder="Contraseña" name="contrasenia"
+                    [(ngModel)]="usuario.contrasenia">
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Sede</mat-label>
+                <mat-select name="sede" [(ngModel)]="usuario.sede">
+                    <mat-option *ngFor="let s of sedes" [value]="s.sede">
+                        {{s.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-checkbox name="debaja" [(ngModel)]="+usuario.debaja" class="fontFamily">De baja</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <mat-checkbox name="esmesero" [(ngModel)]="+usuario.esmesero" class="fontFamily">Es mesero</mat-checkbox>
+            <div align="end">
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmUsuario.form.valid">
                     <mat-icon>save</mat-icon>
                 </button>
@@ -51,4 +38,3 @@
         </form>
     </mat-card-content>
 </mat-card>
-<!--<span *ngIf="usuario.usuario">{{usuario | json}}</span>-->
