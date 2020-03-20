@@ -14,13 +14,13 @@ import * as qs from 'qs';
 export class MesaService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'mante/mesa';
+  private moduleUrl: string = 'mesa';
   private usrToken: string = null;
 
   constructor(
     private http: HttpClient,
-    private ls: LocalstorageService    
-  ) { 
+    private ls: LocalstorageService
+  ) {
     this.srvcErrHndl = new ServiceErrorHandler();
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
@@ -31,6 +31,22 @@ export class MesaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Mesa[]>(`${GLOBAL.url}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Mesa[]>(
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`,
+      httpOptions
+      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  save(entidad: Mesa) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlMantenimientos}/mesa/guardar${entidad.mesa ? ('/' + entidad.mesa) : ''}`,
+      entidad,
+      httpOptions
+      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

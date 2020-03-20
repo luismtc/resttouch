@@ -60,7 +60,13 @@ export class FormAreaComponent implements OnInit {
 
     areaDesignerRef.afterClosed().subscribe((result: any) => {
       if (result) {
-        console.log(result);
+        // console.log(result);
+        this.entidadSavedEv.emit();
+        this.entidadSrvc.get({ area: +this.entidad.area }).subscribe(res => {
+          if (res && res.length > 0) {
+            this.entidad = res[0];
+          }
+        });
       }
     });
   }

@@ -32,8 +32,8 @@ export class AreaDesignerComponent implements OnInit {
       mesa: null,
       area: this.data.area,
       numero: this.getNextTableNumber(),
-      posx: 5,
-      posy: 5,
+      posx: 1,
+      posy: 1,
       tamanio: 72,
       estatus: 1
     });
@@ -42,8 +42,8 @@ export class AreaDesignerComponent implements OnInit {
   onClickMesa = (obj: any) => { }
 
   terminar = () => {
-    console.log(this.mesas);
-    // this.dialogRef.close(this.mesas);
+    // console.log(this.mesas);
+    this.dialogRef.close(this.mesas);
   }
 
 }

@@ -8,6 +8,6 @@
         </button>
     </div>
     <div id="divAreaPosicionamiento" class="areaPosicionamiento">
-        <app-mesa *ngFor="let m of mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)"></app-mesa>
+        <app-mesa *ngFor="let m of mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)" [dontAllowDrag]="false"></app-mesa>
     </div>
 </div>
