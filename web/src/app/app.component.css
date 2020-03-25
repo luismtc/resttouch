@@ -25,3 +25,7 @@
         font-size: 28pt !important;
     }
 }
+
+mat-sidenav-content {
+    padding-top: 10px;
+}

@@ -24,13 +24,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/scss/resttouch.scss",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/assets/scss/resttouch.scss",              
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/jquery/dist/jquery.min.js"              
             ]
           },
           "configurations": {

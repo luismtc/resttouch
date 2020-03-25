@@ -1,15 +1,12 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-5">
-            <app-categoria-producto (categoriaGrupoSvd)="refreshArticuloList($event)" (onChangeSubCategoriaEv)="setArticuloCategoriaGrupo($event)"></app-categoria-producto>
-        </div>
+<div class="row">
+    <div class="col m5 s12">
+        <app-categoria-producto (categoriaGrupoSvd)="refreshArticuloList($event)"
+            (onChangeSubCategoriaEv)="setArticuloCategoriaGrupo($event)"></app-categoria-producto>
+        <app-lista-producto #lstProducto [treeHeight]="'100%'" (productoClickedEv)="setArticulo($event)">
+        </app-lista-producto>
     </div>
-    <div class="row">
-        <div class="col-5">
-            <app-lista-producto #lstProducto [treeHeight]="'100%'" (productoClickedEv)="setArticulo($event)"></app-lista-producto>
-        </div>
-        <div class="col">
-            <app-form-producto #frmProducto [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)" ></app-form-producto>
-        </div>
+    <div class="col m7 s12">
+        <app-form-producto #frmProducto [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)">
+        </app-form-producto>
     </div>
 </div>

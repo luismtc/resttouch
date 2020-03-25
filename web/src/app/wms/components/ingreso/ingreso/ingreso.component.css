@@ -1,4 +1,24 @@
-.mat-grid-tile .mat-figure {
-    justify-content: flex-start !important ;
+/*
+.mat-grid-list {
+    display: flex;
+    align-items: flex-start !important;
+    vertical-align: top !important;
+ }
+*/
+/*
+ .mat-grid-tile .mat-figure {
     align-items: flex-start !important;
  }
+*/
+/*
+ ::ng-deep md-grid-tile.mat-grid-tile .mat-figure {
+    align-items: flex-start;  
+    justify-content: flex-start;  
+}
+*/
+/*
+mat-grid-tile >::ng-deep .mat-figure {
+    align-items: flex-start;
+    overflow-y: auto;
+}
+*/
