@@ -8,8 +8,9 @@ class Inicio
     {
     	$this->ci =& get_instance();
     	$this->ci->load->helper(['jwt', 'authorization']);
-    	$this->libres = ['/resttouch/index.php/usuario/login'];
-        if(!in_array($_SERVER['REQUEST_URI'], $this->libres)) {
+    	$this->libres = ['/usuario/login'];
+ 
+        if(!in_array($_SERVER['PATH_INFO'], $this->libres)) {
         	$headers = $this->ci->input->request_headers();
         	$response = ['mensaje' => '¡Acceso no autorizado!', 'valido' => false];
         	$continuar = true;
