@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 
 import { MatListModule } from '@angular/material/list';
@@ -24,7 +24,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { SidebarDirective } from './directives/sidebar.directive';
-import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
+import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { LoginComponent } from './components/login/login.component';
@@ -50,7 +50,10 @@ import { FormClienteDialogComponent } from './components/cliente/form-cliente-di
 
 @NgModule({
   declarations: [
-    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective, UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent, FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent, ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent
+    LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
+    UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
+    FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent

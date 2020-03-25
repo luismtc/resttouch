@@ -107,10 +107,12 @@ export class TranComandaComponent implements OnInit {
           showInputNotas: false,
           itemListHeight: '70px',
           detalle_comanda: +p.detalle_comanda,
-          detalle_cuenta: +p.detalle_cuenta
+          detalle_cuenta: +p.detalle_cuenta,
+          impresora: p.articulo.impresora
         });
       }
     }
+    // console.log('SELECCIONADOS = ', this.lstProductosSeleccionados);
   }
 
   setSelectedCuenta(noCuenta: number) {
@@ -244,6 +246,16 @@ export class TranComandaComponent implements OnInit {
           }
         });
       }
+      /*
+      const msgToSocket = JSON.stringify({
+        Tipo: 'Comanda',
+        Nombre: this.cuentaActiva.nombre,
+        Numero: this.noComanda,
+        DetalleCuenta: this.lstProductosAImprimir,
+        Total: null
+      });
+      console.log('MENSAJE = ', msgToSocket);
+      */
       this.socket.emit('print:comanda', `${JSON.stringify({
         Tipo: 'Comanda',
         Nombre: this.cuentaActiva.nombre,
@@ -268,7 +280,7 @@ export class TranComandaComponent implements OnInit {
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
     this.setSumaCuenta(this.lstProductosAImprimir);
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
-    //this.showPortalCuenta = true;    
+    // this.showPortalCuenta = true;    
     /*
     this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
       Tipo: 'Cuenta', 
@@ -277,6 +289,16 @@ export class TranComandaComponent implements OnInit {
       DetalleCuenta: this.lstProductosAImprimir,
       Total: this.sumaDetalle(this.lstProductosAImprimir)
     })}`);
+    */
+    /*
+    const msgToSocket = JSON.stringify({
+      Tipo: 'Cuenta',
+      Nombre: this.cuentaActiva.nombre,
+      Numero: null,
+      DetalleCuenta: this.lstProductosAImprimir,
+      Total: this.sumaDetalle(this.lstProductosAImprimir)
+    });
+    console.log('MENSAJE = ', msgToSocket);
     */
     this.socket.emit(`print:cuenta`, `${JSON.stringify({
       Tipo: 'Cuenta',

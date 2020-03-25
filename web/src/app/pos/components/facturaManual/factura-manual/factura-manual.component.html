@@ -1,10 +1,9 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-5">
-            <app-lista-factura-manual #lstFacturaManual (getFacturaEv)="setFactura($event)"></app-lista-factura-manual>
-        </div>
-        <div class="col">
-            <app-form-factura-manual #frmFacturaManual [factura]="factura" (facturaSavedEv)="refreshFacturaList()"></app-form-factura-manual>
-        </div>
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-factura-manual #lstFacturaManual (getFacturaEv)="setFactura($event)"></app-lista-factura-manual>
+    </div>
+    <div class="col m7 s12">
+        <app-form-factura-manual #frmFacturaManual [factura]="factura" (facturaSavedEv)="refreshFacturaList()">
+        </app-form-factura-manual>
     </div>
 </div>

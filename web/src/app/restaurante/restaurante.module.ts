@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { WmsModule } from '../wms/wms.module';
 import { PosModule } from '../pos/pos.module';
-//import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,7 +32,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
-import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
+import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { RestauranteRoutingModule } from './restaurante-routing.module';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
@@ -50,7 +50,7 @@ import { ListaTurnoComponent } from './components/turno/lista-turno/lista-turno.
 import { FormTurnoComponent } from './components/turno/form-turno/form-turno.component';
 import { AreaDesignerComponent } from './components/area/area-designer/area-designer.component';
 
-//const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
   declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent, FormTurnoComponent, AreaDesignerComponent],

@@ -1,19 +1,19 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col" style="padding-bottom: 5px !important;">
-            <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-flat-button type="button" color="accent" (click)="transformar()">
-                    <mat-icon style="font-size: 18pt;">transform</mat-icon>&nbsp;Transformar
-                </button>
-            </div>
-        </div>        
+<div class="row">
+    <div class="col m12 s12" style="padding-bottom: 5px !important;">
+        <div align="end">
+            <button mat-flat-button type="button" color="accent" (click)="transformar()">
+                <mat-icon style="font-size: 18pt;">transform</mat-icon>&nbsp;Transformar
+            </button>
+        </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <app-form-egreso #frmEgreso [(egreso)]="egreso" [saveToDB]="false" (egresoSavedEv)="doSomething()"></app-form-egreso>
-        </div>
-        <div class="col">
-            <app-form-ingreso #frmIngreso [(ingreso)]="ingreso" [saveToDB]="false" (ingresoSavedEv)="doSomething()"></app-form-ingreso>            
-        </div>
+</div>
+<div class="row">
+    <div class="col m6 s12">
+        <app-form-egreso #frmEgreso [(egreso)]="egreso" [saveToDB]="false" (egresoSavedEv)="doSomething()">
+        </app-form-egreso>
+    </div>
+    <div class="col m6 s12">
+        <app-form-ingreso #frmIngreso [(ingreso)]="ingreso" [saveToDB]="false" (ingresoSavedEv)="doSomething()">
+        </app-form-ingreso>
     </div>
 </div>
