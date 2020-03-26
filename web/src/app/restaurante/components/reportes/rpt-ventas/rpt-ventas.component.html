@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col m12 s12">
+        <mat-card class="mat-elevation-z4 fullWidth">
+            <mat-card-title>
+                <h4>Reporte de ventas</h4>
+            </mat-card-title>
+            <mat-card-content>
+                <form #frmEntidad="ngForm" (ngSubmit)="frmEntidad.form.valid && onSubmit()" novalidate>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Tipo</mat-label>
+                        <mat-select name="tipo_reporte" [(ngModel)]="params.tipo_reporte" required>
+                            <mat-option *ngFor="let tr of tiposReporte" [value]="tr.tipo_reporte">
+                                {{tr.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <input type="date" matInput placeholder="Del" name="fdel" [(ngModel)]="params.fdel" required>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <input type="date" matInput placeholder="Al" name="fal" [(ngModel)]="params.fal" required>
+                    </mat-form-field>
+                    <div align="end">
+                        <button mat-icon-button type="button" color="accent" (click)="getReporte(1)" [disabled]="!frmEntidad.form.valid">
+                            <mat-icon>code</mat-icon>
+                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button mat-icon-button type="button" color="accent" (click)="getReporte(2)" [disabled]="!frmEntidad.form.valid">
+                            <mat-icon>picture_as_pdf</mat-icon>
+                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button mat-icon-button type="button" color="accent" (click)="getReporte(3)" [disabled]="!frmEntidad.form.valid">
+                            <mat-icon>library_books</mat-icon>
+                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button mat-icon-button type="button" color="accent" (click)="resetParams()">
+                            <mat-icon>restore</mat-icon>
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+            <mat-card-footer>                
+                <div align="center" *ngIf="!!msgGenerandoReporte">
+                    <h2>{{msgGenerandoReporte}}</h2>
+                    <h4>{{params | json}}</h4>
+                </div>
+            </mat-card-footer>
+        </mat-card>
+    </div>
+</div>

@@ -55,6 +55,15 @@ $config['menu'] = [
 						'link' => '/restaurante/turno'
 					]
 				]
+			],
+			2 => [
+				'nombre' => 'Reportes',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Ventas por categoría',
+						'link' => '/restaurante/rptvtascat'
+					]
+				]
 			]
 		]
 	],

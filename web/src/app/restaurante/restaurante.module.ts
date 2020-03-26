@@ -49,11 +49,16 @@ import { TurnoComponent } from './components/turno/turno/turno.component';
 import { ListaTurnoComponent } from './components/turno/lista-turno/lista-turno.component';
 import { FormTurnoComponent } from './components/turno/form-turno/form-turno.component';
 import { AreaDesignerComponent } from './components/area/area-designer/area-designer.component';
+import { RptVentasComponent } from './components/reportes/rpt-ventas/rpt-ventas.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
 @NgModule({
-  declarations: [TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent, ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent, FormTurnoComponent, AreaDesignerComponent],
+  declarations: [
+    TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent,
+    ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent,
+    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent
+  ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent
   ],
@@ -65,7 +70,7 @@ import { AreaDesignerComponent } from './components/area/area-designer/area-desi
     SharedModule,
     WmsModule,
     PosModule,
-    //SocketIoModule.forRoot(config),
+    // SocketIoModule.forRoot(config),
     MatListModule,
     MatIconModule,
     MatFormFieldModule,
