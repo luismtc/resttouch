@@ -75,11 +75,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $active_group = 'default';
 $query_builder = TRUE;
 
-$params = array(
+$db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
-	'password' => 'PoChoco2016',
+	'password' => '',
 	'database' => 'resttouch',
 	/*'hostname' => '/cloudsql/restouch:us-central1:restadmin',
 	'hostname' => '127.0.0.1',
@@ -102,7 +102,3 @@ $params = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
-
-
-
-$db['default'] = 
