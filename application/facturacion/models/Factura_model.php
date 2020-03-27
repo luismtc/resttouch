@@ -21,7 +21,7 @@ class Factura_model extends General_model {
 	public function __construct($id = '')
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.factura");
+		$this->setTabla("factura");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -93,7 +93,7 @@ class Factura_model extends General_model {
 		$datos = [];
 		$tmp = $this->db
 		->where("factura", $this->factura)
-		->get("resttouch.detalle_factura")
+		->get("detalle_factura")
 		->result();
 
 		foreach ($tmp as $row) {
@@ -116,7 +116,7 @@ class Factura_model extends General_model {
 	{
 		$this->serie = $this->db
 							->where("factura_serie", $this->factura_serie)
-							->get("resttouch.factura_serie")
+							->get("factura_serie")
 							->row();
 	}
 
@@ -124,16 +124,16 @@ class Factura_model extends General_model {
 	{		
 		$this->empresa = $this->db
 							  ->select("b.*")
-							  ->join("resttouch.empresa b", "b.empresa = a.empresa")
+							  ->join("empresa b", "b.empresa = a.empresa")
 							  ->where("a.sede", $this->sede)
-							  ->get("resttouch.sede a")
+							  ->get("sede a")
 							  ->row();
 	}
 
 	public function cargarSede() {
 		$this->sedeFactura = $this->db								  
 								  ->where("sede", $this->sede)
-								  ->get("resttouch.sede")
+								  ->get("sede")
 								  ->row();
 	}
 
@@ -141,7 +141,7 @@ class Factura_model extends General_model {
 	{
 		$this->receptor = $this->db
 							   ->where("cliente", $this->cliente)
-							   ->get("resttouch.cliente")
+							   ->get("cliente")
 							   ->row();
 	}
 
@@ -149,7 +149,7 @@ class Factura_model extends General_model {
 	{
 		$this->moneda = $this->db
 							 ->where("moneda", $this->moneda)
-							 ->get("resttouch.moneda")
+							 ->get("moneda")
 							 ->row();
 	}
 

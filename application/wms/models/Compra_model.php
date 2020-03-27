@@ -13,7 +13,7 @@ class Compra_model extends General_Model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.orden_compra");
+		$this->setTabla("orden_compra");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -24,7 +24,7 @@ class Compra_model extends General_Model {
 	{
 		return $this->db
 					->where("proveedor", $this->proveedor)
-					->get("resttouch.proveedor")
+					->get("proveedor")
 					->row();
 	}
 
@@ -86,7 +86,7 @@ class Compra_model extends General_Model {
 			$this->db
 				 ->set("ingreso", $ing->ingreso)
 				 ->set("orden_compra", $this->orden_compra)
-				 ->insert("resttouch.ingreso_has_orden_compra");
+				 ->insert("ingreso_has_orden_compra");
 			return $ing;
 		} else {
 			$this->mensaje = $det->getMensaje();

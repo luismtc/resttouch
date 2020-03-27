@@ -15,7 +15,7 @@ class Dcomanda_model extends General_Model {
 	public function __construct($id = '')
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.detalle_comanda");
+		$this->setTabla("detalle_comanda");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -26,7 +26,7 @@ class Dcomanda_model extends General_Model {
 		$datos = [];
 		$tmp = $this->db
 					->where("articulo", $this->articulo)
-					->get("resttouch.articulo")
+					->get("articulo")
 					->row();
 		$tmp->impresora = $this->db
 		->select("b.*")

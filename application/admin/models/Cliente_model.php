@@ -13,7 +13,7 @@ class Cliente_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.cliente");
+		$this->setTabla("cliente");
 
 		if(!empty($id)) {
 			$this->cargar($id);

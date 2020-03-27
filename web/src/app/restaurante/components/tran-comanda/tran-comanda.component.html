@@ -1,13 +1,11 @@
-<div class="container-fluid divFullSize">
+<div class="divFullSize">
     <div class="row">
-        <div class="col d-flex justify-content-center">
-            <h4>
-                {{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}
-            </h4>
+        <div class="col m12 s12" align="center">
+            <span class="bld" style="font-size: 14pt;">{{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}</span>
         </div>
     </div>
     <div class="row">
-        <div class="col d-flex justify-content-center">
+        <div class="col m12 s12" align="center" style="padding: 0 !important;">
             <button mat-raised-button type="button" color="accent" *ngFor="let cta of mesaEnUso.cuentas" [disabled]="+cta.cerrada == 1"
                 (click)="setSelectedCuenta(cta.numero)">
                 {{cta.nombre}}
@@ -15,25 +13,25 @@
         </div>
     </div>
     <div class="row">
-        <div class="col d-flex justify-content-center" style="padding: 0 !important;">
-            <h6>Productos</h6><br />
+        <div class="col m6 s12" align="center" style="padding: 0 !important;">
+            <span class="bld">Productos</span>
         </div>
-        <div class="col d-flex justify-content-center" style="padding: 0 !important;">
-            <h6 *ngIf="cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</h6>
-            <h6 *ngIf="!cuentaActiva.nombre">Por favor seleccione una cuenta. Gracias.</h6>
+        <div class="col m6 s12" align="center" style="padding: 0 !important;">
+            <span class="bld" *ngIf="cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</span>
+            <span class="bld" *ngIf="!cuentaActiva.nombre">Por favor seleccione una cuenta. Gracias.</span>
         </div>
     </div>
     <div class="row">
-        <div class="col overflow-auto mat-elevation-z3">
+        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto;">
             <app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>
         </div>
-        <div class="col overflow-auto mat-elevation-z3">
+        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto;">
             <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero" [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta"
                 (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>
     </div>
     <div class="row">
-        <div class="col d-flex justify-content-center">
+        <div class="col m12 s12" align="center">
             <button mat-raised-button type="button" color="accent" (click)="printComanda()" [disabled]="!cuentaActiva.nombre">
                 Comanda
             </button>
@@ -49,6 +47,7 @@
         </div>
     </div>
 </div>
+<!--
 <app-window *ngIf="showPortalComanda && cuentaActiva.nombre" [windowConfig]="windowConfig">
     <div class="row">
         <div class="col" style="text-align: center; border-bottom: solid 1px black; padding: 0; font-Weight: bold;">
@@ -108,3 +107,4 @@
         <button mat-raised-button type="button" color="accent" (click)="this.showPortalCuenta = false">Cerrar</button>
     </div>
 </app-window>
+-->

@@ -10,7 +10,7 @@ class Categoria_model extends General_Model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.categoria");
+		$this->setTabla("categoria");
 
 		if(!empty($id)) {
 			$this->cargar($id);

@@ -1,12 +1,9 @@
-<div class="container d-flex justify-content-center align-items-center" style="height: 400px !important; overflow-y: hidden !important;">
-
-    <div class="d-flex flex-row" *ngFor="let modulo of appMenu">
-        <button mat-button class="divBtnSize" (click)="handleClick(modulo.nombre)">
+<div class="row">
+    <div class="col m12 s12" align="center">
+        <button mat-button class="divBtnSize" *ngFor="let modulo of appMenu" (click)="handleClick(modulo.nombre)">
             <mat-icon class="lnkIconBoton">{{modulo.icono}}</mat-icon>
-            <br/>
+            <br />
             <span class="lnkBoton">{{modulo.nombre}}</span>
         </button>
-        <!--<div class="mat-elevation-z2 divBtnSize" *ngFor="let boton of fila.boton"></div>-->
     </div>
-
 </div>

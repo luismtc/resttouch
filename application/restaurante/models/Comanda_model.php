@@ -12,7 +12,7 @@ class Comanda_model extends General_Model {
 	public function __construct($id = '')
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.comanda");
+		$this->setTabla("comanda");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -30,9 +30,9 @@ class Comanda_model extends General_Model {
 			b.posy,
 			b.tamanio,
 			b.estatus")
-		->join("resttouch.mesa b", "a.mesa = b.mesa")
+		->join("mesa b", "a.mesa = b.mesa")
 		->where("a.comanda", $this->comanda)
-		->get("resttouch.comanda_has_mesa a")
+		->get("comanda_has_mesa a")
 		->row();
 	}
 
@@ -41,7 +41,7 @@ class Comanda_model extends General_Model {
 		$this->db
 		->set("comanda", $this->comanda)
 		->set("mesa", $mesa)
-		->insert("resttouch.comanda_has_mesa");
+		->insert("comanda_has_mesa");
 
 		return $this->db->affected_rows() > 0;
 
@@ -118,7 +118,7 @@ class Comanda_model extends General_Model {
 		$cuentas = [];
 		$tmp = $this->db
 		->where("comanda", $this->comanda)
-		->get("resttouch.cuenta")
+		->get("cuenta")
 		->result();
 
 		foreach ($tmp as $row) {
@@ -134,7 +134,7 @@ class Comanda_model extends General_Model {
 	{
 		$tmp = $this->db
 		->where("comanda", $this->comanda)
-		->get("resttouch.comanda")
+		->get("comanda")
 		->row();
 
 		$mesa = $this->getMesas();

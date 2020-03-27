@@ -13,7 +13,7 @@ class Acceso_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.acceso");
+		$this->setTabla("acceso");
 
 		if(!empty($id)) {
 			$this->cargar($id);

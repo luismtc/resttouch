@@ -12,7 +12,7 @@ class Turno_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.turno");
+		$this->setTabla("turno");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -23,7 +23,7 @@ class Turno_model extends General_model {
 	{
 		return $this->db
 					->where("turno_tipo", $this->turno_tipo)
-					->get("resttouch.turno_tipo")
+					->get("turno_tipo")
 					->row();
 	}
 
@@ -51,7 +51,7 @@ class Turno_model extends General_model {
 		}
 
 		$tmp = $this->db
-					->get("resttouch.turno");
+					->get("turno");
 
 		if(isset($args['_uno'])) {
 			return $tmp->row();
@@ -66,14 +66,14 @@ class Turno_model extends General_model {
 					->where("turno", $this->turno)
 					->where("usuario", $args['usuario'])
 					->where("usuario_tipo", $args['usuario_tipo'])
-					->get("resttouch.turno_has_usuario");
+					->get("turno_has_usuario");
 
 		if($tmp->num_rows() == 0) {
 			$this->db
 				 ->set("turno", $this->turno)
 				 ->set("usuario", $args['usuario'])
 				 ->set("usuario_tipo", $args['usuario_tipo'])
-				 ->insert("resttouch.turno_has_usuario");
+				 ->insert("turno_has_usuario");
 
 			return $this->db->affected_rows() > 0;
 		}
@@ -116,7 +116,7 @@ class Turno_model extends General_model {
 			 ->where("turno", $this->turno)
 			 ->where("usuario", $args['usuario'])
 			 ->where("usuario_tipo", $args['usuario_tipo'])
-			 ->update("resttouch.turno_has_usuario");
+			 ->update("turno_has_usuario");
 
 		return $this->db->affected_rows() > 0;
 	}

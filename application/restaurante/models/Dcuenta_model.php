@@ -10,7 +10,7 @@ class Dcuenta_model extends General_Model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.detalle_cuenta");
+		$this->setTabla("detalle_cuenta");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -20,7 +20,7 @@ class Dcuenta_model extends General_Model {
 	public function getArticulo() {
 		return $this->db
 					->where("articulo", $this->articulo)
-					->get("resttouch.articulo")
+					->get("articulo")
 					->row();
 	}
 	

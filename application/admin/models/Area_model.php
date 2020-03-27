@@ -11,7 +11,7 @@ class Area_model extends General_Model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.area");
+		$this->setTabla("area");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -21,7 +21,7 @@ class Area_model extends General_Model {
 	public function get_mesas() {
 		return $this->db
 					->where("area", $this->area)
-					->get("resttouch.mesa")
+					->get("mesa")
 					->result();
 	}
 }

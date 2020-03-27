@@ -5,12 +5,13 @@ import { AuthguardService as AuthGuard } from '../admin/services/authguard.servi
 import { AreaComponent } from './components/area/area/area.component';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
 import { TurnoComponent } from './components/turno/turno/turno.component';
-
+import { RptVentasComponent } from './components/reportes/rpt-ventas/rpt-ventas.component';
 
 const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
   { path: 'tranareas', component: TranAreasComponent, canActivate: [AuthGuard] },
   { path: 'turno', component: TurnoComponent, canActivate: [AuthGuard] },
+  { path: 'rptvtascat', component: RptVentasComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

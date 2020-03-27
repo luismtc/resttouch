@@ -1,20 +1,23 @@
-<div id="frmLogIn" class="d-flex justify-content-center">    
-    <div class="card align-self-center" style="width: 23rem;">
-        <img id="imgLogo" class="card-img-top" src="../../../../assets/img/logo.svg" alt="Rest-Touch">
-        <div class="dropdown-divider"></div>
-        <div class="card-body">
-            <h5 class="card-title">Ingreso</h5>
-            <form #frmLogIn="ngForm" novalidate>
-                <div class="form-group">
-                    <label for="txtUsuario">Usuario</label>
-                    <input type="text" class="form-control" id="txtUsuario" name="txtUsuario" [(ngModel)]="usr.usuario" placeholder="Ingrese su usuario">
-                </div>
-                <div class="form-group">
-                    <label for="txtContrasenia">Contraseña</label>
-                    <input type="password" class="form-control" id="txtContrasenia" name="txtContrasenia" [(ngModel)]="usr.contrasenia" placeholder="Ingrese su contraseña">
-                </div>
-                <button type="button" class="btn btn-primary btn-block" (click)="doLogin()">Ingresar</button>
-            </form>
-        </div>
+<div class="row">
+    <div class="col m3 s1"></div>
+    <div class="col m6 s10 topMargin">
+        <mat-card class="example-card">
+            <img id="imgLogo" mat-card-image src="../../../../assets/img/logo.svg" alt="Rest-Touch">
+            <mat-card-content>
+                <h5>Ingreso</h5>
+                <form #frmLogIn="ngForm" novalidate>
+                    <mat-form-field class="fullWidth">
+                        <input matInput type="text" placeholder="Usuario" id="txtUsuario" name="txtUsuario" [(ngModel)]="usr.usuario" required>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <input matInput type="password" id="txtContrasenia" name="txtContrasenia" [(ngModel)]="usr.contrasenia" placeholder="Contraseña" required>
+                    </mat-form-field>
+                </form>
+            </mat-card-content>
+            <mat-card-actions align="end">
+                <button mat-flat-button type="button" color="accent" class="fullWidth" (click)="doLogin()" [disabled]="!frmLogIn.form.valid">Ingresar</button>
+            </mat-card-actions>
+        </mat-card>
     </div>
+    <div class="col m3 s1"></div>
 </div>

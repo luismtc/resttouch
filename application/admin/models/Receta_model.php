@@ -13,7 +13,7 @@ class Receta_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.articulo_detalle");
+		$this->setTabla("articulo_detalle");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -23,7 +23,7 @@ class Receta_model extends General_model {
 	public function getArticulo() {
 		return $this->db
 					->where("articulo", $this->articulo)
-					->get("resttouch.articulo")
+					->get("articulo")
 					->row();
 	}
 
@@ -31,7 +31,7 @@ class Receta_model extends General_model {
 	{
 		return $this->db
 					->where("medida", $this->medida)
-					->get("resttouch.medida")
+					->get("medida")
 					->row();
 	}
 

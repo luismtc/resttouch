@@ -1,20 +1,8 @@
-<!--
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-5">
-            <app-lista-ingreso #lstIngreso (getIngresoEv)="setIngreso($event)"></app-lista-ingreso>
-        </div>
-        <div class="col">
-            <app-form-ingreso #frmIngreso [ingreso]="ingreso" (ingresoSavedEv)="refreshIngresoList()"></app-form-ingreso>
-        </div>
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-ingreso #lstIngreso (getIngresoEv)="setIngreso($event)"></app-lista-ingreso>
+    </div>
+    <div class="col m7 s12">
+        <app-form-ingreso #frmIngreso [ingreso]="ingreso" (ingresoSavedEv)="refreshIngresoList()"></app-form-ingreso>
     </div>
 </div>
--->
-<mat-grid-list [cols]="breakpoint" [rowHeight]="tamFila" (window:resize)="onWindowResize($event)">
-    <mat-grid-tile>
-        <app-lista-ingreso #lstIngreso (getIngresoEv)="setIngreso($event)"></app-lista-ingreso>
-    </mat-grid-tile>
-    <mat-grid-tile>
-        <app-form-ingreso #frmIngreso [ingreso]="ingreso" (ingresoSavedEv)="refreshIngresoList()"></app-form-ingreso>
-    </mat-grid-tile>
-</mat-grid-list>

@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import "m-modified.css";
 
 html, body {
     height: 100%;
@@ -55,4 +56,8 @@ button .mat-icon {
 
 .fullWidth {
     width: 100%;
+}
+
+.bld {
+    font-weight: bold;
 }

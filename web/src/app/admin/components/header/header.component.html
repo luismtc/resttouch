@@ -11,10 +11,10 @@
             <mat-icon>power_settings_new</mat-icon>
         </button>
         <mat-menu #menu="matMenu" xPosition="before">
-            <div class="d-flex flex-row" *ngFor="let modulo of appMenu">
-                <button mat-button (click)="handleClick(modulo.nombre)">
+            <div align="center">
+                <button mat-button *ngFor="let modulo of appMenu" (click)="handleClick(modulo.nombre)">
                     <mat-icon>{{modulo.icono}}</mat-icon>
-                    <br/>
+                    <br />
                     <span>{{modulo.nombre}}</span>
                 </button>
             </div>

@@ -13,7 +13,7 @@ class CDetalle_model extends General_Model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.orden_compra_detalle");
+		$this->setTabla("orden_compra_detalle");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -23,7 +23,7 @@ class CDetalle_model extends General_Model {
 	public function getArticulo() {
 		return $this->db
 					->where("articulo", $this->articulo)
-					->get("resttouch.articulo")
+					->get("articulo")
 					->row();
 	}
 

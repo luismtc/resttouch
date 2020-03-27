@@ -1,10 +1,8 @@
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-5">
-            <app-lista-cliente #lstCliente (getClienteEv)="setCliente($event)"></app-lista-cliente>
-        </div>
-        <div class="col">
-            <app-form-cliente #frmCliente [cliente]="cliente" (clienteSavedEv)="refreshClienteList()"></app-form-cliente>
-        </div>
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-cliente #lstCliente (getClienteEv)="setCliente($event)"></app-lista-cliente>
+    </div>
+    <div class="col m7 s12">
+        <app-form-cliente #frmCliente [cliente]="cliente" (clienteSavedEv)="refreshClienteList()"></app-form-cliente>
     </div>
 </div>

@@ -10,7 +10,7 @@ class Fpago_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.forma_pago");
+		$this->setTabla("forma_pago");
 
 		if(!empty($id)) {
 			$this->cargar($id);
