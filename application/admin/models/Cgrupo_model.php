@@ -13,7 +13,7 @@ class Cgrupo_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.categoria_grupo");
+		$this->setTabla("categoria_grupo");
 
 		if(!empty($id)) {
 			$this->cargar($id);

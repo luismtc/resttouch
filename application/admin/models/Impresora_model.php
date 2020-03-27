@@ -13,7 +13,7 @@ class Impresora_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.impresora");
+		$this->setTabla("impresora");
 
 		if(!empty($id)) {
 			$this->cargar($id);

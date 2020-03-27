@@ -15,7 +15,7 @@ class Egreso_model extends General_Model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.egreso");
+		$this->setTabla("egreso");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -25,7 +25,7 @@ class Egreso_model extends General_Model {
 	public function getTipoMovimiento() {
 		return $this->db
 					->where("tipo_movimiento", $this->tipo_movimiento)
-					->get("resttouch.tipo_movimiento")
+					->get("tipo_movimiento")
 					->row();
 	}
 
@@ -33,7 +33,7 @@ class Egreso_model extends General_Model {
 	{
 		return $this->db
 					->where("usuario", $this->usuario)
-					->get("resttouch.usuario")
+					->get("usuario")
 					->row();
 	}
 
@@ -41,7 +41,7 @@ class Egreso_model extends General_Model {
 	{
 		return $this->db
 					->where("bodega", $this->bodega)
-					->get("resttouch.bodega")
+					->get("bodega")
 					->row();
 	}
 
@@ -132,7 +132,7 @@ class Egreso_model extends General_Model {
 					$this->db
 						 ->set("egreso_detalle", $row->egreso_detalle)
 						 ->set("ingreso_detalle", $det->ingreso_detalle)
-						 ->insert("resttouch.traslado_detalle");
+						 ->insert("traslado_detalle");
 				}
 			}
 			return $ing;

@@ -11,7 +11,7 @@ class Nota_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.notas");
+		$this->setTabla("notas");
 
 		if(!empty($id)) {
 			$this->cargar($id);

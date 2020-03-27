@@ -17,7 +17,7 @@ class Dfactura_model extends General_model {
 	public function __construct($id = '')
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.detalle_factura");
+		$this->setTabla("detalle_factura");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -27,7 +27,7 @@ class Dfactura_model extends General_model {
 	public function getArticulo() {
 		return $this->db
 					->where("articulo", $this->articulo)
-					->get("resttouch.articulo")
+					->get("articulo")
 					->row();
 	}
 

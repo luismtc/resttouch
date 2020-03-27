@@ -14,7 +14,7 @@ class Mesa_model extends General_Model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.mesa");
+		$this->setTabla("mesa");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -33,9 +33,9 @@ class Mesa_model extends General_Model {
 			b.usuario,
 			b.sede,
 			b.estatus")
-		->join("resttouch.comanda b", "a.comanda = b.comanda")
+		->join("comanda b", "a.comanda = b.comanda")
 		->where("a.mesa", $this->mesa)		
-		->get("resttouch.comanda_has_mesa a")
+		->get("comanda_has_mesa a")
 		->row();
 	}
 }

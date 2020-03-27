@@ -14,7 +14,7 @@ class Articulo_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.articulo");
+		$this->setTabla("articulo");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -25,7 +25,7 @@ class Articulo_model extends General_model {
 	{
 		return $this->db
 					->where("categoria_grupo", $this->categoria_grupo)
-					->get("resttouch.categoria_grupo")
+					->get("categoria_grupo")
 					->row();
 	}
 
@@ -33,7 +33,7 @@ class Articulo_model extends General_model {
 	{
 		return $this->db
 					->where("presentacion", $this->presentacion)
-					->get("resttouch.presentacion")
+					->get("presentacion")
 					->row();
 	}
 

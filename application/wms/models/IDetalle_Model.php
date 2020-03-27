@@ -13,7 +13,7 @@ class IDetalle_Model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.ingreso_detalle");
+		$this->setTabla("ingreso_detalle");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -24,7 +24,7 @@ class IDetalle_Model extends General_model {
 	public function getArticulo() {
 		return $this->db
 					->where("articulo", $this->articulo)
-					->get("resttouch.articulo")
+					->get("articulo")
 					->row();
 	}
 }

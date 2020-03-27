@@ -11,7 +11,7 @@ class Presentacion_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.presentacion");
+		$this->setTabla("presentacion");
 
 		if(!empty($id)) {
 			$this->cargar($id);

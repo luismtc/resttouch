@@ -14,7 +14,7 @@ class Cuenta_model extends General_Model {
 	public function __construct($id = '')
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.cuenta");
+		$this->setTabla("cuenta");
 
 		if(!empty($id)) {
 			$this->cargar($id);
@@ -50,9 +50,9 @@ class Cuenta_model extends General_Model {
 	{
 		$datos = [];
 		$tmp = $this->db
-		->join("resttouch.detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")
+		->join("detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")
 		->where("a.cuenta_cuenta", $this->cuenta)
-		->get("resttouch.detalle_cuenta a")
+		->get("detalle_cuenta a")
 		->result();
 
 		foreach ($tmp as $row) {
@@ -71,7 +71,7 @@ class Cuenta_model extends General_Model {
 			->set("cuenta", $this->cuenta)
 			->set("forma_pago", $pago->forma_pago)
 			->set("monto", $pago->monto)
-			->insert("resttouch.cuenta_forma_pago");
+			->insert("cuenta_forma_pago");
 
 			return $this->db->affected_rows() > 0;
 		}

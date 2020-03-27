@@ -69,16 +69,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | The $query_builder variables lets you determine whether or not to load
 | the query builder class.
+| cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:3306
+| cloud_sql_proxy -instances="restouch:us-central1:restadmin"=tcp:3306
 */
 $active_group = 'default';
 $query_builder = TRUE;
 
-$db['default'] = array(
+$params = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => 'PoChoco2016',
 	'database' => 'resttouch',
+	/*'hostname' => '/cloudsql/restouch:us-central1:restadmin',
+	'hostname' => '127.0.0.1',
+	'username' => 'root',
+	'password' => 'c807#spc',
+	'database' => 'restouch',
+	*/
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -94,3 +102,7 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+
+
+$db['default'] = 

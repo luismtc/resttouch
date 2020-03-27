@@ -10,7 +10,7 @@ class TurnoTipo_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("resttouch.turno_tipo");
+		$this->setTabla("turno_tipo");
 
 		if(!empty($id)) {
 			$this->cargar($id);
