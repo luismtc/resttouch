@@ -501,6 +501,27 @@ class Factura_model extends General_model {
 		return $this->db->affected_rows() > 0;
 	}
 
+	public function get_facturas($args = [])
+	{
+		if (isset($args['fdel']) && isset($args['fal'])) {
+			$this->db
+				 ->where("fecha_factura >=", $args['fdel'])
+				 ->where("fecha_factura <=", $args['fal']);
+		}
+
+		if (isset($args['sede'])) {
+			$this->db->where("sede", $args['sede']);
+		}
+
+		$tmp = $this->db->get("factura");
+
+		if(isset($args['uno'])) {
+			return $tmp->row();
+		}
+
+		return $tmp->result();
+	}
+
 }
 
 /* End of file Factura_model.php */
