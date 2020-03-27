@@ -7,6 +7,7 @@ import { AccesoUsuario, SubModulo, NodoAppMenu } from '../interfaces/acceso-usua
 import { LocalstorageService } from '../services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+import * as qs from 'qs';
 
 export interface IAppMenu {
   modulo: number;
@@ -79,7 +80,8 @@ export class UsuarioService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios.json?debaja=${debaja}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?debaja=${debaja}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   async checkUserToken() {
@@ -106,7 +108,8 @@ export class UsuarioService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios.json`, filtros, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?${qs.stringify(filtros)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios_post`, filtros, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Usuario): Observable<Usuario> {
@@ -117,12 +120,12 @@ export class UsuarioService {
     };
 
     if (entidad.usuario) {
-      return this.http.put<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/usuario.json?usuario=${entidad.usuario}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      return this.http.put<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
     } else {
       if (!entidad.contrasenia) {
         delete entidad.contrasenia;
       }
-      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/usuario.json`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
     }
 
   }

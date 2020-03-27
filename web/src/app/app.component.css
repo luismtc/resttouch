@@ -13,10 +13,10 @@
 }
 
 .menuSideNav {
-    width: 25% !important;
+    width: 30% !important;
 }
 
-@media (max-width: 360px) {
+@media (max-width: 400px) {
     .menuSideNav {
         width: 50% !important;
     }
