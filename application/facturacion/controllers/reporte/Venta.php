@@ -59,10 +59,14 @@ class Venta extends CI_Controller {
 		}
 		$datos = [];
 		foreach ($categorias as $row) {
-			$row->categoria_grupo = buscar_articulo($row->categoria_grupo, $detalle);
+			$row->articulos = buscar_articulo($row->categoria_grupo, $detalle);
+			unset($row->categoria_grupo);
 			$datos[] = $row;
 		}
 
+		foreach ($datos as $row) {
+			
+		}
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));

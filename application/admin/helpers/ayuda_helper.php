@@ -13,10 +13,11 @@ if( ! function_exists('suma_field')){
 }
 
 if( ! function_exists('insertar_articulo')){
-	function buscar_articulo($datos, $articulos) {
+	function buscar_articulo($datos, $articulos, $descripcion='', $result=[]) {
 		$cat = [];
 		foreach ($datos as $row) {
-			$row->categoria_grupo_grupo = buscar_articulo($row->categoria_grupo_grupo, $articulos);
+			$row->descripcion = $descripcion." - ".$row->descripcion;
+			
 			if (count($row->articulo) > 0) {
 				$art = [];
 				$cantidad = 0;
@@ -29,20 +30,25 @@ if( ! function_exists('insertar_articulo')){
 				}
 				$tmp = [];
 				foreach ($art as $value) {
-					$value->porcentaje = $value->cantidad*100/$cantidad;
+					$value->porcentaje = number_format($value->cantidad*100/$cantidad, 2);
 					$tmp[] = $value;
 				}
 				usort($tmp, function($a, $b) {return (int)$a->cantidad < (int)$b->cantidad;});
 				$row->articulo = $tmp;
 				
-				$row->total = suma_field($row->articulo, 'total');				
-			} else {
-				$row->total = suma_field($row->categoria_grupo_grupo, 'total');
+				$row->total = suma_field($row->articulo, 'total');	
+				$result[] = [
+					"articulos" => $row->articulo, 
+					"descripcion" => $row->descripcion,
+					"total" => $row->total
+				];
+			} 	
+			$tmp = buscar_articulo($row->categoria_grupo_grupo, $articulos, $row->descripcion);
+			if (count($tmp) > 0) {
+				$result = array_merge($result, $tmp);
 			}
-			
-			$cat[] = $row;
 		}
 
-		return $cat;
+		return $result;
 	}
 }
