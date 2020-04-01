@@ -61,3 +61,34 @@ button .mat-icon {
 .bld {
     font-weight: bold;
 }
+
+.rtxt {
+    text-align: right;
+}
+
+.brdTSingleBDouble {
+    border-top: solid 1px black;
+    border-bottom: double 3px black;
+}
+
+.brdTSingleBSingle {
+    border-top: solid 1px black;
+    border-bottom: solid 1px black;
+}
+
+.brdBSingle { 
+    border-bottom: solid 1px black;
+}
+
+.tab {
+    padding-left: 10px;
+}
+
+.doubleTab {
+    padding-left: 20px;
+}
+
+.tbl {
+    width: 100%;
+    border-collapse: collapse;    
+}

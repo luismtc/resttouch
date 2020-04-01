@@ -9,6 +9,7 @@ export interface Articulo {
     precio: number;
     bien_servicio?: string;
     impresora?: Impresora;
+    existencias?: number;
 }
 
 export interface ArticuloResponse {

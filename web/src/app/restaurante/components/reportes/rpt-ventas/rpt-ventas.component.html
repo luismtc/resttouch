@@ -36,12 +36,24 @@
                     </div>
                 </form>
             </mat-card-content>
-            <mat-card-footer>                
+            <!--
+            <mat-card-footer>
                 <div align="center" *ngIf="!!msgGenerandoReporte">
                     <h2>{{msgGenerandoReporte}}</h2>
                     <h4>{{params | json}}</h4>
                 </div>
             </mat-card-footer>
+            -->
         </mat-card>
+    </div>
+</div>
+<div class="row" *ngIf="params.tipo_reporte === 1 && porCategoria.length > 0">
+    <div class="col m12 s12">
+        <app-por-categoria [params]="params" [data]="porCategoria"></app-por-categoria>
+    </div>
+</div>
+<div class="row" *ngIf="params.tipo_reporte === 2 && porArticulo.length > 0">
+    <div class="col m12 s12">
+        <app-por-articulo [params]="params" [data]="porArticulo"></app-por-articulo>
     </div>
 </div>
