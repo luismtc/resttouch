@@ -59,7 +59,7 @@ class Venta extends CI_Controller {
 		}
 		$datos = [];
 		foreach ($categorias as $row) {
-			$row->articulos = buscar_articulo($row->categoria_grupo, $detalle);
+			$row->subcategoria = buscar_articulo($row->categoria_grupo, $detalle);
 			unset($row->categoria_grupo);
 			$datos[] = $row;
 		}

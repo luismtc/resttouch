@@ -16,7 +16,9 @@ if( ! function_exists('insertar_articulo')){
 	function buscar_articulo($datos, $articulos, $descripcion='', $result=[]) {
 		$cat = [];
 		foreach ($datos as $row) {
-			$row->descripcion = $descripcion." - ".$row->descripcion;
+			if (!empty($descripcion)) {				
+				$row->descripcion = $descripcion." - ".$row->descripcion;
+			}
 			
 			if (count($row->articulo) > 0) {
 				$art = [];
