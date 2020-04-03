@@ -1,5 +1,6 @@
 // const urlBase = `http://192.168.168.88/resttouch`;
-const urlBase = 'http://localhost/resttouch';
+//const urlBase = 'http://localhost/resttouch';
+const urlBase = 'http://35.202.129.255';
 // const urlBase = location.origin;
 // const urlBase = 'http://192.168.51.14/resttouch';
 export const GLOBAL = {
