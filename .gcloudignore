@@ -16,3 +16,5 @@
 application/vendor/*
 web/node_modules/*
 web/src/*
+web
+*.exe

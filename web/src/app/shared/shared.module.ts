@@ -27,7 +27,8 @@ import { WindowComponent } from './components/window/window.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 // const config: SocketIoConfig = { url: 'http://192.168.168.88:8988', options: {} };
-const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
 
 @NgModule({
   declarations: [

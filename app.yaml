@@ -7,18 +7,23 @@ runtime: php72
 #
 # entrypoint: serve index.php
 handlers:
-- url: /assets
-  static_dir: web/dist/web/assets
-- url: /(.*\.(gif|png|jpeg|jpg|css|js|ico|svg))$
-  static_files: web/dist/web/\1
-  upload: web/dist/web/(.*)
-- url: /(.*\.php)/(.*)$
+- url: /
   script: auto
-- url: /(.*)
-  static_files: web/dist/web/index.html
-  upload: web/dist/web/index.html
-#- url: /(.*)
+
+- url: /(.+)
+  script: auto
+# - url: /assets
+#  static_dir: web/dist/web/assets
+# - url: /(.*\.(gif|png|jpeg|jpg|css|js|ico|svg))$
+#  static_files: web/dist/web/\1
+#  upload: web/dist/web/(.*)
+# - url: /(.*\.php)/(.*)$
+#  script: auto
+# - url: /(.*)
+#  static_files: web/dist/web/index.html
+#  upload: web/dist/web/index.html
+# - url: /(.*)
 #  static_files: web/dist/web/index.html
 #  upload: web/dist/web/index.html
 # - url: .*
-#  script: auto
+# script: auto

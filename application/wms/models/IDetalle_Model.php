@@ -9,6 +9,7 @@ class IDetalle_Model extends General_model {
 	public $cantidad;
 	public $precio_unitario;
 	public $precio_total;
+	public $presentacion;
 
 	public function __construct($id = "")
 	{

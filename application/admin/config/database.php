@@ -77,16 +77,20 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
+	/*
 	'hostname' => 'localhost',
 	'username' => 'root',
 	'password' => 'PoChoco2016',
 	'database' => 'resttouch',
-	/*'hostname' => '/cloudsql/restouch:us-central1:restadmin',
-	'hostname' => '127.0.0.1',
+	*/
+	
+	//'hostname' => '/cloudsql/restouch:us-central1:restadmin',	
+	'hostname' => '104.155.160.111',
+	//'hostname' => '127.0.0.1',
 	'username' => 'root',
 	'password' => 'c807#spc',
 	'database' => 'restouch',
-	*/
+	
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
