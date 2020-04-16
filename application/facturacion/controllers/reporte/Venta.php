@@ -13,6 +13,9 @@ class Venta extends CI_Controller {
 			'Categoria_model',
 			'Catalogo_model'
 		]);
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
 	}
 
 	public function categoria()
@@ -20,8 +23,9 @@ class Venta extends CI_Controller {
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
-		$_GET['sede'] = $data->sede;
-		$facts = $this->Factura_model->buscar($_GET);
+		$req = json_decode(file_get_contents('php://input'), true);
+		$req['sede'] = $this->data->sede;
+		$facts = $this->Factura_model->get_facturas($req);
 
 		$datos = [];
 		$detalle = [];
@@ -77,8 +81,9 @@ class Venta extends CI_Controller {
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
-		$_GET['sede'] = $data->sede;
-		$facts = $this->Factura_model->buscar($_GET);
+		$req = json_decode(file_get_contents('php://input'), true);
+		$req['sede'] = $data->sede;
+		$facts = $this->Factura_model->get_facturas($req);
 
 		$datos = [];
 		$detalle = [];
@@ -101,6 +106,32 @@ class Venta extends CI_Controller {
 		}
 		$datos = array_values($detalle);
 		usort($datos, function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode($datos));
+	}
+
+	public function propina()
+	{
+		$req = json_decode(file_get_contents('php://input'), true);
+		$req['sede'] = $this->data->sede;
+		$facts = $this->Factura_model->get_facturas($req);
+		$datos = [];
+		foreach ($facts as $row) {
+			$fac = new Factura_model($row->factura);
+			$propina = $fac->getPropina();
+			if ($propina) {
+				$dato = [
+					"cuentas" => $propina, 
+					"factura" => ["numero" => $fac->numero_factura, "fecha" => $fac->fecha_factura], 
+					"total" => [
+						"monto" => number_format(suma_field($propina, "propina_monto"),2),
+						"porcentaje" => number_format(suma_field($propina, "propina_porcentaje"), 2)
+					]
+				];
+				$datos[] = $dato;
+			}
+		}
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));
