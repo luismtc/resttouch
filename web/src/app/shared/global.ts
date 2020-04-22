@@ -1,5 +1,6 @@
 const urlBase = 'http://localhost/resttouch'; // Desarrollo
-// const urlBase = 'https://resttouchapi.c807.com'; // Producción
+// const urlBase = 'https://restouch.appspot.com'; // Producción
+// const urlBase = 'https://resttouchapi.c807.com'; // Producción (Usado temporalmente en una VM)
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
