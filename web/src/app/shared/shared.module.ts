@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PortalModule } from '@angular/cdk/portal';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
@@ -25,6 +26,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { FilterPipe } from './pipes/filter.pipe';
 import { WindowComponent } from './components/window/window.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { RptFechasComponent } from './components/rpt-fechas/rpt-fechas.component';
+import { RptBotonesComponent } from './components/rpt-botones/rpt-botones.component';
 
 // const config: SocketIoConfig = { url: 'http://192.168.168.88:8988', options: {} };
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
@@ -34,7 +37,9 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
   declarations: [
     FilterPipe,
     WindowComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RptFechasComponent,
+    RptBotonesComponent
   ],
   entryComponents: [
     ConfirmDialogComponent
@@ -42,6 +47,7 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
   imports: [
     CommonModule,
     PortalModule,
+    FormsModule,
     SocketIoModule.forRoot(config),
     MatListModule,
     MatIconModule,
@@ -65,7 +71,9 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
   exports: [
     FilterPipe,
     WindowComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RptFechasComponent,
+    RptBotonesComponent
   ]
 })
 export class SharedModule { }

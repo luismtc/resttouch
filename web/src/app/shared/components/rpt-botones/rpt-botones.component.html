@@ -1,0 +1,14 @@
+<div align="end">
+    <button mat-icon-button type="button" color="accent" (click)="onHtmlClick()" [disabled]="configuracion.isHtmlDisabled">
+        <mat-icon>code</mat-icon>
+    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-icon-button type="button" color="accent" (click)="onPdfClick()" [disabled]="configuracion.isPdfDisabled">
+        <mat-icon>picture_as_pdf</mat-icon>
+    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-icon-button type="button" color="accent" (click)="onExcelClick()" [disabled]="configuracion.isExcelDisabled">
+        <mat-icon>library_books</mat-icon>
+    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-icon-button type="button" color="accent" (click)="onResetParamsClick()">
+        <mat-icon>restore</mat-icon>
+    </button>
+</div>

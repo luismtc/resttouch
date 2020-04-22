@@ -52,6 +52,8 @@ import { AreaDesignerComponent } from './components/area/area-designer/area-desi
 import { RptVentasComponent } from './components/reportes/rpt-ventas/rpt-ventas.component';
 import { PorCategoriaComponent } from './components/reportes/rpt-ventas/por-categoria/por-categoria.component';
 import { PorArticuloComponent } from './components/reportes/rpt-ventas/por-articulo/por-articulo.component';
+import { TurnosComponent } from './components/reportes/turnos/turnos.component';
+import { PropinasComponent } from './components/reportes/propinas/propinas.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
@@ -59,7 +61,7 @@ import { PorArticuloComponent } from './components/reportes/rpt-ventas/por-artic
   declarations: [
     TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent,
     ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent,
-    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent
+    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent
   ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent
