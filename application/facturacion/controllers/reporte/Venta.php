@@ -8,7 +8,7 @@ class Venta extends CI_Controller {
 		parent::__construct();
 		$this->load->model([
 			'Factura_model',
-			'DFactura_model',
+			'Dfactura_model',
 			'Articulo_model',
 			'Categoria_model',
 			'Catalogo_model'

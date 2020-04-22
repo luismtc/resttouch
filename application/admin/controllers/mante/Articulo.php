@@ -23,6 +23,12 @@ class Articulo extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
+			if (empty($id)) {
+				$req['existencias'] = 0;
+			} else {
+				$req['existencias'] = $art->existencias;
+			}
+			
 			$datos['exito'] = $art->guardar($req);
 
 			if($datos['exito']) {
