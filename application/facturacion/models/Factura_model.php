@@ -503,23 +503,36 @@ class Factura_model extends General_model {
 
 	public function get_facturas($args = [])
 	{
+		$this->db->where("fel_uuid_anulacion is null");
+
 		if (isset($args['fdel']) && isset($args['fal'])) {
 			$this->db
 				 ->where("fecha_factura >=", $args['fdel'])
 				 ->where("fecha_factura <=", $args['fal']);
+			unset($args['fdel']);
+			unset($args['fal']);
 		}
 
 		if (isset($args['sede'])) {
 			$this->db->where("sede", $args['sede']);
+			unset($args['sede']);
 		}
 
-		$tmp = $this->db->get("factura");
+		return $this->buscar($args);
+	}
 
-		if(isset($args['uno'])) {
-			return $tmp->row();
-		}
-
-		return $tmp->result();
+	public function getPropina(){
+		return $this->db
+					->select("e.*")
+					->from("factura a")
+					->join("detalle_factura b", "a.factura = b.factura")
+					->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
+					->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+					->join("cuenta e", "d.cuenta_cuenta = e.cuenta")
+					->where("a.factura", $this->factura)
+					->group_by("a.factura")
+					->get()
+					->result();
 	}
 
 }

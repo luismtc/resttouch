@@ -24,7 +24,7 @@ class Acceso extends CI_Controller {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
 				$datos['acceso'] = $acceso;
 			} else {
-				$datos['mensaje'] = $mesa->getMensaje();
+				$datos['mensaje'] = $acceso->getMensaje();
 			}	
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";

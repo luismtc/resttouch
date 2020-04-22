@@ -147,6 +147,11 @@ class Turno extends CI_Controller {
 	public function buscar()
 	{
 		$datos = [];
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		
+		$_GET['sede'] = $data->sede;
 		$tmp = $this->Turno_model->getTurno($_GET);
 
 		if(is_array($tmp)) {

@@ -50,6 +50,16 @@ class Turno_model extends General_model {
 			$this->db->where('fin is null');
 		}
 
+		if (isset($args['tipo_turno'])) {
+			$this->db->where('tipo_turno', $args['tipo_turno']);
+		}
+
+		if (isset($args['fal']) && isset($args['fdel'])) {
+			$this->db
+				 ->where("inicio <= ", $args['fal'])
+				 ->where("inicio >= ", $args['fdel']);
+		}
+
 		$tmp = $this->db
 					->get("turno");
 
