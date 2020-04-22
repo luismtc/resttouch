@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -53,6 +54,7 @@ export class TranComandaComponent implements OnInit {
   public detalleComanda: DetalleComanda;
 
   constructor(
+    private router: Router,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     public comandaSrvc: ComandaService,
@@ -256,17 +258,49 @@ export class TranComandaComponent implements OnInit {
       });
       console.log('MENSAJE = ', msgToSocket);
       */
-      this.socket.emit('print:comanda', `${JSON.stringify({
-        Tipo: 'Comanda',
-        Nombre: this.cuentaActiva.nombre,
-        Numero: this.noComanda,
-        DetalleCuenta: this.lstProductosAImprimir,
-        Total: null
-      })}`);
+
+      const AImpresoraNormal: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
+      const AImpresoraBT: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+
+      if (AImpresoraNormal.length > 0) {
+        this.socket.emit('print:comanda', `${JSON.stringify({
+          Tipo: 'Comanda',
+          Nombre: this.cuentaActiva.nombre,
+          Numero: this.noComanda,
+          DetalleCuenta: AImpresoraNormal,
+          Total: null
+        })}`);
+      }
+
+      if (AImpresoraBT.length > 0) {
+        this.printToBT(
+          JSON.stringify({
+            Tipo: 'Comanda',
+            Nombre: this.cuentaActiva.nombre,
+            Numero: this.noComanda,
+            DetalleCuenta: AImpresoraBT,
+            Total: null
+          })
+        );
+      }
     } else {
       this._snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
     }
   }
+
+  printToBT = (msgToPrint: string = '') => {
+    /*
+    const a = document.createElement('a');
+    document.body.appendChild(a);
+    a.href = `'com.restouch.impresion://impresion/${msgToPrint}'`;
+    a.onclick = (e) => { e.preventDefault(); };
+    a.click();
+    */
+   const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
+   const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+   setTimeout(() => wref.close(), 1000);
+  }
+
 
   sumaDetalle = (detalle: productoSelected[]) => {
     let total = 0.00;
@@ -280,7 +314,7 @@ export class TranComandaComponent implements OnInit {
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
     this.setSumaCuenta(this.lstProductosAImprimir);
     this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
-    // this.showPortalCuenta = true;    
+    // this.showPortalCuenta = true;
     /*
     this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
       Tipo: 'Cuenta', 

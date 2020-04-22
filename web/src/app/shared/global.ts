@@ -1,9 +1,5 @@
-// const urlBase = `http://192.168.168.88/resttouch`;
-//const urlBase = 'http://localhost/resttouch';
-//const urlBase = 'http://35.202.129.255';
-const urlBase = 'https://resttouchapi.c807.com';
-// const urlBase = location.origin;
-// const urlBase = 'http://192.168.51.14/resttouch';
+const urlBase = 'http://localhost/resttouch'; // Desarrollo
+// const urlBase = 'https://resttouchapi.c807.com'; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -16,4 +12,4 @@ export const GLOBAL = {
     urlWms: `${urlBase}/wms.php`,
     urlFacturacion: `${urlBase}/facturacion.php`,
     usrTokenVar: 'rttoken'
-}
+};
