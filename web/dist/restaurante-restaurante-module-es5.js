@@ -5292,6 +5292,7 @@
                     this.rptVentasSrvc = rptVentasSrvc;
                     this.tiposReporte = [];
                     this.params = {};
+                    this.paramsToSend = {};
                     this.msgGenerandoReporte = null;
                     this.porCategoria = [];
                     this.porArticulo = [];
@@ -5313,6 +5314,7 @@
                     };
                     this.getReporte = function (tipo) {
                         if (tipo === void 0) { tipo = 1; }
+                        _this.paramsToSend = _this.params;
                         _this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
                         switch (tipo) {
                             case 1:
@@ -5336,10 +5338,10 @@
                                 break;
                         }
                     };
-                    this.cleanParams = function () { return delete _this.params.tipo_reporte; };
+                    this.cleanParams = function () { return delete _this.paramsToSend.tipo_reporte; };
                     this.getPorCategoriaEnPantalla = function () {
                         _this.cleanParams();
-                        _this.rptVentasSrvc.porCategoria(_this.params).subscribe(function (res) {
+                        _this.rptVentasSrvc.porCategoria(_this.paramsToSend).subscribe(function (res) {
                             if (res) {
                                 _this.porCategoria = res;
                             }
@@ -5350,7 +5352,7 @@
                     };
                     this.getPorArticuloEnPantalla = function () {
                         _this.cleanParams();
-                        _this.rptVentasSrvc.porArticulo(_this.params).subscribe(function (res) {
+                        _this.rptVentasSrvc.porArticulo(_this.paramsToSend).subscribe(function (res) {
                             if (res) {
                                 _this.porArticulo = res;
                             }

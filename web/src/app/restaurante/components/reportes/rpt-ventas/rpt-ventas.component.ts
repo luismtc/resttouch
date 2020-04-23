@@ -15,6 +15,7 @@ export class RptVentasComponent implements OnInit {
 
   public tiposReporte: any[] = [];
   public params: any = {};
+  public paramsToSend: any = {};
   public msgGenerandoReporte: string = null;
   public porCategoria: PorCategoria[] = [];
   public porArticulo: PorArticulo[] = [];
@@ -48,6 +49,7 @@ export class RptVentasComponent implements OnInit {
   }
 
   getReporte = (tipo: number = 1) => {
+    this.paramsToSend = this.params;
     this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
     switch (tipo) {
       case 1 : this.getEnPantalla(); break;
@@ -63,11 +65,11 @@ export class RptVentasComponent implements OnInit {
     }
   }
 
-  cleanParams = () => delete this.params.tipo_reporte;
+  cleanParams = () => delete this.paramsToSend.tipo_reporte;
 
   getPorCategoriaEnPantalla = () => {
     this.cleanParams();
-    this.rptVentasSrvc.porCategoria(this.params).subscribe(res => {
+    this.rptVentasSrvc.porCategoria(this.paramsToSend).subscribe(res => {
       if (res) {
         this.porCategoria = res;
       } else {
@@ -78,7 +80,7 @@ export class RptVentasComponent implements OnInit {
 
   getPorArticuloEnPantalla = () => {
     this.cleanParams();
-    this.rptVentasSrvc.porArticulo(this.params).subscribe(res => {
+    this.rptVentasSrvc.porArticulo(this.paramsToSend).subscribe(res => {
       if (res) {
         this.porArticulo = res;
       } else {

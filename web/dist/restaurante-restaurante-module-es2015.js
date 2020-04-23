@@ -5377,6 +5377,7 @@ let RptVentasComponent = class RptVentasComponent {
         this.rptVentasSrvc = rptVentasSrvc;
         this.tiposReporte = [];
         this.params = {};
+        this.paramsToSend = {};
         this.msgGenerandoReporte = null;
         this.porCategoria = [];
         this.porArticulo = [];
@@ -5397,6 +5398,7 @@ let RptVentasComponent = class RptVentasComponent {
             };
         };
         this.getReporte = (tipo = 1) => {
+            this.paramsToSend = this.params;
             this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
             switch (tipo) {
                 case 1:
@@ -5420,10 +5422,10 @@ let RptVentasComponent = class RptVentasComponent {
                     break;
             }
         };
-        this.cleanParams = () => delete this.params.tipo_reporte;
+        this.cleanParams = () => delete this.paramsToSend.tipo_reporte;
         this.getPorCategoriaEnPantalla = () => {
             this.cleanParams();
-            this.rptVentasSrvc.porCategoria(this.params).subscribe(res => {
+            this.rptVentasSrvc.porCategoria(this.paramsToSend).subscribe(res => {
                 if (res) {
                     this.porCategoria = res;
                 }
@@ -5434,7 +5436,7 @@ let RptVentasComponent = class RptVentasComponent {
         };
         this.getPorArticuloEnPantalla = () => {
             this.cleanParams();
-            this.rptVentasSrvc.porArticulo(this.params).subscribe(res => {
+            this.rptVentasSrvc.porArticulo(this.paramsToSend).subscribe(res => {
                 if (res) {
                     this.porArticulo = res;
                 }
