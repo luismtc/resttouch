@@ -5420,7 +5420,9 @@ let RptVentasComponent = class RptVentasComponent {
                     break;
             }
         };
+        this.cleanParams = () => delete this.params.tipo_reporte;
         this.getPorCategoriaEnPantalla = () => {
+            this.cleanParams();
             this.rptVentasSrvc.porCategoria(this.params).subscribe(res => {
                 if (res) {
                     this.porCategoria = res;
@@ -5431,6 +5433,7 @@ let RptVentasComponent = class RptVentasComponent {
             });
         };
         this.getPorArticuloEnPantalla = () => {
+            this.cleanParams();
             this.rptVentasSrvc.porArticulo(this.params).subscribe(res => {
                 if (res) {
                     this.porArticulo = res;

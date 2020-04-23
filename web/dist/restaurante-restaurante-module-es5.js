@@ -5336,7 +5336,9 @@
                                 break;
                         }
                     };
+                    this.cleanParams = function () { return delete _this.params.tipo_reporte; };
                     this.getPorCategoriaEnPantalla = function () {
+                        _this.cleanParams();
                         _this.rptVentasSrvc.porCategoria(_this.params).subscribe(function (res) {
                             if (res) {
                                 _this.porCategoria = res;
@@ -5347,6 +5349,7 @@
                         });
                     };
                     this.getPorArticuloEnPantalla = function () {
+                        _this.cleanParams();
                         _this.rptVentasSrvc.porArticulo(_this.params).subscribe(function (res) {
                             if (res) {
                                 _this.porArticulo = res;

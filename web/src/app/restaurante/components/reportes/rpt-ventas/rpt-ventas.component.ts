@@ -63,7 +63,10 @@ export class RptVentasComponent implements OnInit {
     }
   }
 
+  cleanParams = () => delete this.params.tipo_reporte;
+
   getPorCategoriaEnPantalla = () => {
+    this.cleanParams();
     this.rptVentasSrvc.porCategoria(this.params).subscribe(res => {
       if (res) {
         this.porCategoria = res;
@@ -74,6 +77,7 @@ export class RptVentasComponent implements OnInit {
   }
 
   getPorArticuloEnPantalla = () => {
+    this.cleanParams();
     this.rptVentasSrvc.porArticulo(this.params).subscribe(res => {
       if (res) {
         this.porArticulo = res;
