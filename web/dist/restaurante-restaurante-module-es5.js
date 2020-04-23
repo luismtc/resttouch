@@ -5314,7 +5314,7 @@
                     };
                     this.getReporte = function (tipo) {
                         if (tipo === void 0) { tipo = 1; }
-                        _this.paramsToSend = _this.params;
+                        _this.paramsToSend = JSON.parse(JSON.stringify(_this.params));
                         _this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
                         switch (tipo) {
                             case 1:
@@ -5499,10 +5499,10 @@
                         // console.log('Mesa = ', m);
                         // console.log('Estatus solicitado = ', estatus);
                         var idxArea = _this.lstTabsAreas.findIndex(function (a) { return +a.area === +m.area; });
-                        console.log("Area = " + idxArea);
+                        // console.log(`Area = ${idxArea}`);
                         if (idxArea > -1) {
                             var idxMesa = _this.lstTabsAreas[idxArea].mesas.findIndex(function (m) { return +m.mesa === +m.mesa; });
-                            console.log("Mesa = " + idxMesa);
+                            // console.log(`Mesa = ${idxMesa}`);
                             if (idxMesa > -1) {
                                 _this.lstTabsAreas[idxArea].mesas[idxMesa].estatus = estatus;
                             }
@@ -5514,14 +5514,33 @@
                         _this.snTrancomanda.resetLstProductosDeCuenta();
                         _this.snTrancomanda.resetLstProductosSeleccionados();
                         _this.snTrancomanda.resetCuentaActiva();
+                        _this.loadComandaMesa(_this.mesaSeleccionada.mesa, false);
                     };
-                    this.loadComandaMesa = function (obj) {
+                    this.checkEstatusMesa = function () {
+                        // console.log('MESA = ', this.mesaSeleccionada);
+                        if (!!_this.mesaSeleccionada && _this.mesaSeleccionada.cuentas.length > 0) {
+                            var abiertas = _this.mesaSeleccionada.cuentas.filter(function (cta) { return +cta.cerrada === 0; }).length || 0;
+                            // console.log(`ABIERTAS = ${abiertas}`);
+                            if (abiertas === 0) {
+                                _this.setEstatusMesa({
+                                    area: _this.mesaSeleccionada.mesa.area.area,
+                                    mesa: _this.mesaSeleccionada.mesa.mesa
+                                }, 1);
+                            }
+                        }
+                    };
+                    this.loadComandaMesa = function (obj, shouldToggle) {
+                        if (shouldToggle === void 0) { shouldToggle = true; }
+                        // console.log(obj);
                         _this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe(function (res) {
-                            //console.log(res); return;
+                            // console.log(res); return;
                             if (res) {
                                 _this.mesaSeleccionada = res;
-                                _this.snTrancomanda.llenaProductosSeleccionados(_this.mesaSeleccionada);
-                                _this.toggleRightSidenav();
+                                _this.checkEstatusMesa();
+                                if (shouldToggle) {
+                                    _this.snTrancomanda.llenaProductosSeleccionados(_this.mesaSeleccionada);
+                                    _this.toggleRightSidenav();
+                                }
                             }
                             else {
                                 _this._snackBar.open("Problema al mostrar la comanda de la mesa #" + obj.numero, 'ERROR', { duration: 5000 });
@@ -5980,9 +5999,9 @@
                         });
                         cobrarCtaRef.afterClosed().subscribe(function (res) {
                             if (res) {
-                                //console.log(res);
+                                // console.log(res);
                                 _this.cambiarEstatusCuenta(res);
-                                //this.socket.emit('print:doccontable', JSON.stringify(res));
+                                // this.socket.emit('print:doccontable', JSON.stringify(res));
                             }
                         });
                     }

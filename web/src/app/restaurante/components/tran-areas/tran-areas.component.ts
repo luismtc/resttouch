@@ -51,17 +51,17 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   resetMesaSeleccionada = () => this.mesaSeleccionada = {
-    comanda: null, usuario: null, sede: null, estatus: null, 
-    mesa: { 
-      mesa: null, 
-      area: { area: null, sede: null, area_padre: null, nombre: null }, 
-      numero: null, posx: null, posy: null, tamanio: null, estatus: null 
+    comanda: null, usuario: null, sede: null, estatus: null,
+    mesa: {
+      mesa: null,
+      area: { area: null, sede: null, area_padre: null, nombre: null },
+      numero: null, posx: null, posy: null, tamanio: null, estatus: null
     },
-    cuentas: []    
+    cuentas: []
   };
 
   loadAreas = () => {
-    this.areaSrvc.get({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe((res) => {
+    this.areaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res) => {
       this.lstTabsAreas = res;
     });
   }
@@ -85,10 +85,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     // console.log('Mesa = ', m);
     // console.log('Estatus solicitado = ', estatus);
     const idxArea = this.lstTabsAreas.findIndex(a => +a.area === +m.area);
-    console.log(`Area = ${idxArea}`);
+    // console.log(`Area = ${idxArea}`);
     if (idxArea > -1) {
       const idxMesa = this.lstTabsAreas[idxArea].mesas.findIndex(m => +m.mesa === +m.mesa);
-      console.log(`Mesa = ${idxMesa}`);
+      // console.log(`Mesa = ${idxMesa}`);
       if (idxMesa > -1) {
         this.lstTabsAreas[idxArea].mesas[idxMesa].estatus = estatus;
       }
@@ -142,20 +142,39 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   toggleRightSidenav = () => this.rightSidenav.toggle();
 
-  cerrandoRightSideNav = () => { 
-    this.snTrancomanda.resetMesaEnUso(); 
+  cerrandoRightSideNav = () => {
+    this.snTrancomanda.resetMesaEnUso();
     this.snTrancomanda.resetLstProductosDeCuenta();
     this.snTrancomanda.resetLstProductosSeleccionados();
     this.snTrancomanda.resetCuentaActiva();
+    this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
   }
 
-  loadComandaMesa = (obj: any) => {
+  checkEstatusMesa = () => {
+    // console.log('MESA = ', this.mesaSeleccionada);
+    if (!!this.mesaSeleccionada && this.mesaSeleccionada.cuentas.length > 0) {
+      const abiertas = this.mesaSeleccionada.cuentas.filter(cta => +cta.cerrada === 0).length || 0;
+      // console.log(`ABIERTAS = ${abiertas}`);
+      if (abiertas === 0) {
+        this.setEstatusMesa({
+          area: this.mesaSeleccionada.mesa.area.area,
+          mesa: this.mesaSeleccionada.mesa.mesa
+        }, 1);
+      }
+    }
+  }
+
+  loadComandaMesa = (obj: any, shouldToggle = true) => {
+    // console.log(obj);
     this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
-      //console.log(res); return;
+      // console.log(res); return;
       if (res) {
         this.mesaSeleccionada = res;
-        this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
-        this.toggleRightSidenav();
+        this.checkEstatusMesa();
+        if (shouldToggle) {
+          this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
+          this.toggleRightSidenav();
+        }
       } else {
         this._snackBar.open(`Problema al mostrar la comanda de la mesa #${obj.numero}`, 'ERROR', { duration: 5000 });
       }

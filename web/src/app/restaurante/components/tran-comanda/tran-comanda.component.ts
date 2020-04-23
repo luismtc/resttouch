@@ -372,9 +372,9 @@ export class TranComandaComponent implements OnInit {
 
       cobrarCtaRef.afterClosed().subscribe(res => {
         if (res) {
-          //console.log(res);
+          // console.log(res);
           this.cambiarEstatusCuenta(res);
-          //this.socket.emit('print:doccontable', JSON.stringify(res));
+          // this.socket.emit('print:doccontable', JSON.stringify(res));
         }
       });
     } else {

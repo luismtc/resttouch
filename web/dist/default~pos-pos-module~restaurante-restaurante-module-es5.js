@@ -762,6 +762,7 @@
                                     }
                                     else {
                                         _this._snackBar.open('Factura', "ERROR: " + res.mensaje, { duration: 3000 });
+                                        _this.dialogRef.close(res.cuenta);
                                     }
                                 });
                             }

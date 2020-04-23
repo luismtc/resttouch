@@ -106,10 +106,10 @@ export class CobrarPedidoComponent implements OnInit {
 
   cancelar = () => this.dialogRef.close();
 
-  setClienteFacturar = (obj: Cliente) => { 
+  setClienteFacturar = (obj: Cliente) => {
     this.clienteSelected = obj;
-    this.factReq.cliente = +obj.cliente; 
-  };
+    this.factReq.cliente = +obj.cliente;
+  }
 
   cobrar = () => {
     const objCobro: Cobro = {
@@ -136,11 +136,12 @@ export class CobrarPedidoComponent implements OnInit {
             this.dialogRef.close(res.cuenta);
           } else {
             this._snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 3000 });
+            this.dialogRef.close(res.cuenta);
           }
         });
       } else {
         this._snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 3000 });
-      }      
+      }
     });
-  };
+  }
 }

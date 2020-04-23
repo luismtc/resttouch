@@ -49,7 +49,7 @@ export class RptVentasComponent implements OnInit {
   }
 
   getReporte = (tipo: number = 1) => {
-    this.paramsToSend = this.params;
+    this.paramsToSend = JSON.parse(JSON.stringify(this.params));
     this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
     switch (tipo) {
       case 1 : this.getEnPantalla(); break;

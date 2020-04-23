@@ -5398,7 +5398,7 @@ let RptVentasComponent = class RptVentasComponent {
             };
         };
         this.getReporte = (tipo = 1) => {
-            this.paramsToSend = this.params;
+            this.paramsToSend = JSON.parse(JSON.stringify(this.params));
             this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
             switch (tipo) {
                 case 1:
@@ -5604,10 +5604,10 @@ let TranAreasComponent = class TranAreasComponent {
             // console.log('Mesa = ', m);
             // console.log('Estatus solicitado = ', estatus);
             const idxArea = this.lstTabsAreas.findIndex(a => +a.area === +m.area);
-            console.log(`Area = ${idxArea}`);
+            // console.log(`Area = ${idxArea}`);
             if (idxArea > -1) {
                 const idxMesa = this.lstTabsAreas[idxArea].mesas.findIndex(m => +m.mesa === +m.mesa);
-                console.log(`Mesa = ${idxMesa}`);
+                // console.log(`Mesa = ${idxMesa}`);
                 if (idxMesa > -1) {
                     this.lstTabsAreas[idxArea].mesas[idxMesa].estatus = estatus;
                 }
@@ -5619,14 +5619,32 @@ let TranAreasComponent = class TranAreasComponent {
             this.snTrancomanda.resetLstProductosDeCuenta();
             this.snTrancomanda.resetLstProductosSeleccionados();
             this.snTrancomanda.resetCuentaActiva();
+            this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
         };
-        this.loadComandaMesa = (obj) => {
+        this.checkEstatusMesa = () => {
+            // console.log('MESA = ', this.mesaSeleccionada);
+            if (!!this.mesaSeleccionada && this.mesaSeleccionada.cuentas.length > 0) {
+                const abiertas = this.mesaSeleccionada.cuentas.filter(cta => +cta.cerrada === 0).length || 0;
+                // console.log(`ABIERTAS = ${abiertas}`);
+                if (abiertas === 0) {
+                    this.setEstatusMesa({
+                        area: this.mesaSeleccionada.mesa.area.area,
+                        mesa: this.mesaSeleccionada.mesa.mesa
+                    }, 1);
+                }
+            }
+        };
+        this.loadComandaMesa = (obj, shouldToggle = true) => {
+            // console.log(obj);
             this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res) => {
-                //console.log(res); return;
+                // console.log(res); return;
                 if (res) {
                     this.mesaSeleccionada = res;
-                    this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
-                    this.toggleRightSidenav();
+                    this.checkEstatusMesa();
+                    if (shouldToggle) {
+                        this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
+                        this.toggleRightSidenav();
+                    }
                 }
                 else {
                     this._snackBar.open(`Problema al mostrar la comanda de la mesa #${obj.numero}`, 'ERROR', { duration: 5000 });
@@ -6089,9 +6107,9 @@ let TranComandaComponent = class TranComandaComponent {
             });
             cobrarCtaRef.afterClosed().subscribe(res => {
                 if (res) {
-                    //console.log(res);
+                    // console.log(res);
                     this.cambiarEstatusCuenta(res);
-                    //this.socket.emit('print:doccontable', JSON.stringify(res));
+                    // this.socket.emit('print:doccontable', JSON.stringify(res));
                 }
             });
         }

@@ -794,6 +794,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
                         }
                         else {
                             this._snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 3000 });
+                            this.dialogRef.close(res.cuenta);
                         }
                     });
                 }
