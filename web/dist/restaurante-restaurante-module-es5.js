@@ -5501,7 +5501,7 @@
                         var idxArea = _this.lstTabsAreas.findIndex(function (a) { return +a.area === +m.area; });
                         // console.log(`Area = ${idxArea}`);
                         if (idxArea > -1) {
-                            var idxMesa = _this.lstTabsAreas[idxArea].mesas.findIndex(function (m) { return +m.mesa === +m.mesa; });
+                            var idxMesa = _this.lstTabsAreas[idxArea].mesas.findIndex(function (l) { return +l.mesa === +m.mesa; });
                             // console.log(`Mesa = ${idxMesa}`);
                             if (idxMesa > -1) {
                                 _this.lstTabsAreas[idxArea].mesas[idxMesa].estatus = estatus;
@@ -5608,6 +5608,7 @@
                                 // console.log(res);
                                 if (res.exito) {
                                     _this.mesaSeleccionada = res.comanda;
+                                    // console.log('m', m);
                                     _this.setEstatusMesa(m, +res.comanda.mesa.estatus);
                                     _this.toggleRightSidenav();
                                 }

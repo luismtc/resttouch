@@ -5606,7 +5606,7 @@ let TranAreasComponent = class TranAreasComponent {
             const idxArea = this.lstTabsAreas.findIndex(a => +a.area === +m.area);
             // console.log(`Area = ${idxArea}`);
             if (idxArea > -1) {
-                const idxMesa = this.lstTabsAreas[idxArea].mesas.findIndex(m => +m.mesa === +m.mesa);
+                const idxMesa = this.lstTabsAreas[idxArea].mesas.findIndex(l => +l.mesa === +m.mesa);
                 // console.log(`Mesa = ${idxMesa}`);
                 if (idxMesa > -1) {
                     this.lstTabsAreas[idxArea].mesas[idxMesa].estatus = estatus;
@@ -5710,6 +5710,7 @@ let TranAreasComponent = class TranAreasComponent {
                     // console.log(res);
                     if (res.exito) {
                         this.mesaSeleccionada = res.comanda;
+                        // console.log('m', m);
                         this.setEstatusMesa(m, +res.comanda.mesa.estatus);
                         this.toggleRightSidenav();
                     }
