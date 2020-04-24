@@ -5615,15 +5615,20 @@ let TranAreasComponent = class TranAreasComponent {
         };
         this.toggleRightSidenav = () => this.rightSidenav.toggle();
         this.cerrandoRightSideNav = () => {
+            // console.log('Antes de "resetMesaEnUso"');
             this.snTrancomanda.resetMesaEnUso();
+            // console.log('Antes de "resetLstProductosDeCuenta"');
             this.snTrancomanda.resetLstProductosDeCuenta();
+            // console.log('Antes de "resetLstProductosSeleccionados"');
             this.snTrancomanda.resetLstProductosSeleccionados();
+            // console.log('Antes de "resetCuentaActiva"');
             this.snTrancomanda.resetCuentaActiva();
+            // console.log('Antes de "loadComandaMesa"');
             this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
         };
         this.checkEstatusMesa = () => {
             // console.log('MESA = ', this.mesaSeleccionada);
-            if (!!this.mesaSeleccionada && this.mesaSeleccionada.cuentas.length > 0) {
+            if (!!this.mesaSeleccionada && !!this.mesaSeleccionada.cuentas && this.mesaSeleccionada.cuentas.length > 0) {
                 const abiertas = this.mesaSeleccionada.cuentas.filter(cta => +cta.cerrada === 0).length || 0;
                 // console.log(`ABIERTAS = ${abiertas}`);
                 if (abiertas === 0) {
@@ -5639,7 +5644,19 @@ let TranAreasComponent = class TranAreasComponent {
             this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res) => {
                 // console.log(res); return;
                 if (res) {
-                    this.mesaSeleccionada = res;
+                    if (!Array.isArray(res)) {
+                        this.mesaSeleccionada = res;
+                    }
+                    else {
+                        if (res.length === 0) {
+                            this.mesaSeleccionada = {
+                                mesa: this.mesaSeleccionada.mesa,
+                                cuentas: [
+                                    { cerrada: 1 }
+                                ]
+                            };
+                        }
+                    }
                     this.checkEstatusMesa();
                     if (shouldToggle) {
                         this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);

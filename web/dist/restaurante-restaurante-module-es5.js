@@ -5510,15 +5510,20 @@
                     };
                     this.toggleRightSidenav = function () { return _this.rightSidenav.toggle(); };
                     this.cerrandoRightSideNav = function () {
+                        // console.log('Antes de "resetMesaEnUso"');
                         _this.snTrancomanda.resetMesaEnUso();
+                        // console.log('Antes de "resetLstProductosDeCuenta"');
                         _this.snTrancomanda.resetLstProductosDeCuenta();
+                        // console.log('Antes de "resetLstProductosSeleccionados"');
                         _this.snTrancomanda.resetLstProductosSeleccionados();
+                        // console.log('Antes de "resetCuentaActiva"');
                         _this.snTrancomanda.resetCuentaActiva();
+                        // console.log('Antes de "loadComandaMesa"');
                         _this.loadComandaMesa(_this.mesaSeleccionada.mesa, false);
                     };
                     this.checkEstatusMesa = function () {
                         // console.log('MESA = ', this.mesaSeleccionada);
-                        if (!!_this.mesaSeleccionada && _this.mesaSeleccionada.cuentas.length > 0) {
+                        if (!!_this.mesaSeleccionada && !!_this.mesaSeleccionada.cuentas && _this.mesaSeleccionada.cuentas.length > 0) {
                             var abiertas = _this.mesaSeleccionada.cuentas.filter(function (cta) { return +cta.cerrada === 0; }).length || 0;
                             // console.log(`ABIERTAS = ${abiertas}`);
                             if (abiertas === 0) {
@@ -5535,7 +5540,19 @@
                         _this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe(function (res) {
                             // console.log(res); return;
                             if (res) {
-                                _this.mesaSeleccionada = res;
+                                if (!Array.isArray(res)) {
+                                    _this.mesaSeleccionada = res;
+                                }
+                                else {
+                                    if (res.length === 0) {
+                                        _this.mesaSeleccionada = {
+                                            mesa: _this.mesaSeleccionada.mesa,
+                                            cuentas: [
+                                                { cerrada: 1 }
+                                            ]
+                                        };
+                                    }
+                                }
                                 _this.checkEstatusMesa();
                                 if (shouldToggle) {
                                     _this.snTrancomanda.llenaProductosSeleccionados(_this.mesaSeleccionada);
