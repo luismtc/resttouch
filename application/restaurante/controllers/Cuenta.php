@@ -63,6 +63,7 @@ class Cuenta extends CI_Controller {
 							if ($cerrada == count($cuentas)) {
 								$tmp = $com->getMesas();
 								$mesa = new Mesa_model($tmp->mesa);
+								$com->guardar(["estatus" => 2]);
 								$mesa->guardar(["estatus" => 1]);
 							}
 							$datos['exito'] = true;
