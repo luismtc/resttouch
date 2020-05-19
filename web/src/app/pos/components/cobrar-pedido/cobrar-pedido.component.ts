@@ -119,12 +119,21 @@ export class CobrarPedidoComponent implements OnInit {
       propina_monto: this.inputData.montoPropina,
       propina_porcentaje: this.inputData.porcentajePropina
     };
+
+    for (const fp of this.formasPagoDeCuenta) {
+      objCobro.forma_pago.push({
+        forma_pago: +fp.forma_pago.forma_pago,
+        monto: fp.monto
+      });
+    }
+    /*
     for (let i = 0; i < this.formasPagoDeCuenta.length; i++) {
       objCobro.forma_pago.push({
         forma_pago: +this.formasPagoDeCuenta[i].forma_pago.forma_pago,
         monto: this.formasPagoDeCuenta[i].monto
       });
     }
+    */
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
     this.cobroSrvc.save(objCobro).subscribe(res => {
       if (res.exito) {

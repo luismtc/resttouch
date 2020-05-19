@@ -54,6 +54,7 @@ import { PorCategoriaComponent } from './components/reportes/rpt-ventas/por-cate
 import { PorArticuloComponent } from './components/reportes/rpt-ventas/por-articulo/por-articulo.component';
 import { TurnosComponent } from './components/reportes/turnos/turnos.component';
 import { PropinasComponent } from './components/reportes/propinas/propinas.component';
+import { ComandaEnLineaComponent } from './components/comanda-en-linea/comanda-en-linea.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
@@ -61,7 +62,7 @@ import { PropinasComponent } from './components/reportes/propinas/propinas.compo
   declarations: [
     TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent,
     ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent,
-    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent
+    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent, ComandaEnLineaComponent
   ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent

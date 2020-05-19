@@ -53,6 +53,10 @@ $config['menu'] = [
 					3 => [
 						'nombre' => 'Turno',
 						'link' => '/restaurante/turno'
+					],
+					4 => [
+						'nombre' => 'Comanda en línea',
+						'link' => '/restaurante/cmdonline'
 					]
 				]
 			],

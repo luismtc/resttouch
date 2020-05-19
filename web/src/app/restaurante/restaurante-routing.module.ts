@@ -8,6 +8,7 @@ import { TurnoComponent } from './components/turno/turno/turno.component';
 import { RptVentasComponent } from './components/reportes/rpt-ventas/rpt-ventas.component';
 import { TurnosComponent } from './components/reportes/turnos/turnos.component';
 import { PropinasComponent } from './components/reportes/propinas/propinas.component';
+import { ComandaEnLineaComponent } from './components/comanda-en-linea/comanda-en-linea.component';
 
 const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'rptvtascat', component: RptVentasComponent, canActivate: [AuthGuard] },
   { path: 'rptturnos', component: TurnosComponent, canActivate: [AuthGuard] },
   { path: 'rptpropinas', component: PropinasComponent, canActivate: [AuthGuard] },
+  { path: 'cmdonline', component: ComandaEnLineaComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
