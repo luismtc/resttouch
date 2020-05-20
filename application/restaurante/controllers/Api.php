@@ -49,60 +49,73 @@ class Api extends CI_Controller {
 				
 				$req['usuario'] = 1;
 				$req['sede'] = 1;
-
-				if ($turno) {
-					$req['turno'] = $turno->turno;
-					$datos['exito'] = $comanda->guardar($datosComanda);
-	
-					$cuenta = new Cuenta_model();
-					
-					if ($cuenta->cerrada == 0) {
-						$datosCta['comanda'] = $comanda->comanda;
-						$cuenta->guardar($datosCta);	
-					}							
-					foreach ($req['line_items'] as $row) {
-						$art = $this->Articulo_model->buscar([
-							'shopify_id' => $row['product_id'],
-							'_uno' => true
-						]);
-						if ($art) {
-							$datosDcomanda=['articulo' => 1
-								,'cantidad' => $row['quantity']
-								,'precio' => $row['price']
-								,'impreso' => 0
-								,'total' => $row['price'] * $row['quantity']
-								,'notas' => ''
-							];
-							$det = $comanda->guardarDetalle($datosDcomanda);
-							$id = '';
-							if ($det) {
-								$cuenta->guardarDetalle([
-									'detalle_comanda' => $det->detalle_comanda
-								]);	
-								$datos['exito'] = true;
+				$insert = false;
+				foreach ($req['line_items'] as $row) {
+					$art = $this->Articulo_model->buscar([
+						'shopify_id' => $row['product_id'],
+						'_uno' => true
+					]);
+					if ($art) {
+						$insert = true;
+					}
+				}
+				if ($insert) {
+					if ($turno) {
+						$datosComanda['turno'] = $turno->turno;
+						$datos['exito'] = $comanda->guardar($datosComanda);
+		
+						$cuenta = new Cuenta_model();
+						
+						if ($cuenta->cerrada == 0) {
+							$datosCta['comanda'] = $comanda->comanda;
+							$cuenta->guardar($datosCta);	
+						}							
+						foreach ($req['line_items'] as $row) {
+							$art = $this->Articulo_model->buscar([
+								'shopify_id' => $row['product_id'],
+								'_uno' => true
+							]);
+							if ($art) {
+								$datosDcomanda=['articulo' => 1
+									,'cantidad' => $row['quantity']
+									,'precio' => $row['price']
+									,'impreso' => 0
+									,'total' => $row['price'] * $row['quantity']
+									,'notas' => ''
+								];
+								$det = $comanda->guardarDetalle($datosDcomanda);
+								$id = '';
+								if ($det) {
+									$cuenta->guardarDetalle([
+										'detalle_comanda' => $det->detalle_comanda
+									]);	
+									$datos['exito'] = true;
+								} else {
+									$datos['exito'] = false;						
+								}	
 							} else {
-								$datos['exito'] = false;						
-							}	
+								$datos['exito'] = false;
+							}				
+						}
+							
+						if ($datos['exito']) {
+							$datos['comanda'] = $comanda->getComanda();	
 						} else {
-							$datos['exito'] = false;
-						}				
-					}
-						
-					if ($datos['exito']) {
-						$datos['comanda'] = $comanda->getComanda();	
-					} else {
-						$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-					}							
-						
-					if($datos['exito']) {
-						$datos['mensaje'] = "Datos Actualizados con Exito";
-						$datos['comanda'] = $comanda->getComanda();	
-					} else {
-						$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-					}
+							$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+						}							
+							
+						if($datos['exito']) {
+							$datos['mensaje'] = "Datos Actualizados con Exito";
+							$datos['comanda'] = $comanda->getComanda();	
+						} else {
+							$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+						}
 
+					} else {
+						$datos['mensaje'] = "No existe ningun turno abierto";
+					}	
 				} else {
-					$datos['mensaje'] = "No existe ningun turno abierto";
+					$datos['mensaje'] = "No existen productos";	
 				}
 			} else {
 				$datos['mensaje'] = "Mesero Invalido";
