@@ -4,11 +4,19 @@ if (!defined( 'BASEPATH')) exit('No direct script access allowed');
 
 class Inicio
 {
+	public function __construct()
+	{
+		$this->libres = [
+			'/resttouch/index.php/usuario/login.json', 
+			'/resttouch/restaurante.php/api/set_comanda'
+		];
+		
+	}
     public function verificarSesion()
     {
     	$this->ci =& get_instance();
     	$this->ci->load->helper(['jwt', 'authorization']);
-    	$this->libres = ['/resttouch/index.php/usuario/login.json'];
+    	
         if(!in_array($_SERVER['REQUEST_URI'], $this->libres)) {
         	$headers = $this->ci->input->request_headers();
         	$response = ['mensaje' => '¡Acceso no autorizado!', 'valido' => false];

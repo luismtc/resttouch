@@ -135,13 +135,28 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
-	function get_comanda($mesa){
-		$mesa = new Mesa_model($mesa);
-		$tmp = $mesa->get_comanda(["estatus" => 1]);
+	function get_comanda($mesa=''){
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		if (empty($mesa)) {			
+			$tmp = $this->Comanda_model->getComandas([
+				'domicilio' => 1, 
+				'sede' => $data->sede
+			]);
+		} else {
+			$mesa = new Mesa_model($mesa);
+			$tmp = $mesa->get_comanda(["estatus" => 1]);
+		}
 		$datos = [];
-		if($tmp) {
+		if($tmp && is_object($tmp)) {
 			$comanda = new Comanda_model($tmp->comanda);
 			$datos = $comanda->getComanda();
+		} else {
+			foreach ($tmp as $row) {
+				$comanda = new Comanda_model($row->comanda);
+				$datos[] = $comanda->getComanda();
+			}
 		}
 
 		$this->output

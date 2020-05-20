@@ -8,6 +8,7 @@ class Comanda_model extends General_Model {
 	public $sede;
 	public $estatus;
 	public $turno;
+	public $domicilio;
 
 	public function __construct($id = '')
 	{
@@ -138,10 +139,27 @@ class Comanda_model extends General_Model {
 		->row();
 
 		$mesa = $this->getMesas();
-		$mesa->area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
-		$tmp->mesa = $mesa;		
+		if($mesa){
+			$mesa->area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
+			$tmp->mesa = $mesa;			
+		}
+		
 		$tmp->cuentas = $this->getCuentas();
 		return $tmp;
+	}
+
+	public function getComandas($args =[])
+	{
+		if(isset($args["domicilio"])){
+			$this->db->where('a.domicilio', $args['domicilio']);
+		}
+
+		return $this->db
+					->select("a.*")
+					->join("turno b", "a.turno = b.turno")
+					->where("b.sede", $args['sede'])
+					->get("comanda a")
+					->result();
 	}
 
 }

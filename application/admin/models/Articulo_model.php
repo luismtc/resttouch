@@ -10,6 +10,7 @@ class Articulo_model extends General_model {
 	public $precio;
 	public $bien_servicio;
 	public $existencias;
+	public $shopify_id;
 
 	public function __construct($id = "")
 	{
