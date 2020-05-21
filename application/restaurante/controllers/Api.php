@@ -76,7 +76,8 @@ class Api extends CI_Controller {
 								'_uno' => true
 							]);
 							if ($art) {
-								$datosDcomanda=['articulo' => 1
+								$datosDcomanda = [
+									'articulo' => $art->articulo
 									,'cantidad' => $row['quantity']
 									,'precio' => $row['price']
 									,'impreso' => 0
