@@ -126,17 +126,10 @@ export class CobrarPedidoComponent implements OnInit {
         monto: fp.monto
       });
     }
-    /*
-    for (let i = 0; i < this.formasPagoDeCuenta.length; i++) {
-      objCobro.forma_pago.push({
-        forma_pago: +this.formasPagoDeCuenta[i].forma_pago.forma_pago,
-        monto: this.formasPagoDeCuenta[i].monto
-      });
-    }
-    */
+
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
     this.cobroSrvc.save(objCobro).subscribe(res => {
-      if (res.exito) {
+      if (res.exito || !res.facturada) {
         this._snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
         this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
           if (resFact.exito) {
