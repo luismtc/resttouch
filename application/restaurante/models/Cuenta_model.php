@@ -46,6 +46,19 @@ class Cuenta_model extends General_Model {
 		return $result;
 	}
 
+	public function facturada()
+	{
+		$tmp = $this->db
+					->select("count(a.detalle_cuenta) det, count(b.detalle_cuenta) fact")
+					->from("detalle_cuenta a")
+					->join("detalle_factura_detalle_cuenta b", "a.detalle_cuenta = b.detalle_cuenta", "left")
+					->where("cuenta_cuenta", $this->getPK())
+					->get()
+					->row();
+
+		return $tmp->det == $tmp->fact;
+	}
+
 	public function getDetalle($args = [])
 	{
 		$datos = [];

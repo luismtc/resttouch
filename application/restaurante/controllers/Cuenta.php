@@ -26,12 +26,13 @@ class Cuenta extends CI_Controller {
 	public function cobrar($cuenta)
 	{
 		$req =  json_decode(file_get_contents('php://input'));
-		$datos = ["exito" => false];
+		$datos = ["exito" => false, "facturada" => false];
 		if ($this->input->method() == 'post') {
 			if (isset($req->forma_pago)) {		
 				$cta = new Cuenta_model($cuenta);
 				$det = $cta->getDetalle();
 				$total = 0;
+				$datos['facturada'] = $cta->facturada();
 				if ($cta->cerrada == 0) {
 					foreach ($det as $row) {
 						$total+= ($row->cantidad * $row->precio);
