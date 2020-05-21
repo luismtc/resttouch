@@ -54,3 +54,58 @@ if( ! function_exists('insertar_articulo')){
 		return $result;
 	}
 }
+
+if ( ! function_exists('formatoFecha')) {
+	function formatoFecha($fecha = '', $tipo = '') {
+
+		if (empty($fecha)) {
+			return $fecha;
+		}
+
+		try {
+			$date    = new DateTime($fecha);
+			$formato = '';
+
+			switch ($tipo) {
+				case 1:
+					$formato = "d/m/Y H:i";
+					break;
+				case 2:
+					$formato = 'd/m/Y';
+					break;
+				case 3: # Devuelve el día
+					$formato = 'd';
+					break;
+				case 4: # Devuelve mes
+					$formato = 'm';
+					break;
+				case 5: # Devuelve año
+					$formato = 'Y';
+					break;
+				case 6: # Gringo AWB
+					$formato = 'M-d-Y';
+					break;
+				case 7:
+					$formato = "Y-m-d H:i:s";
+					break;
+				case 8:
+					$formato = "Y-m-d";
+					break;
+				case 9: #devuelve hora
+					$formato = "H:i:s";
+					break;
+				case 10:
+					$formato = "n";
+					break;
+				default:
+					$formato = "d/m/Y H:i";
+					break;
+			}
+
+			return $date->format($formato);
+
+		} catch (Exception $e) {
+		    return $fecha;
+		}
+	}
+}

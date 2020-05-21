@@ -104,6 +104,22 @@ class Factura_model extends General_model {
 		return $datos;
 	}
 
+	public function getMesa()
+	{
+		return $this->db
+					->select("g.numero as mesa")
+					->join("detalle_factura b", "a.factura = b.factura")
+					->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
+					->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+					->join("cuenta e", "d.cuenta_cuenta = e.cuenta")
+					->join("comanda_has_mesa f", "e.comanda = f.comanda")
+					->join("mesa g", "f.mesa = g.mesa")
+					->where("a.factura", $this->getPK())
+					->group_by("a.factura")
+					->get("factura a")
+					->row();
+	}
+
 	public function cargarCertificadorFel()
 	{
 		$this->certificador_fel = $this->db
