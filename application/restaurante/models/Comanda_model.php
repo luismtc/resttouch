@@ -151,16 +151,23 @@ class Comanda_model extends General_Model {
 
 	public function getComandas($args =[])
 	{
+		$this->db
+			 ->select("a.*")
+			 ->from("comanda a")
+			 ->join("turno t", "a.turno = t.turno")
+			 ->where("t.sede", $args['sede']);
+
 		if(isset($args["domicilio"])){
-			$this->db->where('a.domicilio', $args['domicilio']);
+			$this->db
+				 ->select("count(b.detalle_comanda) detalle, count(d.detalle_factura) factura")
+				 ->join("detalle_comanda b", "a.comanda = b.comanda")
+				 ->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
+				 ->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
+				 ->where('a.domicilio', $args['domicilio'])
+				 ->having("detalle > factura");
 		}
 
-		return $this->db
-					->select("a.*")
-					->join("turno b", "a.turno = b.turno")
-					->where("b.sede", $args['sede'])
-					->get("comanda a")
-					->result();
+		return $this->db->get()->result();
 	}
 
 }
