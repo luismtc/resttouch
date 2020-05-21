@@ -144,7 +144,7 @@ class Comanda_model extends General_Model {
 			$tmp->mesa = $mesa;			
 		}
 		$det = $this->getDetalle();
-		$tmp->total = number_format(suma_field($det, 'precio'), 2);
+		$tmp->total = number_format(suma_field($det, 'total'), 2);
 		$tmp->cuentas = $this->getCuentas();
 		return $tmp;
 	}
