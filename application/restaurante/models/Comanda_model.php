@@ -155,7 +155,8 @@ class Comanda_model extends General_Model {
 			 ->select("a.*")
 			 ->from("comanda a")
 			 ->join("turno t", "a.turno = t.turno")
-			 ->where("t.sede", $args['sede']);
+			 ->where("t.sede", $args['sede'])
+			 ->group_by("a.comanda");
 
 		if(isset($args["domicilio"])){
 			$this->db
