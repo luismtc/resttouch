@@ -7,8 +7,8 @@ class Inicio
 	public function __construct()
 	{
 		$this->libres = [
-			'/resttouch/index.php/usuario/login.json', 
-			'/resttouch/restaurante.php/api/set_comanda'
+			'/usuario/login.json', 
+			'/api/set_comanda'
 		];
 		
 	}
@@ -17,7 +17,7 @@ class Inicio
     	$this->ci =& get_instance();
     	$this->ci->load->helper(['jwt', 'authorization']);
     	
-        if(!in_array($_SERVER['REQUEST_URI'], $this->libres)) {
+        if(!in_array($_SERVER['PATH_INFO'], $this->libres)) {
         	$headers = $this->ci->input->request_headers();
         	$response = ['mensaje' => '¡Acceso no autorizado!', 'valido' => false];
         	$continuar = true;
