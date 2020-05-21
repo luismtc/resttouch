@@ -34,7 +34,7 @@ class Reporte extends CI_Controller {
 		$facts = $this->Factura_model->get_facturas($_GET);
 		$data = $_GET;
 		$mpdf = new \Mpdf\Mpdf(['format' => 'Legal']);
-
+		$data['facturas'] = [];
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);
 			$fac->mesa = $fac->getMesa();
