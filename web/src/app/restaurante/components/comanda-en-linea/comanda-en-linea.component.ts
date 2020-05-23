@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
+import * as moment from 'moment';
 
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 
-import { Comanda } from '../../interfaces/comanda';
+// import { Comanda } from '../../interfaces/comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
 import { ComandaService } from '../../services/comanda.service';
 
@@ -40,13 +41,14 @@ interface productoSelected {
     ])
   ]
 })
-export class ComandaEnLineaComponent implements OnInit {
+export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   public dataSource: any[] = [];
   public columnsToDisplay = ['comanda', 'nombre', 'total', 'imprimir', 'facturar'];
   public expandedElement: any | null;
 
   public comandasEnLinea: any[] = [];
+  public intervalId: any;
 
   constructor(
     public dialog: MatDialog,
@@ -57,16 +59,30 @@ export class ComandaEnLineaComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loadComandasEnLinea();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+      this.socket.on('shopify:updlist', () => {
+        this.loadComandasEnLinea();
+        console.log(`${moment().format(GLOBAL.dateTimeFormat)}: Actualizando lista de ordenes en linea...`);
+      });
+    }
+
+    this.loadComandasEnLinea();
+    // this.intervalId = setInterval(() => this.loadComandasEnLinea(), 30000); // Ejecución cada 30s
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
     }
   }
 
   loadComandasEnLinea = () => {
-    this.comandasEnLinea = this.comandaSrvc.getComandasOnLine();
-    this.dataSource = this.comandasEnLinea;
-    // console.log(this.comandasEnLinea);
+    this.comandaSrvc.getComandasOnLIne().subscribe((res: any[]) => {
+      this.comandasEnLinea = res;
+      this.dataSource = this.comandasEnLinea;
+      // console.log(this.comandasEnLinea);
+    });
   }
 
   setToPrint = (articulos: any[]) => {
@@ -85,6 +101,7 @@ export class ComandaEnLineaComponent implements OnInit {
 
   imprimir = (obj: any) => {
 
+    /*
     const objCmd: Comanda = {
       area: obj.mesa.area.area,
       mesa: obj.mesa.mesa,
@@ -92,6 +109,7 @@ export class ComandaEnLineaComponent implements OnInit {
       comanda: obj.comanda,
       cuentas: obj.cuentas
     };
+    */
 
     /*
     this.comandaSrvc.save(objCmd).subscribe((res) => {
@@ -147,7 +165,7 @@ export class ComandaEnLineaComponent implements OnInit {
   }
 
   facturar = (obj: any) => {
-    console.log(obj);
+    // console.log(obj);
     const productosACobrar = obj.cuentas[0].productos;
     if (productosACobrar.length > 0) {
       const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
@@ -164,8 +182,8 @@ export class ComandaEnLineaComponent implements OnInit {
         if (res) {
           // console.log(res);
           obj.cuentas[0].cerrada = +res.cerrada;
-          // this.socket.emit('print:doccontable', JSON.stringify(res));
         }
+        this.loadComandasEnLinea();
       });
     } else {
       this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });

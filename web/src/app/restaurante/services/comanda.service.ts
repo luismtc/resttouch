@@ -77,7 +77,7 @@ export class ComandaService {
     ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getComandasOnLine(): any[] {
+  getComandasOnLine_Test(): any[] {
     const comandasOnLine: any[] = [
       {
         comanda: 37,
@@ -267,5 +267,17 @@ export class ComandaService {
       }
     ];
     return comandasOnLine;
+  }
+
+  getComandasOnLIne(): Observable<ComandaGetResponse[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<ComandaGetResponse[]>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda`,
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

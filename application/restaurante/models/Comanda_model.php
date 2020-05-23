@@ -8,7 +8,7 @@ class Comanda_model extends General_Model {
 	public $sede;
 	public $estatus;
 	public $turno;
-	public $domicilio;
+	public $domicilio = 0;
 
 	public function __construct($id = '')
 	{
