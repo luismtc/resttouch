@@ -62,7 +62,7 @@ class Reporte extends CI_Controller {
 
 	public function comanda()
 	{
-		$_GET['sede'] = 1;
+		$_GET['sede'] = $this->data->sede;
 		$tmp = $this->Comanda_model->getComandas($_GET);
 		$datos = [];
 		$data = $_GET;
