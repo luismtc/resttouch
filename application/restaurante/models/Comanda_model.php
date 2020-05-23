@@ -133,9 +133,12 @@ class Comanda_model extends General_Model {
 
 	public function getComanda()
 	{
+		
+
 		$tmp = $this->db
 		->where("comanda", $this->comanda)
-		->get("comanda")
+		->join("turno t", "a.turno = t.turno")
+		->get("comanda a")
 		->row();
 
 		$mesa = $this->getMesas();
@@ -144,13 +147,22 @@ class Comanda_model extends General_Model {
 			$tmp->mesa = $mesa;			
 		}
 		$det = $this->getDetalle();
+		$turno = new Turno_model($tmp->turno);
+		$tmp->mesero = $turno->getUsuarios(["usuario_tipo" => 1]);
 		$tmp->total = number_format(suma_field($det, 'total'), 2);
 		$tmp->cuentas = $this->getCuentas();
+		$tmp->factura = $this->getFactura();
 		return $tmp;
 	}
 
 	public function getComandas($args =[])
 	{
+		if (isset($args['fdel']) && isset($args['fal'])) {
+			$this->db
+				 ->where('t.inicio >=', $args['fdel'])
+				 ->where('t.fin <= ', $args['fal']);
+		}
+
 		$this->db
 			 ->select("a.*")
 			 ->from("comanda a")
@@ -159,16 +171,32 @@ class Comanda_model extends General_Model {
 			 ->group_by("a.comanda");
 
 		if(isset($args["domicilio"])){
-			$this->db
-				 ->select("count(b.detalle_comanda) detalle, count(d.detalle_factura) factura")
+			$this->db				 
 				 ->join("detalle_comanda b", "a.comanda = b.comanda")
 				 ->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
 				 ->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
+				 ->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
+				 ->join("factura f", "f.factura = e.factura", "left")
 				 ->where('a.domicilio', $args['domicilio'])
-				 ->having("detalle > factura");
+				 ->where("f.fel_uuid is null");
 		}
 
 		return $this->db->get()->result();
+	}
+
+	public function getFactura(){
+		return $this->db
+					->select("a.*, sum(b.total) as total")
+					->from("factura a")
+					->join("detalle_factura b", "a.factura = b.factura")
+					->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
+					->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+					->join("cuenta e", "e.cuenta = d.cuenta_cuenta")
+					->join("comanda f", "e.comanda = f.comanda")
+					->where("f.comanda", $this->getPK())
+					->group_by("f.comanda")
+					->get()
+					->row();
 	}
 
 }

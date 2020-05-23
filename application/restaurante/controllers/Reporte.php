@@ -7,7 +7,16 @@ class Reporte extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->add_package_path('application/facturacion');
-		$this->load->model(['Reporte_model', 'Factura_model', 'Dfactura_model']);
+		$this->load->model([
+			'Reporte_model', 
+			'Factura_model', 
+			'Dfactura_model', 
+			'Comanda_model',
+			'Area_model',
+			'Dcomanda_model',
+			'Cuenta_model',
+			'Usuario_model'
+		]);
 
 		$this->load->helper(['jwt', 'authorization']);
 
@@ -49,6 +58,25 @@ class Reporte extends CI_Controller {
 		//$mpdf->AddPage();
 		$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
 		$mpdf->Output("Detalle de Facturas.pdf", "D");	
+	}
+
+	public function comanda()
+	{
+		$_GET['sede'] = 1;
+		$tmp = $this->Comanda_model->getComandas($_GET);
+		$datos = [];
+		$data = $_GET;
+		$mpdf = new \Mpdf\Mpdf(['format' => 'Legal']);
+		foreach ($tmp as $row) {
+			$comanda = new Comanda_model($row->comanda);
+			$datos[] = $comanda->getComanda();
+
+		}
+
+		$data['comanda'] = $datos;
+			
+		$mpdf->WriteHTML($this->load->view('comanda', $data, true));
+		$mpdf->Output("Detalle de Comandas.pdf", "D");	
 	}
 
 }
