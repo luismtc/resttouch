@@ -64,7 +64,7 @@ export class CobrarPedidoComponent implements OnInit {
     this.calculaPropina();
     this.actualizaSaldo();
     this.formaPago.monto = this.inputData.saldo;
-  };
+  }
 
   calculaPropina = () => {
     this.inputData.montoPropina = parseFloat((this.inputData.porcentajePropina * this.inputData.totalDeCuenta / 100).toFixed(2));

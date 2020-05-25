@@ -12,6 +12,7 @@ import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cob
 // import { Comanda } from '../../interfaces/comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
 import { ComandaService } from '../../services/comanda.service';
+import { FacturaService } from '../../../pos/services/factura.service';
 
 interface productoSelected {
   id: number;
@@ -48,14 +49,15 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
   public expandedElement: any | null;
 
   public comandasEnLinea: any[] = [];
-  public intervalId: any;
+  // public intervalId: any;
 
   constructor(
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private socket: Socket,
     private ls: LocalstorageService,
-    private comandaSrvc: ComandaService
+    private comandaSrvc: ComandaService,
+    private facturaSrvc: FacturaService
   ) { }
 
   ngOnInit() {
@@ -72,9 +74,11 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    /*
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    */
   }
 
   loadComandasEnLinea = () => {
@@ -164,6 +168,49 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     setTimeout(() => wref.close(), 1000);
   }
 
+  firmar = (obj: any) => {
+    console.log(obj);
+    this.facturaSrvc.firmar(+obj.factura.factura).subscribe((res: any) => {
+      console.log(res);
+      if (res.exito) {
+        this.loadComandasEnLinea();
+        this.printFactura(res.factura);
+      }
+      this.snackBar.open('Facturación', res.mensaje, { duration: 3000 });
+    });
+  }
+
+  printFactura = (fact: any) => {
+    const dataToPrint = {
+      NombreEmpresa: fact.empresa.nombre_comercial,
+      NitEmpresa: fact.empresa.nit,
+      SedeEmpresa: fact.sedeFactura.nombre,
+      DireccionEmpresa: fact.empresa.direccion,
+      Fecha: moment(fact.fecha_factura).format(GLOBAL.dateFormat),
+      Nit: fact.receptor.nit,
+      Nombre: fact.receptor.nombre,
+      Direccion: fact.receptor.direccion,
+      Serie: fact.serie_factura,
+      Numero: fact.numero_factura,
+      Total: 0.00,
+      NoAutorizacion: fact.fel_uuid,
+      NombreCertificador: fact.certificador_fel.nombre,
+      DetalleFactura: []
+    };
+
+    for (const det of fact.detalle) {
+      dataToPrint.DetalleFactura.push({
+        Cantidad: det.cantidad,
+        Descripcion: det.articulo.descripcion,
+        Total: parseFloat(det.total)
+      });
+      dataToPrint.Total += parseFloat(det.total);
+    }
+
+    this.socket.emit('print:factura', JSON.stringify(dataToPrint));
+  }
+
+  /*
   facturar = (obj: any) => {
     // console.log(obj);
     const productosACobrar = obj.cuentas[0].productos;
@@ -189,4 +236,5 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
     }
   }
+  */
 }
