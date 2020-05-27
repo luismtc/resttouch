@@ -13,8 +13,9 @@
 .git
 .gitignore
 
+cloud_sql_proxy
+
 application/vendor/*
-web/node_modules/*
-web/src/*
-web
+web/*
+!web/dist
 *.exe
