@@ -33,7 +33,7 @@ class Api extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 
 		$datos = ["exito" => false];
-		$_GET['key'] = "0b0928b0-ff4f-4b6d-8287-f5980fe11a46";
+
 		if (isset($_GET['key'])) {
 			if ($this->input->method() == 'post') {
 				$sede = $this->Catalogo_model->getSede([
@@ -110,7 +110,7 @@ class Api extends CI_Controller {
 								$total = 0;					
 								foreach ($req['line_items'] as $row) {
 									$art = $this->Articulo_model->buscar([
-										'shopify_id' => $row['product_id'],
+										'shopify_id' => $row['variant_id'],
 										'_uno' => true
 									]);
 									if ($art) {
