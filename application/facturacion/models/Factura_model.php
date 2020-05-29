@@ -410,22 +410,19 @@ class Factura_model extends General_model {
 
 	public function enviar($args=array())
 	{
-		$vinculo = "https://signer-emisores.feel.com.gt/sign_solicitud_firmas/firma_xml";
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $vinculo);
+		curl_setopt($ch, CURLOPT_URL, $this->certificador_fel->vinculo_firma);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		curl_setopt($ch, CURLOPT_POST, 1);
 		$datos = array(
-			"llave" => "9c748d9bcf1455655b9e9a5c34525570",
+			"llave" => $this->certificador_fel->firma_llave,
 			"archivo" => base64_encode(html_entity_decode($this->xml->saveXML())),
-			"codigo" => "1000000000K",
-			"alias" => "DEMO_FEL",
+			"codigo" => $this->certificador_fel->firma_codigo,
+			"alias" => $this->certificador_fel->firma_alias,
 			"es_anulacion" => $this->esAnulacion
 		);
 		
-		# Datos que recibe el web service para obtener firma para el documento
-		# Debe pasar por el servidor gacela.c807.com por cuestiones de versión de PHP
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
 
 		$jsonFirma = json_decode(curl_exec($ch));
@@ -433,37 +430,27 @@ class Factura_model extends General_model {
 		# para imprimir errores
 		
 		if ($jsonFirma->resultado) {
-			$vinculo = "https://certificador.feel.com.gt/fel/certificacion/dte";
-			# Datos para el envío del documento para la ceritificación por SAT
 			$datos = array(
 				"correo_copia" => "",
-				"nit_emisor"   => str_replace('-','','1000000000K'),
+				"nit_emisor"   => str_replace('-','',$this->empresa->nit),
 				"xml_dte"      => $jsonFirma->archivo
 			);
 
 			$prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
-			#$prefijo = 'VT';
 			$identificador = "{$prefijo}-{$this->factura}";
-			
 
 			$params = array(
-				'llave' => "9c748d9bcf1455655b9e9a5c34525570",
+				'llave' => $this->certificador_fel->llave,
 				'datos' => json_encode($datos),
-				'usuario' => "DEMO_FEL",
+				'usuario' => $this->certificador_fel->usuario,
 				'identificador' => $identificador
 			);
 
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $vinculo);
+			curl_setopt($ch, CURLOPT_URL, $this->certificador_fel->vinculo_factura);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				"Content-Type: application/json",
-				"Usuario: C807",
-				"llave: E5DC9FFBA5F3653E27DF2FC1DCAC824D",
-				"identificador: " . $identificador
-			));
 
 			$query = curl_exec($ch);
 

@@ -89,7 +89,7 @@ class Api extends CI_Controller {
 						$insert = false;
 						foreach ($req['line_items'] as $row) {
 							$art = $this->Articulo_model->buscar([
-								'shopify_id' => $row['product_id'],
+								'shopify_id' => $row['variant_id'],
 								'_uno' => true
 							]);
 							if ($art) {
