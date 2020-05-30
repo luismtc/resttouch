@@ -7,6 +7,8 @@ class Comanda extends CI_Controller {
 	{
 		parent::__construct();
 		//$this->datos = [];
+		$this->load->add_package_path('application/facturacion');
+
 		$this->load->model([
 			"Comanda_model", 
 			"Dcomanda_model", 
@@ -17,7 +19,8 @@ class Comanda extends CI_Controller {
 			"Area_model",
 			"Articulo_model",
 			"Catalogo_model",
-			"Turno_model"
+			"Turno_model",
+			"Factura_model"
 		]);
 
 		$this->output
