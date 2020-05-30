@@ -19,6 +19,7 @@ class Factura_model extends General_model {
 	public $sede;
 	private $namespaceURI = "http://www.sat.gob.gt/dte/fel/0.2.0";
 	private $esAnulacion;
+	private $certificador;
 
 	public function __construct($id = '')
 	{
@@ -124,10 +125,15 @@ class Factura_model extends General_model {
 
 	public function cargarCertificadorFel()
 	{
-		$this->certificador_fel = $this->db
+		$this->certificador = $this->db
 									   ->where("certificador_fel", $this->certificador_fel)
 									   ->get("certificador_fel")
 									   ->row();
+	}
+
+	public function getCertificador()
+	{
+		return $this->certificador;
 	}
 
 	public function cargarFacturaSerie()
@@ -402,7 +408,7 @@ class Factura_model extends General_model {
 		$DatosGenerales->setAttribute('MotivoAnulacion', substr($comentario, 0, 255));
 		$DatosGenerales->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
 		$DatosGenerales->setAttribute('NumeroDocumentoAAnular', $this->fel_uuid);
-		$this->certificador_fel->vinculo_firma = $this->certificador_fel->vinculo_anulacion;
+		$this->certificador->vinculo_firma = $this->certificador->vinculo_anulacion;
 	}
 
 	public function anularInfile() {
@@ -417,15 +423,15 @@ class Factura_model extends General_model {
 	public function enviar($args=array())
 	{
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $this->certificador_fel->vinculo_firma);
+		curl_setopt($ch, CURLOPT_URL, $this->certificador->vinculo_firma);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		curl_setopt($ch, CURLOPT_POST, 1);
 		$datos = array(
-			"llave" => $this->certificador_fel->firma_llave,
+			"llave" => $this->certificador->firma_llave,
 			"archivo" => base64_encode(html_entity_decode($this->xml->saveXML())),
-			"codigo" => $this->certificador_fel->firma_codigo,
-			"alias" => $this->certificador_fel->firma_alias,
+			"codigo" => $this->certificador->firma_codigo,
+			"alias" => $this->certificador->firma_alias,
 			"es_anulacion" => $this->esAnulacion
 		);
 		
@@ -445,14 +451,14 @@ class Factura_model extends General_model {
 			$identificador = "{$prefijo}-{$this->factura}";
 
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $this->certificador_fel->vinculo_factura);
+			curl_setopt($ch, CURLOPT_URL, $this->certificador->vinculo_factura);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 				"Content-Type: application/json",
-				"Usuario: " . $this->certificador_fel->usuario,
-				"llave: " . $this->certificador_fel->llave,
+				"Usuario: " . $this->certificador->usuario,
+				"llave: " . $this->certificador->llave,
 				"identificador: " . $identificador
 			));
 
@@ -483,17 +489,17 @@ class Factura_model extends General_model {
 	public function enviarDigiFact($args = [])
 	{
 		$this->load->helper('api');
-		$link = $this->certificador_fel->vinculo_factura;		
+		$link = $this->certificador->vinculo_factura;		
 		$nit = str_repeat("0", 12-strlen($this->empresa->nit)).$this->empresa->nit;
 		$datos = array(
-			"Username" => "{$this->empresa->pais_iso_dos}.{$nit}.{$this->certificador_fel->usuario}",
-			"Password" => $this->certificador_fel->llave
+			"Username" => "{$this->empresa->pais_iso_dos}.{$nit}.{$this->certificador->usuario}",
+			"Password" => $this->certificador->llave
 		);
 		
 		$jsonToken = json_decode(post_request($link, json_encode($datos)));
 
 		if(isset($jsonToken->Token)) {
-			$link = $this->certificador_fel->vinculo_firma.$nit;
+			$link = $this->certificador->vinculo_firma.$nit;
 			$header = ["Authorization: {$jsonToken->Token}"];
 			$datos = html_entity_decode($this->xml->saveXML());
 			$res = json_decode(post_request($link, $datos, $header));
@@ -522,6 +528,25 @@ class Factura_model extends General_model {
 				 ->insert('factura_fel');
 
 		return $this->db->affected_rows() > 0;
+	}
+
+	public function getFelRespuesta()
+	{
+		$tmp = $this->db
+		->where('factura', $this->factura)
+		->order_by('factura_fel', 'desc')
+		->get('factura_fel')
+		->result();
+
+		foreach ($tmp as $row) {
+			$json = json_decode($row->resultado);
+
+			if ($json->resultado) {
+				return $json;
+			}
+		}
+
+		return null;
 	}
 
 	public function get_facturas($args = [])

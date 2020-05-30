@@ -154,13 +154,19 @@ class Factura extends CI_Controller {
 			$fac->cargarReceptor();
 			$fac->procesar_factura();
 			$fac->cargarCertificadorFel();
-			$funcion = $fac->certificador_fel->metodo_factura;
+			
+			$cer = $fac->getCertificador();
+
+			$funcion = $cer->metodo_factura;
 			$resp = $fac->$funcion();
 			$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
 			
 			if (!empty($fac->numero_factura)) {
+				$fac->certificador_fel = $cer;
 				$fac->cargarSede();
 				$fac->detalle = $fac->getDetalle();
+				$fac->fecha_autorizacion = $resp->fecha;
+
 				$datos['exito'] = true;
 				$datos['factura'] = $fac;
 				$datos['mensaje'] = "Datos actualizados con exito";	
@@ -224,6 +230,14 @@ class Factura extends CI_Controller {
 		$fac->serie->xmldte = '';
 		$fac->serie->xmldte_anulacion = '';
 		$fac->detalle = $fac->getDetalle();
+		$fac->certificador_fel = $fac->getCertificador();
+
+		$resp = $fac->getFelRespuesta();
+
+		if ($resp) {
+			$fac->fecha_autorizacion = $resp->fecha;
+		}
+
 		$datos['factura'] = $fac;
 		$this->output
 		->set_content_type("application/json")
