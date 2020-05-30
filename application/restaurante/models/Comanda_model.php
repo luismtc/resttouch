@@ -154,6 +154,7 @@ class Comanda_model extends General_Model {
 		$tmp->total = number_format(suma_field($det, 'total'), 2);
 		$tmp->cuentas = $this->getCuentas();
 		$tmp->factura = $this->getFactura();
+		$tmp->origen_datos = $this->getOrigenDatos();
 		return $tmp;
 	}
 
@@ -188,7 +189,6 @@ class Comanda_model extends General_Model {
 		foreach ($this->db->get()->result() as $row) {
 			$com = new Comanda_model($row->comanda);
 			$com->origen_datos = $com->getOrigenDatos();
-			$com->comanda_origen_datos = null;
 
 			$lista[] = $com;
 		}
