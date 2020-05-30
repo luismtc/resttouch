@@ -136,9 +136,16 @@ class Comanda_model extends General_Model {
 	public function getComanda()
 	{
 		
-
+		
 		$tmp = $this->db
-		->where("comanda", $this->comanda)
+		->select("
+		a.comanda,
+		a.usuario,
+		a.sede,
+		a.estatus,
+		a.domicilio,
+		t.*")
+		->where("a.comanda", $this->comanda)
 		->join("turno t", "a.turno = t.turno")
 		->get("comanda a")
 		->row();
