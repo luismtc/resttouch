@@ -8,15 +8,15 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 
-	'hostname' => '/cloudsql/restouch:us-central1:restadmin',
-	'username' => 'root',
-	'password' => 'c807#spc',
-	'database' => 'restouch',
-
-	/*'hostname' => '127.0.0.1',
+	/*'hostname' => '/cloudsql/restouch:us-central1:restadmin',
 	'username' => 'root',
 	'password' => 'c807#spc',
 	'database' => 'restouch',*/
+
+	'hostname' => '127.0.0.1',
+	'username' => 'root',
+	'password' => 'PoChoco2016',
+	'database' => 'resttouch',
 
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
