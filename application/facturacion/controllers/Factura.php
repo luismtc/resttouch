@@ -167,6 +167,9 @@ class Factura extends CI_Controller {
 				$fac->detalle = $fac->getDetalle();
 				$fac->fecha_autorizacion = $resp->fecha;
 
+				$comanda = $fac->getComanda();
+				$fac->origen_datos = $comanda->getOrigenDatos();
+
 				$datos['exito'] = true;
 				$datos['factura'] = $fac;
 				$datos['mensaje'] = "Datos actualizados con exito";	
@@ -236,7 +239,12 @@ class Factura extends CI_Controller {
 
 		if ($resp) {
 			$fac->fecha_autorizacion = $resp->fecha;
+		} else {
+			$fac->fecha_autorizacion = '';
 		}
+
+		$comanda = $fac->getComanda();
+		$fac->origen_datos = $comanda->getOrigenDatos();
 
 		$datos['factura'] = $fac;
 		$this->output

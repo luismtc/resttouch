@@ -84,6 +84,17 @@ class Factura_model extends General_model {
 		return false;
 	}
 
+	public function getTotal()
+	{
+		return $this->db
+		->select("factura, sum(total) as total")
+		->where("factura", $this->factura)
+		->group_by("factura")
+		->get("detalle_factura")
+		->row()
+		->total;
+	}
+
 	public function getDetalle($args = [])
 	{
 		if (count($args) > 0) {
@@ -121,6 +132,23 @@ class Factura_model extends General_model {
 					->group_by("a.factura")
 					->get("factura a")
 					->row();
+	}
+
+	public function getComanda()
+	{
+		$tmp = $this->db
+		->select("e.comanda")
+		->from("factura a")
+		->join("detalle_factura b", "a.factura = b.factura")
+		->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
+		->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+		->join("cuenta e", "d.cuenta_cuenta = e.cuenta")
+		->where("a.factura", $this->getPK())
+		->group_by("e.comanda")
+		->get()
+		->row();
+
+		return new Comanda_model($tmp->comanda);
 	}
 
 	public function cargarCertificadorFel()
