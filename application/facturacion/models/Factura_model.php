@@ -17,6 +17,8 @@ class Factura_model extends General_model {
 	public $exenta = false;
 	public $notas;
 	public $sede;
+	private $namespaceURI = "http://www.sat.gob.gt/dte/fel/0.2.0";
+	private $esAnulacion;
 
 	public function __construct($id = '')
 	{
@@ -174,7 +176,7 @@ class Factura_model extends General_model {
 		$datosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);
 		$datosGenerales->setAttribute('CodigoMoneda', $this->moneda->codigo);
 
-		$fecha = $this->fecha_factura;	
+		$fecha = $this->fecha_factura;
 		
 
 		$datosGenerales->setAttribute('FechaHoraEmision', $fecha.date("\TH:i:s-06:00"));
@@ -214,7 +216,11 @@ class Factura_model extends General_model {
 		$emisor = $this->xml->getElementsByTagName('Emisor')->item(0);
 		$emisor->setAttribute('AfiliacionIVA', 'GEN');
 		$emisor->setAttribute('CodigoEstablecimiento', 1);
-		$emisor->setAttribute('CorreoEmisor', $this->empresa->correo_emisor);
+
+		if (!empty($this->empresa->correo_emisor)) {
+			$emisor->setAttribute('CorreoEmisor', $this->empresa->correo_emisor);
+		}
+
 		$emisor->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
 		$emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
 		$emisor->setAttribute('NombreEmisor', $this->empresa->nombre);
@@ -350,7 +356,7 @@ class Factura_model extends General_model {
 			$nodo = $this->xml->createElement($nombre, $valor);
 			unset($attr['SNS']);
 		} else {
-			$nodo = $this->xml->createElementNS("http://www.sat.gob.gt/dte/fel/0.1.0", $nombre, $valor);
+			$nodo = $this->xml->createElementNS($this->namespaceURI, $nombre, $valor);
 		}
 
 		if (is_array($attr) && count($attr) > 0) {
@@ -431,7 +437,6 @@ class Factura_model extends General_model {
 		
 		if ($jsonFirma->resultado) {
 			$datos = array(
-				"correo_copia" => "",
 				"nit_emisor"   => str_replace('-','',$this->empresa->nit),
 				"xml_dte"      => $jsonFirma->archivo
 			);
@@ -439,24 +444,37 @@ class Factura_model extends General_model {
 			$prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
 			$identificador = "{$prefijo}-{$this->factura}";
 
-			$params = array(
-				'llave' => $this->certificador_fel->llave,
-				'datos' => json_encode($datos),
-				'usuario' => $this->certificador_fel->usuario,
-				'identificador' => $identificador
-			);
-
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $this->certificador_fel->vinculo_factura);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				"Content-Type: application/json",
+				"Usuario: " . $this->certificador_fel->usuario,
+				"llave: " . $this->certificador_fel->llave,
+				"identificador: " . $identificador
+			));
 
 			$query = curl_exec($ch);
 
 			curl_close($ch);
 
-			return $query;
+			$res = json_decode($query);
+
+			if ($res->resultado) {
+				if ($this->esAnulacion === 'S') {
+					$this->fel_uuid_anulacion = $res->uuid;
+				} else {
+					$this->numero_factura = $res->numero;
+					$this->serie_factura = $res->serie;
+					$this->fel_uuid = $res->uuid;
+				}
+
+				$this->guardar();
+			}
+
+			return $res;
 		} else {
 			return $jsonFirma;
 		}
@@ -487,6 +505,8 @@ class Factura_model extends General_model {
 			} else if ($this->esAnulacion === 'S') {
 				$this->fel_uuid_anulacion = $res->Autorizacion;
 			}
+
+			$this->guardar();
 
 			return $res;
 		}

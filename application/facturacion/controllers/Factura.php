@@ -157,13 +157,8 @@ class Factura extends CI_Controller {
 			$funcion = $fac->certificador_fel->metodo_factura;
 			$resp = $fac->$funcion();
 			$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+			
 			if (!empty($fac->numero_factura)) {
-				$fact = new Factura_model($fac->factura);
-				$fact->guardar([
-					"numero_factura" => $fac->numero_factura,
-					"serie_factura" => $fac->serie_factura,
-					"fel_uuid" => $fac->fel_uuid
-				]);
 				$fac->cargarSede();
 				$fac->detalle = $fac->getDetalle();
 				$datos['exito'] = true;
@@ -171,6 +166,7 @@ class Factura extends CI_Controller {
 				$datos['mensaje'] = "Datos actualizados con exito";	
 			} else {
 				$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";
+				$datos["error"] = $resp;
 			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
@@ -233,7 +229,22 @@ class Factura extends CI_Controller {
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));	
 	}
+	
+	public function xml($factura)
+	{
+		$this->output
+		->set_content_type("application/xml", "UTF-8");
 
+		$fac = new Factura_model($factura);
+		$fac->cargarFacturaSerie();
+		$fac->cargarEmpresa();
+		$fac->cargarMoneda();
+		$fac->cargarReceptor();
+		$fac->procesar_factura();
+		$fac->cargarCertificadorFel();
+
+		echo $fac->getXml();
+	}
 }
 
 /* End of file Factura.php */

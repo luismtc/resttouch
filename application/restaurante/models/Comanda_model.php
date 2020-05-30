@@ -186,17 +186,47 @@ class Comanda_model extends General_Model {
 
 	public function getFactura(){
 		return $this->db
-					->select("a.*, sum(b.total) as total")
-					->from("factura a")
-					->join("detalle_factura b", "a.factura = b.factura")
-					->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
-					->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
-					->join("cuenta e", "e.cuenta = d.cuenta_cuenta")
-					->join("comanda f", "e.comanda = f.comanda")
-					->where("f.comanda", $this->getPK())
-					->group_by("f.comanda")
-					->get()
-					->row();
+		->select("
+		e.comanda, 
+		a.factura,
+		a.usuario,
+		a.factura_serie,
+		a.cliente,
+		a.numero_factura,
+		a.serie_factura,
+		a.fecha_factura,
+		a.fel_uuid,
+		a.fel_uuid_anulacion,
+		a.moneda,
+		a.certificador_fel,
+		a.exenta,
+		a.notas,
+		a.sede, 
+		sum(b.total) as total")
+		->from("factura a")
+		->join("detalle_factura b", "a.factura = b.factura")
+		->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
+		->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+		->join("cuenta e", "e.cuenta = d.cuenta_cuenta")
+		->join("comanda f", "e.comanda = f.comanda")
+		->where("f.comanda", $this->getPK())
+		->group_by("f.comanda")
+		->group_by("a.factura")
+		->group_by("a.usuario")
+		->group_by("a.factura_serie")
+		->group_by("a.cliente")
+		->group_by("a.numero_factura")
+		->group_by("a.serie_factura")
+		->group_by("a.fecha_factura")
+		->group_by("a.fel_uuid")
+		->group_by("a.fel_uuid_anulacion")
+		->group_by("a.moneda")
+		->group_by("a.certificador_fel")
+		->group_by("a.exenta")
+		->group_by("a.notas")
+		->group_by("a.sede")
+		->get()
+		->row();
 	}
 
 }
