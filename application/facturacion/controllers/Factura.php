@@ -198,7 +198,9 @@ class Factura extends CI_Controller {
 			$fac->cargarReceptor();
 			$fac->cargarCertificadorFel();
 			$fac->procesarAnulacion($_POST);
-			$funcion = $fac->certificador_fel->metodo_anulacion;
+
+			$cer = $fac->getCertificador();
+			$funcion = $cer->metodo_anulacion;
 			
 			$resp = $fac->$funcion();
 
