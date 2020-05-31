@@ -7,7 +7,8 @@ class Factura extends CI_Controller {
 	{
         parent::__construct();
         $this->load->add_package_path('application/admin');
-        $this->load->add_package_path('application/restaurante');
+		$this->load->add_package_path('application/restaurante');
+
         $this->load->model([
 			'Dfactura_model',
 			'Usuario_model',
@@ -16,7 +17,8 @@ class Factura extends CI_Controller {
 			'Dcomanda_model',
 			'Dcuenta_model',
 			'Factura_model',
-			'Articulo_model'
+			'Articulo_model',
+			'Comanda_model'
 		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");

@@ -41,8 +41,14 @@ class Api extends CI_Controller {
 					"_uno" => true
 				]);
 
+				$nit = filter_var($req['billing_address']['zip'], FILTER_SANITIZE_NUMBER_INT);
+
+				if (empty($nit)) {
+					$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$req['billing_address']['zip']));
+				}
+
 				$cliente = $this->Cliente_model->buscar([
-					"nit" => str_replace("-", "", $req['billing_address']['zip']),
+					"nit" => $nit,
 					"_uno" => true
 				]);
 
@@ -56,7 +62,7 @@ class Api extends CI_Controller {
 					$clt->guardar([
 						"nombre" => $req['billing_address']['name'],
 						"direccion" => $req['billing_address']['address1'],
-						"nit" => str_replace("-", "", $req['billing_address']['zip'])
+						"nit" => $nit
 					]);
 					$idCliente = $clt->getPK();
 				} else {

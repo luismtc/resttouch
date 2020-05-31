@@ -244,7 +244,9 @@ class Comanda_model extends General_Model {
 
 			$datos["nombre"] = $origen->descripcion;
 
-			if ($origen->descripcion == 'Shopify') {
+			$nombre = strtolower(trim($origen->descripcion));
+
+			if ($nombre == 'shopify') {
 				$datos["numero_orden"] = $json->order_number;
 				$datos["metodo_pago"] = $json->payment_gateway_names;
 			}
@@ -252,7 +254,6 @@ class Comanda_model extends General_Model {
 
 		return $datos;
 	}
-
 }
 
 /* End of file Comanda_model.php */
