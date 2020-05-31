@@ -204,15 +204,14 @@ class Factura extends CI_Controller {
 
 			$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
 			if (!empty($fac->fel_uuid_anulacion)) {
-				$fact = new Factura_model($fac->factura);
-				$fact->guardar([
-					"fel_uuid_anulacion" => $fac->fel_uuid_anulacion
-				]);
+				$fac->anularComandas();
+
 				$datos['exito'] = true;
-				$datos['factura'] = $fact;
+				$datos['factura'] = $fac;
 				$datos['mensaje'] = "Datos actualizados con exito";	
 			} else {
 				$datos['mensaje'] = "Ocurrio un error al anular la factura, intente nuevamente";
+				$datos["error"] = $resp;
 			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";

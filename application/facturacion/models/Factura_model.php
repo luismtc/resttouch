@@ -426,17 +426,18 @@ class Factura_model extends General_model {
 
 		$this->esAnulacion = "S";
 
+		$json = $this->getFelRespuesta();
+
 		$this->iniciar_xml(2);
 		$this->fecha_factura.=date("\TH:i:s");
 		$DatosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);
-		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $this->fecha_factura);
+		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $json->fecha);
 		$DatosGenerales->setAttribute('FechaHoraAnulacion', date("Y-m-d\TH:i:s"));
 
 		$DatosGenerales->setAttribute('IDReceptor', str_replace('-','',($this->exenta?'CF':$this->receptor->nit)));
 		$DatosGenerales->setAttribute('MotivoAnulacion', substr($comentario, 0, 255));
 		$DatosGenerales->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
 		$DatosGenerales->setAttribute('NumeroDocumentoAAnular', $this->fel_uuid);
-		$this->certificador->vinculo_firma = $this->certificador->vinculo_anulacion;
 	}
 
 	public function anularInfile() {
@@ -478,8 +479,10 @@ class Factura_model extends General_model {
 			$prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
 			$identificador = "{$prefijo}-{$this->factura}";
 
+			$url = $this->esAnulacion === 'N' ? $this->certificador->vinculo_factura : $this->certificador->vinculo_anulacion;
+
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $this->certificador->vinculo_factura);
+			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POST, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
@@ -609,6 +612,13 @@ class Factura_model extends General_model {
 					->group_by("a.factura")
 					->get()
 					->result();
+	}
+
+	public function anularComandas()
+	{
+		$com = $this->getComanda();
+		$com->estatus = 1;
+		$com->guardar();
 	}
 
 }
