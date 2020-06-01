@@ -431,15 +431,21 @@ class Factura_model extends General_model {
 		$datos = $xml->getElementsByTagName('DatosGenerales')->item(0);
 		$fecha = $datos->getAttribute('FechaHoraEmision');
 
+		$receptor = $xml->getElementsByTagName('Receptor')->item(0);
+		$IDReceptor = $receptor->getAttribute('IDReceptor');
+
+		$emisor = $xml->getElementsByTagName('Emisor')->item(0);
+		$NITEmisor = $emisor->getAttribute('NITEmisor');
+
 		$this->iniciar_xml(2);
 		$this->fecha_factura.=date("\TH:i:s");
 		$DatosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);
 		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $fecha);
 		$DatosGenerales->setAttribute('FechaHoraAnulacion', date("Y-m-d\TH:i:s"));
 
-		$DatosGenerales->setAttribute('IDReceptor', str_replace('-','',($this->exenta?'CF':$this->receptor->nit)));
+		$DatosGenerales->setAttribute('IDReceptor', $IDReceptor);
 		$DatosGenerales->setAttribute('MotivoAnulacion', substr($comentario, 0, 255));
-		$DatosGenerales->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
+		$DatosGenerales->setAttribute('NITEmisor', $NITEmisor);
 		$DatosGenerales->setAttribute('NumeroDocumentoAAnular', $this->fel_uuid);
 	}
 
