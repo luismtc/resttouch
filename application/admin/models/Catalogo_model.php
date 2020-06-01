@@ -228,9 +228,17 @@ class Catalogo_model extends CI_Model {
 			$this->db->where('sede', $args['sede']);
 		}
 
+		if(isset($args['admin_llave'])) {
+			$this->db
+				 ->join("empresa b", "a.empresa = b.empresa")
+				 ->join("corporacion c", "b.corporacion = c.corporacion")
+				 ->where("c.admin_llave", $args['admin_llave']);
+		}
+
 		$qry = $this->db
-		->order_by("nombre")
-		->get("sede");
+		->select("a.*")
+		->order_by("a.nombre")
+		->get("sede a");
 
 		return $this->getCatalogo($qry, $args);
 	}
@@ -305,6 +313,23 @@ class Catalogo_model extends CI_Model {
 		$qry = $this->db
 		->order_by("certificador_fel")
 		->get("certificador_fel");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getCorporacion($args=[])
+	{
+		if(count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if ($key != '_uno') {
+					$this->db->where($key, $row);
+				}
+			}
+		}
+
+		$qry = $this->db
+		->order_by("corporacion")
+		->get("corporacion");
 
 		return $this->getCatalogo($qry, $args);
 	}
