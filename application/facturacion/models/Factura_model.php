@@ -420,18 +420,21 @@ class Factura_model extends General_model {
 	public function procesarAnulacion($args = [])
 	{
 		$comentario = 'ERROR DE EMISIÓN';
+		
 		if(isset($args['comentario'])) {
 			$comentario = $args['comentario'];
 		}
 
 		$this->esAnulacion = "S";
 
-		$json = $this->getFelRespuesta();
+		$xml = $this->getFelXml();
+		$datos = $xml->getElementsByTagName('DatosGenerales')->item(0);
+		$fecha = $datos->getAttribute('FechaHoraEmision');
 
 		$this->iniciar_xml(2);
 		$this->fecha_factura.=date("\TH:i:s");
 		$DatosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);
-		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $json->fecha);
+		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $fecha);
 		$DatosGenerales->setAttribute('FechaHoraAnulacion', date("Y-m-d\TH:i:s"));
 
 		$DatosGenerales->setAttribute('IDReceptor', str_replace('-','',($this->exenta?'CF':$this->receptor->nit)));
@@ -509,6 +512,11 @@ class Factura_model extends General_model {
 				}
 
 				$this->guardar();
+			} else {
+				foreach ($res->descripcion_errores as $row) {
+					$error = explode('|', $row->mensaje_error);
+					$this->setMensaje($error[count($error)-1]);
+				}
 			}
 
 			return $res;
@@ -565,6 +573,7 @@ class Factura_model extends General_model {
 	{
 		$tmp = $this->db
 		->where('factura', $this->factura)
+		->where('resultado is not ', 'null', false)
 		->order_by('factura_fel', 'desc')
 		->get('factura_fel')
 		->result();
@@ -572,12 +581,22 @@ class Factura_model extends General_model {
 		foreach ($tmp as $row) {
 			$json = json_decode($row->resultado);
 
-			if ($json->resultado) {
+			if (isset($json->resultado) && $json->resultado) {
 				return $json;
 			}
 		}
 
 		return null;
+	}
+
+	public function getFelXml()
+	{
+		$res = $this->getFelRespuesta();
+		$xml = new DOMDocument();
+		$xml->validateOnParse = true;
+		$xml->loadXML(base64_decode($res->xml_certificado));
+
+		return $xml;
 	}
 
 	public function get_facturas($args = [])
