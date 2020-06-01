@@ -194,7 +194,7 @@ class Factura extends CI_Controller {
 	public function anular($factura)
 	{
 		$datos = ['exito' => false];
-		if ($this->input->method() == 'get') {
+		if ($this->input->method() == 'post') {
 			$fac = new Factura_model($factura);
 
 			if (empty($fac->fel_uuid_anulacion)) {
