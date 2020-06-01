@@ -20,8 +20,8 @@ export class FacturaService {
 
   constructor(
     private http: HttpClient,
-    private ls: LocalstorageService    
-  ) { 
+    private ls: LocalstorageService
+  ) {
     this.srvcErrHndl = new ServiceErrorHandler();
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
@@ -31,7 +31,7 @@ export class FacturaService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
+    };
     return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
@@ -58,7 +58,7 @@ export class FacturaService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
+    };
     return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/guardar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
@@ -67,8 +67,18 @@ export class FacturaService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
+    };
     return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/facturar/${identidad}`, {}, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  anular(identidad: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/anular/${identidad}`, {}, httpOptions)
+      .pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getDetalle(idfactura: number, fltr: any = {}): Observable<DetalleFactura[]> {
@@ -85,7 +95,7 @@ export class FacturaService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
+    };
     return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/guardar_detalle/${entidad.factura}${!!entidad.detalle_factura ? ('/' + entidad.detalle_factura) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 

@@ -5,7 +5,7 @@ import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
-//import { SignalRService } from '../../../../shared/services/signal-r.service';
+// import { SignalRService } from '../../../../shared/services/signal-r.service';
 import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 
@@ -159,8 +159,8 @@ export class FormFacturaManualComponent implements OnInit {
     return detFact;
   }
 
-  getTotalDetalle = (detalle: any[]): Number => {
-    let suma: number = 0.00;
+  getTotalDetalle = (detalle: any[]): number => {
+    let suma = 0.00;
     detalle.forEach(d => suma += +d.total);
     return suma;
   }
@@ -204,11 +204,40 @@ export class FormFacturaManualComponent implements OnInit {
           NombreCertificador: res.factura.certificador_fel.nombre,
           DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
         })}`);
-        this._snackBar.open(`Imprimiendo factura ${this.factura.serie_factura}-${this.factura.numero_factura}`, 'Impresión', { duration: 3000 });
+        this._snackBar.open(
+          `Imprimiendo factura ${this.factura.serie_factura}-${this.factura.numero_factura}`,
+          'Impresión', { duration: 3000 }
+        );
       } else {
         this._snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 3000 });
       }
-    })
+    });
+  }
+
+  anularFactura = () => {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel(
+        'Anular factura',
+        'Luego de anular la factura no podrá hacer ninguna modificación. ¿Desea continuar?',
+        'Sí',
+        'No'
+        )
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.facturaSrvc.anular(+this.factura.factura).subscribe(resAnula => {
+          if (resAnula.exito) {
+            this.factura.fel_uuid_anulacion = resAnula.factura.fel_uuid_anulacion;
+            this.facturaSavedEv.emit();
+            this._snackBar.open('Factura anulada con éxito...', 'Firmar', { duration: 3000 });
+          } else {
+            this._snackBar.open(`ERROR: ${resAnula.mensaje}`, 'Firmar', { duration: 10000 });
+          }
+        });
+      }
+    });
   }
 
   loadArticulos = () => {
@@ -229,11 +258,11 @@ export class FormFacturaManualComponent implements OnInit {
 
   resetDetalleFactura = () => this.detalleFactura = {
     detalle_factura: null, factura: (this.factura.factura || 0), articulo: null, cantidad: 1, precio_unitario: null, total: null
-  };
+  }
 
   loadDetalleFactura = (idfactura: number = +this.factura.factura) => {
     this.facturaSrvc.getDetalle(idfactura, { factura: idfactura }).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res) {
         this.detallesFactura = res;
         this.updateTableDataSource();
@@ -243,7 +272,7 @@ export class FormFacturaManualComponent implements OnInit {
 
   getDetalleFactura = (idfactura: number = +this.factura.factura, iddetalle: number) => {
     this.facturaSrvc.getDetalle(idfactura, { detalle_factura: iddetalle }).subscribe((res: any[]) => {
-      //console.log(res);
+      // console.log(res);
       if (res) {
         this.detalleFactura = {
           detalle_factura: res[0].detalle_factura,
@@ -260,9 +289,9 @@ export class FormFacturaManualComponent implements OnInit {
 
   onSubmitDetail = () => {
     this.detalleFactura.factura = this.factura.factura;
-    //console.log(this.detalleFactura);
+    // console.log(this.detalleFactura);
     this.facturaSrvc.saveDetalle(this.detalleFactura).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res) {
         this.loadDetalleFactura();
         this.resetDetalleFactura();
