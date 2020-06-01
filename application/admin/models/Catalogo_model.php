@@ -317,6 +317,22 @@ class Catalogo_model extends CI_Model {
 		return $this->getCatalogo($qry, $args);
 	}
 
+	public function getComandaOrigen($args = []) {
+		if (isset($args['comanda_origen'])) {
+			$this->db->where('comanda_origen', $args['comanda_origen']);
+		}
+
+		if (isset($args['descripcion'])) {
+			$this->db->where('descripcion', $args['descripcion']);
+		}
+
+		$qry = $this->db
+		->order_by("comanda_origen")
+		->get("comanda_origen");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
 	public function getCorporacion($args=[])
 	{
 		if(count($args) > 0) {

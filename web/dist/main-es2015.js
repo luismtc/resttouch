@@ -3615,7 +3615,6 @@ __webpack_require__.r(__webpack_exports__);
 
 // const urlBase = 'http://localhost/resttouch'; // Desarrollo
 const urlBase = location.origin; // Producción
-// const urlBase = 'https://resttouchapi.c807.com'; // Producción (Usado temporalmente en una VM)
 const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -3737,8 +3736,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// const config: SocketIoConfig = { url: 'http://192.168.168.88:8988', options: {} };
-// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
 const config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
 let SharedModule = class SharedModule {
 };

@@ -74,6 +74,14 @@ $config['menu'] = [
 					3 => [
 						'nombre' => 'Propinas',
 						'link' => '/restaurante/rptpropinas'
+					],
+					4 => [
+						'nombre' => 'Caja',
+						'link' => '/restaurante/rptcaja'
+					],
+					5 => [
+						'nombre' => 'Factura',
+						'link' => '/restaurante/rptfactura'
 					]
 				]
 			]

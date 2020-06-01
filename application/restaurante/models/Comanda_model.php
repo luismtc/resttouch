@@ -9,6 +9,8 @@ class Comanda_model extends General_Model {
 	public $estatus;
 	public $turno;
 	public $domicilio = 0;
+	public $comanda_origen;
+	public $comanda_origen_datos;
 
 	public function __construct($id = '')
 	{
@@ -134,9 +136,16 @@ class Comanda_model extends General_Model {
 	public function getComanda()
 	{
 		
-
+		
 		$tmp = $this->db
-		->where("comanda", $this->comanda)
+		->select("
+		a.comanda,
+		a.usuario,
+		a.sede,
+		a.estatus,
+		a.domicilio,
+		t.*")
+		->where("a.comanda", $this->comanda)
 		->join("turno t", "a.turno = t.turno")
 		->get("comanda a")
 		->row();
@@ -152,6 +161,7 @@ class Comanda_model extends General_Model {
 		$tmp->total = number_format(suma_field($det, 'total'), 2);
 		$tmp->cuentas = $this->getCuentas();
 		$tmp->factura = $this->getFactura();
+		$tmp->origen_datos = $this->getOrigenDatos();
 		return $tmp;
 	}
 
@@ -164,7 +174,7 @@ class Comanda_model extends General_Model {
 		}
 
 		$this->db
-			 ->select("a.*")
+			 ->select("a.comanda")
 			 ->from("comanda a")
 			 ->join("turno t", "a.turno = t.turno")
 			 ->where("t.sede", $args['sede'])
@@ -181,24 +191,69 @@ class Comanda_model extends General_Model {
 				 ->where("f.fel_uuid is null");
 		}
 
-		return $this->db->get()->result();
+		$lista = [];
+
+		foreach ($this->db->get()->result() as $row) {
+			$com = new Comanda_model($row->comanda);
+			$com->origen_datos = $com->getOrigenDatos();
+
+			$lista[] = $com;
+		}
+
+		return $lista;
 	}
 
 	public function getFactura(){
-		return $this->db
-					->select("a.*, sum(b.total) as total")
-					->from("factura a")
-					->join("detalle_factura b", "a.factura = b.factura")
-					->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
-					->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
-					->join("cuenta e", "e.cuenta = d.cuenta_cuenta")
-					->join("comanda f", "e.comanda = f.comanda")
-					->where("f.comanda", $this->getPK())
-					->group_by("f.comanda")
-					->get()
-					->row();
+		$tmp = $this->db
+		->select("a.factura")
+		->from("factura a")
+		->join("detalle_factura b", "a.factura = b.factura")
+		->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
+		->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+		->join("cuenta e", "e.cuenta = d.cuenta_cuenta")
+		->where("e.comanda", $this->getPK())
+		->group_by("a.factura")
+		->get()
+		->row();
+
+		$fac = new Factura_model($tmp->factura);
+		$fac->total = $fac->getTotal();
+
+		return $fac;
 	}
 
+	public function getComandaOrigen()
+	{
+		return $this->Catalogo_model->getComandaOrigen([
+			"_uno" => true,
+			"comanda_origen" => $this->comanda_origen
+		]);
+	}
+
+	public function getOrigenDatos()
+	{
+		$datos = [
+			"nombre" => "",
+			"numero_orden" => "",
+			"metodo_pago" => []
+		];
+
+		if ($this->comanda_origen_datos) {
+			$json = json_decode($this->comanda_origen_datos);
+			$origen = $this->getComandaOrigen();
+
+			$datos["nombre"] = $origen->descripcion;
+
+			$nombre = strtolower(trim($origen->descripcion));
+
+			if ($nombre == 'shopify') {
+				$datos["numero_orden"] = $json->order_number;
+				$datos["metodo_pago"] = $json->payment_gateway_names;
+			}
+		}
+
+		return $datos;
+	}
 }
 
 /* End of file Comanda_model.php */

@@ -17,6 +17,9 @@ class Factura_model extends General_model {
 	public $exenta = false;
 	public $notas;
 	public $sede;
+	private $namespaceURI = "http://www.sat.gob.gt/dte/fel/0.2.0";
+	private $esAnulacion;
+	private $certificador;
 
 	public function __construct($id = '')
 	{
@@ -81,6 +84,17 @@ class Factura_model extends General_model {
 		return false;
 	}
 
+	public function getTotal()
+	{
+		return $this->db
+		->select("factura, sum(total) as total")
+		->where("factura", $this->factura)
+		->group_by("factura")
+		->get("detalle_factura")
+		->row()
+		->total;
+	}
+
 	public function getDetalle($args = [])
 	{
 		if (count($args) > 0) {
@@ -120,12 +134,34 @@ class Factura_model extends General_model {
 					->row();
 	}
 
+	public function getComanda()
+	{
+		$tmp = $this->db
+		->select("e.comanda")
+		->from("factura a")
+		->join("detalle_factura b", "a.factura = b.factura")
+		->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
+		->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+		->join("cuenta e", "d.cuenta_cuenta = e.cuenta")
+		->where("a.factura", $this->getPK())
+		->group_by("e.comanda")
+		->get()
+		->row();
+
+		return new Comanda_model($tmp->comanda);
+	}
+
 	public function cargarCertificadorFel()
 	{
-		$this->certificador_fel = $this->db
+		$this->certificador = $this->db
 									   ->where("certificador_fel", $this->certificador_fel)
 									   ->get("certificador_fel")
 									   ->row();
+	}
+
+	public function getCertificador()
+	{
+		return $this->certificador;
 	}
 
 	public function cargarFacturaSerie()
@@ -174,7 +210,7 @@ class Factura_model extends General_model {
 		$datosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);
 		$datosGenerales->setAttribute('CodigoMoneda', $this->moneda->codigo);
 
-		$fecha = $this->fecha_factura;	
+		$fecha = $this->fecha_factura;
 		
 
 		$datosGenerales->setAttribute('FechaHoraEmision', $fecha.date("\TH:i:s-06:00"));
@@ -214,7 +250,11 @@ class Factura_model extends General_model {
 		$emisor = $this->xml->getElementsByTagName('Emisor')->item(0);
 		$emisor->setAttribute('AfiliacionIVA', 'GEN');
 		$emisor->setAttribute('CodigoEstablecimiento', 1);
-		$emisor->setAttribute('CorreoEmisor', $this->empresa->correo_emisor);
+
+		if (!empty($this->empresa->correo_emisor)) {
+			$emisor->setAttribute('CorreoEmisor', $this->empresa->correo_emisor);
+		}
+
 		$emisor->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
 		$emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
 		$emisor->setAttribute('NombreEmisor', $this->empresa->nombre);
@@ -350,7 +390,7 @@ class Factura_model extends General_model {
 			$nodo = $this->xml->createElement($nombre, $valor);
 			unset($attr['SNS']);
 		} else {
-			$nodo = $this->xml->createElementNS("http://www.sat.gob.gt/dte/fel/0.1.0", $nombre, $valor);
+			$nodo = $this->xml->createElementNS($this->namespaceURI, $nombre, $valor);
 		}
 
 		if (is_array($attr) && count($attr) > 0) {
@@ -380,23 +420,33 @@ class Factura_model extends General_model {
 	public function procesarAnulacion($args = [])
 	{
 		$comentario = 'ERROR DE EMISIÓN';
+		
 		if(isset($args['comentario'])) {
 			$comentario = $args['comentario'];
 		}
 
 		$this->esAnulacion = "S";
 
+		$xml = $this->getFelXml();
+		$datos = $xml->getElementsByTagName('DatosGenerales')->item(0);
+		$fecha = $datos->getAttribute('FechaHoraEmision');
+
+		$receptor = $xml->getElementsByTagName('Receptor')->item(0);
+		$IDReceptor = $receptor->getAttribute('IDReceptor');
+
+		$emisor = $xml->getElementsByTagName('Emisor')->item(0);
+		$NITEmisor = $emisor->getAttribute('NITEmisor');
+
 		$this->iniciar_xml(2);
 		$this->fecha_factura.=date("\TH:i:s");
 		$DatosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);
-		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $this->fecha_factura);
+		$DatosGenerales->setAttribute('FechaEmisionDocumentoAnular', $fecha);
 		$DatosGenerales->setAttribute('FechaHoraAnulacion', date("Y-m-d\TH:i:s"));
 
-		$DatosGenerales->setAttribute('IDReceptor', str_replace('-','',($this->exenta?'CF':$this->receptor->nit)));
+		$DatosGenerales->setAttribute('IDReceptor', $IDReceptor);
 		$DatosGenerales->setAttribute('MotivoAnulacion', substr($comentario, 0, 255));
-		$DatosGenerales->setAttribute('NITEmisor', str_replace('-','',$this->empresa->nit));
+		$DatosGenerales->setAttribute('NITEmisor', $NITEmisor);
 		$DatosGenerales->setAttribute('NumeroDocumentoAAnular', $this->fel_uuid);
-		$this->certificador_fel->vinculo_firma = $this->certificador_fel->vinculo_anulacion;
 	}
 
 	public function anularInfile() {
@@ -410,22 +460,19 @@ class Factura_model extends General_model {
 
 	public function enviar($args=array())
 	{
-		$vinculo = "https://signer-emisores.feel.com.gt/sign_solicitud_firmas/firma_xml";
 		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $vinculo);
+		curl_setopt($ch, CURLOPT_URL, $this->certificador->vinculo_firma);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		curl_setopt($ch, CURLOPT_POST, 1);
 		$datos = array(
-			"llave" => "9c748d9bcf1455655b9e9a5c34525570",
+			"llave" => $this->certificador->firma_llave,
 			"archivo" => base64_encode(html_entity_decode($this->xml->saveXML())),
-			"codigo" => "1000000000K",
-			"alias" => "DEMO_FEL",
+			"codigo" => $this->certificador->firma_codigo,
+			"alias" => $this->certificador->firma_alias,
 			"es_anulacion" => $this->esAnulacion
 		);
 		
-		# Datos que recibe el web service para obtener firma para el documento
-		# Debe pasar por el servidor gacela.c807.com por cuestiones de versión de PHP
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
 
 		$jsonFirma = json_decode(curl_exec($ch));
@@ -433,35 +480,25 @@ class Factura_model extends General_model {
 		# para imprimir errores
 		
 		if ($jsonFirma->resultado) {
-			$vinculo = "https://certificador.feel.com.gt/fel/certificacion/dte";
-			# Datos para el envío del documento para la ceritificación por SAT
 			$datos = array(
-				"correo_copia" => "",
-				"nit_emisor"   => str_replace('-','','1000000000K'),
+				"nit_emisor"   => str_replace('-','',$this->empresa->nit),
 				"xml_dte"      => $jsonFirma->archivo
 			);
 
 			$prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
-			#$prefijo = 'VT';
 			$identificador = "{$prefijo}-{$this->factura}";
-			
 
-			$params = array(
-				'llave' => "9c748d9bcf1455655b9e9a5c34525570",
-				'datos' => json_encode($datos),
-				'usuario' => "DEMO_FEL",
-				'identificador' => $identificador
-			);
+			$url = $this->esAnulacion === 'N' ? $this->certificador->vinculo_factura : $this->certificador->vinculo_anulacion;
 
 			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $vinculo);
+			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
 				"Content-Type: application/json",
-				"Usuario: C807",
-				"llave: E5DC9FFBA5F3653E27DF2FC1DCAC824D",
+				"Usuario: " . $this->certificador->usuario,
+				"llave: " . $this->certificador->llave,
 				"identificador: " . $identificador
 			));
 
@@ -469,7 +506,26 @@ class Factura_model extends General_model {
 
 			curl_close($ch);
 
-			return $query;
+			$res = json_decode($query);
+
+			if ($res->resultado) {
+				if ($this->esAnulacion === 'S') {
+					$this->fel_uuid_anulacion = $res->uuid;
+				} else {
+					$this->numero_factura = $res->numero;
+					$this->serie_factura = $res->serie;
+					$this->fel_uuid = $res->uuid;
+				}
+
+				$this->guardar();
+			} else {
+				foreach ($res->descripcion_errores as $row) {
+					$error = explode('|', $row->mensaje_error);
+					$this->setMensaje($error[count($error)-1]);
+				}
+			}
+
+			return $res;
 		} else {
 			return $jsonFirma;
 		}
@@ -478,17 +534,17 @@ class Factura_model extends General_model {
 	public function enviarDigiFact($args = [])
 	{
 		$this->load->helper('api');
-		$link = $this->certificador_fel->vinculo_factura;		
+		$link = $this->certificador->vinculo_factura;		
 		$nit = str_repeat("0", 12-strlen($this->empresa->nit)).$this->empresa->nit;
 		$datos = array(
-			"Username" => "{$this->empresa->pais_iso_dos}.{$nit}.{$this->certificador_fel->usuario}",
-			"Password" => $this->certificador_fel->llave
+			"Username" => "{$this->empresa->pais_iso_dos}.{$nit}.{$this->certificador->usuario}",
+			"Password" => $this->certificador->llave
 		);
 		
 		$jsonToken = json_decode(post_request($link, json_encode($datos)));
 
 		if(isset($jsonToken->Token)) {
-			$link = $this->certificador_fel->vinculo_firma.$nit;
+			$link = $this->certificador->vinculo_firma.$nit;
 			$header = ["Authorization: {$jsonToken->Token}"];
 			$datos = html_entity_decode($this->xml->saveXML());
 			$res = json_decode(post_request($link, $datos, $header));
@@ -500,6 +556,8 @@ class Factura_model extends General_model {
 			} else if ($this->esAnulacion === 'S') {
 				$this->fel_uuid_anulacion = $res->Autorizacion;
 			}
+
+			$this->guardar();
 
 			return $res;
 		}
@@ -515,6 +573,36 @@ class Factura_model extends General_model {
 				 ->insert('factura_fel');
 
 		return $this->db->affected_rows() > 0;
+	}
+
+	public function getFelRespuesta()
+	{
+		$tmp = $this->db
+		->where('factura', $this->factura)
+		->where('resultado is not ', 'null', false)
+		->order_by('factura_fel', 'desc')
+		->get('factura_fel')
+		->result();
+
+		foreach ($tmp as $row) {
+			$json = json_decode($row->resultado);
+
+			if (isset($json->resultado) && $json->resultado) {
+				return $json;
+			}
+		}
+
+		return null;
+	}
+
+	public function getFelXml()
+	{
+		$res = $this->getFelRespuesta();
+		$xml = new DOMDocument();
+		$xml->validateOnParse = true;
+		$xml->loadXML(base64_decode($res->xml_certificado));
+
+		return $xml;
 	}
 
 	public function get_facturas($args = [])
@@ -549,6 +637,13 @@ class Factura_model extends General_model {
 					->group_by("a.factura")
 					->get()
 					->result();
+	}
+
+	public function anularComandas()
+	{
+		$com = $this->getComanda();
+		$com->estatus = 1;
+		$com->guardar();
 	}
 
 }

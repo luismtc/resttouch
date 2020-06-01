@@ -12,6 +12,7 @@ import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cob
 // import { Comanda } from '../../interfaces/comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
 import { ComandaService } from '../../services/comanda.service';
+import { FacturaService } from '../../../pos/services/factura.service';
 
 interface productoSelected {
   id: number;
@@ -44,18 +45,19 @@ interface productoSelected {
 export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   public dataSource: any[] = [];
-  public columnsToDisplay = ['comanda', 'nombre', 'total', 'imprimir', 'facturar'];
+  public columnsToDisplay = ['comanda', 'orden', 'nombre', 'total', 'imprimir', 'facturar'];
   public expandedElement: any | null;
 
   public comandasEnLinea: any[] = [];
-  public intervalId: any;
+  // public intervalId: any;
 
   constructor(
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private socket: Socket,
     private ls: LocalstorageService,
-    private comandaSrvc: ComandaService
+    private comandaSrvc: ComandaService,
+    private facturaSrvc: FacturaService
   ) { }
 
   ngOnInit() {
@@ -63,7 +65,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('shopify:updlist', () => {
         this.loadComandasEnLinea();
-        console.log(`${moment().format(GLOBAL.dateTimeFormat)}: Actualizando lista de ordenes en linea...`);
+        // console.log(`${moment().format(GLOBAL.dateTimeFormat)}: Actualizando lista de ordenes en linea...`);
       });
     }
 
@@ -72,9 +74,11 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    /*
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    */
   }
 
   loadComandasEnLinea = () => {
@@ -138,6 +142,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         Tipo: 'Comanda',
         Nombre: obj.cuentas[0].nombre,
         Numero: obj.comanda,
+        NoOrdenEnLinea: obj.origen_datos.numero_orden,
         DetalleCuenta: AImpresoraNormal,
         Total: null
       };
@@ -150,6 +155,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         Tipo: 'Comanda',
         Nombre: obj.cuentas[0].nombre,
         Numero: obj.comanda,
+        NoOrdenEnLinea: obj.origen_datos.numero_orden,
         DetalleCuenta: AImpresoraBT,
         Total: null
       };
@@ -164,6 +170,53 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     setTimeout(() => wref.close(), 1000);
   }
 
+  firmar = (obj: any) => {
+    // console.log(obj);
+    this.facturaSrvc.firmar(+obj.factura.factura).subscribe((res: any) => {
+      // console.log(res);
+      if (res.exito) {
+        this.loadComandasEnLinea();
+        this.printFactura(res.factura, obj.origen_datos);
+      }
+      this.snackBar.open('Facturación', res.mensaje, { duration: (res.exito ? 3000 : 10000) });
+    });
+  }
+
+  printFactura = (fact: any, datosOrigen: any = {}) => {
+    const dataToPrint = {
+      NombreEmpresa: fact.empresa.nombre_comercial,
+      NitEmpresa: fact.empresa.nit,
+      SedeEmpresa: fact.sedeFactura.nombre,
+      DireccionEmpresa: fact.empresa.direccion,
+      Fecha: moment(fact.fecha_factura).format(GLOBAL.dateFormat),
+      Nit: fact.receptor.nit,
+      Nombre: fact.receptor.nombre,
+      Direccion: fact.receptor.direccion,
+      Serie: fact.serie_factura,
+      Numero: fact.numero_factura,
+      Total: 0.00,
+      NoAutorizacion: fact.fel_uuid,
+      NombreCertificador: fact.certificador_fel.nombre,
+      NitCertificador: fact.certificador_fel.nit,
+      FechaDeAutorizacion: fact.fecha_autorizacion,
+      NoOrdenEnLinea: datosOrigen.numero_orden,
+      FormaDePago: datosOrigen.metodo_pago.join(', '),
+      DetalleFactura: []
+    };
+
+    for (const det of fact.detalle) {
+      dataToPrint.DetalleFactura.push({
+        Cantidad: det.cantidad,
+        Descripcion: det.articulo.descripcion,
+        Total: parseFloat(det.total)
+      });
+      dataToPrint.Total += parseFloat(det.total);
+    }
+
+    this.socket.emit('print:factura', JSON.stringify(dataToPrint));
+  }
+
+  /*
   facturar = (obj: any) => {
     // console.log(obj);
     const productosACobrar = obj.cuentas[0].productos;
@@ -189,4 +242,5 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
     }
   }
+  */
 }

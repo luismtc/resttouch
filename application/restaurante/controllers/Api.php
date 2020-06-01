@@ -33,7 +33,7 @@ class Api extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 
 		$datos = ["exito" => false];
-		$_GET['key'] = "0b0928b0-ff4f-4b6d-8287-f5980fe11a46";
+
 		if (isset($_GET['key'])) {
 			if ($this->input->method() == 'post') {
 				$sede = $this->Catalogo_model->getSede([
@@ -41,9 +41,20 @@ class Api extends CI_Controller {
 					"_uno" => true
 				]);
 
+				$nit = filter_var($req['billing_address']['zip'], FILTER_SANITIZE_NUMBER_INT);
+
+				if (empty($nit)) {
+					$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$req['billing_address']['zip']));
+				}
+
 				$cliente = $this->Cliente_model->buscar([
-					"nit" => str_replace("-", "", $req['billing_address']['zip']),
+					"nit" => $nit,
 					"_uno" => true
+				]);
+
+				$origen = $this->Catalogo_model->getComandaOrigen([
+					"_uno" => true,
+					"descripcion" => "Shopify"
 				]);
 
 				if (!$cliente) {
@@ -51,7 +62,7 @@ class Api extends CI_Controller {
 					$clt->guardar([
 						"nombre" => $req['billing_address']['name'],
 						"direccion" => $req['billing_address']['address1'],
-						"nit" => str_replace("-", "", $req['billing_address']['zip'])
+						"nit" => $nit
 					]);
 					$idCliente = $clt->getPK();
 				} else {
@@ -73,118 +84,125 @@ class Api extends CI_Controller {
 				]);
 
 				if($sede) {
-					if ($usu) {
-						$turno = $this->Turno_model->getTurno([
-							"sede" => 1,
-							'abierto' => true, 
-							"_uno" => true
-						]);
-						$comanda = new Comanda_model();
-						$datosComanda = [
-							'usuario' => $usu->usuario, 
-							'sede' => $sede->sede, 
-							'estatus' => 1, 
-							'domicilio' => 1
-						];				
-						$insert = false;
-						foreach ($req['line_items'] as $row) {
-							$art = $this->Articulo_model->buscar([
-								'shopify_id' => $row['product_id'],
-								'_uno' => true
+					if ($origen) {
+						if ($usu) {
+							$turno = $this->Turno_model->getTurno([
+								"sede" => 1,
+								'abierto' => true, 
+								"_uno" => true
 							]);
-							if ($art) {
-								$insert = true;
+							$comanda = new Comanda_model();
+							$datosComanda = [
+								'usuario' => $usu->usuario, 
+								'sede' => $sede->sede, 
+								'estatus' => 1, 
+								'domicilio' => 1,
+								'comanda_origen' => $origen->comanda_origen,
+								'comanda_origen_datos' => json_encode($req)
+							];
+							
+							$insert = false;
+							foreach ($req['line_items'] as $row) {
+								$art = $this->Articulo_model->buscar([
+									'shopify_id' => $row['variant_id'],
+									'_uno' => true
+								]);
+								if ($art) {
+									$insert = true;
+								}
 							}
-						}
-						if ($insert) {
-							if ($turno) {
-								$datosComanda['turno'] = $turno->turno;
-								$datos['exito'] = $comanda->guardar($datosComanda);
-				
-								$cuenta = new Cuenta_model();
-								
-								if ($cuenta->cerrada == 0) {
-									$datosCta['comanda'] = $comanda->comanda;
-									$cuenta->guardar($datosCta);	
-								}		
-								$total = 0;					
-								foreach ($req['line_items'] as $row) {
-									$art = $this->Articulo_model->buscar([
-										'shopify_id' => $row['product_id'],
-										'_uno' => true
-									]);
-									if ($art) {
-										$datosDcomanda = [
-											'articulo' => $art->articulo
-											,'cantidad' => $row['quantity']
-											,'precio' => $row['price']
-											,'impreso' => 0
-											,'total' => $row['price'] * $row['quantity']
-											,'notas' => ''
-										];
-										$total += ($row['price'] * $row['quantity']);
-										$det = $comanda->guardarDetalle($datosDcomanda);
-										$id = '';
-										if ($det) {
-											$cuenta->guardarDetalle([
-												'detalle_comanda' => $det->detalle_comanda
-											]);	
-											$datos['exito'] = true;
-										} else {
-											$datos['exito'] = false;						
-										}	
-									} else {
-										$datos['exito'] = false;
-									}				
-								}
+							if ($insert) {
+								if ($turno) {
+									$datosComanda['turno'] = $turno->turno;
+									$datos['exito'] = $comanda->guardar($datosComanda);
+					
+									$cuenta = new Cuenta_model();
 									
-								if ($datos['exito']) {
-									$exito = $cuenta->cobrar((object)[
-										"forma_pago" => 1,
-										"monto" => $total
-									]);									
-
-									if($exito) {
-										$cuenta->guardar(["cerrada" => 1]);
-
-										$fac = new Factura_model();
-										$fac->guardar($datosFac);
-										$fac->cargarEmpresa();
-										$pimpuesto = $fac->empresa->porcentaje_iva +1;
-										foreach ($cuenta->getDetalle() as $det) {
-											$det->bien_servicio = $det->articulo->bien_servicio;
-											$det->articulo = $det->articulo->articulo;
-											$det->precio_unitario = $det->precio;
-											if ($fac->exenta) {
-												$det->monto_base = $det->total;
+									if ($cuenta->cerrada == 0) {
+										$datosCta['comanda'] = $comanda->comanda;
+										$cuenta->guardar($datosCta);	
+									}		
+									$total = 0;					
+									foreach ($req['line_items'] as $row) {
+										$art = $this->Articulo_model->buscar([
+											'shopify_id' => $row['variant_id'],
+											'_uno' => true
+										]);
+										if ($art) {
+											$datosDcomanda = [
+												'articulo' => $art->articulo
+												,'cantidad' => $row['quantity']
+												,'precio' => $row['price']
+												,'impreso' => 0
+												,'total' => $row['price'] * $row['quantity']
+												,'notas' => ''
+											];
+											$total += ($row['price'] * $row['quantity']);
+											$det = $comanda->guardarDetalle($datosDcomanda);
+											$id = '';
+											if ($det) {
+												$cuenta->guardarDetalle([
+													'detalle_comanda' => $det->detalle_comanda
+												]);	
+												$datos['exito'] = true;
 											} else {
-												$det->monto_base = number_format($det->total / $pimpuesto, 2);
-											}
-											$det->monto_iva = $det->total - $det->monto_base;	
-											$fac->setDetalle((array) $det);
-										}
+												$datos['exito'] = false;						
+											}	
+										} else {
+											$datos['exito'] = false;
+										}				
 									}
-									$datos['comanda'] = $comanda->getComanda();	
-								} else {
-									$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-								}							
-									
-								if($datos['exito']) {
-									$datos['mensaje'] = "Datos Actualizados con Exito";
-									$datos['comanda'] = $comanda->getComanda();	
-								} else {
-									$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-								}
+										
+									if ($datos['exito']) {
+										$exito = $cuenta->cobrar((object)[
+											"forma_pago" => 1,
+											"monto" => $total
+										]);									
 
+										if($exito) {
+											$cuenta->guardar(["cerrada" => 1]);
+
+											$fac = new Factura_model();
+											$fac->guardar($datosFac);
+											$fac->cargarEmpresa();
+											$pimpuesto = $fac->empresa->porcentaje_iva +1;
+											foreach ($cuenta->getDetalle() as $det) {
+												$det->bien_servicio = $det->articulo->bien_servicio;
+												$det->articulo = $det->articulo->articulo;
+												$det->precio_unitario = $det->precio;
+												if ($fac->exenta) {
+													$det->monto_base = $det->total;
+												} else {
+													$det->monto_base = number_format($det->total / $pimpuesto, 2);
+												}
+												$det->monto_iva = $det->total - $det->monto_base;	
+												$fac->setDetalle((array) $det);
+											}
+										}
+										$datos['comanda'] = $comanda->getComanda();	
+									} else {
+										$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+									}							
+										
+									if($datos['exito']) {
+										$datos['mensaje'] = "Datos Actualizados con Exito";
+										$datos['comanda'] = $comanda->getComanda();	
+									} else {
+										$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+									}
+
+								} else {
+									$datos['mensaje'] = "No existe ningun turno abierto";
+								}	
 							} else {
-								$datos['mensaje'] = "No existe ningun turno abierto";
-							}	
+								$datos['mensaje'] = "No existen productos";	
+							}
 						} else {
-							$datos['mensaje'] = "No existen productos";	
+							$datos['mensaje'] = "Mesero Invalido";
 						}
 					} else {
-						$datos['mensaje'] = "Mesero Invalido";
-					}								
+						$datos['mensaje'] = "Origen desconocido";
+					}
 				} else {
 					$datos['mensaje'] = "Llave invalida";
 				}
