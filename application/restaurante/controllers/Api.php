@@ -100,16 +100,22 @@ class Api extends CI_Controller {
 								'comanda_origen' => $origen->comanda_origen,
 								'comanda_origen_datos' => json_encode($req)
 							];
-							
+
+							$propina = false;
 							$insert = false;
+							$propinaMonto = 0;
+
 							foreach ($req['line_items'] as $row) {
-								$art = $this->Articulo_model->buscar([
-									'shopify_id' => $row['variant_id'],
-									'_uno' => true
-								]);
-								if ($art) {
-									$insert = true;
-								}
+								if (strtolower($row['title']) != 'tip') {
+									$art = $this->Articulo_model->buscar([
+										'shopify_id' => $row['variant_id'],
+										'_uno' => true
+									]);	
+
+									if ($art) {
+										$insert = true;
+									}
+								}								
 							}
 							if ($insert) {
 								if ($turno) {
@@ -128,31 +134,92 @@ class Api extends CI_Controller {
 											'shopify_id' => $row['variant_id'],
 											'_uno' => true
 										]);
-										if ($art) {
-											$datosDcomanda = [
-												'articulo' => $art->articulo
-												,'cantidad' => $row['quantity']
-												,'precio' => $row['price']
-												,'impreso' => 0
-												,'total' => $row['price'] * $row['quantity']
-												,'notas' => ''
-											];
-											$total += ($row['price'] * $row['quantity']);
-											$det = $comanda->guardarDetalle($datosDcomanda);
-											$id = '';
-											if ($det) {
-												$cuenta->guardarDetalle([
-													'detalle_comanda' => $det->detalle_comanda
-												]);	
-												$datos['exito'] = true;
+										if (strtolower($row['title']) != 'tip') {
+											if ($art) {
+												$datosDcomanda = [
+													'articulo' => $art->articulo
+													,'cantidad' => $row['quantity']
+													,'precio' => $row['price']
+													,'impreso' => 0
+													,'total' => $row['price'] * $row['quantity']
+													,'notas' => ''
+												];
+												$total += ($row['price'] * $row['quantity']);
+												$det = $comanda->guardarDetalle($datosDcomanda);
+												$id = '';
+												if ($det) {
+													$cuenta->guardarDetalle([
+														'detalle_comanda' => $det->detalle_comanda
+													]);	
+													$datos['exito'] = true;
+												} else {
+													$datos['exito'] = false;						
+												}	
 											} else {
-												$datos['exito'] = false;						
+												$datos['exito'] = false;
 											}	
 										} else {
-											$datos['exito'] = false;
-										}				
+											$propina = true;
+											$propinaMonto = $row['price'];
+											$cuenta->guardar([
+												"propina_monto" => $row['price']
+											]);
+										}		
 									}
 										
+									if ($propina) {
+										$art = $this->Articulo_model->buscar([
+											'descripcion' => 'Propina',
+											'_uno' => true
+										]);
+										$datosDcomanda = [
+											'articulo' => $art->articulo
+											,'cantidad' => 1
+											,'precio' => $propinaMonto
+											,'impreso' => 0
+											,'total' => $propinaMonto
+											,'notas' => ''
+										];
+										$total += $propinaMonto;
+										$det = $comanda->guardarDetalle($datosDcomanda);
+										$id = '';
+										if ($det) {
+											$cuenta->guardarDetalle([
+												'detalle_comanda' => $det->detalle_comanda
+											]);	
+											$datos['exito'] = true;
+										} else {
+											$datos['exito'] = false;						
+										}	
+									}
+
+									if (isset($req['total_shipping_price_set']) && isset($req['total_shipping_price_set']['shop_money'])) {
+										$row = $req['total_shipping_price_set']['shop_money'];
+										$art = $this->Articulo_model->buscar([
+											'descripcion' => 'Entrega',
+											'_uno' => true
+										]);
+
+										$datosDcomanda = [
+											'articulo' => $art->articulo
+											,'cantidad' => 1
+											,'precio' => $row['amount']
+											,'impreso' => 0
+											,'total' => $row['amount']
+											,'notas' => ''
+										];
+										$total += ($row['amount']);
+										$det = $comanda->guardarDetalle($datosDcomanda);
+										$id = '';
+										if ($det) {
+											$cuenta->guardarDetalle([
+												'detalle_comanda' => $det->detalle_comanda
+											]);	
+											$datos['exito'] = true;
+										} else {
+											$datos['exito'] = false;						
+										}		
+									}
 									if ($datos['exito']) {
 										$exito = $cuenta->cobrar((object)[
 											"forma_pago" => 1,
@@ -190,7 +257,6 @@ class Api extends CI_Controller {
 									} else {
 										$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
 									}
-
 								} else {
 									$datos['mensaje'] = "No existe ningun turno abierto";
 								}	
