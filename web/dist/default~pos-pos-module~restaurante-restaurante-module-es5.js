@@ -1027,27 +1027,9 @@
                         return suma;
                     };
                     this.imprimirFactura = function () {
-                        //console.log(this.factura);
+                        // console.log(this.factura);
                         _this.facturaSrvc.imprimir(+_this.factura.factura).subscribe(function (res) {
                             if (res.factura) {
-                                /*
-                                this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
-                                  NombreEmpresa: res.factura.empresa.nombre,
-                                  NitEmpresa: res.factura.empresa.nit,
-                                  SedeEmpresa: res.factura.sedeFactura.nombre,
-                                  DireccionEmpresa: res.factura.empresa.direccion,
-                                  Fecha: moment(res.factura.fecha_factura).format(GLOBAL.dateFormat),
-                                  Nit: res.factura.receptor.nit,
-                                  Nombre: res.factura.receptor.nombre,
-                                  Direccion: res.factura.receptor.direccion,
-                                  Serie: res.factura.serie_factura,
-                                  Numero: res.factura.numero_factura,
-                                  Total: this.getTotalDetalle(res.factura.detalle),
-                                  NoAutorizacion: res.factura.fel_uuid,
-                                  NombreCertificador: res.factura.certificador_fel.nombre,
-                                  DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
-                                })}`, 'SendFactura');
-                                */
                                 _this.socket.emit("print:factura", "" + JSON.stringify({
                                     NombreEmpresa: res.factura.empresa.nombre,
                                     NitEmpresa: res.factura.empresa.nit,
@@ -1062,6 +1044,10 @@
                                     Total: _this.getTotalDetalle(res.factura.detalle),
                                     NoAutorizacion: res.factura.fel_uuid,
                                     NombreCertificador: res.factura.certificador_fel.nombre,
+                                    NitCertificador: res.factura.certificador_fel.nit,
+                                    FechaDeAutorizacion: res.factura.fecha_autorizacion,
+                                    NoOrdenEnLinea: '',
+                                    FormaDePago: '',
                                     DetalleFactura: _this.procesaDetalleFactura(res.factura.detalle)
                                 }));
                                 _this._snackBar.open("Imprimiendo factura " + _this.factura.serie_factura + "-" + _this.factura.numero_factura, 'Impresión', { duration: 3000 });
