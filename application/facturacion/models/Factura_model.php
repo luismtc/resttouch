@@ -148,7 +148,11 @@ class Factura_model extends General_model {
 		->get()
 		->row();
 
-		return new Comanda_model($tmp->comanda);
+		if ($tmp) {			
+			return new Comanda_model($tmp->comanda);
+		}
+
+		return null;
 	}
 
 	public function cargarCertificadorFel()

@@ -255,7 +255,8 @@ class Factura extends CI_Controller {
 		}
 
 		$comanda = $fac->getComanda();
-		$fac->origen_datos = $comanda->getOrigenDatos();
+
+		$fac->origen_datos = ($comanda) ? $comanda->getOrigenDatos() : null;
 
 		$datos['factura'] = $fac;
 		$this->output
