@@ -25,7 +25,6 @@ date_default_timezone_set('America/Guatemala');
 |
 */
 
-#$config['base_url'] = $_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER['HTTP_HOST'];
 $config['base_url'] = ($_SERVER["REQUEST_SCHEME"] ?? 'http')."://".$_SERVER["HTTP_HOST"];
 
 /*
@@ -139,7 +138,7 @@ $config['subclass_prefix'] = 'MY_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = FCPATH . 'application/vendor/autoload.php';
+$config['composer_autoload'] = FCPATH . 'vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------

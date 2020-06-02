@@ -32,7 +32,10 @@ class Reporte extends CI_Controller {
 		$data = $_GET;
 		$data['ingresos'] = $this->Reporte_model->get_ingresos($_GET);
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
-		$mpdf = new \Mpdf\Mpdf(['format' => 'Legal']);
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => sys_get_temp_dir(),
+			'format' => 'Legal'
+		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));
 		$mpdf->Output("Reporte de Caja.pdf", "D");	
 	}
@@ -42,7 +45,10 @@ class Reporte extends CI_Controller {
 		$_GET['sede'] = $this->data->sede;
 		$facts = $this->Factura_model->get_facturas($_GET);
 		$data = $_GET;
-		$mpdf = new \Mpdf\Mpdf(['format' => 'Legal']);
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => sys_get_temp_dir(),
+			'format' => 'Legal'
+		]);
 		$data['facturas'] = [];
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);
@@ -66,7 +72,10 @@ class Reporte extends CI_Controller {
 		$tmp = $this->Comanda_model->getComandas($_GET);
 		$datos = [];
 		$data = $_GET;
-		$mpdf = new \Mpdf\Mpdf(['format' => 'Legal']);
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => sys_get_temp_dir(),
+			'format' => 'Legal'
+		]);
 		foreach ($tmp as $row) {
 			$comanda = new Comanda_model($row->comanda);
 			$datos[] = $comanda->getComanda();

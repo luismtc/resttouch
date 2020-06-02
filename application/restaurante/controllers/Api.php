@@ -41,7 +41,7 @@ class Api extends CI_Controller {
 					"_uno" => true
 				]);
 
-				$nit = filter_var($req['billing_address']['zip'], FILTER_SANITIZE_NUMBER_INT);
+				$nit = preg_replace("/[^0-9?!]/",'', $req['billing_address']['zip']);
 
 				if (empty($nit)) {
 					$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$req['billing_address']['zip']));
