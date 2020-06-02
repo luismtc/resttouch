@@ -132,7 +132,7 @@ class Factura_model extends General_model {
 					->group_by("a.factura")
 					->get("factura a");
 
-		if ($tmp->num_rows() > 0) {
+		if ($tmp && $tmp->num_rows() > 0) {
 			return $tmp->row();
 		}
 
