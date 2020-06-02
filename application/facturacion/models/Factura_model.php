@@ -120,7 +120,7 @@ class Factura_model extends General_model {
 
 	public function getMesa()
 	{
-		return $this->db
+		$tmp = $this->db
 					->select("g.numero as mesa")
 					->join("detalle_factura b", "a.factura = b.factura")
 					->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
@@ -130,8 +130,13 @@ class Factura_model extends General_model {
 					->join("mesa g", "f.mesa = g.mesa")
 					->where("a.factura", $this->getPK())
 					->group_by("a.factura")
-					->get("factura a")
-					->row();
+					->get("factura a");
+
+		if ($tmp->num_rows() > 0) {
+			return $tmp->row();
+		}
+
+		return false;
 	}
 
 	public function getComanda()
