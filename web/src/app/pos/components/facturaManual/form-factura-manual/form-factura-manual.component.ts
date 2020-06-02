@@ -166,28 +166,9 @@ export class FormFacturaManualComponent implements OnInit {
   }
 
   imprimirFactura = () => {
-    //console.log(this.factura);
+    // console.log(this.factura);
     this.facturaSrvc.imprimir(+this.factura.factura).subscribe(res => {
       if (res.factura) {
-        /*
-        this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
-          NombreEmpresa: res.factura.empresa.nombre,
-          NitEmpresa: res.factura.empresa.nit,
-          SedeEmpresa: res.factura.sedeFactura.nombre,
-          DireccionEmpresa: res.factura.empresa.direccion,
-          Fecha: moment(res.factura.fecha_factura).format(GLOBAL.dateFormat),
-          Nit: res.factura.receptor.nit,
-          Nombre: res.factura.receptor.nombre,
-          Direccion: res.factura.receptor.direccion,
-          Serie: res.factura.serie_factura,
-          Numero: res.factura.numero_factura,
-          Total: this.getTotalDetalle(res.factura.detalle),
-          NoAutorizacion: res.factura.fel_uuid,
-          NombreCertificador: res.factura.certificador_fel.nombre,
-          DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
-        })}`, 'SendFactura');
-        */
-
         this.socket.emit(`print:factura`, `${JSON.stringify({
           NombreEmpresa: res.factura.empresa.nombre,
           NitEmpresa: res.factura.empresa.nit,
@@ -202,6 +183,10 @@ export class FormFacturaManualComponent implements OnInit {
           Total: this.getTotalDetalle(res.factura.detalle),
           NoAutorizacion: res.factura.fel_uuid,
           NombreCertificador: res.factura.certificador_fel.nombre,
+          NitCertificador: res.factura.certificador_fel.nit,
+          FechaDeAutorizacion: res.factura.fecha_autorizacion,
+          NoOrdenEnLinea: '',
+          FormaDePago: '',
           DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
         })}`);
         this._snackBar.open(
@@ -222,7 +207,7 @@ export class FormFacturaManualComponent implements OnInit {
         'Luego de anular la factura no podrá hacer ninguna modificación. ¿Desea continuar?',
         'Sí',
         'No'
-        )
+      )
     });
 
     dialogRef.afterClosed().subscribe(res => {
