@@ -172,7 +172,7 @@ class Factura extends CI_Controller {
 					$fac->fecha_autorizacion = $resp->fecha;
 
 					$comanda = $fac->getComanda();
-					$fac->origen_datos = $comanda->getOrigenDatos();
+					$fac->origen_datos = ($comanda) ? $comanda->getOrigenDatos() : null;
 
 					$datos['exito'] = true;
 					$datos['factura'] = $fac;
