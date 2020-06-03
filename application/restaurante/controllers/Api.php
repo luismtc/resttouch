@@ -32,7 +32,7 @@ class Api extends CI_Controller {
 	{
 		$req = json_decode(file_get_contents('php://input'), true);
 
-		$datos = ["exito" => false];
+		$datos = ["exito" => false, 'mensaje' => ''];
 
 		if (isset($_GET['key'])) {
 			if ($this->input->method() == 'post') {
@@ -174,11 +174,11 @@ class Api extends CI_Controller {
 													
 												} else {
 													$exito = false;
-													$datos['mensaje'] = "ocurrio un error al guardar el detalle";	
+													$datos['mensaje'] .= "\nOcurrio un error al guardar el detalle";	
 												}	
 											} else {
 												$exito = false;
-												$datos['mensaje'] = "ocurrio un error al guardar el articulo";	
+												$datos['mensaje'] .= "\nOcurrio un error al guardar el articulo {$row['title']} Id {$row['variant_id']}";	
 											}
 										} else {
 											$propina = true;
@@ -211,7 +211,7 @@ class Api extends CI_Controller {
 											]);											
 										} else {
 											$exito = false;
-											$datos['mensaje'] = 'Ocurrio un error al guardar la propina';
+											$datos['mensaje'] .= "\nOcurrio un error al guardar la propina";
 										}	
 									}
 
@@ -270,7 +270,7 @@ class Api extends CI_Controller {
 												}
 											} else {
 												$datos['exito'] = false;
-												$datos['mensaje'] = 'Hacen falta datos para facturacion';
+												$datos['mensaje'] .= "\nHacen falta datos para facturacion";
 											}
 											
 										}
