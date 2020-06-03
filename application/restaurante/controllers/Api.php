@@ -147,7 +147,8 @@ class Api extends CI_Controller {
 										$datosCta['comanda'] = $comanda->comanda;
 										$cuenta->guardar($datosCta);	
 									}		
-									$total = 0;					
+									$total = 0;		
+									$exito = true;			
 									foreach ($req['line_items'] as $row) {
 										$art = $this->Articulo_model->buscar([
 											'shopify_id' => $row['variant_id'],
@@ -170,13 +171,13 @@ class Api extends CI_Controller {
 													$cuenta->guardarDetalle([
 														'detalle_comanda' => $det->detalle_comanda
 													]);	
-													$datos['exito'] = true;
+													
 												} else {
-													$datos['exito'] = false;
+													$exito = false;
 													$datos['mensaje'] = "ocurrio un error al guardar el detalle";	
 												}	
 											} else {
-												$datos['exito'] = false;
+												$exito = false;
 												$datos['mensaje'] = "ocurrio un error al guardar el articulo";	
 											}
 										} else {
@@ -187,7 +188,7 @@ class Api extends CI_Controller {
 											]);
 										}		
 									}
-										
+									
 									if ($propina) {
 										$art = $this->Articulo_model->buscar([
 											'descripcion' => 'Propina',
@@ -207,10 +208,10 @@ class Api extends CI_Controller {
 										if ($det) {
 											$cuenta->guardarDetalle([
 												'detalle_comanda' => $det->detalle_comanda
-											]);	
-											$datos['exito'] = true;
+											]);											
 										} else {
-											$datos['exito'] = false;						
+											$exito = false;
+											$datos['mensaje'] = 'Ocurrio un error al guardar la propina';
 										}	
 									}
 
@@ -241,6 +242,7 @@ class Api extends CI_Controller {
 											$datos['exito'] = false;						
 										}		
 									}
+									$datos['exito'] = $exito;
 									if ($datos['exito']) {
 										$exito = $cuenta->cobrar((object)[
 											"forma_pago" => 1,
