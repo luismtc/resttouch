@@ -4923,7 +4923,6 @@
                         _this.comandaSrvc.getComandasOnLIne().subscribe(function (res) {
                             _this.comandasEnLinea = res;
                             _this.dataSource = _this.comandasEnLinea;
-                            // console.log(this.comandasEnLinea);
                         });
                     };
                     this.setToPrint = function (articulos) {
@@ -4940,34 +4939,9 @@
                         return lstArticulos;
                     };
                     this.imprimir = function (obj) {
-                        /*
-                        const objCmd: Comanda = {
-                          area: obj.mesa.area.area,
-                          mesa: obj.mesa.mesa,
-                          mesero: obj.usuario,
-                          comanda: obj.comanda,
-                          cuentas: obj.cuentas
-                        };
-                        */
-                        /*
-                        this.comandaSrvc.save(objCmd).subscribe((res) => {
-                          if (res.exito) {
-                            this.comandaSrvc.setProductoImpreso(this.cuentaActiva.cuenta).subscribe(resImp => {
-                              this.llenaProductosSeleccionados(resImp.comanda);
-                              this.setSelectedCuenta(this.cuentaActiva.numero);
-                              this._snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
-                            });
-                          } else {
-                            this._snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
-                          }
-                        });
-                        */
                         var listaProductos = _this.setToPrint(obj.cuentas[0].productos);
-                        // console.log('Lista = ', listaProductos);
                         var AImpresoraNormal = listaProductos.filter(function (p) { return +p.impresora.bluetooth === 0; });
-                        // console.log('IMPRESORA = ', AImpresoraNormal);
                         var AImpresoraBT = listaProductos.filter(function (p) { return +p.impresora.bluetooth === 1; });
-                        // console.log('BT = ', AImpresoraBT);
                         var objToPrint = {};
                         if (AImpresoraNormal.length > 0) {
                             objToPrint = {
@@ -4978,7 +4952,6 @@
                                 DetalleCuenta: AImpresoraNormal,
                                 Total: null
                             };
-                            // console.log(objToPrint);
                             _this.socket.emit('print:comanda', "" + JSON.stringify(objToPrint));
                         }
                         if (AImpresoraBT.length > 0) {
@@ -4990,7 +4963,6 @@
                                 DetalleCuenta: AImpresoraBT,
                                 Total: null
                             };
-                            // console.log(objToPrint);
                             _this.printToBT(JSON.stringify(objToPrint));
                         }
                     };
@@ -5008,7 +4980,7 @@
                                 _this.loadComandasEnLinea();
                                 _this.printFactura(res.factura, obj.origen_datos);
                             }
-                            _this.snackBar.open('Facturación', res.mensaje, { duration: (res.exito ? 3000 : 10000) });
+                            _this.snackBar.open(res.mensaje, 'Facturación', { duration: (res.exito ? 3000 : 10000) });
                         });
                     };
                     this.printFactura = function (fact, datosOrigen) {
@@ -5051,19 +5023,15 @@
                         this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar).sede_uuid);
                         this.socket.on('shopify:updlist', function () {
                             _this.loadComandasEnLinea();
-                            // console.log(`${moment().format(GLOBAL.dateTimeFormat)}: Actualizando lista de ordenes en linea...`);
+                        });
+                        this.socket.on('shopify:error', function (mensaje) {
+                            _this.loadComandasEnLinea();
+                            _this.snackBar.open("ERROR: " + mensaje, 'Firmar', { duration: 10000 });
                         });
                     }
                     this.loadComandasEnLinea();
-                    // this.intervalId = setInterval(() => this.loadComandasEnLinea(), 30000); // Ejecución cada 30s
                 };
-                ComandaEnLineaComponent.prototype.ngOnDestroy = function () {
-                    /*
-                    if (this.intervalId) {
-                      clearInterval(this.intervalId);
-                    }
-                    */
-                };
+                ComandaEnLineaComponent.prototype.ngOnDestroy = function () { };
                 return ComandaEnLineaComponent;
             }());
             ComandaEnLineaComponent.ctorParameters = function () { return [

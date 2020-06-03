@@ -4934,7 +4934,6 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
             this.comandaSrvc.getComandasOnLIne().subscribe((res) => {
                 this.comandasEnLinea = res;
                 this.dataSource = this.comandasEnLinea;
-                // console.log(this.comandasEnLinea);
             });
         };
         this.setToPrint = (articulos) => {
@@ -4951,34 +4950,9 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
             return lstArticulos;
         };
         this.imprimir = (obj) => {
-            /*
-            const objCmd: Comanda = {
-              area: obj.mesa.area.area,
-              mesa: obj.mesa.mesa,
-              mesero: obj.usuario,
-              comanda: obj.comanda,
-              cuentas: obj.cuentas
-            };
-            */
-            /*
-            this.comandaSrvc.save(objCmd).subscribe((res) => {
-              if (res.exito) {
-                this.comandaSrvc.setProductoImpreso(this.cuentaActiva.cuenta).subscribe(resImp => {
-                  this.llenaProductosSeleccionados(resImp.comanda);
-                  this.setSelectedCuenta(this.cuentaActiva.numero);
-                  this._snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
-                });
-              } else {
-                this._snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
-              }
-            });
-            */
             const listaProductos = this.setToPrint(obj.cuentas[0].productos);
-            // console.log('Lista = ', listaProductos);
             const AImpresoraNormal = listaProductos.filter(p => +p.impresora.bluetooth === 0);
-            // console.log('IMPRESORA = ', AImpresoraNormal);
             const AImpresoraBT = listaProductos.filter(p => +p.impresora.bluetooth === 1);
-            // console.log('BT = ', AImpresoraBT);
             let objToPrint = {};
             if (AImpresoraNormal.length > 0) {
                 objToPrint = {
@@ -4989,7 +4963,6 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
                     DetalleCuenta: AImpresoraNormal,
                     Total: null
                 };
-                // console.log(objToPrint);
                 this.socket.emit('print:comanda', `${JSON.stringify(objToPrint)}`);
             }
             if (AImpresoraBT.length > 0) {
@@ -5001,7 +4974,6 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
                     DetalleCuenta: AImpresoraBT,
                     Total: null
                 };
-                // console.log(objToPrint);
                 this.printToBT(JSON.stringify(objToPrint));
             }
         };
@@ -5018,7 +4990,7 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
                     this.loadComandasEnLinea();
                     this.printFactura(res.factura, obj.origen_datos);
                 }
-                this.snackBar.open('Facturación', res.mensaje, { duration: (res.exito ? 3000 : 10000) });
+                this.snackBar.open(res.mensaje, 'Facturación', { duration: (res.exito ? 3000 : 10000) });
             });
         };
         this.printFactura = (fact, datosOrigen = {}) => {
@@ -5058,19 +5030,15 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
             this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar).sede_uuid);
             this.socket.on('shopify:updlist', () => {
                 this.loadComandasEnLinea();
-                // console.log(`${moment().format(GLOBAL.dateTimeFormat)}: Actualizando lista de ordenes en linea...`);
+            });
+            this.socket.on('shopify:error', (mensaje) => {
+                this.loadComandasEnLinea();
+                this.snackBar.open(`ERROR: ${mensaje}`, 'Firmar', { duration: 10000 });
             });
         }
         this.loadComandasEnLinea();
-        // this.intervalId = setInterval(() => this.loadComandasEnLinea(), 30000); // Ejecución cada 30s
     }
-    ngOnDestroy() {
-        /*
-        if (this.intervalId) {
-          clearInterval(this.intervalId);
-        }
-        */
-    }
+    ngOnDestroy() { }
 };
 ComandaEnLineaComponent.ctorParameters = () => [
     { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__["MatDialog"] },
