@@ -41,34 +41,53 @@ class Api extends CI_Controller {
 					"_uno" => true
 				]);
 
-				$nit = preg_replace("/[^0-9?!]/",'', $req['billing_address']['zip']);
-
-				if (empty($nit)) {
-					$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$req['billing_address']['zip']));
+				$datosCliente = false;
+				$idCliente = false;
+				if (isset($req['billing_address'])) {
+					$datosCliente = $req['billing_address'];					
+				} else if ($req['source_name'] == 'pos') {
+					$datosCliente = $req['customer']['default_address'];
 				}
+				if ($datosCliente) {
 
-				$cliente = $this->Cliente_model->buscar([
-					"nit" => $nit,
-					"_uno" => true
-				]);
+					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['zip']);
 
-				$origen = $this->Catalogo_model->getComandaOrigen([
-					"_uno" => true,
-					"descripcion" => "Shopify"
-				]);
+					if (empty($nit)) {
+						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['zip']));
+					}
 
-				if (!$cliente) {
-					$clt = new Cliente_model();
-					$clt->guardar([
-						"nombre" => $req['billing_address']['name'],
-						"direccion" => $req['billing_address']['address1'],
-						"nit" => $nit
+					$cliente = $this->Cliente_model->buscar([
+						"nit" => $nit,
+						"_uno" => true
 					]);
-					$idCliente = $clt->getPK();
-				} else {
-					$idCliente = $cliente->cliente;
+
+					$origen = $this->Catalogo_model->getComandaOrigen([
+						"_uno" => true,
+						"descripcion" => "Shopify"
+					]);
+
+
+					if (!$cliente) {
+						$clt = new Cliente_model();
+						$clt->guardar([
+							"nombre" => $datosCliente['name'],
+							"direccion" => $datosCliente['address1'],
+							"nit" => $nit
+						]);
+						$idCliente = $clt->getPK();
+					} else {
+						$idCliente = $cliente->cliente;
+					}
 				}
-				$datosCta = ['nombre' => $req['shipping_address']['name'], 'numero' => $req['order_number']];
+
+				$cuenta = ["nombre" => "Unica"];
+				if (isset($req['shipping_address'])) {
+					$cuenta['nombre'] = $req['shipping_address']['name'];
+				} else if (isset($req['customer'])) {
+					$cuenta['nombre'] = "{$req['customer']['first_name']} {$req['customer']['last_name']}";
+				}
+
+				$datosCta = ['nombre' => $cuenta['nombre'], 'numero' => $req['order_number']];
 				$datosFac = [
 					"usuario" => 1,
 					"factura_serie" => 1,
@@ -193,7 +212,7 @@ class Api extends CI_Controller {
 										}	
 									}
 
-									if (isset($req['total_shipping_price_set']) && isset($req['total_shipping_price_set']['shop_money'])) {
+									if (isset($req['total_shipping_price_set']) && isset($req['total_shipping_price_set']['shop_money']) && $req['source_name'] != "pos") {
 										$row = $req['total_shipping_price_set']['shop_money'];
 										$art = $this->Articulo_model->buscar([
 											'descripcion' => 'Entrega',
@@ -228,26 +247,32 @@ class Api extends CI_Controller {
 
 										if($exito) {
 											$cuenta->guardar(["cerrada" => 1]);
-
-											$fac = new Factura_model();
-											$fac->guardar($datosFac);
-											$fac->cargarEmpresa();
-											$pimpuesto = $fac->empresa->porcentaje_iva +1;
-											foreach ($cuenta->getDetalle() as $det) {
-												$det->bien_servicio = $det->articulo->bien_servicio;
-												$det->articulo = $det->articulo->articulo;
-												$det->precio_unitario = $det->precio;
-												if ($fac->exenta) {
-													$det->monto_base = $det->total;
-												} else {
-													$det->monto_base = number_format($det->total / $pimpuesto, 2);
+											if ($idCliente) {
+												$fac = new Factura_model();
+												$fac->guardar($datosFac);
+												$fac->cargarEmpresa();
+												$pimpuesto = $fac->empresa->porcentaje_iva +1;
+												foreach ($cuenta->getDetalle() as $det) {
+													$det->bien_servicio = $det->articulo->bien_servicio;
+													$det->articulo = $det->articulo->articulo;
+													$det->precio_unitario = $det->precio;
+													if ($fac->exenta) {
+														$det->monto_base = $det->total;
+													} else {
+														$det->monto_base = number_format($det->total / $pimpuesto, 2);
+													}
+													$det->monto_iva = $det->total - $det->monto_base;	
+													$fac->setDetalle((array) $det);
 												}
-												$det->monto_iva = $det->total - $det->monto_base;	
-												$fac->setDetalle((array) $det);
+											} else {
+												$datos['exito'] = false;
+												$datos['mensaje'] = 'Hacen falta datos para facturacion';
 											}
+											
 										}
 										$datos['comanda'] = $comanda->getComanda();	
 									} else {
+										$datos['exito'] = false;
 										$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
 									}							
 										
