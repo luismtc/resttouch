@@ -94,7 +94,7 @@ export class FormTurnoComponent implements OnInit {
         this.turnoSavedEv.emit();
         this.resetTurno();
         this.turno = res.turno;
-        this._snackBar.open('Se abrió un turno nuevo...', 'Turno', { duration: 3000 });
+        this._snackBar.open('Turno modificado con éxito...', 'Turno', { duration: 3000 });
       } else {
         this._snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
       }
@@ -102,7 +102,7 @@ export class FormTurnoComponent implements OnInit {
   }
 
   onSubmit = () => {
-    if(!!this.turno.fin) {
+    if (moment(this.turno.fin).isValid()) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         maxWidth: "400px",
         data: new ConfirmDialogModel('Cerrar turno', 'La fecha de finalización cerrará el turno. ¿Desea continuar?', 'Sí', 'No')
@@ -110,13 +110,13 @@ export class FormTurnoComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(res => {
         if (res) {
-          this.saveInfoTurno();          
+          this.saveInfoTurno();
         }
       });
 
     } else {
       this.saveInfoTurno();
-    }    
+    }
   }
 
   resetDetalleTurno = () => this.detalleTurno = { turno: !!this.turno.turno ? this.turno.turno : null, usuario: null, usuario_tipo: null }
@@ -141,7 +141,7 @@ export class FormTurnoComponent implements OnInit {
         this.resetDetalleTurno();
         this._snackBar.open('Usuario agregado al turno...', 'Turno', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });        
+        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
       }
     });
   }

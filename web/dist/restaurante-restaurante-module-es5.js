@@ -6524,7 +6524,7 @@
                                 _this.turnoSavedEv.emit();
                                 _this.resetTurno();
                                 _this.turno = res.turno;
-                                _this._snackBar.open('Se abrió un turno nuevo...', 'Turno', { duration: 3000 });
+                                _this._snackBar.open('Turno modificado con éxito...', 'Turno', { duration: 3000 });
                             }
                             else {
                                 _this._snackBar.open("ERROR: " + res.mensaje, 'Turno', { duration: 3000 });
@@ -6532,7 +6532,7 @@
                         });
                     };
                     this.onSubmit = function () {
-                        if (!!_this.turno.fin) {
+                        if (moment__WEBPACK_IMPORTED_MODULE_8__(_this.turno.fin).isValid()) {
                             var dialogRef = _this.dialog.open(_shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_6__["ConfirmDialogComponent"], {
                                 maxWidth: "400px",
                                 data: new _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_6__["ConfirmDialogModel"]('Cerrar turno', 'La fecha de finalización cerrará el turno. ¿Desea continuar?', 'Sí', 'No')
