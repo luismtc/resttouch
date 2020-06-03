@@ -274,6 +274,7 @@ export class FormFacturaManualComponent implements OnInit {
 
   onSubmitDetail = () => {
     this.detalleFactura.factura = this.factura.factura;
+    this.detalleFactura.total = +this.detalleFactura.precio_unitario * +this.detalleFactura.cantidad;
     // console.log(this.detalleFactura);
     this.facturaSrvc.saveDetalle(this.detalleFactura).subscribe(res => {
       // console.log(res);

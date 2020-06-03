@@ -1123,6 +1123,7 @@
                     };
                     this.onSubmitDetail = function () {
                         _this.detalleFactura.factura = _this.factura.factura;
+                        _this.detalleFactura.total = +_this.detalleFactura.precio_unitario * +_this.detalleFactura.cantidad;
                         // console.log(this.detalleFactura);
                         _this.facturaSrvc.saveDetalle(_this.detalleFactura).subscribe(function (res) {
                             // console.log(res);
