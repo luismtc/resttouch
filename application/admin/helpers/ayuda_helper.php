@@ -5,7 +5,10 @@ if( ! function_exists('suma_field')){
 		$suma_campo = 0;
 
 		foreach ($datos as $row) {
-			$suma_campo += $row->$campo;
+			if (isset($row->$campo) && is_numeric($row->$campo)) {
+				
+				$suma_campo += $row->$campo;
+			}
 		}
 
 		return round($suma_campo,2);
