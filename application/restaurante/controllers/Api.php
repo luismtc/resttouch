@@ -172,11 +172,13 @@ class Api extends CI_Controller {
 													]);	
 													$datos['exito'] = true;
 												} else {
-													$datos['exito'] = false;						
+													$datos['exito'] = false;
+													$datos['mensaje'] = "ocurrio un error al guardar el detalle";	
 												}	
 											} else {
 												$datos['exito'] = false;
-											}	
+												$datos['mensaje'] = "ocurrio un error al guardar el articulo";	
+											}
 										} else {
 											$propina = true;
 											$propinaMonto = $row['price'];
@@ -271,17 +273,12 @@ class Api extends CI_Controller {
 											
 										}
 										$datos['comanda'] = $comanda->getComanda();	
-									} else {
-										$datos['exito'] = false;
-										$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-									}							
+									} 							
 										
 									if($datos['exito']) {
 										$datos['mensaje'] = "Datos Actualizados con Exito";
 										$datos['comanda'] = $comanda->getComanda();	
-									} else {
-										$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-									}
+									} 
 								} else {
 									$datos['mensaje'] = "No existe ningun turno abierto";
 								}	
