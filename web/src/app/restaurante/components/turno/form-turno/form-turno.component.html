@@ -39,7 +39,7 @@
                 </mat-form-field>
             </div>
             <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmTurno.form.valid || !!turno.fin">
+                <button mat-icon-button type="submit" color="accent" [disabled]="!frmTurno.form.valid">
                     <mat-icon>save</mat-icon>
                 </button>
                 <button mat-icon-button type="button" color="accent" (click)="resetTurno()" *ngIf="turno.turno">
