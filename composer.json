@@ -1,0 +1,9 @@
+{
+    "name": "Restouch",
+    "description": "Restouch",
+    "require": {
+        "php": "7.2.*",
+		"mpdf/mpdf": "^8.0.0"
+    },
+    "authors": []
+}

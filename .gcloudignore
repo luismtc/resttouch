@@ -15,7 +15,7 @@
 
 cloud_sql_proxy
 
-application/vendor/*
+application/vendor/
 web/*
 !web/dist
 *.exe
