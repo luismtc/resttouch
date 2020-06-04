@@ -1,9 +1,0 @@
-{
-    "name": "Restouch",
-    "description": "Restouch",
-    "require": {
-        "chriskacerguis/codeigniter-restserver": "^3.0",
-		"mpdf/mpdf": "^8.0.0"
-    },
-    "authors": []
-}

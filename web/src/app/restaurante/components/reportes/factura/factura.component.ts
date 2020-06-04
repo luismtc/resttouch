@@ -19,10 +19,10 @@ export class FacturaComponent implements OnInit {
 
   ngOnInit() { }
 
-  onSubmit () {
+  onSubmit() {
     this.pdfServicio.getReporteFactura(this.params).subscribe(res => {
       if (res) {
-        var blob = new Blob([res], { type: 'application/pdf' });
+        const blob = new Blob([res], { type: 'application/pdf' });
         saveAs(blob, `${this.titulo}.pdf`);
       } else {
         this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });

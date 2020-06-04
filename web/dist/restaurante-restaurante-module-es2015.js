@@ -4212,7 +4212,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-grid-list cols=\"3\" rowHeight=\"2:1\">\n  <mat-grid-tile></mat-grid-tile>\n  <mat-grid-tile>\n    <form class=\"reporte-form\" (ngSubmit)=\"onSubmit()\">\n      <mat-card class=\"reporte-form\">\n        <mat-card-title>{{ titulo }}</mat-card-title>\n        <mat-card-content>\n          <mat-form-field class=\"reporte-full-width\">\n            <mat-label>Del</mat-label>\n            <input matInput type=\"date\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <br>\n          <mat-form-field class=\"reporte-full-width\">\n            <mat-label>Al</mat-label>\n            <input matInput type=\"date\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n        </mat-card-content>\n        <mat-card-actions>\n          <button mat-button type=\"submit\">GENERAR</button>\n        </mat-card-actions>\n      </mat-card>\n    </form>\n  </mat-grid-tile>\n  <mat-grid-tile></mat-grid-tile>\n</mat-grid-list>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de caja</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
 
 /***/ }),
 
@@ -4225,7 +4225,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-grid-list cols=\"3\" rowHeight=\"2:1\">\n  <mat-grid-tile></mat-grid-tile>\n  <mat-grid-tile>\n    <form class=\"reporte-form\" (ngSubmit)=\"onSubmit()\">\n      <mat-card class=\"reporte-form\">\n        <mat-card-title>{{ titulo }}</mat-card-title>\n        <mat-card-content>\n          <mat-form-field class=\"reporte-full-width\">\n            <mat-label>Del</mat-label>\n            <input matInput type=\"date\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <br>\n          <mat-form-field class=\"reporte-full-width\">\n            <mat-label>Al</mat-label>\n            <input matInput type=\"date\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n        </mat-card-content>\n        <mat-card-actions>\n          <button mat-button type=\"submit\">GENERAR</button>\n        </mat-card-actions>\n      </mat-card>\n    </form>\n  </mat-grid-tile>\n  <mat-grid-tile></mat-grid-tile>\n</mat-grid-list>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de facturas</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>\n");
 
 /***/ }),
 
@@ -5420,7 +5420,7 @@ PideDatosCuentasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".reporte-form {\n    min-width: 150px;\n    max-width: 500px;\n    width: 100%;\n  }\n  \n  .reporte-full-width {\n    width: 100%;\n  }\n  \n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9jYWphL2NhamEuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLGdCQUFnQjtJQUNoQixnQkFBZ0I7SUFDaEIsV0FBVztFQUNiOztFQUVBO0lBQ0UsV0FBVztFQUNiIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9jYWphL2NhamEuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5yZXBvcnRlLWZvcm0ge1xuICAgIG1pbi13aWR0aDogMTUwcHg7XG4gICAgbWF4LXdpZHRoOiA1MDBweDtcbiAgICB3aWR0aDogMTAwJTtcbiAgfVxuICBcbiAgLnJlcG9ydGUtZnVsbC13aWR0aCB7XG4gICAgd2lkdGg6IDEwMCU7XG4gIH1cbiAgIl19 */");
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Jlc3RhdXJhbnRlL2NvbXBvbmVudHMvcmVwb3J0ZXMvY2FqYS9jYWphLmNvbXBvbmVudC5jc3MifQ== */");
 
 /***/ }),
 
@@ -5456,7 +5456,7 @@ let CajaComponent = class CajaComponent {
     onSubmit() {
         this.pdfServicio.getReporteCaja(this.params).subscribe(res => {
             if (res) {
-                var blob = new Blob([res], { type: 'application/pdf' });
+                const blob = new Blob([res], { type: 'application/pdf' });
                 Object(file_saver__WEBPACK_IMPORTED_MODULE_4__["saveAs"])(blob, `${this.titulo}.pdf`);
             }
             else {
@@ -5490,7 +5490,7 @@ CajaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".reporte-form {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n}\n\n.reporte-full-width {\n  width: 100%;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9mYWN0dXJhL2ZhY3R1cmEuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGdCQUFnQjtFQUNoQixnQkFBZ0I7RUFDaEIsV0FBVztBQUNiOztBQUVBO0VBQ0UsV0FBVztBQUNiIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9mYWN0dXJhL2ZhY3R1cmEuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5yZXBvcnRlLWZvcm0ge1xuICBtaW4td2lkdGg6IDE1MHB4O1xuICBtYXgtd2lkdGg6IDUwMHB4O1xuICB3aWR0aDogMTAwJTtcbn1cblxuLnJlcG9ydGUtZnVsbC13aWR0aCB7XG4gIHdpZHRoOiAxMDAlO1xufVxuIl19 */");
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Jlc3RhdXJhbnRlL2NvbXBvbmVudHMvcmVwb3J0ZXMvZmFjdHVyYS9mYWN0dXJhLmNvbXBvbmVudC5jc3MifQ== */");
 
 /***/ }),
 
@@ -5526,7 +5526,7 @@ let FacturaComponent = class FacturaComponent {
     onSubmit() {
         this.pdfServicio.getReporteFactura(this.params).subscribe(res => {
             if (res) {
-                var blob = new Blob([res], { type: 'application/pdf' });
+                const blob = new Blob([res], { type: 'application/pdf' });
                 Object(file_saver__WEBPACK_IMPORTED_MODULE_4__["saveAs"])(blob, `${this.titulo}.pdf`);
             }
             else {
