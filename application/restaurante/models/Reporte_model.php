@@ -5,7 +5,7 @@ class Reporte_model extends CI_Model {
 
 	public function get_ingresos($args = [])
 	{
-		return $this->db
+		$tmp = $this->db
 					->select("f.*, sum(a.monto) as monto")					
 					->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 					->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
@@ -17,8 +17,13 @@ class Reporte_model extends CI_Model {
 				 	->where("e.fecha_factura <=", $args['fal'])
 				 	->where("e.fel_uuid_anulacion is null")
 					->group_by("a.forma_pago")
-					->get("cuenta_forma_pago a")
-					->result();
+					->get("cuenta_forma_pago a");
+
+		if ($tmp && $tmp->num_rows() > 0) {
+			return $tmp->result();
+		}
+
+		return [];
 	}	
 
 	public function getRangoComandas($args)
