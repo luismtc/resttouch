@@ -349,6 +349,25 @@ class Catalogo_model extends CI_Model {
 
 		return $this->getCatalogo($qry, $args);
 	}
+
+	public function getCredenciales($dominio)
+	{
+		$tmp = $this->db
+					->select("
+						db_hostname,
+						db_username,
+						db_password,
+						db_database")
+					->from('cliente_corporacion')
+					->where("dominio", $dominio)
+					->get();
+
+		if($tmp && $tmp->num_rows() > 0) {
+			return $tmp->row();
+		} 
+
+		return false;
+	}
 }
 
 /* End of file Catalogo_model.php */

@@ -10,7 +10,7 @@ class Usuario extends CI_Controller
             die();
         }
         parent::__construct();
-        $this->load->model('Usuario_model');
+        $this->load->model(['Usuario_model', 'Catalogo_model']);
         $this->output
         ->set_content_type("application/json", "UTF-8");
     }
@@ -22,6 +22,25 @@ class Usuario extends CI_Controller
         if ($this->input->method() == 'post') {
 
             $credenciales = json_decode(file_get_contents('php://input'), true);
+            $usr = explode("@", $credenciales['usr']);
+            
+            $credenciales['usr'] = $usr[0];
+
+            $usr = explode(".", $usr[1]);
+
+            $datosDb = $this->Catalogo_model->getCredenciales($usr[0]);
+            $conn = [
+                'host' => $datosDb->db_hostname,
+                'user' => $datosDb->db_username,
+                'password' => $datosDb->db_password,
+                'database' => $datosDb->db_database
+            ];
+
+            $db = conexion_db($conn);
+            
+            $this->db = $this->load->database($db, true);
+
+            $credenciales = array_merge($credenciales, $conn);
             $logged = $this->Usuario_model->logIn($credenciales);
             
             if (!empty($logged['token'])) {            

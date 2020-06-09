@@ -15,8 +15,8 @@ $db['default'] = array(
 
 	'hostname' => '127.0.0.1',
 	'username' => 'root',
-	'password' => 'PoChoco2016',
-	'database' => 'resttouch',
+	'password' => '',
+	'database' => 'restadmin',
 
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',

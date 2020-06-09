@@ -45,7 +45,11 @@ class Usuario_model extends CI_Model
                         'sede' => $dbusr->sede,
                         'usuario' => $credenciales['usr'],
                         'inicia' => date('Y-m-d H:i:s'),
-                        'hasta' => date('Y-m-d H:i:s', strtotime('+12 hours'))
+                        'hasta' => date('Y-m-d H:i:s', strtotime('+12 hours')),
+                        'database' => $credenciales['database'],
+                        'host' => $credenciales['host'],
+                        'user' => $credenciales['user'],
+                        'password' => $credenciales['password'] 
                     );
                     return array(
                         'mensaje' => 'El usuario tiene acceso.',

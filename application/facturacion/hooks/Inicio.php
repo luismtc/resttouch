@@ -26,6 +26,14 @@ class Inicio
 						if ($now->format('Y-m-d H:i:s') > $hasta->format('Y-m-d H:i:s')) {
 							$response['mensaje'] = 'El token ya se venció. Debe loggearse de nuevo, por favor.';
 							$continuar = false;
+						} else {
+							$db = conexion_db([
+				                'host' => $data->host,
+				                'user' => $data->user,
+				                'password' => $data->password,
+				                'database' => $data->database
+				            ]);
+							$this->ci->db = $this->ci->load->database($db, true);
 						}
 					}
 				} catch (Exception $e) {
