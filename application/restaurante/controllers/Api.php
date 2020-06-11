@@ -79,18 +79,20 @@ class Api extends CI_Controller {
 						"descripcion" => "Shopify"
 					]);
 
-
+					$clt = new Cliente_model();
+					$guardar = [
+						"direccion" => $datosCliente['address1'],
+						"correo" => $req['email']
+					];
 					if (!$cliente) {
-						$clt = new Cliente_model();
-						$clt->guardar([
-							"nombre" => $datosCliente['name'],
-							"direccion" => $datosCliente['address1'],
-							"nit" => $nit
-						]);
-						$idCliente = $clt->getPK();
+						$guardar['nombre'] = $datosCliente['name'];
+						$guardar['nit'] = $nit;
 					} else {
-						$idCliente = $cliente->cliente;
+						$clt->cargar($cliente->cliente);
 					}
+
+					$clt->guardar($guardar);
+					$idCliente = $clt->getPK();
 				}
 
 				$cuenta = ["nombre" => "Unica"];
