@@ -8,6 +8,7 @@ class Inicio
     {
     	$this->ci =& get_instance();
     	$this->ci->load->helper(['jwt', 'authorization']);
+    	$this->ci->load->model('Catalogo_model');
     	$this->libres = ['/usuario/login'];
  
         if(!in_array($_SERVER['PATH_INFO'], $this->libres)) {
@@ -28,12 +29,14 @@ class Inicio
 							$response['mensaje'] = 'El token ya se venció. Debe loggearse de nuevo, por favor.';
 							$continuar = false;
 						} else {
-							$db = conexion_db([
-				                'host' => $data->host,
-				                'user' => $data->user,
-				                'password' => $data->password,
-				                'database' => $data->database
-				            ]);
+							$datosDb = $this->ci->Catalogo_model->getCredenciales([ 'dominio' => $data->dominio]);
+				            $conn = [
+				                'host' => $datosDb->db_hostname,
+				                'user' => $datosDb->db_username,
+				                'password' => $datosDb->db_password,
+				                'database' => $datosDb->db_database
+				            ];
+							$db = conexion_db($conn);
 							$this->ci->db = $this->ci->load->database($db, true);
 						}
 					}

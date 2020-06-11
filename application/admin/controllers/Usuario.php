@@ -23,12 +23,12 @@ class Usuario extends CI_Controller
 
             $credenciales = json_decode(file_get_contents('php://input'), true);
             $usr = explode("@", $credenciales['usr']);
-            
+
             $credenciales['usr'] = $usr[0];
 
             $usr = explode(".", $usr[1]);
 
-            $datosDb = $this->Catalogo_model->getCredenciales($usr[0]);
+            $datosDb = $this->Catalogo_model->getCredenciales(['dominio' => $usr[0]]);
             $conn = [
                 'host' => $datosDb->db_hostname,
                 'user' => $datosDb->db_username,
@@ -40,7 +40,7 @@ class Usuario extends CI_Controller
             
             $this->db = $this->load->database($db, true);
 
-            $credenciales = array_merge($credenciales, $conn);
+            $credenciales['dominio'] = $usr[0];
             $logged = $this->Usuario_model->logIn($credenciales);
             
             if (!empty($logged['token'])) {            

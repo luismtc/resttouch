@@ -350,8 +350,16 @@ class Catalogo_model extends CI_Model {
 		return $this->getCatalogo($qry, $args);
 	}
 
-	public function getCredenciales($dominio)
+	public function getCredenciales($args = [])
 	{
+		if (isset($args['dominio'])) {
+			$this->db->where("dominio", $args['dominio']);
+		}
+
+		if (isset($args['llave'])) {
+			$this->db->where("llave", $args['llave']);	
+		}
+
 		$tmp = $this->db
 					->select("
 						db_hostname,
@@ -359,7 +367,6 @@ class Catalogo_model extends CI_Model {
 						db_password,
 						db_database")
 					->from('cliente_corporacion')
-					->where("dominio", $dominio)
 					->get();
 
 		if($tmp && $tmp->num_rows() > 0) {
