@@ -348,10 +348,14 @@ class Api extends CI_Controller {
 					"_uno" => true
 				]);
 
+				$moneda = $this->Catalogo_model->getMoneda([
+					'codigo' => $req['moneda'],
+					'_uno' => true
+				]);
 				$datosCliente = $req['cliente'];
 
 				if ($datosCliente) {
-					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['zip']);
+					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['nit']);
 
 					if (empty($nit)) {
 						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['zip']));
@@ -364,7 +368,7 @@ class Api extends CI_Controller {
 
 					$origen = $this->Catalogo_model->getComandaOrigen([
 						"_uno" => true,
-						"descripcion" => "Shopify"
+						"descripcion" => "API"
 					]);
 
 					if (!$cliente) {
@@ -381,9 +385,10 @@ class Api extends CI_Controller {
 				}
 
 				$datosCta = [
-					'nombre' => $req['cuenta']['nombre'], 
+					'nombre' => "Unica", 
 					'numero' => $req['numero_orden']
 				];
+				
 
 				$datosFac = [
 					"usuario" => 1,
@@ -392,7 +397,7 @@ class Api extends CI_Controller {
 					"certificador_fel" => 1,
 					"cliente" => $idCliente,
 					"fecha_factura" => date('Y-m-d'),
-					"moneda" => $req['moneda']
+					"moneda" => $moneda->moneda
 				];
 				$usu = $this->Usuario_model->find([
 					'usuario' => 1, 
@@ -408,6 +413,7 @@ class Api extends CI_Controller {
 								"_uno" => true
 							]);
 							$comanda = new Comanda_model();
+
 							$datosComanda = [
 								'usuario' => $usu->usuario, 
 								'sede' => $sede->sede, 
@@ -422,33 +428,37 @@ class Api extends CI_Controller {
 							$propinaMonto = 0;
 
 							foreach ($req['detalle'] as $row) {
-								if (strtolower($row['title']) != 'tip') {
+								
 									$art = $this->Articulo_model->buscar([
-										'shopify_id' => $row['origen_id'],
+										'articulo' => $row['codigo'],
 										'_uno' => true
 									]);	
 
 									if ($art) {
 										$insert = true;
 									}
-								}								
+																
 							}
 							if ($insert) {
 								if ($turno) {
 									$datosComanda['turno'] = $turno->turno;
 									$datos['exito'] = $comanda->guardar($datosComanda);
-					
+									if (isset($req['mesa'])) {
+										$mesa = new Mesa_model($req['mesa']);
+										$comanda->setMesa($req['mesa']);
+										$mesa->guardar(["estatus" => 2]);
+									}
 									$cuenta = new Cuenta_model();
-									
 									if ($cuenta->cerrada == 0) {
 										$datosCta['comanda'] = $comanda->comanda;
 										$cuenta->guardar($datosCta);	
-									}		
+									}
+									
 									$total = 0;		
 									$exito = true;			
 									foreach ($req['detalle'] as $row) {
 										$art = $this->Articulo_model->buscar([
-											'shopify_id' => $row['origen_id'],
+											'articulo' => $row['codigo'],
 											'_uno' => true
 										]);
 										

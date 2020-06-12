@@ -279,6 +279,10 @@ class Catalogo_model extends CI_Model {
 			$this->db->where('moneda', $args['moneda']);
 		}
 
+		if (isset($args['codigo'])) {
+			$this->db->where('codigo', $args['codigo']);	
+		}
+
 		$qry = $this->db
 		->order_by("moneda")
 		->get("moneda");
