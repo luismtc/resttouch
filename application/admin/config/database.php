@@ -7,17 +7,6 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-
-	/*'hostname' => '/cloudsql/restouch:us-central1:restadmin',
-	'username' => 'root',
-	'password' => 'c807#spc',
-	'database' => 'restouch',*/
-
-	'hostname' => '127.0.0.1',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'restadmin',
-
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
@@ -33,3 +22,17 @@ $db['default'] = array(
 	'failover' => array(),
 	'save_queries' => TRUE
 );
+
+if (isset($_SERVER["GAE_APPLICATION"])) {
+	/* PRODUCCIÓN */
+	$db['default']['hostname'] = '/cloudsql/restouch:us-central1:administracion';
+	$db['default']['username'] = 'root';
+	$db['default']['password'] = 'xIrs4ECzrcp6wnHF';
+	$db['default']['database'] = 'administracion';
+} else {
+	/* LOCAL */
+	$db['default']['hostname'] = '127.0.0.1';
+	$db['default']['username'] = 'root';
+	$db['default']['password'] = 'xIrs4ECzrcp6wnHF';
+	$db['default']['database'] = 'administracion';
+}
