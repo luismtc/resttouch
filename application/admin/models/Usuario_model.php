@@ -159,6 +159,9 @@ class Usuario_model extends CI_Model
 
     function findAll($debaja = 0)
     {
+        $headers = $this->input->request_headers();
+        $data = AUTHORIZATION::validateToken($headers['Authorization']);        
+
         if ($debaja !== 3) {
             $this->db->where('debaja', $debaja);
         }
@@ -166,6 +169,7 @@ class Usuario_model extends CI_Model
         return $this->db
             ->select('usuario, nombres, apellidos, usrname, debaja')
             ->from($this->tabla)
+            ->where("sede", $data->sede)
             ->get()
             ->result();
     }

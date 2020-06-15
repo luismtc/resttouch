@@ -12,6 +12,10 @@ class Area extends CI_Controller {
 	{
         parent::__construct();
         $this->load->model('Area_model');
+
+        $headers = $this->input->request_headers();
+        $this->data = AUTHORIZATION::validateToken($headers['Authorization']); 
+
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -41,6 +45,7 @@ class Area extends CI_Controller {
 	public function get_areas()
 	{
 		$this->load->model('Mesa_model');
+		$_GET['sede'] = $this->data->sede;
 		$areas = $this->Area_model->buscar($_GET);
 		$datos = [];
 		if(is_array($areas)) {

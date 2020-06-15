@@ -103,25 +103,26 @@ class Api extends CI_Controller {
 				}
 
 				$datosCta = ['nombre' => $cuenta['nombre'], 'numero' => $req['order_number']];
-				$datosFac = [
-					"usuario" => 1,
-					"factura_serie" => 1,
-					"sede" => 1,
-					"certificador_fel" => 1,
-					"cliente" => $idCliente,
-					"fecha_factura" => date('Y-m-d'),
-					"moneda" => 1
-				];
-				$usu = $this->Usuario_model->find([
-					'usuario' => 1, 
-					"_uno" => true
-				]);
 
 				if($sede) {
 					if ($origen) {
 						if ($usu) {
+
+							$datosFac = [
+								"usuario" => 1,
+								"factura_serie" => 1,
+								"sede" => $sede->sede,
+								"certificador_fel" => 1,
+								"cliente" => $idCliente,
+								"fecha_factura" => date('Y-m-d'),
+								"moneda" => 1
+							];
+							$usu = $this->Usuario_model->find([
+								'usuario' => 1, 
+								"_uno" => true
+							]);
 							$turno = $this->Turno_model->getTurno([
-								"sede" => 1,
+								"sede" => $sede->sede,
 								'abierto' => true, 
 								"_uno" => true
 							]);

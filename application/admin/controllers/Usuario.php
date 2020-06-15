@@ -107,8 +107,11 @@ class Usuario extends CI_Controller
     
     public function usuarios_post()
     {
+        $headers = $this->input->request_headers();
+        $data = AUTHORIZATION::validateToken($headers['Authorization']); 
+
         $datos = json_decode(file_get_contents('php://input'), true);
-        
+        $datos['sede'] = $data->sede;
         $nuevo = $this->Usuario_model->find($datos);
         
         $this->output->set_output(json_encode($nuevo));

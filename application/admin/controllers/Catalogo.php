@@ -8,7 +8,8 @@ class Catalogo extends CI_Controller {
 		parent::__construct();
 		//$this->datos = [];
 		$this->load->model("Catalogo_model");
-
+		$headers = $this->input->request_headers();
+        $this->data = AUTHORIZATION::validateToken($headers['Authorization']); 
 		$this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -44,6 +45,7 @@ class Catalogo extends CI_Controller {
 
 	public function get_bodega()
 	{
+		$_GET['sede'] = $this->data->sede;
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getBodega($_GET)));
 	}
@@ -56,12 +58,14 @@ class Catalogo extends CI_Controller {
 
 	public function get_articulo()
 	{
+		$_GET['sede'] = $this->data->sede;
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getArticulo($_GET)));
 	}
 
 	public function get_usuario()
 	{
+		$_GET['sede'] = $this->data->sede;
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getUsuario($_GET)));
 	}
@@ -141,11 +145,9 @@ class Catalogo extends CI_Controller {
 	{
 		$this->load->model(['Turno_model', 'Usuario_model']);
 		$datos = [];
-		$this->load->helper(['jwt', 'authorization']);
-		$headers = $this->input->request_headers();
-		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		
 		$tmp = $this->Turno_model->getTurno([
-			"sede" => $data->sede,
+			"sede" => $this->data->sede,
 			'abierto' => true, 
 			"_uno" => true
 		]);

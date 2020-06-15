@@ -99,17 +99,25 @@ class Catalogo_model extends CI_Model {
 
 	public function getArticulo($args = [])
 	{
+		$sede = isset($args['sede']) ? $args['sede'] : false;
+		unset($args['sede']);
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if ($key != '_uno') {
-					$this->db->where($key, $row);
+					$this->db->where("a.{$key}", $row);
 				}
 			}
 		}
 
+		if ($sede) {
+			$this->db->where('c.sede', $sede);
+		}
+
 		$qry = $this->db
-		->order_by("articulo")
-		->get("articulo");
+		->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
+		->join("categoria c", "c.categoria = b.categoria")
+		->order_by("a.articulo")
+		->get("articulo a");
 
 		$tmp = $this->getCatalogo($qry, $args);
 
@@ -157,18 +165,24 @@ class Catalogo_model extends CI_Model {
 	public function getCategoriaGrupo($args = [])
 	{
 		$raiz = isset($args['raiz']);
+		$sede = isset($args['sede']) ? $args['sede'] : false;
 		unset($args['raiz']);
+		unset($args['sede']);
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if ($key != '_uno') {
-					$this->db->where($key, $row);
+					$this->db->where("a.{$key}", $row);
 				}
 			}
 		}
-
+		if ($sede) {
+			$this->db->where('b.sede', $sede);
+		}
+		
 		$qry = $this->db
+		->join("categoria b", "b.categoria = a.categoria")
 		->order_by("categoria_grupo")
-		->get("categoria_grupo");
+		->get("categoria_grupo a");
 
 		$grupo = $this->getCatalogo($qry, $args);
 

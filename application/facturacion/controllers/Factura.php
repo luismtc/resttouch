@@ -20,13 +20,14 @@ class Factura extends CI_Controller {
 			'Articulo_model',
 			'Comanda_model'
 		]);
+		$this->load->helper(['jwt', 'authorization']);
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
 
 	public function guardar($id = '')
 	{
-		$this->load->helper(['jwt', 'authorization']);
+		
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$fac = new Factura_model($id);
@@ -98,6 +99,10 @@ class Factura extends CI_Controller {
 	}
 
 	public function buscar_factura(){		
+		$headers = $this->input->request_headers();
+        $data = AUTHORIZATION::validateToken($headers['Authorization']); 
+        $_GET['sede'] = $data->sede;
+
 		$facturas = $this->Factura_model->buscar($_GET);
 		$datos = [];
 		if(is_array($facturas)) {

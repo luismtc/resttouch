@@ -1,17 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE');
-header('Allow: GET, POST, OPTIONS, PUT, DELETE');
-
 class Categoria extends CI_Controller {
 
 	public function __construct()
 	{
         parent::__construct();
         $this->load->model('Categoria_model');
+        $headers = $this->input->request_headers();
+        $this->data = AUTHORIZATION::validateToken($headers['Authorization']); 
+
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -42,6 +40,7 @@ class Categoria extends CI_Controller {
 
 	public function buscar()
 	{
+		$_GET['sede'] = $this->data->sede;
 		$datos = $this->Categoria_model->buscar($_GET);
 
 		$this->output
