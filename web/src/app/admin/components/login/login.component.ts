@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   public usuario: Usuario;
 
   constructor(
-    private usrSrvc: UsuarioService, 
+    private usrSrvc: UsuarioService,
     private ls: LocalstorageService,
     private router: Router
   ) {
@@ -38,8 +38,10 @@ export class LoginComponent implements OnInit {
   }
 
   esMovil = (): boolean => {
-    let estoyEnMovil: boolean = false, ua = navigator.userAgent;
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
+    let estoyEnMovil: boolean = false;
+    estoyEnMovil = true; // Solo para desarrollo
+    const ua = navigator.userAgent;
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
       estoyEnMovil = true;
     }
     return estoyEnMovil;
@@ -48,8 +50,9 @@ export class LoginComponent implements OnInit {
   doLogin() {
     this.usrSrvc.login(this.usr).subscribe(res => {
       if (res.token) {
-        this.ls.set(GLOBAL.usrTokenVar, { 
-          token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso,
+        this.ls.set(GLOBAL.usrTokenVar, {
+          token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, 
+          idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso,
           sede_uuid: res.sede_uuid
         });
         this.router.navigate(['/admin/dashboard']);

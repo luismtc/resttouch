@@ -6,6 +6,7 @@ import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 import * as moment from 'moment';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 
@@ -93,6 +94,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         id: item.articulo.articulo,
         nombre: item.articulo.descripcion,
         cantidad: item.cantidad,
+        total: item.total,
         notas: item.notas,
         impresora: item.articulo.impresora
       });
@@ -101,6 +103,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
   }
 
   imprimir = (obj: any) => {
+    // console.log(obj); // return;
     const listaProductos = this.setToPrint(obj.cuentas[0].productos);
     const AImpresoraNormal: productoSelected[] = listaProductos.filter(p => +p.impresora.bluetooth === 0);
     const AImpresoraBT: productoSelected[] = listaProductos.filter(p => +p.impresora.bluetooth === 1);
@@ -108,11 +111,13 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     let objToPrint = {};
 
     if (AImpresoraNormal.length > 0) {
+      console.log(AImpresoraNormal);
       objToPrint = {
         Tipo: 'Comanda',
         Nombre: obj.cuentas[0].nombre,
         Numero: obj.comanda,
         NoOrdenEnLinea: obj.origen_datos.numero_orden,
+        DireccionEntrega: obj.origen_datos.direccion_entrega,
         DetalleCuenta: AImpresoraNormal,
         Total: null
       };
@@ -125,6 +130,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         Nombre: obj.cuentas[0].nombre,
         Numero: obj.comanda,
         NoOrdenEnLinea: obj.origen_datos.numero_orden,
+        DireccionEntrega: obj.origen_datos.direccion_entrega,
         DetalleCuenta: AImpresoraBT,
         Total: null
       };
@@ -144,7 +150,17 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       // console.log(res);
       if (res.exito) {
         this.loadComandasEnLinea();
-        this.printFactura(res.factura, obj.origen_datos);
+
+        const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+          maxWidth: '400px',
+          data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
+        });
+
+        confirmRef.afterClosed().subscribe((confirma: boolean) => {
+          if (confirma) {
+            this.printFactura(res.factura, obj.origen_datos);
+          }
+        });
       }
       this.snackBar.open(res.mensaje, 'Facturación', { duration: (res.exito ? 3000 : 10000) });
     });
