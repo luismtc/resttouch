@@ -114,9 +114,11 @@ class Catalogo_model extends CI_Model {
 		}
 
 		$qry = $this->db
+		->select("a.*")
 		->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
 		->join("categoria c", "c.categoria = b.categoria")
 		->order_by("a.articulo")
+		->group_by("a.articulo")
 		->get("articulo a");
 
 		$tmp = $this->getCatalogo($qry, $args);
@@ -180,8 +182,10 @@ class Catalogo_model extends CI_Model {
 		}
 		
 		$qry = $this->db
+		->select("a.*")
 		->join("categoria b", "b.categoria = a.categoria")
 		->order_by("categoria_grupo")
+		->group_by("a.categoria_grupo")
 		->get("categoria_grupo a");
 
 		$grupo = $this->getCatalogo($qry, $args);
@@ -189,7 +193,6 @@ class Catalogo_model extends CI_Model {
 		$datos = [];
 		if (is_array($grupo)) {
 			foreach ($grupo as $row) {
-				
 				if ($raiz) {
 					$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
 						"categoria_grupo" => $row->categoria_grupo_grupo,
