@@ -501,7 +501,7 @@ class Api extends CI_Controller {
 									$datos['exito'] = $exito;
 									if ($datos['exito']) {
 										$exito = $cuenta->cobrar((object)[
-											"forma_pago" => 1,
+											"forma_pago" => $req['metodo_pago']['codigo'],
 											"monto" => $total
 										]);									
 
