@@ -103,7 +103,10 @@ class Api extends CI_Controller {
 				}
 
 				$datosCta = ['nombre' => $cuenta['nombre'], 'numero' => $req['order_number']];
-
+				$usu = $this->Usuario_model->find([
+					'usuario' => 1, 
+					"_uno" => true
+				]);
 				if($sede) {
 					if ($origen) {
 						if ($usu) {
@@ -117,10 +120,7 @@ class Api extends CI_Controller {
 								"fecha_factura" => date('Y-m-d'),
 								"moneda" => 1
 							];
-							$usu = $this->Usuario_model->find([
-								'usuario' => 1, 
-								"_uno" => true
-							]);
+							
 							$turno = $this->Turno_model->getTurno([
 								"sede" => $sede->sede,
 								'abierto' => true, 
