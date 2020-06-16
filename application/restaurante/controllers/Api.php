@@ -344,15 +344,23 @@ class Api extends CI_Controller {
 				$db = conexion_db($conn);
 				$this->db = $this->load->database($db, true);
 
-				$sede = $this->Catalogo_model->getSede([
-					"admin_llave" => $_GET['key'],
-					"_uno" => true
-				]);
+				if (isset($req["sede"])) {
+					$sede = $this->Catalogo_model->getSede([
+						"sede" => $req["sede"],
+						"_uno" => true
+					]);
+				} else {
+					$sede = $this->Catalogo_model->getSede([
+						"admin_llave" => $_GET['key'],
+						"_uno" => true
+					]);
+				}
 
 				$moneda = $this->Catalogo_model->getMoneda([
 					'codigo' => $req['moneda'],
 					'_uno' => true
 				]);
+
 				$datosCliente = $req['cliente'];
 
 				if ($datosCliente) {
@@ -377,6 +385,8 @@ class Api extends CI_Controller {
 						$clt->guardar([
 							"nombre" => $datosCliente['nombre'],
 							"direccion" => $datosCliente['direccion'],
+							"correo" => $datosCliente['correo'],
+							"telefono" => $datosCliente['telefono'],
 							"nit" => $nit
 						]);
 						$idCliente = $clt->getPK();
@@ -389,7 +399,6 @@ class Api extends CI_Controller {
 					'nombre' => "Unica", 
 					'numero' => $req['numero_orden']
 				];
-				
 
 				$datosFac = [
 					"usuario" => 1,
@@ -488,7 +497,6 @@ class Api extends CI_Controller {
 											$exito = false;
 											$datos['mensaje'] .= "\nOcurrio un error al guardar el articulo {$row['title']} Id {$row['variant_id']}";	
 										}
-										 	
 									}
 
 									$datos['exito'] = $exito;
