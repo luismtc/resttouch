@@ -162,12 +162,6 @@ class Comanda_model extends General_Model {
 		$tmp->cuentas = $this->getCuentas();
 		$tmp->factura = $this->getFactura();
 		$tmp->origen_datos = $this->getOrigenDatos();
-		if ($this->comanda_origen_datos) {
-			$datos = json_decode($this->comanda_origen_datos);
-			if (isset($datos->cliente)) {
-				$tmp->direccion_entrega = $datos->cliente;		
-			}
-		}
 		
 		return $tmp;
 	}
@@ -242,7 +236,8 @@ class Comanda_model extends General_Model {
 		$datos = [
 			"nombre" => "",
 			"numero_orden" => "",
-			"metodo_pago" => []
+			"metodo_pago" => [],
+			"direccion_entrega" => new StdClass
 		];
 
 		if ($this->comanda_origen_datos) {
@@ -256,6 +251,13 @@ class Comanda_model extends General_Model {
 			if ($nombre == 'shopify') {
 				$datos["numero_orden"] = isset($json->order_number) ? $json->order_number : '';
 				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
+			} else if ($nombre == 'api') {
+				$datos["numero_orden"] = '';
+				$datos["metodo_pago"] = '';
+				
+				if (isset($json->cliente)) {
+					$datos['direccion_entrega'] = $json->cliente;		
+				}
 			}
 		}
 
