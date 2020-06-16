@@ -488,14 +488,13 @@ class Api extends CI_Controller {
 												$cuenta->guardarDetalle([
 													'detalle_comanda' => $det->detalle_comanda
 												]);	
-												
 											} else {
 												$exito = false;
-												$datos['mensaje'] .= "\nOcurrio un error al guardar el detalle";	
-											}	
+												$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
+											}
 										} else {
 											$exito = false;
-											$datos['mensaje'] .= "\nOcurrio un error al guardar el articulo {$row['title']} Id {$row['variant_id']}";	
+											$datos['mensaje'] .= "\nArtículo no entrado.";	
 										}
 									}
 
