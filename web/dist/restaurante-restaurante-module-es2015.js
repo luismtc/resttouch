@@ -4959,7 +4959,7 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
             const AImpresoraBT = listaProductos.filter(p => +p.impresora.bluetooth === 1);
             let objToPrint = {};
             if (AImpresoraNormal.length > 0) {
-                console.log(AImpresoraNormal);
+                // console.log(AImpresoraNormal);
                 objToPrint = {
                     Tipo: 'Comanda',
                     Nombre: obj.cuentas[0].nombre,

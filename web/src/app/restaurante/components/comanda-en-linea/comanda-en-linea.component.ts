@@ -111,7 +111,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     let objToPrint = {};
 
     if (AImpresoraNormal.length > 0) {
-      console.log(AImpresoraNormal);
+      // console.log(AImpresoraNormal);
       objToPrint = {
         Tipo: 'Comanda',
         Nombre: obj.cuentas[0].nombre,

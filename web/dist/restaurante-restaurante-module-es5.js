@@ -4947,7 +4947,7 @@
                         var AImpresoraBT = listaProductos.filter(function (p) { return +p.impresora.bluetooth === 1; });
                         var objToPrint = {};
                         if (AImpresoraNormal.length > 0) {
-                            console.log(AImpresoraNormal);
+                            // console.log(AImpresoraNormal);
                             objToPrint = {
                                 Tipo: 'Comanda',
                                 Nombre: obj.cuentas[0].nombre,
