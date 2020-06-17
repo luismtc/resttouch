@@ -118,7 +118,8 @@ class Api extends CI_Controller {
 								"certificador_fel" => 1,
 								"cliente" => $idCliente,
 								"fecha_factura" => date('Y-m-d'),
-								"moneda" => 1
+								"moneda" => 1,
+								"correo_receptor" => $req['email']
 							];
 							
 							$turno = $this->Turno_model->getTurno([
@@ -256,7 +257,7 @@ class Api extends CI_Controller {
 											$datos['exito'] = true;
 										} else {
 											$datos['exito'] = false;						
-										}		
+										}
 									}
 									$datos['exito'] = $exito;
 									if ($datos['exito']) {
@@ -367,7 +368,7 @@ class Api extends CI_Controller {
 					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['nit']);
 
 					if (empty($nit)) {
-						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['zip']));
+						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['nit']));
 					}
 
 					$cliente = $this->Cliente_model->buscar([
@@ -383,20 +384,22 @@ class Api extends CI_Controller {
 					if (!$cliente) {
 						$clt = new Cliente_model();
 						$clt->guardar([
-							"nombre" => $datosCliente['nombre'],
+							"nombre" => $datosCliente['nombre'].' '.$datosCliente['apellidos'],
 							"direccion" => $datosCliente['direccion'],
 							"correo" => $datosCliente['correo'],
 							"telefono" => $datosCliente['telefono'],
 							"nit" => $nit
 						]);
 						$idCliente = $clt->getPK();
+						$correoReceptor = $datosCliente['correo'];
 					} else {
 						$idCliente = $cliente->cliente;
+						$correoReceptor = $cliente->correo;
 					}
 				}
 
 				$datosCta = [
-					'nombre' => "Unica", 
+					'nombre' => $datosCliente['nombre'], 
 					'numero' => $req['numero_orden']
 				];
 
@@ -407,7 +410,8 @@ class Api extends CI_Controller {
 					"certificador_fel" => 1,
 					"cliente" => $idCliente,
 					"fecha_factura" => date('Y-m-d'),
-					"moneda" => $moneda->moneda
+					"moneda" => $moneda->moneda,
+					"correo_receptor" => $correoReceptor
 				];
 				$usu = $this->Usuario_model->find([
 					'usuario' => 1, 

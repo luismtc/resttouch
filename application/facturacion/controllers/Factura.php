@@ -18,7 +18,8 @@ class Factura extends CI_Controller {
 			'Dcuenta_model',
 			'Factura_model',
 			'Articulo_model',
-			'Comanda_model'
+			'Comanda_model',
+			'Cliente_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
         $this->output
@@ -36,9 +37,13 @@ class Factura extends CI_Controller {
 		if ($this->input->method() == 'post') {
 			if (empty($id) || empty($fac->numero_factura)) {				
 				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
+				$clt = new Cliente_model($req['cliente']);
+
 				$req['usuario'] = $data->idusuario;
 				$req['certificador_fel'] = $sede->certificador_fel;	
 				$req['sede'] = $data->sede;
+				$req["correo_receptor"] = $clt->correo;
+				
 				$datos['exito'] = $fac->guardar($req);
 
 				if($datos['exito']) {

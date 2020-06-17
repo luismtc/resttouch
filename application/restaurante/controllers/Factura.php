@@ -15,7 +15,8 @@ class Factura extends CI_Controller {
 			'Dcomanda_model',
 			'Dcuenta_model',
 			'Factura_model',
-			'Articulo_model'
+			'Articulo_model',
+			'Cliente_model'
 		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -31,9 +32,12 @@ class Factura extends CI_Controller {
 		if ($this->input->method() == 'post') {
 			if (isset($req['cliente']) && isset($req['moneda']) && isset($req['factura_serie'])) {
 				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
+				$clt = new Cliente_model($req['cliente']);
+
 				$req['usuario'] = $data->idusuario;
 				$req['sede'] = $data->sede;
 				$req['certificador_fel'] = $sede->certificador_fel;
+				$req["correo_receptor"] = $clt->correo;
 				
 				$fac = new Factura_model();
 				$result = $fac->guardar($req);

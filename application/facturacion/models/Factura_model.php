@@ -17,6 +17,7 @@ class Factura_model extends General_model {
 	public $exenta = false;
 	public $notas;
 	public $sede;
+	public $correo_receptor;
 	private $namespaceURI = "http://www.sat.gob.gt/dte/fel/0.2.0";
 	private $esAnulacion;
 	private $certificador;
@@ -285,7 +286,7 @@ class Factura_model extends General_model {
 		# $correos = explode(",", $this->cliente->correo_factura);
 		$receptor = $this->xml->getElementsByTagName('Receptor')->item(0);
 		# $receptor->setAttribute('CorreoReceptor', $correos[0]);
-		$receptor->setAttribute('CorreoReceptor', str_replace(" ", "", str_replace(",",";",$this->receptor->correo)));
+		$receptor->setAttribute('CorreoReceptor', str_replace(" ", "", str_replace(",",";",$this->correo_receptor)));
 
 		
 		$receptor->setAttribute('IDReceptor', str_replace('-','',($this->exenta?'CF':$this->receptor->nit)));
