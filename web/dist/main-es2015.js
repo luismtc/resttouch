@@ -1648,7 +1648,9 @@ let LoginComponent = class LoginComponent {
             }
         });
         this.esMovil = () => {
-            let estoyEnMovil = false, ua = navigator.userAgent;
+            let estoyEnMovil = false;
+            estoyEnMovil = true; // Solo para desarrollo
+            const ua = navigator.userAgent;
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
                 estoyEnMovil = true;
             }
@@ -1664,7 +1666,8 @@ let LoginComponent = class LoginComponent {
         this.usrSrvc.login(this.usr).subscribe(res => {
             if (res.token) {
                 this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].usrTokenVar, {
-                    token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso,
+                    token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
+                    idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso,
                     sede_uuid: res.sede_uuid
                 });
                 this.router.navigate(['/admin/dashboard']);
@@ -3858,7 +3861,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_3__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\xampp\htdocs\resttouch\web\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! E:\htdocs\resttouch\web\src\main.ts */"./src/main.ts");
 
 
 /***/ }),

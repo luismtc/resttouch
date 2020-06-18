@@ -256,7 +256,8 @@ class Comanda_model extends General_Model {
 				$datos["metodo_pago"] = '';
 				
 				if (isset($json->cliente)) {
-					$datos['direccion_entrega'] = $json->cliente;		
+					$json->cliente->direccion = $json->direccion_entrega;
+					$datos['direccion_entrega'] = $json->cliente;
 				}
 			}
 		}

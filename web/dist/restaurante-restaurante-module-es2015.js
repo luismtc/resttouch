@@ -4905,8 +4905,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
-/* harmony import */ var _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../pos/services/factura.service */ "./src/app/pos/services/factura.service.ts");
+/* harmony import */ var _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../shared/components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
+/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+/* harmony import */ var _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../pos/services/factura.service */ "./src/app/pos/services/factura.service.ts");
+
 
 
 
@@ -4943,6 +4945,7 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
                     id: item.articulo.articulo,
                     nombre: item.articulo.descripcion,
                     cantidad: item.cantidad,
+                    total: item.total,
                     notas: item.notas,
                     impresora: item.articulo.impresora
                 });
@@ -4950,16 +4953,19 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
             return lstArticulos;
         };
         this.imprimir = (obj) => {
+            // console.log(obj); // return;
             const listaProductos = this.setToPrint(obj.cuentas[0].productos);
             const AImpresoraNormal = listaProductos.filter(p => +p.impresora.bluetooth === 0);
             const AImpresoraBT = listaProductos.filter(p => +p.impresora.bluetooth === 1);
             let objToPrint = {};
             if (AImpresoraNormal.length > 0) {
+                // console.log(AImpresoraNormal);
                 objToPrint = {
                     Tipo: 'Comanda',
                     Nombre: obj.cuentas[0].nombre,
                     Numero: obj.comanda,
                     NoOrdenEnLinea: obj.origen_datos.numero_orden,
+                    DireccionEntrega: obj.origen_datos.direccion_entrega,
                     DetalleCuenta: AImpresoraNormal,
                     Total: null
                 };
@@ -4971,6 +4977,7 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
                     Nombre: obj.cuentas[0].nombre,
                     Numero: obj.comanda,
                     NoOrdenEnLinea: obj.origen_datos.numero_orden,
+                    DireccionEntrega: obj.origen_datos.direccion_entrega,
                     DetalleCuenta: AImpresoraBT,
                     Total: null
                 };
@@ -4988,7 +4995,15 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
                 // console.log(res);
                 if (res.exito) {
                     this.loadComandasEnLinea();
-                    this.printFactura(res.factura, obj.origen_datos);
+                    const confirmRef = this.dialog.open(_shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_9__["ConfirmDialogComponent"], {
+                        maxWidth: '400px',
+                        data: new _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_9__["ConfirmDialogModel"]('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
+                    });
+                    confirmRef.afterClosed().subscribe((confirma) => {
+                        if (confirma) {
+                            this.printFactura(res.factura, obj.origen_datos);
+                        }
+                    });
                 }
                 this.snackBar.open(res.mensaje, 'Facturación', { duration: (res.exito ? 3000 : 10000) });
             });
@@ -5045,8 +5060,8 @@ ComandaEnLineaComponent.ctorParameters = () => [
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
     { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_5__["Socket"] },
     { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__["LocalstorageService"] },
-    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_9__["ComandaService"] },
-    { type: _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_10__["FacturaService"] }
+    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__["ComandaService"] },
+    { type: _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_11__["FacturaService"] }
 ];
 ComandaEnLineaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

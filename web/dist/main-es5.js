@@ -1576,7 +1576,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         });
                     }); };
                     this.esMovil = function () {
-                        var estoyEnMovil = false, ua = navigator.userAgent;
+                        var estoyEnMovil = false;
+                        estoyEnMovil = true; // Solo para desarrollo
+                        var ua = navigator.userAgent;
                         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
                             estoyEnMovil = true;
                         }
@@ -1593,7 +1595,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     this.usrSrvc.login(this.usr).subscribe(function (res) {
                         if (res.token) {
                             _this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].usrTokenVar, {
-                                token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede, idusr: +res.idusr, enmovil: _this.esMovil(), acceso: res.acceso,
+                                token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
+                                idusr: +res.idusr, enmovil: _this.esMovil(), acceso: res.acceso,
                                 sede_uuid: res.sede_uuid
                             });
                             _this.router.navigate(['/admin/dashboard']);
@@ -3545,7 +3548,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
           \***************************/
         /*! no static exports found */
         /***/ (function (module, exports, __webpack_require__) {
-            module.exports = __webpack_require__(/*! C:\xampp\htdocs\resttouch\web\src\main.ts */ "./src/main.ts");
+            module.exports = __webpack_require__(/*! E:\htdocs\resttouch\web\src\main.ts */ "./src/main.ts");
             /***/ 
         }),
         /***/ 1: 
