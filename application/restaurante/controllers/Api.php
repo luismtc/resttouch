@@ -190,7 +190,7 @@ class Api extends CI_Controller {
 													
 												} else {
 													$exito = false;
-													$datos['mensaje'] .= "\nOcurrio un error al guardar el detalle";	
+													$datos['mensaje'] .= implode("\n", $comanda->getMensaje());
 												}	
 											} else {
 												$exito = false;
@@ -436,110 +436,122 @@ class Api extends CI_Controller {
 							$propina = false;
 							$insert = false;
 							$propinaMonto = 0;
-
+							$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+							$existencia = true;
 							foreach ($req['detalle'] as $row) {
 								
-									$art = $this->Articulo_model->buscar([
-										'articulo' => $row['codigo'],
+									$art = $this->Articulo_model->buscarArticulo([
+										'codigo' => $row['codigo'],
+										'sede' => $sede->sede,
 										'_uno' => true
 									]);	
 
 									if ($art) {
 										$insert = true;
+										$articulo = new Articulo_model($art->articulo);
+										$articulo->actualizarExistencia();
+										if (!empty($menu)) {
+											$existencia = $articulo->existencias >= $row['cantidad'];
+										}
 									}
 																
 							}
 							if ($insert) {
-								if ($turno) {
-									$datosComanda['turno'] = $turno->turno;
-									$datos['exito'] = $comanda->guardar($datosComanda);
-									if (isset($req['mesa'])) {
-										$mesa = new Mesa_model($req['mesa']);
-										$comanda->setMesa($req['mesa']);
-										$mesa->guardar(["estatus" => 2]);
-									}
-									$cuenta = new Cuenta_model();
-									if ($cuenta->cerrada == 0) {
-										$datosCta['comanda'] = $comanda->comanda;
-										$cuenta->guardar($datosCta);	
-									}
-									
-									$total = 0;		
-									$exito = true;			
-									foreach ($req['detalle'] as $row) {
-										$art = $this->Articulo_model->buscar([
-											'articulo' => $row['codigo'],
-											'_uno' => true
-										]);
-										
-										if ($art) {
-											$datosDcomanda = [
-												'articulo' => $art->articulo
-												,'cantidad' => $row['cantidad']
-												,'precio' => $row['precio']
-												,'impreso' => 0
-												,'total' => $row['precio'] * $row['cantidad']
-												,'notas' => ''
-											];
-											$total += ($row['precio'] * $row['cantidad']);
-											$det = $comanda->guardarDetalle($datosDcomanda);
-											$id = '';
-											if ($det) {
-												$cuenta->guardarDetalle([
-													'detalle_comanda' => $det->detalle_comanda
-												]);	
-											} else {
-												$exito = false;
-												$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
-											}
-										} else {
-											$exito = false;
-											$datos['mensaje'] .= "\nArtículo no entrado.";	
+								if ($existencia) {
+									if ($turno) {
+										$datosComanda['turno'] = $turno->turno;
+										$datos['exito'] = $comanda->guardar($datosComanda);
+										if (isset($req['mesa'])) {
+											$mesa = new Mesa_model($req['mesa']);
+											$comanda->setMesa($req['mesa']);
+											$mesa->guardar(["estatus" => 2]);
 										}
-									}
-
-									$datos['exito'] = $exito;
-									if ($datos['exito']) {
-										$exito = $cuenta->cobrar((object)[
-											"forma_pago" => $req['metodo_pago']['codigo'],
-											"monto" => $total
-										]);									
-
-										if($exito) {
-											$cuenta->guardar(["cerrada" => 1]);
-											if ($idCliente) {
-												$fac = new Factura_model();
-												$fac->guardar($datosFac);
-												$fac->cargarEmpresa();
-												$pimpuesto = $fac->empresa->porcentaje_iva +1;
-												foreach ($cuenta->getDetalle() as $det) {
-													$det->bien_servicio = $det->articulo->bien_servicio;
-													$det->articulo = $det->articulo->articulo;
-													$det->precio_unitario = $det->precio;
-													if ($fac->exenta) {
-														$det->monto_base = $det->total;
-													} else {
-														$det->monto_base = number_format($det->total / $pimpuesto, 2);
-													}
-													$det->monto_iva = $det->total - $det->monto_base;	
-													$fac->setDetalle((array) $det);
+										$cuenta = new Cuenta_model();
+										if ($cuenta->cerrada == 0) {
+											$datosCta['comanda'] = $comanda->comanda;
+											$cuenta->guardar($datosCta);	
+										}
+										
+										$total = 0;		
+										$exito = true;			
+										foreach ($req['detalle'] as $row) {
+											$art = $this->Articulo_model->buscarArticulo([
+												'codigo' => $row['codigo'],
+												'sede' => $sede->sede,
+												'_uno' => true
+											]);
+											
+											if ($art) {
+												$datosDcomanda = [
+													'articulo' => $art->articulo
+													,'cantidad' => $row['cantidad']
+													,'precio' => $row['precio']
+													,'impreso' => 0
+													,'total' => $row['precio'] * $row['cantidad']
+													,'notas' => ''
+												];
+												$total += ($row['precio'] * $row['cantidad']);
+												$det = $comanda->guardarDetalle($datosDcomanda);
+												$id = '';
+												if ($det) {
+													$cuenta->guardarDetalle([
+														'detalle_comanda' => $det->detalle_comanda
+													]);	
+												} else {
+													$exito = false;
+													$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
 												}
 											} else {
-												$datos['exito'] = false;
-												$datos['mensaje'] .= "\nHacen falta datos para facturacion";
+												$exito = false;
+												$datos['mensaje'] .= "\nArtículo no entrado.";	
 											}
-											
 										}
-										$datos['comanda'] = $comanda->getComanda();	
-									} 							
-										
-									if($datos['exito']) {
-										$datos['mensaje'] = "Datos Actualizados con Exito";
-										$datos['comanda'] = $comanda->getComanda();	
-									} 
-								} else {
-									$datos['mensaje'] = "No existe ningun turno abierto";
-								}	
+
+										$datos['exito'] = $exito;
+										if ($datos['exito']) {
+											$exito = $cuenta->cobrar((object)[
+												"forma_pago" => $req['metodo_pago']['codigo'],
+												"monto" => $total
+											]);									
+
+											if($exito) {
+												$cuenta->guardar(["cerrada" => 1]);
+												if ($idCliente) {
+													$fac = new Factura_model();
+													$fac->guardar($datosFac);
+													$fac->cargarEmpresa();
+													$pimpuesto = $fac->empresa->porcentaje_iva +1;
+													foreach ($cuenta->getDetalle() as $det) {
+														$det->bien_servicio = $det->articulo->bien_servicio;
+														$det->articulo = $det->articulo->articulo;
+														$det->precio_unitario = $det->precio;
+														if ($fac->exenta) {
+															$det->monto_base = $det->total;
+														} else {
+															$det->monto_base = $det->total / $pimpuesto;
+														}
+														$det->monto_iva = $det->total - $det->monto_base;	
+														$fac->setDetalle((array) $det);
+													}
+												} else {
+													$datos['exito'] = false;
+													$datos['mensaje'] .= "\nHacen falta datos para facturacion";
+												}
+												
+											}
+											$datos['comanda'] = $comanda->getComanda();	
+										} 							
+											
+										if($datos['exito']) {
+											$datos['mensaje'] = "Datos Actualizados con Exito";
+											$datos['comanda'] = $comanda->getComanda();	
+										} 
+									} else {
+										$datos['mensaje'] = "No existe ningun turno abierto";
+									}	
+								}else {
+									$datos['mensaje'] = "No hay existencia suficiente";
+								}
 							} else {
 								$datos['mensaje'] = "No existen productos";	
 							}
