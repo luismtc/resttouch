@@ -455,7 +455,9 @@ class Api extends CI_Controller {
 										$articulo = new Articulo_model($art->articulo);
 										$articulo->actualizarExistencia();
 										if (!empty($menu)) {
-											$existencia = $articulo->existencias >= $row['cantidad'];
+											if ($existencia) {											
+												$existencia = $articulo->existencias >= $row['cantidad'];
+											}
 										}
 									}
 																
