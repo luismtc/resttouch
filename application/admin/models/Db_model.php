@@ -10,7 +10,6 @@ class Db_model extends CI_Model
             $columnas = $this->db
                 ->select('COLUMN_NAME')
                 ->from('information_schema.columns')
-                ->where("TABLE_SCHEMA = '$tblSchema'")
                 ->where("TABLE_NAME = '$tblName'")
                 ->order_by('ORDINAL_POSITION')
                 ->get()
