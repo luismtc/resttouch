@@ -494,7 +494,7 @@ class Api extends CI_Controller {
 													,'precio' => $row['precio']
 													,'impreso' => 0
 													,'total' => $row['precio'] * $row['cantidad']
-													,'notas' => ''
+													,'notas' => (isset($row['nota']) ?? '')
 												];
 												$total += ($row['precio'] * $row['cantidad']);
 												$det = $comanda->guardarDetalle($datosDcomanda);
