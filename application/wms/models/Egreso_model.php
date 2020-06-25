@@ -100,11 +100,13 @@ class Egreso_model extends General_Model {
 			foreach ($det as $row) {
 				$detalle = new EDetalle_Model($row->egreso_detalle);
 				$row->articulo = $detalle->getArticulo();
+				$row->presentacion = $detalle->getPresentacion();
 				$datos[] = $row;
 			}
 		} else if($det) {
 			$detalle = new EDetalle_Model($det->egreso_detalle);
 			$det->articulo = $detalle->getArticulo();
+			$det->presentacion = $detalle->getPresentacion();
 			$datos[] = $det;
 		}
 

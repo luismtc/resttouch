@@ -21,6 +21,13 @@ class EDetalle_model extends General_Model {
 		}
 	}
 	
+	public function getPresentacion()
+	{
+		return $this->db
+					->where("presentacion", $this->presentacion)
+					->get("presentacion")
+					->row();
+	}
 
 	public function getArticulo() {
 		return $this->db

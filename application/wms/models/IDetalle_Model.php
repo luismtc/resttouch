@@ -28,6 +28,14 @@ class IDetalle_Model extends General_model {
 					->get("articulo")
 					->row();
 	}
+
+	public function getPresentacion()
+	{
+		return $this->db
+					->where("presentacion", $this->presentacion)
+					->get("presentacion")
+					->row();
+	}
 }
 
 /* End of file IDetalle_Model.php */
