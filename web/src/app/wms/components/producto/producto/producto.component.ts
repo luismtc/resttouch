@@ -31,9 +31,10 @@ export class ProductoComponent implements OnInit {
         this.articulo = {
           articulo: +obj.articulo,
           categoria_grupo: +obj.categoria_grupo.categoria_grupo,
-          presentacion: obj.presentacion,
+          presentacion: obj.presentacion.presentacion,
           descripcion: obj.descripcion,
-          precio: +obj.precio          
+          precio: +obj.precio,
+          codigo: obj.codigo
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();
