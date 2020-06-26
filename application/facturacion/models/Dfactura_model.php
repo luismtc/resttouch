@@ -13,6 +13,7 @@ class Dfactura_model extends General_model {
 	public $monto_base;
 	public $monto_iva;	
 	public $bien_servicio = 'B';
+	public $descuento = 0;
 
 	public function __construct($id = '')
 	{

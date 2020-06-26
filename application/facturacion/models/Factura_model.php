@@ -130,7 +130,7 @@ class Factura_model extends General_model {
 					->join("comanda_has_mesa f", "e.comanda = f.comanda")
 					->join("mesa g", "f.mesa = g.mesa")
 					->where("a.factura", $this->getPK())
-					->group_by("a.factura")
+					->group_by(["a.factura", "g.numero"])
 					->get("factura a");
 
 		if ($tmp && $tmp->num_rows() > 0) {
@@ -321,7 +321,7 @@ class Factura_model extends General_model {
 	        $item->appendChild($this->crearElemento('dte:Descripcion', $row->articulo->descripcion, array(), true));
 	        $item->appendChild($this->crearElemento('dte:PrecioUnitario', round(($row->precio_unitario), 6)));
 	        $item->appendChild($this->crearElemento('dte:Precio', $row->total));
-	        $item->appendChild($this->crearElemento('dte:Descuento', 0));
+	        $item->appendChild($this->crearElemento('dte:Descuento', $row->descuento));
 
         	$impuestos = $this->crearElemento('dte:Impuestos');
 	        $impuesto = $this->crearElemento('dte:Impuesto');
