@@ -513,7 +513,7 @@ class Api extends CI_Controller {
 													,'precio' => $row['precio']
 													,'impreso' => 0
 													,'total' => $row['precio'] * $row['cantidad']
-													,'notas' => (isset($row['nota']) ?? '')
+													,'notas' => ($row['nota'] ?? '')
 												];
 												$total += ($row['precio'] * $row['cantidad']);
 												$det = $comanda->guardarDetalle($datosDcomanda);
@@ -534,10 +534,17 @@ class Api extends CI_Controller {
 
 										$datos['exito'] = $exito;
 										if ($datos['exito']) {
-											$exito = $cuenta->cobrar((object)[
+											$tmpCobro = [
 												"forma_pago" => $req['metodo_pago']['codigo'],
 												"monto" => $total
-											]);									
+											];
+
+											if (isset($req['transferencia']) && !empty($req['transferencia'])) {
+												$tmpCobro["documento"] = $req['transferencia']["documento"];
+												$tmpCobro["observaciones"] = $req['transferencia']["observaciones"];
+											}
+
+											$exito = $cuenta->cobrar((object)$tmpCobro);								
 
 											if($exito) {
 												$cuenta->guardar(["cerrada" => 1]);
