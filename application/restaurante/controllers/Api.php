@@ -21,7 +21,8 @@ class Api extends CI_Controller {
 			"Turno_model",
 			"Factura_model",
 			"Dfactura_model",
-			"Cliente_model"
+			"Cliente_model",
+			"Receta_model"
 		]);
 
 		$this->output
@@ -463,22 +464,22 @@ class Api extends CI_Controller {
 							$existencia = true;
 							foreach ($req['detalle'] as $row) {
 								
-									$art = $this->Articulo_model->buscarArticulo([
-										'codigo' => $row['codigo'],
-										'sede' => $sede->sede,
-										'_uno' => true
-									]);	
+								$art = $this->Articulo_model->buscarArticulo([
+									'codigo' => $row['codigo'],
+									'sede' => $sede->sede,
+									'_uno' => true
+								]);	
 
-									if ($art) {
-										$insert = true;
-										$articulo = new Articulo_model($art->articulo);
-										$articulo->actualizarExistencia();
-										if (!empty($menu)) {
-											if ($existencia) {											
-												$existencia = $articulo->existencias >= $row['cantidad'];
-											}
+								if ($art) {
+									$insert = true;
+									$articulo = new Articulo_model($art->articulo);
+									$articulo->actualizarExistencia();
+									if (!empty($menu)) {
+										if ($existencia) {
+											$existencia = $articulo->existencias >= $row['cantidad'];
 										}
 									}
+								}
 																
 							}
 							if ($insert) {
@@ -562,7 +563,6 @@ class Api extends CI_Controller {
 													$datos['exito'] = false;
 													$datos['mensaje'] .= "\nHacen falta datos para facturacion";
 												}
-												
 											}
 											$datos['comanda'] = $comanda->getComanda();	
 										} 							
