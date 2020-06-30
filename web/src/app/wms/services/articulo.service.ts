@@ -127,6 +127,8 @@ export class ArticuloService {
             nombre: art.descripcion,
             precio: art.precio,
             impresora: art.impresora,
+            codigo: art.codigo,
+            presentacion: art.presentacion,
             hijos: null
           });
         }

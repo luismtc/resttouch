@@ -10,14 +10,16 @@ export interface Articulo {
     bien_servicio?: string;
     impresora?: Impresora;
     existencias?: number;
+    codigo?: string;
 }
 
 export interface ArticuloResponse {
     articulo: number;
     categoria_grupo: CategoriaGrupo;
-    presentacion: number;
+    presentacion: any;
     descripcion: string;
     precio: number;
+    codigo?: string;
 }
 
 export interface ArbolCategoriaGrupo {
@@ -41,5 +43,7 @@ export interface NodoProducto {
     nombre: string;
     precio?: number;
     impresora?: Impresora;
+    presentacion?: number;
+    codigo?: string;
     hijos?: NodoProducto[];
 }

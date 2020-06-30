@@ -81,6 +81,14 @@ class Cuenta_model extends General_Model {
 	public function cobrar($pago)
 	{
 		if (is_object($pago) && isset($pago->forma_pago) && isset($pago->monto)) {	
+			if (isset($pago->documento)) {
+				$this->db->set("documento", $pago->documento);
+			}
+
+			if (isset($pago->observaciones)) {
+				$this->db->set("observaciones", $pago->observaciones);
+			}
+
 			$this->db
 			->set("cuenta", $this->cuenta)
 			->set("forma_pago", $pago->forma_pago)

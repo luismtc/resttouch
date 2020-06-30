@@ -39,6 +39,14 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput type="text" placeholder="Código" name="codigo" [(ngModel)]="articulo.codigo" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
+                    ng-virtual-keyboard-placeholder="Código" type="text" placeholder="Código" name="codigo"
+                    [(ngModel)]="articulo.codigo" required>
+            </mat-form-field>
             <div align="end">
                 <button mat-icon-button type="submit" color="accent"
                     [disabled]="!frmArticulo.form.valid || !articulo.categoria_grupo">
