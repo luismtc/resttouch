@@ -65,6 +65,7 @@ class Cuenta_model extends General_Model {
 		$tmp = $this->db
 		->join("detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")
 		->where("a.cuenta_cuenta", $this->cuenta)
+		->where("b.total >", 0)
 		->get("detalle_cuenta a")
 		->result();
 

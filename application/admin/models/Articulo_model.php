@@ -76,8 +76,31 @@ class Articulo_model extends General_model {
 		return $datos;
 	}
 
-	public function actualizarExistencia()
+	function actualizarExistencia()
 	{
+		$receta = $this->getReceta();
+
+		if (count($receta) > 0) {
+			$grupos = [];
+			foreach ($receta as $row) {
+				$existR = $this->obtenerExistencia($row->articulo->articulo);
+				$art = new Articulo_model($row->articulo->articulo);
+				$art->guardar(['existencias' => $existR]);
+
+				$grupos[] = intdiv($art->existencias, $row->cantidad);
+			}
+
+			$exist = min($grupos);
+		} else {
+			$exist = $this->obtenerExistencia($this->articulo);
+		}
+
+		return $this->guardar(['existencias' => $exist]);
+	}
+
+	public function obtenerExistencia($articulo)
+	{
+
 		$ingresos = $this->db
 						 ->select("
 						 	sum(ifnull(a.cantidad, 0)) as total")
@@ -86,13 +109,13 @@ class Articulo_model extends General_model {
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("ingreso e", "e.ingreso = a.ingreso")
 						 ->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
-						 ->where("a.articulo", $this->articulo)
+						 ->where("a.articulo", $articulo)
 						 ->get("ingreso_detalle a")
 						 ->row(); //total ingresos
 
 		$egresos = $this->db
 						->select("sum(ifnull(cantidad, 0)) as total")
-						->where("articulo", $this->articulo)
+						->where("articulo", $articulo)
 						->get("egreso_detalle")
 						->row();//total egresos wms
 
@@ -103,7 +126,7 @@ class Articulo_model extends General_model {
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("comanda e", "e.comanda = a.comanda")
 						 ->join("turno f", "e.turno = f.turno and f.sede = d.sede")
-						 ->where("a.articulo", $this->articulo)
+						 ->where("a.articulo", $articulo)
 						 ->get("detalle_comanda a")
 						 ->row();//total ventas comanda
 
@@ -114,14 +137,14 @@ class Articulo_model extends General_model {
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("detalle_factura_detalle_cuenta e", "a.detalle_factura = e.detalle_factura", "left")
 						 ->join("factura f", "a.factura = f.factura and f.sede = d.sede")
-						 ->where("a.articulo", $this->articulo)
+						 ->where("a.articulo", $articulo)
 						 ->where("e.detalle_factura_detalle_cuenta is null")
 						 ->get("detalle_factura a")
 						 ->row();//total ventas factura manual
 
-		$exist = $ingresos->total - ($egresos->total + $comandas->total + $facturas->total);
+		return $ingresos->total - ($egresos->total + $comandas->total + $facturas->total);
 
-		return $this->guardar(['existencias' => $exist]);
+		
 	}
 
 	public function buscarArticulo($args = [])
@@ -139,7 +162,6 @@ class Articulo_model extends General_model {
 					->from("articulo a")
 					->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
 					->join("categoria c","b.categoria = c.categoria")
-					->group_by("a.articulo")
 					->get();
 
 		if ($tmp && $tmp->num_rows() > 0) {

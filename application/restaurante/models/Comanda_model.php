@@ -80,6 +80,21 @@ class Comanda_model extends General_Model {
 		$oldart = new Articulo_model($det->articulo);
 		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
 			$result = $det->guardar($args);
+			$receta = $art->getReceta();
+			if (count($receta) > 0) {
+				foreach ($receta as $rec) {
+					$detr = new Dcomanda_model();
+					$dato = [
+						"comanda" => $this->getPK(),
+						"articulo" => $rec->articulo->articulo,
+						"cantidad" => $rec->cantidad,
+						"precio" => 0,
+						"total" => 0,
+						"impreso" => 0
+					];
+					$detr->guardar($dato);
+				}
+			}
 			if($result) {
 				if (isset($args['articulo'])) {
 					$art->actualizarExistencia();
@@ -217,10 +232,13 @@ class Comanda_model extends General_Model {
 		->get()
 		->row();
 
-		$fac = new Factura_model($tmp->factura);
-		$fac->total = $fac->getTotal();
-
-		return $fac;
+		if ($tmp) {
+			$fac = new Factura_model($tmp->factura);
+			$fac->total = $fac->getTotal();	
+			return $fac;
+		}
+		
+		return null;
 	}
 
 	public function getComandaOrigen()
