@@ -84,6 +84,15 @@ $config['menu'] = [
 						'link' => '/restaurante/rptfactura'
 					]
 				]
+			],
+			3 => [
+				'nombre' => 'Mantenimiento',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Tipo de Turno',
+						'link' => '/restaurante/tipoturno'
+					]
+				]
 			]
 		]
 	],
