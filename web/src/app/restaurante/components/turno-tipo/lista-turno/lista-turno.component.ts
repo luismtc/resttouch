@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/cor
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { TipoTurno } from '../../../interfaces/turno-tipo';
+import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
 
 @Component({
