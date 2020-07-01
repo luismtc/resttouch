@@ -45,6 +45,9 @@ import { PresentacionComponent } from './components/presentacion/presentacion/pr
 import { ListaPresentacionComponent } from './components/presentacion/lista-presentacion/lista-presentacion.component';
 import { FormPresentacionComponent } from './components/presentacion/form-presentacion/form-presentacion.component';
 import { FormClienteDialogComponent } from './components/cliente/form-cliente-dialog/form-cliente-dialog.component';
+import { PropinaComponent } from './components/propina/propina/propina.component';
+import { FormPropinaComponent } from './components/propina/form-propina/form-propina.component';
+import { ListaPropinaComponent } from './components/propina/lista-propina/lista-propina.component';
 
 
 
@@ -53,7 +56,7 @@ import { FormClienteDialogComponent } from './components/cliente/form-cliente-di
     LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
     UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
     FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
-    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, PropinaComponent, FormPropinaComponent, ListaPropinaComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent

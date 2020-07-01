@@ -57,6 +57,9 @@ import { PropinasComponent } from './components/reportes/propinas/propinas.compo
 import { ComandaEnLineaComponent } from './components/comanda-en-linea/comanda-en-linea.component';
 import { CajaComponent } from './components/reportes/caja/caja.component';
 import { FacturaComponent } from './components/reportes/factura/factura.component';
+import { ListaTurnoTipoComponent } from './components/turno-tipo/lista-turno/lista-turno.component';
+import { FormTurnoTipoComponent } from './components/turno-tipo/form-turno/form-turno.component';
+import { TurnoTipoComponent } from './components/turno-tipo/turno/turno.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
@@ -64,7 +67,7 @@ import { FacturaComponent } from './components/reportes/factura/factura.componen
   declarations: [
     TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent,
     ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent,
-    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent
+    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent,FormTurnoTipoComponent,TurnoTipoComponent
   ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent
