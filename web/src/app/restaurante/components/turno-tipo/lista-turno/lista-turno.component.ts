@@ -17,6 +17,8 @@ export class ListaTurnoTipoComponent implements OnInit {
 
   public lstTurnos: TipoTurno[];
   @Output() getTurnoEv = new EventEmitter();
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  
   constructor(private turnoSrvc: TipoTurnoService) { }
 
   ngOnInit() {

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { ListaTurnoComponent } from '../lista-turno/lista-turno.component';
+import { ListaTurnoTipoComponent } from '../lista-turno/lista-turno.component';
 import { TipoTurno } from '../../../interfaces/tipo-turno';
 
 @Component({
@@ -11,7 +11,7 @@ import { TipoTurno } from '../../../interfaces/tipo-turno';
 export class TurnoTipoComponent implements OnInit {
 
   public turno: TipoTurno;
-  @ViewChild('lstTurno', { static: false }) lstTurnoComponent: ListaTurnoComponent;
+  @ViewChild('lstTurno', { static: false }) lstTurnoComponent: ListaTurnoTipoComponent;
 
   constructor() {
     this.turno = { 
