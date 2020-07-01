@@ -12,6 +12,9 @@ import { ComandaEnLineaComponent } from './components/comanda-en-linea/comanda-e
 import { CajaComponent } from './components/reportes/caja/caja.component';
 import { FacturaComponent } from './components/reportes/factura/factura.component';
 import { TurnoTipoComponent } from './components/turno-tipo/turno/turno.component';
+import { PropinaComponent } from './components/propina/propina/propina.component';
+import { FormPropinaComponent } from './components/propina/form-propina/form-propina.component';
+import { ListaPropinaComponent } from './components/propina/lista-propina/lista-propina.component';
 
 const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
@@ -24,6 +27,7 @@ const routes: Routes = [
   { path: 'rptfactura', component: FacturaComponent, canActivate: [AuthGuard]},
   { path: 'cmdonline', component: ComandaEnLineaComponent, canActivate: [AuthGuard] },
   { path: 'tipoturno', component: TurnoTipoComponent, canActivate: [AuthGuard] },
+  { path: 'propina', component: PropinaComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
