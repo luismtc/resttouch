@@ -282,6 +282,24 @@ class Comanda_model extends General_Model {
 
 		return $datos;
 	}
+
+	public function getComandasAbiertas($args = [])
+	{
+		$tmp = $this->db
+					->select("a.comanda")
+					->from("comanda a")
+					->join("detalle_comanda b", "a.comanda = b.comanda")
+					->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
+					->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
+					->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
+					->join("factura f", "f.factura = e.factura", "left")
+					->where("a.turno", $args['turno'])
+					->where("f.fel_uuid is null")
+					->group_by("a.comanda")
+					->get();
+		
+		return $tmp->num_rows() > 0;
+	}
 }
 
 /* End of file Comanda_model.php */

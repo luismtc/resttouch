@@ -6,7 +6,8 @@ class Turno extends CI_Controller {
 	public function __construct()
 	{
         parent::__construct();
-        $this->load->model(['Turno_model', 'TurnoTipo_model']);
+        $this->load->add_package_path('application/restaurante');
+        $this->load->model(['Turno_model', 'TurnoTipo_model', 'Comanda_model']);
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -31,6 +32,17 @@ class Turno extends CI_Controller {
 				if($tmp) {
 					$continuar = false;
 					$datos['mensaje'] = "Ya existe un turno abierto";
+				}
+			} else {
+				if (!empty($req['fin'])) {
+					$com = $this->Comanda_model->getComandasAbiertas([
+						"turno" => $turno->getPK()
+					]);
+
+					if ($com) {
+						$continuar = false;
+						$datos['mensaje'] = "Existen comandas pendientes de facturar";
+					}
 				}
 			}
 
