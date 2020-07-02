@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-propina #lstPropina (getPropinaEv)="setPropina($event)"></app-lista-propina>
+    </div>
+    <div class="col m7 s12">
+        <app-form-propina #frmPropina [propina]="propina" (propinaSavedEv)="refreshPropinaList()"></app-form-propina>
+    </div>
+</div>
