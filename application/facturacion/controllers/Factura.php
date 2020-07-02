@@ -19,7 +19,8 @@ class Factura extends CI_Controller {
 			'Factura_model',
 			'Articulo_model',
 			'Comanda_model',
-			'Cliente_model'
+			'Cliente_model',
+			'Receta_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
         $this->output
@@ -166,8 +167,9 @@ class Factura extends CI_Controller {
 				$fac->cargarEmpresa();
 				$fac->cargarMoneda();
 				$fac->cargarReceptor();
-				$fac->procesar_factura();
+				$fac->cargarSede();
 				$fac->cargarCertificadorFel();
+				$fac->procesar_factura();
 				
 				$cer = $fac->getCertificador();
 
@@ -177,7 +179,6 @@ class Factura extends CI_Controller {
 				
 				if (!empty($fac->numero_factura)) {
 					$fac->certificador_fel = $cer;
-					$fac->cargarSede();
 					$fac->detalle = $fac->getDetalle();
 					$fac->fecha_autorizacion = $resp->fecha;
 
