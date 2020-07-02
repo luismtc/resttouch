@@ -164,9 +164,9 @@ class Factura_model extends General_model {
 	public function cargarCertificadorFel()
 	{
 		$this->certificador = $this->db
-									   ->where("certificador_fel", $this->certificador_fel)
-									   ->get("certificador_fel")
-									   ->row();
+		->where("certificador_fel", $this->certificador_fel)
+		->get("certificador_fel")
+		->row();
 	}
 
 	public function getCertificador()
@@ -259,7 +259,8 @@ class Factura_model extends General_model {
 	{
 		$emisor = $this->xml->getElementsByTagName('Emisor')->item(0);
 		$emisor->setAttribute('AfiliacionIVA', 'GEN');
-		$emisor->setAttribute('CodigoEstablecimiento', 1);
+
+		$emisor->setAttribute('CodigoEstablecimiento', $this->sedeFactura->fel_establecimiento);
 
 		if (!empty($this->empresa->correo_emisor)) {
 			$emisor->setAttribute('CorreoEmisor', $this->empresa->correo_emisor);
@@ -375,14 +376,14 @@ class Factura_model extends General_model {
 			if ($this->empresa->agente_retenedor == 1) {
 				$frases->appendChild($this->crearElemento('dte:Frase', '', array(
 					'TipoFrase'       => 2,
-					'CodigoEscenario' => 1
+					'CodigoEscenario' => $this->certificador->frase_retencion_iva
 				)));
 			}
 
 			if (in_array($this->serie->tipo, array('FCAM', 'FACT')) ) {
 				$frases->appendChild($this->crearElemento('dte:Frase', '', array(
 					'TipoFrase'       => 1,
-					'CodigoEscenario' => 1
+					'CodigoEscenario' => $this->certificador->frase_retencion_isr
 				)));
 			}
 		}
