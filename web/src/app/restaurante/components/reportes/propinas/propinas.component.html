@@ -1,22 +1,22 @@
 <div class="row">
-    <div class="col m12 s12">
-        <mat-card class="mat-elevation-z4 fullWidth">
-            <mat-card-title>
-                <h4>Reporte de Propinas</h4>
-            </mat-card-title>
-            <mat-card-content>
-                <form #frmEntidad="ngForm" novalidate>
-                    <app-rpt-fechas [(fdel)]="params.fdel" [(fal)]="params.fal" [configuracion]="configParams"></app-rpt-fechas>
-                    <app-rpt-botones
-                        [configuracion]="configBotones"
-                        (htmlClick)="getReporte()"
-                        (pdfClick)="getReporte()"
-                        (excelClick)="getReporte()"
-                        (resetParamsClick)="resetParams()">
-                    </app-rpt-botones>
-                </form>
-            </mat-card-content>
-        </mat-card>                
-    </div>
+  <div class="col m12 s12">
+    <mat-card class="mat-elevation-z4 fullWidth">
+      <mat-card-title>
+        <h4>Reporte de propinas</h4>
+      </mat-card-title>
+      <mat-card-content>
+        <form (ngSubmit)="onSubmit()" novalidate>
+          <mat-form-field class="fullWidth">            
+            <input matInput type="date" placeholder="Del" [(ngModel)]="params.fdel" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <mat-form-field class="fullWidth">            
+            <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
+          </mat-form-field>
+          <div align="end">
+            <button mat-button color="accent" type="submit">GENERAR</button>
+          </div>
+        </form>        
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
-

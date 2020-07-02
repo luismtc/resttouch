@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+import { Impresora } from '../../../interfaces/impresora';
 import { Categoria } from '../../../interfaces/categoria';
 import { CategoriaGrupo } from '../../../interfaces/categoria-grupo';
 import { ArticuloService } from '../../../services/articulo.service';
@@ -26,6 +27,7 @@ export class CategoriaProductoComponent implements OnInit {
   public editSubCategoriaMode = false;
   public showCategoriasForm = false;
   public esMovil: boolean = false;
+  public impresoras: Impresora[] = [];
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -37,6 +39,7 @@ export class CategoriaProductoComponent implements OnInit {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetCategoria();
     this.loadCategorias();
+    this.loadImpresoras();
   }
 
   resetCategoria = () => {
@@ -73,6 +76,15 @@ export class CategoriaProductoComponent implements OnInit {
       if (res) {
         this.categoriasGruposPadre = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
         this.categoriasGrupos = this.categoriasGruposPadre;
+      }
+    });
+  }
+
+  loadImpresoras = () => {
+    this.articuloSrvc.getImpresoras({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
+      //console.log(res);
+      if (res) {
+        this.impresoras = res;
       }
     });
   }

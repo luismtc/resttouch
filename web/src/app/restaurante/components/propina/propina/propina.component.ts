@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { ListaMedidaComponent } from '../lista-propina/lista-propina.component';
+import { ListaPropinaComponent } from '../lista-propina/lista-propina.component';
 import { Propina } from '../../../interfaces/propina';
 
 @Component({

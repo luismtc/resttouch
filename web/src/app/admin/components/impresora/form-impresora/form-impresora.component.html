@@ -1,0 +1,29 @@
+<mat-card class="mat-elevation-z4 fullWidth">
+    <mat-card-title>
+        <h4>
+            Impresora {{!!impresora.impresora ? impresora.nombre : ''}}
+        </h4>
+    </mat-card-title>
+    <mat-card-content>
+        <form #frmImpresora="ngForm" (ngSubmit)="frmImpresora.form.valid && onSubmit()" novalidate>
+            <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="impresora.nombre" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Dirección IP" name="ip" [(ngModel)]="impresora.direccion_ip">
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Ubicación" name="ubicacion" [(ngModel)]="impresora.ubicacion">
+            </mat-form-field>
+            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+impresora.bluetooth">¿Es bluetooth?</mat-checkbox>
+            <div align="end">
+                <button mat-icon-button type="submit" color="accent" [disabled]="!frmImpresora.form.valid">
+                    <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button type="button" color="accent" (click)="resetImpresora()" *ngIf="impresora.impresora">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

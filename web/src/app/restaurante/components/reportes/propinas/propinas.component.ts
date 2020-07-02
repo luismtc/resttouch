@@ -1,40 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { GLOBAL } from '../../../../shared/global';
-import * as moment from 'moment';
-
-import { ConfiguracionFechas, ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ReportePdfService } from '../../../services/reporte-pdf.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-propinas',
   templateUrl: './propinas.component.html',
   styleUrls: ['./propinas.component.css']
 })
+
 export class PropinasComponent implements OnInit {
-
   public params: any = {};
-  public configParams: ConfiguracionFechas = {
-    isRequiredFDel: true, isRequiredFAl: true
-  };
-  public configBotones: ConfiguracionBotones = {
-    isHtmlDisabled: false, isPdfDisabled: false, isExcelDisabled: false
-  };
+  public titulo: string = 'Propinas';
 
-  constructor() { }
+  constructor(
+    private snackBar: MatSnackBar,
+    private pdfServicio: ReportePdfService
+  ) { }
 
   ngOnInit() {
-    this.resetParams();
   }
 
-  resetParams = () => {
-    this.params = {
-      fdel: moment().startOf('month').format(GLOBAL.dbDateFormat),
-      fal: moment().endOf('month').format(GLOBAL.dbDateFormat)
-    };
-    // console.log(this.params);
-  }
-
-  getReporte = () => {
-    console.log('GENERANDO CON PARAMETROS = ', this.params);
+  onSubmit() {
+    this.pdfServicio.getReportePropina(this.params).subscribe(res => {
+      if (res) {
+        const blob = new Blob([res], { type: 'application/pdf' });
+        saveAs(blob, `${this.titulo}.pdf`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+      }
+    });
   }
 
 }

@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-impresora #lstImpresora (getImpresoraEv)="setImpresora($event)"></app-lista-impresora>
+    </div>
+    <div class="col m7 s12">
+        <app-form-impresora #frmImpresora [impresora]="impresora" (impresoraSavedEv)="refreshImpresoraList()"></app-form-impresora>
+    </div>
+</div>

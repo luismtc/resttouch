@@ -45,6 +45,9 @@ import { PresentacionComponent } from './components/presentacion/presentacion/pr
 import { ListaPresentacionComponent } from './components/presentacion/lista-presentacion/lista-presentacion.component';
 import { FormPresentacionComponent } from './components/presentacion/form-presentacion/form-presentacion.component';
 import { FormClienteDialogComponent } from './components/cliente/form-cliente-dialog/form-cliente-dialog.component';
+import { ImpresoraComponent } from './components/impresora/impresora/impresora.component';
+import { FormImpresoraComponent } from './components/impresora/form-impresora/form-impresora.component';
+import { ListaImpresoraComponent } from './components/impresora/lista-impresora/lista-impresora.component';
 
 
 
@@ -53,7 +56,7 @@ import { FormClienteDialogComponent } from './components/cliente/form-cliente-di
     LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
     UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
     FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
-    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent

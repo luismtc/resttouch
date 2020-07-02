@@ -44,4 +44,13 @@ export class ReportePdfService {
       this.httpOptions
     ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  getReportePropina(params: Object) {
+    this.httpOptions['params'] = params;
+
+    return this.http.get<string>(
+      `${GLOBAL.urlFacturacion}/reporte/venta/propina`,
+      this.httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
 }

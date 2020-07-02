@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Categoria } from '../interfaces/categoria';
+import { Impresora } from '../interfaces/impresora';
 import { CategoriaGrupo, CategoriaGrupoResponse } from '../interfaces/categoria-grupo';
 import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo, ArticuloResponse } from '../interfaces/articulo';
 import { ArticuloDetalle } from '../interfaces/articulo-detalle';
@@ -37,6 +38,15 @@ export class ArticuloService {
       })
     };
     return this.http.get<Categoria[]>(`${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getImpresoras(fltr: any = {}): Observable<Impresora[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<Impresora[]>(`${GLOBAL.urlMantenimientos}/impresora/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveCategoria(entidad: Categoria) {
