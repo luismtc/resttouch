@@ -9,6 +9,7 @@ class Cgrupo_model extends General_model {
 	public $categoria_grupo_grupo;
 	public $receta = 0;
 	public $impresora;
+	public $descuento = 0;
 
 	public function __construct($id = "")
 	{

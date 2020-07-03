@@ -622,18 +622,41 @@ class Factura_model extends General_model {
 
 		if (isset($args['fdel']) && isset($args['fal'])) {
 			$this->db
-				 ->where("fecha_factura >=", $args['fdel'])
-				 ->where("fecha_factura <=", $args['fal']);
+				 ->where("a.fecha_factura >=", $args['fdel'])
+				 ->where("a.fecha_factura <=", $args['fal']);
 			unset($args['fdel']);
 			unset($args['fal']);
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where("sede", $args['sede']);
+			$this->db->where("a.sede", $args['sede']);
 			unset($args['sede']);
 		}
 
-		return $this->buscar($args);
+		if (isset($args['turno_tipo'])) {
+			$this->db->where("g.turno_tipo", $args['turno_tipo']);
+			unset($args['turno_tipo']);
+		}
+
+		if (count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if($key != "_uno"){
+					$this->db->where("a.{$key}", $row);
+				}
+			}	
+		}
+
+		return $this->db
+					->select("a.*")
+					->join("detalle_factura b", "a.factura = b.factura")
+					->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura", "left")
+					->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
+					->join("cuenta e", "d.cuenta_cuenta = e.cuenta", "left")
+					->join("comanda f", "e.comanda = f.comanda", "left")
+					->join("turno g", "g.turno = f.turno", "left")
+					->group_by("a.factura")
+					->get("factura a")
+					->result();
 	}
 
 	public function getPropina(){

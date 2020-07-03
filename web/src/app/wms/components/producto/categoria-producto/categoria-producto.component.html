@@ -95,6 +95,7 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
+        <mat-checkbox name="descuento" class="fullWidth" [(ngModel)]="+categoriaGrupo.descuento">¿Aplica Descuento?</mat-checkbox>
     </form>
     <div align="end">
         <button mat-icon-button type="button" color="accent" (click)="editSubCategoriaMode = true;"

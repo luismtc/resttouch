@@ -5,6 +5,10 @@ class Reporte_model extends CI_Model {
 
 	public function get_ingresos($args = [])
 	{
+		if (isset($args['turno_tipo'])) {
+			$this->db->where('i.turno_tipo', $args['turno_tipo']);
+		}
+
 		$tmp = $this->db
 					->select("f.*, sum(a.monto) as monto")					
 					->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
@@ -12,6 +16,9 @@ class Reporte_model extends CI_Model {
 					->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
 					->join("factura e", "d.factura = e.factura")
 					->join("forma_pago f", "a.forma_pago = f.forma_pago")
+					->join("cuenta g", "g.cuenta = b.cuenta_cuenta")
+					->join("comanda h", "h.comanda = g.comanda")
+					->join("turno i", "i.turno = h.turno")
 					->where("e.sede", $args['sede'])
 					->where("e.fecha_factura >=", $args['fdel'])
 				 	->where("e.fecha_factura <=", $args['fal'])
@@ -28,6 +35,10 @@ class Reporte_model extends CI_Model {
 
 	public function getRangoComandas($args)
 	{
+		if (isset($args['turno_tipo'])) {
+			$this->db->where('b.turno_tipo', $args['turno_tipo']);
+		}
+		
 		return $this->db
 					->select("
 						max(comanda) as maxComanda, 

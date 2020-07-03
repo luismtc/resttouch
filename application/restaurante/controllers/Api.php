@@ -291,18 +291,28 @@ class Api extends CI_Controller {
 												$fac->guardar($datosFac);
 												$fac->cargarEmpresa();
 												$pimpuesto = $fac->empresa->porcentaje_iva +1;
-												$detalle = $cuenta->getDetalle();
+												$detalle = $cuenta->getDetalle([
+													"descuento" => 1
+												]);
 												foreach ($cuenta->getDetalle() as $det) {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
-													$det->precio_unitario = $det->precio;
-													if ($fac->exenta) {
-														$det->monto_base = $det->total;
+													if ($det->descuento == 1) {
+														$det->descuento = $descuento / count($detalle);		
 													} else {
-														$det->monto_base = number_format($det->total / $pimpuesto, 2);
+														$det->descuento = 0;
 													}
-													$det->monto_iva = $det->total - $det->monto_base;
-													$det->descuento = $descuento / count($detalle);	
+													
+													$det->precio_unitario = $det->precio;
+													$total = $det->total - $det->descuento;
+													if ($fac->exenta) {
+														$det->monto_base = $total;
+													} else {
+														$det->monto_base = $total / $pimpuesto;
+													}
+													
+													$det->monto_iva = $total - $det->monto_base;
+													$det->total = $total;
 													$fac->setDetalle((array) $det);
 												}
 											} else {
@@ -535,17 +545,34 @@ class Api extends CI_Controller {
 
 										$datos['exito'] = $exito;
 										if ($datos['exito']) {
+											$pagos = [];
+											$descuento = 0;
+											if (isset($req['descuento']) && is_array($req['descuento'])) {
+
+												foreach ($req['descuento'] as $desc) {
+													$descuento += ($total * $desc['valor'] /100);
+													
+												}
+												$pagos[] = [
+													"forma_pago" => 3, 
+													"monto" => $descuento
+												];	
+											}
+
 											$tmpCobro = [
 												"forma_pago" => $req['metodo_pago']['codigo'],
-												"monto" => $total
+												"monto" => $total-$descuento
 											];
 
 											if (isset($req['transferencia']) && !empty($req['transferencia'])) {
 												$tmpCobro["documento"] = $req['transferencia']["documento"];
 												$tmpCobro["observaciones"] = $req['transferencia']["observaciones"];
 											}
+											array_push($pagos, $tmpCobro);
 
-											$exito = $cuenta->cobrar((object)$tmpCobro);								
+											foreach ($pagos as $pago) {
+												$exito = $cuenta->cobrar((object) $pago);	
+											}							
 
 											if($exito) {
 												$cuenta->guardar(["cerrada" => 1]);
@@ -554,16 +581,26 @@ class Api extends CI_Controller {
 													$fac->guardar($datosFac);
 													$fac->cargarEmpresa();
 													$pimpuesto = $fac->empresa->porcentaje_iva +1;
+													$detalle = $cuenta->getDetalle([
+														"descuento" => 1
+													]);
 													foreach ($cuenta->getDetalle() as $det) {
 														$det->bien_servicio = $det->articulo->bien_servicio;
 														$det->articulo = $det->articulo->articulo;
 														$det->precio_unitario = $det->precio;
-														if ($fac->exenta) {
-															$det->monto_base = $det->total;
+														if ($det->descuento == 1) {
+															$det->descuento = $descuento / count($detalle);		
 														} else {
-															$det->monto_base = $det->total / $pimpuesto;
+															$det->descuento = 0;
 														}
-														$det->monto_iva = $det->total - $det->monto_base;	
+														$total = $det->total-$det->descuento;
+														if ($fac->exenta) {
+															$det->monto_base = $total;
+														} else {
+															$det->monto_base = $total / $pimpuesto;
+														}
+														$det->monto_iva = $total - $det->monto_base;	
+														$det->total = $total;
 														$fac->setDetalle((array) $det);
 													}
 												} else {

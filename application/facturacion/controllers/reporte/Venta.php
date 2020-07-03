@@ -18,12 +18,12 @@ class Venta extends CI_Controller {
 		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
 	}
 
-	public function categoria()
+	public function categoria($pdf = 0)
 	{
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
-		$req = json_decode(file_get_contents('php://input'), true);
+		$req = $_GET;
 		$req['sede'] = $this->data->sede;
 		$facts = $this->Factura_model->get_facturas($req);
 
@@ -49,7 +49,7 @@ class Venta extends CI_Controller {
 			}
 		}
 
-		$cat = $this->Categoria_model->buscar(["sede" => $data->sede]);		
+		$cat = $this->Categoria_model->buscar(["sede" => $this->data->sede]);		
 		
 		$categorias = [];
 		foreach ($cat as $row) {
@@ -68,20 +68,30 @@ class Venta extends CI_Controller {
 			$datos[] = $row;
 		}
 
-		foreach ($datos as $row) {
-			
+		if ($pdf === 0) {
+			$this->output
+				->set_content_type("application/json")
+				->set_output(json_encode($datos));	
+		} else {
+			$data = ["detalle" => $datos];
+			$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
+
+			$mpdf = new \Mpdf\Mpdf([
+				//'tempDir' => sys_get_temp_dir(), //Produccion
+				'format' => 'Legal'
+			]);
+
+			$mpdf->WriteHTML($vista);
+			$mpdf->Output("Ventas_categoria.pdf", "D");
 		}
-		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));
 	}
 
-	public function articulo()
+	public function articulo($pdf = 0)
 	{
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
-		$req = json_decode(file_get_contents('php://input'), true);
+		$req = $_GET;
 		$req['sede'] = $data->sede;
 		$facts = $this->Factura_model->get_facturas($req);
 
@@ -106,16 +116,30 @@ class Venta extends CI_Controller {
 		}
 		$datos = array_values($detalle);
 		usort($datos, function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
-		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));
+
+		if ($pdf === 0) {
+			$this->output
+				 ->set_content_type("application/json")
+				 ->set_output(json_encode($datos));	
+		}  else {
+			$data = ["detalle" => $datos];
+			$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
+
+			$mpdf = new \Mpdf\Mpdf([
+				//'tempDir' => sys_get_temp_dir(), //Produccion
+				'format' => 'Legal'
+			]);
+
+			$mpdf->WriteHTML($vista);
+			$mpdf->Output("Ventas_articulo.pdf", "D");
+		}
 	}
 
 	public function propina()
 	{
-		$req = json_decode(file_get_contents('php://input'), true);
-		$req['sede'] = $this->data->sede;
-		$facts = $this->Factura_model->get_facturas($req);
+		
+		$_GET['sede'] = $this->data->sede;
+		$facts = $this->Factura_model->get_facturas($_GET);
 		$datos = [];
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);

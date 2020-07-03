@@ -75,6 +75,8 @@ export class ArticuloService {
       categoria_grupo_grupo: !!item.categoria_grupo_grupo && item.categoria_grupo_grupo.length > 0 ? +item.categoria_grupo_grupo[0].categoria_grupo : null,
       descripcion: item.descripcion,
       receta: +item.receta,
+      impresora: item.impresora,
+      descuento: item.descuento,
       antecesores: null
     }));
     return lst;

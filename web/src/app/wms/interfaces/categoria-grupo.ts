@@ -7,6 +7,8 @@ export interface CategoriaGrupo {
     categoria_grupo_grupo?: number;
     descripcion: string;
     receta: number;
+    impresora: number;
+    descuento: number;
     antecesores?: string;
 }
 
@@ -16,5 +18,7 @@ export interface CategoriaGrupoResponse {
     categoria_grupo_grupo: CategoriaGrupoResponse[];
     descripcion: string;
     receta: number;
+    impresora: number;
+    descuento: number;
     articulo: Articulo[];
 }

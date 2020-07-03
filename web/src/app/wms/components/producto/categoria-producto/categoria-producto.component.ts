@@ -55,6 +55,8 @@ export class CategoriaProductoComponent implements OnInit {
       categoria_grupo_grupo: null,
       descripcion: null,
       receta: 0,
+      impresora: null,
+      descuento: 0,
       antecesores: null
     };
     this.editSubCategoriaMode = false;

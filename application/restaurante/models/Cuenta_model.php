@@ -62,8 +62,13 @@ class Cuenta_model extends General_Model {
 	public function getDetalle($args = [])
 	{
 		$datos = [];
+		if (isset($args['descuento'])) {
+			$this->db->where('d.descuento', $args['descuento']);
+		}
 		$tmp = $this->db
 		->join("detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")
+		->join("articulo c", "b.articulo = c.articulo")
+		->join("categoria_grupo d", "d.categoria_grupo = c.categoria_grupo")
 		->where("a.cuenta_cuenta", $this->cuenta)
 		->where("b.total >", 0)
 		->get("detalle_cuenta a")
