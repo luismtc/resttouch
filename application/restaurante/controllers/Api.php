@@ -309,7 +309,6 @@ class Api extends CI_Controller {
 													}
 													
 													$det->monto_iva = $total - $det->monto_base;
-													$det->total = $total;
 													$fac->setDetalle((array) $det);
 												}
 											} else {
@@ -597,7 +596,6 @@ class Api extends CI_Controller {
 															$det->monto_base = $total / $pimpuesto;
 														}
 														$det->monto_iva = $total - $det->monto_base;	
-														$det->total = $total;
 														$fac->setDetalle((array) $det);
 													}
 												} else {
