@@ -66,6 +66,7 @@ class Cuenta_model extends General_Model {
 			$this->db->where('d.descuento', $args['descuento']);
 		}
 		$tmp = $this->db
+		->select("b.*, d.descuento")
 		->join("detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")
 		->join("articulo c", "b.articulo = c.articulo")
 		->join("categoria_grupo d", "d.categoria_grupo = c.categoria_grupo")

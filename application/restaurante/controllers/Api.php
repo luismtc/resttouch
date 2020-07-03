@@ -264,12 +264,15 @@ class Api extends CI_Controller {
 									if ($datos['exito']) {
 										$pagos = [];						
 										$descuento = 0;
+										$pdescuento = 0;
 										if (isset($req['discount_applications']) && is_array($req['discount_applications'])) {
 											foreach ($req['discount_applications'] as $desc) {
 												if (strtolower($desc['value_type']) == 'percentage') {
 													$descuento += ($total * $desc['value'] /100);
+													$pdescuento += $desc['value'];
 												}
 											}
+
 											$pagos[] = [
 												"forma_pago" => 3, 
 												"monto" => $descuento
@@ -291,17 +294,11 @@ class Api extends CI_Controller {
 												$fac->guardar($datosFac);
 												$fac->cargarEmpresa();
 												$pimpuesto = $fac->empresa->porcentaje_iva +1;
-												$detalle = $cuenta->getDetalle([
-													"descuento" => 1
-												]);
+												
 												foreach ($cuenta->getDetalle() as $det) {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
-													if ($det->descuento == 1) {
-														$det->descuento = $descuento / count($detalle);		
-													} else {
-														$det->descuento = 0;
-													}
+													$det->descuento = $det->total * $pdescuento/100;
 													
 													$det->precio_unitario = $det->precio;
 													$total = $det->total - $det->descuento;
@@ -589,7 +586,7 @@ class Api extends CI_Controller {
 														$det->articulo = $det->articulo->articulo;
 														$det->precio_unitario = $det->precio;
 														if ($det->descuento == 1) {
-															$det->descuento = $descuento / count($detalle);		
+															$det->descuento = $det->total * $pdescuento/100;	
 														} else {
 															$det->descuento = 0;
 														}
