@@ -50,7 +50,13 @@ class Factura extends CI_Controller {
 						foreach ($cta->getDetalle() as $det) {
 							$det->bien_servicio = $det->articulo->bien_servicio;
 							$det->articulo = $det->articulo->articulo;
-							$det->descuento = $det->total * $pdesc;
+							
+							if ($det->descuento == 1) {
+								$det->descuento = $det->total * $pdesc;	
+							} else {
+								$det->descuento = 0;
+							}
+							
 							$det->precio_unitario = $det->precio;
 							$total = $det->total - $det->descuento;
 
