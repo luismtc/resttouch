@@ -31,6 +31,10 @@ $config['menu'] = [
 					6 => [
 						'nombre' => 'Medidas',
 						'link' => '/admin/medida'
+					],
+					7  => [
+						'nombre' => 'Impresoras',
+						'link' => '/admin/impresora'
 					]
 				]
 			]
@@ -91,6 +95,10 @@ $config['menu'] = [
 					1 => [
 						'nombre' => 'Tipo de Turno',
 						'link' => '/restaurante/tipoturno'
+					],
+					2 => [
+						'nombre' => 'Distribución de propinas',
+						'link' => '/restaurante/propina'
 					]
 				]
 			]

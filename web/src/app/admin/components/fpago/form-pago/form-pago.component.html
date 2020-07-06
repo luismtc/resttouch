@@ -1,0 +1,23 @@
+<mat-card class="mat-elevation-z4 fullWidth">
+    <mat-card-title>
+        <h4>
+            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}
+        </h4>
+    </mat-card-title>
+    <mat-card-content>
+        <form #frmFpago="ngForm" (ngSubmit)="frmFpago.form.valid && onSubmit()" novalidate>
+            <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="fpago.descripcion" required>
+            </mat-form-field>
+            <mat-checkbox name="activo" class="fullWidth" [(ngModel)]="fpago.activo">Activo</mat-checkbox>
+            <div align="end">
+                <button mat-icon-button type="submit" color="accent" [disabled]="!frmFpago.form.valid">
+                    <mat-icon>save</mat-icon>
+                </button>
+                <button mat-icon-button type="button" color="accent" (click)="resetFormaPago()" *ngIf="fpago.forma_pago">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

@@ -396,6 +396,14 @@ class Catalogo_model extends CI_Model {
 
 		return false;
 	}
+
+	public function getJerarquia($args=[])
+	{
+		$qry = $this->db
+		->get("jerarquia");
+
+		return $this->getCatalogo($qry, $args);
+	}
 }
 
 /* End of file Catalogo_model.php */

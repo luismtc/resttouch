@@ -159,6 +159,12 @@ class Catalogo extends CI_Controller {
 		$this->output
 		->set_output(json_encode($datos));
 	}
+
+	public function get_jerarquia()
+	{
+		$this->output
+		->set_output(json_encode($this->Catalogo_model->getJerarquia($_GET)));
+	}
 }
 
 /* End of file Catalogo.php */

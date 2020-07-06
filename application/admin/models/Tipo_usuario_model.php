@@ -16,6 +16,14 @@ class Tipo_usuario_model extends General_model {
 		}
 	}
 
+	public function getJerarquia()
+	{
+		return $this->db
+		->where("jerarquia", $this->jerarquia)
+		->get("jerarquia")
+		->row();
+	}
+
 }
 
 /* End of file Tipo_usuario_model.php */

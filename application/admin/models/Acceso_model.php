@@ -40,13 +40,17 @@ class Acceso_model extends General_model {
 	public function getSubModulo()
 	{
 		$menu = $this->config->item("menu");
-		return ["nombre" => $menu[$this->modulo]['submodulo'][$this->submodulo]['nombre']];
+		return [
+			"nombre" => $menu[$this->modulo]['submodulo'][$this->submodulo]['nombre'],
+			"submodulo" => $this->submodulo
+		];
 	}
 
 	public function getOpcion()
 	{
 		$menu = $this->config->item("menu");
-		return $menu[$this->modulo]['submodulo'][$this->submodulo]['opciones'][$this->opcion];
+		return array_merge($menu[$this->modulo]['submodulo'][$this->submodulo]['opciones'][$this->opcion], ["opcion" => $this->opcion
+		]);
 	}
 }
 

@@ -100,11 +100,12 @@ class Factura_model extends General_model {
 	{
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
-				if($key != "_uno"){
+				if(substr($key, 0, 1) != "_"){
 					$this->db->where($key, $row);
 				}
 			}	
 		}
+		
 		$datos = [];
 		$tmp = $this->db
 		->where("factura", $this->factura)
@@ -114,6 +115,11 @@ class Factura_model extends General_model {
 		foreach ($tmp as $row) {
 			$det = new Dfactura_model($row->detalle_factura);
 			$row->articulo = $det->getArticulo();
+
+			if (isset($args["_imprimir"])) {
+				$row->total = ($row->total - $row->descuento);
+			}
+			
 			$datos[] = $row;
 		}
 		return $datos;
@@ -346,9 +352,11 @@ class Factura_model extends General_model {
 	        $impuestos->appendChild($impuesto);
 	        $item->appendChild($impuestos);
 
-	        $item->appendChild($this->crearElemento('dte:Total', $row->total));
+	        $tmpTotal = ($row->total - $row->descuento);
+
+	        $item->appendChild($this->crearElemento('dte:Total', $tmpTotal));
 	        $items->appendChild($item);
-	        $montoTotal+= $row->total;
+	        $montoTotal+= $tmpTotal;
     	}
 
     	$totalIva = $this->xml->getElementsByTagName('TotalImpuesto')->item(0);

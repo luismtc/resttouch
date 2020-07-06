@@ -66,8 +66,10 @@ class Factura extends CI_Controller {
 					$fac->cargarFacturaSerie();
 					$fac->cargarMoneda();
 					$fac->cargarReceptor();
-					$fac->procesar_factura();
+					$fac->cargarSede();
 					$fac->cargarCertificadorFel();
+					$fac->procesar_factura();
+					
 					$funcion = $fac->getCertificador()->metodo_factura;
 					$resp = $fac->$funcion();
 					$fac->setBitacoraFel(['resultado' => json_encode($resp)]);

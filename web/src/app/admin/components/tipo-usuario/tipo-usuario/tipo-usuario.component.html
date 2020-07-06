@@ -1,0 +1,8 @@
+<div class="row">
+	<div class="col m5 s12">
+		<app-lista-tipo-usuario #lstTipoUsuario (getTipoUsuarioEv)="setTipoUsuario($event)"></app-lista-tipo-usuario>
+	</div>
+	<div class="col m7 s12">
+		<app-form-tipo-usuario #frmTipoUsuario [usuarioTipo]="usuarioTipo" (usuarioTipoSavedEv)="refreshtipoUsuarioList()"></app-form-tipo-usuario>
+	</div>
+</div>

@@ -411,7 +411,7 @@ class Api extends CI_Controller {
 						$clt = new Cliente_model();
 						$clt->guardar([
 							"nombre" => $datosCliente['nombre'].' '.$datosCliente['apellidos'],
-							"direccion" => $datosCliente['direccion'],
+							"direccion" => ($datosCliente['direccion'] ?? 'CIUDAD'),
 							"correo" => $datosCliente['correo'],
 							"telefono" => $datosCliente['telefono'],
 							"nit" => $nit
@@ -519,10 +519,12 @@ class Api extends CI_Controller {
 													,'cantidad' => $row['cantidad']
 													,'precio' => $row['precio']
 													,'impreso' => 0
-													,'total' => $row['precio'] * $row['cantidad']
+													,'total' => $row['total']
 													,'notas' => ($row['nota'] ?? '')
 												];
-												$total += ($row['precio'] * $row['cantidad']);
+												
+												$total += $row['total'];
+												
 												$det = $comanda->guardarDetalle($datosDcomanda);
 												$id = '';
 												if ($det) {
@@ -562,7 +564,10 @@ class Api extends CI_Controller {
 
 											if (isset($req['transferencia']) && !empty($req['transferencia'])) {
 												$tmpCobro["documento"] = $req['transferencia']["documento"];
-												$tmpCobro["observaciones"] = $req['transferencia']["observaciones"];
+
+												if (isset($req['transferencia']["observaciones"])) {
+													$tmpCobro["observaciones"] = $req['transferencia']["observaciones"];
+												}
 											}
 											array_push($pagos, $tmpCobro);
 
@@ -585,7 +590,7 @@ class Api extends CI_Controller {
 														$det->articulo = $det->articulo->articulo;
 														$det->precio_unitario = $det->precio;
 														if ($det->descuento == 1) {
-															$det->descuento = $det->total * $pdescuento/100;	
+															$det->descuento = 0; // $det->total * $pdescuento/100;	
 														} else {
 															$det->descuento = 0;
 														}

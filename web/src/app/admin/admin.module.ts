@@ -48,7 +48,15 @@ import { FormClienteDialogComponent } from './components/cliente/form-cliente-di
 import { ImpresoraComponent } from './components/impresora/impresora/impresora.component';
 import { FormImpresoraComponent } from './components/impresora/form-impresora/form-impresora.component';
 import { ListaImpresoraComponent } from './components/impresora/lista-impresora/lista-impresora.component';
-
+import { FpagoComponent } from './components/fpago/fpago/fpago.component';
+import { FormPagoComponent } from './components/fpago/form-pago/form-pago.component';
+import { ListaPagoComponent } from './components/fpago/lista-pago/lista-pago.component';
+import { TipoUsuarioComponent } from './components/tipo-usuario/tipo-usuario/tipo-usuario.component';
+import { ListaTipoUsuarioComponent } from './components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component';
+import { FormTipoUsuarioComponent } from './components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component';
+import { AccesoUsuarioComponent } from './components/acceso-usuario/acceso-usuario/acceso-usuario.component';
+import { FormAccesoUsuarioComponent } from './components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component';
+import { ListaAccesoUsuarioComponent } from './components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component';
 
 
 @NgModule({
@@ -56,7 +64,7 @@ import { ListaImpresoraComponent } from './components/impresora/lista-impresora/
     LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
     UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
     FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
-    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent, FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent
