@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-pago #lstFPago (getFpagoEv)="setFormPago($event)"></app-lista-pago>
+    </div>
+    <div class="col m7 s12">
+        <app-form-pago #frmFpago [fpago]="fpago" (fpagoSavedEv)="refreshFpagoList()"></app-form-pago>
+    </div>
+</div>

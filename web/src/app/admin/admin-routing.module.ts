@@ -9,6 +9,8 @@ import { ClienteComponent } from './components/cliente/cliente/cliente.component
 import { MedidaComponent } from './components/medida/medida/medida.component';
 import { PresentacionComponent } from './components/presentacion/presentacion/presentacion.component';
 import { ImpresoraComponent } from './components/impresora/impresora/impresora.component';
+import { FpagoComponent } from './components/fpago/fpago/fpago.component';
+
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
@@ -17,6 +19,7 @@ const routes: Routes = [
   {path: 'medida', component: MedidaComponent, canActivate: [AuthGuard]},
   {path: 'presentacion', component: PresentacionComponent, canActivate: [AuthGuard]},
   {path: 'impresora', component: ImpresoraComponent, canActivate: [AuthGuard]},
+  {path: 'formapago', component: FpagoComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 

@@ -48,6 +48,9 @@ import { FormClienteDialogComponent } from './components/cliente/form-cliente-di
 import { ImpresoraComponent } from './components/impresora/impresora/impresora.component';
 import { FormImpresoraComponent } from './components/impresora/form-impresora/form-impresora.component';
 import { ListaImpresoraComponent } from './components/impresora/lista-impresora/lista-impresora.component';
+import { FpagoComponent } from './components/fpago/fpago/fpago.component';
+import { FormPagoComponent } from './components/fpago/form-pago/form-pago.component';
+import { ListaPagoComponent } from './components/fpago/lista-pago/lista-pago.component';
 
 
 
@@ -56,7 +59,7 @@ import { ListaImpresoraComponent } from './components/impresora/lista-impresora/
     LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
     UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
     FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
-    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent
