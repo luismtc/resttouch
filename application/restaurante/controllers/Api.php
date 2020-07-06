@@ -638,6 +638,64 @@ class Api extends CI_Controller {
 		$this->output
 		->set_output(json_encode($datos));
 	}
+
+	public function set_producto()
+	{
+		$datos = ["exito" => false, 'mensaje' => ''];
+		if (isset($_GET['key'])) {
+			if ($this->input->method() == 'post') {
+
+				$req = json_decode(file_get_contents('php://input'), true);
+
+				$datosDb = $this->Catalogo_model->getCredenciales([
+					"llave" => $_GET['key']
+				]);
+	            $conn = [
+	                'host' => $datosDb->db_hostname,
+	                'user' => $datosDb->db_username,
+	                'password' => $datosDb->db_password,
+	                'database' => $datosDb->db_database
+	            ];
+				$db = conexion_db($conn);
+				$this->db = $this->load->database($db, true);
+
+				$sede = $this->Catalogo_model->getSede([
+					"admin_llave" => $_GET['key'],
+					"_uno" => true
+				]);
+
+				if (isset($req['variants'])) {
+					foreach ($req['variants'] as $row) {
+						$args = [
+							"categoria_grupo" => 1,
+							"presentacion" => 1,
+							"descripcion" => $row['sku'],
+							"precio" => $row['price'] ,
+							"bien_servicio" => "B",
+							"existencias" => 0,
+							"shopify_id" => $row['id']
+						];
+						$art = new Articulo_model();
+
+						$datos['exito'] = $art->guardar($args);
+					}	
+				}
+
+				if ($datos['exito']) {
+					$datos['mensaje'] = "Datos Actualizados con exito";
+				} else {
+					$datos['mensaje'] = "Ocurrio un erro al guardar el producto";
+				}
+			} else {
+				$datos['mensaje'] = "Parametros Invalidos";
+			}
+		} else {
+			$datos['mensaje'] = "Hacen falta datos obligatorios para continuar";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
 }
 
 /* End of file Api.php */

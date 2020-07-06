@@ -67,23 +67,74 @@ class Venta extends CI_Controller {
 			unset($row->categoria_grupo);
 			$datos[] = $row;
 		}
+	
+		$this->output
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));	
+	 
+	}
 
-		if ($pdf === 0) {
-			$this->output
-				->set_content_type("application/json")
-				->set_output(json_encode($datos));	
-		} else {
-			$data = ["detalle" => $datos];
-			$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
+	public function categoriapdf($pdf = 0)
+	{
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		$req = $_GET;
+		$req['sede'] = $this->data->sede;
+		$facts = $this->Factura_model->get_facturas($req);
 
-			$mpdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(), //Produccion
-				'format' => 'Legal'
-			]);
-
-			$mpdf->WriteHTML($vista);
-			$mpdf->Output("Ventas_categoria.pdf", "D");
+		$datos = [];
+		$detalle = [];
+		foreach ($facts as $row) {
+			$fac = new Factura_model($row->factura);
+			$tmp = $fac->getDetalle();
+			foreach ($tmp as $det) {
+				$art = new Articulo_model($det->articulo->articulo);
+				
+				if (isset($detalle[$art->articulo])) {
+					$detalle[$art->articulo]["cantidad"] += $det->cantidad;
+					$detalle[$art->articulo]["total"] += $det->total;
+				} else {
+					$detalle[$art->articulo] = [
+						"cantidad" => $det->cantidad, 
+						"total" => $det->total,
+						"descripcion" => $art->descripcion,
+						"precio_unitario" => $det->precio_unitario
+					];
+				}
+			}
 		}
+
+		$cat = $this->Categoria_model->buscar(["sede" => $this->data->sede]);		
+		
+		$categorias = [];
+		foreach ($cat as $row) {
+			$grupo = $this->Catalogo_model->getCategoriaGrupo([
+				"categoria" => $row->categoria,
+				"categoria_grupo_grupo" => null			
+			]);
+			$row->categoria_grupo = $grupo;
+
+			$categorias[] = $row;
+		}
+		$datos = [];
+		foreach ($categorias as $row) {
+			$row->subcategoria = buscar_articulo($row->categoria_grupo, $detalle);
+			unset($row->categoria_grupo);
+			$datos[] = $row;
+		}
+		
+		$data = ["detalle" => $datos];
+		$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
+
+		$mpdf = new \Mpdf\Mpdf([
+			//'tempDir' => sys_get_temp_dir(), //Produccion
+			'format' => 'Legal'
+		]);
+
+		$mpdf->WriteHTML($vista);
+		$mpdf->Output("Ventas_categoria.pdf", "D");
+		
 	}
 
 	public function articulo($pdf = 0)
@@ -117,22 +168,56 @@ class Venta extends CI_Controller {
 		$datos = array_values($detalle);
 		usort($datos, function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
 
-		if ($pdf === 0) {
-			$this->output
-				 ->set_content_type("application/json")
-				 ->set_output(json_encode($datos));	
-		}  else {
-			$data = ["detalle" => $datos];
-			$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
+	
+		$this->output
+			 ->set_content_type("application/json")
+			 ->set_output(json_encode($datos));	
+		
+	}
 
-			$mpdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(), //Produccion
-				'format' => 'Legal'
-			]);
+	public function articulopdf($pdf = 0)
+	{
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		$req = $_GET;
+		$req['sede'] = $data->sede;
+		$facts = $this->Factura_model->get_facturas($req);
 
-			$mpdf->WriteHTML($vista);
-			$mpdf->Output("Ventas_articulo.pdf", "D");
+		$datos = [];
+		$detalle = [];
+		foreach ($facts as $row) {
+			$fac = new Factura_model($row->factura);
+			$tmp = $fac->getDetalle();
+			foreach ($tmp as $det) {
+				$key = $det->articulo->articulo;
+				if (isset($detalle[$key])) {
+					$detalle[$key]['cantidad'] += $det->cantidad;
+					$detalle[$key]['total'] += $det->total;
+				} else {
+					$detalle[$key] = [
+						"cantidad" => $det->cantidad,
+						"total" => $det->total,
+						"articulo" => $det->articulo
+					];
+				}
+			}
 		}
+		$datos = array_values($detalle);
+		usort($datos, function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
+
+		
+		$data = ["detalle" => $datos];
+		$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
+
+		$mpdf = new \Mpdf\Mpdf([
+			//'tempDir' => sys_get_temp_dir(), //Produccion
+			'format' => 'Legal'
+		]);
+
+		$mpdf->WriteHTML($vista);
+		$mpdf->Output("Ventas_articulo.pdf", "D");
+	
 	}
 
 	public function propina()

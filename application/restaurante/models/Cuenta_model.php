@@ -106,6 +106,29 @@ class Cuenta_model extends General_Model {
 
 		return false;
 	}
+
+	public function get_descuento()
+	{
+		$total = $this->db
+					->select("sum(monto) as total")
+					->where("cuenta", $this->getPK())
+					->get("cuenta_forma_pago")
+					->row();
+
+		$desc = $this->db
+					 ->select("sum(monto) as descuento")
+					 ->join("forma_pago b", "a.forma_pago = b.forma_pago")
+					 ->where("cuenta", $this->getPK())
+					 ->where("b.descuento", 1)
+					 ->get("cuenta_forma_pago")
+					 ->row();
+
+		if ($desc->descuento) {
+			return $desc->descuento / $total->total;	
+		}
+		
+		return 0;
+	}
 }
 
 /* End of file Cuenta_model.php */

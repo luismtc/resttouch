@@ -46,16 +46,20 @@ class Factura extends CI_Controller {
 				if($result) {
 					foreach ($req['cuentas'] as $row) {
 						$cta = new Cuenta_model($row['cuenta']);
+						$pdesc = $cta->get_descuento();
 						foreach ($cta->getDetalle() as $det) {
 							$det->bien_servicio = $det->articulo->bien_servicio;
 							$det->articulo = $det->articulo->articulo;
+							$det->descuento = $det->total * $pdesc;
 							$det->precio_unitario = $det->precio;
+							$total = $det->total - $det->descuento;
+
 							if ($fac->exenta) {
-								$det->monto_base = $det->total;
+								$det->monto_base = $total;
 							} else {
-								$det->monto_base = number_format($det->total / $pimpuesto, 2);
+								$det->monto_base = $total / $pimpuesto;
 							}
-							$det->monto_iva = $det->total - $det->monto_base;	
+							$det->monto_iva = $total - $det->monto_base;	
 							$fac->setDetalle((array) $det);
 						}
 					}

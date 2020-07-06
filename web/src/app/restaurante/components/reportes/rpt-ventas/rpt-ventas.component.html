@@ -15,6 +15,14 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
+                      <mat-label>Tipo de turno</mat-label>
+                      <mat-select name="turno_tipo" [(ngModel)]="params.turno_tipo">
+                          <mat-option *ngFor="let tt of tiposTurno" [value]="tt.turno_tipo">
+                              {{tt.descripcion}}
+                          </mat-option>
+                      </mat-select>
+                  </mat-form-field>
+                    <mat-form-field class="fullWidth">
                         <input type="date" matInput placeholder="Del" name="fdel" [(ngModel)]="params.fdel" required>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">

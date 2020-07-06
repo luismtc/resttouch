@@ -32,9 +32,8 @@ export class ReporteVentasService {
       })
     };
 
-    return this.http.post<PorCategoria[]>(
-      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/categoria`,
-      params,
+    return this.http.get<PorCategoria[]>(
+      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/categoria?${qs.stringify(params)}`,
       httpOptions
       ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
@@ -46,9 +45,38 @@ export class ReporteVentasService {
       })
     };
 
-    return this.http.post<PorArticulo[]>(
-      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/articulo`,
-      params,
+    return this.http.get<PorArticulo[]>(
+      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/articulo?${qs.stringify(params)}`,
+      httpOptions
+      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  porCategoriaPdf(params: Object) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken,
+        'Accept': 'application/pdf'
+      }),
+      responseType: 'blob' as 'json'
+    };
+
+    return this.http.get<string>(
+      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/categoriapdf/1?${qs.stringify(params)}`,
+      httpOptions
+      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  porArticuloPdf(params: Object) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken,
+        'Accept': 'application/pdf'
+      }),
+      responseType:'blob' as 'json'
+    };
+
+    return this.http.get<string>(
+      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/articulopdf/1?${qs.stringify(params)}`,
       httpOptions
       ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
