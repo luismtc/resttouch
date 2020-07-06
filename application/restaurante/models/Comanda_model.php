@@ -173,7 +173,7 @@ class Comanda_model extends General_Model {
 		$det = $this->getDetalle();
 		$turno = new Turno_model($tmp->turno);
 		$tmp->mesero = $turno->getUsuarios(["usuario_tipo" => 1]);
-		$tmp->total = number_format(suma_field($det, 'total'), 2);
+		$tmp->total = suma_field($det, 'total');
 		$tmp->cuentas = $this->getCuentas();
 		$tmp->factura = $this->getFactura();
 		$tmp->origen_datos = $this->getOrigenDatos();
