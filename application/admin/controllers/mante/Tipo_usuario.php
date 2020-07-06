@@ -41,7 +41,21 @@ class Tipo_usuario extends CI_Controller {
 
 	public function buscar()
 	{
-		$datos = $this->Tipo_usuario_model->buscar($_GET);
+		//$datos = $this->Tipo_usuario_model->buscar($_GET);
+		$datos = [];
+		$tmp = $this->Tipo_usuario_model->buscar($_GET);
+
+		if(is_array($tmp)) {
+			foreach ($tmp as $row) {
+				$tuser = new Tipo_usuario_model($row->usuario_tipo);
+				$row->jerarquia = $tuser->getJerarquia();
+				$datos[] = $row;
+			}
+		} else if(is_object($tmp)) {
+			$tuser = new Tipo_usuario_model($tmp->usuario_tipo);
+			$tmp->jerarquia = $tuser->getJerarquia();
+			$datos = $tmp;
+		}
 
 		$this->output
 		->set_content_type("application/json")

@@ -1,0 +1,8 @@
+<div class="row">
+	<div class="col m5 s12">
+		<app-lista-acceso-usuario #lstUsuario (getUsuarioEv)="setUsuario($event)"></app-lista-acceso-usuario>
+	</div>
+	<div class="col m7 s12">
+		<app-form-acceso-usuario #frmAccesoUsuario [usuario]="usuario" (UsuarioSavedEv)="refreshUsuarioList()"></app-form-acceso-usuario>
+	</div>
+</div>

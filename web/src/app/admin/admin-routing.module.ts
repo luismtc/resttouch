@@ -10,6 +10,8 @@ import { MedidaComponent } from './components/medida/medida/medida.component';
 import { PresentacionComponent } from './components/presentacion/presentacion/presentacion.component';
 import { ImpresoraComponent } from './components/impresora/impresora/impresora.component';
 import { FpagoComponent } from './components/fpago/fpago/fpago.component';
+import { TipoUsuarioComponent } from './components/tipo-usuario/tipo-usuario/tipo-usuario.component';
+import { AccesoUsuarioComponent } from './components/acceso-usuario/acceso-usuario/acceso-usuario.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
@@ -20,6 +22,8 @@ const routes: Routes = [
   {path: 'presentacion', component: PresentacionComponent, canActivate: [AuthGuard]},
   {path: 'impresora', component: ImpresoraComponent, canActivate: [AuthGuard]},
   {path: 'formapago', component: FpagoComponent, canActivate: [AuthGuard]},
+  {path: 'tipo_usuario', component: TipoUsuarioComponent, canActivate: [AuthGuard]},
+  {path: 'acceso', component: AccesoUsuarioComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
