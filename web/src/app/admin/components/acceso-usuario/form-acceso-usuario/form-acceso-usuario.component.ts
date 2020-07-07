@@ -12,7 +12,7 @@ import { Modulo } from '../../../interfaces/modulo';
 import { ModuloService } from '../../../services/modulo.service';
 import { SubModulo } from '../../../interfaces/sub-modulo';
 import { SubModuloService } from '../../../services/sub-modulo.service';
-import { Opcion } from '../../../interfaces/Opcion';
+import { Opcion } from '../../../interfaces/opcion';
 import { OpcionService } from '../../../services/opcion.service';
 
 @Component({
