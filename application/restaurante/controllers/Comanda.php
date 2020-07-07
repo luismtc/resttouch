@@ -167,7 +167,7 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
-	public function imprimir($idCta)
+	public function imprimir($idCta, $pdf = 0)
 	{
 		$cta = new Cuenta_model($idCta);
 		$cta->imprimirDetalle();
@@ -178,9 +178,18 @@ class Comanda extends CI_Controller {
 			'comanda' => $com->getComanda()
 		];
 
-		$this->output
-		->set_output(json_encode($datos));
-		
+		if ($pdf === 0) {
+			$this->output
+			->set_output(json_encode($datos));	
+		} else {
+			$mpdf = new \Mpdf\Mpdf([
+				//'tempDir' => sys_get_temp_dir(), //produccion
+				'format' => 'Legal'
+			]);
+
+			$mpdf->WriteHTML($this->load->view('impresion/comanda', $datos, true));
+			$mpdf->Output("Detalle de Comandas.pdf", "D");
+		}
 	}
 
 }

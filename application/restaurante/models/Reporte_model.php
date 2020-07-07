@@ -51,6 +51,94 @@ class Reporte_model extends CI_Model {
 					->row();	
 	}
 
+	public function getTablas($args = [])
+	{
+		$tab = $this->config->item("tabla");
+		$datos = [];
+		$datos = [];
+		if (empty($args)) {
+			$datos = $tab;
+		} else {
+			foreach ($tab as $row) {
+				if (isset($args['tabla']) && $row['tabla'] == $args['tabla']) {
+					$datos = $row;
+				} 
+			}
+		}
+
+		return $datos;
+	}
+
+	public function getCampos($args = [])
+	{
+		$campo = $this->config->item("campos");
+		$datos = [];
+		if (empty($args)) {
+			$datos = $campo;
+		} else {
+			foreach ($campo as $row) {
+				$tabla = $this->getTablas(["tabla" => $row['tabla']]);
+				$row['columna'] = "{$tabla['entidad']}.{$row['campo']}";
+
+				if (isset($args['campos']) && in_array($row['tabla_campo'],$args['campos'])){
+					$datos[] = $row;
+				} else {
+					if (isset($args['por_fecha']) && $row['por_fecha'] == 1) {
+						$datos[] = $row;
+					} else if(isset($args['ordenar_por']) && $row['ordenar_por'] == 1){
+						$datos[] = $row;
+					}
+				}
+			}
+		}
+
+		return isset($args['uno']) ? $datos[0] :$datos;
+	}
+
+	public function autoconsulta($args = [])
+	{
+		$campos = $this->getCampos($args);
+		$tablas = $this->getTablas();
+		$temp   = $this->getCampos(["campos" => [$args["fecha"]], "uno" => true]);
+		$xfecha = "{$temp['columna']}";
+
+		$this->db
+			 ->where("date({$xfecha}) between '{$args["fdel"]}' and '{$args["fal"]}'")
+			 ->where("factura.sede", $args['sede']);
+
+		if (isset($args["orden"])) {
+			$temp = $this->getCampos(["campos" => [$args["orden"]], "uno" => true]);
+			$xorden = "{$temp['columna']}";
+		}
+
+		foreach ($campos as $row) {
+			if ($row['compuesto'] == 1) {
+				$this->db->select("{$row['campo']} as {$row['descripcion']}");
+			} else {
+				$this->db->select("{$row['columna']} as {$row['descripcion']}");
+			}
+		}
+
+		foreach ($tablas as $row) {
+			$tbl = $row['entidad'];
+
+			if ($row['orden'] == 1) {
+				$this->db->from($tbl);
+			} else {
+				$this->db->join($tbl, $row['condicion'], $row['accion']);
+			}
+		}
+		
+		$this->db->group_by("detalle_factura.detalle_factura");
+
+		$tmp = $this->db->get();
+		if ($tmp) {
+			return $tmp->result();
+		}
+
+		return [];
+	}
+
 }
 
 /* End of file Reporte_model.php */

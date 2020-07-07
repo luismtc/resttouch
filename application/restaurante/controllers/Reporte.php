@@ -33,7 +33,7 @@ class Reporte extends CI_Controller {
 		$data['ingresos'] = $this->Reporte_model->get_ingresos($_GET);
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			//'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));
@@ -46,7 +46,7 @@ class Reporte extends CI_Controller {
 		$facts = $this->Factura_model->get_facturas($_GET);
 		$data = $_GET;
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			//'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$data['facturas'] = [];
@@ -86,6 +86,51 @@ class Reporte extends CI_Controller {
 			
 		$mpdf->WriteHTML($this->load->view('comanda', $data, true));
 		$mpdf->Output("Detalle de Comandas.pdf", "D");	
+	}
+
+	public function autoconsulta()
+	{
+		$req = json_decode(file_get_contents('php://input'), true);
+		$req['sede'] = $this->data->sede;
+		$datos = $this->Reporte_model->autoconsulta($req);
+		$excel = new PHPExcel();
+		$excel->getProperties()
+			  ->setCreator("Restouch")
+			  ->setTitle("Office 2007 xlsx Dinamico")
+			  ->setSubject("Office 2007 xlsx Dinamico")
+			  ->setKeywords("office 2007 openxml php");
+
+		$excel->setActiveSheetIndex(0);
+		$hoja = $excel->getActiveSheet();
+		if ($datos) {
+			$nombres    = array_keys((array)$datos[0]);
+			$cntnombres = count($nombres);
+
+			$hoja->fromArray($nombres, null, "A5");
+			
+			$pos = 6;
+			foreach ($datos as $key => $row) {
+				$hoja->fromArray((array) $row, null, "A{$pos}");
+				$pos+=1;
+			}
+
+			$hoja->setTitle("Dinamico");
+
+			for ($i=0; $i <= $cntnombres ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+		}
+		
+		header("Content-Type: application/vnd.ms-excel");
+		header("Content-Disposition: attachment;filename=Dinamico.xls");
+		header("Cache-Control: max-age=1");
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+		header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+		header("Cache-Control: cache, must-revalidate");
+		header("Pragma: public");
+
+		$obwrite = PHPExcel_IOFactory::createWriter($excel, "Excel5");
+		$obwrite->save("php://output");
 	}
 
 }

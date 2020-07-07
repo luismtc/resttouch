@@ -1,1 +1,48 @@
-<p>autoconsulta works!</p>
+<div class="row">
+    <div class="col m12 s12">
+        <mat-card class="mat-elevation-z4 fullWidth">
+            <mat-card-title>
+                <h4>Autoconsulta</h4>
+            </mat-card-title>
+            <mat-card-content>
+                <form #frmEntidad="ngForm" (ngSubmit)="frmEntidad.form.valid && onSubmit()" novalidate>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Campos</mat-label>
+                        <mat-select name="campos" [(ngModel)]="params.campos" multiple="multiple" required>
+                            <mat-option *ngFor="let campo of campos" [value]="campo.tabla_campo">
+                                {{campo.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <input type="date" matInput placeholder="Del" name="fdel" [(ngModel)]="params.fdel" required>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <input type="date" matInput placeholder="Al" name="fal" [(ngModel)]="params.fal" required>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Filtrar Por</mat-label>
+                        <mat-select name="campos" [(ngModel)]="params.fecha" required>
+                            <mat-option *ngFor="let campo of fechas" [value]="campo.tabla_campo">
+                                {{campo.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Ordenar Por</mat-label>
+                        <mat-select name="campos" [(ngModel)]="params.orden">
+                            <mat-option *ngFor="let campo of orden" [value]="campo.tabla_campo">
+                                {{campo.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div align="end">
+                        <button mat-icon-button type="button" color="accent" (click)="getReporte()" [disabled]="!frmEntidad.form.valid">
+                            <mat-icon>library_books</mat-icon>
+                        </button>                    
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

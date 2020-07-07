@@ -103,7 +103,7 @@ $autoload['helper'] = array('url', 'file', 'ayuda', 'jwt', 'authorization');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array('menu');
+$autoload['config'] = array('menu', 'autoconsulta');
 
 /*
 | -------------------------------------------------------------------

@@ -15,6 +15,7 @@ import { TurnoTipoComponent } from './components/turno-tipo/turno/turno.componen
 import { PropinaComponent } from './components/propina/propina/propina.component';
 import { FormPropinaComponent } from './components/propina/form-propina/form-propina.component';
 import { ListaPropinaComponent } from './components/propina/lista-propina/lista-propina.component';
+import { AutoconsultaComponent } from './components/reportes/autoconsulta/autoconsulta.component';
 
 const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'cmdonline', component: ComandaEnLineaComponent, canActivate: [AuthGuard] },
   { path: 'tipoturno', component: TurnoTipoComponent, canActivate: [AuthGuard] },
   { path: 'propina', component: PropinaComponent, canActivate: [AuthGuard] },
+  { path: 'autoconsulta', component: AutoconsultaComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

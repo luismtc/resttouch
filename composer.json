@@ -2,8 +2,9 @@
     "name": "Restouch",
     "description": "Restouch",
     "require": {
-        "php": "7.2.*",
-		"mpdf/mpdf": "^8.0.0"
+        "php": "7.4.*",
+		"mpdf/mpdf": "^8.0.0",
+		"phpoffice/phpexcel": "^1.8"
     },
     "authors": []
 }

@@ -165,6 +165,26 @@ class Catalogo extends CI_Controller {
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getJerarquia($_GET)));
 	}
+
+	public function get_campos()
+	{
+		$campo = $this->config->item("campos");
+		$datos = [];
+		if (empty($_GET)) {
+			$datos = $campo;
+		} else {
+			foreach ($campo as $row) {
+				if (isset($_GET['por_fecha']) && $row['por_fecha'] == 1) {
+					$datos[] = $row;
+				} else if(isset($_GET['ordenar_por']) && $row['ordenar_por'] == 1){
+					$datos[] = $row;
+				}
+			}
+		}
+
+		$this->output
+			 ->set_output(json_encode($datos));
+	}
 }
 
 /* End of file Catalogo.php */
