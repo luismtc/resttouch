@@ -361,6 +361,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.html": 
+        /*!************************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.html ***!
+          \************************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n\t<div class=\"col m5 s12\">\n\t\t<app-lista-acceso-usuario #lstUsuario (getUsuarioEv)=\"setUsuario($event)\"></app-lista-acceso-usuario>\n\t</div>\n\t<div class=\"col m7 s12\">\n\t\t<app-form-acceso-usuario #frmAccesoUsuario [usuario]=\"usuario\" (UsuarioSavedEv)=\"refreshUsuarioList()\"></app-form-acceso-usuario>\n\t</div>\n</div>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.html": 
+        /*!**********************************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.html ***!
+          \**********************************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n\t<mat-card-title>\n\t\t<h4>Accesos {{!!this.usuario? this.usuario.nombres : '' }}</h4>\n\t</mat-card-title>\n\t<mat-card-content>\n\t\t<form #frmAccesoUsuario=\"ngForm\" (ngSubmit)=\"frmAccesoUsuario.form.valid && onSubmit()\" novalidate>\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Modulo</mat-label>\n\t\t\t\t<mat-select name=\"modulo\" (selectionChange)=\"loadSubModulos($event.value)\" [(ngModel)]=\"acceso.modulo\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of modulos\" [value]=\"m.modulo\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Sub-Modulo</mat-label>\n\t\t\t\t<mat-select name=\"submodulo\" (selectionChange)=\"loadOpciones($event.value)\" [(ngModel)]=\"acceso.submodulo\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of submodulos\" [value]=\"m.sub_modulo\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Opcion</mat-label>\n\t\t\t\t<mat-select name=\"opcion\" [(ngModel)]=\"acceso.opcion\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of opciones\" [value]=\"m.opcion\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\t\t\t<!-- <mat-checkbox name=\"anulado\" class=\"fullWidth\">Anulado</mat-checkbox> -->\n\t\t\t<div align=\"end\">\n\t\t\t\t<button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmAccesoUsuario.form.valid\" \n\t\t\t\t*ngIf=\"this.usuario.usuario\">\n\t\t\t\t\t<mat-icon>save</mat-icon>\n\t\t\t\t</button>\n\t\t\t\t<button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetAcceso()\"\n\t\t\t\t*ngIf=\"this.usuario.usuario\">\n\t\t\t\t\t<mat-icon>add</mat-icon>\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</form>\n\t\t<hr *ngIf=\"accesos.length > 0\"/>\n\t\t<table mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z4 full-width\" *ngIf=\"accesos.length > 0\">\n\t\t\t<ng-container matColumnDef=\"modulo\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Modulo</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.modulo.descripcion }}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"submodulo\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Sub-Modulo</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.submodulo.nombre}}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"opcion\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Opcion</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.opcion.nombre}}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"editItem\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>&nbsp;</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-right\">\n\t\t\t\t\t<button mat-icon-button type=\"button\" color=\"accent\" (click)=\"setAcceso(element)\">\n\t\t\t\t\t\t<mat-icon>edit</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button mat-icon-button type=\"button\" color=\"accent\" (click)=\"removerAcceso(element)\">\n\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t</td>\n\t\t\t</ng-container>\n\t\t\t<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n\t\t\t<tr mat-row *matRowDef=\"let row; columns: displayedColumns;\">\n\t\t\t</tr>\n\t\t</table>\n\t</mat-card-content>\n</mat-card>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.html": 
+        /*!************************************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.html ***!
+          \************************************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"usuarios\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getUsuario(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.nombres}}</h5>\n                            <span mat-line>{{element.apellidos}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/cliente/cliente/cliente.component.html": 
         /*!***************************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/cliente/cliente/cliente.component.html ***!
@@ -427,6 +460,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\" align=\"center\">\n        <button mat-button class=\"divBtnSize\" *ngFor=\"let modulo of appMenu\" (click)=\"handleClick(modulo.nombre)\">\n            <mat-icon class=\"lnkIconBoton\">{{modulo.icono}}</mat-icon>\n            <br />\n            <span class=\"lnkBoton\">{{modulo.nombre}}</span>\n        </button>\n    </div>\n</div>");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/form-pago/form-pago.component.html": 
+        /*!*****************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/form-pago/form-pago.component.html ***!
+          \*****************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFpago=\"ngForm\" (ngSubmit)=\"frmFpago.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"fpago.descripcion\" required>\n            </mat-form-field>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"fpago.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmFpago.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"fpago.forma_pago\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/fpago/fpago.component.html": 
+        /*!*********************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/fpago/fpago.component.html ***!
+          \*********************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-lista-pago #lstFPago (getFpagoEv)=\"setFormPago($event)\"></app-lista-pago>\n    </div>\n    <div class=\"col m7 s12\">\n        <app-form-pago #frmFpago [fpago]=\"fpago\" (fpagoSavedEv)=\"refreshFpagoList()\"></app-form-pago>\n    </div>\n</div>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/lista-pago/lista-pago.component.html": 
+        /*!*******************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/lista-pago/lista-pago.component.html ***!
+          \*******************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"forma_pago\">\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getFpago(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/header/header.component.html": 
         /*!*****************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/header/header.component.html ***!
@@ -436,6 +502,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
             /* harmony default export */ __webpack_exports__["default"] = ("<mat-toolbar color=\"primary-lighter\">\n    <mat-toolbar-row>\n        <img src=\"/assets/img/minilogo.svg\" width=\"30\" height=\"30\" alt=\"Rest-Touch Pro\">\n        <span class=\"spacer\"></span>\n        <app-clock></app-clock>\n        <span class=\"spacer\"></span>\n        <button mat-button [matMenuTriggerFor]=\"menu\">\n            {{usrInfo.usuario}}&nbsp;<mat-icon>apps</mat-icon>\n        </button>\n        <button mat-icon-button type=\"button\" (click)=\"LogOut()\">\n            <mat-icon>power_settings_new</mat-icon>\n        </button>\n        <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n            <div align=\"center\">\n                <button mat-button *ngFor=\"let modulo of appMenu\" (click)=\"handleClick(modulo.nombre)\">\n                    <mat-icon>{{modulo.icono}}</mat-icon>\n                    <br/>\n                    <span>{{modulo.nombre}}</span>\n                </button>\n            </div>\n            <!--\n            <div class=\"d-flex flex-row\" *ngFor=\"let fila of appMenu\">\n                <div class=\"p-2\" *ngFor=\"let boton of fila.boton\">\n                    <a mat-button [routerLink]=\"boton.url\" (click)=\"handleClick(boton.rol)\">\n                        <mat-icon>{{boton.icono}}</mat-icon><br/>\n                        <span>{{boton.descripcion}}</span>\n                    </a>\n                </div>\n            </div>\n            -->\n        </mat-menu>\n    </mat-toolbar-row>\n</mat-toolbar>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/form-impresora/form-impresora.component.html": 
+        /*!*******************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/form-impresora/form-impresora.component.html ***!
+          \*******************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Impresora {{!!impresora.impresora ? impresora.nombre : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmImpresora=\"ngForm\" (ngSubmit)=\"frmImpresora.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"impresora.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Dirección IP\" name=\"ip\" [(ngModel)]=\"impresora.direccion_ip\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Ubicación\" name=\"ubicacion\" [(ngModel)]=\"impresora.ubicacion\">\n            </mat-form-field>\n            <mat-checkbox name=\"traslado\" class=\"fullWidth\" [(ngModel)]=\"+impresora.bluetooth\">¿Es bluetooth?</mat-checkbox>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmImpresora.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetImpresora()\" *ngIf=\"impresora.impresora\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/impresora/impresora.component.html": 
+        /*!*********************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/impresora/impresora.component.html ***!
+          \*********************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-lista-impresora #lstImpresora (getImpresoraEv)=\"setImpresora($event)\"></app-lista-impresora>\n    </div>\n    <div class=\"col m7 s12\">\n        <app-form-impresora #frmImpresora [impresora]=\"impresora\" (impresoraSavedEv)=\"refreshImpresoraList()\"></app-form-impresora>\n    </div>\n</div>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.html": 
+        /*!*********************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.html ***!
+          \*********************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"impresora\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getImpresora(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.nombre}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/login/login.component.html": 
@@ -524,6 +623,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-lista-presentacion #lstPresentacion (getPresentacionEv)=\"setPresentacion($event)\"></app-lista-presentacion>\n    </div>\n    <div class=\"col m7 s12\">\n        <app-form-presentacion #frmPresentacion [presentacion]=\"presentacion\"\n            (presentacionSavedEv)=\"refreshPresentacionList()\"></app-form-presentacion>\n    </div>\n</div>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.html": 
+        /*!****************************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.html ***!
+          \****************************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmTipoUsuario=\"ngForm\" (ngSubmit)=\"frmTipoUsuario.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Jerarquia</mat-label>\n                <mat-select name=\"jerarquia\" [(ngModel)]=\"usuarioTipo.jerarquia\" required>\n                \t<mat-option></mat-option>\n                    <mat-option *ngFor=\"let m of jerarquias\" [value]=\"m.jerarquia\">\n                        {{m.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"usuarioTipo.descripcion\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmTipoUsuario.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetTipoUsuario()\" *ngIf=\"true\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>\n");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.html": 
+        /*!******************************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.html ***!
+          \******************************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"usuario_tipo\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getTipoUsuario(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <span mat-line>{{element.jerarquia.descripcion}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.html": 
+        /*!******************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.html ***!
+          \******************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n\t<div class=\"col m5 s12\">\n\t\t<app-lista-tipo-usuario #lstTipoUsuario (getTipoUsuarioEv)=\"setTipoUsuario($event)\"></app-lista-tipo-usuario>\n\t</div>\n\t<div class=\"col m7 s12\">\n\t\t<app-form-tipo-usuario #frmTipoUsuario [usuarioTipo]=\"usuarioTipo\" (usuarioTipoSavedEv)=\"refreshtipoUsuarioList()\"></app-form-tipo-usuario>\n\t</div>\n</div>\n");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/usuario/form-usuario/form-usuario.component.html": 
@@ -922,6 +1054,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/cliente/cliente/cliente.component */ "./src/app/admin/components/cliente/cliente/cliente.component.ts");
             /* harmony import */ var _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/medida/medida/medida.component */ "./src/app/admin/components/medida/medida/medida.component.ts");
             /* harmony import */ var _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/presentacion/presentacion/presentacion.component */ "./src/app/admin/components/presentacion/presentacion/presentacion.component.ts");
+            /* harmony import */ var _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/impresora/impresora/impresora.component */ "./src/app/admin/components/impresora/impresora/impresora.component.ts");
+            /* harmony import */ var _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/fpago/fpago/fpago.component */ "./src/app/admin/components/fpago/fpago/fpago.component.ts");
+            /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
             var routes = [
                 { path: 'login', component: _components_login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] },
                 { path: 'dashboard', component: _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_5__["DashboardComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
@@ -929,6 +1065,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 { path: 'cliente', component: _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_7__["ClienteComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'medida', component: _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_8__["MedidaComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'presentacion', component: _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_9__["PresentacionComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'impresora', component: _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_10__["ImpresoraComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'formapago', component: _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_11__["FpagoComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'tipo_usuario', component: _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_12__["TipoUsuarioComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'acceso', component: _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_13__["AccesoUsuarioComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
             ];
             var AdminRoutingModule = /** @class */ (function () {
@@ -999,6 +1139,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/presentacion/lista-presentacion/lista-presentacion.component */ "./src/app/admin/components/presentacion/lista-presentacion/lista-presentacion.component.ts");
             /* harmony import */ var _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/presentacion/form-presentacion/form-presentacion.component */ "./src/app/admin/components/presentacion/form-presentacion/form-presentacion.component.ts");
             /* harmony import */ var _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/cliente/form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
+            /* harmony import */ var _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/impresora/impresora/impresora.component */ "./src/app/admin/components/impresora/impresora/impresora.component.ts");
+            /* harmony import */ var _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/impresora/form-impresora/form-impresora.component */ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.ts");
+            /* harmony import */ var _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/impresora/lista-impresora/lista-impresora.component */ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.ts");
+            /* harmony import */ var _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/fpago/fpago/fpago.component */ "./src/app/admin/components/fpago/fpago/fpago.component.ts");
+            /* harmony import */ var _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/fpago/form-pago/form-pago.component */ "./src/app/admin/components/fpago/form-pago/form-pago.component.ts");
+            /* harmony import */ var _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/fpago/lista-pago/lista-pago.component */ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.ts");
+            /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
+            /* harmony import */ var _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.ts");
+            /* harmony import */ var _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts");
             var AdminModule = /** @class */ (function () {
                 function AdminModule() {
                 }
@@ -1010,7 +1162,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         _components_login_login_component__WEBPACK_IMPORTED_MODULE_27__["LoginComponent"], _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_28__["DashboardComponent"], _components_header_header_component__WEBPACK_IMPORTED_MODULE_29__["HeaderComponent"], _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_30__["ClockComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_31__["MenuComponent"], _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_24__["SidebarDirective"],
                         _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_32__["UsuarioComponent"], _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_33__["ListaUsuarioComponent"], _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_34__["FormUsuarioComponent"], _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_35__["ClienteComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_36__["ListaClienteComponent"],
                         _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_37__["FormClienteComponent"], _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_38__["MedidaComponent"], _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_39__["ListaMedidaComponent"], _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_40__["FormMedidaComponent"], _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_41__["PresentacionComponent"],
-                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_42__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_43__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__["FormClienteDialogComponent"]
+                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_42__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_43__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__["FormClienteDialogComponent"], _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_45__["ImpresoraComponent"], _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_46__["FormImpresoraComponent"], _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_47__["ListaImpresoraComponent"], _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_48__["FpagoComponent"], _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_49__["FormPagoComponent"], _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_50__["ListaPagoComponent"], _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_51__["TipoUsuarioComponent"], _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_52__["ListaTipoUsuarioComponent"], _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__["FormTipoUsuarioComponent"], _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_54__["AccesoUsuarioComponent"], _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_55__["FormAccesoUsuarioComponent"], _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__["ListaAccesoUsuarioComponent"]
                     ],
                     entryComponents: [
                         _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_37__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__["FormClienteDialogComponent"]
@@ -1046,6 +1198,298 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     ]
                 })
             ], AdminModule);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.css": 
+        /*!*********************************************************************************************!*\
+          !*** ./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.css ***!
+          \*********************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvYWNjZXNvLXVzdWFyaW8vYWNjZXNvLXVzdWFyaW8vYWNjZXNvLXVzdWFyaW8uY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts": 
+        /*!********************************************************************************************!*\
+          !*** ./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts ***!
+          \********************************************************************************************/
+        /*! exports provided: AccesoUsuarioComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AccesoUsuarioComponent", function () { return AccesoUsuarioComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            var AccesoUsuarioComponent = /** @class */ (function () {
+                function AccesoUsuarioComponent(ls) {
+                    var _this = this;
+                    this.ls = ls;
+                    this.setUsuario = function (usr) {
+                        _this.usuario = usr;
+                        _this.frmAccesoUsuario.loadAccesos(+_this.usuario.usuario);
+                        _this.frmAccesoUsuario.resetAcceso();
+                    };
+                    this.refreshUsuarioList = function () { return _this.lstUsuarioComponent.loadUsuario(); };
+                    this.usuario = {
+                        usuario: null, nombres: null, apellidos: null
+                    };
+                }
+                AccesoUsuarioComponent.prototype.ngOnInit = function () {
+                };
+                return AccesoUsuarioComponent;
+            }());
+            AccesoUsuarioComponent.ctorParameters = function () { return [
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__["LocalstorageService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lstUsuario', { static: false })
+            ], AccesoUsuarioComponent.prototype, "lstUsuarioComponent", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('frmAccesoUsuario', { static: false })
+            ], AccesoUsuarioComponent.prototype, "frmAccesoUsuario", void 0);
+            AccesoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-acceso-usuario',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./acceso-usuario.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./acceso-usuario.component.css */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.css")).default]
+                })
+            ], AccesoUsuarioComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.css": 
+        /*!*******************************************************************************************************!*\
+          !*** ./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.css ***!
+          \*******************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvYWNjZXNvLXVzdWFyaW8vZm9ybS1hY2Nlc28tdXN1YXJpby9mb3JtLWFjY2Vzby11c3VhcmlvLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts": 
+        /*!******************************************************************************************************!*\
+          !*** ./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts ***!
+          \******************************************************************************************************/
+        /*! exports provided: FormAccesoUsuarioComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormAccesoUsuarioComponent", function () { return FormAccesoUsuarioComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            /* harmony import */ var _services_acceso_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/acceso-usuario.service */ "./src/app/admin/services/acceso-usuario.service.ts");
+            /* harmony import */ var _services_modulo_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/modulo.service */ "./src/app/admin/services/modulo.service.ts");
+            /* harmony import */ var _services_sub_modulo_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../services/sub-modulo.service */ "./src/app/admin/services/sub-modulo.service.ts");
+            /* harmony import */ var _services_opcion_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../services/opcion.service */ "./src/app/admin/services/opcion.service.ts");
+            var FormAccesoUsuarioComponent = /** @class */ (function () {
+                function FormAccesoUsuarioComponent(_snackBar, accesoUsuarioSrvc, moduloSrvc, subModuloSrvc, opcionSrvc) {
+                    var _this = this;
+                    this._snackBar = _snackBar;
+                    this.accesoUsuarioSrvc = accesoUsuarioSrvc;
+                    this.moduloSrvc = moduloSrvc;
+                    this.subModuloSrvc = subModuloSrvc;
+                    this.opcionSrvc = opcionSrvc;
+                    this.AccesoUsuarioSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.accesos = [];
+                    this.displayedColumns = ['modulo', 'submodulo', 'opcion', 'editItem'];
+                    this.modulos = [];
+                    this.submodulos = [];
+                    this.opciones = [];
+                    this.loadAccesos = function (idusuario) {
+                        if (idusuario === void 0) { idusuario = +_this.usuario.usuario; }
+                        _this.accesoUsuarioSrvc.get({ usuario: idusuario }).subscribe(function (res) {
+                            if (res) {
+                                _this.accesos = res;
+                                _this.updateTableDataSource();
+                            }
+                        });
+                    };
+                    this.loadModulos = function () {
+                        _this.moduloSrvc.get().subscribe(function (res) {
+                            if (res) {
+                                _this.modulos = res;
+                            }
+                        });
+                    };
+                    this.loadSubModulos = function (idmodulo) {
+                        if (idmodulo) {
+                            _this.subModuloSrvc.get(idmodulo).subscribe(function (res) {
+                                if (res) {
+                                    var temp = [];
+                                    for (var x in res) {
+                                        temp.push({
+                                            sub_modulo: x,
+                                            descripcion: res[x].nombre
+                                        });
+                                    }
+                                    _this.submodulos = temp;
+                                }
+                            });
+                        }
+                    };
+                    this.loadOpciones = function (idsubmodulo) {
+                        var temp = [];
+                        if (idsubmodulo && _this.acceso.modulo) {
+                            _this.opcionSrvc.get(_this.acceso.modulo, idsubmodulo).subscribe(function (res) {
+                                for (var x in res) {
+                                    temp.push({
+                                        opcion: x,
+                                        descripcion: res[x].nombre
+                                    });
+                                }
+                            });
+                        }
+                        _this.opciones = temp;
+                    };
+                    this.resetAcceso = function () {
+                        _this.acceso = {
+                            acceso: null, modulo: null, usuario: null, submodulo: null, opcion: null, activo: 1
+                        };
+                    };
+                    this.setAcceso = function (pres) {
+                        _this.acceso = {
+                            acceso: pres.acceso,
+                            modulo: pres.modulo.modulo,
+                            usuario: pres.usuario.usuario,
+                            submodulo: pres.submodulo.submodulo,
+                            opcion: pres.opcion.opcion,
+                            activo: pres.activo
+                        };
+                        _this.loadSubModulos(_this.acceso.modulo);
+                        _this.loadOpciones(_this.acceso.submodulo);
+                    };
+                    this.onSubmit = function () {
+                        _this.acceso.usuario = _this.usuario.usuario;
+                        _this.accesoUsuarioSrvc.save(_this.acceso).subscribe(function (res) {
+                            if (res.exito) {
+                                _this.resetAcceso();
+                                _this.loadAccesos(_this.usuario.usuario);
+                                _this._snackBar.open('Acceso guardado con éxito...', 'Acceso Usuario', { duration: 3000 });
+                            }
+                            else {
+                                _this._snackBar.open("ERROR: " + res.mensaje, 'Acceso Usuario', { duration: 3000 });
+                            }
+                        });
+                    };
+                    this.removerAcceso = function (pres) {
+                        pres.activo = 0;
+                        _this.accesoUsuarioSrvc.save(pres).subscribe(function (res) {
+                            if (res.exito) {
+                                _this.resetAcceso();
+                                _this.loadAccesos(_this.usuario.usuario);
+                                _this._snackBar.open('Removido con éxito...', 'Acceso Usuario', { duration: 3000 });
+                            }
+                            else {
+                                _this._snackBar.open("ERROR: " + res.mensaje, 'Acceso Usuario', { duration: 3000 });
+                            }
+                        });
+                    };
+                    this.updateTableDataSource = function () { return _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.accesos); };
+                    this.acceso = {
+                        acceso: null, modulo: null, usuario: null, submodulo: null, opcion: null, activo: 1
+                    };
+                }
+                FormAccesoUsuarioComponent.prototype.ngOnInit = function () {
+                    this.loadAccesos(this.usuario.usuario);
+                    this.loadModulos();
+                };
+                return FormAccesoUsuarioComponent;
+            }());
+            FormAccesoUsuarioComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _services_acceso_usuario_service__WEBPACK_IMPORTED_MODULE_4__["AccesoUsuarioService"] },
+                { type: _services_modulo_service__WEBPACK_IMPORTED_MODULE_5__["ModuloService"] },
+                { type: _services_sub_modulo_service__WEBPACK_IMPORTED_MODULE_6__["SubModuloService"] },
+                { type: _services_opcion_service__WEBPACK_IMPORTED_MODULE_7__["OpcionService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+            ], FormAccesoUsuarioComponent.prototype, "usuario", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], FormAccesoUsuarioComponent.prototype, "AccesoUsuarioSavedEv", void 0);
+            FormAccesoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-form-acceso-usuario',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./form-acceso-usuario.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./form-acceso-usuario.component.css */ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.css")).default]
+                })
+            ], FormAccesoUsuarioComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.css": 
+        /*!*********************************************************************************************************!*\
+          !*** ./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.css ***!
+          \*********************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvYWNjZXNvLXVzdWFyaW8vbGlzdGEtYWNjZXNvLXVzdWFyaW8vbGlzdGEtYWNjZXNvLXVzdWFyaW8uY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts": 
+        /*!********************************************************************************************************!*\
+          !*** ./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts ***!
+          \********************************************************************************************************/
+        /*! exports provided: ListaAccesoUsuarioComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaAccesoUsuarioComponent", function () { return ListaAccesoUsuarioComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            /* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
+            var ListaAccesoUsuarioComponent = /** @class */ (function () {
+                function ListaAccesoUsuarioComponent(UsuarioSrvc) {
+                    var _this = this;
+                    this.UsuarioSrvc = UsuarioSrvc;
+                    this.displayedColumns = ['usuarios'];
+                    this.getUsuarioEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.loadUsuario = function () {
+                        _this.UsuarioSrvc.getAll().subscribe(function (lst) {
+                            if (lst) {
+                                if (lst.length > 0) {
+                                    _this.lstUsuario = lst;
+                                    _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.lstUsuario);
+                                    _this.dataSource.paginator = _this.paginator;
+                                }
+                            }
+                        });
+                    };
+                    this.getUsuario = function (obj) {
+                        _this.getUsuarioEv.emit(obj);
+                    };
+                }
+                ListaAccesoUsuarioComponent.prototype.ngOnInit = function () {
+                    this.loadUsuario();
+                };
+                return ListaAccesoUsuarioComponent;
+            }());
+            ListaAccesoUsuarioComponent.ctorParameters = function () { return [
+                { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__["UsuarioService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], ListaAccesoUsuarioComponent.prototype, "getUsuarioEv", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
+            ], ListaAccesoUsuarioComponent.prototype, "paginator", void 0);
+            ListaAccesoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-lista-acceso-usuario',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./lista-acceso-usuario.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-acceso-usuario.component.css */ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.css")).default]
+                })
+            ], ListaAccesoUsuarioComponent);
             /***/ 
         }),
         /***/ "./src/app/admin/components/cliente/cliente/cliente.component.css": 
@@ -1444,6 +1888,198 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], DashboardComponent);
             /***/ 
         }),
+        /***/ "./src/app/admin/components/fpago/form-pago/form-pago.component.css": 
+        /*!**************************************************************************!*\
+          !*** ./src/app/admin/components/fpago/form-pago/form-pago.component.css ***!
+          \**************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvZnBhZ28vZm9ybS1wYWdvL2Zvcm0tcGFnby5jb21wb25lbnQuY3NzIn0= */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/fpago/form-pago/form-pago.component.ts": 
+        /*!*************************************************************************!*\
+          !*** ./src/app/admin/components/fpago/form-pago/form-pago.component.ts ***!
+          \*************************************************************************/
+        /*! exports provided: FormPagoComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormPagoComponent", function () { return FormPagoComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _services_fpago_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/fpago.service */ "./src/app/admin/services/fpago.service.ts");
+            var FormPagoComponent = /** @class */ (function () {
+                function FormPagoComponent(_snackBar, fpagoSrvc) {
+                    var _this = this;
+                    this._snackBar = _snackBar;
+                    this.fpagoSrvc = fpagoSrvc;
+                    this.fpagoSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.resetFormaPago = function () { return _this.fpago = {
+                        forma_pago: null,
+                        descripcion: null,
+                        activo: 1
+                    }; };
+                    this.onSubmit = function () {
+                        _this.fpagoSrvc.save(_this.fpago).subscribe(function (res) {
+                            if (res.exito) {
+                                _this.fpagoSavedEv.emit();
+                                _this.resetFormaPago();
+                                _this._snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
+                            }
+                            else {
+                                _this._snackBar.open("ERROR: " + res.mensaje, 'Forma de pago', { duration: 3000 });
+                            }
+                        });
+                    };
+                }
+                FormPagoComponent.prototype.ngOnInit = function () {
+                };
+                return FormPagoComponent;
+            }());
+            FormPagoComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _services_fpago_service__WEBPACK_IMPORTED_MODULE_3__["FpagoService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+            ], FormPagoComponent.prototype, "fpago", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], FormPagoComponent.prototype, "fpagoSavedEv", void 0);
+            FormPagoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-form-pago',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./form-pago.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/form-pago/form-pago.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./form-pago.component.css */ "./src/app/admin/components/fpago/form-pago/form-pago.component.css")).default]
+                })
+            ], FormPagoComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/fpago/fpago/fpago.component.css": 
+        /*!******************************************************************!*\
+          !*** ./src/app/admin/components/fpago/fpago/fpago.component.css ***!
+          \******************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvZnBhZ28vZnBhZ28vZnBhZ28uY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/fpago/fpago/fpago.component.ts": 
+        /*!*****************************************************************!*\
+          !*** ./src/app/admin/components/fpago/fpago/fpago.component.ts ***!
+          \*****************************************************************/
+        /*! exports provided: FpagoComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FpagoComponent", function () { return FpagoComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var FpagoComponent = /** @class */ (function () {
+                function FpagoComponent() {
+                    var _this = this;
+                    this.setFormPago = function (cli) { return _this.fpago = cli; };
+                    this.refreshFpagoList = function () { return _this.lstFpagoComponent.getFormasPago(); };
+                    this.fpago = {
+                        forma_pago: null,
+                        descripcion: null,
+                        activo: 1
+                    };
+                }
+                FpagoComponent.prototype.ngOnInit = function () {
+                };
+                return FpagoComponent;
+            }());
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lstFPago', { static: false })
+            ], FpagoComponent.prototype, "lstFpagoComponent", void 0);
+            FpagoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-fpago',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./fpago.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/fpago/fpago.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./fpago.component.css */ "./src/app/admin/components/fpago/fpago/fpago.component.css")).default]
+                })
+            ], FpagoComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.css": 
+        /*!****************************************************************************!*\
+          !*** ./src/app/admin/components/fpago/lista-pago/lista-pago.component.css ***!
+          \****************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvZnBhZ28vbGlzdGEtcGFnby9saXN0YS1wYWdvLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.ts": 
+        /*!***************************************************************************!*\
+          !*** ./src/app/admin/components/fpago/lista-pago/lista-pago.component.ts ***!
+          \***************************************************************************/
+        /*! exports provided: ListaPagoComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaPagoComponent", function () { return ListaPagoComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            /* harmony import */ var _services_fpago_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/fpago.service */ "./src/app/admin/services/fpago.service.ts");
+            var ListaPagoComponent = /** @class */ (function () {
+                function ListaPagoComponent(fpagoSrvc) {
+                    var _this = this;
+                    this.fpagoSrvc = fpagoSrvc;
+                    this.displayedColumns = ['forma_pago'];
+                    this.getFpagoEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.getFormasPago = function () {
+                        _this.fpagoSrvc.get().subscribe(function (lst) {
+                            if (lst) {
+                                if (lst.length > 0) {
+                                    _this.listaFpago = lst;
+                                    _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.listaFpago);
+                                    _this.dataSource.paginator = _this.paginator;
+                                }
+                            }
+                        });
+                    };
+                    this.getFpago = function (obj) {
+                        _this.getFpagoEv.emit(obj);
+                    };
+                }
+                ListaPagoComponent.prototype.ngOnInit = function () {
+                    this.getFormasPago();
+                };
+                ListaPagoComponent.prototype.applyFilter = function (filterValue) {
+                    this.dataSource.filter = filterValue.trim().toLowerCase();
+                };
+                return ListaPagoComponent;
+            }());
+            ListaPagoComponent.ctorParameters = function () { return [
+                { type: _services_fpago_service__WEBPACK_IMPORTED_MODULE_4__["FpagoService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], ListaPagoComponent.prototype, "getFpagoEv", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
+            ], ListaPagoComponent.prototype, "paginator", void 0);
+            ListaPagoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-lista-pago',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./lista-pago.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/lista-pago/lista-pago.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-pago.component.css */ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.css")).default]
+                })
+            ], ListaPagoComponent);
+            /***/ 
+        }),
         /***/ "./src/app/admin/components/header/header.component.css": 
         /*!**************************************************************!*\
           !*** ./src/app/admin/components/header/header.component.css ***!
@@ -1523,6 +2159,195 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./header.component.css */ "./src/app/admin/components/header/header.component.css")).default]
                 })
             ], HeaderComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.css": 
+        /*!****************************************************************************************!*\
+          !*** ./src/app/admin/components/impresora/form-impresora/form-impresora.component.css ***!
+          \****************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvaW1wcmVzb3JhL2Zvcm0taW1wcmVzb3JhL2Zvcm0taW1wcmVzb3JhLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.ts": 
+        /*!***************************************************************************************!*\
+          !*** ./src/app/admin/components/impresora/form-impresora/form-impresora.component.ts ***!
+          \***************************************************************************************/
+        /*! exports provided: FormImpresoraComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormImpresoraComponent", function () { return FormImpresoraComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _services_impresora_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/impresora.service */ "./src/app/admin/services/impresora.service.ts");
+            var FormImpresoraComponent = /** @class */ (function () {
+                function FormImpresoraComponent(_snackBar, impresoraSrvc) {
+                    var _this = this;
+                    this._snackBar = _snackBar;
+                    this.impresoraSrvc = impresoraSrvc;
+                    this.impresoraSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.resetImpresora = function () { return _this.impresora = {
+                        impresora: null, nombre: null, direccion_ip: null, ubicacion: null, bluetooth: 0, sede: null
+                    }; };
+                    this.onSubmit = function () {
+                        _this.impresoraSrvc.save(_this.impresora).subscribe(function (res) {
+                            //console.log(res);
+                            if (res.exito) {
+                                _this.impresoraSavedEv.emit();
+                                _this.resetImpresora();
+                                _this._snackBar.open('Impresora agregada...', 'Impresora', { duration: 3000 });
+                            }
+                            else {
+                                _this._snackBar.open("ERROR: " + res.mensaje, 'Impresora', { duration: 3000 });
+                            }
+                        });
+                    };
+                }
+                FormImpresoraComponent.prototype.ngOnInit = function () {
+                };
+                return FormImpresoraComponent;
+            }());
+            FormImpresoraComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _services_impresora_service__WEBPACK_IMPORTED_MODULE_3__["ImpresoraService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+            ], FormImpresoraComponent.prototype, "impresora", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], FormImpresoraComponent.prototype, "impresoraSavedEv", void 0);
+            FormImpresoraComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-form-impresora',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./form-impresora.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/form-impresora/form-impresora.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./form-impresora.component.css */ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.css")).default]
+                })
+            ], FormImpresoraComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/impresora/impresora/impresora.component.css": 
+        /*!******************************************************************************!*\
+          !*** ./src/app/admin/components/impresora/impresora/impresora.component.css ***!
+          \******************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvaW1wcmVzb3JhL2ltcHJlc29yYS9pbXByZXNvcmEuY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/impresora/impresora/impresora.component.ts": 
+        /*!*****************************************************************************!*\
+          !*** ./src/app/admin/components/impresora/impresora/impresora.component.ts ***!
+          \*****************************************************************************/
+        /*! exports provided: ImpresoraComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ImpresoraComponent", function () { return ImpresoraComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var ImpresoraComponent = /** @class */ (function () {
+                function ImpresoraComponent() {
+                    var _this = this;
+                    this.setImpresora = function (cli) { return _this.impresora = cli; };
+                    this.refreshImpresoraList = function () { return _this.lstImpresoraComponent.loadImpresoras(); };
+                    this.impresora = {
+                        impresora: null, nombre: null, direccion_ip: null, ubicacion: null, bluetooth: 0, sede: null
+                    };
+                }
+                ImpresoraComponent.prototype.ngOnInit = function () {
+                };
+                return ImpresoraComponent;
+            }());
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lstImpresora', { static: false })
+            ], ImpresoraComponent.prototype, "lstImpresoraComponent", void 0);
+            ImpresoraComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-impresora',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./impresora.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/impresora/impresora.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./impresora.component.css */ "./src/app/admin/components/impresora/impresora/impresora.component.css")).default]
+                })
+            ], ImpresoraComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.css": 
+        /*!******************************************************************************************!*\
+          !*** ./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.css ***!
+          \******************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvaW1wcmVzb3JhL2xpc3RhLWltcHJlc29yYS9saXN0YS1pbXByZXNvcmEuY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.ts": 
+        /*!*****************************************************************************************!*\
+          !*** ./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.ts ***!
+          \*****************************************************************************************/
+        /*! exports provided: ListaImpresoraComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaImpresoraComponent", function () { return ListaImpresoraComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            /* harmony import */ var _services_impresora_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/impresora.service */ "./src/app/admin/services/impresora.service.ts");
+            var ListaImpresoraComponent = /** @class */ (function () {
+                function ListaImpresoraComponent(impresoraSrvc) {
+                    var _this = this;
+                    this.impresoraSrvc = impresoraSrvc;
+                    this.displayedColumns = ['impresora'];
+                    this.getImpresoraEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.loadImpresoras = function () {
+                        _this.impresoraSrvc.get().subscribe(function (lst) {
+                            if (lst) {
+                                if (lst.length > 0) {
+                                    _this.lstImpresoras = lst;
+                                    _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.lstImpresoras);
+                                    _this.dataSource.paginator = _this.paginator;
+                                }
+                            }
+                        });
+                    };
+                    this.getImpresora = function (obj) {
+                        _this.getImpresoraEv.emit(obj);
+                    };
+                }
+                ListaImpresoraComponent.prototype.ngOnInit = function () {
+                    this.loadImpresoras();
+                };
+                ListaImpresoraComponent.prototype.applyFilter = function (filterValue) {
+                    this.dataSource.filter = filterValue.trim().toLowerCase();
+                };
+                return ListaImpresoraComponent;
+            }());
+            ListaImpresoraComponent.ctorParameters = function () { return [
+                { type: _services_impresora_service__WEBPACK_IMPORTED_MODULE_4__["ImpresoraService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], ListaImpresoraComponent.prototype, "getImpresoraEv", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
+            ], ListaImpresoraComponent.prototype, "paginator", void 0);
+            ListaImpresoraComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-lista-impresora',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./lista-impresora.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-impresora.component.css */ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.css")).default]
+                })
+            ], ListaImpresoraComponent);
             /***/ 
         }),
         /***/ "./src/app/admin/components/login/login.component.css": 
@@ -2086,6 +2911,205 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], PresentacionComponent);
             /***/ 
         }),
+        /***/ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.css": 
+        /*!*************************************************************************************************!*\
+          !*** ./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.css ***!
+          \*************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvdGlwby11c3VhcmlvL2Zvcm0tdGlwby11c3VhcmlvL2Zvcm0tdGlwby11c3VhcmlvLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.ts": 
+        /*!************************************************************************************************!*\
+          !*** ./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.ts ***!
+          \************************************************************************************************/
+        /*! exports provided: FormTipoUsuarioComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormTipoUsuarioComponent", function () { return FormTipoUsuarioComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/tipo-usuario.service */ "./src/app/admin/services/tipo-usuario.service.ts");
+            /* harmony import */ var _services_jerarquia_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/jerarquia.service */ "./src/app/admin/services/jerarquia.service.ts");
+            var FormTipoUsuarioComponent = /** @class */ (function () {
+                function FormTipoUsuarioComponent(_snackBar, tipoUsuarioSrvc, jerarquiaSrvc) {
+                    var _this = this;
+                    this._snackBar = _snackBar;
+                    this.tipoUsuarioSrvc = tipoUsuarioSrvc;
+                    this.jerarquiaSrvc = jerarquiaSrvc;
+                    this.usuarioTipoSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.jerarquias = [];
+                    this.loadJerarquia = function () {
+                        _this.jerarquiaSrvc.get().subscribe(function (res) {
+                            _this.jerarquias = res;
+                        });
+                    };
+                    this.resetTipoUsuario = function () { return _this.usuarioTipo = {
+                        usuario_tipo: null, descripcion: null, jerarquia: null
+                    }; };
+                    this.onSubmit = function () {
+                        _this.tipoUsuarioSrvc.save(_this.usuarioTipo).subscribe(function (res) {
+                            if (res.exito) {
+                                _this.usuarioTipoSavedEv.emit();
+                                _this.resetTipoUsuario();
+                                _this._snackBar.open('Tipo agregado...', 'Tipo Usuario', { duration: 3000 });
+                            }
+                            else {
+                                _this._snackBar.open("ERROR: " + res.mensaje, 'Tipo Usuario', { duration: 3000 });
+                            }
+                        });
+                    };
+                }
+                FormTipoUsuarioComponent.prototype.ngOnInit = function () {
+                    this.loadJerarquia();
+                };
+                return FormTipoUsuarioComponent;
+            }());
+            FormTipoUsuarioComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_3__["TipoUsuarioService"] },
+                { type: _services_jerarquia_service__WEBPACK_IMPORTED_MODULE_4__["JerarquiaService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+            ], FormTipoUsuarioComponent.prototype, "usuarioTipo", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], FormTipoUsuarioComponent.prototype, "usuarioTipoSavedEv", void 0);
+            FormTipoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-form-tipo-usuario',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./form-tipo-usuario.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./form-tipo-usuario.component.css */ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.css")).default]
+                })
+            ], FormTipoUsuarioComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.css": 
+        /*!***************************************************************************************************!*\
+          !*** ./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.css ***!
+          \***************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvdGlwby11c3VhcmlvL2xpc3RhLXRpcG8tdXN1YXJpby9saXN0YS10aXBvLXVzdWFyaW8uY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.ts": 
+        /*!**************************************************************************************************!*\
+          !*** ./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.ts ***!
+          \**************************************************************************************************/
+        /*! exports provided: ListaTipoUsuarioComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaTipoUsuarioComponent", function () { return ListaTipoUsuarioComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            /* harmony import */ var _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/tipo-usuario.service */ "./src/app/admin/services/tipo-usuario.service.ts");
+            var ListaTipoUsuarioComponent = /** @class */ (function () {
+                function ListaTipoUsuarioComponent(tipoUsuarioSrvc) {
+                    var _this = this;
+                    this.tipoUsuarioSrvc = tipoUsuarioSrvc;
+                    this.displayedColumns = ['usuario_tipo'];
+                    this.getTipoUsuarioEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.loadTipoUsuario = function () {
+                        _this.tipoUsuarioSrvc.get().subscribe(function (lst) {
+                            if (lst) {
+                                if (lst.length > 0) {
+                                    _this.lstUsuarioTipo = lst;
+                                    _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.lstUsuarioTipo);
+                                    _this.dataSource.paginator = _this.paginator;
+                                }
+                            }
+                        });
+                    };
+                    this.getTipoUsuario = function (obj) {
+                        _this.getTipoUsuarioEv.emit(obj);
+                    };
+                }
+                ListaTipoUsuarioComponent.prototype.ngOnInit = function () {
+                    this.loadTipoUsuario();
+                };
+                return ListaTipoUsuarioComponent;
+            }());
+            ListaTipoUsuarioComponent.ctorParameters = function () { return [
+                { type: _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_4__["TipoUsuarioService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], ListaTipoUsuarioComponent.prototype, "getTipoUsuarioEv", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
+            ], ListaTipoUsuarioComponent.prototype, "paginator", void 0);
+            ListaTipoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-lista-tipo-usuario',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./lista-tipo-usuario.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-tipo-usuario.component.css */ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.css")).default]
+                })
+            ], ListaTipoUsuarioComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.css": 
+        /*!***************************************************************************************!*\
+          !*** ./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.css ***!
+          \***************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvdGlwby11c3VhcmlvL3RpcG8tdXN1YXJpby90aXBvLXVzdWFyaW8uY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts": 
+        /*!**************************************************************************************!*\
+          !*** ./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts ***!
+          \**************************************************************************************/
+        /*! exports provided: TipoUsuarioComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TipoUsuarioComponent", function () { return TipoUsuarioComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var TipoUsuarioComponent = /** @class */ (function () {
+                function TipoUsuarioComponent() {
+                    var _this = this;
+                    this.setTipoUsuario = function (pres) { return _this.usuarioTipo = {
+                        usuario_tipo: pres.usuario_tipo,
+                        descripcion: pres.descripcion,
+                        jerarquia: pres.jerarquia.jerarquia
+                    }; };
+                    this.refreshtipoUsuarioList = function () { return _this.lstUsuarioTipo.loadTipoUsuario(); };
+                    this.usuarioTipo = {
+                        usuario_tipo: null, descripcion: null, jerarquia: null
+                    };
+                }
+                TipoUsuarioComponent.prototype.ngOnInit = function () {
+                };
+                return TipoUsuarioComponent;
+            }());
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lstTipoUsuario', { static: false })
+            ], TipoUsuarioComponent.prototype, "lstUsuarioTipo", void 0);
+            TipoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-tipo-usuario',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./tipo-usuario.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./tipo-usuario.component.css */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.css")).default]
+                })
+            ], TipoUsuarioComponent);
+            /***/ 
+        }),
         /***/ "./src/app/admin/components/usuario/form-usuario/form-usuario.component.css": 
         /*!**********************************************************************************!*\
           !*** ./src/app/admin/components/usuario/form-usuario/form-usuario.component.css ***!
@@ -2376,6 +3400,63 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             }());
             /***/ 
         }),
+        /***/ "./src/app/admin/services/acceso-usuario.service.ts": 
+        /*!**********************************************************!*\
+          !*** ./src/app/admin/services/acceso-usuario.service.ts ***!
+          \**********************************************************/
+        /*! exports provided: AccesoUsuarioService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AccesoUsuarioService", function () { return AccesoUsuarioService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var AccesoUsuarioService = /** @class */ (function () {
+                function AccesoUsuarioService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.moduleUrl = 'acceso';
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                AccesoUsuarioService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/buscar?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                AccesoUsuarioService.prototype.save = function (entidad) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/guardar" + (!!entidad.acceso ? ('/' + entidad.acceso) : ''), entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return AccesoUsuarioService;
+            }());
+            AccesoUsuarioService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            AccesoUsuarioService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], AccesoUsuarioService);
+            /***/ 
+        }),
         /***/ "./src/app/admin/services/app-menu.service.ts": 
         /*!****************************************************!*\
           !*** ./src/app/admin/services/app-menu.service.ts ***!
@@ -2515,6 +3596,168 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], ClienteService);
             /***/ 
         }),
+        /***/ "./src/app/admin/services/fpago.service.ts": 
+        /*!*************************************************!*\
+          !*** ./src/app/admin/services/fpago.service.ts ***!
+          \*************************************************/
+        /*! exports provided: FpagoService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FpagoService", function () { return FpagoService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var FpagoService = /** @class */ (function () {
+                function FpagoService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.moduleUrl = 'fpago';
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                FpagoService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/buscar?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                FpagoService.prototype.save = function (forma) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/guardar" + (!!forma.forma_pago ? ('/' + forma.forma_pago) : ''), forma, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return FpagoService;
+            }());
+            FpagoService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            FpagoService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], FpagoService);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/services/impresora.service.ts": 
+        /*!*****************************************************!*\
+          !*** ./src/app/admin/services/impresora.service.ts ***!
+          \*****************************************************/
+        /*! exports provided: ImpresoraService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ImpresoraService", function () { return ImpresoraService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var ImpresoraService = /** @class */ (function () {
+                function ImpresoraService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.moduleUrl = 'impresora';
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                ImpresoraService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/buscar?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ImpresoraService.prototype.save = function (entidad) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/guardar" + (!!entidad.impresora ? ('/' + entidad.impresora) : ''), entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return ImpresoraService;
+            }());
+            ImpresoraService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            ImpresoraService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], ImpresoraService);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/services/jerarquia.service.ts": 
+        /*!*****************************************************!*\
+          !*** ./src/app/admin/services/jerarquia.service.ts ***!
+          \*****************************************************/
+        /*! exports provided: JerarquiaService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JerarquiaService", function () { return JerarquiaService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var JerarquiaService = /** @class */ (function () {
+                function JerarquiaService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                JerarquiaService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos + "/get_jerarquia?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return JerarquiaService;
+            }());
+            JerarquiaService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            JerarquiaService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], JerarquiaService);
+            /***/ 
+        }),
         /***/ "./src/app/admin/services/localstorage.service.ts": 
         /*!********************************************************!*\
           !*** ./src/app/admin/services/localstorage.service.ts ***!
@@ -2613,6 +3856,102 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     providedIn: 'root'
                 })
             ], MedidaService);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/services/modulo.service.ts": 
+        /*!**************************************************!*\
+          !*** ./src/app/admin/services/modulo.service.ts ***!
+          \**************************************************/
+        /*! exports provided: ModuloService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ModuloService", function () { return ModuloService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var ModuloService = /** @class */ (function () {
+                function ModuloService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                ModuloService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos + "/get_modulo?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return ModuloService;
+            }());
+            ModuloService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            ModuloService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], ModuloService);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/services/opcion.service.ts": 
+        /*!**************************************************!*\
+          !*** ./src/app/admin/services/opcion.service.ts ***!
+          \**************************************************/
+        /*! exports provided: OpcionService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OpcionService", function () { return OpcionService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var OpcionService = /** @class */ (function () {
+                function OpcionService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                OpcionService.prototype.get = function (idmodulo, idsubmodulo, fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos + "/get_opcion/" + idmodulo + "/" + idsubmodulo + "/?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return OpcionService;
+            }());
+            OpcionService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            OpcionService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], OpcionService);
             /***/ 
         }),
         /***/ "./src/app/admin/services/presentacion.service.ts": 
@@ -2719,6 +4058,111 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     providedIn: 'root'
                 })
             ], SedeService);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/services/sub-modulo.service.ts": 
+        /*!******************************************************!*\
+          !*** ./src/app/admin/services/sub-modulo.service.ts ***!
+          \******************************************************/
+        /*! exports provided: SubModuloService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SubModuloService", function () { return SubModuloService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var SubModuloService = /** @class */ (function () {
+                function SubModuloService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                SubModuloService.prototype.get = function (idmodulo, fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos + "/get_sub_modulo/" + idmodulo + "/?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return SubModuloService;
+            }());
+            SubModuloService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            SubModuloService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], SubModuloService);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/services/tipo-usuario.service.ts": 
+        /*!********************************************************!*\
+          !*** ./src/app/admin/services/tipo-usuario.service.ts ***!
+          \********************************************************/
+        /*! exports provided: TipoUsuarioService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TipoUsuarioService", function () { return TipoUsuarioService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var TipoUsuarioService = /** @class */ (function () {
+                function TipoUsuarioService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.moduleUrl = 'tipo_usuario';
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                TipoUsuarioService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/buscar?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                TipoUsuarioService.prototype.save = function (entidad) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/" + this.moduleUrl + "/guardar" + (!!entidad.usuario_tipo ? ('/' + entidad.usuario_tipo) : ''), entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return TipoUsuarioService;
+            }());
+            TipoUsuarioService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            TipoUsuarioService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], TipoUsuarioService);
             /***/ 
         }),
         /***/ "./src/app/admin/services/usuario.service.ts": 
@@ -3352,7 +4796,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             __webpack_require__.r(__webpack_exports__);
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GLOBAL", function () { return GLOBAL; });
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            // const urlBase = 'http://localhost/resttouch'; // Desarrollo
+            // const urlBase = 'http://localhost:8005'; // Desarrollo
             var urlBase = location.origin; // Producción
             var GLOBAL = {
                 dbDateFormat: 'YYYY-MM-DD',
@@ -3548,7 +4992,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
           \***************************/
         /*! no static exports found */
         /***/ (function (module, exports, __webpack_require__) {
-            module.exports = __webpack_require__(/*! E:\htdocs\resttouch\web\src\main.ts */ "./src/main.ts");
+            module.exports = __webpack_require__(/*! /home/lmtzina/c807/resttouch/web/src/main.ts */ "./src/main.ts");
             /***/ 
         }),
         /***/ 1: 

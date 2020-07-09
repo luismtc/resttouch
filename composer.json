@@ -1,10 +1,9 @@
 {
-    "name": "Restouch",
+    "name": "c807/restouch",
     "description": "Restouch",
     "require": {
-        "php": "7.4.*",
+        "php": "7.2.*",
 		"mpdf/mpdf": "^8.0.0",
-		"phpoffice/phpexcel": "^1.8"
-    },
-    "authors": []
+		"phpoffice/phpspreadsheet": "1.13.0"
+    }
 }
