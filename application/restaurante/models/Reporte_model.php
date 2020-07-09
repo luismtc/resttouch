@@ -129,7 +129,7 @@ class Reporte_model extends CI_Model {
 			}
 		}
 		
-		$this->db->group_by("detalle_factura.detalle_factura");
+		# $this->db->group_by("detalle_factura.detalle_factura");
 
 		$tmp = $this->db->get();
 		if ($tmp) {

@@ -14,7 +14,7 @@
 .gitignore
 
 cloud_sql_proxy
-
+vendor/
 application/vendor/
 web/*
 !web/dist
