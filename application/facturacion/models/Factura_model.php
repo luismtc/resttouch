@@ -115,10 +115,8 @@ class Factura_model extends General_model {
 		foreach ($tmp as $row) {
 			$det = new Dfactura_model($row->detalle_factura);
 			$row->articulo = $det->getArticulo();
-
-			if (isset($args["_imprimir"])) {
-				$row->total = ($row->total - $row->descuento);
-			}
+			$row->subtotal = $row->total;
+			$row->total = ($row->total - $row->descuento);
 			
 			$datos[] = $row;
 		}
@@ -327,7 +325,7 @@ class Factura_model extends General_model {
 	        $item->appendChild($this->crearElemento('dte:UnidadMedida', 'PZA'));
 	        $item->appendChild($this->crearElemento('dte:Descripcion', $row->articulo->descripcion, array(), true));
 	        $item->appendChild($this->crearElemento('dte:PrecioUnitario', round(($row->precio_unitario), 6)));
-	        $item->appendChild($this->crearElemento('dte:Precio', $row->total));
+	        $item->appendChild($this->crearElemento('dte:Precio', $row->subtotal));
 	        $item->appendChild($this->crearElemento('dte:Descuento', $row->descuento));
 
         	$impuestos = $this->crearElemento('dte:Impuestos');
@@ -352,11 +350,9 @@ class Factura_model extends General_model {
 	        $impuestos->appendChild($impuesto);
 	        $item->appendChild($impuestos);
 
-	        $tmpTotal = ($row->total - $row->descuento);
-
-	        $item->appendChild($this->crearElemento('dte:Total', $tmpTotal));
+	        $item->appendChild($this->crearElemento('dte:Total', $row->total));
 	        $items->appendChild($item);
-	        $montoTotal+= $tmpTotal;
+	        $montoTotal+= $row->total;
     	}
 
     	$totalIva = $this->xml->getElementsByTagName('TotalImpuesto')->item(0);

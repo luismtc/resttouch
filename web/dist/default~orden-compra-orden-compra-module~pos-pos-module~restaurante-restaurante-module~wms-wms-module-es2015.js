@@ -8372,6 +8372,14 @@ let ArticuloService = class ArticuloService {
         };
         return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/${this.categoriaUrl}/buscar?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
+    getImpresoras(fltr = {}) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/impresora/buscar?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
     saveCategoria(entidad) {
         const httpOptions = {
             headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
@@ -8396,6 +8404,8 @@ let ArticuloService = class ArticuloService {
             categoria_grupo_grupo: !!item.categoria_grupo_grupo && item.categoria_grupo_grupo.length > 0 ? +item.categoria_grupo_grupo[0].categoria_grupo : null,
             descripcion: item.descripcion,
             receta: +item.receta,
+            impresora: item.impresora,
+            descuento: item.descuento,
             antecesores: null
         }));
         return lst;

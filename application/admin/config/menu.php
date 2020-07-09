@@ -35,6 +35,18 @@ $config['menu'] = [
 					7  => [
 						'nombre' => 'Impresoras',
 						'link' => '/admin/impresora'
+					],
+					8  => [
+						'nombre' => 'Tipo de Usuario',
+						'link' => '/admin/tipo_usuario'
+					],
+					9  => [
+						'nombre' => 'Acceso',
+						'link' => '/admin/acceso'
+					],
+					10  => [
+						'nombre' => 'Forma de Pago',
+						'link' => '/admin/formapago'
 					]
 				]
 			]
@@ -86,6 +98,10 @@ $config['menu'] = [
 					5 => [
 						'nombre' => 'Factura',
 						'link' => '/restaurante/rptfactura'
+					],
+					6 => [
+						'nombre' => 'Autoconsulta',
+						'link' => '/restaurante/autoconsulta'
 					]
 				]
 			],

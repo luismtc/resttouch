@@ -1,5 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class Reporte extends CI_Controller {
 
@@ -93,7 +95,7 @@ class Reporte extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$req['sede'] = $this->data->sede;
 		$datos = $this->Reporte_model->autoconsulta($req);
-		$excel = new PHPExcel();
+		$excel = new Spreadsheet();
 		$excel->getProperties()
 			  ->setCreator("Restouch")
 			  ->setTitle("Office 2007 xlsx Dinamico")
@@ -122,15 +124,18 @@ class Reporte extends CI_Controller {
 		}
 		
 		header("Content-Type: application/vnd.ms-excel");
-		header("Content-Disposition: attachment;filename=Dinamico.xls");
+		header("Content-Disposition: attachment;filename=Dinamico.xlsx");
 		header("Cache-Control: max-age=1");
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
 		header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
 		header("Cache-Control: cache, must-revalidate");
 		header("Pragma: public");
 
-		$obwrite = PHPExcel_IOFactory::createWriter($excel, "Excel5");
-		$obwrite->save("php://output");
+		$writer = new Xlsx($excel);
+		$writer->save("php://output");
+
+		#$obwrite = PHPExcel_IOFactory::createWriter($excel, "Excel5");
+		#$obwrite->save("php://output");
 	}
 
 }
