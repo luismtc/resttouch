@@ -64,6 +64,9 @@ import { PropinaComponent } from './components/propina/propina/propina.component
 import { FormPropinaComponent } from './components/propina/form-propina/form-propina.component';
 import { ListaPropinaComponent } from './components/propina/lista-propina/lista-propina.component';
 import { AutoconsultaComponent } from './components/reportes/autoconsulta/autoconsulta.component';
+import { CajacorteComponent } from './components/caja-corte/cajacorte/cajacorte.component';
+import { CajacorteListaComponent } from './components/caja-corte/cajacorte-lista/cajacorte-lista.component';
+import { CajacorteFormComponent } from './components/caja-corte/cajacorte-form/cajacorte-form.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
@@ -71,7 +74,7 @@ import { AutoconsultaComponent } from './components/reportes/autoconsulta/autoco
   declarations: [
     TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent,
     ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent,
-    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent,FormTurnoTipoComponent,TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent
+    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent,FormTurnoTipoComponent,TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent, CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent
   ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent

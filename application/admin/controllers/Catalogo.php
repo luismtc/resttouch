@@ -185,6 +185,22 @@ class Catalogo extends CI_Controller {
 		$this->output
 			 ->set_output(json_encode($datos));
 	}
+
+	public function get_caja_corte_tipo()
+	{
+		$this->output
+		->set_output(json_encode(
+			$this->Catalogo_model->getCajaCorteTipo($_GET)
+		));
+	}
+
+	public function get_caja_corte_nominacion()
+	{
+		$this->output
+		->set_output(json_encode(
+			$this->Catalogo_model->getCajaCorteNominacion($_GET)
+		));
+	}
 }
 
 /* End of file Catalogo.php */

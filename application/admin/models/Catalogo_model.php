@@ -404,6 +404,23 @@ class Catalogo_model extends CI_Model {
 
 		return $this->getCatalogo($qry, $args);
 	}
+
+	public function getCajaCorteTipo($args=[])
+	{
+		$qry = $this->db
+		->order_by("descripcion")
+		->get("caja_corte_tipo");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
+	public function getCajaCorteNominacion($args=[])
+	{
+		$qry = $this->db
+		->get("caja_corte_nominacion");
+
+		return $this->getCatalogo($qry, $args);
+	}
 }
 
 /* End of file Catalogo_model.php */

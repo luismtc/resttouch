@@ -1,0 +1,8 @@
+<div class="row">
+  <div class="col m5 s12">
+    <app-cajacorte-lista  #lstCortecaja (getCajacorteEv)="editarCajaCorte($event)"></app-cajacorte-lista>
+  </div>
+  <div class="col m7 s12">
+    <app-cajacorte-form #frmCortecaja [ccorte]="ccorte" (cajacorteSavedEv)="actualizaLista()"></app-cajacorte-form>
+  </div>
+</div>
