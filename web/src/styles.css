@@ -50,6 +50,11 @@ body {
     padding-top: 10px;
 }
 
+button {
+    min-width: 48px !important;
+    min-height: 48px !important;    
+}
+
 button .mat-icon {
     font-size: 48px;
 }

@@ -13,3 +13,6 @@ export const GLOBAL = {
     urlFacturacion: `${urlBase}/facturacion.php`,
     usrTokenVar: 'rttoken'
 };
+
+export const PaginarArray = (array: any[], page_size: number, page_number: number) =>
+array.slice((page_number - 1) * page_size, page_number * page_size);
