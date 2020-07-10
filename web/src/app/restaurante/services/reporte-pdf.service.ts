@@ -36,6 +36,15 @@ export class ReportePdfService {
         ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  getReporteExistencia(params: Object) {
+    this.httpOptions['params'] = params;
+
+    return this.http.get<string>(
+        `${GLOBAL.urlWms}/reporte/existencia`,
+        this.httpOptions
+        ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getReporteFactura(params: Object) {
     this.httpOptions['params'] = params;
 

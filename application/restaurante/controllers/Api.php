@@ -646,21 +646,28 @@ class Api extends CI_Controller {
 
 	public function set_producto()
 	{
+		$this->load->model(['Categoria_model', 'Cgrupo_model']);
+
 		$datos = ["exito" => false, 'mensaje' => ''];
+
 		if (isset($_GET['key'])) {
 			if ($this->input->method() == 'post') {
 
 				$req = json_decode(file_get_contents('php://input'), true);
+				$cat = new Categoria_model();
+				$cgrupo = new Cgrupo_model();
 
 				$datosDb = $this->Catalogo_model->getCredenciales([
 					"llave" => $_GET['key']
 				]);
+
 	            $conn = [
 	                'host' => $datosDb->db_hostname,
 	                'user' => $datosDb->db_username,
 	                'password' => $datosDb->db_password,
 	                'database' => $datosDb->db_database
 	            ];
+	            
 				$db = conexion_db($conn);
 				$this->db = $this->load->database($db, true);
 
@@ -669,12 +676,47 @@ class Api extends CI_Controller {
 					"_uno" => true
 				]);
 
+				$tmpcat = $this->Categoria_model->buscar([
+					'descripcion' => $req['vendor'],
+					"sede" => $sede->sede,
+					'_uno' => true
+				]);
+
+				if ($tmpcat) {
+					$cat->cargar($tmpcat->categoria);
+				} else {
+					$cat->guardar([
+						"descripcion" => $req['vendor'],
+						"sede" => $sede->sede,
+					]);
+				}
+
+				$grupo = $this->Cgrupo_model->buscar([
+					"categoria" => $cat->getPK(),
+					"descripcion" => $req['tags'],
+					"_uno" => true
+				]);
+
+				if ($grupo) {
+					$cgrupo->cargar($grupo->categoria_grupo);
+				} else {
+					$cgrupo->guardar([
+						"categoria" => $cat->getPK(),
+						"descripcion" => $req['tags']
+					]);
+				}
+
 				if (isset($req['variants'])) {
 					foreach ($req['variants'] as $row) {
+						$desc = $req['title'];
+						if (count($req['variants']) > 1) {
+							$desc .= " {$row['title']}";
+						}
+
 						$args = [
-							"categoria_grupo" => 1,
+							"categoria_grupo" => $cgrupo->getPK(),
 							"presentacion" => 1,
-							"descripcion" => $row['sku'],
+							"descripcion" => $desc,
 							"precio" => $row['price'] ,
 							"bien_servicio" => "B",
 							"existencias" => 0,

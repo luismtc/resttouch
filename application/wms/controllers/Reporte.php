@@ -19,7 +19,10 @@ class Reporte extends CI_Controller {
 	public function existencia()
 	{
 		$rpt = new Reporte_model();
-		$_GET['sede'] = $this->data->sede;
+
+		if (!isset($_GET['sede'])) {			
+			$_GET['sede'] = $this->data->sede;
+		}
 
 		$exist = $rpt->getExistencias($_GET);
 		$args = [
@@ -39,7 +42,6 @@ class Reporte extends CI_Controller {
 		$pdf->WriteHTML($vista);
 		$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
 		$pdf->Output("Existencias_{$rand}.pdf", "D");
-
 	}
 
 }
