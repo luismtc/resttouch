@@ -82,10 +82,10 @@
                     name="pais_iso_dos" [(ngModel)]="cliente.pais_iso_dos">
             </mat-form-field>
             <div align="end">
-                <button mat-flat-button type="submit" color="accent" [disabled]="!frmCliente.form.valid">
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmCliente.form.valid">
                     Guardar
-                </button>
-                <button mat-flat-button type="button" color="accent" (click)="resetCliente()" *ngIf="cliente.cliente">
+                </button>                
+                <button mat-raised-button type="button" color="accent" (click)="resetCliente()" *ngIf="cliente.cliente">
                     Nuevo
                 </button>
             </div>

@@ -4070,22 +4070,6 @@ DragDropModule.decorators = [
 
 /***/ }),
 
-/***/ "./node_modules/file-saver/dist/FileSaver.min.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/file-saver/dist/FileSaver.min.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function(a,b){if(true)!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (b),
-				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
-				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else {}})(this,function(){"use strict";function b(a,b){return"undefined"==typeof b?b={autoBom:!1}:"object"!=typeof b&&(console.warn("Deprecated: Expected third argument to be a object"),b={autoBom:!b}),b.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type)?new Blob(["\uFEFF",a],{type:a.type}):a}function c(b,c,d){var e=new XMLHttpRequest;e.open("GET",b),e.responseType="blob",e.onload=function(){a(e.response,c,d)},e.onerror=function(){console.error("could not download file")},e.send()}function d(a){var b=new XMLHttpRequest;b.open("HEAD",a,!1);try{b.send()}catch(a){}return 200<=b.status&&299>=b.status}function e(a){try{a.dispatchEvent(new MouseEvent("click"))}catch(c){var b=document.createEvent("MouseEvents");b.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),a.dispatchEvent(b)}}var f="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof global&&global.global===global?global:void 0,a=f.saveAs||("object"!=typeof window||window!==f?function(){}:"download"in HTMLAnchorElement.prototype?function(b,g,h){var i=f.URL||f.webkitURL,j=document.createElement("a");g=g||b.name||"download",j.download=g,j.rel="noopener","string"==typeof b?(j.href=b,j.origin===location.origin?e(j):d(j.href)?c(b,g,h):e(j,j.target="_blank")):(j.href=i.createObjectURL(b),setTimeout(function(){i.revokeObjectURL(j.href)},4E4),setTimeout(function(){e(j)},0))}:"msSaveOrOpenBlob"in navigator?function(f,g,h){if(g=g||f.name||"download","string"!=typeof f)navigator.msSaveOrOpenBlob(b(f,h),g);else if(d(f))c(f,g,h);else{var i=document.createElement("a");i.href=f,i.target="_blank",setTimeout(function(){e(i)})}}:function(a,b,d,e){if(e=e||open("","_blank"),e&&(e.document.title=e.document.body.innerText="downloading..."),"string"==typeof a)return c(a,b,d);var g="application/octet-stream"===a.type,h=/constructor/i.test(f.HTMLElement)||f.safari,i=/CriOS\/[\d]+/.test(navigator.userAgent);if((i||g&&h)&&"object"==typeof FileReader){var j=new FileReader;j.onloadend=function(){var a=j.result;a=i?a:a.replace(/^data:[^;]*;/,"data:attachment/file;"),e?e.location.href=a:location=a,e=null},j.readAsDataURL(a)}else{var k=f.URL||f.webkitURL,l=k.createObjectURL(a);e?e.location=l:location.href=l,e=null,setTimeout(function(){k.revokeObjectURL(l)},4E4)}});f.saveAs=a.saveAs=a, true&&(module.exports=a)});
-
-//# sourceMappingURL=FileSaver.min.js.map
-
-/***/ }),
-
 /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.html":
 /*!*******************************************************************************************************************!*\
   !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.html ***!
@@ -4134,7 +4118,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>Área</h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmEntidad=\"ngForm\" (ngSubmit)=\"frmEntidad.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input type=\"text\" matInput placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input type=\"text\" matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Área padre</mat-label>\n                <mat-select name=\"area_padre\" [(ngModel)]=\"entidad.area_padre\">\n                    <mat-option *ngFor=\"let ar of lstAreas\" [value]=\"ar.area\">\n                        {{ar.nombre}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <h5>Mesas en el área: {{entidad.mesas.length}}</h5>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmEntidad.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n                <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"openDesigner()\" *ngIf=\"entidad.area\">\n                    Diseñar\n                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetEntidad()\" *ngIf=\"entidad.area\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>Área</h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmEntidad=\"ngForm\" (ngSubmit)=\"frmEntidad.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input type=\"text\" matInput placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input type=\"text\" matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Área padre</mat-label>\n                <mat-select name=\"area_padre\" [(ngModel)]=\"entidad.area_padre\">\n                    <mat-option *ngFor=\"let ar of lstAreas\" [value]=\"ar.area\">\n                        {{ar.nombre}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <h5>Mesas en el área: {{entidad.mesas.length}}</h5>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmEntidad.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" (click)=\"openDesigner()\" *ngIf=\"entidad.area\">\n                    Diseñar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetEntidad()\" *ngIf=\"entidad.area\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -4147,7 +4131,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"nombre\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getEntidad(element.area)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>settings</mat-icon>\n                            <h5 mat-line>{{element.nombre}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item matRipple *ngFor=\"let element of lstEntidadesPaged\" (click)=\"getEntidad(element.area)\">\n                <mat-icon mat-list-icon>settings</mat-icon>\n                <h5 mat-line>{{element.nombre}}</h5>\n            </mat-list-item>            \n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -4160,7 +4144,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\">\n            <ng-container matColumnDef=\"comanda\">\n                <th mat-header-cell *matHeaderCellDef>No.</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.comanda}} </td>\n            </ng-container>\n            <ng-container matColumnDef=\"orden\">\n                <th mat-header-cell *matHeaderCellDef>Orden</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.origen_datos.numero_orden || ''}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"nombre\">\n                <th mat-header-cell *matHeaderCellDef>Cliente</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.cuentas[0].nombre}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"total\">\n                <th mat-header-cell *matHeaderCellDef>Total</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.total | number: '1.2-2'}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"imprimir\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Imprimir</th>\n                <td mat-cell *matCellDef=\"let element\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"imprimir(element)\">\n                        Imprimir\n                    </button>\n                </td>\n            </ng-container>\n            <ng-container matColumnDef=\"facturar\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Facturar</th>\n                <td mat-cell *matCellDef=\"let element\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"firmar(element)\">\n                        Facturar\n                    </button>\n                </td>\n            </ng-container>\n\n            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->\n            <ng-container matColumnDef=\"expandedDetail\">\n                <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"columnsToDisplay.length\">\n                    <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n                        <table style=\"width: 50%; background-color:#f5f5f5;\">\n                            <caption>\n                                <h5>Detalle del pedido #{{element.comanda}}</h5>\n                                <h6 *ngIf=\"element.origen_datos.numero_orden\">Orden #{{element.origen_datos.numero_orden}}</h6>\n                            </caption>\n                            <thead>\n                                <th>Producto</th>\n                                <th class=\"rtxt\">Precio</th>\n                                <th class=\"rtxt\">Total</th>\n                            </thead>\n                            <tbody>\n                                <tr *ngFor=\"let det of element.cuentas[0].productos\">\n                                    <td>{{det.cantidad}} {{det.articulo.descripcion}}</td>\n                                    <td class=\"rtxt\">{{det.precio | number: '1.2-2'}}</td>\n                                    <td class=\"rtxt\">{{det.total | number: '1.2-2'}}</td>\n                                </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                </td>\n            </ng-container>\n\n            <tr mat-header-row *matHeaderRowDef=\"columnsToDisplay\"></tr>\n            <tr mat-row *matRowDef=\"let element; columns: columnsToDisplay;\" class=\"example-element-row\"\n                [class.example-expanded-row]=\"expandedElement === element\"\n                (click)=\"expandedElement = expandedElement === element ? null : element\">\n            </tr>\n            <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n        </table>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\">\n            <ng-container matColumnDef=\"comanda\">\n                <th mat-header-cell *matHeaderCellDef>No.</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.comanda}} </td>\n            </ng-container>\n            <ng-container matColumnDef=\"orden\">\n                <th mat-header-cell *matHeaderCellDef>Orden</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.origen_datos.numero_orden || ''}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"nombre\">\n                <th mat-header-cell *matHeaderCellDef>Cliente</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.cuentas[0].nombre}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"total\">\n                <th mat-header-cell *matHeaderCellDef>Total</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.total | number: '1.2-2'}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"imprimir\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Imprimir</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"imprimir(element)\">\n                        Imprimir\n                    </button>\n                </td>\n            </ng-container>\n            <ng-container matColumnDef=\"facturar\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Facturar</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"firmar(element)\">\n                        Facturar\n                    </button>\n                </td>\n            </ng-container>\n\n            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->\n            <ng-container matColumnDef=\"expandedDetail\">\n                <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"columnsToDisplay.length\">\n                    <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n                        <table style=\"width: 50%; background-color:#f5f5f5;\">\n                            <caption>\n                                <h5>Detalle del pedido #{{element.comanda}}</h5>\n                                <h6 *ngIf=\"element.origen_datos.numero_orden\">Orden #{{element.origen_datos.numero_orden}}</h6>\n                            </caption>\n                            <thead>\n                                <th>Producto</th>\n                                <th class=\"rtxt\">Precio</th>\n                                <th class=\"rtxt\">Total</th>\n                            </thead>\n                            <tbody>\n                                <tr *ngFor=\"let det of element.cuentas[0].productos\">\n                                    <td>{{det.cantidad}} {{det.articulo.descripcion}}</td>\n                                    <td class=\"rtxt\">{{det.precio | number: '1.2-2'}}</td>\n                                    <td class=\"rtxt\">{{det.total | number: '1.2-2'}}</td>\n                                </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                </td>\n            </ng-container>\n\n            <tr mat-header-row *matHeaderRowDef=\"columnsToDisplay\"></tr>\n            <tr mat-row *matRowDef=\"let element; columns: columnsToDisplay;\" class=\"example-element-row\"\n                [class.example-expanded-row]=\"expandedElement === element\"\n                (click)=\"expandedElement = expandedElement === element ? null : element\">\n            </tr>\n            <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n        </table>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -4433,7 +4417,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"turno\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getTurno(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>schedule</mat-icon>\n                            <h5 mat-line>Inicio: {{element.inicio | date: 'dd/MM/yyyy HH:mm:ss'}}</h5><br/>\n                            <p mat-line>\n                                Fin: {{element.fin | date: 'dd/MM/yyyy'}}\n                            </p>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstTurnosPaged\" (click)=\"getTurno(element)\">\n                <mat-icon mat-list-icon>schedule</mat-icon>\n                <h5 mat-line>Inicio: {{element.inicio | date: 'dd/MM/yyyy HH:mm:ss'}}</h5><br/>\n                <p mat-line>\n                    Fin: {{element.fin | date: 'dd/MM/yyyy'}}\n                </p>\n            </mat-list-item>            \n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>\n");
 
 /***/ }),
 
@@ -4895,13 +4879,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaAreaComponent", function() { return ListaAreaComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
-/* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
-
-
+/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
 
 
 
@@ -4911,15 +4891,18 @@ let ListaAreaComponent = class ListaAreaComponent {
     constructor(areaSrvc, ls) {
         this.areaSrvc = areaSrvc;
         this.ls = ls;
-        this.displayedColumns = ['nombre'];
         this.getEntidadEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadEntidades = () => {
-            this.areaSrvc.get({ sede: (this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_5__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe((lst) => {
+            this.areaSrvc.get({ sede: (this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe((lst) => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstEntidades = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstEntidades);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -4933,24 +4916,34 @@ let ListaAreaComponent = class ListaAreaComponent {
                 }
             });
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadEntidades();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["MultiFiltro"])(this.lstEntidades, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstEntidadesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstEntidades.length;
+            this.lstEntidadesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(this.lstEntidades, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaAreaComponent.ctorParameters = () => [
-    { type: _services_area_service__WEBPACK_IMPORTED_MODULE_6__["AreaService"] },
-    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_4__["LocalstorageService"] }
+    { type: _services_area_service__WEBPACK_IMPORTED_MODULE_4__["AreaService"] },
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__["LocalstorageService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaAreaComponent.prototype, "getEntidadEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaAreaComponent.prototype, "paginator", void 0);
 ListaAreaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-area',
@@ -4972,7 +4965,7 @@ ListaAreaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("table {\n    width: 100%;\n  }\n  \n  tr.example-detail-row {\n    height: 0;\n  }\n  \n  tr.example-element-row:not(.example-expanded-row):hover {\n    background: #777;\n  }\n  \n  tr.example-element-row:not(.example-expanded-row):active {\n    background: #efefef;\n  }\n  \n  .example-element-row td {\n    border-bottom-width: 0;\n  }\n  \n  .example-element-detail {\n    overflow: hidden;\n    display: flex;\n    /*\n    border-radius: 10px;\n    border: solid 1px lightgray;\n    */\n  }\n  \n  .example-element-diagram {\n    min-width: 80px;\n    border: 2px solid black;\n    padding: 8px;\n    font-weight: lighter;\n    margin: 8px 0;\n    height: 104px;\n  }\n  \n  .example-element-symbol {\n    font-weight: bold;\n    font-size: 40px;\n    line-height: normal;\n  }\n  \n  .example-element-description {\n    padding: 16px;\n  }\n  \n  .example-element-description-attribution {\n    opacity: 0.5;\n  }\n  \n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9jb21hbmRhLWVuLWxpbmVhL2NvbWFuZGEtZW4tbGluZWEuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7RUFDYjs7RUFFQTtJQUNFLFNBQVM7RUFDWDs7RUFFQTtJQUNFLGdCQUFnQjtFQUNsQjs7RUFFQTtJQUNFLG1CQUFtQjtFQUNyQjs7RUFFQTtJQUNFLHNCQUFzQjtFQUN4Qjs7RUFFQTtJQUNFLGdCQUFnQjtJQUNoQixhQUFhO0lBQ2I7OztLQUdDO0VBQ0g7O0VBRUE7SUFDRSxlQUFlO0lBQ2YsdUJBQXVCO0lBQ3ZCLFlBQVk7SUFDWixvQkFBb0I7SUFDcEIsYUFBYTtJQUNiLGFBQWE7RUFDZjs7RUFFQTtJQUNFLGlCQUFpQjtJQUNqQixlQUFlO0lBQ2YsbUJBQW1CO0VBQ3JCOztFQUVBO0lBQ0UsYUFBYTtFQUNmOztFQUVBO0lBQ0UsWUFBWTtFQUNkIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9jb21hbmRhLWVuLWxpbmVhL2NvbWFuZGEtZW4tbGluZWEuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbInRhYmxlIHtcbiAgICB3aWR0aDogMTAwJTtcbiAgfVxuICBcbiAgdHIuZXhhbXBsZS1kZXRhaWwtcm93IHtcbiAgICBoZWlnaHQ6IDA7XG4gIH1cbiAgXG4gIHRyLmV4YW1wbGUtZWxlbWVudC1yb3c6bm90KC5leGFtcGxlLWV4cGFuZGVkLXJvdyk6aG92ZXIge1xuICAgIGJhY2tncm91bmQ6ICM3Nzc7XG4gIH1cbiAgXG4gIHRyLmV4YW1wbGUtZWxlbWVudC1yb3c6bm90KC5leGFtcGxlLWV4cGFuZGVkLXJvdyk6YWN0aXZlIHtcbiAgICBiYWNrZ3JvdW5kOiAjZWZlZmVmO1xuICB9XG4gIFxuICAuZXhhbXBsZS1lbGVtZW50LXJvdyB0ZCB7XG4gICAgYm9yZGVyLWJvdHRvbS13aWR0aDogMDtcbiAgfVxuICBcbiAgLmV4YW1wbGUtZWxlbWVudC1kZXRhaWwge1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG4gICAgZGlzcGxheTogZmxleDtcbiAgICAvKlxuICAgIGJvcmRlci1yYWRpdXM6IDEwcHg7XG4gICAgYm9yZGVyOiBzb2xpZCAxcHggbGlnaHRncmF5O1xuICAgICovXG4gIH1cbiAgXG4gIC5leGFtcGxlLWVsZW1lbnQtZGlhZ3JhbSB7XG4gICAgbWluLXdpZHRoOiA4MHB4O1xuICAgIGJvcmRlcjogMnB4IHNvbGlkIGJsYWNrO1xuICAgIHBhZGRpbmc6IDhweDtcbiAgICBmb250LXdlaWdodDogbGlnaHRlcjtcbiAgICBtYXJnaW46IDhweCAwO1xuICAgIGhlaWdodDogMTA0cHg7XG4gIH1cbiAgXG4gIC5leGFtcGxlLWVsZW1lbnQtc3ltYm9sIHtcbiAgICBmb250LXdlaWdodDogYm9sZDtcbiAgICBmb250LXNpemU6IDQwcHg7XG4gICAgbGluZS1oZWlnaHQ6IG5vcm1hbDtcbiAgfVxuICBcbiAgLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbiB7XG4gICAgcGFkZGluZzogMTZweDtcbiAgfVxuICBcbiAgLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbi1hdHRyaWJ1dGlvbiB7XG4gICAgb3BhY2l0eTogMC41O1xuICB9XG4gICJdfQ== */");
+/* harmony default export */ __webpack_exports__["default"] = ("table {\r\n    width: 100%;\r\n}\r\n\r\ntr.example-detail-row {\r\n    height: 0;\r\n}\r\n\r\ntr.example-element-row:not(.example-expanded-row):hover {\r\n    background: #777;\r\n}\r\n\r\ntr.example-element-row:not(.example-expanded-row):active {\r\n    background: #efefef;\r\n}\r\n\r\n.tamanioAmigable {\r\n  padding: 5px;\r\n  width: 10%;  \r\n  min-height: 55px;  \r\n}\r\n\r\n.example-element-row td {\r\n    border-bottom-width: 0;\r\n}\r\n\r\n.example-element-detail {\r\n    overflow: hidden;\r\n    display: flex;\r\n    /*\r\n    border-radius: 10px;\r\n    border: solid 1px lightgray;\r\n    */\r\n}\r\n\r\n.example-element-diagram {\r\n    min-width: 80px;\r\n    border: 2px solid black;\r\n    padding: 8px;\r\n    font-weight: lighter;\r\n    margin: 8px 0;\r\n    height: 104px;\r\n}\r\n\r\n.example-element-symbol {\r\n    font-weight: bold;\r\n    font-size: 40px;\r\n    line-height: normal;\r\n}\r\n\r\n.example-element-description {\r\n    padding: 16px;\r\n}\r\n\r\n.example-element-description-attribution {\r\n    opacity: 0.5;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9jb21hbmRhLWVuLWxpbmVhL2NvbWFuZGEtZW4tbGluZWEuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7QUFDZjs7QUFFQTtJQUNJLFNBQVM7QUFDYjs7QUFFQTtJQUNJLGdCQUFnQjtBQUNwQjs7QUFFQTtJQUNJLG1CQUFtQjtBQUN2Qjs7QUFFQTtFQUNFLFlBQVk7RUFDWixVQUFVO0VBQ1YsZ0JBQWdCO0FBQ2xCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksZ0JBQWdCO0lBQ2hCLGFBQWE7SUFDYjs7O0tBR0M7QUFDTDs7QUFFQTtJQUNJLGVBQWU7SUFDZix1QkFBdUI7SUFDdkIsWUFBWTtJQUNaLG9CQUFvQjtJQUNwQixhQUFhO0lBQ2IsYUFBYTtBQUNqQjs7QUFFQTtJQUNJLGlCQUFpQjtJQUNqQixlQUFlO0lBQ2YsbUJBQW1CO0FBQ3ZCOztBQUVBO0lBQ0ksYUFBYTtBQUNqQjs7QUFFQTtJQUNJLFlBQVk7QUFDaEIiLCJmaWxlIjoic3JjL2FwcC9yZXN0YXVyYW50ZS9jb21wb25lbnRzL2NvbWFuZGEtZW4tbGluZWEvY29tYW5kYS1lbi1saW5lYS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsidGFibGUge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbn1cclxuXHJcbnRyLmV4YW1wbGUtZGV0YWlsLXJvdyB7XHJcbiAgICBoZWlnaHQ6IDA7XHJcbn1cclxuXHJcbnRyLmV4YW1wbGUtZWxlbWVudC1yb3c6bm90KC5leGFtcGxlLWV4cGFuZGVkLXJvdyk6aG92ZXIge1xyXG4gICAgYmFja2dyb3VuZDogIzc3NztcclxufVxyXG5cclxudHIuZXhhbXBsZS1lbGVtZW50LXJvdzpub3QoLmV4YW1wbGUtZXhwYW5kZWQtcm93KTphY3RpdmUge1xyXG4gICAgYmFja2dyb3VuZDogI2VmZWZlZjtcclxufVxyXG5cclxuLnRhbWFuaW9BbWlnYWJsZSB7XHJcbiAgcGFkZGluZzogNXB4O1xyXG4gIHdpZHRoOiAxMCU7ICBcclxuICBtaW4taGVpZ2h0OiA1NXB4OyAgXHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtcm93IHRkIHtcclxuICAgIGJvcmRlci1ib3R0b20td2lkdGg6IDA7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtZGV0YWlsIHtcclxuICAgIG92ZXJmbG93OiBoaWRkZW47XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgLypcclxuICAgIGJvcmRlci1yYWRpdXM6IDEwcHg7XHJcbiAgICBib3JkZXI6IHNvbGlkIDFweCBsaWdodGdyYXk7XHJcbiAgICAqL1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LWRpYWdyYW0ge1xyXG4gICAgbWluLXdpZHRoOiA4MHB4O1xyXG4gICAgYm9yZGVyOiAycHggc29saWQgYmxhY2s7XHJcbiAgICBwYWRkaW5nOiA4cHg7XHJcbiAgICBmb250LXdlaWdodDogbGlnaHRlcjtcclxuICAgIG1hcmdpbjogOHB4IDA7XHJcbiAgICBoZWlnaHQ6IDEwNHB4O1xyXG59XHJcblxyXG4uZXhhbXBsZS1lbGVtZW50LXN5bWJvbCB7XHJcbiAgICBmb250LXdlaWdodDogYm9sZDtcclxuICAgIGZvbnQtc2l6ZTogNDBweDtcclxuICAgIGxpbmUtaGVpZ2h0OiBub3JtYWw7XHJcbn1cclxuXHJcbi5leGFtcGxlLWVsZW1lbnQtZGVzY3JpcHRpb24ge1xyXG4gICAgcGFkZGluZzogMTZweDtcclxufVxyXG5cclxuLmV4YW1wbGUtZWxlbWVudC1kZXNjcmlwdGlvbi1hdHRyaWJ1dGlvbiB7XHJcbiAgICBvcGFjaXR5OiAwLjU7XHJcbn0iXX0= */");
 
 /***/ }),
 
@@ -6078,7 +6071,7 @@ PropinasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".numWidth {\n    width: 10%;\n}\n\ntr {\n    border: none;\n}\n\nth, td {\n    padding-top: 0.25em;\n    padding-bottom: 0.25em;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9ycHQtdmVudGFzL3Bvci1hcnRpY3Vsby9wb3ItYXJ0aWN1bG8uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFVBQVU7QUFDZDs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7SUFDSSxtQkFBbUI7SUFDbkIsc0JBQXNCO0FBQzFCIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9ycHQtdmVudGFzL3Bvci1hcnRpY3Vsby9wb3ItYXJ0aWN1bG8uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5udW1XaWR0aCB7XG4gICAgd2lkdGg6IDEwJTtcbn1cblxudHIge1xuICAgIGJvcmRlcjogbm9uZTtcbn1cblxudGgsIHRkIHtcbiAgICBwYWRkaW5nLXRvcDogMC4yNWVtO1xuICAgIHBhZGRpbmctYm90dG9tOiAwLjI1ZW07XG59Il19 */");
+/* harmony default export */ __webpack_exports__["default"] = (".numWidth {\r\n    width: 10%;\r\n}\r\n\r\ntr {\r\n    border: none;\r\n}\r\n\r\nth, td {\r\n    padding-top: 0.25em;\r\n    padding-bottom: 0.25em;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9ycHQtdmVudGFzL3Bvci1hcnRpY3Vsby9wb3ItYXJ0aWN1bG8uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFVBQVU7QUFDZDs7QUFFQTtJQUNJLFlBQVk7QUFDaEI7O0FBRUE7SUFDSSxtQkFBbUI7SUFDbkIsc0JBQXNCO0FBQzFCIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9ycHQtdmVudGFzL3Bvci1hcnRpY3Vsby9wb3ItYXJ0aWN1bG8uY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5udW1XaWR0aCB7XHJcbiAgICB3aWR0aDogMTAlO1xyXG59XHJcblxyXG50ciB7XHJcbiAgICBib3JkZXI6IG5vbmU7XHJcbn1cclxuXHJcbnRoLCB0ZCB7XHJcbiAgICBwYWRkaW5nLXRvcDogMC4yNWVtO1xyXG4gICAgcGFkZGluZy1ib3R0b206IDAuMjVlbTtcclxufSJdfQ== */");
 
 /***/ }),
 
@@ -6131,7 +6124,7 @@ PorArticuloComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".numWidth {\n    width: 10%;\n}\n\ntr {\n    border: none;\n}\n\nth, td {\n    padding-top: 0.25em;\n    padding-bottom: 0.25em;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9ycHQtdmVudGFzL3Bvci1jYXRlZ29yaWEvcG9yLWNhdGVnb3JpYS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksVUFBVTtBQUNkOztBQUVBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLG1CQUFtQjtJQUNuQixzQkFBc0I7QUFDMUIiLCJmaWxlIjoic3JjL2FwcC9yZXN0YXVyYW50ZS9jb21wb25lbnRzL3JlcG9ydGVzL3JwdC12ZW50YXMvcG9yLWNhdGVnb3JpYS9wb3ItY2F0ZWdvcmlhLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubnVtV2lkdGgge1xuICAgIHdpZHRoOiAxMCU7XG59XG5cbnRyIHtcbiAgICBib3JkZXI6IG5vbmU7XG59XG5cbnRoLCB0ZCB7XG4gICAgcGFkZGluZy10b3A6IDAuMjVlbTtcbiAgICBwYWRkaW5nLWJvdHRvbTogMC4yNWVtO1xufSJdfQ== */");
+/* harmony default export */ __webpack_exports__["default"] = (".numWidth {\r\n    width: 10%;\r\n}\r\n\r\ntr {\r\n    border: none;\r\n}\r\n\r\nth, td {\r\n    padding-top: 0.25em;\r\n    padding-bottom: 0.25em;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9yZXBvcnRlcy9ycHQtdmVudGFzL3Bvci1jYXRlZ29yaWEvcG9yLWNhdGVnb3JpYS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksVUFBVTtBQUNkOztBQUVBO0lBQ0ksWUFBWTtBQUNoQjs7QUFFQTtJQUNJLG1CQUFtQjtJQUNuQixzQkFBc0I7QUFDMUIiLCJmaWxlIjoic3JjL2FwcC9yZXN0YXVyYW50ZS9jb21wb25lbnRzL3JlcG9ydGVzL3JwdC12ZW50YXMvcG9yLWNhdGVnb3JpYS9wb3ItY2F0ZWdvcmlhLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubnVtV2lkdGgge1xyXG4gICAgd2lkdGg6IDEwJTtcclxufVxyXG5cclxudHIge1xyXG4gICAgYm9yZGVyOiBub25lO1xyXG59XHJcblxyXG50aCwgdGQge1xyXG4gICAgcGFkZGluZy10b3A6IDAuMjVlbTtcclxuICAgIHBhZGRpbmctYm90dG9tOiAwLjI1ZW07XHJcbn0iXX0= */");
 
 /***/ }),
 
@@ -7488,13 +7481,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaTurnoComponent", function() { return ListaTurnoComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
-/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var _services_turno_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../services/turno.service */ "./src/app/restaurante/services/turno.service.ts");
-
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var _services_turno_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/turno.service */ "./src/app/restaurante/services/turno.service.ts");
 
 
 
@@ -7504,15 +7493,18 @@ let ListaTurnoComponent = class ListaTurnoComponent {
     constructor(ls, turnoSrvc) {
         this.ls = ls;
         this.turnoSrvc = turnoSrvc;
-        this.displayedColumns = ['turno'];
         this.getTurnoEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadTurnos = () => {
-            this.turnoSrvc.get({ sede: (+this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe(lst => {
+            this.turnoSrvc.get({ sede: (+this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_2__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstTurnos = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstTurnos);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -7526,24 +7518,34 @@ let ListaTurnoComponent = class ListaTurnoComponent {
                 fin: obj.fin
             });
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadTurnos();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstTurnos, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstTurnosPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstTurnos.length;
+            this.lstTurnosPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstTurnos, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaTurnoComponent.ctorParameters = () => [
-    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
-    { type: _services_turno_service__WEBPACK_IMPORTED_MODULE_6__["TurnoService"] }
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__["LocalstorageService"] },
+    { type: _services_turno_service__WEBPACK_IMPORTED_MODULE_4__["TurnoService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaTurnoComponent.prototype, "getTurnoEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaTurnoComponent.prototype, "paginator", void 0);
 ListaTurnoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-turno',
@@ -8520,70 +8522,6 @@ PropinaService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         providedIn: 'root'
     })
 ], PropinaService);
-
-
-
-/***/ }),
-
-/***/ "./src/app/restaurante/services/reporte-pdf.service.ts":
-/*!*************************************************************!*\
-  !*** ./src/app/restaurante/services/reporte-pdf.service.ts ***!
-  \*************************************************************/
-/*! exports provided: ReportePdfService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReportePdfService", function() { return ReportePdfService; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
-/* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
-/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
-
-
-
-
-
-
-
-let ReportePdfService = class ReportePdfService {
-    constructor(http, ls) {
-        this.http = http;
-        this.ls = ls;
-        this.usrToken = null;
-        this.httpOptions = { responseType: 'blob' };
-        this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
-        this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
-        this.httpOptions['headers'] = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-            'Authorization': this.usrToken,
-            'Accept': 'application/pdf'
-        });
-    }
-    getReporteCaja(params) {
-        this.httpOptions['params'] = params;
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/reporte/caja`, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    getReporteFactura(params) {
-        this.httpOptions['params'] = params;
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/reporte/factura`, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    getReportePropina(params) {
-        this.httpOptions['params'] = params;
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/reporte/venta/propina`, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-};
-ReportePdfService.ctorParameters = () => [
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
-    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
-];
-ReportePdfService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-    })
-], ReportePdfService);
 
 
 

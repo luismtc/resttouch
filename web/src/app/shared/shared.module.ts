@@ -22,6 +22,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatRippleModule } from '@angular/material/core';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { WindowComponent } from './components/window/window.component';
@@ -29,8 +30,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { RptFechasComponent } from './components/rpt-fechas/rpt-fechas.component';
 import { RptBotonesComponent } from './components/rpt-botones/rpt-botones.component';
 
-const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
+const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; //
     MatGridListModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatRippleModule
   ],
   exports: [
     FilterPipe,

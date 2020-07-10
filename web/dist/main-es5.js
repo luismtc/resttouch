@@ -424,7 +424,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Cliente {{!!cliente.cliente ? cliente.nombre : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmCliente=\"ngForm\" (ngSubmit)=\"frmCliente.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" type=\"text\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"N.I.T.\" name=\"nit\" [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"N.I.T.\" type=\"text\" placeholder=\"N.I.T.\" name=\"nit\"\n                    [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Dirección\" name=\"direccion\" [(ngModel)]=\"cliente.direccion\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Dirección\" type=\"text\" placeholder=\"Dirección\" name=\"direccion\"\n                    [(ngModel)]=\"cliente.direccion\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Teléfono\" name=\"telefono\" [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Teléfono\" type=\"text\" placeholder=\"Teléfono\" name=\"telefono\"\n                    [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"E-mail\" name=\"correo\" [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"E-mail\" type=\"text\" placeholder=\"E-mail\" name=\"correo\"\n                    [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Código postal\" name=\"codigo_postal\"\n                    [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Código postal\" type=\"text\" placeholder=\"Código postal\"\n                    name=\"codigo_postal\" [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Municipio\" name=\"municipio\" [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Municipio\" type=\"text\" placeholder=\"Municipio\" name=\"municipio\"\n                    [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Departamento\" name=\"departamento\"\n                    [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Departamento\" type=\"text\" placeholder=\"Departamento\"\n                    name=\"departamento\" [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\" name=\"pais_iso_dos\"\n                    [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"País ISO\" type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\"\n                    name=\"pais_iso_dos\" [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmCliente.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetCliente()\" *ngIf=\"cliente.cliente\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Cliente {{!!cliente.cliente ? cliente.nombre : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmCliente=\"ngForm\" (ngSubmit)=\"frmCliente.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" type=\"text\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"N.I.T.\" name=\"nit\" [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"N.I.T.\" type=\"text\" placeholder=\"N.I.T.\" name=\"nit\"\n                    [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Dirección\" name=\"direccion\" [(ngModel)]=\"cliente.direccion\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Dirección\" type=\"text\" placeholder=\"Dirección\" name=\"direccion\"\n                    [(ngModel)]=\"cliente.direccion\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Teléfono\" name=\"telefono\" [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Teléfono\" type=\"text\" placeholder=\"Teléfono\" name=\"telefono\"\n                    [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"E-mail\" name=\"correo\" [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"E-mail\" type=\"text\" placeholder=\"E-mail\" name=\"correo\"\n                    [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Código postal\" name=\"codigo_postal\"\n                    [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Código postal\" type=\"text\" placeholder=\"Código postal\"\n                    name=\"codigo_postal\" [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Municipio\" name=\"municipio\" [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Municipio\" type=\"text\" placeholder=\"Municipio\" name=\"municipio\"\n                    [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Departamento\" name=\"departamento\"\n                    [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Departamento\" type=\"text\" placeholder=\"Departamento\"\n                    name=\"departamento\" [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\" name=\"pais_iso_dos\"\n                    [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"País ISO\" type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\"\n                    name=\"pais_iso_dos\" [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmCliente.form.valid\">\n                    Guardar\n                </button>                \n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetCliente()\" *ngIf=\"cliente.cliente\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/cliente/lista-cliente/lista-cliente.component.html": 
@@ -435,7 +435,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"agregarCliente()\" *ngIf=\"showAddButton\">\n            Agregar\n        </button>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"cliente\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getCliente(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>person</mat-icon>\n                            <h5 mat-line>{{element.nombre}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>\n\n");
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput type=\"text\" (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"agregarCliente()\" *ngIf=\"showAddButton\">\n            Agregar\n        </button>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let cli of lstClientesPaged\" (click)=\"getCliente(cli)\">\n                <mat-icon mat-list-icon>person</mat-icon>\n                <h5 mat-line>{{cli.nombre}}</h5>\n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/clock/clock.component.html": 
@@ -457,7 +457,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\" align=\"center\">\n        <button mat-button class=\"divBtnSize\" *ngFor=\"let modulo of appMenu\" (click)=\"handleClick(modulo.nombre)\">\n            <mat-icon class=\"lnkIconBoton\">{{modulo.icono}}</mat-icon>\n            <br />\n            <span class=\"lnkBoton\">{{modulo.nombre}}</span>\n        </button>\n    </div>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\" align=\"center\">\n        <h4>¿En qué módulo quieres empezar a trabajar?</h4>\n        <button mat-raised-button class=\"divBtnSize btnAccion\" color=\"accent\" *ngFor=\"let modulo of appMenu\" (click)=\"handleClick(modulo.nombre)\">\n            <span class=\"lnkBoton\">{{modulo.nombre}}</span>\n        </button>\n    </div>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/form-pago/form-pago.component.html": 
@@ -501,7 +501,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<mat-toolbar color=\"primary-lighter\">\n    <mat-toolbar-row>\n        <img src=\"/assets/img/minilogo.svg\" width=\"30\" height=\"30\" alt=\"Rest-Touch Pro\">\n        <span class=\"spacer\"></span>\n        <app-clock></app-clock>\n        <span class=\"spacer\"></span>\n        <button mat-button [matMenuTriggerFor]=\"menu\">\n            {{usrInfo.usuario}}&nbsp;<mat-icon>apps</mat-icon>\n        </button>\n        <button mat-icon-button type=\"button\" (click)=\"LogOut()\">\n            <mat-icon>power_settings_new</mat-icon>\n        </button>\n        <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n            <div align=\"center\">\n                <button mat-button *ngFor=\"let modulo of appMenu\" (click)=\"handleClick(modulo.nombre)\">\n                    <mat-icon>{{modulo.icono}}</mat-icon>\n                    <br/>\n                    <span>{{modulo.nombre}}</span>\n                </button>\n            </div>\n            <!--\n            <div class=\"d-flex flex-row\" *ngFor=\"let fila of appMenu\">\n                <div class=\"p-2\" *ngFor=\"let boton of fila.boton\">\n                    <a mat-button [routerLink]=\"boton.url\" (click)=\"handleClick(boton.rol)\">\n                        <mat-icon>{{boton.icono}}</mat-icon><br/>\n                        <span>{{boton.descripcion}}</span>\n                    </a>\n                </div>\n            </div>\n            -->\n        </mat-menu>\n    </mat-toolbar-row>\n</mat-toolbar>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-toolbar color=\"primary-lighter\">\n    <mat-toolbar-row>\n        <img src=\"/assets/img/minilogo.svg\" width=\"30\" height=\"30\" alt=\"Rest-Touch Pro\">\n        <span class=\"spacer\"></span>\n        <app-clock></app-clock>\n        <span class=\"spacer\"></span>\n        <button mat-raised-button color=\"primary\" [matMenuTriggerFor]=\"menu\">\n            {{usrInfo.usuario}}&nbsp;<mat-icon>apps</mat-icon>\n        </button>\n        <button mat-icon-button type=\"button\" (click)=\"LogOut()\">\n            <mat-icon>power_settings_new</mat-icon>\n        </button>\n        <mat-menu #menu=\"matMenu\" xPosition=\"before\">\n            <div align=\"center\">\n                <button mat-raised-button color=\"accent\" class=\"btnApp btnAccion\" *ngFor=\"let modulo of appMenu\" (click)=\"handleClick(modulo.nombre)\">\n                    <span>{{modulo.nombre}}</span>\n                </button>\n            </div>\n        </mat-menu>\n    </mat-toolbar-row>\n</mat-toolbar>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/impresora/form-impresora/form-impresora.component.html": 
@@ -1695,58 +1695,71 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaClienteComponent", function () { return ListaClienteComponent; });
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
             /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-            /* harmony import */ var _services_cliente_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/cliente.service */ "./src/app/admin/services/cliente.service.ts");
-            /* harmony import */ var _form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
+            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _services_cliente_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/cliente.service */ "./src/app/admin/services/cliente.service.ts");
+            /* harmony import */ var _form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
             var ListaClienteComponent = /** @class */ (function () {
                 function ListaClienteComponent(dialogAddCliente, clienteSrvc) {
                     var _this = this;
                     this.dialogAddCliente = dialogAddCliente;
                     this.clienteSrvc = clienteSrvc;
-                    this.displayedColumns = ['cliente'];
                     this.showAddButton = false;
                     this.getClienteEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.length = 0;
+                    this.pageSize = 5;
+                    this.pageSizeOptions = [5, 10, 15];
+                    this.pageIndex = 0;
+                    this.txtFiltro = '';
                     this.loadClientes = function () {
                         _this.clienteSrvc.get().subscribe(function (lst) {
                             if (lst) {
                                 if (lst.length > 0) {
                                     _this.lstClientes = lst;
-                                    _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.lstClientes);
-                                    _this.dataSource.paginator = _this.paginator;
+                                    _this.applyFilter();
                                 }
                             }
                         });
                     };
-                    this.getCliente = function (obj) {
-                        _this.getClienteEv.emit(obj);
-                    };
+                    this.getCliente = function (obj) { return _this.getClienteEv.emit(obj); };
                     this.agregarCliente = function () {
-                        var addClienteRef = _this.dialogAddCliente.open(_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_6__["FormClienteDialogComponent"], {
+                        var addClienteRef = _this.dialogAddCliente.open(_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_5__["FormClienteDialogComponent"], {
                             width: '50%',
                             data: { esDialogo: true }
                         });
                         addClienteRef.afterClosed().subscribe(function (result) {
                             if (result) {
-                                //console.log(result);
+                                // console.log(result);
                                 _this.loadClientes();
                                 _this.getCliente(result);
                             }
                         });
                     };
+                    this.pageChange = function (e) {
+                        _this.pageSize = e.pageSize;
+                        _this.pageIndex = e.pageIndex;
+                        _this.applyFilter();
+                    };
                 }
                 ListaClienteComponent.prototype.ngOnInit = function () {
                     this.loadClientes();
                 };
-                ListaClienteComponent.prototype.applyFilter = function (filterValue) {
-                    this.dataSource.filter = filterValue.trim().toLowerCase();
+                ListaClienteComponent.prototype.applyFilter = function () {
+                    if (this.txtFiltro.length > 0) {
+                        var tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["MultiFiltro"])(this.lstClientes, this.txtFiltro);
+                        this.length = tmpList.length;
+                        this.lstClientesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+                    }
+                    else {
+                        this.length = this.lstClientes.length;
+                        this.lstClientesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(this.lstClientes, this.pageSize, this.pageIndex + 1);
+                    }
                 };
                 return ListaClienteComponent;
             }());
             ListaClienteComponent.ctorParameters = function () { return [
-                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__["MatDialog"] },
-                { type: _services_cliente_service__WEBPACK_IMPORTED_MODULE_5__["ClienteService"] }
+                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"] },
+                { type: _services_cliente_service__WEBPACK_IMPORTED_MODULE_4__["ClienteService"] }
             ]; };
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
@@ -1754,9 +1767,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
             ], ListaClienteComponent.prototype, "getClienteEv", void 0);
-            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-            ], ListaClienteComponent.prototype, "paginator", void 0);
             ListaClienteComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
                     selector: 'app-lista-cliente',
@@ -2088,7 +2098,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("#navHeader {\n    width: 100%;\n    /*border: dotted 1px lightslategray;*/\n}\n\n.spacer {\n    flex: 1 1 auto;\n}\n\nbutton .mat-icon{\n    font-size: 24px;\n}\n\n.btnApp {\n    width: 96px;\n    height: 96px;\n    /*\n    vertical-align: middle !important;\n    text-align: center !important;\n    */\n}\n\n.btnCell {\n    width: 33.33% !important;\n    vertical-align: middle !important;\n    text-align: center !important;\n}\n\n::ng-deep .mat-menu-panel {\n    width: 800px !important;\n    height: 500px !important;\n    padding: 0 5px !important;\n    /*overflow-y: auto;*/\n}\n\n@media (max-width: 400px) {\n    button {\n        font-size: 10pt !important;\n    }\n\n    img {\n        width: 20px;\n        height: 20px;\n    }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvYWRtaW4vY29tcG9uZW50cy9oZWFkZXIvaGVhZGVyLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0lBQ1gscUNBQXFDO0FBQ3pDOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLGVBQWU7QUFDbkI7O0FBRUE7SUFDSSxXQUFXO0lBQ1gsWUFBWTtJQUNaOzs7S0FHQztBQUNMOztBQUVBO0lBQ0ksd0JBQXdCO0lBQ3hCLGlDQUFpQztJQUNqQyw2QkFBNkI7QUFDakM7O0FBRUE7SUFDSSx1QkFBdUI7SUFDdkIsd0JBQXdCO0lBQ3hCLHlCQUF5QjtJQUN6QixvQkFBb0I7QUFDeEI7O0FBRUE7SUFDSTtRQUNJLDBCQUEwQjtJQUM5Qjs7SUFFQTtRQUNJLFdBQVc7UUFDWCxZQUFZO0lBQ2hCO0FBQ0oiLCJmaWxlIjoic3JjL2FwcC9hZG1pbi9jb21wb25lbnRzL2hlYWRlci9oZWFkZXIuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIiNuYXZIZWFkZXIge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIC8qYm9yZGVyOiBkb3R0ZWQgMXB4IGxpZ2h0c2xhdGVncmF5OyovXG59XG5cbi5zcGFjZXIge1xuICAgIGZsZXg6IDEgMSBhdXRvO1xufVxuXG5idXR0b24gLm1hdC1pY29ue1xuICAgIGZvbnQtc2l6ZTogMjRweDtcbn1cblxuLmJ0bkFwcCB7XG4gICAgd2lkdGg6IDk2cHg7XG4gICAgaGVpZ2h0OiA5NnB4O1xuICAgIC8qXG4gICAgdmVydGljYWwtYWxpZ246IG1pZGRsZSAhaW1wb3J0YW50O1xuICAgIHRleHQtYWxpZ246IGNlbnRlciAhaW1wb3J0YW50O1xuICAgICovXG59XG5cbi5idG5DZWxsIHtcbiAgICB3aWR0aDogMzMuMzMlICFpbXBvcnRhbnQ7XG4gICAgdmVydGljYWwtYWxpZ246IG1pZGRsZSAhaW1wb3J0YW50O1xuICAgIHRleHQtYWxpZ246IGNlbnRlciAhaW1wb3J0YW50O1xufVxuXG46Om5nLWRlZXAgLm1hdC1tZW51LXBhbmVsIHtcbiAgICB3aWR0aDogODAwcHggIWltcG9ydGFudDtcbiAgICBoZWlnaHQ6IDUwMHB4ICFpbXBvcnRhbnQ7XG4gICAgcGFkZGluZzogMCA1cHggIWltcG9ydGFudDtcbiAgICAvKm92ZXJmbG93LXk6IGF1dG87Ki9cbn1cblxuQG1lZGlhIChtYXgtd2lkdGg6IDQwMHB4KSB7XG4gICAgYnV0dG9uIHtcbiAgICAgICAgZm9udC1zaXplOiAxMHB0ICFpbXBvcnRhbnQ7XG4gICAgfVxuXG4gICAgaW1nIHtcbiAgICAgICAgd2lkdGg6IDIwcHg7XG4gICAgICAgIGhlaWdodDogMjBweDtcbiAgICB9XG59Il19 */");
+            /* harmony default export */ __webpack_exports__["default"] = ("#navHeader {\n    width: 100%;\n    /*border: dotted 1px lightslategray;*/\n}\n\n.spacer {\n    flex: 1 1 auto;\n}\n\nbutton .mat-icon{\n    font-size: 24px;\n}\n\n.btnApp {\n    width: 80px;\n}\n\n.btnCell {\n    width: 33.33% !important;\n    vertical-align: middle !important;\n    text-align: center !important;\n}\n\n::ng-deep .mat-menu-panel {\n    width: 800px !important;\n    height: 200px !important;\n    padding: 0 5px !important;\n    /*overflow-y: auto;*/\n}\n\n@media (max-width: 400px) {\n    button {\n        font-size: 10pt !important;\n    }\n\n    img {\n        width: 20px;\n        height: 20px;\n    }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvYWRtaW4vY29tcG9uZW50cy9oZWFkZXIvaGVhZGVyLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFDSSxXQUFXO0lBQ1gscUNBQXFDO0FBQ3pDOztBQUVBO0lBQ0ksY0FBYztBQUNsQjs7QUFFQTtJQUNJLGVBQWU7QUFDbkI7O0FBRUE7SUFDSSxXQUFXO0FBQ2Y7O0FBRUE7SUFDSSx3QkFBd0I7SUFDeEIsaUNBQWlDO0lBQ2pDLDZCQUE2QjtBQUNqQzs7QUFFQTtJQUNJLHVCQUF1QjtJQUN2Qix3QkFBd0I7SUFDeEIseUJBQXlCO0lBQ3pCLG9CQUFvQjtBQUN4Qjs7QUFFQTtJQUNJO1FBQ0ksMEJBQTBCO0lBQzlCOztJQUVBO1FBQ0ksV0FBVztRQUNYLFlBQVk7SUFDaEI7QUFDSiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvaGVhZGVyL2hlYWRlci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiI25hdkhlYWRlciB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgLypib3JkZXI6IGRvdHRlZCAxcHggbGlnaHRzbGF0ZWdyYXk7Ki9cbn1cblxuLnNwYWNlciB7XG4gICAgZmxleDogMSAxIGF1dG87XG59XG5cbmJ1dHRvbiAubWF0LWljb257XG4gICAgZm9udC1zaXplOiAyNHB4O1xufVxuXG4uYnRuQXBwIHtcbiAgICB3aWR0aDogODBweDtcbn1cblxuLmJ0bkNlbGwge1xuICAgIHdpZHRoOiAzMy4zMyUgIWltcG9ydGFudDtcbiAgICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlICFpbXBvcnRhbnQ7XG4gICAgdGV4dC1hbGlnbjogY2VudGVyICFpbXBvcnRhbnQ7XG59XG5cbjo6bmctZGVlcCAubWF0LW1lbnUtcGFuZWwge1xuICAgIHdpZHRoOiA4MDBweCAhaW1wb3J0YW50O1xuICAgIGhlaWdodDogMjAwcHggIWltcG9ydGFudDtcbiAgICBwYWRkaW5nOiAwIDVweCAhaW1wb3J0YW50O1xuICAgIC8qb3ZlcmZsb3cteTogYXV0bzsqL1xufVxuXG5AbWVkaWEgKG1heC13aWR0aDogNDAwcHgpIHtcbiAgICBidXR0b24ge1xuICAgICAgICBmb250LXNpemU6IDEwcHQgIWltcG9ydGFudDtcbiAgICB9XG5cbiAgICBpbWcge1xuICAgICAgICB3aWR0aDogMjBweDtcbiAgICAgICAgaGVpZ2h0OiAyMHB4O1xuICAgIH1cbn0iXX0= */");
             /***/ 
         }),
         /***/ "./src/app/admin/components/header/header.component.ts": 
@@ -2120,10 +2130,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     this.handleClick = function (modulo) {
                         if (modulo === void 0) { modulo = ''; }
                         var objModulo = _this.appMenu.find(function (m) { return m.nombre === modulo; });
-                        //console.log(objModulo);
+                        // console.log(objModulo);
                         if (objModulo) {
                             var submodulo = _this.usrSrvc.transformSubModule(objModulo.submodulo);
-                            //console.log(submodulo);
+                            // console.log(submodulo);
                             _this.appMenuSrvc.updOpciones(submodulo);
                             _this._snackBar.open("Cambio al m\u00F3dulo " + modulo, 'Módulo', { duration: 5000 });
                         }
@@ -4790,13 +4800,16 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /*!**********************************!*\
           !*** ./src/app/shared/global.ts ***!
           \**********************************/
-        /*! exports provided: GLOBAL */
+        /*! exports provided: GLOBAL, PaginarArray, CheckObjectType, MultiFiltro */
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GLOBAL", function () { return GLOBAL; });
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PaginarArray", function () { return PaginarArray; });
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CheckObjectType", function () { return CheckObjectType; });
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function () { return MultiFiltro; });
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            // const urlBase = 'http://localhost:8005'; // Desarrollo
+            // const urlBase = 'http://localhost/resttouch'; // Desarrollo
             var urlBase = location.origin; // Producción
             var GLOBAL = {
                 dbDateFormat: 'YYYY-MM-DD',
@@ -4810,6 +4823,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 urlWms: urlBase + "/wms.php",
                 urlFacturacion: urlBase + "/facturacion.php",
                 usrTokenVar: 'rttoken'
+            };
+            var PaginarArray = function (array, page_size, page_number) { return array.slice((page_number - 1) * page_size, page_number * page_size); };
+            var CheckObjectType = function (objeto, tipo) { return Object.prototype.toString.call(objeto).toLowerCase().substring(7).indexOf(tipo.trim().toLowerCase()) > -1; };
+            var MultiFiltro = function (array, filtro) {
+                if (array.length > 0) {
+                    var keys_1 = Object.keys(array[0]);
+                    var tmp_1 = [];
+                    var valor_1;
+                    array.forEach(function (item) {
+                        for (var _i = 0, keys_2 = keys_1; _i < keys_2.length; _i++) {
+                            var key = keys_2[_i];
+                            if (!!item[key]) {
+                                if (CheckObjectType(item[key], 'array') || CheckObjectType(item[key], 'object')) {
+                                    valor_1 = JSON.stringify(item[key]);
+                                }
+                                else {
+                                    valor_1 = item[key].toString();
+                                }
+                                if (valor_1.trim().toLowerCase().indexOf(filtro.trim().toLowerCase()) > -1) {
+                                    tmp_1.push(item);
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                    return tmp_1;
+                }
+                return array;
             };
             /***/ 
         }),
@@ -4879,11 +4920,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
             /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
             /* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/sidenav */ "./node_modules/@angular/material/esm2015/sidenav.js");
-            /* harmony import */ var _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./pipes/filter.pipe */ "./src/app/shared/pipes/filter.pipe.ts");
-            /* harmony import */ var _components_window_window_component__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/window/window.component */ "./src/app/shared/components/window/window.component.ts");
-            /* harmony import */ var _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
-            /* harmony import */ var _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/rpt-fechas/rpt-fechas.component */ "./src/app/shared/components/rpt-fechas/rpt-fechas.component.ts");
-            /* harmony import */ var _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/rpt-botones/rpt-botones.component */ "./src/app/shared/components/rpt-botones/rpt-botones.component.ts");
+            /* harmony import */ var _angular_material_core__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/core */ "./node_modules/@angular/material/esm2015/core.js");
+            /* harmony import */ var _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./pipes/filter.pipe */ "./src/app/shared/pipes/filter.pipe.ts");
+            /* harmony import */ var _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/window/window.component */ "./src/app/shared/components/window/window.component.ts");
+            /* harmony import */ var _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
+            /* harmony import */ var _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/rpt-fechas/rpt-fechas.component */ "./src/app/shared/components/rpt-fechas/rpt-fechas.component.ts");
+            /* harmony import */ var _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/rpt-botones/rpt-botones.component */ "./src/app/shared/components/rpt-botones/rpt-botones.component.ts");
             // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
             var config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
             var SharedModule = /** @class */ (function () {
@@ -4894,14 +4936,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
                     declarations: [
-                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_24__["FilterPipe"],
-                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_25__["WindowComponent"],
-                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_26__["ConfirmDialogComponent"],
-                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_27__["RptFechasComponent"],
-                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_28__["RptBotonesComponent"]
+                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_25__["FilterPipe"],
+                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__["WindowComponent"],
+                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"],
+                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__["RptFechasComponent"],
+                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"]
                     ],
                     entryComponents: [
-                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_26__["ConfirmDialogComponent"]
+                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"]
                     ],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
@@ -4925,14 +4967,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_20__["MatGridListModule"],
                         _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__["MatPaginatorModule"],
                         _angular_material_dialog__WEBPACK_IMPORTED_MODULE_22__["MatDialogModule"],
-                        _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_23__["MatSidenavModule"]
+                        _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_23__["MatSidenavModule"],
+                        _angular_material_core__WEBPACK_IMPORTED_MODULE_24__["MatRippleModule"]
                     ],
                     exports: [
-                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_24__["FilterPipe"],
-                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_25__["WindowComponent"],
-                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_26__["ConfirmDialogComponent"],
-                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_27__["RptFechasComponent"],
-                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_28__["RptBotonesComponent"]
+                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_25__["FilterPipe"],
+                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__["WindowComponent"],
+                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"],
+                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__["RptFechasComponent"],
+                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"]
                     ]
                 })
             ], SharedModule);
@@ -4992,7 +5035,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
           \***************************/
         /*! no static exports found */
         /***/ (function (module, exports, __webpack_require__) {
-            module.exports = __webpack_require__(/*! /home/lmtzina/c807/resttouch/web/src/main.ts */ "./src/main.ts");
+            module.exports = __webpack_require__(/*! E:\htdocs\resttouch\web\src\main.ts */ "./src/main.ts");
             /***/ 
         }),
         /***/ 1: 

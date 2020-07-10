@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
-import { PaginarArray } from '../../../../shared/global';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Cliente } from '../../../interfaces/cliente';
 import { ClienteService } from '../../../services/cliente.service';
@@ -15,19 +14,17 @@ import { FormClienteDialogComponent } from '../form-cliente-dialog/form-cliente-
 })
 export class ListaClienteComponent implements OnInit {
 
-  public displayedColumns: string[] = ['cliente'];
-  public dataSource: MatTableDataSource<Cliente>;
-
   public lstClientes: Cliente[];
   public lstClientesPaged: Cliente[];
-  @Input() showAddButton: boolean = false;
+  @Input() showAddButton = false;
   @Output() getClienteEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
-  public pageSizeOptions: number[] = [5, 10, 25, 50];
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
   public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     public dialogAddCliente: MatDialog,
@@ -38,8 +35,15 @@ export class ListaClienteComponent implements OnInit {
     this.loadClientes();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstClientes, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstClientesPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstClientes.length;
+      this.lstClientesPaged = PaginarArray(this.lstClientes, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadClientes = () => {
@@ -47,18 +51,13 @@ export class ListaClienteComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstClientes = lst;
-          this.length = this.lstClientes.length;
-          this.lstClientesPaged = PaginarArray(this.lstClientes, this.pageSize, 1);
-          this.dataSource = new MatTableDataSource(this.lstClientes);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
     });
   }
 
-  getCliente = (obj: Cliente) => {
-    this.getClienteEv.emit(obj);
-  }
+  getCliente = (obj: Cliente) => this.getClienteEv.emit(obj);
 
   agregarCliente = () => {
     const addClienteRef = this.dialogAddCliente.open(FormClienteDialogComponent, {
@@ -68,7 +67,7 @@ export class ListaClienteComponent implements OnInit {
 
     addClienteRef.afterClosed().subscribe(result => {
       if (result) {
-        //console.log(result);
+        // console.log(result);
         this.loadClientes();
         this.getCliente(result);
       }
@@ -76,7 +75,8 @@ export class ListaClienteComponent implements OnInit {
   }
 
   pageChange = (e: PageEvent) => {
-    // console.log(e);
-    this.lstClientesPaged = PaginarArray(this.lstClientes, e.pageSize, e.pageIndex + 1);
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
   }
 }

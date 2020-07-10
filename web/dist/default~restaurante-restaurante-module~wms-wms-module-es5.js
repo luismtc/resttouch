@@ -1,4 +1,54 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["default~restaurante-restaurante-module~wms-wms-module"], {
+        /***/ "./node_modules/file-saver/dist/FileSaver.min.js": 
+        /*!*******************************************************!*\
+          !*** ./node_modules/file-saver/dist/FileSaver.min.js ***!
+          \*******************************************************/
+        /*! no static exports found */
+        /***/ (function (module, exports, __webpack_require__) {
+            var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+            (function (a, b) {
+                if (true)
+                    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (b),
+                        __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+                            (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+                        __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+                else { }
+            })(this, function () {
+                "use strict";
+                function b(a, b) { return "undefined" == typeof b ? b = { autoBom: !1 } : "object" != typeof b && (console.warn("Deprecated: Expected third argument to be a object"), b = { autoBom: !b }), b.autoBom && /^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type) ? new Blob(["\uFEFF", a], { type: a.type }) : a; }
+                function c(b, c, d) { var e = new XMLHttpRequest; e.open("GET", b), e.responseType = "blob", e.onload = function () { a(e.response, c, d); }, e.onerror = function () { console.error("could not download file"); }, e.send(); }
+                function d(a) { var b = new XMLHttpRequest; b.open("HEAD", a, !1); try {
+                    b.send();
+                }
+                catch (a) { } return 200 <= b.status && 299 >= b.status; }
+                function e(a) { try {
+                    a.dispatchEvent(new MouseEvent("click"));
+                }
+                catch (c) {
+                    var b = document.createEvent("MouseEvents");
+                    b.initMouseEvent("click", !0, !0, window, 0, 0, 0, 80, 20, !1, !1, !1, !1, 0, null), a.dispatchEvent(b);
+                } }
+                var f = "object" == typeof window && window.window === window ? window : "object" == typeof self && self.self === self ? self : "object" == typeof global && global.global === global ? global : void 0, a = f.saveAs || ("object" != typeof window || window !== f ? function () { } : "download" in HTMLAnchorElement.prototype ? function (b, g, h) { var i = f.URL || f.webkitURL, j = document.createElement("a"); g = g || b.name || "download", j.download = g, j.rel = "noopener", "string" == typeof b ? (j.href = b, j.origin === location.origin ? e(j) : d(j.href) ? c(b, g, h) : e(j, j.target = "_blank")) : (j.href = i.createObjectURL(b), setTimeout(function () { i.revokeObjectURL(j.href); }, 4E4), setTimeout(function () { e(j); }, 0)); } : "msSaveOrOpenBlob" in navigator ? function (f, g, h) { if (g = g || f.name || "download", "string" != typeof f)
+                    navigator.msSaveOrOpenBlob(b(f, h), g);
+                else if (d(f))
+                    c(f, g, h);
+                else {
+                    var i = document.createElement("a");
+                    i.href = f, i.target = "_blank", setTimeout(function () { e(i); });
+                } } : function (a, b, d, e) { if (e = e || open("", "_blank"), e && (e.document.title = e.document.body.innerText = "downloading..."), "string" == typeof a)
+                    return c(a, b, d); var g = "application/octet-stream" === a.type, h = /constructor/i.test(f.HTMLElement) || f.safari, i = /CriOS\/[\d]+/.test(navigator.userAgent); if ((i || g && h) && "object" == typeof FileReader) {
+                    var j = new FileReader;
+                    j.onloadend = function () { var a = j.result; a = i ? a : a.replace(/^data:[^;]*;/, "data:attachment/file;"), e ? e.location.href = a : location = a, e = null; }, j.readAsDataURL(a);
+                }
+                else {
+                    var k = f.URL || f.webkitURL, l = k.createObjectURL(a);
+                    e ? e.location = l : location.href = l, e = null, setTimeout(function () { k.revokeObjectURL(l); }, 4E4);
+                } });
+                f.saveAs = a.saveAs = a, true && (module.exports = a);
+            });
+            //# sourceMappingURL=FileSaver.min.js.map
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/egreso/egreso/egreso.component.html": 
         /*!**********************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/egreso/egreso/egreso.component.html ***!
@@ -109,6 +159,17 @@
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-categoria-producto (categoriaGrupoSvd)=\"refreshArticuloList($event)\"\n            (onChangeSubCategoriaEv)=\"setArticuloCategoriaGrupo($event)\"></app-categoria-producto>\n        <app-lista-producto #lstProducto [treeHeight]=\"'100%'\" (productoClickedEv)=\"setArticulo($event)\">\n        </app-lista-producto>\n    </div>\n    <div class=\"col m7 s12\">\n        <app-form-producto #frmProducto [articulo]=\"articulo\" (articuloSvd)=\"refreshArticuloList($event)\">\n        </app-form-producto>\n    </div>\n</div>");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/reporte/existencias/existencias.component.html": 
+        /*!*********************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/reporte/existencias/existencias.component.html ***!
+          \*********************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de existencias</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Bodega</mat-label>\n              <mat-select name=\"bodega\" [(ngModel)]=\"params.bodega\">\n                  <mat-option *ngFor=\"let bod of bodegas\" [value]=\"bod.bodega\">\n                      {{bod.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Sede</mat-label>\n              <mat-select name=\"sede\" [(ngModel)]=\"params.sede\">\n                  <mat-option *ngFor=\"let sede of sedes\" [value]=\"sede.sede\">\n                      {{sede.nombre}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fecha\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/transformacion/transformacion.component.html": 
         /*!*******************************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/transformacion/transformacion.component.html ***!
@@ -118,6 +179,64 @@
             "use strict";
             __webpack_require__.r(__webpack_exports__);
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\" style=\"padding-bottom: 5px !important;\">\n        <div align=\"end\">\n            <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"transformar()\">\n                <mat-icon style=\"font-size: 18pt;\">transform</mat-icon>&nbsp;Transformar\n            </button>\n        </div>\n    </div>\n</div>\n<div class=\"row\">\n    <div class=\"col m6 s12\">\n        <app-form-egreso #frmEgreso [(egreso)]=\"egreso\" [saveToDB]=\"false\" (egresoSavedEv)=\"doSomething()\">\n        </app-form-egreso>\n    </div>\n    <div class=\"col m6 s12\">\n        <app-form-ingreso #frmIngreso [(ingreso)]=\"ingreso\" [saveToDB]=\"false\" (ingresoSavedEv)=\"doSomething()\">\n        </app-form-ingreso>\n    </div>\n</div>");
+            /***/ 
+        }),
+        /***/ "./src/app/restaurante/services/reporte-pdf.service.ts": 
+        /*!*************************************************************!*\
+          !*** ./src/app/restaurante/services/reporte-pdf.service.ts ***!
+          \*************************************************************/
+        /*! exports provided: ReportePdfService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReportePdfService", function () { return ReportePdfService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            var ReportePdfService = /** @class */ (function () {
+                function ReportePdfService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.usrToken = null;
+                    this.httpOptions = { responseType: 'blob' };
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                    this.httpOptions['headers'] = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                        'Authorization': this.usrToken,
+                        'Accept': 'application/pdf'
+                    });
+                }
+                ReportePdfService.prototype.getReporteCaja = function (params) {
+                    this.httpOptions['params'] = params;
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/reporte/caja", this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ReportePdfService.prototype.getReporteExistencia = function (params) {
+                    this.httpOptions['params'] = params;
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlWms + "/reporte/existencia", this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ReportePdfService.prototype.getReporteFactura = function (params) {
+                    this.httpOptions['params'] = params;
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/reporte/factura", this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ReportePdfService.prototype.getReportePropina = function (params) {
+                    this.httpOptions['params'] = params;
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion + "/reporte/venta/propina", this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return ReportePdfService;
+            }());
+            ReportePdfService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            ReportePdfService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], ReportePdfService);
             /***/ 
         }),
         /***/ "./src/app/wms/components/egreso/egreso/egreso.component.css": 
@@ -1311,6 +1430,91 @@
             ], ProductoComponent);
             /***/ 
         }),
+        /***/ "./src/app/wms/components/reporte/existencias/existencias.component.css": 
+        /*!******************************************************************************!*\
+          !*** ./src/app/wms/components/reporte/existencias/existencias.component.css ***!
+          \******************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3dtcy9jb21wb25lbnRzL3JlcG9ydGUvZXhpc3RlbmNpYXMvZXhpc3RlbmNpYXMuY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/wms/components/reporte/existencias/existencias.component.ts": 
+        /*!*****************************************************************************!*\
+          !*** ./src/app/wms/components/reporte/existencias/existencias.component.ts ***!
+          \*****************************************************************************/
+        /*! exports provided: ExistenciasComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExistenciasComponent", function () { return ExistenciasComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _restaurante_services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../restaurante/services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
+            /* harmony import */ var _admin_services_sede_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../admin/services/sede.service */ "./src/app/admin/services/sede.service.ts");
+            /* harmony import */ var _services_bodega_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/bodega.service */ "./src/app/wms/services/bodega.service.ts");
+            /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
+            /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/ __webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_6__);
+            var ExistenciasComponent = /** @class */ (function () {
+                function ExistenciasComponent(snackBar, pdfServicio, sedeSrvc, bodegaSrvc) {
+                    var _this = this;
+                    this.snackBar = snackBar;
+                    this.pdfServicio = pdfServicio;
+                    this.sedeSrvc = sedeSrvc;
+                    this.bodegaSrvc = bodegaSrvc;
+                    this.bodegas = [];
+                    this.sedes = [];
+                    this.params = {};
+                    this.titulo = "Existencias";
+                    this.getSede = function (params) {
+                        if (params === void 0) { params = {}; }
+                        _this.sedeSrvc.get(params).subscribe(function (res) {
+                            _this.sedes = res;
+                        });
+                    };
+                    this.getBodega = function (params) {
+                        if (params === void 0) { params = {}; }
+                        _this.bodegaSrvc.get(params).subscribe(function (res) {
+                            _this.bodegas = res;
+                        });
+                    };
+                }
+                ExistenciasComponent.prototype.ngOnInit = function () {
+                    this.getSede();
+                    this.getBodega();
+                };
+                ExistenciasComponent.prototype.onSubmit = function () {
+                    var _this = this;
+                    this.pdfServicio.getReporteExistencia(this.params).subscribe(function (res) {
+                        if (res) {
+                            var blob = new Blob([res], { type: 'application/pdf' });
+                            Object(file_saver__WEBPACK_IMPORTED_MODULE_6__["saveAs"])(blob, _this.titulo + ".pdf");
+                        }
+                        else {
+                            _this.snackBar.open('No se pudo generar el reporte...', _this.titulo, { duration: 3000 });
+                        }
+                    });
+                };
+                return ExistenciasComponent;
+            }());
+            ExistenciasComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _restaurante_services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__["ReportePdfService"] },
+                { type: _admin_services_sede_service__WEBPACK_IMPORTED_MODULE_4__["SedeService"] },
+                { type: _services_bodega_service__WEBPACK_IMPORTED_MODULE_5__["BodegaService"] }
+            ]; };
+            ExistenciasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-existencias',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./existencias.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/reporte/existencias/existencias.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./existencias.component.css */ "./src/app/wms/components/reporte/existencias/existencias.component.css")).default]
+                })
+            ], ExistenciasComponent);
+            /***/ 
+        }),
         /***/ "./src/app/wms/components/transformacion/transformacion.component.css": 
         /*!****************************************************************************!*\
           !*** ./src/app/wms/components/transformacion/transformacion.component.css ***!
@@ -1790,11 +1994,13 @@
             /* harmony import */ var _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/egreso/egreso/egreso.component */ "./src/app/wms/components/egreso/egreso/egreso.component.ts");
             /* harmony import */ var _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/producto/producto/producto.component */ "./src/app/wms/components/producto/producto/producto.component.ts");
             /* harmony import */ var _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/transformacion/transformacion.component */ "./src/app/wms/components/transformacion/transformacion.component.ts");
+            /* harmony import */ var _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/reporte/existencias/existencias.component */ "./src/app/wms/components/reporte/existencias/existencias.component.ts");
             var routes = [
                 { path: 'ingresos', component: _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_4__["IngresoComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'egresos', component: _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_5__["EgresoComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'articulos', component: _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_6__["ProductoComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'transformaciones', component: _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_7__["TransformacionComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'rptexistencia', component: _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_8__["ExistenciasComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
             ];
             var WmsRoutingModule = /** @class */ (function () {
@@ -1860,6 +2066,7 @@
             /* harmony import */ var _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/egreso/form-egreso/form-egreso.component */ "./src/app/wms/components/egreso/form-egreso/form-egreso.component.ts");
             /* harmony import */ var _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/transformacion/transformacion.component */ "./src/app/wms/components/transformacion/transformacion.component.ts");
             /* harmony import */ var _services_transformacion_service__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./services/transformacion.service */ "./src/app/wms/services/transformacion.service.ts");
+            /* harmony import */ var _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/reporte/existencias/existencias.component */ "./src/app/wms/components/reporte/existencias/existencias.component.ts");
             var WmsModule = /** @class */ (function () {
                 function WmsModule() {
                 }
@@ -1867,7 +2074,7 @@
             }());
             WmsModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-                    declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"]],
+                    declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"], _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__["ExistenciasComponent"]],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
                         _wms_routing_module__WEBPACK_IMPORTED_MODULE_27__["WmsRoutingModule"],

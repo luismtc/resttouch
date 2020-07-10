@@ -1,8 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
-import { GLOBAL } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Factura } from '../../../interfaces/factura';
 import { FacturaService } from '../../../services/factura.service';
@@ -14,13 +13,18 @@ import { FacturaService } from '../../../services/factura.service';
 })
 export class ListaFacturaManualComponent implements OnInit {
 
-  public displayedColumns: string[] = ['factura'];
-  public dataSource: MatTableDataSource<Factura>;
-  public esMovil: boolean = false;
+  public esMovil = false;
 
   public lstFacturas: Factura[];
-  @Output() getFacturaEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  public lstFacturasPaged: Factura[];
+  @Output() getFacturaEv = new EventEmitter(); 
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     private facturaSrvc: FacturaService,
@@ -32,18 +36,24 @@ export class ListaFacturaManualComponent implements OnInit {
     this.loadFacturas();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstFacturas, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstFacturasPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstFacturas.length;
+      this.lstFacturasPaged = PaginarArray(this.lstFacturas, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadFacturas = () => {
     this.facturaSrvc.get().subscribe(lst => {
-      //console.log(lst);
+      // console.log(lst);
       if (lst) {
         if (lst.length > 0) {
           this.lstFacturas = lst;
-          this.dataSource = new MatTableDataSource(this.lstFacturas);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
     });
@@ -51,6 +61,12 @@ export class ListaFacturaManualComponent implements OnInit {
 
   getFactura = (obj: Factura) => {
     this.getFacturaEv.emit(obj);
+  }
+
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
   }
 
 }

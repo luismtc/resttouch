@@ -1,8 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
-import { GLOBAL } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Area } from '../../../interfaces/area';
 import { AreaService } from '../../../services/area.service';
@@ -15,11 +14,15 @@ import { AreaService } from '../../../services/area.service';
 export class ListaAreaComponent implements OnInit {
 
   public lstEntidades: Area[];
-  public displayedColumns: string[] = ['nombre'];
-  public dataSource: MatTableDataSource<Area>;
-
+  public lstEntidadesPaged: Area[];
   @Output() getEntidadEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     public areaSrvc: AreaService,
@@ -30,8 +33,15 @@ export class ListaAreaComponent implements OnInit {
     this.loadEntidades();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstEntidades, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstEntidadesPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstEntidades.length;
+      this.lstEntidadesPaged = PaginarArray(this.lstEntidades, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadEntidades = () => {
@@ -39,11 +49,10 @@ export class ListaAreaComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstEntidades = lst;
-          this.dataSource = new MatTableDataSource(this.lstEntidades);
-          this.dataSource.paginator = this.paginator;          
+          this.applyFilter();
         }
       }
-    })
+    });
   }
 
   getEntidad = (id: number) => {
@@ -53,6 +62,12 @@ export class ListaAreaComponent implements OnInit {
           this.getEntidadEv.emit(lst[0]);
         }
       }
-    })
+    });
+  }
+
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
   }
 }
