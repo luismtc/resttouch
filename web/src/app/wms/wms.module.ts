@@ -41,9 +41,10 @@ import { FormEgresoComponent } from './components/egreso/form-egreso/form-egreso
 import { TransformacionComponent } from './components/transformacion/transformacion.component';
 
 import { TransformacionService } from './services/transformacion.service';
+import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
 
 @NgModule({
-  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent],
+  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent],
   imports: [
     CommonModule,
     WmsRoutingModule,

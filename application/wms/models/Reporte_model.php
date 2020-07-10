@@ -25,6 +25,10 @@ class Reporte_model extends CI_Model {
 			$where .= " date(e.fecha) <= '{$args['fecha']}'";
 		}
 
+		if (isset($args['bodega'])) {
+			$where .= " and f.bodega = {$args['bodega']}";
+		}
+
 		$this->sqlIngreso = <<<EOT
 select
 	sum(ifnull(a.cantidad, 0)) as total_ingreso,
@@ -46,6 +50,10 @@ EOT;
 
 		if (isset($args['fecha'])) {
 			$where .= " date(e.fecha) <= '{$args['fecha']}'";
+		}
+
+		if (isset($args['bodega'])) {
+			$where .= " and f.bodega = {$args['bodega']}";
 		}
 
 		$this->sqlEgreso = <<<EOT

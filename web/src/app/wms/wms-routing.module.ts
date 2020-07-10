@@ -6,12 +6,14 @@ import { IngresoComponent } from './components/ingreso/ingreso/ingreso.component
 import { EgresoComponent } from './components/egreso/egreso/egreso.component';
 import { ProductoComponent } from './components/producto/producto/producto.component';
 import { TransformacionComponent } from './components/transformacion/transformacion.component';
+import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
   { path: 'egresos', component: EgresoComponent, canActivate: [AuthGuard] },
   { path: 'articulos', component: ProductoComponent, canActivate: [AuthGuard] },
   { path: 'transformaciones', component: TransformacionComponent, canActivate: [AuthGuard] },
+  { path: 'rptexistencia', component: ExistenciasComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
