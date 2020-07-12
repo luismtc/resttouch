@@ -37,10 +37,10 @@ export class HeaderComponent implements OnInit {
 
   handleClick = (modulo: string = '') => {
     const objModulo: any = this.appMenu.find(m => m.nombre === modulo);
-    //console.log(objModulo);
+    // console.log(objModulo);
     if (objModulo) {
       const submodulo: any = this.usrSrvc.transformSubModule(objModulo.submodulo);
-      //console.log(submodulo);
+      // console.log(submodulo);
       this.appMenuSrvc.updOpciones(submodulo);
       this._snackBar.open(`Cambio al módulo ${modulo}`, 'Módulo', { duration: 5000 });
     }

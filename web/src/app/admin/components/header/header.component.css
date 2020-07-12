@@ -12,12 +12,7 @@ button .mat-icon{
 }
 
 .btnApp {
-    width: 96px;
-    height: 96px;
-    /*
-    vertical-align: middle !important;
-    text-align: center !important;
-    */
+    width: 80px;
 }
 
 .btnCell {
@@ -28,7 +23,7 @@ button .mat-icon{
 
 ::ng-deep .mat-menu-panel {
     width: 800px !important;
-    height: 500px !important;
+    height: 200px !important;
     padding: 0 5px !important;
     /*overflow-y: auto;*/
 }

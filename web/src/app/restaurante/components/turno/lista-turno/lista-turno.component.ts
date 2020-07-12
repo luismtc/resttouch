@@ -1,9 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { GLOBAL } from '../../../../shared/global';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
-//import * as moment from 'moment';
 
 import { Turno } from '../../../interfaces/turno';
 import { TurnoService } from '../../../services/turno.service';
@@ -15,12 +13,16 @@ import { TurnoService } from '../../../services/turno.service';
 })
 export class ListaTurnoComponent implements OnInit {
 
-  public displayedColumns: string[] = ['turno'];
-  public dataSource: MatTableDataSource<Turno>;
-
   public lstTurnos: Turno[];
+  public lstTurnosPaged: Turno[];
   @Output() getTurnoEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     private ls: LocalstorageService,
@@ -31,8 +33,15 @@ export class ListaTurnoComponent implements OnInit {
     this.loadTurnos();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstTurnos, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstTurnosPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstTurnos.length;
+      this.lstTurnosPaged = PaginarArray(this.lstTurnos, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadTurnos = () => {
@@ -40,8 +49,7 @@ export class ListaTurnoComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstTurnos = lst;
-          this.dataSource = new MatTableDataSource(this.lstTurnos);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
     });
@@ -55,6 +63,12 @@ export class ListaTurnoComponent implements OnInit {
       inicio: obj.inicio,
       fin: obj.fin
     });
+  }
+
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
   }
 
 }

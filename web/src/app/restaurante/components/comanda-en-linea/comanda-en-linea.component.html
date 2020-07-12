@@ -19,7 +19,7 @@
             </ng-container>
             <ng-container matColumnDef="imprimir">
                 <th mat-header-cell *matHeaderCellDef style="width: 10%;">Imprimir</th>
-                <td mat-cell *matCellDef="let element" style="width: 10%;">
+                <td mat-cell *matCellDef="let element" class="tamanioAmigable" style="width: 10%;">
                     <button mat-flat-button type="button" color="accent" (click)="imprimir(element)">
                         Imprimir
                     </button>
@@ -27,7 +27,7 @@
             </ng-container>
             <ng-container matColumnDef="facturar">
                 <th mat-header-cell *matHeaderCellDef style="width: 10%;">Facturar</th>
-                <td mat-cell *matCellDef="let element" style="width: 10%;">
+                <td mat-cell *matCellDef="let element" class="tamanioAmigable" style="width: 10%;">
                     <button mat-flat-button type="button" color="accent" (click)="firmar(element)">
                         Facturar
                     </button>

@@ -22,6 +22,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatRippleModule } from '@angular/material/core';
 
 import { FilterPipe } from './pipes/filter.pipe';
 import { WindowComponent } from './components/window/window.component';
@@ -65,7 +66,8 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
     MatGridListModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatRippleModule
   ],
   exports: [
     FilterPipe,

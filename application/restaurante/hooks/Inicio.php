@@ -9,7 +9,8 @@ class Inicio
 		$this->libres = [
 			'/usuario/login.json', 
 			'/api/set_comanda',
-			'/api/guardar_comanda'
+			'/api/guardar_comanda',
+			'/api/set_producto'
 		];
 		
 	}

@@ -50,6 +50,11 @@ body {
     padding-top: 10px;
 }
 
+button {
+    min-width: 48px !important;
+    min-height: 48px !important;    
+}
+
 button .mat-icon {
     font-size: 48px;
 }
@@ -91,4 +96,11 @@ button .mat-icon {
 .tbl {
     width: 100%;
     border-collapse: collapse;    
+}
+
+.btnAccion {
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    margin-right: 8px !important;
+
 }

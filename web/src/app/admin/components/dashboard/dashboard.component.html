@@ -1,8 +1,7 @@
 <div class="row">
     <div class="col m12 s12" align="center">
-        <button mat-button class="divBtnSize" *ngFor="let modulo of appMenu" (click)="handleClick(modulo.nombre)">
-            <mat-icon class="lnkIconBoton">{{modulo.icono}}</mat-icon>
-            <br />
+        <h4>¿En qué módulo quieres empezar a trabajar?</h4>
+        <button mat-raised-button class="divBtnSize btnAccion" color="accent" *ngFor="let modulo of appMenu" (click)="handleClick(modulo.nombre)">
             <span class="lnkBoton">{{modulo.nombre}}</span>
         </button>
     </div>

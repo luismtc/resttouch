@@ -557,7 +557,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" (change)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n            <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\" ng-virtual-keyboard-placeholder=\"Buscar...\" (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"factura\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getFactura(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>receipt</mat-icon>\n                            <h5 mat-line>{{element.serie_factura}}&nbsp;{{element.numero_factura}}</h5>\n                            <span mat-line>Fecha: {{element.fecha_factura | date:'dd/MM/yyyy'}}</span>\n                            <span mat-line>Cliente: {{element.cliente.nombre}}</span>\n                            <span mat-line>NIT: {{element.cliente.nit}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n            <input matInput (keyup)=\"applyFilter()\" (change)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n            <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\" ng-virtual-keyboard-placeholder=\"Buscar...\" (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstFacturasPaged\" (click)=\"getFactura(element)\">\n                <mat-icon mat-list-icon>receipt</mat-icon>\n                <h5 mat-line>{{element.serie_factura}}&nbsp;{{element.numero_factura}}</h5>\n                <span mat-line>Fecha: {{element.fecha_factura | date:'dd/MM/yyyy'}}</span>\n                <span mat-line>Cliente: {{element.cliente.nombre}}</span>\n                <span mat-line>NIT: {{element.cliente.nit}}</span>\n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>        \n        <!--\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"factura\">                \n                <td mat-cell *matCellDef=\"let element\" (click)=\"getFactura(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>receipt</mat-icon>\n                            <h5 mat-line>{{element.serie_factura}}&nbsp;{{element.numero_factura}}</h5>\n                            <span mat-line>Fecha: {{element.fecha_factura | date:'dd/MM/yyyy'}}</span>\n                            <span mat-line>Cliente: {{element.cliente.nombre}}</span>\n                            <span mat-line>NIT: {{element.cliente.nit}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>            \n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n        -->\n    </mat-card-content>\n</mat-card>\n");
 
 /***/ }),
 
@@ -1258,13 +1258,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaFacturaManualComponent", function() { return ListaFacturaManualComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
-/* harmony import */ var _services_factura_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../services/factura.service */ "./src/app/pos/services/factura.service.ts");
-
-
+/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_factura_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/factura.service */ "./src/app/pos/services/factura.service.ts");
 
 
 
@@ -1274,17 +1270,20 @@ let ListaFacturaManualComponent = class ListaFacturaManualComponent {
     constructor(facturaSrvc, ls) {
         this.facturaSrvc = facturaSrvc;
         this.ls = ls;
-        this.displayedColumns = ['factura'];
         this.esMovil = false;
         this.getFacturaEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadFacturas = () => {
             this.facturaSrvc.get().subscribe(lst => {
-                //console.log(lst);
+                // console.log(lst);
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstFacturas = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstFacturas);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -1292,25 +1291,35 @@ let ListaFacturaManualComponent = class ListaFacturaManualComponent {
         this.getFactura = (obj) => {
             this.getFacturaEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
-        this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_5__["GLOBAL"].usrTokenVar).enmovil || false;
+        this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).enmovil || false;
         this.loadFacturas();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["MultiFiltro"])(this.lstFacturas, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstFacturasPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstFacturas.length;
+            this.lstFacturasPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(this.lstFacturas, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaFacturaManualComponent.ctorParameters = () => [
-    { type: _services_factura_service__WEBPACK_IMPORTED_MODULE_6__["FacturaService"] },
-    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_4__["LocalstorageService"] }
+    { type: _services_factura_service__WEBPACK_IMPORTED_MODULE_4__["FacturaService"] },
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__["LocalstorageService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaFacturaManualComponent.prototype, "getFacturaEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaFacturaManualComponent.prototype, "paginator", void 0);
 ListaFacturaManualComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-factura-manual',
