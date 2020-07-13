@@ -42,9 +42,10 @@ import { TransformacionComponent } from './components/transformacion/transformac
 
 import { TransformacionService } from './services/transformacion.service';
 import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
+import { KardexComponent } from './components/reporte/kardex/kardex.component';
 
 @NgModule({
-  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent],
+  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent, KardexComponent],
   imports: [
     CommonModule,
     WmsRoutingModule,

@@ -7,6 +7,7 @@ import { EgresoComponent } from './components/egreso/egreso/egreso.component';
 import { ProductoComponent } from './components/producto/producto/producto.component';
 import { TransformacionComponent } from './components/transformacion/transformacion.component';
 import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
+import { KardexComponent } from './components/reporte/kardex/kardex.component';
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
@@ -14,6 +15,7 @@ const routes: Routes = [
   { path: 'articulos', component: ProductoComponent, canActivate: [AuthGuard] },
   { path: 'transformaciones', component: TransformacionComponent, canActivate: [AuthGuard] },
   { path: 'rptexistencia', component: ExistenciasComponent, canActivate: [AuthGuard] },
+  { path: 'rptkardex', component: KardexComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 
