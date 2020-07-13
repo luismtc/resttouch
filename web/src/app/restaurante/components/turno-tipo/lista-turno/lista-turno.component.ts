@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
@@ -12,21 +12,32 @@ import { TipoTurnoService } from '../../../services/tipo-turno.service';
 })
 export class ListaTurnoTipoComponent implements OnInit {
 
-  public displayedColumns: string[] = ['turno'];
-  public dataSource: MatTableDataSource<TipoTurno>;
-
   public lstTurnos: TipoTurno[];
+  public lstTurnosPaged: TipoTurno[];
   @Output() getTurnoEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
+
   constructor(private turnoSrvc: TipoTurnoService) { }
 
   ngOnInit() {
-  	this.loadTurnos();
+    this.loadTurnos();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstTurnos, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstTurnosPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstTurnos.length;
+      this.lstTurnosPaged = PaginarArray(this.lstTurnos, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadTurnos = () => {
@@ -34,8 +45,7 @@ export class ListaTurnoTipoComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstTurnos = lst;
-          this.dataSource = new MatTableDataSource(this.lstTurnos);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
     });
@@ -43,6 +53,12 @@ export class ListaTurnoTipoComponent implements OnInit {
 
   getTurno = (obj: TipoTurno) => {
     this.getTurnoEv.emit(obj);
+  }
+
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
   }
 
 }

@@ -10,11 +10,11 @@
                 <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="medida.descripcion" required>
             </mat-form-field>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmMedida.form.valid">
-                    <mat-icon>save</mat-icon>
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmMedida.form.valid">
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetMedida()" *ngIf="medida.medida">
-                    <mat-icon>add</mat-icon>
+                <button mat-raised-button type="button" color="accent" (click)="resetMedida()" *ngIf="medida.medida">
+                    Nueva
                 </button>
             </div>
         </form>

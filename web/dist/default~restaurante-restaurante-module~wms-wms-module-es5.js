@@ -170,6 +170,17 @@
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de existencias</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Bodega</mat-label>\n              <mat-select name=\"bodega\" [(ngModel)]=\"params.bodega\">\n                  <mat-option *ngFor=\"let bod of bodegas\" [value]=\"bod.bodega\">\n                      {{bod.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Sede</mat-label>\n              <mat-select name=\"sede\" [(ngModel)]=\"params.sede\">\n                  <mat-option *ngFor=\"let sede of sedes\" [value]=\"sede.sede\">\n                      {{sede.nombre}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fecha\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/reporte/kardex/kardex.component.html": 
+        /*!***********************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/reporte/kardex/kardex.component.html ***!
+          \***********************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Kardex</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Bodega</mat-label>\n              <mat-select name=\"bodega\" [(ngModel)]=\"params.bodega\">\n                  <mat-option *ngFor=\"let bod of bodegas\" [value]=\"bod.bodega\">\n                      {{bod.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Sede</mat-label>\n              <mat-select name=\"sede\" [(ngModel)]=\"params.sede\">\n                  <mat-option *ngFor=\"let sede of sedes\" [value]=\"sede.sede\">\n                      {{sede.nombre}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/transformacion/transformacion.component.html": 
         /*!*******************************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/transformacion/transformacion.component.html ***!
@@ -217,6 +228,10 @@
                 ReportePdfService.prototype.getReporteExistencia = function (params) {
                     this.httpOptions['params'] = params;
                     return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlWms + "/reporte/existencia", this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ReportePdfService.prototype.getReporteKardex = function (params) {
+                    this.httpOptions['params'] = params;
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlWms + "/reporte/kardex", this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
                 };
                 ReportePdfService.prototype.getReporteFactura = function (params) {
                     this.httpOptions['params'] = params;
@@ -1515,6 +1530,91 @@
             ], ExistenciasComponent);
             /***/ 
         }),
+        /***/ "./src/app/wms/components/reporte/kardex/kardex.component.css": 
+        /*!********************************************************************!*\
+          !*** ./src/app/wms/components/reporte/kardex/kardex.component.css ***!
+          \********************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3dtcy9jb21wb25lbnRzL3JlcG9ydGUva2FyZGV4L2thcmRleC5jb21wb25lbnQuY3NzIn0= */");
+            /***/ 
+        }),
+        /***/ "./src/app/wms/components/reporte/kardex/kardex.component.ts": 
+        /*!*******************************************************************!*\
+          !*** ./src/app/wms/components/reporte/kardex/kardex.component.ts ***!
+          \*******************************************************************/
+        /*! exports provided: KardexComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KardexComponent", function () { return KardexComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _restaurante_services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../restaurante/services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
+            /* harmony import */ var _admin_services_sede_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../admin/services/sede.service */ "./src/app/admin/services/sede.service.ts");
+            /* harmony import */ var _services_bodega_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/bodega.service */ "./src/app/wms/services/bodega.service.ts");
+            /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
+            /* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/ __webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_6__);
+            var KardexComponent = /** @class */ (function () {
+                function KardexComponent(snackBar, pdfServicio, sedeSrvc, bodegaSrvc) {
+                    var _this = this;
+                    this.snackBar = snackBar;
+                    this.pdfServicio = pdfServicio;
+                    this.sedeSrvc = sedeSrvc;
+                    this.bodegaSrvc = bodegaSrvc;
+                    this.bodegas = [];
+                    this.sedes = [];
+                    this.params = {};
+                    this.titulo = "Kardex";
+                    this.getSede = function (params) {
+                        if (params === void 0) { params = {}; }
+                        _this.sedeSrvc.get(params).subscribe(function (res) {
+                            _this.sedes = res;
+                        });
+                    };
+                    this.getBodega = function (params) {
+                        if (params === void 0) { params = {}; }
+                        _this.bodegaSrvc.get(params).subscribe(function (res) {
+                            _this.bodegas = res;
+                        });
+                    };
+                }
+                KardexComponent.prototype.ngOnInit = function () {
+                    this.getSede();
+                    this.getBodega();
+                };
+                KardexComponent.prototype.onSubmit = function () {
+                    var _this = this;
+                    this.pdfServicio.getReporteKardex(this.params).subscribe(function (res) {
+                        if (res) {
+                            var blob = new Blob([res], { type: 'application/pdf' });
+                            Object(file_saver__WEBPACK_IMPORTED_MODULE_6__["saveAs"])(blob, _this.titulo + ".pdf");
+                        }
+                        else {
+                            _this.snackBar.open('No se pudo generar el reporte...', _this.titulo, { duration: 3000 });
+                        }
+                    });
+                };
+                return KardexComponent;
+            }());
+            KardexComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _restaurante_services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__["ReportePdfService"] },
+                { type: _admin_services_sede_service__WEBPACK_IMPORTED_MODULE_4__["SedeService"] },
+                { type: _services_bodega_service__WEBPACK_IMPORTED_MODULE_5__["BodegaService"] }
+            ]; };
+            KardexComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-kardex',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./kardex.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/reporte/kardex/kardex.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./kardex.component.css */ "./src/app/wms/components/reporte/kardex/kardex.component.css")).default]
+                })
+            ], KardexComponent);
+            /***/ 
+        }),
         /***/ "./src/app/wms/components/transformacion/transformacion.component.css": 
         /*!****************************************************************************!*\
           !*** ./src/app/wms/components/transformacion/transformacion.component.css ***!
@@ -1995,12 +2095,14 @@
             /* harmony import */ var _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/producto/producto/producto.component */ "./src/app/wms/components/producto/producto/producto.component.ts");
             /* harmony import */ var _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/transformacion/transformacion.component */ "./src/app/wms/components/transformacion/transformacion.component.ts");
             /* harmony import */ var _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/reporte/existencias/existencias.component */ "./src/app/wms/components/reporte/existencias/existencias.component.ts");
+            /* harmony import */ var _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/reporte/kardex/kardex.component */ "./src/app/wms/components/reporte/kardex/kardex.component.ts");
             var routes = [
                 { path: 'ingresos', component: _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_4__["IngresoComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'egresos', component: _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_5__["EgresoComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'articulos', component: _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_6__["ProductoComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'transformaciones', component: _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_7__["TransformacionComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'rptexistencia', component: _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_8__["ExistenciasComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'rptkardex', component: _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_9__["KardexComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
             ];
             var WmsRoutingModule = /** @class */ (function () {
@@ -2067,6 +2169,7 @@
             /* harmony import */ var _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/transformacion/transformacion.component */ "./src/app/wms/components/transformacion/transformacion.component.ts");
             /* harmony import */ var _services_transformacion_service__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./services/transformacion.service */ "./src/app/wms/services/transformacion.service.ts");
             /* harmony import */ var _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/reporte/existencias/existencias.component */ "./src/app/wms/components/reporte/existencias/existencias.component.ts");
+            /* harmony import */ var _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/reporte/kardex/kardex.component */ "./src/app/wms/components/reporte/kardex/kardex.component.ts");
             var WmsModule = /** @class */ (function () {
                 function WmsModule() {
                 }
@@ -2074,7 +2177,7 @@
             }());
             WmsModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-                    declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"], _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__["ExistenciasComponent"]],
+                    declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"], _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__["ExistenciasComponent"], _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__["KardexComponent"]],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
                         _wms_routing_module__WEBPACK_IMPORTED_MODULE_27__["WmsRoutingModule"],

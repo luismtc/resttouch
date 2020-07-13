@@ -11,11 +11,11 @@
             </mat-form-field>
             <mat-checkbox name="activo" class="fullWidth" [(ngModel)]="+turno.activo">Activo</mat-checkbox>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmTurno.form.valid">
-                    <mat-icon>save</mat-icon>
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTurno.form.valid">
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetTurno()" *ngIf="turno.turno_tipo">
-                    <mat-icon>add</mat-icon>
+                <button mat-raised-button type="button" color="accent" (click)="resetTurno()" *ngIf="turno.turno_tipo">
+                    Nuevo
                 </button>
             </div>
         </form>

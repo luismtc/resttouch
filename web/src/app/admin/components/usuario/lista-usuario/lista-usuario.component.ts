@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Usuario } from '../../../models/usuario';
 import { UsuarioService } from '../../../services/usuario.service';
@@ -12,12 +12,16 @@ import { UsuarioService } from '../../../services/usuario.service';
 })
 export class ListaUsuarioComponent implements OnInit {
 
-  public displayedColumns: string[] = ['usuario'];
-  public dataSource: MatTableDataSource<Usuario>;
-
   public lstUsuarios: Usuario[];
+  public lstUsuariosPaged: Usuario[];
   @Output() getUsuarioEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     private usuarioSrvc: UsuarioService
@@ -27,8 +31,15 @@ export class ListaUsuarioComponent implements OnInit {
     this.loadUsuarios();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstUsuarios, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstUsuariosPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstUsuarios.length;
+      this.lstUsuariosPaged = PaginarArray(this.lstUsuarios, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadUsuarios() {
@@ -36,11 +47,10 @@ export class ListaUsuarioComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstUsuarios = lst;
-          this.dataSource = new MatTableDataSource(this.lstUsuarios);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
-    })
+    });
   }
 
   getUsuario(id: number) {
@@ -51,7 +61,11 @@ export class ListaUsuarioComponent implements OnInit {
         }
       }
     });
-
   }
 
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
+  }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { FormaPago } from '../../../interfaces/forma-pago';
 import { FpagoService } from '../../../services/fpago.service';
@@ -12,12 +12,16 @@ import { FpagoService } from '../../../services/fpago.service';
 })
 export class ListaPagoComponent implements OnInit {
 
-  public displayedColumns: string[] = ['forma_pago'];
-  public dataSource: MatTableDataSource<FormaPago>;
-
   public listaFpago: FormaPago[];
+  public listaFpagoPaged: FormaPago[];
   @Output() getFpagoEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     private fpagoSrvc: FpagoService
@@ -27,8 +31,15 @@ export class ListaPagoComponent implements OnInit {
     this.getFormasPago();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.listaFpago, this.txtFiltro);
+      this.length = tmpList.length;
+      this.listaFpagoPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.listaFpago.length;
+      this.listaFpagoPaged = PaginarArray(this.listaFpago, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   getFormasPago = () => {
@@ -36,8 +47,7 @@ export class ListaPagoComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.listaFpago = lst;
-          this.dataSource = new MatTableDataSource(this.listaFpago);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
     });
@@ -47,4 +57,9 @@ export class ListaPagoComponent implements OnInit {
     this.getFpagoEv.emit(obj);
   }
 
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
+  }
 }

@@ -17,11 +17,11 @@
             </mat-form-field>
             <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+impresora.bluetooth">¿Es bluetooth?</mat-checkbox>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmImpresora.form.valid">
-                    <mat-icon>save</mat-icon>
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmImpresora.form.valid">
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetImpresora()" *ngIf="impresora.impresora">
-                    <mat-icon>add</mat-icon>
+                <button mat-raised-button type="button" color="accent" (click)="resetImpresora()" *ngIf="impresora.impresora">
+                    Nueva
                 </button>
             </div>
         </form>

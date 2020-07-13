@@ -364,7 +364,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n\t<mat-card-title>\n\t\t<h4>Accesos {{!!this.usuario? this.usuario.nombres : '' }}</h4>\n\t</mat-card-title>\n\t<mat-card-content>\n\t\t<form #frmAccesoUsuario=\"ngForm\" (ngSubmit)=\"frmAccesoUsuario.form.valid && onSubmit()\" novalidate>\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Modulo</mat-label>\n\t\t\t\t<mat-select name=\"modulo\" (selectionChange)=\"loadSubModulos($event.value)\" [(ngModel)]=\"acceso.modulo\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of modulos\" [value]=\"m.modulo\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Sub-Modulo</mat-label>\n\t\t\t\t<mat-select name=\"submodulo\" (selectionChange)=\"loadOpciones($event.value)\" [(ngModel)]=\"acceso.submodulo\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of submodulos\" [value]=\"m.sub_modulo\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Opcion</mat-label>\n\t\t\t\t<mat-select name=\"opcion\" [(ngModel)]=\"acceso.opcion\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of opciones\" [value]=\"m.opcion\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\t\t\t<!-- <mat-checkbox name=\"anulado\" class=\"fullWidth\">Anulado</mat-checkbox> -->\n\t\t\t<div align=\"end\">\n\t\t\t\t<button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmAccesoUsuario.form.valid\" \n\t\t\t\t*ngIf=\"this.usuario.usuario\">\n\t\t\t\t\t<mat-icon>save</mat-icon>\n\t\t\t\t</button>\n\t\t\t\t<button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetAcceso()\"\n\t\t\t\t*ngIf=\"this.usuario.usuario\">\n\t\t\t\t\t<mat-icon>add</mat-icon>\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</form>\n\t\t<hr *ngIf=\"accesos.length > 0\"/>\n\t\t<table mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z4 full-width\" *ngIf=\"accesos.length > 0\">\n\t\t\t<ng-container matColumnDef=\"modulo\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Modulo</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.modulo.descripcion }}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"submodulo\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Sub-Modulo</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.submodulo.nombre}}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"opcion\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Opcion</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.opcion.nombre}}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"editItem\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>&nbsp;</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-right\">\n\t\t\t\t\t<button mat-icon-button type=\"button\" color=\"accent\" (click)=\"setAcceso(element)\">\n\t\t\t\t\t\t<mat-icon>edit</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t\t<button mat-icon-button type=\"button\" color=\"accent\" (click)=\"removerAcceso(element)\">\n\t\t\t\t\t\t<mat-icon>delete</mat-icon>\n\t\t\t\t\t</button>\n\t\t\t\t</td>\n\t\t\t</ng-container>\n\t\t\t<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n\t\t\t<tr mat-row *matRowDef=\"let row; columns: displayedColumns;\">\n\t\t\t</tr>\n\t\t</table>\n\t</mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n\t<mat-card-title>\n\t\t<h4>Accesos {{!!this.usuario? this.usuario.nombres : '' }}</h4>\n\t</mat-card-title>\n\t<mat-card-content>\n\t\t<form #frmAccesoUsuario=\"ngForm\" (ngSubmit)=\"frmAccesoUsuario.form.valid && onSubmit()\" novalidate>\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Modulo</mat-label>\n\t\t\t\t<mat-select name=\"modulo\" (selectionChange)=\"loadSubModulos($event.value)\" [(ngModel)]=\"acceso.modulo\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of modulos\" [value]=\"m.modulo\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Sub-Modulo</mat-label>\n\t\t\t\t<mat-select name=\"submodulo\" (selectionChange)=\"loadOpciones($event.value)\" [(ngModel)]=\"acceso.submodulo\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of submodulos\" [value]=\"m.sub_modulo\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\n\t\t\t<mat-form-field class=\"fullWidth\">\n\t\t\t\t<mat-label>Opcion</mat-label>\n\t\t\t\t<mat-select name=\"opcion\" [(ngModel)]=\"acceso.opcion\" required>\n\t\t\t\t\t<mat-option></mat-option>\n\t\t\t\t\t<mat-option *ngFor=\"let m of opciones\" [value]=\"m.opcion\">\n\t\t\t\t\t\t{{ m.descripcion }}\n\t\t\t\t\t</mat-option>\n\t\t\t\t</mat-select>\n\t\t\t</mat-form-field>\n\t\t\t<!-- <mat-checkbox name=\"anulado\" class=\"fullWidth\">Anulado</mat-checkbox> -->\n\t\t\t<div align=\"end\">\n\t\t\t\t<button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmAccesoUsuario.form.valid\" \n\t\t\t\t*ngIf=\"this.usuario.usuario\">\n\t\t\t\t\tGuardar\n\t\t\t\t</button>\n\t\t\t\t<button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetAcceso()\"\n\t\t\t\t*ngIf=\"this.usuario.usuario\">\n\t\t\t\t\tNuevo\n\t\t\t\t</button>\n\t\t\t</div>\n\t\t</form>\n\t\t<hr *ngIf=\"accesos.length > 0\"/>\n\t\t<table mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z4 full-width\" *ngIf=\"accesos.length > 0\">\n\t\t\t<ng-container matColumnDef=\"modulo\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Modulo</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.modulo.descripcion }}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"submodulo\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Sub-Modulo</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.submodulo.nombre}}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"opcion\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>Opcion</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{ element.opcion.nombre}}</td>\n\t\t\t</ng-container>\n\t\t\t<ng-container matColumnDef=\"editItem\">\n\t\t\t\t<th mat-header-cell *matHeaderCellDef>&nbsp;</th>\n\t\t\t\t<td mat-cell *matCellDef=\"let element\" class=\"text-right\">\n\t\t\t\t\t<button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"setAcceso(element)\">\n\t\t\t\t\t\tEditar\n\t\t\t\t\t</button>\n\t\t\t\t\t<button mat-raised-button type=\"button\" color=\"accent\" (click)=\"removerAcceso(element)\">\n\t\t\t\t\t\tEliminar\n\t\t\t\t\t</button>\n\t\t\t\t</td>\n\t\t\t</ng-container>\n\t\t\t<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n\t\t\t<tr mat-row *matRowDef=\"let row; columns: displayedColumns;\">\n\t\t\t</tr>\n\t\t</table>\n\t</mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -377,7 +377,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"usuarios\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getUsuario(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.nombres}}</h5>\n                            <span mat-line>{{element.apellidos}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstUsuarioPaged\" (click)=\"getUsuario(element)\">\n                <mat-icon mat-list-icon>line_weight</mat-icon>\n                <h5 mat-line>{{element.nombres}}</h5>\n                <span mat-line>{{element.apellidos}}</span>\n            </mat-list-item>            \n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -468,7 +468,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFpago=\"ngForm\" (ngSubmit)=\"frmFpago.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"fpago.descripcion\" required>\n            </mat-form-field>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"fpago.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmFpago.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"fpago.forma_pago\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFpago=\"ngForm\" (ngSubmit)=\"frmFpago.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"fpago.descripcion\" required>\n            </mat-form-field>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"fpago.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmFpago.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"fpago.forma_pago\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -494,7 +494,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"forma_pago\">\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getFpago(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of listaFpagoPaged\" (click)=\"getFpago(element)\">\n                <mat-icon mat-list-icon>line_weight</mat-icon>\n                <h5 mat-line>{{element.descripcion}}</h5>\n            </mat-list-item>\n        </mat-nav-list>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -520,7 +520,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Impresora {{!!impresora.impresora ? impresora.nombre : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmImpresora=\"ngForm\" (ngSubmit)=\"frmImpresora.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"impresora.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Dirección IP\" name=\"ip\" [(ngModel)]=\"impresora.direccion_ip\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Ubicación\" name=\"ubicacion\" [(ngModel)]=\"impresora.ubicacion\">\n            </mat-form-field>\n            <mat-checkbox name=\"traslado\" class=\"fullWidth\" [(ngModel)]=\"+impresora.bluetooth\">¿Es bluetooth?</mat-checkbox>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmImpresora.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetImpresora()\" *ngIf=\"impresora.impresora\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Impresora {{!!impresora.impresora ? impresora.nombre : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmImpresora=\"ngForm\" (ngSubmit)=\"frmImpresora.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"impresora.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Dirección IP\" name=\"ip\" [(ngModel)]=\"impresora.direccion_ip\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Ubicación\" name=\"ubicacion\" [(ngModel)]=\"impresora.ubicacion\">\n            </mat-form-field>\n            <mat-checkbox name=\"traslado\" class=\"fullWidth\" [(ngModel)]=\"+impresora.bluetooth\">¿Es bluetooth?</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmImpresora.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetImpresora()\" *ngIf=\"impresora.impresora\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -546,7 +546,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"impresora\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getImpresora(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.nombre}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstImpresorasPaged\" (click)=\"getImpresora(element)\">\n                <mat-icon mat-list-icon>line_weight</mat-icon>\n                <h5 mat-line>{{element.nombre}}</h5>\n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -572,7 +572,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Unidad de medida {{!!medida.medida ? medida.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmMedida=\"ngForm\" (ngSubmit)=\"frmMedida.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"medida.descripcion\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmMedida.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetMedida()\" *ngIf=\"medida.medida\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Unidad de medida {{!!medida.medida ? medida.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmMedida=\"ngForm\" (ngSubmit)=\"frmMedida.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"medida.descripcion\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmMedida.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetMedida()\" *ngIf=\"medida.medida\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -585,7 +585,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"medida\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getMedida(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstMedidasPaged\" (click)=\"getMedida(element)\">\n                <mat-icon mat-list-icon>line_weight</mat-icon>\n                <h5 mat-line>{{element.descripcion}}</h5>\n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -624,7 +624,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Presentación {{!!presentacion.presentacion ? presentacion.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmMedida=\"ngForm\" (ngSubmit)=\"frmMedida.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"presentacion.descripcion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Medida</mat-label>\n                <mat-select name=\"medida\" [(ngModel)]=\"presentacion.medida\" required>\n                    <mat-option *ngFor=\"let m of medidas\" [value]=\"m.medida\">\n                        {{m.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"number\" placeholder=\"Cantidad\" name=\"cantidad\" [(ngModel)]=\"presentacion.cantidad\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmMedida.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetPresentacion()\"\n                    *ngIf=\"presentacion.presentacion\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Presentación {{!!presentacion.presentacion ? presentacion.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmMedida=\"ngForm\" (ngSubmit)=\"frmMedida.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"presentacion.descripcion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Medida</mat-label>\n                <mat-select name=\"medida\" [(ngModel)]=\"presentacion.medida\" required>\n                    <mat-option *ngFor=\"let m of medidas\" [value]=\"m.medida\">\n                        {{m.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"number\" placeholder=\"Cantidad\" name=\"cantidad\" [(ngModel)]=\"presentacion.cantidad\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmMedida.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetPresentacion()\"\n                    *ngIf=\"presentacion.presentacion\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -637,7 +637,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"presentacion\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getPresentacion(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>card_membership</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <span mat-line>{{element.cantidad | number:'1.2-2'}} {{element.medida.descripcion}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstPresentacionPaged\" (click)=\"getPresentacion(element)\">\n                <mat-icon mat-list-icon>card_membership</mat-icon>\n                <h5 mat-line>{{element.descripcion}}</h5>\n                <span mat-line>{{element.cantidad | number:'1.2-2'}} {{element.medida.descripcion}}</span>\n            </mat-list-item>            \n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n        <!--\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"presentacion\">                \n                <td mat-cell *matCellDef=\"let element\" (click)=\"getPresentacion(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>card_membership</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <span mat-line>{{element.cantidad | number:'1.2-2'}} {{element.medida.descripcion}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>            \n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n        -->\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -663,7 +663,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmTipoUsuario=\"ngForm\" (ngSubmit)=\"frmTipoUsuario.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Jerarquia</mat-label>\n                <mat-select name=\"jerarquia\" [(ngModel)]=\"usuarioTipo.jerarquia\" required>\n                \t<mat-option></mat-option>\n                    <mat-option *ngFor=\"let m of jerarquias\" [value]=\"m.jerarquia\">\n                        {{m.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"usuarioTipo.descripcion\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmTipoUsuario.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetTipoUsuario()\" *ngIf=\"true\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        Tipo de empleado\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmTipoUsuario=\"ngForm\" (ngSubmit)=\"frmTipoUsuario.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Jerarquia</mat-label>\n                <mat-select name=\"jerarquia\" [(ngModel)]=\"usuarioTipo.jerarquia\" required>\n                \t<mat-option></mat-option>\n                    <mat-option *ngFor=\"let m of jerarquias\" [value]=\"m.jerarquia\">\n                        {{m.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"usuarioTipo.descripcion\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmTipoUsuario.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetTipoUsuario()\" *ngIf=\"usuarioTipo.usuario_tipo\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>\n");
 
 /***/ }),
 
@@ -676,7 +676,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"usuario_tipo\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getTipoUsuario(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <span mat-line>{{element.jerarquia.descripcion}}</span>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstUsuarioTipoPaged\" (click)=\"getTipoUsuario(element)\">\n                <mat-icon mat-list-icon>line_weight</mat-icon>\n                <h5 mat-line>{{element.descripcion}}</h5>\n                <span mat-line>{{element.jerarquia.descripcion}}</span>\n            </mat-list-item>            \n        </mat-nav-list>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -702,7 +702,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>Usuario</h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmUsuario=\"ngForm\" (ngSubmit)=\"frmUsuario.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput placeholder=\"Nombres\" name=\"nombres\" [(ngModel)]=\"usuario.nombres\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput placeholder=\"Apellidos\" name=\"apellidos\" [(ngModel)]=\"usuario.apellidos\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput placeholder=\"Usuario\" name=\"usrname\" [(ngModel)]=\"usuario.usrname\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"password\" placeholder=\"Contraseña\" name=\"contrasenia\"\n                    [(ngModel)]=\"usuario.contrasenia\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Sede</mat-label>\n                <mat-select name=\"sede\" [(ngModel)]=\"usuario.sede\">\n                    <mat-option *ngFor=\"let s of sedes\" [value]=\"s.sede\">\n                        {{s.nombre}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-checkbox name=\"debaja\" [(ngModel)]=\"+usuario.debaja\" class=\"fontFamily\">De baja</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n            <mat-checkbox name=\"esmesero\" [(ngModel)]=\"+usuario.esmesero\" class=\"fontFamily\">Es mesero</mat-checkbox>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmUsuario.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetUsuario()\" *ngIf=\"usuario.usuario\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>Usuario</h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmUsuario=\"ngForm\" (ngSubmit)=\"frmUsuario.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput placeholder=\"Nombres\" name=\"nombres\" [(ngModel)]=\"usuario.nombres\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput placeholder=\"Apellidos\" name=\"apellidos\" [(ngModel)]=\"usuario.apellidos\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput placeholder=\"Usuario\" name=\"usrname\" [(ngModel)]=\"usuario.usrname\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"password\" placeholder=\"Contraseña\" name=\"contrasenia\"\n                    [(ngModel)]=\"usuario.contrasenia\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Sede</mat-label>\n                <mat-select name=\"sede\" [(ngModel)]=\"usuario.sede\">\n                    <mat-option *ngFor=\"let s of sedes\" [value]=\"s.sede\">\n                        {{s.nombre}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-checkbox name=\"debaja\" [(ngModel)]=\"+usuario.debaja\" class=\"fontFamily\">De baja</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n            <mat-checkbox name=\"esmesero\" [(ngModel)]=\"+usuario.esmesero\" class=\"fontFamily\">Es mesero</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmUsuario.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetUsuario()\" *ngIf=\"usuario.usuario\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -715,7 +715,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"usuario\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getUsuario(element.usuario)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>face</mat-icon>\n                            <h5 mat-line>{{element.nombres}}</h5>\n                            <p mat-line>{{element.apellidos}}</p>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstUsuariosPaged\" (click)=\"getUsuario(element.usuario)\">\n                <mat-icon mat-list-icon>face</mat-icon>\n                <h5 mat-line>{{element.nombres}}</h5>\n                <p mat-line>{{element.apellidos}}</p>\n            </mat-list-item>            \n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -1517,10 +1517,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaAccesoUsuarioComponent", function() { return ListaAccesoUsuarioComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
 
 
 
@@ -1528,15 +1526,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaAccesoUsuarioComponent = class ListaAccesoUsuarioComponent {
     constructor(UsuarioSrvc) {
         this.UsuarioSrvc = UsuarioSrvc;
-        this.displayedColumns = ['usuarios'];
         this.getUsuarioEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadUsuario = () => {
             this.UsuarioSrvc.getAll().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstUsuario = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstUsuario);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -1544,20 +1545,33 @@ let ListaAccesoUsuarioComponent = class ListaAccesoUsuarioComponent {
         this.getUsuario = (obj) => {
             this.getUsuarioEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadUsuario();
     }
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstUsuario, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstUsuarioPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstUsuario.length;
+            this.lstUsuarioPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstUsuario, this.pageSize, this.pageIndex + 1);
+        }
+    }
 };
 ListaAccesoUsuarioComponent.ctorParameters = () => [
-    { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__["UsuarioService"] }
+    { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_3__["UsuarioService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaAccesoUsuarioComponent.prototype, "getUsuarioEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaAccesoUsuarioComponent.prototype, "paginator", void 0);
 ListaAccesoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-acceso-usuario',
@@ -2184,10 +2198,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaPagoComponent", function() { return ListaPagoComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_fpago_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/fpago.service */ "./src/app/admin/services/fpago.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_fpago_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/fpago.service */ "./src/app/admin/services/fpago.service.ts");
 
 
 
@@ -2195,15 +2207,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaPagoComponent = class ListaPagoComponent {
     constructor(fpagoSrvc) {
         this.fpagoSrvc = fpagoSrvc;
-        this.displayedColumns = ['forma_pago'];
         this.getFpagoEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.getFormasPago = () => {
             this.fpagoSrvc.get().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.listaFpago = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.listaFpago);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -2211,23 +2226,33 @@ let ListaPagoComponent = class ListaPagoComponent {
         this.getFpago = (obj) => {
             this.getFpagoEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.getFormasPago();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.listaFpago, this.txtFiltro);
+            this.length = tmpList.length;
+            this.listaFpagoPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.listaFpago.length;
+            this.listaFpagoPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.listaFpago, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaPagoComponent.ctorParameters = () => [
-    { type: _services_fpago_service__WEBPACK_IMPORTED_MODULE_4__["FpagoService"] }
+    { type: _services_fpago_service__WEBPACK_IMPORTED_MODULE_3__["FpagoService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaPagoComponent.prototype, "getFpagoEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaPagoComponent.prototype, "paginator", void 0);
 ListaPagoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-pago',
@@ -2487,10 +2512,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaImpresoraComponent", function() { return ListaImpresoraComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_impresora_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/impresora.service */ "./src/app/admin/services/impresora.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_impresora_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/impresora.service */ "./src/app/admin/services/impresora.service.ts");
 
 
 
@@ -2498,15 +2521,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaImpresoraComponent = class ListaImpresoraComponent {
     constructor(impresoraSrvc) {
         this.impresoraSrvc = impresoraSrvc;
-        this.displayedColumns = ['impresora'];
         this.getImpresoraEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadImpresoras = () => {
             this.impresoraSrvc.get().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstImpresoras = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstImpresoras);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -2514,23 +2540,33 @@ let ListaImpresoraComponent = class ListaImpresoraComponent {
         this.getImpresora = (obj) => {
             this.getImpresoraEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadImpresoras();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstImpresoras, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstImpresorasPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstImpresoras.length;
+            this.lstImpresorasPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstImpresoras, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaImpresoraComponent.ctorParameters = () => [
-    { type: _services_impresora_service__WEBPACK_IMPORTED_MODULE_4__["ImpresoraService"] }
+    { type: _services_impresora_service__WEBPACK_IMPORTED_MODULE_3__["ImpresoraService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaImpresoraComponent.prototype, "getImpresoraEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaImpresoraComponent.prototype, "paginator", void 0);
 ListaImpresoraComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-impresora',
@@ -2747,10 +2783,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaMedidaComponent", function() { return ListaMedidaComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_medida_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/medida.service */ "./src/app/admin/services/medida.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_medida_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/medida.service */ "./src/app/admin/services/medida.service.ts");
 
 
 
@@ -2758,15 +2792,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaMedidaComponent = class ListaMedidaComponent {
     constructor(medidaSrvc) {
         this.medidaSrvc = medidaSrvc;
-        this.displayedColumns = ['medida'];
         this.getMedidaEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadMedidas = () => {
             this.medidaSrvc.get().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstMedidas = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstMedidas);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -2774,23 +2811,33 @@ let ListaMedidaComponent = class ListaMedidaComponent {
         this.getMedida = (obj) => {
             this.getMedidaEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadMedidas();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstMedidas, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstMedidasPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstMedidas.length;
+            this.lstMedidasPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstMedidas, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaMedidaComponent.ctorParameters = () => [
-    { type: _services_medida_service__WEBPACK_IMPORTED_MODULE_4__["MedidaService"] }
+    { type: _services_medida_service__WEBPACK_IMPORTED_MODULE_3__["MedidaService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaMedidaComponent.prototype, "getMedidaEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaMedidaComponent.prototype, "paginator", void 0);
 ListaMedidaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-medida',
@@ -3048,10 +3095,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaPresentacionComponent", function() { return ListaPresentacionComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_presentacion_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/presentacion.service */ "./src/app/admin/services/presentacion.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_presentacion_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/presentacion.service */ "./src/app/admin/services/presentacion.service.ts");
 
 
 
@@ -3059,15 +3104,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaPresentacionComponent = class ListaPresentacionComponent {
     constructor(presentacionSrvc) {
         this.presentacionSrvc = presentacionSrvc;
-        this.displayedColumns = ['presentacion'];
         this.getPresentacionEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadPresentaciones = () => {
             this.presentacionSrvc.get().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstPresentacion = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstPresentacion);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -3075,23 +3123,33 @@ let ListaPresentacionComponent = class ListaPresentacionComponent {
         this.getPresentacion = (obj) => {
             this.getPresentacionEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadPresentaciones();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstPresentacion, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstPresentacionPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstPresentacion.length;
+            this.lstPresentacionPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstPresentacion, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaPresentacionComponent.ctorParameters = () => [
-    { type: _services_presentacion_service__WEBPACK_IMPORTED_MODULE_4__["PresentacionService"] }
+    { type: _services_presentacion_service__WEBPACK_IMPORTED_MODULE_3__["PresentacionService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaPresentacionComponent.prototype, "getPresentacionEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaPresentacionComponent.prototype, "paginator", void 0);
 ListaPresentacionComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-presentacion',
@@ -3275,10 +3333,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaTipoUsuarioComponent", function() { return ListaTipoUsuarioComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/tipo-usuario.service */ "./src/app/admin/services/tipo-usuario.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/tipo-usuario.service */ "./src/app/admin/services/tipo-usuario.service.ts");
 
 
 
@@ -3286,15 +3342,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaTipoUsuarioComponent = class ListaTipoUsuarioComponent {
     constructor(tipoUsuarioSrvc) {
         this.tipoUsuarioSrvc = tipoUsuarioSrvc;
-        this.displayedColumns = ['usuario_tipo'];
         this.getTipoUsuarioEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadTipoUsuario = () => {
             this.tipoUsuarioSrvc.get().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstUsuarioTipo = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstUsuarioTipo);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -3302,20 +3361,33 @@ let ListaTipoUsuarioComponent = class ListaTipoUsuarioComponent {
         this.getTipoUsuario = (obj) => {
             this.getTipoUsuarioEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadTipoUsuario();
     }
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstUsuarioTipo, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstUsuarioTipoPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstUsuarioTipo.length;
+            this.lstUsuarioTipoPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstUsuarioTipo, this.pageSize, this.pageIndex + 1);
+        }
+    }
 };
 ListaTipoUsuarioComponent.ctorParameters = () => [
-    { type: _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_4__["TipoUsuarioService"] }
+    { type: _services_tipo_usuario_service__WEBPACK_IMPORTED_MODULE_3__["TipoUsuarioService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaTipoUsuarioComponent.prototype, "getTipoUsuarioEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaTipoUsuarioComponent.prototype, "paginator", void 0);
 ListaTipoUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-tipo-usuario',
@@ -3499,10 +3571,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaUsuarioComponent", function() { return ListaUsuarioComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
 
 
 
@@ -3510,22 +3580,38 @@ __webpack_require__.r(__webpack_exports__);
 let ListaUsuarioComponent = class ListaUsuarioComponent {
     constructor(usuarioSrvc) {
         this.usuarioSrvc = usuarioSrvc;
-        this.displayedColumns = ['usuario'];
         this.getUsuarioEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadUsuarios();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstUsuarios, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstUsuariosPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstUsuarios.length;
+            this.lstUsuariosPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstUsuarios, this.pageSize, this.pageIndex + 1);
+        }
     }
     loadUsuarios() {
         this.usuarioSrvc.getAll(3).subscribe((lst) => {
             if (lst) {
                 if (lst.length > 0) {
                     this.lstUsuarios = lst;
-                    this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstUsuarios);
-                    this.dataSource.paginator = this.paginator;
+                    this.applyFilter();
                 }
             }
         });
@@ -3541,14 +3627,11 @@ let ListaUsuarioComponent = class ListaUsuarioComponent {
     }
 };
 ListaUsuarioComponent.ctorParameters = () => [
-    { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__["UsuarioService"] }
+    { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_3__["UsuarioService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaUsuarioComponent.prototype, "getUsuarioEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaUsuarioComponent.prototype, "paginator", void 0);
 ListaUsuarioComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-usuario',

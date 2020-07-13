@@ -1,22 +1,27 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Usuario } from '../../../interfaces/usuario';
 import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
-  selector: 'app-lista-acceso-usuario',
-  templateUrl: './lista-acceso-usuario.component.html',
-  styleUrls: ['./lista-acceso-usuario.component.css']
+	selector: 'app-lista-acceso-usuario',
+	templateUrl: './lista-acceso-usuario.component.html',
+	styleUrls: ['./lista-acceso-usuario.component.css']
 })
 export class ListaAccesoUsuarioComponent implements OnInit {
 
-	public displayedColumns: string[] = ['usuarios'];
-	public dataSource: MatTableDataSource<Usuario>;
 	public lstUsuario: Usuario[];
+	public lstUsuarioPaged: Usuario[];
 	@Output() getUsuarioEv = new EventEmitter();
-	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+	public length = 0;
+	public pageSize = 5;
+	public pageSizeOptions: number[] = [5, 10, 15];
+	public pageIndex = 0;
+	public pageEvent: PageEvent;
+	public txtFiltro = '';
 
 	constructor(private UsuarioSrvc: UsuarioService) { }
 
@@ -24,13 +29,23 @@ export class ListaAccesoUsuarioComponent implements OnInit {
 		this.loadUsuario();
 	}
 
+	applyFilter() {
+		if (this.txtFiltro.length > 0) {
+			const tmpList = MultiFiltro(this.lstUsuario, this.txtFiltro);
+			this.length = tmpList.length;
+			this.lstUsuarioPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+		} else {
+			this.length = this.lstUsuario.length;
+			this.lstUsuarioPaged = PaginarArray(this.lstUsuario, this.pageSize, this.pageIndex + 1);
+		}
+	}
+
 	loadUsuario = () => {
 		this.UsuarioSrvc.getAll().subscribe(lst => {
 			if (lst) {
 				if (lst.length > 0) {
-					this.lstUsuario           = lst;
-					this.dataSource           = new MatTableDataSource(this.lstUsuario);
-					this.dataSource.paginator = this.paginator;
+					this.lstUsuario = lst;
+					this.applyFilter();
 				}
 			}
 		});
@@ -38,5 +53,11 @@ export class ListaAccesoUsuarioComponent implements OnInit {
 
 	getUsuario = (obj: Usuario) => {
 		this.getUsuarioEv.emit(obj);
+	}
+
+	pageChange = (e: PageEvent) => {
+		this.pageSize = e.pageSize;
+		this.pageIndex = e.pageIndex;
+		this.applyFilter();
 	}
 }

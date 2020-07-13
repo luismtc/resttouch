@@ -4135,6 +4135,45 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.html":
+/*!**************************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.html ***!
+  \**************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n  <mat-card-title>\n    <h5>Corte de caja</h5>\n  </mat-card-title>\n  <mat-card-content>\n    <form #frmcc=\"ngForm\" (ngSubmit)=\"frmcc.form.valid && guardar()\" novalidate>\n      <mat-form-field class=\"fullWidth\">\n        <mat-label>Tipo de Corte</mat-label>\n        <mat-select name=\"tipo\" [(ngModel)]=\"ccorte.caja_corte_tipo\" (selectionChange)=\"setNameTipo()\" required>\n          <mat-option *ngFor=\"let m of ccorteTipo\" [value]=\"m.caja_corte_tipo\">\n            {{m.descripcion}}\n          </mat-option>\n        </mat-select>\n      </mat-form-field>\n      <p>Agregar nominaciones</p>\n      <div class=\"example-container\">\n        <mat-form-field>\n          <mat-label>Nominación:</mat-label>\n          <mat-select name=\"nominacion\" [(ngModel)]=\"detalle.caja_corte_nominacion\" (selectionChange)=\"setNamenomi()\">\n            <mat-option *ngFor=\"let m of ccorteNomi\" [value]=\"m.caja_corte_nominacion\">\n              {{m.nombre}}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <mat-form-field>\n          <mat-label>Cantidad:</mat-label>\n          <input matInput type=\"number\" step=\"0.01\" name=\"cantidad\" [(ngModel)]=\"detalle.cantidad\" (blur)=\"setTotal()\">\n        </mat-form-field>\n        <mat-form-field>\n          <mat-label>Total:</mat-label>\n          <input matInput type=\"number\" step=\"0.01\" name=\"total\" [(ngModel)]=\"detalle.total\" readonly>\n        </mat-form-field>\n        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"agregarDetalle()\" title=\"Agregar el detalle\">\n          <mat-icon>add</mat-icon>\n        </button>\n      </div>\n      <mat-grid-list cols=\"4\" rowHeight=\"7:1\">\n        <mat-grid-tile><b>Nominación</b></mat-grid-tile>\n        <mat-grid-tile><b>Cantidad</b></mat-grid-tile>\n        <mat-grid-tile><b>Total</b></mat-grid-tile>\n        <mat-grid-tile></mat-grid-tile>\n      </mat-grid-list>\n\n      <mat-grid-list *ngFor=\"let m of ccorte.detalle\" cols=\"4\" rowHeight=\"7:1\">\n        <mat-grid-tile>{{ m.nombre }}</mat-grid-tile>\n        <mat-grid-tile>{{ m.cantidad }}</mat-grid-tile>\n        <mat-grid-tile>{{ m.total }}</mat-grid-tile>\n        <mat-grid-tile>\n          <mat-icon class=\"anulacion\" (click)=\"anularCajaDetalle(m)\" mat-list-icon>close</mat-icon>\n        </mat-grid-tile>\n      </mat-grid-list>\n      <hr>\n      <div align=\"end\">\n        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"reseteGeneral()\" *ngIf=\"ccorte.caja_corte\">\n          <mat-icon>add</mat-icon>\n        </button>\n        <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmcc.form.valid\" title=\"Guardar corte de caja\">\n          <mat-icon>save</mat-icon>\n        </button>\n      </div>\n    </form>\n  </mat-card-content>\n</mat-card>\n");
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.html":
+/*!****************************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.html ***!
+  \****************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n  <mat-card-content>\n    <mat-form-field>\n\t    <input matInput (keyup)=\"filtrar($event.target.value)\" placeholder=\"Buscar...\">\n\t</mat-form-field>\n\t<table mat-table [dataSource]=\"dataSource\">\n        <ng-container matColumnDef=\"ccGeneral\">\n            <td mat-cell *matCellDef=\"let element\">\n                <mat-list>\n                    <mat-list-item>\n                        <mat-icon class=\"anulaicon\" (click)=\"anularCaja(element)\" mat-list-icon>close</mat-icon>\n                        <h5 mat-line>{{ element.descripcion }}</h5>\n                        <span mat-line>{{ element.creacion }}</span>\n                        <span mat-line>Total: {{ element.total }}</span>\n                        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"getCajacorte(element)\">\n                            <mat-icon>arrow_right_alt</mat-icon>\n                        </button>\n                    </mat-list-item>\n                </mat-list>\n            </td>\n        </ng-container>\n        <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </table>\n    <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n  </mat-card-content>\n</mat-card>\n");
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.html":
+/*!****************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.html ***!
+  \****************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m5 s12\">\n    <app-cajacorte-lista  #lstCortecaja (getCajacorteEv)=\"editarCajaCorte($event)\"></app-cajacorte-lista>\n  </div>\n  <div class=\"col m7 s12\">\n    <app-cajacorte-form #frmCortecaja [ccorte]=\"ccorte\" (cajacorteSavedEv)=\"actualizaLista()\"></app-cajacorte-form>\n  </div>\n</div>");
+
+/***/ }),
+
 /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/comanda-en-linea/comanda-en-linea.component.html":
 /*!*******************************************************************************************************************************!*\
   !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/comanda-en-linea/comanda-en-linea.component.html ***!
@@ -4365,7 +4404,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Tipo de Turno {{!!turno.turno_tipo ? turno.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmTurno=\"ngForm\" (ngSubmit)=\"frmTurno.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"turno.descripcion\" required>\n            </mat-form-field>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"+turno.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmTurno.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetTurno()\" *ngIf=\"turno.turno_tipo\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Tipo de Turno {{!!turno.turno_tipo ? turno.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmTurno=\"ngForm\" (ngSubmit)=\"frmTurno.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"turno.descripcion\" required>\n            </mat-form-field>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"+turno.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmTurno.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetTurno()\" *ngIf=\"turno.turno_tipo\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -4378,7 +4417,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"turno\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getTurno(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>line_weight</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\"  [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstTurnosPaged\" (click)=\"getTurno(element)\">\n                <mat-icon mat-list-icon>line_weight</mat-icon>\n                <h5 mat-line>{{element.descripcion}}</h5>                \n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -4951,6 +4990,338 @@ ListaAreaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-area.component.css */ "./src/app/restaurante/components/area/lista-area/lista-area.component.css")).default]
     })
 ], ListaAreaComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.css":
+/*!***********************************************************************************************!*\
+  !*** ./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.css ***!
+  \***********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".example-container .mat-form-field + .mat-form-field {\n  margin-left: 8px;\n}\n\nmat-grid-tile {\n  text-align: left;\n}\n\n.anulacion {\n\tcursor: pointer;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9jYWphLWNvcnRlL2NhamFjb3J0ZS1mb3JtL2NhamFjb3J0ZS1mb3JtLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDRSxnQkFBZ0I7QUFDbEI7O0FBRUE7RUFDRSxnQkFBZ0I7QUFDbEI7O0FBRUE7Q0FDQyxlQUFlO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9jYWphLWNvcnRlL2NhamFjb3J0ZS1mb3JtL2NhamFjb3J0ZS1mb3JtLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuZXhhbXBsZS1jb250YWluZXIgLm1hdC1mb3JtLWZpZWxkICsgLm1hdC1mb3JtLWZpZWxkIHtcbiAgbWFyZ2luLWxlZnQ6IDhweDtcbn1cblxubWF0LWdyaWQtdGlsZSB7XG4gIHRleHQtYWxpZ246IGxlZnQ7XG59XG5cbi5hbnVsYWNpb24ge1xuXHRjdXJzb3I6IHBvaW50ZXI7XG59Il19 */");
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.ts":
+/*!**********************************************************************************************!*\
+  !*** ./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.ts ***!
+  \**********************************************************************************************/
+/*! exports provided: CajacorteFormComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CajacorteFormComponent", function() { return CajacorteFormComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _services_cajacorte_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/cajacorte.service */ "./src/app/restaurante/services/cajacorte.service.ts");
+
+
+
+
+let CajacorteFormComponent = class CajacorteFormComponent {
+    constructor(_snackBar, cajacorteSrvc) {
+        this._snackBar = _snackBar;
+        this.cajacorteSrvc = cajacorteSrvc;
+        this.cajacorteSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.ccorteTipo = [];
+        this.ccorteNomi = [];
+        this.detalle = {
+            caja_corte_detalle: 0,
+            caja_corte: 0,
+            cantidad: 0,
+            total: 0,
+            anulado: 0,
+            caja_corte_nominacion: 0,
+            nombre: null
+        };
+        this.getCajaCorteTipo = () => {
+            this.cajacorteSrvc.getCajaCorteTipo().subscribe(res => {
+                this.ccorteTipo = res;
+            });
+        };
+        this.getCajaCorteNominacion = () => {
+            this.cajacorteSrvc.getCajaCorteNominacion().subscribe(res => {
+                this.ccorteNomi = res;
+            });
+        };
+        this.setTotal = () => {
+            if (this.detalle.caja_corte_nominacion) {
+                let tmp = this.ccorteNomi.filter(o => {
+                    return o.caja_corte_nominacion == this.detalle.caja_corte_nominacion;
+                })[0];
+                if (tmp.calcula == 1) {
+                    this.detalle.total = this.detalle.cantidad * tmp.valor;
+                }
+                else {
+                    this.detalle.total = this.detalle.cantidad;
+                }
+            }
+        };
+        this.setNamenomi = () => {
+            let tmp = this.ccorteNomi.filter(o => {
+                return o.caja_corte_nominacion == this.detalle.caja_corte_nominacion;
+            })[0];
+            console.log(tmp, this.detalle.caja_corte_nominacion);
+            this.detalle.nombre = tmp.nombre;
+        };
+        this.setNameTipo = () => {
+            let tmp = this.ccorteTipo.filter(o => {
+                return o.caja_corte_tipo == this.ccorte.caja_corte_tipo;
+            })[0];
+            console.log(tmp, this.ccorte.caja_corte_tipo);
+            this.ccorte.descripcion = tmp.descripcion;
+        };
+        this.reseteGeneral = () => this.ccorte = {
+            caja_corte: 0,
+            creacion: null,
+            usuario: 0,
+            turno: 0,
+            confirmado: null,
+            anulado: 0,
+            caja_corte_tipo: 0,
+            descripcion: null,
+            detalle: []
+        };
+        this.resetDetalle = () => this.detalle = {
+            caja_corte_detalle: 0,
+            caja_corte: 0,
+            cantidad: 0,
+            total: 0,
+            anulado: 0,
+            caja_corte_nominacion: 0,
+            nombre: null
+        };
+        this.agregarDetalle = () => {
+            if (this.detalle.caja_corte_nominacion &&
+                this.detalle.cantidad &&
+                this.detalle.total) {
+                this.ccorte.detalle.push(this.detalle);
+                this.resetDetalle();
+            }
+            else {
+                this._snackBar.open(`Complete los datos de nominaciones`, 'Corte de caja', { duration: 3000 });
+            }
+        };
+        this.guardar = () => {
+            if (confirm('¿Está seguro?')) {
+                if (this.ccorte.detalle.length == 0) {
+                    this._snackBar.open(`Por favor agregue las nominaciones`, 'Corte de caja', { duration: 3000 });
+                    return false;
+                }
+                if (!this.ccorte.caja_corte_tipo) {
+                    this._snackBar.open(`Seleccione el tipo de corte de caja.`, 'Corte de caja', { duration: 3000 });
+                    return false;
+                }
+                this.cajacorteSrvc.guardar(this.ccorte).subscribe(res => {
+                    if (res.exito) {
+                        this.cajacorteSavedEv.emit();
+                        this.reseteGeneral();
+                    }
+                    this._snackBar.open(`${res.mensaje}`, 'Corte de caja', { duration: 3000 });
+                });
+            }
+        };
+        this.anularCajaDetalle = (obj) => {
+            if (confirm('¿Está seguro.?')) {
+                if (obj.caja_corte_detalle) {
+                    this.cajacorteSrvc.anularDetalle(obj).subscribe(res => {
+                        if (res.exito) {
+                            let key = this.ccorte.detalle.indexOf(obj);
+                            this.ccorte.detalle.splice(key, 1);
+                        }
+                        this._snackBar.open(`${res.mensaje}`, 'Corte de caja', { duration: 3000 });
+                    });
+                }
+                else {
+                    let key = this.ccorte.detalle.indexOf(obj);
+                    this.ccorte.detalle.splice(key, 1);
+                }
+            }
+        };
+    }
+    ngOnInit() {
+        this.getCajaCorteTipo();
+        this.getCajaCorteNominacion();
+    }
+};
+CajacorteFormComponent.ctorParameters = () => [
+    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+    { type: _services_cajacorte_service__WEBPACK_IMPORTED_MODULE_3__["CajacorteService"] }
+];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+], CajacorteFormComponent.prototype, "ccorte", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+], CajacorteFormComponent.prototype, "cajacorteSavedEv", void 0);
+CajacorteFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-cajacorte-form',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./cajacorte-form.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./cajacorte-form.component.css */ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.css")).default]
+    })
+], CajacorteFormComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.css":
+/*!*************************************************************************************************!*\
+  !*** ./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.css ***!
+  \*************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".anulaicon {\n\tcursor: pointer;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9jYWphLWNvcnRlL2NhamFjb3J0ZS1saXN0YS9jYWphY29ydGUtbGlzdGEuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtDQUNDLGVBQWU7QUFDaEIiLCJmaWxlIjoic3JjL2FwcC9yZXN0YXVyYW50ZS9jb21wb25lbnRzL2NhamEtY29ydGUvY2FqYWNvcnRlLWxpc3RhL2NhamFjb3J0ZS1saXN0YS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmFudWxhaWNvbiB7XG5cdGN1cnNvcjogcG9pbnRlcjtcbn0iXX0= */");
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.ts":
+/*!************************************************************************************************!*\
+  !*** ./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.ts ***!
+  \************************************************************************************************/
+/*! exports provided: CajacorteListaComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CajacorteListaComponent", function() { return CajacorteListaComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _services_cajacorte_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/cajacorte.service */ "./src/app/restaurante/services/cajacorte.service.ts");
+
+
+
+
+
+
+let CajacorteListaComponent = class CajacorteListaComponent {
+    constructor(ccorteSrvc, _snackBar) {
+        this.ccorteSrvc = ccorteSrvc;
+        this._snackBar = _snackBar;
+        this.displayedColumns = ['ccGeneral'];
+        this.getCajacorteEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.getCajascortes = () => {
+            this.ccorteSrvc.buscar().subscribe(lst => {
+                this.listacc = lst;
+                this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.listacc);
+                this.dataSource.paginator = this.paginator;
+            });
+        };
+        this.anularCaja = (obj) => {
+            if (confirm('¿Si anula este corte, se anulará también las nominaciones.?')) {
+                this.ccorteSrvc.anularCorte(obj).subscribe(res => {
+                    if (res.exito) {
+                        this.getCajascortes();
+                    }
+                    this._snackBar.open(`${res.mensaje}`, 'Corte de caja', { duration: 3000 });
+                });
+            }
+        };
+        this.getCajacorte = (obj) => {
+            this.getCajacorteEv.emit(obj);
+        };
+    }
+    ngOnInit() {
+        this.getCajascortes();
+    }
+    filtrar(filtro) {
+        this.dataSource.filter = filtro.trim().toLowerCase();
+    }
+    ;
+};
+CajacorteListaComponent.ctorParameters = () => [
+    { type: _services_cajacorte_service__WEBPACK_IMPORTED_MODULE_5__["CajacorteService"] },
+    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__["MatSnackBar"] }
+];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+], CajacorteListaComponent.prototype, "getCajacorteEv", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
+], CajacorteListaComponent.prototype, "paginator", void 0);
+CajacorteListaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-cajacorte-lista',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./cajacorte-lista.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./cajacorte-lista.component.css */ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.css")).default]
+    })
+], CajacorteListaComponent);
+
+
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.css":
+/*!*************************************************************************************!*\
+  !*** ./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.css ***!
+  \*************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Jlc3RhdXJhbnRlL2NvbXBvbmVudHMvY2FqYS1jb3J0ZS9jYWphY29ydGUvY2FqYWNvcnRlLmNvbXBvbmVudC5jc3MifQ== */");
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts":
+/*!************************************************************************************!*\
+  !*** ./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts ***!
+  \************************************************************************************/
+/*! exports provided: CajacorteComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CajacorteComponent", function() { return CajacorteComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+let CajacorteComponent = class CajacorteComponent {
+    constructor() {
+        this.editarCajaCorte = (pres) => this.ccorte = pres;
+        this.actualizaLista = () => this.lstCajacorteComponent.getCajascortes();
+        this.ccorte = {
+            caja_corte: 0,
+            creacion: null,
+            usuario: 0,
+            turno: 0,
+            confirmado: null,
+            anulado: 0,
+            caja_corte_tipo: 0,
+            descripcion: null,
+            detalle: []
+        };
+    }
+    ngOnInit() {
+    }
+};
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lstCortecaja', { static: false })
+], CajacorteComponent.prototype, "lstCajacorteComponent", void 0);
+CajacorteComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-cajacorte',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./cajacorte.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./cajacorte.component.css */ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.css")).default]
+    })
+], CajacorteComponent);
 
 
 
@@ -7147,10 +7518,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaTurnoTipoComponent", function() { return ListaTurnoTipoComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_tipo_turno_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/tipo-turno.service */ "./src/app/restaurante/services/tipo-turno.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_tipo_turno_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/tipo-turno.service */ "./src/app/restaurante/services/tipo-turno.service.ts");
 
 
 
@@ -7158,15 +7527,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaTurnoTipoComponent = class ListaTurnoTipoComponent {
     constructor(turnoSrvc) {
         this.turnoSrvc = turnoSrvc;
-        this.displayedColumns = ['turno'];
         this.getTurnoEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadTurnos = () => {
             this.turnoSrvc.get().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstTurnos = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstTurnos);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -7174,23 +7546,33 @@ let ListaTurnoTipoComponent = class ListaTurnoTipoComponent {
         this.getTurno = (obj) => {
             this.getTurnoEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadTurnos();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstTurnos, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstTurnosPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstTurnos.length;
+            this.lstTurnosPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstTurnos, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaTurnoTipoComponent.ctorParameters = () => [
-    { type: _services_tipo_turno_service__WEBPACK_IMPORTED_MODULE_4__["TipoTurnoService"] }
+    { type: _services_tipo_turno_service__WEBPACK_IMPORTED_MODULE_3__["TipoTurnoService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaTurnoTipoComponent.prototype, "getTurnoEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaTurnoTipoComponent.prototype, "paginator", void 0);
 ListaTurnoTipoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-turno-tipo',
@@ -7728,6 +8110,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/turno-tipo/turno/turno.component */ "./src/app/restaurante/components/turno-tipo/turno/turno.component.ts");
 /* harmony import */ var _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/propina/propina/propina.component */ "./src/app/restaurante/components/propina/propina/propina.component.ts");
 /* harmony import */ var _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/reportes/autoconsulta/autoconsulta.component */ "./src/app/restaurante/components/reportes/autoconsulta/autoconsulta.component.ts");
+/* harmony import */ var _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/caja-corte/cajacorte/cajacorte.component */ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts");
+
 
 
 
@@ -7757,6 +8141,7 @@ const routes = [
     { path: 'tipoturno', component: _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_13__["TurnoTipoComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
     { path: 'propina', component: _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_14__["PropinaComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
     { path: 'autoconsulta', component: _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_15__["AutoconsultaComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+    { path: 'cajacorte', component: _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_16__["CajacorteComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
     { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 let RestauranteRoutingModule = class RestauranteRoutingModule {
@@ -7845,6 +8230,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/propina/form-propina/form-propina.component */ "./src/app/restaurante/components/propina/form-propina/form-propina.component.ts");
 /* harmony import */ var _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/propina/lista-propina/lista-propina.component */ "./src/app/restaurante/components/propina/lista-propina/lista-propina.component.ts");
 /* harmony import */ var _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/reportes/autoconsulta/autoconsulta.component */ "./src/app/restaurante/components/reportes/autoconsulta/autoconsulta.component.ts");
+/* harmony import */ var _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/caja-corte/cajacorte/cajacorte.component */ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts");
+/* harmony import */ var _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-lista/cajacorte-lista.component */ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.ts");
+/* harmony import */ var _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-form/cajacorte-form.component */ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.ts");
 
 
 
@@ -7908,6 +8296,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 let RestauranteModule = class RestauranteModule {
 };
@@ -7916,7 +8307,7 @@ RestauranteModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         declarations: [
             _components_tran_areas_tran_areas_component__WEBPACK_IMPORTED_MODULE_33__["TranAreasComponent"], _components_mesa_mesa_component__WEBPACK_IMPORTED_MODULE_34__["MesaComponent"], _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_tran_comanda_tran_comanda_component__WEBPACK_IMPORTED_MODULE_36__["TranComandaComponent"], _components_lista_productos_comanda_lista_productos_comanda_component__WEBPACK_IMPORTED_MODULE_37__["ListaProductosComandaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"],
             _components_area_lista_area_lista_area_component__WEBPACK_IMPORTED_MODULE_39__["ListaAreaComponent"], _components_area_form_area_form_area_component__WEBPACK_IMPORTED_MODULE_40__["FormAreaComponent"], _components_area_area_area_component__WEBPACK_IMPORTED_MODULE_41__["AreaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_turno_turno_turno_component__WEBPACK_IMPORTED_MODULE_43__["TurnoComponent"], _components_turno_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_44__["ListaTurnoComponent"],
-            _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_45__["FormTurnoComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_47__["RptVentasComponent"], _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_48__["PorCategoriaComponent"], _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_49__["PorArticuloComponent"], _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_50__["TurnosComponent"], _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_51__["PropinasComponent"], _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_52__["ComandaEnLineaComponent"], _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_53__["CajaComponent"], _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_54__["FacturaComponent"], _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_55__["ListaTurnoTipoComponent"], _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_56__["FormTurnoTipoComponent"], _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_57__["TurnoTipoComponent"], _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_58__["PropinaComponent"], _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__["FormPropinaComponent"], _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__["ListaPropinaComponent"], _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__["AutoconsultaComponent"]
+            _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_45__["FormTurnoComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_47__["RptVentasComponent"], _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_48__["PorCategoriaComponent"], _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_49__["PorArticuloComponent"], _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_50__["TurnosComponent"], _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_51__["PropinasComponent"], _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_52__["ComandaEnLineaComponent"], _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_53__["CajaComponent"], _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_54__["FacturaComponent"], _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_55__["ListaTurnoTipoComponent"], _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_56__["FormTurnoTipoComponent"], _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_57__["TurnoTipoComponent"], _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_58__["PropinaComponent"], _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__["FormPropinaComponent"], _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__["ListaPropinaComponent"], _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__["AutoconsultaComponent"], _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__["CajacorteComponent"], _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__["CajacorteListaComponent"], _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__["CajacorteFormComponent"]
         ],
         entryComponents: [
             _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"]
@@ -8095,6 +8486,105 @@ AutoconsultaService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         providedIn: 'root'
     })
 ], AutoconsultaService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/restaurante/services/cajacorte.service.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/restaurante/services/cajacorte.service.ts ***!
+  \***********************************************************/
+/*! exports provided: CajacorteService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CajacorteService", function() { return CajacorteService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+
+
+
+
+
+
+
+
+let CajacorteService = class CajacorteService {
+    constructor(http, ls) {
+        this.http = http;
+        this.ls = ls;
+        this.moduleUrl = 'cajacorte';
+        this.usrToken = null;
+        this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+        this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+    }
+    buscar(fltr = {}) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/buscar?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    getCajaCorteTipo(fltr = {}) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos}/get_caja_corte_tipo?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    getCajaCorteNominacion(fltr = {}) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos}/get_caja_corte_nominacion?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    guardar(entidad) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    anularCorte(entidad) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/anular_caja`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    anularDetalle(entidad) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/anular_caja_detalle`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+};
+CajacorteService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+];
+CajacorteService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    })
+], CajacorteService);
 
 
 

@@ -35,13 +35,13 @@
 			</mat-form-field>
 			<!-- <mat-checkbox name="anulado" class="fullWidth">Anulado</mat-checkbox> -->
 			<div align="end">
-				<button mat-icon-button type="submit" color="accent" [disabled]="!frmAccesoUsuario.form.valid" 
+				<button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmAccesoUsuario.form.valid" 
 				*ngIf="this.usuario.usuario">
-					<mat-icon>save</mat-icon>
+					Guardar
 				</button>
-				<button mat-icon-button type="button" color="accent" (click)="resetAcceso()"
+				<button mat-raised-button type="button" color="accent" (click)="resetAcceso()"
 				*ngIf="this.usuario.usuario">
-					<mat-icon>add</mat-icon>
+					Nuevo
 				</button>
 			</div>
 		</form>
@@ -62,11 +62,11 @@
 			<ng-container matColumnDef="editItem">
 				<th mat-header-cell *matHeaderCellDef>&nbsp;</th>
 				<td mat-cell *matCellDef="let element" class="text-right">
-					<button mat-icon-button type="button" color="accent" (click)="setAcceso(element)">
-						<mat-icon>edit</mat-icon>
+					<button mat-raised-button type="button" class="btnAccion" color="accent" (click)="setAcceso(element)">
+						Editar
 					</button>
-					<button mat-icon-button type="button" color="accent" (click)="removerAcceso(element)">
-						<mat-icon>delete</mat-icon>
+					<button mat-raised-button type="button" color="accent" (click)="removerAcceso(element)">
+						Eliminar
 					</button>
 				</td>
 			</ng-container>

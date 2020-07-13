@@ -28,11 +28,11 @@
             <mat-checkbox name="debaja" [(ngModel)]="+usuario.debaja" class="fontFamily">De baja</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <mat-checkbox name="esmesero" [(ngModel)]="+usuario.esmesero" class="fontFamily">Es mesero</mat-checkbox>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmUsuario.form.valid">
-                    <mat-icon>save</mat-icon>
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmUsuario.form.valid">
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetUsuario()" *ngIf="usuario.usuario">
-                    <mat-icon>add</mat-icon>
+                <button mat-raised-button type="button" color="accent" (click)="resetUsuario()" *ngIf="usuario.usuario">
+                    Nuevo
                 </button>
             </div>
         </form>
