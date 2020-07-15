@@ -18,11 +18,11 @@
                 <mat-checkbox name="activo" class="fullWidth" [(ngModel)]="+formaPago.activo">Activo</mat-checkbox>
             </div>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmFormaPago.form.valid">
-                    <mat-icon>save</mat-icon>
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmFormaPago.form.valid">
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetFormaPago()" *ngIf="formaPago.forma_pago">
-                    <mat-icon>add</mat-icon>
+                <button mat-raised-button type="button" color="accent" (click)="resetFormaPago()" *ngIf="formaPago.forma_pago">
+                    Nueva
                 </button>
             </div>
         </form>

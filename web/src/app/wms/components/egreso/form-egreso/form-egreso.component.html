@@ -61,16 +61,16 @@
                 </mat-select>
             </mat-form-field>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent"
+                <button mat-raised-button type="submit" color="accent" class="btnAccion"
                     [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
                     *ngIf="saveToDB">
-                    <mat-icon>save</mat-icon>
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" (click)="confirmarEgreso()"
+                    Guardar
+                </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="confirmarEgreso()"
                     *ngIf="egreso.egreso && detallesEgreso.length > 0"
-                    [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0">Confirmar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-icon-button type="button" color="accent" (click)="resetEgreso()" *ngIf="egreso.egreso">
-                    <mat-icon>add</mat-icon>
+                    [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0">Confirmar</button>
+                <button mat-raised-button type="button" color="accent" (click)="resetEgreso()" *ngIf="egreso.egreso">
+                    Nuevo
                 </button>
             </div>
         </form>
@@ -136,19 +136,19 @@
                     required>
             </mat-form-field>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent"
+                <button mat-raised-button type="submit" color="accent" class="btnAccion"
                     [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
                     *ngIf="saveToDB">
-                    <mat-icon>save</mat-icon>
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="addToDetail()"
+                <button mat-raised-button type="button" color="accent" (click)="addToDetail()"
                     [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
                     *ngIf="!saveToDB">
-                    <mat-icon>add</mat-icon>
+                    Nuevo
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetDetalleEgreso()"
+                <button mat-raised-button type="button" color="accent" (click)="resetDetalleEgreso()"
                     *ngIf="detalleEgreso.egreso_detalle">
-                    <mat-icon>add</mat-icon>
+                    Nuevo
                 </button>
             </div>
         </form>
@@ -182,14 +182,14 @@
             <ng-container matColumnDef="editItem">
                 <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td mat-cell *matCellDef="let element" class="text-wrap">
-                    <button mat-icon-button type="button" color="accent"
+                    <button mat-raised-button type="button" color="accent" class="btnAccion"
                         (click)="getDetalleEgreso(element.egreso, element.egreso_detalle)"
                         [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="saveToDB">
-                        <mat-icon>edit</mat-icon>
+                        Editar
                     </button>
-                    <button mat-icon-button type="button" color="accent" (click)="removeFromDetail(element.articulo)"
+                    <button mat-raised-button type="button" color="accent" (click)="removeFromDetail(element.articulo)"
                         [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
-                        <mat-icon>delete</mat-icon>
+                        Eliminar
                     </button>
                 </td>
             </ng-container>

@@ -5574,7 +5574,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function() { return MultiFiltro; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 
-// const urlBase = 'http://localhost:8005'; // Desarrollo
+// const urlBase = 'http://localhost/resttouch'; // Desarrollo
 const urlBase = location.origin; // Producción
 const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',

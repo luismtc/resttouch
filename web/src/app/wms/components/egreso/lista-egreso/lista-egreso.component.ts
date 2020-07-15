@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Egreso } from '../../../interfaces/egreso';
 import { EgresoService } from '../../../services/egreso.service';
@@ -12,12 +12,16 @@ import { EgresoService } from '../../../services/egreso.service';
 })
 export class ListaEgresoComponent implements OnInit {
 
-  public displayedColumns: string[] = ['egreso'];
-  public dataSource: MatTableDataSource<Egreso>;
-
   public lstEgresos: Egreso[];
+  public lstEgresosPaged: Egreso[];
   @Output() getEgresoEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     private egresoSrvc: EgresoService
@@ -27,8 +31,15 @@ export class ListaEgresoComponent implements OnInit {
     this.loadEgresos();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstEgresos, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstEgresosPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstEgresos.length;
+      this.lstEgresosPaged = PaginarArray(this.lstEgresos, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadEgresos = () => {
@@ -36,8 +47,7 @@ export class ListaEgresoComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstEgresos = lst;
-          this.dataSource = new MatTableDataSource(this.lstEgresos);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
     });
@@ -55,4 +65,9 @@ export class ListaEgresoComponent implements OnInit {
     });
   }
 
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
+  }
 }

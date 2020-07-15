@@ -5076,7 +5076,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CheckObjectType", function () { return CheckObjectType; });
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function () { return MultiFiltro; });
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            // const urlBase = 'http://localhost:8005'; // Desarrollo
+            // const urlBase = 'http://localhost/resttouch'; // Desarrollo
             var urlBase = location.origin; // Producción
             var GLOBAL = {
                 dbDateFormat: 'YYYY-MM-DD',

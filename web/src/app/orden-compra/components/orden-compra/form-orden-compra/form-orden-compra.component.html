@@ -47,18 +47,18 @@
                 </mat-select>
             </mat-form-field>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent"
+                <button mat-raised-button type="submit" color="accent" class="btnAccion"
                     [disabled]="!frmOrdenCompra.form.valid || [2, 3].indexOf(+ordenCompra.estatus_movimiento) >= 0">
-                    <mat-icon>save</mat-icon>
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" (click)="generarIngreso()"
+                    Guardar
+                </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="generarIngreso()"
                     *ngIf="ordenCompra.orden_compra && detallesOrdenCompra.length > 0"
                     [disabled]="!frmOrdenCompra.form.valid || [2, 3].indexOf(+ordenCompra.estatus_movimiento) >= 0 || !ordenCompra.bodega || !ordenCompra.tipo_movimiento">
                     Generar ingreso
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-icon-button type="button" color="accent" (click)="resetOrdenCompra()"
+                </button>
+                <button mat-raised-button type="button" color="accent" (click)="resetOrdenCompra()"
                     *ngIf="ordenCompra.orden_compra">
-                    <mat-icon>add</mat-icon>
+                    Nueva
                 </button>
             </div>
         </form>
@@ -114,13 +114,13 @@
                     required>
             </mat-form-field>
             <div align="end">
-                <button mat-icon-button type="submit" color="accent"
+                <button mat-raised-button type="submit" color="accent" class="btnAccion"
                     [disabled]="!frmDetalleOrdenCompra.form.valid || [2, 3].indexOf(+ordenCompra.estatus_movimiento) >= 0">
-                    <mat-icon>save</mat-icon>
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetDetalleOrdenCompra()"
+                <button mat-raised-button type="button" color="accent" (click)="resetDetalleOrdenCompra()"
                     *ngIf="detalleOrdenCompra.orden_compra_detalle">
-                    <mat-icon>add</mat-icon>
+                    Nuevo
                 </button>
             </div>
         </form>
@@ -146,10 +146,10 @@
             <ng-container matColumnDef="editItem">
                 <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td mat-cell *matCellDef="let element" class="text-wrap">
-                    <button mat-icon-button type="button" color="accent"
+                    <button mat-raised-button type="button" color="accent"
                         (click)="getDetalleOrdenCompra(element.orden_compra, element.orden_compra_detalle)"
                         [disabled]="[2, 3].indexOf(+ordenCompra.estatus_movimiento) >= 0">
-                        <mat-icon>edit</mat-icon>
+                        Editar
                     </button>
                 </td>
             </ng-container>

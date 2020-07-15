@@ -570,7 +570,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!formaPago.forma_pago ? formaPago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFormaPago=\"ngForm\" (ngSubmit)=\"frmFormaPago.form.valid && onSubmit()\" novalidate>\n            <div class=\"form-group\">\n                <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                    <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"formaPago.descripcion\" required>\n                </mat-form-field>\n                <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\" ng-virtual-keyboard-placeholder=\"Descripcion\" type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"formaPago.descripcion\" required>\n                </mat-form-field>\n            </div>\n            <div class=\"form-group\">\n                <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"+formaPago.activo\">Activo</mat-checkbox>\n            </div>\n            <div align=\"end\">\n                <button mat-icon-button type=\"submit\" color=\"accent\" [disabled]=\"!frmFormaPago.form.valid\">\n                    <mat-icon>save</mat-icon>\n                </button>\n                <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"formaPago.forma_pago\">\n                    <mat-icon>add</mat-icon>\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!formaPago.forma_pago ? formaPago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFormaPago=\"ngForm\" (ngSubmit)=\"frmFormaPago.form.valid && onSubmit()\" novalidate>\n            <div class=\"form-group\">\n                <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                    <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"formaPago.descripcion\" required>\n                </mat-form-field>\n                <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\" ng-virtual-keyboard-placeholder=\"Descripcion\" type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"formaPago.descripcion\" required>\n                </mat-form-field>\n            </div>\n            <div class=\"form-group\">\n                <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"+formaPago.activo\">Activo</mat-checkbox>\n            </div>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmFormaPago.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"formaPago.forma_pago\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -596,7 +596,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field>\n            <input matInput (keyup)=\"applyFilter($event.target.value)\" placeholder=\"Buscar...\">\n        </mat-form-field>\n        <table mat-table [dataSource]=\"dataSource\">\n            <ng-container matColumnDef=\"formaPago\">\n                <!--<th mat-header-cell *matHeaderCellDef> No. </th>-->\n                <td mat-cell *matCellDef=\"let element\" (click)=\"getFormaPago(element)\">\n                    <mat-list>\n                        <mat-list-item>\n                            <mat-icon mat-list-icon>account_balance_wallet</mat-icon>\n                            <h5 mat-line>{{element.descripcion}}</h5>\n                            <button mat-icon-button type=\"button\" color=\"accent\">\n                                <mat-icon>arrow_right_alt</mat-icon>\n                            </button>\n                        </mat-list-item>\n                    </mat-list>\n                </td>\n            </ng-container>\n            <!--<tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>-->\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n        </table>\n        <mat-paginator [pageSizeOptions]=\"[5, 10, 20]\" showFirstLastButtons></mat-paginator>\n    </mat-card-content>\n</mat-card>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstFormasPagoPaged\" (click)=\"getFormaPago(element)\">\n                <mat-icon mat-list-icon>account_balance_wallet</mat-icon>\n                <h5 mat-line>{{element.descripcion}}</h5>\n            </mat-list-item>            \n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>\n");
 
 /***/ }),
 
@@ -1490,10 +1490,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaFormaPagoComponent", function() { return ListaFormaPagoComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/forma-pago.service */ "./src/app/pos/services/forma-pago.service.ts");
-
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/forma-pago.service */ "./src/app/pos/services/forma-pago.service.ts");
 
 
 
@@ -1501,15 +1499,18 @@ __webpack_require__.r(__webpack_exports__);
 let ListaFormaPagoComponent = class ListaFormaPagoComponent {
     constructor(formaPagoSrvc) {
         this.formaPagoSrvc = formaPagoSrvc;
-        this.displayedColumns = ['formaPago'];
         this.getFormaPagoEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.length = 0;
+        this.pageSize = 5;
+        this.pageSizeOptions = [5, 10, 15];
+        this.pageIndex = 0;
+        this.txtFiltro = '';
         this.loadFormasPago = () => {
             this.formaPagoSrvc.buscar().subscribe(lst => {
                 if (lst) {
                     if (lst.length > 0) {
                         this.lstFormasPago = lst;
-                        this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](this.lstFormasPago);
-                        this.dataSource.paginator = this.paginator;
+                        this.applyFilter();
                     }
                 }
             });
@@ -1517,23 +1518,33 @@ let ListaFormaPagoComponent = class ListaFormaPagoComponent {
         this.getFormaPago = (obj) => {
             this.getFormaPagoEv.emit(obj);
         };
+        this.pageChange = (e) => {
+            this.pageSize = e.pageSize;
+            this.pageIndex = e.pageIndex;
+            this.applyFilter();
+        };
     }
     ngOnInit() {
         this.loadFormasPago();
     }
-    applyFilter(filterValue) {
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+    applyFilter() {
+        if (this.txtFiltro.length > 0) {
+            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstFormasPago, this.txtFiltro);
+            this.length = tmpList.length;
+            this.lstFormasPagoPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+        }
+        else {
+            this.length = this.lstFormasPago.length;
+            this.lstFormasPagoPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstFormasPago, this.pageSize, this.pageIndex + 1);
+        }
     }
 };
 ListaFormaPagoComponent.ctorParameters = () => [
-    { type: _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_4__["FormaPagoService"] }
+    { type: _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_3__["FormaPagoService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaFormaPagoComponent.prototype, "getFormaPagoEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])(_angular_material_paginator__WEBPACK_IMPORTED_MODULE_2__["MatPaginator"], { static: true })
-], ListaFormaPagoComponent.prototype, "paginator", void 0);
 ListaFormaPagoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-forma-pago',

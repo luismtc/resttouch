@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Ingreso } from '../../../interfaces/ingreso';
 import { IngresoService } from '../../../services/ingreso.service';
@@ -12,12 +12,16 @@ import { IngresoService } from '../../../services/ingreso.service';
 })
 export class ListaIngresoComponent implements OnInit {
 
-  public displayedColumns: string[] = ['ingreso'];
-  public dataSource: MatTableDataSource<Ingreso>;
-
   public lstIngresos: Ingreso[];
+  public lstIngresosPaged: Ingreso[];
   @Output() getIngresoEv = new EventEmitter();
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  public length = 0;
+  public pageSize = 5;
+  public pageSizeOptions: number[] = [5, 10, 15];
+  public pageIndex = 0;
+  public pageEvent: PageEvent;
+  public txtFiltro = '';
 
   constructor(
     private ingresoSrvc: IngresoService
@@ -27,8 +31,15 @@ export class ListaIngresoComponent implements OnInit {
     this.loadIngresos();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      const tmpList = MultiFiltro(this.lstIngresos, this.txtFiltro);
+      this.length = tmpList.length;
+      this.lstIngresosPaged = PaginarArray(tmpList, this.pageSize, this.pageIndex + 1);
+    } else {
+      this.length = this.lstIngresos.length;
+      this.lstIngresosPaged = PaginarArray(this.lstIngresos, this.pageSize, this.pageIndex + 1);
+    }
   }
 
   loadIngresos = () => {
@@ -36,8 +47,7 @@ export class ListaIngresoComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstIngresos = lst;
-          this.dataSource = new MatTableDataSource(this.lstIngresos);
-          this.dataSource.paginator = this.paginator;
+          this.applyFilter();
         }
       }
     });
@@ -54,6 +64,12 @@ export class ListaIngresoComponent implements OnInit {
       comentario: obj.comentario,
       proveedor: obj.proveedor.proveedor
     });
+  }
+
+  pageChange = (e: PageEvent) => {
+    this.pageSize = e.pageSize;
+    this.pageIndex = e.pageIndex;
+    this.applyFilter();
   }
 
 }
