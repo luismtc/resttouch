@@ -1862,32 +1862,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
             /* harmony import */ var _services_app_menu_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/app-menu.service */ "./src/app/admin/services/app-menu.service.ts");
             /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../shared/services/desktop-notification.service */ "./src/app/shared/services/desktop-notification.service.ts");
             var DashboardComponent = /** @class */ (function () {
-                function DashboardComponent(router, ls, _snackBar, usrSrvc, appMenuSrvc) {
+                function DashboardComponent(router, ls, _snackBar, usrSrvc, appMenuSrvc, dns) {
                     var _this = this;
                     this.router = router;
                     this.ls = ls;
                     this._snackBar = _snackBar;
                     this.usrSrvc = usrSrvc;
                     this.appMenuSrvc = appMenuSrvc;
+                    this.dns = dns;
                     this.handleClick = function (modulo) {
                         if (modulo === void 0) { modulo = ''; }
                         var objModulo = _this.appMenu.find(function (m) { return m.nombre === modulo; });
-                        //console.log(objModulo);
+                        // console.log(objModulo);
                         if (objModulo) {
                             var submodulo = _this.usrSrvc.transformSubModule(objModulo.submodulo);
-                            //console.log(submodulo);
+                            // console.log(submodulo);
                             _this.appMenuSrvc.updOpciones(submodulo);
                             _this._snackBar.open("Cambio al m\u00F3dulo " + modulo, 'Módulo', { duration: 5000 });
                         }
                     };
-                    //this.appMenu = this.usrSrvc.getUserAppMenu();
+                    // this.appMenu = this.usrSrvc.getUserAppMenu();
                 }
                 DashboardComponent.prototype.ngOnInit = function () {
                     var _this = this;
                     this.appMenuSrvc.getData().subscribe(function (res) {
                         if (res) {
                             _this.appMenu = res;
+                        }
+                    });
+                    this.dns.havePermission().then(function (res) {
+                        if (!res) {
+                            _this.dns.requestPermission();
                         }
                     });
                 };
@@ -1902,7 +1909,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 { type: _services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__["LocalstorageService"] },
                 { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_7__["MatSnackBar"] },
                 { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__["UsuarioService"] },
-                { type: _services_app_menu_service__WEBPACK_IMPORTED_MODULE_6__["AppMenuService"] }
+                { type: _services_app_menu_service__WEBPACK_IMPORTED_MODULE_6__["AppMenuService"] },
+                { type: _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_8__["DesktopNotificationService"] }
             ]; };
             DashboardComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -4976,6 +4984,60 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     name: 'filter'
                 })
             ], FilterPipe);
+            /***/ 
+        }),
+        /***/ "./src/app/shared/services/desktop-notification.service.ts": 
+        /*!*****************************************************************!*\
+          !*** ./src/app/shared/services/desktop-notification.service.ts ***!
+          \*****************************************************************/
+        /*! exports provided: DesktopNotificationService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DesktopNotificationService", function () { return DesktopNotificationService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _shared_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared.module */ "./src/app/shared/shared.module.ts");
+            var DesktopNotificationService = /** @class */ (function () {
+                function DesktopNotificationService() {
+                    var _this = this;
+                    this.requestPermission = function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
+                        var result;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!('Notification' in window)) {
+                                        return [2 /*return*/];
+                                    }
+                                    if (!(Notification.permission === 'default')) return [3 /*break*/, 2];
+                                    return [4 /*yield*/, Notification.requestPermission()];
+                                case 1:
+                                    result = _a.sent();
+                                    return [2 /*return*/, result];
+                                case 2: return [2 /*return*/, Notification.permission];
+                            }
+                        });
+                    }); };
+                    this.havePermission = function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () { return __generator(this, function (_a) {
+                        return [2 /*return*/, Notification.permission === 'granted'];
+                    }); }); };
+                    this.createNotification = function (title, delay, options) {
+                        if (delay === void 0) { delay = 5000; }
+                        if (Notification.permission === 'granted') {
+                            var notification = new Notification(title, options);
+                            if (delay !== null && delay !== undefined && +delay > 0) {
+                                setTimeout(notification.close.bind(notification), delay);
+                            }
+                        }
+                    };
+                }
+                return DesktopNotificationService;
+            }());
+            DesktopNotificationService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: _shared_module__WEBPACK_IMPORTED_MODULE_2__["SharedModule"]
+                })
+            ], DesktopNotificationService);
             /***/ 
         }),
         /***/ "./src/app/shared/shared.module.ts": 

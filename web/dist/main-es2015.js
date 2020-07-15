@@ -1981,6 +1981,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
 /* harmony import */ var _services_app_menu_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/app-menu.service */ "./src/app/admin/services/app-menu.service.ts");
 /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../shared/services/desktop-notification.service */ "./src/app/shared/services/desktop-notification.service.ts");
+
 
 
 
@@ -1990,28 +1992,34 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let DashboardComponent = class DashboardComponent {
-    constructor(router, ls, _snackBar, usrSrvc, appMenuSrvc) {
+    constructor(router, ls, _snackBar, usrSrvc, appMenuSrvc, dns) {
         this.router = router;
         this.ls = ls;
         this._snackBar = _snackBar;
         this.usrSrvc = usrSrvc;
         this.appMenuSrvc = appMenuSrvc;
+        this.dns = dns;
         this.handleClick = (modulo = '') => {
             const objModulo = this.appMenu.find(m => m.nombre === modulo);
-            //console.log(objModulo);
+            // console.log(objModulo);
             if (objModulo) {
                 const submodulo = this.usrSrvc.transformSubModule(objModulo.submodulo);
-                //console.log(submodulo);
+                // console.log(submodulo);
                 this.appMenuSrvc.updOpciones(submodulo);
                 this._snackBar.open(`Cambio al módulo ${modulo}`, 'Módulo', { duration: 5000 });
             }
         };
-        //this.appMenu = this.usrSrvc.getUserAppMenu();
+        // this.appMenu = this.usrSrvc.getUserAppMenu();
     }
     ngOnInit() {
         this.appMenuSrvc.getData().subscribe((res) => {
             if (res) {
                 this.appMenu = res;
+            }
+        });
+        this.dns.havePermission().then((res) => {
+            if (!res) {
+                this.dns.requestPermission();
             }
         });
     }
@@ -2025,7 +2033,8 @@ DashboardComponent.ctorParameters = () => [
     { type: _services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__["LocalstorageService"] },
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_7__["MatSnackBar"] },
     { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__["UsuarioService"] },
-    { type: _services_app_menu_service__WEBPACK_IMPORTED_MODULE_6__["AppMenuService"] }
+    { type: _services_app_menu_service__WEBPACK_IMPORTED_MODULE_6__["AppMenuService"] },
+    { type: _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_8__["DesktopNotificationService"] }
 ];
 DashboardComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -5449,6 +5458,57 @@ FilterPipe = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         name: 'filter'
     })
 ], FilterPipe);
+
+
+
+/***/ }),
+
+/***/ "./src/app/shared/services/desktop-notification.service.ts":
+/*!*****************************************************************!*\
+  !*** ./src/app/shared/services/desktop-notification.service.ts ***!
+  \*****************************************************************/
+/*! exports provided: DesktopNotificationService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DesktopNotificationService", function() { return DesktopNotificationService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _shared_module__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared.module */ "./src/app/shared/shared.module.ts");
+
+
+
+let DesktopNotificationService = class DesktopNotificationService {
+    constructor() {
+        this.requestPermission = () => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            if (!('Notification' in window)) {
+                return;
+            }
+            if (Notification.permission === 'default') {
+                const result = yield Notification.requestPermission();
+                return result;
+            }
+            else {
+                return Notification.permission;
+            }
+        });
+        this.havePermission = () => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () { return Notification.permission === 'granted'; });
+        this.createNotification = (title, delay = 5000, options) => {
+            if (Notification.permission === 'granted') {
+                const notification = new Notification(title, options);
+                if (delay !== null && delay !== undefined && +delay > 0) {
+                    setTimeout(notification.close.bind(notification), delay);
+                }
+            }
+        };
+    }
+};
+DesktopNotificationService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: _shared_module__WEBPACK_IMPORTED_MODULE_2__["SharedModule"]
+    })
+], DesktopNotificationService);
 
 
 

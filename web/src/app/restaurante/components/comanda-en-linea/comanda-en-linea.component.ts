@@ -7,6 +7,7 @@ import { LocalstorageService } from '../../../admin/services/localstorage.servic
 import { GLOBAL } from '../../../shared/global';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { DesktopNotificationService } from '../../../shared/services/desktop-notification.service';
 
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 
@@ -58,7 +59,8 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     private socket: Socket,
     private ls: LocalstorageService,
     private comandaSrvc: ComandaService,
-    private facturaSrvc: FacturaService
+    private facturaSrvc: FacturaService,
+    private dns: DesktopNotificationService,
   ) { }
 
   ngOnInit() {
@@ -67,6 +69,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
       this.socket.on('shopify:updlist', () => {
         this.loadComandasEnLinea();
+        this.notificarUsuario();
       });
 
       this.socket.on('shopify:error', (mensaje: string) => {
@@ -76,6 +79,15 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     }
 
     this.loadComandasEnLinea();
+  }
+
+  notificarUsuario = () => {
+    const opciones: NotificationOptions = {
+      icon: 'assets/img/minilogo.png',
+      body: `Se recibió una nueva orden a las ${moment().format(GLOBAL.dateTimeFormat)}.`,
+      dir: 'auto'
+    };
+    this.dns.createNotification('Rest-Touch Pro', 10000, opciones);
   }
 
   ngOnDestroy() { }

@@ -5361,8 +5361,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../shared/components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
-/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
-/* harmony import */ var _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../pos/services/factura.service */ "./src/app/pos/services/factura.service.ts");
+/* harmony import */ var _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../shared/services/desktop-notification.service */ "./src/app/shared/services/desktop-notification.service.ts");
+/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+/* harmony import */ var _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../../pos/services/factura.service */ "./src/app/pos/services/factura.service.ts");
+
 
 
 
@@ -5377,16 +5379,25 @@ __webpack_require__.r(__webpack_exports__);
 
 let ComandaEnLineaComponent = class ComandaEnLineaComponent {
     // public intervalId: any;
-    constructor(dialog, snackBar, socket, ls, comandaSrvc, facturaSrvc) {
+    constructor(dialog, snackBar, socket, ls, comandaSrvc, facturaSrvc, dns) {
         this.dialog = dialog;
         this.snackBar = snackBar;
         this.socket = socket;
         this.ls = ls;
         this.comandaSrvc = comandaSrvc;
         this.facturaSrvc = facturaSrvc;
+        this.dns = dns;
         this.dataSource = [];
         this.columnsToDisplay = ['comanda', 'orden', 'nombre', 'total', 'imprimir', 'facturar'];
         this.comandasEnLinea = [];
+        this.notificarUsuario = () => {
+            const opciones = {
+                icon: 'assets/img/minilogo.png',
+                body: `Se recibió una nueva orden a las ${moment__WEBPACK_IMPORTED_MODULE_8__().format(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].dateTimeFormat)}.`,
+                dir: 'auto'
+            };
+            this.dns.createNotification('Rest-Touch Pro', 10000, opciones);
+        };
         this.loadComandasEnLinea = () => {
             this.comandaSrvc.getComandasOnLIne().subscribe((res) => {
                 this.comandasEnLinea = res;
@@ -5500,6 +5511,7 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
             this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar).sede_uuid);
             this.socket.on('shopify:updlist', () => {
                 this.loadComandasEnLinea();
+                this.notificarUsuario();
             });
             this.socket.on('shopify:error', (mensaje) => {
                 this.loadComandasEnLinea();
@@ -5515,8 +5527,9 @@ ComandaEnLineaComponent.ctorParameters = () => [
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
     { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_5__["Socket"] },
     { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__["LocalstorageService"] },
-    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__["ComandaService"] },
-    { type: _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_11__["FacturaService"] }
+    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_11__["ComandaService"] },
+    { type: _pos_services_factura_service__WEBPACK_IMPORTED_MODULE_12__["FacturaService"] },
+    { type: _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_10__["DesktopNotificationService"] }
 ];
 ComandaEnLineaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
