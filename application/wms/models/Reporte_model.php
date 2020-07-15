@@ -28,12 +28,13 @@ class Reporte_model extends CI_Model {
 		$where = 'where ';
 		$group = " group by ";
 
-		if (isset($args['fecha'])) {
-			$where .= " date(e.fecha) <= '{$args['fecha']}'";
+		if (isset($args['fecha']) && !empty($args['fecha'])) {
+			$fecha = $args['fecha'];
+			$where .= " date(e.fecha) <= '{$fecha}'";
 			$group .= " b.articulo";
 		}
 
-		if (isset($args['bodega'])) {
+		if (isset($args['bodega']) && !empty($args['bodega'])) {
 			$where .= " and f.bodega = {$args['bodega']}";
 		}
 
@@ -73,11 +74,12 @@ EOT;
 		$where = 'where ';
 		$group = 'group by ';
 
-		if (isset($args['fecha'])) {
-			$where .= " date(e.fecha) <= '{$args['fecha']}'";
+		if (isset($args['fecha']) && !empty($args['fecha'])) {
+			$fecha = $args['fecha'];
+			$where .= " date(e.fecha) <= '{$fecha}'";
 		}
 
-		if (isset($args['bodega'])) {
+		if (isset($args['bodega']) && !empty($args['bodega'])) {
 			$where .= " and f.bodega = {$args['bodega']}";
 		}
 
@@ -120,8 +122,9 @@ EOT;
 		$where = 'where ';
 		$group = 'group by ';
 
-		if (isset($args['fecha'])) {
-			$where .= " date(f.inicio) <= '{$args['fecha']}'";
+		if (isset($args['fecha']) && !empty($args['fecha'])) {
+			$fecha = $args['fecha'];
+			$where .= " date(f.inicio) <= '{$fecha}'";
 		}
 
 		if (in_array($this->tipo, [1,2])) {
@@ -163,8 +166,9 @@ EOT;
 		$where = '';
 		$group = ' group by';
 
-		if (isset($args['fecha'])) {
-			$where .= " and f.fecha_factura <= '{$args['fecha']}'";
+		if (isset($args['fecha'] && !empty($args['fecha']))) {
+			$fecha = $args['fecha'];
+			$where .= " and f.fecha_factura <= '{$fecha}'";
 		}
 
 		if (in_array($this->tipo, [1,2])) {
