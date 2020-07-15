@@ -625,6 +625,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-lista-presentacion #lstPresentacion (getPresentacionEv)=\"setPresentacion($event)\"></app-lista-presentacion>\n    </div>\n    <div class=\"col m7 s12\">\n        <app-form-presentacion #frmPresentacion [presentacion]=\"presentacion\"\n            (presentacionSavedEv)=\"refreshPresentacionList()\"></app-form-presentacion>\n    </div>\n</div>");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/tablero.component.html": 
+        /*!*******************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/tablero.component.html ***!
+          \*******************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n\t<div class=\"col m12 s12\">\n\t\t<mat-card class=\"mat-elevation-z4 fullWidth\">\n\t\t<mat-card-content>\n\t\t<form (ngSubmit)=\"onSubmit()\" novalidate>\n\t\t\t<mat-form-field appearance=\"legacy\">\n\t\t\t\t<mat-label>Del</mat-label>\n\t\t\t\t<input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n\t\t\t</mat-form-field>\n\t\t\t<mat-form-field appearance=\"legacy\" style=\"margin-left: 3px;\">\n\t\t\t\t<mat-label>Al</mat-label>\n\t\t\t\t<input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n\t\t\t</mat-form-field>\n\t\t\t<button mat-button color=\"accent\" type=\"submit\" style=\"margin-left: 3px;\">GENERAR</button>\n\t\t</form>\n\t\t<ng-template [ngIf]=\"cargando\">\n\t\t\t<mat-progress-bar mode=\"query\"></mat-progress-bar>\n\t\t</ng-template>\n\t\t</mat-card-content>\n\t\t</mat-card>\n\n\n\t\t\n\t\t<br><br>\n\t\t<ejs-pivotview \n\t\t\t#pivotview id='PivotView' \n\t\t\t[dataSourceSettings]=dataSourceSettings \n\t\t\twidth='100%'\n\t\t\theight='350'\n\t\t\t[gridSettings]='gridSettings' \n\t\t\tallowExcelExport='true'\n\t\t\tshowFieldList=\"true\"\n\t\t>\n\t\t</ejs-pivotview>\n\t\t<button ej-button id='export'>Export</button>\n\t</div>\n</div>\n<br><br>\n<div class=\"row\">\n\t<div class=\"col m6 s12\">\n\t\t<table>\n\t\t\t<tbody>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Cantidad de días</th>\n\t\t\t\t\t<td>{{ estDias }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Mínimo</th>\n\t\t\t\t\t<td>{{ estMin }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Máximo</th>\n\t\t\t\t\t<td>{{ estMax }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Media</th>\n\t\t\t\t\t<td>{{ estMedia }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Total</th>\n\t\t\t\t\t<td>{{ estTotal }}</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</div>\n</div>");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.html": 
         /*!****************************************************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.html ***!
@@ -1058,6 +1069,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/fpago/fpago/fpago.component */ "./src/app/admin/components/fpago/fpago/fpago.component.ts");
             /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
             /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
+            /* harmony import */ var _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/tablero/tablero.component */ "./src/app/admin/components/tablero/tablero.component.ts");
             var routes = [
                 { path: 'login', component: _components_login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] },
                 { path: 'dashboard', component: _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_5__["DashboardComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
@@ -1069,6 +1081,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 { path: 'formapago', component: _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_11__["FpagoComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'tipo_usuario', component: _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_12__["TipoUsuarioComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'acceso', component: _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_13__["AccesoUsuarioComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'tablero', component: _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_14__["TableroComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
             ];
             var AdminRoutingModule = /** @class */ (function () {
@@ -1117,40 +1130,43 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
             /* harmony import */ var _angular_material_tree__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/tree */ "./node_modules/@angular/material/esm2015/tree.js");
             /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-            /* harmony import */ var _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./directives/sidebar.directive */ "./src/app/admin/directives/sidebar.directive.ts");
-            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @protacon/ng-virtual-keyboard */ "./node_modules/@protacon/ng-virtual-keyboard/dist/index.js");
-            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_25___default = /*#__PURE__*/ __webpack_require__.n(_protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_25__);
-            /* harmony import */ var _admin_routing_module__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./admin-routing.module */ "./src/app/admin/admin-routing.module.ts");
-            /* harmony import */ var _components_login_login_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/login/login.component */ "./src/app/admin/components/login/login.component.ts");
-            /* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/dashboard/dashboard.component */ "./src/app/admin/components/dashboard/dashboard.component.ts");
-            /* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/admin/components/header/header.component.ts");
-            /* harmony import */ var _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/clock/clock.component */ "./src/app/admin/components/clock/clock.component.ts");
-            /* harmony import */ var _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/menu/menu.component */ "./src/app/admin/components/menu/menu.component.ts");
-            /* harmony import */ var _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/usuario/usuario/usuario.component */ "./src/app/admin/components/usuario/usuario/usuario.component.ts");
-            /* harmony import */ var _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/usuario/lista-usuario/lista-usuario.component */ "./src/app/admin/components/usuario/lista-usuario/lista-usuario.component.ts");
-            /* harmony import */ var _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/usuario/form-usuario/form-usuario.component */ "./src/app/admin/components/usuario/form-usuario/form-usuario.component.ts");
-            /* harmony import */ var _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/cliente/cliente/cliente.component */ "./src/app/admin/components/cliente/cliente/cliente.component.ts");
-            /* harmony import */ var _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/cliente/lista-cliente/lista-cliente.component */ "./src/app/admin/components/cliente/lista-cliente/lista-cliente.component.ts");
-            /* harmony import */ var _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/cliente/form-cliente/form-cliente.component */ "./src/app/admin/components/cliente/form-cliente/form-cliente.component.ts");
-            /* harmony import */ var _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/medida/medida/medida.component */ "./src/app/admin/components/medida/medida/medida.component.ts");
-            /* harmony import */ var _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/medida/lista-medida/lista-medida.component */ "./src/app/admin/components/medida/lista-medida/lista-medida.component.ts");
-            /* harmony import */ var _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/medida/form-medida/form-medida.component */ "./src/app/admin/components/medida/form-medida/form-medida.component.ts");
-            /* harmony import */ var _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/presentacion/presentacion/presentacion.component */ "./src/app/admin/components/presentacion/presentacion/presentacion.component.ts");
-            /* harmony import */ var _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/presentacion/lista-presentacion/lista-presentacion.component */ "./src/app/admin/components/presentacion/lista-presentacion/lista-presentacion.component.ts");
-            /* harmony import */ var _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/presentacion/form-presentacion/form-presentacion.component */ "./src/app/admin/components/presentacion/form-presentacion/form-presentacion.component.ts");
-            /* harmony import */ var _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/cliente/form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
-            /* harmony import */ var _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/impresora/impresora/impresora.component */ "./src/app/admin/components/impresora/impresora/impresora.component.ts");
-            /* harmony import */ var _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/impresora/form-impresora/form-impresora.component */ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.ts");
-            /* harmony import */ var _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/impresora/lista-impresora/lista-impresora.component */ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.ts");
-            /* harmony import */ var _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/fpago/fpago/fpago.component */ "./src/app/admin/components/fpago/fpago/fpago.component.ts");
-            /* harmony import */ var _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/fpago/form-pago/form-pago.component */ "./src/app/admin/components/fpago/form-pago/form-pago.component.ts");
-            /* harmony import */ var _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/fpago/lista-pago/lista-pago.component */ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.ts");
-            /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
-            /* harmony import */ var _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.ts");
-            /* harmony import */ var _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.ts");
-            /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
-            /* harmony import */ var _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts");
-            /* harmony import */ var _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts");
+            /* harmony import */ var _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/progress-bar */ "./node_modules/@angular/material/esm2015/progress-bar.js");
+            /* harmony import */ var _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./directives/sidebar.directive */ "./src/app/admin/directives/sidebar.directive.ts");
+            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @protacon/ng-virtual-keyboard */ "./node_modules/@protacon/ng-virtual-keyboard/dist/index.js");
+            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/ __webpack_require__.n(_protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26__);
+            /* harmony import */ var _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @syncfusion/ej2-angular-pivotview */ "./node_modules/@syncfusion/ej2-angular-pivotview/@syncfusion/ej2-angular-pivotview.js");
+            /* harmony import */ var _admin_routing_module__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./admin-routing.module */ "./src/app/admin/admin-routing.module.ts");
+            /* harmony import */ var _components_login_login_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/login/login.component */ "./src/app/admin/components/login/login.component.ts");
+            /* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/dashboard/dashboard.component */ "./src/app/admin/components/dashboard/dashboard.component.ts");
+            /* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/admin/components/header/header.component.ts");
+            /* harmony import */ var _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/clock/clock.component */ "./src/app/admin/components/clock/clock.component.ts");
+            /* harmony import */ var _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/menu/menu.component */ "./src/app/admin/components/menu/menu.component.ts");
+            /* harmony import */ var _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/usuario/usuario/usuario.component */ "./src/app/admin/components/usuario/usuario/usuario.component.ts");
+            /* harmony import */ var _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/usuario/lista-usuario/lista-usuario.component */ "./src/app/admin/components/usuario/lista-usuario/lista-usuario.component.ts");
+            /* harmony import */ var _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/usuario/form-usuario/form-usuario.component */ "./src/app/admin/components/usuario/form-usuario/form-usuario.component.ts");
+            /* harmony import */ var _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/cliente/cliente/cliente.component */ "./src/app/admin/components/cliente/cliente/cliente.component.ts");
+            /* harmony import */ var _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/cliente/lista-cliente/lista-cliente.component */ "./src/app/admin/components/cliente/lista-cliente/lista-cliente.component.ts");
+            /* harmony import */ var _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/cliente/form-cliente/form-cliente.component */ "./src/app/admin/components/cliente/form-cliente/form-cliente.component.ts");
+            /* harmony import */ var _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/medida/medida/medida.component */ "./src/app/admin/components/medida/medida/medida.component.ts");
+            /* harmony import */ var _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/medida/lista-medida/lista-medida.component */ "./src/app/admin/components/medida/lista-medida/lista-medida.component.ts");
+            /* harmony import */ var _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/medida/form-medida/form-medida.component */ "./src/app/admin/components/medida/form-medida/form-medida.component.ts");
+            /* harmony import */ var _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/presentacion/presentacion/presentacion.component */ "./src/app/admin/components/presentacion/presentacion/presentacion.component.ts");
+            /* harmony import */ var _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/presentacion/lista-presentacion/lista-presentacion.component */ "./src/app/admin/components/presentacion/lista-presentacion/lista-presentacion.component.ts");
+            /* harmony import */ var _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/presentacion/form-presentacion/form-presentacion.component */ "./src/app/admin/components/presentacion/form-presentacion/form-presentacion.component.ts");
+            /* harmony import */ var _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/cliente/form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
+            /* harmony import */ var _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/impresora/impresora/impresora.component */ "./src/app/admin/components/impresora/impresora/impresora.component.ts");
+            /* harmony import */ var _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/impresora/form-impresora/form-impresora.component */ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.ts");
+            /* harmony import */ var _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/impresora/lista-impresora/lista-impresora.component */ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.ts");
+            /* harmony import */ var _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/fpago/fpago/fpago.component */ "./src/app/admin/components/fpago/fpago/fpago.component.ts");
+            /* harmony import */ var _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/fpago/form-pago/form-pago.component */ "./src/app/admin/components/fpago/form-pago/form-pago.component.ts");
+            /* harmony import */ var _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/fpago/lista-pago/lista-pago.component */ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.ts");
+            /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
+            /* harmony import */ var _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.ts");
+            /* harmony import */ var _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts");
+            /* harmony import */ var _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/tablero/tablero.component */ "./src/app/admin/components/tablero/tablero.component.ts");
             var AdminModule = /** @class */ (function () {
                 function AdminModule() {
                 }
@@ -1159,17 +1175,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             AdminModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
                     declarations: [
-                        _components_login_login_component__WEBPACK_IMPORTED_MODULE_27__["LoginComponent"], _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_28__["DashboardComponent"], _components_header_header_component__WEBPACK_IMPORTED_MODULE_29__["HeaderComponent"], _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_30__["ClockComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_31__["MenuComponent"], _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_24__["SidebarDirective"],
-                        _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_32__["UsuarioComponent"], _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_33__["ListaUsuarioComponent"], _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_34__["FormUsuarioComponent"], _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_35__["ClienteComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_36__["ListaClienteComponent"],
-                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_37__["FormClienteComponent"], _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_38__["MedidaComponent"], _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_39__["ListaMedidaComponent"], _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_40__["FormMedidaComponent"], _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_41__["PresentacionComponent"],
-                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_42__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_43__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__["FormClienteDialogComponent"], _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_45__["ImpresoraComponent"], _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_46__["FormImpresoraComponent"], _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_47__["ListaImpresoraComponent"], _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_48__["FpagoComponent"], _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_49__["FormPagoComponent"], _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_50__["ListaPagoComponent"], _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_51__["TipoUsuarioComponent"], _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_52__["ListaTipoUsuarioComponent"], _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__["FormTipoUsuarioComponent"], _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_54__["AccesoUsuarioComponent"], _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_55__["FormAccesoUsuarioComponent"], _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__["ListaAccesoUsuarioComponent"]
+                        _components_login_login_component__WEBPACK_IMPORTED_MODULE_29__["LoginComponent"], _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_30__["DashboardComponent"], _components_header_header_component__WEBPACK_IMPORTED_MODULE_31__["HeaderComponent"], _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_32__["ClockComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_33__["MenuComponent"], _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_25__["SidebarDirective"],
+                        _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_34__["UsuarioComponent"], _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_35__["ListaUsuarioComponent"], _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_36__["FormUsuarioComponent"], _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_37__["ClienteComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_38__["ListaClienteComponent"],
+                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_40__["MedidaComponent"], _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_41__["ListaMedidaComponent"], _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_42__["FormMedidaComponent"], _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_43__["PresentacionComponent"],
+                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_44__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_45__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"], _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_47__["ImpresoraComponent"], _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_48__["FormImpresoraComponent"], _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_49__["ListaImpresoraComponent"], _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_50__["FpagoComponent"], _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_51__["FormPagoComponent"], _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_52__["ListaPagoComponent"], _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__["TipoUsuarioComponent"], _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_54__["ListaTipoUsuarioComponent"], _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__["FormTipoUsuarioComponent"], _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__["AccesoUsuarioComponent"], _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_57__["FormAccesoUsuarioComponent"], _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__["ListaAccesoUsuarioComponent"], _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_59__["TableroComponent"]
                     ],
                     entryComponents: [
-                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_37__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__["FormClienteDialogComponent"]
+                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"]
                     ],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
-                        _admin_routing_module__WEBPACK_IMPORTED_MODULE_26__["AdminRoutingModule"],
+                        _admin_routing_module__WEBPACK_IMPORTED_MODULE_28__["AdminRoutingModule"],
                         _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
                         _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
                         _shared_shared_module__WEBPACK_IMPORTED_MODULE_5__["SharedModule"],
@@ -1191,10 +1207,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__["MatPaginatorModule"],
                         _angular_material_tree__WEBPACK_IMPORTED_MODULE_22__["MatTreeModule"],
                         _angular_material_dialog__WEBPACK_IMPORTED_MODULE_23__["MatDialogModule"],
-                        _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_25__["NgVirtualKeyboardModule"]
+                        _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_24__["MatProgressBarModule"],
+                        _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26__["NgVirtualKeyboardModule"],
+                        _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_27__["PivotViewAllModule"],
+                        _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_27__["PivotFieldListAllModule"]
                     ],
                     exports: [
-                        _components_header_header_component__WEBPACK_IMPORTED_MODULE_29__["HeaderComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_31__["MenuComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_36__["ListaClienteComponent"], _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_37__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_44__["FormClienteDialogComponent"]
+                        _components_header_header_component__WEBPACK_IMPORTED_MODULE_31__["HeaderComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_33__["MenuComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_38__["ListaClienteComponent"], _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"]
                     ]
                 })
             ], AdminModule);
@@ -2992,6 +3011,109 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], PresentacionComponent);
             /***/ 
         }),
+        /***/ "./src/app/admin/components/tablero/tablero.component.css": 
+        /*!****************************************************************!*\
+          !*** ./src/app/admin/components/tablero/tablero.component.css ***!
+          \****************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvdGFibGVyby90YWJsZXJvLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/tablero/tablero.component.ts": 
+        /*!***************************************************************!*\
+          !*** ./src/app/admin/components/tablero/tablero.component.ts ***!
+          \***************************************************************/
+        /*! exports provided: TableroComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TableroComponent", function () { return TableroComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @syncfusion/ej2-angular-pivotview */ "./node_modules/@syncfusion/ej2-angular-pivotview/@syncfusion/ej2-angular-pivotview.js");
+            /* harmony import */ var _syncfusion_ej2_buttons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @syncfusion/ej2-buttons */ "./node_modules/@syncfusion/ej2-buttons/dist/es6/ej2-buttons.es2015.js");
+            /* harmony import */ var _services_tablero_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/tablero.service */ "./src/app/admin/services/tablero.service.ts");
+            var TableroComponent = /** @class */ (function () {
+                function TableroComponent(snackBar, tableroService) {
+                    this.snackBar = snackBar;
+                    this.tableroService = tableroService;
+                    this.params = {};
+                    this.titulo = 'Tablero';
+                    this.estDias = 0;
+                    this.estMin = '';
+                    this.estMax = '';
+                    this.estMedia = '';
+                    this.estTotal = '';
+                    this.cargando = false;
+                }
+                TableroComponent.prototype.ngOnInit = function () {
+                    var _this = this;
+                    this.dataSourceSettings = {
+                        dataSource: this.pivotData,
+                        expandAll: false,
+                        columns: [
+                            { name: 'dia', caption: 'Día' }
+                        ],
+                        values: [{ name: 'total', caption: 'Monto' }],
+                        rows: [
+                            { name: 'grupo', caption: 'Grupo' },
+                            { name: 'descripcion', caption: 'Producto' }
+                        ],
+                        formatSettings: [{
+                                name: 'total',
+                                format: 'N2'
+                            }],
+                        filters: [],
+                        valueSortSettings: { headerText: 'Monto', headerDelimiter: '##', sortOrder: 'Descending' }
+                    };
+                    this.button = new _syncfusion_ej2_buttons__WEBPACK_IMPORTED_MODULE_4__["Button"]({ isPrimary: true });
+                    this.button.appendTo('#export');
+                    this.button.element.onclick = function () {
+                        _this.pivotGridObj.excelExport();
+                    };
+                };
+                TableroComponent.prototype.onSubmit = function () {
+                    var _this = this;
+                    this.cargando = true;
+                    this.tableroService.getTableroDatos(this.params).subscribe(function (res) {
+                        if (res.exito) {
+                            _this.pivotGridObj.engineModule.fieldList = {};
+                            _this.pivotGridObj.dataSourceSettings.dataSource = res.datos;
+                            _this.estDias = res.cantidad;
+                            _this.estMin = res.min;
+                            _this.estMax = res.max;
+                            _this.estMedia = res.media;
+                            _this.estTotal = res.total;
+                        }
+                        else {
+                            _this.snackBar.open('No se pudo generar el reporte...', _this.titulo, { duration: 3000 });
+                        }
+                        _this.cargando = false;
+                    });
+                };
+                return TableroComponent;
+            }());
+            TableroComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _services_tablero_service__WEBPACK_IMPORTED_MODULE_5__["TableroService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('pivotview', { static: false })
+            ], TableroComponent.prototype, "pivotGridObj", void 0);
+            TableroComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-tablero',
+                    providers: [_syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_3__["FieldListService"]],
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./tablero.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/tablero.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./tablero.component.css */ "./src/app/admin/components/tablero/tablero.component.css")).default]
+                })
+            ], TableroComponent);
+            /***/ 
+        }),
         /***/ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.css": 
         /*!*************************************************************************************************!*\
           !*** ./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.css ***!
@@ -4217,6 +4339,52 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], SubModuloService);
             /***/ 
         }),
+        /***/ "./src/app/admin/services/tablero.service.ts": 
+        /*!***************************************************!*\
+          !*** ./src/app/admin/services/tablero.service.ts ***!
+          \***************************************************/
+        /*! exports provided: TableroService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TableroService", function () { return TableroService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            var TableroService = /** @class */ (function () {
+                function TableroService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.usrToken = null;
+                    this.httpOptions = { responseType: 'json' };
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                    this.httpOptions['headers'] = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                        'Authorization': this.usrToken,
+                        'Accept': 'application/pdf'
+                    });
+                }
+                TableroService.prototype.getTableroDatos = function (params) {
+                    this.httpOptions['params'] = params;
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url + "/tablero/get_datos", this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return TableroService;
+            }());
+            TableroService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            TableroService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], TableroService);
+            /***/ 
+        }),
         /***/ "./src/app/admin/services/tipo-usuario.service.ts": 
         /*!********************************************************!*\
           !*** ./src/app/admin/services/tipo-usuario.service.ts ***!
@@ -4908,7 +5076,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CheckObjectType", function () { return CheckObjectType; });
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function () { return MultiFiltro; });
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            // const urlBase = 'http://localhost/resttouch'; // Desarrollo
+            // const urlBase = 'http://localhost:8005'; // Desarrollo
             var urlBase = location.origin; // Producción
             var GLOBAL = {
                 dbDateFormat: 'YYYY-MM-DD',
