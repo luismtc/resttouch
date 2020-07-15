@@ -49,6 +49,15 @@ $config['menu'] = [
 						'link' => '/admin/formapago'
 					]
 				]
+			],
+			2 => [
+				'nombre' => 'Reportes',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Tablero',
+						'link' => '/admin/tablero'
+					]
+				]
 			]
 		]
 	],
@@ -73,6 +82,10 @@ $config['menu'] = [
 					4 => [
 						'nombre' => 'Comanda en línea',
 						'link' => '/restaurante/cmdonline'
+					],
+					5 => [
+						'nombre' => 'Corte de caja',
+						'link' => '/restaurante/cajacorte'
 					]
 				]
 			],
@@ -151,6 +164,19 @@ $config['menu'] = [
 					3 => [
 						'nombre' => 'Transformaciones',
 						'link' => '/wms/transformaciones'
+					]
+				]
+			],
+			2 => [
+				'nombre' => 'Reportes',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Existencias',
+						'link' => '/wms/rptexistencia'
+					],
+					2 => [
+						'nombre' => 'Kardex',
+						'link' => '/wms/rptkardex'
 					]
 				]
 			]

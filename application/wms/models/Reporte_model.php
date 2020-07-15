@@ -66,7 +66,7 @@ join ingreso e on e.ingreso = a.ingreso
 join bodega f on f.bodega = e.bodega and f.sede = d.sede
 join tipo_movimiento g on e.tipo_movimiento = g.tipo_movimiento
 {$where} {$group}
-EOT;	
+EOT;
 	}
 
 	function consultaEgresos($args = [])
