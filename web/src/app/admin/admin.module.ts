@@ -22,9 +22,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { SidebarDirective } from './directives/sidebar.directive';
 import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
+
+import { PivotViewAllModule, PivotFieldListAllModule } from '@syncfusion/ej2-angular-pivotview';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { LoginComponent } from './components/login/login.component';
@@ -57,6 +60,7 @@ import { FormTipoUsuarioComponent } from './components/tipo-usuario/form-tipo-us
 import { AccesoUsuarioComponent } from './components/acceso-usuario/acceso-usuario/acceso-usuario.component';
 import { FormAccesoUsuarioComponent } from './components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component';
 import { ListaAccesoUsuarioComponent } from './components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component';
+import { TableroComponent } from './components/tablero/tablero.component';
 
 
 @NgModule({
@@ -64,7 +68,7 @@ import { ListaAccesoUsuarioComponent } from './components/acceso-usuario/lista-a
     LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
     UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
     FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
-    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent, FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent, FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent
@@ -93,7 +97,10 @@ import { ListaAccesoUsuarioComponent } from './components/acceso-usuario/lista-a
     MatPaginatorModule,
     MatTreeModule,
     MatDialogModule,
-    NgVirtualKeyboardModule
+    MatProgressBarModule,
+    NgVirtualKeyboardModule,
+    PivotViewAllModule, 
+    PivotFieldListAllModule
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent

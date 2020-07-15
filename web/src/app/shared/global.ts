@@ -1,4 +1,4 @@
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo
+// const urlBase = 'http://localhost:8005'; // Desarrollo
 const urlBase = location.origin; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',

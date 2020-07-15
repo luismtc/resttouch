@@ -12,6 +12,7 @@ import { ImpresoraComponent } from './components/impresora/impresora/impresora.c
 import { FpagoComponent } from './components/fpago/fpago/fpago.component';
 import { TipoUsuarioComponent } from './components/tipo-usuario/tipo-usuario/tipo-usuario.component';
 import { AccesoUsuarioComponent } from './components/acceso-usuario/acceso-usuario/acceso-usuario.component';
+import { TableroComponent } from './components/tablero/tablero.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   {path: 'formapago', component: FpagoComponent, canActivate: [AuthGuard]},
   {path: 'tipo_usuario', component: TipoUsuarioComponent, canActivate: [AuthGuard]},
   {path: 'acceso', component: AccesoUsuarioComponent, canActivate: [AuthGuard]},
+  {path: 'tablero', component: TableroComponent, canActivate: [AuthGuard]},
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
