@@ -27,6 +27,7 @@ class Reporte_model extends CI_Model {
 	{
 		$where = 'where ';
 		$group = " group by ";
+		$select = "";
 
 		if (isset($args['fecha']) && !empty($args['fecha'])) {
 			$fecha = $args['fecha'];
@@ -42,6 +43,12 @@ class Reporte_model extends CI_Model {
 		if ($this->tipo == 3) {
 			$where .= " date(e.fecha) between '{$args['fdel']}' and '{$args['fal']}'";
 			$group .= " e.ingreso, e.fecha, b.articulo";
+			$select .= " ,e.ingreso as id,
+				1 as tipo,
+				f.bodega,
+				e.fecha,
+				g.descripcion as tipo_movimiento,
+				f.descripcion as nbodega";
 		} 
 
 		if (isset($args['bodega']) && !empty($args['bodega'])) {
@@ -51,13 +58,8 @@ class Reporte_model extends CI_Model {
 		$this->sqlIngreso = <<<EOT
 select
 	sum(ifnull(a.cantidad, 0)) as cantidad,
-	b.articulo,
-	e.ingreso as id,
-	1 as tipo,
-	f.bodega,
-	e.fecha,
-	g.descripcion as tipo_movimiento,
-	f.descripcion as nbodega
+	b.articulo 
+	{$select}
 from ingreso_detalle a
 join articulo b on a.articulo = b.articulo
 join categoria_grupo c on c.categoria_grupo = b.categoria_grupo
@@ -73,6 +75,7 @@ EOT;
 	{
 		$where = 'where ';
 		$group = 'group by ';
+		$select = "";
 
 		if (isset($args['fecha']) && !empty($args['fecha'])) {
 			$fecha = $args['fecha'];
@@ -89,7 +92,13 @@ EOT;
 
 		if ($this->tipo == 3) {
 			$where .= " date(e.fecha) between '{$args['fdel']}' and '{$args['fal']}'";
-			$group .= " e.egreso, e.fecha, b.articulo";
+			$group .= " e.egreso, e.fecha, b.articulo, f.bodega, g.descripcion, f.descripcion";
+			$select .= " ,e.egreso as id,
+				2 as tipo,
+				f.bodega,
+				e.fecha,
+				g.descripcion as tipo_movimiento,
+				f.descripcion as nbodega";
 		}
 
 		if (isset($args['bodega']) && !empty($args['bodega'])) {
@@ -99,13 +108,8 @@ EOT;
 		$this->sqlEgreso = <<<EOT
 select
 	sum(ifnull(a.cantidad, 0)) as cantidad,
-	b.articulo,
-	e.egreso as id,
-	2 as tipo,
-	f.bodega,
-	e.fecha,
-	g.descripcion as tipo_movimiento,
-	f.descripcion as nbodega
+	b.articulo 
+	{$select}
 from egreso_detalle a
 join articulo b on a.articulo = b.articulo
 join categoria_grupo c on c.categoria_grupo = b.categoria_grupo
@@ -121,6 +125,7 @@ EOT;
 	{
 		$where = 'where ';
 		$group = 'group by ';
+		$select = "";
 
 		if (isset($args['fecha']) && !empty($args['fecha'])) {
 			$fecha = $args['fecha'];
@@ -138,18 +143,19 @@ EOT;
 		if ($this->tipo == 3) {
 			$where .= " date(f.fecha) between '{$args['fdel']}' and '{$args['fal']}'";
 			$group .= " e.comanda, f.fecha, b.articulo";
+			$select .= " ,e.comanda id,
+				2 as tipo,
+				1 as bodega,
+				'Comanda' tipo_movimiento,
+				'Comanda' nbodega,
+				f.fecha";
 		}
 
 		$this->sqlComanda = <<<EOT
 select 
 	sum(ifnull(a.cantidad, 0)) as cantidad,
-	b.articulo,
-	e.comanda id,
-	2 as tipo,
-	1 as bodega,
-	f.fecha,
-	'Comanda' tipo_movimiento,
-	'Comanda' nbodega
+	b.articulo
+	{$select}
 from detalle_comanda a
 join articulo b on a.articulo = b.articulo
 join categoria_grupo c on c.categoria_grupo = b.categoria_grupo
@@ -165,6 +171,7 @@ EOT;
 	{
 		$where = '';
 		$group = ' group by';
+		$select= "";
 
 		if (isset($args['fecha']) && !empty($args['fecha'])) {
 			$fecha = $args['fecha'];
@@ -182,25 +189,26 @@ EOT;
 		if ($this->tipo == 3) {
 			$where .= " and date(f.fecha_factura) between '{$args['fdel']}' and '{$args['fal']}'";
 			$group .= " f.factura, f.fecha_factura, b.articulo, numero_factura";
+			$select .= " ,f.numero_factura id,
+				2 as tipo,
+				1 as bodega,
+				'Factura Directa' tipo_movimiento,
+				'Factura Directa' nbodega,
+				f.fecha_factura as fecha";
 		}
 
 
 		$this->sqlFactura = <<<EOT
 select
 	sum(ifnull(a.cantidad, 0)) as cantidad,
-	b.articulo,
-	f.numero_factura id,
-	2 as tipo,
-	1 as bodega,
-	f.fecha_factura as fecha,
-	'Factura Directa' tipo_movimiento,
-	'Factura Directa' nbodega
+	b.articulo  
+	{$select}
 from detalle_factura a
 join articulo b on a.articulo = b.articulo
 join categoria_grupo c on c.categoria_grupo = b.categoria_grupo
 join categoria d on d.categoria = c.categoria
-left join detalle_factura_detalle_cuenta e on a.detalle_factura = e.detalle_factura
 join factura f on a.factura = f.factura and f.sede = d.sede
+left join detalle_factura_detalle_cuenta e on a.detalle_factura = e.detalle_factura
 where e.detalle_factura_detalle_cuenta is null 
 {$where} {$group}
 EOT;
@@ -236,7 +244,6 @@ EOT;
 			$this->db
 				 ->select("
 						art.articulo, art.descripcion, art.codigo,
-						coalesce(ing.bodega, egr.bodega, fac.bodega, com.bodega) as bodega,
 						ifnull(ing.cantidad, 0) as ingresos,
 						ifnull(egr.cantidad, 0) + ifnull(com.cantidad, 0) + ifnull(fac.cantidad, 0)  as total_egresos,
 						(ifnull(ing.cantidad, 0) - ifnull(egr.cantidad, 0) - ifnull(com.cantidad, 0) - ifnull(fac.cantidad, 0)) as existencia
