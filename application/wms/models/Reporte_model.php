@@ -181,7 +181,7 @@ EOT;
 
 		if ($this->tipo == 3) {
 			$where .= " and date(f.fecha_factura) between '{$args['fdel']}' and '{$args['fal']}'";
-			$group .= " f.factura, f.fecha_factura, b.articulo";
+			$group .= " f.factura, f.fecha_factura, b.articulo, numero_factura";
 		}
 
 
