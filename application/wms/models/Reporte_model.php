@@ -34,10 +34,6 @@ class Reporte_model extends CI_Model {
 			$group .= " b.articulo";
 		}
 
-		if (isset($args['bodega']) && !empty($args['bodega'])) {
-			$where .= " and f.bodega = {$args['bodega']}";
-		}
-
 		if ($this->tipo == 2) {
 			$where .= " date(e.fecha) < '{$args['fdel']}'";
 			$group .= " b.articulo";
@@ -47,6 +43,10 @@ class Reporte_model extends CI_Model {
 			$where .= " date(e.fecha) between '{$args['fdel']}' and '{$args['fal']}'";
 			$group .= " e.ingreso, e.fecha, b.articulo";
 		} 
+
+		if (isset($args['bodega']) && !empty($args['bodega'])) {
+			$where .= " and f.bodega = {$args['bodega']}";
+		}
 
 		$this->sqlIngreso = <<<EOT
 select
@@ -79,10 +79,6 @@ EOT;
 			$where .= " date(e.fecha) <= '{$fecha}'";
 		}
 
-		if (isset($args['bodega']) && !empty($args['bodega'])) {
-			$where .= " and f.bodega = {$args['bodega']}";
-		}
-
 		if (in_array($this->tipo, [1,2])) {
 			$group .= " b.articulo";
 		}
@@ -94,6 +90,10 @@ EOT;
 		if ($this->tipo == 3) {
 			$where .= " date(e.fecha) between '{$args['fdel']}' and '{$args['fal']}'";
 			$group .= " e.egreso, e.fecha, b.articulo";
+		}
+
+		if (isset($args['bodega']) && !empty($args['bodega'])) {
+			$where .= " and f.bodega = {$args['bodega']}";
 		}
 
 		$this->sqlEgreso = <<<EOT
@@ -166,7 +166,7 @@ EOT;
 		$where = '';
 		$group = ' group by';
 
-		if (isset($args['fecha'] && !empty($args['fecha']))) {
+		if (isset($args['fecha']) && !empty($args['fecha'])) {
 			$fecha = $args['fecha'];
 			$where .= " and f.fecha_factura <= '{$fecha}'";
 		}
