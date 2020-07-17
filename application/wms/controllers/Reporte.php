@@ -32,7 +32,7 @@ class Reporte extends CI_Controller {
 			"fecha" => formatoFecha($this->input->get('fecha'), 2)
 		];
 		$pdf   = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(), //produccion
+			'tempDir' => sys_get_temp_dir(), //produccion
 			"format" => "letter", 
 			"lands"
 		]);
@@ -102,7 +102,7 @@ class Reporte extends CI_Controller {
 		
 		$vista = $this->load->view('reporte/kardex/imprimir', $args, true);
 		$pdf   = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(), //produccion
+			'tempDir' => sys_get_temp_dir(), //produccion
 			"format" => "letter", 
 			"lands"
 		]);
