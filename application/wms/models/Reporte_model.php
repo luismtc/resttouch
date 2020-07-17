@@ -42,7 +42,7 @@ class Reporte_model extends CI_Model {
 
 		if ($this->tipo == 3) {
 			$where .= " date(e.fecha) between '{$args['fdel']}' and '{$args['fal']}'";
-			$group .= " e.ingreso, e.fecha, b.articulo";
+			$group .= " e.ingreso, e.fecha, b.articulo, f.bodega,g.descripcion,f.descripcion";
 			$select .= " ,e.ingreso as id,
 				1 as tipo,
 				f.bodega,
