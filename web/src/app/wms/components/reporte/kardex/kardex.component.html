@@ -7,8 +7,8 @@
       <mat-card-content>
         <form (ngSubmit)="onSubmit()" novalidate>
           <mat-form-field class="fullWidth">
-              <mat-label>Bodega</mat-label>
-              <mat-select name="bodega" [(ngModel)]="params.articulo" required>
+              <mat-label>Articulo</mat-label>
+              <mat-select name="articulo" [(ngModel)]="params.articulo" required>
                   <mat-option *ngFor="let art of articulos" [value]="art.articulo">
                       {{art.descripcion}}
                   </mat-option>
