@@ -146,9 +146,9 @@ EOT;
 			$select .= " ,e.comanda id,
 				2 as tipo,
 				1 as bodega,
-				'Comanda' tipo_movimiento,
-				'Comanda' nbodega,
-				f.fecha";
+				f.fecha,
+				'Comanda' tipo_movimiento,				
+				'Comanda' nbodega";
 		}
 
 		$this->sqlComanda = <<<EOT
@@ -192,9 +192,9 @@ EOT;
 			$select .= " ,f.numero_factura id,
 				2 as tipo,
 				1 as bodega,
+				f.fecha_factura as fecha,
 				'Factura Directa' tipo_movimiento,
-				'Factura Directa' nbodega,
-				f.fecha_factura as fecha";
+				'Factura Directa' nbodega";
 		}
 
 
@@ -222,6 +222,10 @@ EOT;
 		$this->consultaFacturas($args);
 		if (isset($args['sede'])) {
 			$this->db->where('d.sede', $args['sede']);
+		}
+
+		if (isset($args['articulo'])) {
+			$this->db->where("art.articulo", $args['articulo']);
 		}
 
 		if ($this->tipo == 1) {
