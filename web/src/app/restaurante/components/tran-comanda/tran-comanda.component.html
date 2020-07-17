@@ -6,7 +6,7 @@
     </div>
     <div class="row">
         <div class="col m12 s12" align="center" style="padding: 0 !important;">
-            <button mat-raised-button type="button" color="accent" *ngFor="let cta of mesaEnUso.cuentas" [disabled]="+cta.cerrada == 1"
+            <button mat-raised-button type="button" color="accent" class="btnAccion" *ngFor="let cta of mesaEnUso.cuentas" [disabled]="+cta.cerrada == 1"
                 (click)="setSelectedCuenta(cta.numero)">
                 {{cta.nombre}}
             </button>
@@ -32,79 +32,18 @@
     </div>
     <div class="row">
         <div class="col m12 s12" align="center">
-            <button mat-raised-button type="button" color="accent" (click)="printComanda()" [disabled]="!cuentaActiva.nombre">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="printComanda()" [disabled]="!cuentaActiva.nombre">
                 Comanda
             </button>
-            <button mat-raised-button type="button" color="accent" (click)="printCuenta()" [disabled]="!cuentaActiva.nombre">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="printCuenta()" [disabled]="!cuentaActiva.nombre">
                 Cuenta
             </button>
-            <button mat-raised-button type="button" color="accent" (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2">
                 Unir cuentas
             </button>
-            <button mat-raised-button type="button" color="accent" (click)="cobrarCuenta()" [disabled]="!cuentaActiva.nombre">
+            <button mat-raised-button type="button" color="accent" class="btnAccionComanda" (click)="cobrarCuenta()" [disabled]="!cuentaActiva.nombre">
                 Cobrar cuenta
             </button>
         </div>
     </div>
 </div>
-<!--
-<app-window *ngIf="showPortalComanda && cuentaActiva.nombre" [windowConfig]="windowConfig">
-    <div class="row">
-        <div class="col" style="text-align: center; border-bottom: solid 1px black; padding: 0; font-Weight: bold;">
-            <span style="font-size: 14pt;">Rest-Touch Pro</span><br />
-            <span style="font-size: 16pt;">Comanda #{{noComanda}}</span><br />
-            <span style="font-size: 16pt;">{{cuentaActiva.nombre}}</span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <table class="table">
-                <ng-container *ngFor="let p of lstProductosAImprimir">
-                    <tr>
-                        <td>{{p.cantidad}}</td>
-                        <td>{{p.nombre}}</td>
-                    </tr>
-                    <tr *ngIf="p.notas || p.notas.length > 0 || p.notas != ''">
-                        <td colspan="2" style="padding-left: 15px;"><p>{{p.notas}}</p></td>
-                    </tr>
-                </ng-container>
-            </table>
-        </div>
-    </div>
-    <hr />
-    <div class="d-flex justify-content-end">
-        <button mat-raised-button type="button" color="accent" (click)="this.showPortalComanda = false">Cerrar</button>
-    </div>
-</app-window>
-<app-window *ngIf="showPortalCuenta && cuentaActiva.nombre" [windowConfig]="windowConfig">
-    <div class="row">
-        <div class="col" style="text-align: center; border-bottom: solid 1px black; padding: 0; font-Weight: bold;">
-            <span style="font-size: 14pt;">Rest-Touch Pro</span><br />
-            <span style="font-size: 16pt;">Cuenta {{cuentaActiva.nombre}}</span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <table class="table" style="width: 100%; border-collapse: collapse;">
-                <tr *ngFor="let p of lstProductosAImprimir">
-                    <td style="width: 10%; text-align: center;">{{p.cantidad}}</td>
-                    <td style="width: 65%;">{{p.nombre}}</td>
-                    <td style="width: 25%; text-align: right;">{{(p.cantidad * p.precio) | number:'1.2-2'}}</td>
-                </tr>
-                <tfoot>
-                    <tr>
-                        <td colspan="2" style="width: 75%; text-align: right; font-weight: bold;">TOTAL: </td>
-                        <td
-                            style="width: 25%; text-align: right; font-weight: bold; border-top: solid 1px black; border-bottom: double 5px black;">
-                            {{sumCuenta | number:'1.2-2'}}</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <hr />
-    <div style="text-align: end; align-items: flex-end;">
-        <button mat-raised-button type="button" color="accent" (click)="this.showPortalCuenta = false">Cerrar</button>
-    </div>
-</app-window>
--->
