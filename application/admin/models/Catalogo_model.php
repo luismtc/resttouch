@@ -118,7 +118,6 @@ class Catalogo_model extends CI_Model {
 		->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
 		->join("categoria c", "c.categoria = b.categoria")
 		->order_by("a.articulo")
-		->group_by("a.articulo")
 		->get("articulo a");
 
 		$tmp = $this->getCatalogo($qry, $args);
