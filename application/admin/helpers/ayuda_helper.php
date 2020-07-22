@@ -141,3 +141,24 @@ if (! function_exists('conexion_db')) {
 		return $db;
 	}
 }
+
+if ( ! function_exists('enviarCorreo')) {
+	function enviarCorreo(Array $datos) {
+		$url = "http://intranet.c807.com/grupo_c807/mtm/contactos/index.php/envio/general";
+		$postdata = http_build_query(array('datos' => $datos));
+
+		$opts = array('http' =>
+			array(
+				'method'  => 'POST',
+				'header'  => "Content-Type: application/x-www-form-urlencoded; charset=utf8",
+				'content' => $postdata
+			)
+		);
+
+		$context   = stream_context_create($opts);
+		$resultado = file_get_contents($url, false, $context);
+
+		$obj = (object)json_decode($resultado);
+		return $obj->exito;
+	}
+}
