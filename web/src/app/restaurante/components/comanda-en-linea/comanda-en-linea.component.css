@@ -16,8 +16,13 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .tamanioAmigable {
   padding: 5px;
-  width: 10%;  
+  width: 10% !important;  
   min-height: 55px;  
+}
+
+.btnCelSize { 
+    min-width: 55px;   
+    width: 100%;
 }
 
 .example-element-row td {

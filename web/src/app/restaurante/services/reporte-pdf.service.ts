@@ -71,4 +71,11 @@ export class ReportePdfService {
       this.httpOptions
     ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  getComanda(idcuenta: number) {
+    return this.http.get<string>(
+        `${GLOBAL.urlAppRestaurante}/comanda/imprimir/${idcuenta}/1`,
+        this.httpOptions
+        ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
 }
