@@ -139,6 +139,47 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function set_detalle_comanda($com, $cuenta)
+	{
+		$comanda = new Comanda_model($com);
+		$cuenta = new Cuenta_model($cuenta);
+		$data = json_decode(file_get_contents('php://input'), true);
+		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+		$datos = ["exito" => false];
+		if ($this->input->method() == 'post') {
+			if ($cuenta->cerrada == 0) {
+
+				foreach ($data['articulos'] as $key => $req) {
+				
+					$det = $comanda->guardarDetalle($req);
+					$id = isset($req['detalle_cuenta']) ? $req['detalle_cuenta'] : '';
+					if ($det) {
+						$cuenta->guardarDetalle([
+							'detalle_comanda' => $det->detalle_comanda
+						], $id);	
+						$datos['exito'] = true;
+					} else {
+						$datos['exito'] = false;						
+					}
+				}
+
+				if ($datos['exito']) {
+					$datos['comanda'] = $comanda->getComanda();	
+				} else {
+					$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+				}
+
+			} else {
+				$datos['mensaje'] = "La cuenta ya esta cerrada";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
 	function get_comanda($mesa=''){
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
