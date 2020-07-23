@@ -1,34 +1,32 @@
 <h1 mat-dialog-title>Abrir mesa</h1>
-<div mat-dialog-content>
+<mat-dialog-content>
     <form #frmAbrirMesa="ngForm" (ngSubmit)="frmAbrirMesa.form.valid" novalidate>
-        <mat-form-field>
-            <!--<input type="text" matInput [matKeyboard]="'es'" darkTheme="true" cdkFocusInitial placeholder="Mesero" name="mesero" [(ngModel)]="data.mesero" required>-->
+            <mat-form-field class="separatorMargin">
             <mat-label>Mesero</mat-label>
             <mat-select name="mesero" [(ngModel)]="data.mesero">
                 <mat-option *ngFor="let usr of lstMeseros" [value]="usr.usuario">
                     {{usr.nombres}} {{usr.apellidos}}
                 </mat-option>
             </mat-select>
-        </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;
-        <mat-form-field *ngIf="!esMovil">
+            </mat-form-field>
+            <mat-form-field class="separatorMargin" *ngIf="!esMovil">
             <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                 ng-virtual-keyboard-placeholder="# Comensales" placeholder="# Comensales" name="comensales"
                 [(ngModel)]="data.comensales" required>
-        </mat-form-field>
-        <mat-form-field *ngIf="esMovil">
-            <input type="text" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales"
-                required>
-        </mat-form-field>
-        <mat-checkbox name="esEvento" [(ngModel)]="+data.esEvento">¿Es evento?</mat-checkbox>&nbsp;&nbsp;&nbsp;&nbsp;
-        <mat-checkbox name="dividirCuentasPorSillas" [(ngModel)]="+data.dividirCuentasPorSillas"
-            [disabled]="+data.comensales <= 1">¿Dividir cuentas?</mat-checkbox>
+            </mat-form-field>
+                    <mat-form-field class="separatorMargin" *ngIf="esMovil">
+                <input type="text" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales"
+                    required>
+            </mat-form-field>
+            <mat-checkbox name="esEvento" class="separatorMargin" [(ngModel)]="+data.esEvento">¿Es evento?</mat-checkbox>
+            <mat-checkbox name="dividirCuentasPorSillas" class="separatorMargin" [(ngModel)]="+data.dividirCuentasPorSillas" [disabled]="+data.comensales <= 1">¿Dividir cuentas?</mat-checkbox>
     </form>
-</div>
-<div align="end">
-    <button mat-icon-button (click)="terminar()" color="warn">
-        <mat-icon>cancel_presentation</mat-icon>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button (click)="terminar()" color="secondary" class="btnAccion">
+        Cancelar
     </button>
-    <button mat-icon-button (click)="terminar(data)" [disabled]="!frmAbrirMesa.form.valid" color="accent">
-        <mat-icon>check_circle</mat-icon>
+    <button mat-raised-button (click)="terminar(data)" [disabled]="!frmAbrirMesa.form.valid" color="accent">
+        Abrir mesa
     </button>
-</div>
+</mat-dialog-actions>

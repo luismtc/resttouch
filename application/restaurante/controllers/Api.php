@@ -323,6 +323,7 @@ class Api extends CI_Controller {
 									if($datos['exito']) {
 										$datos['mensaje'] = "Datos Actualizados con Exito";
 										$datos['comanda'] = $comanda->getComanda();	
+										$comanda->envioMail();
 									} 
 								} else {
 									$datos['mensaje'] = "No existe ningun turno abierto";

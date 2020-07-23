@@ -168,7 +168,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Kardex</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Bodega</mat-label>\n              <mat-select name=\"bodega\" [(ngModel)]=\"params.bodega\">\n                  <mat-option *ngFor=\"let bod of bodegas\" [value]=\"bod.bodega\">\n                      {{bod.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Sede</mat-label>\n              <mat-select name=\"sede\" [(ngModel)]=\"params.sede\">\n                  <mat-option *ngFor=\"let sede of sedes\" [value]=\"sede.sede\">\n                      {{sede.nombre}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Kardex</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Articulo</mat-label>\n              <mat-select name=\"articulo\" [(ngModel)]=\"params.articulo\" required>\n                  <mat-option *ngFor=\"let art of articulos\" [value]=\"art.articulo\">\n                      {{art.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Bodega</mat-label>\n              <mat-select name=\"bodega\" [(ngModel)]=\"params.bodega\">\n                  <mat-option *ngFor=\"let bod of bodegas\" [value]=\"bod.bodega\">\n                      {{bod.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Sede</mat-label>\n              <mat-select name=\"sede\" [(ngModel)]=\"params.sede\">\n                  <mat-option *ngFor=\"let sede of sedes\" [value]=\"sede.sede\">\n                      {{sede.nombre}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
 
 /***/ }),
 
@@ -241,6 +241,9 @@ let ReportePdfService = class ReportePdfService {
     getReportePropina(params) {
         this.httpOptions['params'] = params;
         return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/reporte/venta/propina`, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    getComanda(idcuenta) {
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/comanda/imprimir/${idcuenta}/1`, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 ReportePdfService.ctorParameters = () => [
@@ -1698,8 +1701,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _restaurante_services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../restaurante/services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
 /* harmony import */ var _admin_services_sede_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../admin/services/sede.service */ "./src/app/admin/services/sede.service.ts");
 /* harmony import */ var _services_bodega_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/bodega.service */ "./src/app/wms/services/bodega.service.ts");
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _services_articulo_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../services/articulo.service */ "./src/app/wms/services/articulo.service.ts");
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_7__);
+
 
 
 
@@ -1708,18 +1713,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let KardexComponent = class KardexComponent {
-    constructor(snackBar, pdfServicio, sedeSrvc, bodegaSrvc) {
+    constructor(snackBar, pdfServicio, sedeSrvc, bodegaSrvc, articuloSrvc) {
         this.snackBar = snackBar;
         this.pdfServicio = pdfServicio;
         this.sedeSrvc = sedeSrvc;
         this.bodegaSrvc = bodegaSrvc;
+        this.articuloSrvc = articuloSrvc;
         this.bodegas = [];
         this.sedes = [];
+        this.articulos = [];
         this.params = {};
         this.titulo = "Kardex";
         this.getSede = (params = {}) => {
             this.sedeSrvc.get(params).subscribe(res => {
                 this.sedes = res;
+            });
+        };
+        this.getArticulo = (params = {}) => {
+            this.articuloSrvc.getArticulos(params).subscribe(res => {
+                this.articulos = res;
             });
         };
         this.getBodega = (params = {}) => {
@@ -1731,12 +1743,13 @@ let KardexComponent = class KardexComponent {
     ngOnInit() {
         this.getSede();
         this.getBodega();
+        this.getArticulo();
     }
     onSubmit() {
         this.pdfServicio.getReporteKardex(this.params).subscribe(res => {
             if (res) {
                 const blob = new Blob([res], { type: 'application/pdf' });
-                Object(file_saver__WEBPACK_IMPORTED_MODULE_6__["saveAs"])(blob, `${this.titulo}.pdf`);
+                Object(file_saver__WEBPACK_IMPORTED_MODULE_7__["saveAs"])(blob, `${this.titulo}.pdf`);
             }
             else {
                 this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
@@ -1748,7 +1761,8 @@ KardexComponent.ctorParameters = () => [
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
     { type: _restaurante_services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__["ReportePdfService"] },
     { type: _admin_services_sede_service__WEBPACK_IMPORTED_MODULE_4__["SedeService"] },
-    { type: _services_bodega_service__WEBPACK_IMPORTED_MODULE_5__["BodegaService"] }
+    { type: _services_bodega_service__WEBPACK_IMPORTED_MODULE_5__["BodegaService"] },
+    { type: _services_articulo_service__WEBPACK_IMPORTED_MODULE_6__["ArticuloService"] }
 ];
 KardexComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({

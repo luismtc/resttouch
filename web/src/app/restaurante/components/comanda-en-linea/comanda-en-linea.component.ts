@@ -15,6 +15,7 @@ import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cob
 import { Impresora } from '../../../admin/interfaces/impresora';
 import { ComandaService } from '../../services/comanda.service';
 import { FacturaService } from '../../../pos/services/factura.service';
+import { ReportePdfService } from '../../services/reporte-pdf.service';
 
 interface productoSelected {
   id: number;
@@ -47,7 +48,7 @@ interface productoSelected {
 export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   public dataSource: any[] = [];
-  public columnsToDisplay = ['comanda', 'orden', 'nombre', 'total', 'imprimir', 'facturar'];
+  public columnsToDisplay = ['comanda', 'orden', 'nombre', 'total', 'pdf', 'imprimir', 'facturar'];
   public expandedElement: any | null;
 
   public comandasEnLinea: any[] = [];
@@ -61,6 +62,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     private comandaSrvc: ComandaService,
     private facturaSrvc: FacturaService,
     private dns: DesktopNotificationService,
+    private pdfServicio: ReportePdfService,
   ) { }
 
   ngOnInit() {
@@ -95,6 +97,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
   loadComandasEnLinea = () => {
     this.comandaSrvc.getComandasOnLIne().subscribe((res: any[]) => {
       this.comandasEnLinea = res;
+      // console.log(this.comandasEnLinea);
       this.dataSource = this.comandasEnLinea;
     });
   }
@@ -103,15 +106,35 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     const lstArticulos: any[] = [];
     articulos.forEach(item => {
       lstArticulos.push({
-        id: item.articulo.articulo,
+        id: +item.articulo.articulo,
         nombre: item.articulo.descripcion,
-        cantidad: item.cantidad,
-        total: item.total,
-        notas: item.notas,
-        impresora: item.articulo.impresora
+        cantidad: +item.cantidad,
+        total: +item.total,
+        notas: item.notas || '',
+        impresora: {
+          bluetooth: +item.articulo.impresora.bluetooth,
+          direccion_ip: item.articulo.impresora.direccion_ip || '',
+          impresora: +item.articulo.impresora.impresora,
+          nombre: item.articulo.impresora.nombre || '',
+          sede: +item.articulo.impresora.sede,
+          ubicacion: item.articulo.impresora.ubicacion || ''
+        }
       });
     });
     return lstArticulos;
+  }
+
+  getPdf = (obj: any) => {   
+    const noCuenta = +obj.cuentas[0].cuenta;
+    this.pdfServicio.getComanda(noCuenta).subscribe(res => {
+      if (res) {
+        const blob = new Blob([res], { type: 'application/pdf' });        
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+      } else {
+        this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
+      }
+    });
   }
 
   imprimir = (obj: any) => {
@@ -131,8 +154,10 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         NoOrdenEnLinea: obj.origen_datos.numero_orden,
         DireccionEntrega: obj.origen_datos.direccion_entrega,
         DetalleCuenta: AImpresoraNormal,
-        Total: null
+        Total: 0.00
       };
+      // console.log('STRING (IN) = ', JSON.stringify(objToPrint));
+      // console.log('OBJETO (IN) = ', objToPrint);
       this.socket.emit('print:comanda', `${JSON.stringify(objToPrint)}`);
     }
 
@@ -144,8 +169,10 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         NoOrdenEnLinea: obj.origen_datos.numero_orden,
         DireccionEntrega: obj.origen_datos.direccion_entrega,
         DetalleCuenta: AImpresoraBT,
-        Total: null
+        Total: 0.00
       };
+      // console.log('STRING (BT) = ', JSON.stringify(objToPrint));
+      // console.log('OBJETO (BT) = ', objToPrint);
       this.printToBT(JSON.stringify(objToPrint));
     }
   }
