@@ -128,7 +128,7 @@ class Venta extends CI_Controller {
 		$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(), //Produccion
+			'tempDir' => sys_get_temp_dir(), //Produccion
 			'format' => 'Legal'
 		]);
 
@@ -211,7 +211,7 @@ class Venta extends CI_Controller {
 		$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(), //Produccion
+			'tempDir' => sys_get_temp_dir(), //Produccion
 			'format' => 'Legal'
 		]);
 

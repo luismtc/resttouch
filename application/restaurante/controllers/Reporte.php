@@ -35,7 +35,7 @@ class Reporte extends CI_Controller {
 		$data['ingresos'] = $this->Reporte_model->get_ingresos($_GET);
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(),
+			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));
@@ -48,7 +48,7 @@ class Reporte extends CI_Controller {
 		$facts = $this->Factura_model->get_facturas($_GET);
 		$data = $_GET;
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(),
+			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$data['facturas'] = [];
