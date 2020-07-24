@@ -270,8 +270,8 @@ class Comanda_model extends General_Model {
 				$datos["numero_orden"] = isset($json->order_number) ? $json->order_number : '';
 				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
 			} else if ($nombre == 'api') {
-				$datos["numero_orden"] = '';
-				$datos["metodo_pago"] = '';
+				$datos["numero_orden"] = $json->numero_orden;
+				$datos["metodo_pago"] = $json->metodo_pago;
 				
 				if (isset($json->direccion_entrega)) {
 					if ($json->direccion_entrega) {

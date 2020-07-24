@@ -17,7 +17,7 @@
 		<div class="col-sm-12 text-center">
 			<h4>Comanda: <?php echo $comanda->comanda ?></h4>
 			<span>Cuenta: <?php echo $comanda->cuentas[0]->nombre ?></span><br>
-			<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['$comanda->origen_datos'])): ?>
+			<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['numero_orden'])): ?>
 				<span>Número de Orden <?php echo $comanda->origen_datos['numero_orden'] ?></span>
 			<?php endif ?>
 		</div>
@@ -27,8 +27,10 @@
 		<?php if (isset($comanda->origen_datos['direccion_entrega']->direccion)): ?>
 			<div class="col-sm-6">Dirección de Entrega: <?php echo $comanda->origen_datos['direccion_entrega']->direccion ?></div>
 		<?php endif ?>
+		<?php if (isset($comanda->origen_datos['metodo_pago']->nombre)): ?>
+			<div class="col-sm-6">Metodo de Pago: <?php echo $comanda->origen_datos['metodo_pago']->nombre ?></div>	
+		<?php endif ?>
 		
-		<div class="col-sm-6">Metodo de Pago: <?php echo $comanda->origen_datos['metodo_pago'] ?></div>
 	</div>
 	<?php if (isset($comanda->origen_datos['direccion_entrega']->nombre) && isset($comanda->origen_datos['direccion_entrega']->correo) && isset($comanda->origen_datos['direccion_entrega']->apellidos)): ?>
 	<div class="row">
