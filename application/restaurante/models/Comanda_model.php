@@ -273,9 +273,11 @@ class Comanda_model extends General_Model {
 				$datos["numero_orden"] = '';
 				$datos["metodo_pago"] = '';
 				
-				if (isset($json->cliente)) {
-					$json->cliente->direccion = $json->direccion_entrega;
-					$datos['direccion_entrega'] = $json->cliente;
+				if (isset($json->direccion_entrega)) {
+					if ($json->direccion_entrega) {
+						$json->cliente->direccion = $json->direccion_entrega;
+						$datos['direccion_entrega'] = $json->cliente;
+					}
 				}
 			}
 		}
