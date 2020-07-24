@@ -254,7 +254,7 @@ class Comanda extends CI_Controller {
 			->set_output(json_encode($datos));	
 		} else {
 			$mpdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(), //produccion
+				'tempDir' => sys_get_temp_dir(), //produccion
 				'format' => 'Legal'
 			]);
 
