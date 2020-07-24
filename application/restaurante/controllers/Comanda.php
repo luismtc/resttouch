@@ -191,6 +191,7 @@ class Comanda extends CI_Controller {
 				if ($datos['exito']) {
 					$datos['mensaje'] = "Productos agregados con éxito.";
 					$datos['comanda'] = $comanda->getComanda();	
+					$datos['mensaje'] = 'Detalle cuenta cargada correctamente.';	
 				} else {
 					$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
 				}
