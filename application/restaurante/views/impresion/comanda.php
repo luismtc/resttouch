@@ -22,35 +22,40 @@
 			<?php endif ?>
 		</div>
 	</div>
+	<br>
+	<div>
+		<span><b>Datos del Cliente</b></span>
+	</div>
+	<table class="table">
 	<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['direccion_entrega']) && isset($comanda->origen_datos['metodo_pago'])): ?>
-	<div class="row">
+	<tr>
 		<?php if (isset($comanda->origen_datos['direccion_entrega']->direccion)): ?>
-			<div class="col-sm-6">Dirección de Entrega: <?php echo $comanda->origen_datos['direccion_entrega']->direccion ?></div>
+			<td><b>Dirección de Entrega:</b> <?php echo $comanda->origen_datos['direccion_entrega']->direccion ?></td>
 		<?php endif ?>
 		<?php if (isset($comanda->origen_datos['metodo_pago']->nombre)): ?>
-			<div class="col-sm-6">Metodo de Pago: <?php echo $comanda->origen_datos['metodo_pago']->nombre ?></div>	
+			<td><b>Metodo de Pago:</b> <?php echo $comanda->origen_datos['metodo_pago']->nombre ?></td>	
 		<?php endif ?>
 		
-	</div>
-	<?php if (isset($comanda->origen_datos['direccion_entrega']->nombre) && isset($comanda->origen_datos['direccion_entrega']->correo) && isset($comanda->origen_datos['direccion_entrega']->apellidos)): ?>
-	<div class="row">
-		<div class="col-sm-6">Nombre entrega: <?php echo $comanda->origen_datos['direccion_entrega']->nombre." ".$comanda->origen_datos['direccion_entrega']->apellidos ?></div>
-		<div class="col-sm-3">Correo: <?php echo $comanda->origen_datos['direccion_entrega']->correo ?></div>
-	</div>
+	</tr>
 	<?php endif ?>
+	<?php if (isset($comanda->origen_datos['direccion_entrega']->nombre) && isset($comanda->origen_datos['direccion_entrega']->correo) && isset($comanda->origen_datos['direccion_entrega']->apellidos)): ?>
+		<tr>
+			<td><b>Nombre entrega:</b> <?php echo $comanda->origen_datos['direccion_entrega']->nombre." ".$comanda->origen_datos['direccion_entrega']->apellidos ?></td>
+			<td><b>Correo:</b> <?php echo $comanda->origen_datos['direccion_entrega']->correo ?></td>
+		</tr>
 	<?php endif ?>
 	
 	<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['transferencia'])): ?>
-		<div class="row">
-			<div class="col-sm-12">
+		<tr>
+			<td>
 				<span>Detalle de Transferencia: <?php echo $comanda->origen_datos['transferencia']->documento ?></span><br>
 				<span>
 					Observaciones: <?php echo $comanda->origen_datos['transferencia']->observaciones ?>	
 				</span>
-			</div>
-		</div>	
+			</td>
+		</tr>
 	<?php endif ?>
-	
+	</table>
 	<br>
 	<div class="row">
 		<div class="col-sm-12">
@@ -81,6 +86,5 @@
 			</div>
 		</div>
 	</div>
-</body>
 </body>
 </html>
