@@ -39,6 +39,18 @@
 	</div>
 	<?php endif ?>
 	<?php endif ?>
+	
+	<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['transferencia'])): ?>
+		<div class="row">
+			<div class="col-sm-12">
+				<span>Detalle de Transferencia: <?php echo $comanda->origen_datos['transferencia']->documento ?></span><br>
+				<span>
+					Observaciones: <?php echo $comanda->origen_datos['transferencia']->observaciones ?>	
+				</span>
+			</div>
+		</div>	
+	<?php endif ?>
+	
 	<br>
 	<div class="row">
 		<div class="col-sm-12">
@@ -56,8 +68,7 @@
 								<td style="padding: 5px;" class="text-center"><?php echo $det->cantidad ?></td>
 								<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>
 							</tr>
-							<?php if (empty($det->notas)): 
-								$det->notas = "adsfa"?>
+							<?php if (!empty($det->notas)): ?>
 								<tr>
 									<td colspan="2" style="padding: 8px; margin: 10px;">
 										<?php echo "<b>Notas:</b> {$det->notas}" ?>

@@ -272,6 +272,9 @@ class Comanda_model extends General_Model {
 			} else if ($nombre == 'api') {
 				$datos["numero_orden"] = $json->numero_orden;
 				$datos["metodo_pago"] = $json->metodo_pago;
+				if (isset($json->transferencia)) {
+					$datos['transferencia'] = $json->transferencia;
+				}
 				
 				if (isset($json->direccion_entrega)) {
 					if ($json->direccion_entrega) {
