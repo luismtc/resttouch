@@ -45,13 +45,15 @@
 		</tr>
 	<?php endif ?>
 	
-	<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['transferencia'])): ?>
+	<?php if (isset($comanda->origen_datos, $comanda->origen_datos['transferencia'], $comanda->origen_datos['transferencia']->documento)): ?>
 		<tr>
 			<td>
 				<span>Detalle de Transferencia: <?php echo $comanda->origen_datos['transferencia']->documento ?></span><br>
-				<span>
-					Observaciones: <?php echo $comanda->origen_datos['transferencia']->observaciones ?>	
-				</span>
+				<?php if (isset($comanda->origen_datos['transferencia']->observaciones)): ?>
+					<span>
+						Observaciones: <?php echo $comanda->origen_datos['transferencia']->observaciones ?>	
+					</span>	
+				<?php endif ?>
 			</td>
 		</tr>
 	<?php endif ?>
