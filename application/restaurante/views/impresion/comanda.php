@@ -33,7 +33,7 @@
 			<td><b>Dirección de Entrega:</b> <?php echo $comanda->origen_datos['direccion_entrega']->direccion ?></td>
 		<?php endif ?>
 		<?php if (isset($comanda->origen_datos['direccion_entrega']->telefono)): ?>
-			<td><b>Metodo de Pago:</b> <?php echo $comanda->origen_datos['direccion_entrega']->telefono ?></td>	
+			<td><b>Teléfono:</b> <?php echo $comanda->origen_datos['direccion_entrega']->telefono ?></td>	
 		<?php endif ?>
 		
 	</tr>
