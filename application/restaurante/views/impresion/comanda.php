@@ -32,8 +32,8 @@
 		<?php if (isset($comanda->origen_datos['direccion_entrega']->direccion)): ?>
 			<td><b>Dirección de Entrega:</b> <?php echo $comanda->origen_datos['direccion_entrega']->direccion ?></td>
 		<?php endif ?>
-		<?php if (isset($comanda->origen_datos['metodo_pago']->nombre)): ?>
-			<td><b>Metodo de Pago:</b> <?php echo $comanda->origen_datos['metodo_pago']->nombre ?></td>	
+		<?php if (isset($comanda->origen_datos['direccion_entrega']->telefono)): ?>
+			<td><b>Metodo de Pago:</b> <?php echo $comanda->origen_datos['direccion_entrega']->telefono ?></td>	
 		<?php endif ?>
 		
 	</tr>
@@ -44,9 +44,11 @@
 			<td><b>Correo:</b> <?php echo $comanda->origen_datos['direccion_entrega']->correo ?></td>
 		</tr>
 	<?php endif ?>
-	
-	<?php if (isset($comanda->origen_datos, $comanda->origen_datos['transferencia'], $comanda->origen_datos['transferencia']->documento)): ?>
+	<?php if (isset($comanda->origen_datos['metodo_pago']->nombre)): ?>
 		<tr>
+			<td><b>Metodo de Pago:</b> <?php echo $comanda->origen_datos['metodo_pago']->nombre ?>
+			</td>	
+	<?php if (isset($comanda->origen_datos, $comanda->origen_datos['transferencia'], $comanda->origen_datos['transferencia']->documento)): ?>
 			<td>
 				<span>Detalle de Transferencia: <?php echo $comanda->origen_datos['transferencia']->documento ?></span><br>
 				<?php if (isset($comanda->origen_datos['transferencia']->observaciones)): ?>
@@ -55,8 +57,10 @@
 					</span>	
 				<?php endif ?>
 			</td>
+		<?php endif ?>
 		</tr>
 	<?php endif ?>
+	
 	</table>
 	<br>
 	<div class="row">
