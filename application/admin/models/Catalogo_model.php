@@ -237,6 +237,19 @@ class Catalogo_model extends CI_Model {
 		return $datos;
 	}
 
+	public function getEmpresa($args = [])
+	{
+		if (isset($args['empresa'])) {
+			$this->db->where('empresa', $args['empresa']);
+		}
+
+		$qry = $this->db
+		->order_by("a.nombre")
+		->get("empresa a");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
 	public function getSede($args=[])
 	{
 
