@@ -10,16 +10,7 @@ class Proveedor extends CI_Controller {
 
         $this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
-		$data = AUTHORIZATION::validateToken($headers['Authorization']);
-		$sede = $this->Catalogo_model->getSede([
-			"sede" => $data->sede,
-			"_uno" => true
-		]);
-
-		$this->corpo = $this->Catalogo_model->getEmpresa([
-			"empresa" => $sede->empresa,
-			"_uno" => true
-		]);
+		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
 
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -27,11 +18,20 @@ class Proveedor extends CI_Controller {
 
 	public function guardar($id = "") 
 	{
+		$sede = $this->Catalogo_model->getSede([
+			"sede" => $this->data->sede,
+			"_uno" => true
+		]);
+
+		$corpo = $this->Catalogo_model->getEmpresa([
+			"empresa" => $sede->empresa,
+			"_uno" => true
+		]);
 		$prov = new Proveedor_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$req['corporacion'] = $this->corpo->corporacion;
+			$req['corporacion'] = $corpo->corporacion;
 			$datos['exito'] = $prov->guardar($req);
 
 			if($datos['exito']) {
@@ -53,7 +53,16 @@ class Proveedor extends CI_Controller {
 
 	public function buscar()
 	{	
-		$_GET['corporacion'] = $this->corpo->corporacion;
+		$sede = $this->Catalogo_model->getSede([
+			"sede" => $this->data->sede,
+			"_uno" => true
+		]);
+
+		$corpo = $this->Catalogo_model->getEmpresa([
+			"empresa" => $sede->empresa,
+			"_uno" => true
+		]);
+		$_GET['corporacion'] = $corpo->corporacion;
 		$datos = $this->Proveedor_model->buscar($_GET);
 
 		$this->output
