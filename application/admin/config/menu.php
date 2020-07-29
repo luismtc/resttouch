@@ -47,6 +47,10 @@ $config['menu'] = [
 					10  => [
 						'nombre' => 'Forma de Pago',
 						'link' => '/admin/formapago'
+					],
+					11  => [
+						'nombre' => 'Proveedores',
+						'link' => '/admin/proveedor'
 					]
 				]
 			],

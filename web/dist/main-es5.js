@@ -625,6 +625,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-lista-presentacion #lstPresentacion (getPresentacionEv)=\"setPresentacion($event)\"></app-lista-presentacion>\n    </div>\n    <div class=\"col m7 s12\">\n        <app-form-presentacion #frmPresentacion [presentacion]=\"presentacion\"\n            (presentacionSavedEv)=\"refreshPresentacionList()\"></app-form-presentacion>\n    </div>\n</div>");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.html": 
+        /*!*******************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.html ***!
+          \*******************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Proveedor {{!!proveedor.proveedor ? proveedor.razon_social : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmProveedor=\"ngForm\" (ngSubmit)=\"frmProveedor.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Razón Social\" name=\"razon_social\" [(ngModel)]=\"proveedor.razon_social\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"N.I.T.\" name=\"nit\" [(ngModel)]=\"proveedor.nit\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmProveedor.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetProveedor()\" *ngIf=\"proveedor.proveedor\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.html": 
+        /*!*********************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.html ***!
+          \*********************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput type=\"text\" (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let element of lstProveedoresPaged\" (click)=\"getProveedor(element)\">\n                <mat-icon mat-list-icon>person</mat-icon>\n                <h5 mat-line>{{element.razon_social}}</h5>\n                <p mat-line>N.I.T.: {{element.nit}}</p>\n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>\n");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/proveedor/proveedor.component.html": 
+        /*!*********************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/proveedor/proveedor.component.html ***!
+          \*********************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-lista-proveedor #lstProveedor (getProveedorEv)=\"setProveedor($event)\"></app-lista-proveedor>\n    </div>\n    <div class=\"col m7 s12\">        \n        <app-form-proveedor #frmProveedor [proveedor]=\"proveedor\" (proveedorSavedEv)=\"refreshProveedorList()\"></app-form-proveedor>\n    </div>\n</div>\n");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/tablero.component.html": 
         /*!*******************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/tablero.component.html ***!
@@ -1070,6 +1103,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
             /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
             /* harmony import */ var _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/tablero/tablero.component */ "./src/app/admin/components/tablero/tablero.component.ts");
+            /* harmony import */ var _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/proveedor/proveedor/proveedor.component */ "./src/app/admin/components/proveedor/proveedor/proveedor.component.ts");
             var routes = [
                 { path: 'login', component: _components_login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] },
                 { path: 'dashboard', component: _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_5__["DashboardComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
@@ -1082,6 +1116,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 { path: 'tipo_usuario', component: _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_12__["TipoUsuarioComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'acceso', component: _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_13__["AccesoUsuarioComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: 'tablero', component: _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_14__["TableroComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+                { path: 'proveedor', component: _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_15__["ProveedorComponent"], canActivate: [_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
                 { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
             ];
             var AdminRoutingModule = /** @class */ (function () {
@@ -1167,6 +1202,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts");
             /* harmony import */ var _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts");
             /* harmony import */ var _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/tablero/tablero.component */ "./src/app/admin/components/tablero/tablero.component.ts");
+            /* harmony import */ var _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/proveedor/proveedor/proveedor.component */ "./src/app/admin/components/proveedor/proveedor/proveedor.component.ts");
+            /* harmony import */ var _components_proveedor_lista_proveedor_lista_proveedor_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/proveedor/lista-proveedor/lista-proveedor.component */ "./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.ts");
+            /* harmony import */ var _components_proveedor_form_proveedor_form_proveedor_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/proveedor/form-proveedor/form-proveedor.component */ "./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.ts");
             var AdminModule = /** @class */ (function () {
                 function AdminModule() {
                 }
@@ -1178,7 +1216,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         _components_login_login_component__WEBPACK_IMPORTED_MODULE_29__["LoginComponent"], _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_30__["DashboardComponent"], _components_header_header_component__WEBPACK_IMPORTED_MODULE_31__["HeaderComponent"], _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_32__["ClockComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_33__["MenuComponent"], _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_25__["SidebarDirective"],
                         _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_34__["UsuarioComponent"], _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_35__["ListaUsuarioComponent"], _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_36__["FormUsuarioComponent"], _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_37__["ClienteComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_38__["ListaClienteComponent"],
                         _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_40__["MedidaComponent"], _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_41__["ListaMedidaComponent"], _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_42__["FormMedidaComponent"], _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_43__["PresentacionComponent"],
-                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_44__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_45__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"], _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_47__["ImpresoraComponent"], _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_48__["FormImpresoraComponent"], _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_49__["ListaImpresoraComponent"], _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_50__["FpagoComponent"], _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_51__["FormPagoComponent"], _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_52__["ListaPagoComponent"], _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__["TipoUsuarioComponent"], _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_54__["ListaTipoUsuarioComponent"], _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__["FormTipoUsuarioComponent"], _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__["AccesoUsuarioComponent"], _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_57__["FormAccesoUsuarioComponent"], _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__["ListaAccesoUsuarioComponent"], _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_59__["TableroComponent"]
+                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_44__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_45__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"], _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_47__["ImpresoraComponent"], _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_48__["FormImpresoraComponent"], _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_49__["ListaImpresoraComponent"], _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_50__["FpagoComponent"], _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_51__["FormPagoComponent"], _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_52__["ListaPagoComponent"], _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__["TipoUsuarioComponent"], _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_54__["ListaTipoUsuarioComponent"], _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__["FormTipoUsuarioComponent"], _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__["AccesoUsuarioComponent"], _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_57__["FormAccesoUsuarioComponent"], _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__["ListaAccesoUsuarioComponent"], _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_59__["TableroComponent"], _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_60__["ProveedorComponent"], _components_proveedor_lista_proveedor_lista_proveedor_component__WEBPACK_IMPORTED_MODULE_61__["ListaProveedorComponent"], _components_proveedor_form_proveedor_form_proveedor_component__WEBPACK_IMPORTED_MODULE_62__["FormProveedorComponent"]
                     ],
                     entryComponents: [
                         _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"]
@@ -3009,6 +3047,210 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./presentacion.component.css */ "./src/app/admin/components/presentacion/presentacion/presentacion.component.css")).default]
                 })
             ], PresentacionComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.css": 
+        /*!****************************************************************************************!*\
+          !*** ./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.css ***!
+          \****************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = (".full-width {\r\n    width: 100%;\r\n}\r\n\r\n.iconFontSize {\r\n    font-size: 24pt;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvYWRtaW4vY29tcG9uZW50cy9wcm92ZWVkb3IvZm9ybS1wcm92ZWVkb3IvZm9ybS1wcm92ZWVkb3IuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7QUFDZjs7QUFFQTtJQUNJLGVBQWU7QUFDbkIiLCJmaWxlIjoic3JjL2FwcC9hZG1pbi9jb21wb25lbnRzL3Byb3ZlZWRvci9mb3JtLXByb3ZlZWRvci9mb3JtLXByb3ZlZWRvci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmZ1bGwtd2lkdGgge1xyXG4gICAgd2lkdGg6IDEwMCU7XHJcbn1cclxuXHJcbi5pY29uRm9udFNpemUge1xyXG4gICAgZm9udC1zaXplOiAyNHB0O1xyXG59Il19 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.ts": 
+        /*!***************************************************************************************!*\
+          !*** ./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.ts ***!
+          \***************************************************************************************/
+        /*! exports provided: FormProveedorComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FormProveedorComponent", function () { return FormProveedorComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _wms_services_proveedor_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../wms/services/proveedor.service */ "./src/app/wms/services/proveedor.service.ts");
+            var FormProveedorComponent = /** @class */ (function () {
+                function FormProveedorComponent(_snackBar, proveedorSrvc) {
+                    var _this = this;
+                    this._snackBar = _snackBar;
+                    this.proveedorSrvc = proveedorSrvc;
+                    this.proveedorSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.resetProveedor = function () { return _this.proveedor = {
+                        proveedor: null,
+                        corporacion: null,
+                        razon_social: null,
+                        nit: null
+                    }; };
+                    this.onSubmit = function () {
+                        _this.proveedorSrvc.save(_this.proveedor).subscribe(function (res) {
+                            if (res.exito) {
+                                _this.proveedorSavedEv.emit();
+                                _this.resetProveedor();
+                                _this._snackBar.open('Proveedor agregade...', 'Proveedores', { duration: 3000 });
+                            }
+                            else {
+                                _this._snackBar.open("ERROR: " + res.mensaje, 'Proveedores', { duration: 3000 });
+                            }
+                        });
+                    };
+                }
+                FormProveedorComponent.prototype.ngOnInit = function () {
+                };
+                return FormProveedorComponent;
+            }());
+            FormProveedorComponent.ctorParameters = function () { return [
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
+                { type: _wms_services_proveedor_service__WEBPACK_IMPORTED_MODULE_3__["ProveedorService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+            ], FormProveedorComponent.prototype, "proveedor", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], FormProveedorComponent.prototype, "proveedorSavedEv", void 0);
+            FormProveedorComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-form-proveedor',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./form-proveedor.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./form-proveedor.component.css */ "./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.css")).default]
+                })
+            ], FormProveedorComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.css": 
+        /*!******************************************************************************************!*\
+          !*** ./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.css ***!
+          \******************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = (".fullWidth {\r\n    width: 100% !important;\r\n}\r\n\r\ntable {\r\n    width: 100% !important;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvYWRtaW4vY29tcG9uZW50cy9wcm92ZWVkb3IvbGlzdGEtcHJvdmVlZG9yL2xpc3RhLXByb3ZlZWRvci5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCIiwiZmlsZSI6InNyYy9hcHAvYWRtaW4vY29tcG9uZW50cy9wcm92ZWVkb3IvbGlzdGEtcHJvdmVlZG9yL2xpc3RhLXByb3ZlZWRvci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmZ1bGxXaWR0aCB7XHJcbiAgICB3aWR0aDogMTAwJSAhaW1wb3J0YW50O1xyXG59XHJcblxyXG50YWJsZSB7XHJcbiAgICB3aWR0aDogMTAwJSAhaW1wb3J0YW50O1xyXG59Il19 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.ts": 
+        /*!*****************************************************************************************!*\
+          !*** ./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.ts ***!
+          \*****************************************************************************************/
+        /*! exports provided: ListaProveedorComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaProveedorComponent", function () { return ListaProveedorComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _wms_services_proveedor_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../wms/services/proveedor.service */ "./src/app/wms/services/proveedor.service.ts");
+            var ListaProveedorComponent = /** @class */ (function () {
+                function ListaProveedorComponent(proveedorSrvc) {
+                    var _this = this;
+                    this.proveedorSrvc = proveedorSrvc;
+                    this.getProveedorEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.length = 0;
+                    this.pageSize = 5;
+                    this.pageSizeOptions = [5, 10, 15];
+                    this.pageIndex = 0;
+                    this.txtFiltro = '';
+                    this.loadProveedores = function () {
+                        _this.proveedorSrvc.get().subscribe(function (lst) {
+                            if (lst) {
+                                if (lst.length > 0) {
+                                    _this.lstProveedores = lst;
+                                    _this.applyFilter();
+                                }
+                            }
+                        });
+                    };
+                    this.getProveedor = function (obj) { return _this.getProveedorEv.emit(obj); };
+                    this.pageChange = function (e) {
+                        _this.pageSize = e.pageSize;
+                        _this.pageIndex = e.pageIndex;
+                        _this.applyFilter();
+                    };
+                }
+                ListaProveedorComponent.prototype.ngOnInit = function () {
+                    this.loadProveedores();
+                };
+                ListaProveedorComponent.prototype.applyFilter = function () {
+                    if (this.txtFiltro.length > 0) {
+                        var tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["MultiFiltro"])(this.lstProveedores, this.txtFiltro);
+                        this.length = tmpList.length;
+                        this.lstProveedoresPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+                    }
+                    else {
+                        this.length = this.lstProveedores.length;
+                        this.lstProveedoresPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_2__["PaginarArray"])(this.lstProveedores, this.pageSize, this.pageIndex + 1);
+                    }
+                };
+                return ListaProveedorComponent;
+            }());
+            ListaProveedorComponent.ctorParameters = function () { return [
+                { type: _wms_services_proveedor_service__WEBPACK_IMPORTED_MODULE_3__["ProveedorService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], ListaProveedorComponent.prototype, "getProveedorEv", void 0);
+            ListaProveedorComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-lista-proveedor',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./lista-proveedor.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-proveedor.component.css */ "./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.css")).default]
+                })
+            ], ListaProveedorComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/proveedor/proveedor/proveedor.component.css": 
+        /*!******************************************************************************!*\
+          !*** ./src/app/admin/components/proveedor/proveedor/proveedor.component.css ***!
+          \******************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvcHJvdmVlZG9yL3Byb3ZlZWRvci9wcm92ZWVkb3IuY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/proveedor/proveedor/proveedor.component.ts": 
+        /*!*****************************************************************************!*\
+          !*** ./src/app/admin/components/proveedor/proveedor/proveedor.component.ts ***!
+          \*****************************************************************************/
+        /*! exports provided: ProveedorComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProveedorComponent", function () { return ProveedorComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var ProveedorComponent = /** @class */ (function () {
+                function ProveedorComponent() {
+                    var _this = this;
+                    this.setProveedor = function (prov) { return _this.proveedor = prov; };
+                    this.refreshProveedorList = function () { return _this.lstProveedorComponent.loadProveedores(); };
+                    this.proveedor = {
+                        proveedor: null,
+                        corporacion: null,
+                        razon_social: null,
+                        nit: null
+                    };
+                }
+                ProveedorComponent.prototype.ngOnInit = function () {
+                };
+                return ProveedorComponent;
+            }());
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('lstProveedor', { static: false })
+            ], ProveedorComponent.prototype, "lstProveedorComponent", void 0);
+            ProveedorComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-proveedor',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./proveedor.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/proveedor/proveedor/proveedor.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./proveedor.component.css */ "./src/app/admin/components/proveedor/proveedor/proveedor.component.css")).default]
+                })
+            ], ProveedorComponent);
             /***/ 
         }),
         /***/ "./src/app/admin/components/tablero/tablero.component.css": 
@@ -5300,6 +5542,62 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     ]
                 })
             ], SharedModule);
+            /***/ 
+        }),
+        /***/ "./src/app/wms/services/proveedor.service.ts": 
+        /*!***************************************************!*\
+          !*** ./src/app/wms/services/proveedor.service.ts ***!
+          \***************************************************/
+        /*! exports provided: ProveedorService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProveedorService", function () { return ProveedorService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var ProveedorService = /** @class */ (function () {
+                function ProveedorService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                ProveedorService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos + "/get_proveedor?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ProveedorService.prototype.save = function (entidad) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/proveedor/guardar" + (!!entidad.proveedor ? ('/' + entidad.proveedor) : ''), entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return ProveedorService;
+            }());
+            ProveedorService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            ProveedorService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], ProveedorService);
             /***/ 
         }),
         /***/ "./src/environments/environment.ts": 

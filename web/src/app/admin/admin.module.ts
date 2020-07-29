@@ -61,6 +61,9 @@ import { AccesoUsuarioComponent } from './components/acceso-usuario/acceso-usuar
 import { FormAccesoUsuarioComponent } from './components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component';
 import { ListaAccesoUsuarioComponent } from './components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component';
 import { TableroComponent } from './components/tablero/tablero.component';
+import { ProveedorComponent } from './components/proveedor/proveedor/proveedor.component';
+import { ListaProveedorComponent } from './components/proveedor/lista-proveedor/lista-proveedor.component';
+import { FormProveedorComponent } from './components/proveedor/form-proveedor/form-proveedor.component';
 
 
 @NgModule({
@@ -68,7 +71,7 @@ import { TableroComponent } from './components/tablero/tablero.component';
     LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
     UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
     FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
-    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent, FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent, FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent, ListaProveedorComponent, FormProveedorComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent

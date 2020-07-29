@@ -1,0 +1,25 @@
+<mat-card class="mat-elevation-z4 fullWidth">
+    <mat-card-title>
+        <h4>
+            Proveedor {{!!proveedor.proveedor ? proveedor.razon_social : ''}}
+        </h4>
+    </mat-card-title>
+    <mat-card-content>
+        <form #frmProveedor="ngForm" (ngSubmit)="frmProveedor.form.valid && onSubmit()" novalidate>
+            <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Razón Social" name="razon_social" [(ngModel)]="proveedor.razon_social" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="N.I.T." name="nit" [(ngModel)]="proveedor.nit" required>
+            </mat-form-field>
+            <div align="end">
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmProveedor.form.valid">
+                    Guardar
+                </button>
+                <button mat-raised-button type="button" color="accent" (click)="resetProveedor()" *ngIf="proveedor.proveedor">
+                    Nuevo
+                </button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

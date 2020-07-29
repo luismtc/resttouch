@@ -1972,54 +1972,6 @@
             ], IngresoService);
             /***/ 
         }),
-        /***/ "./src/app/wms/services/proveedor.service.ts": 
-        /*!***************************************************!*\
-          !*** ./src/app/wms/services/proveedor.service.ts ***!
-          \***************************************************/
-        /*! exports provided: ProveedorService */
-        /***/ (function (module, __webpack_exports__, __webpack_require__) {
-            "use strict";
-            __webpack_require__.r(__webpack_exports__);
-            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProveedorService", function () { return ProveedorService; });
-            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
-            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
-            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
-            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
-            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
-            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
-            var ProveedorService = /** @class */ (function () {
-                function ProveedorService(http, ls) {
-                    this.http = http;
-                    this.ls = ls;
-                    this.usrToken = null;
-                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
-                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
-                }
-                ProveedorService.prototype.get = function (fltr) {
-                    if (fltr === void 0) { fltr = {}; }
-                    var httpOptions = {
-                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                            'Authorization': this.usrToken
-                        })
-                    };
-                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos + "/get_proveedor?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-                };
-                return ProveedorService;
-            }());
-            ProveedorService.ctorParameters = function () { return [
-                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
-                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
-            ]; };
-            ProveedorService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-                    providedIn: 'root'
-                })
-            ], ProveedorService);
-            /***/ 
-        }),
         /***/ "./src/app/wms/services/tipo-movimiento.service.ts": 
         /*!*********************************************************!*\
           !*** ./src/app/wms/services/tipo-movimiento.service.ts ***!

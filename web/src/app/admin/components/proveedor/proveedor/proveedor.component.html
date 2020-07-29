@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-proveedor #lstProveedor (getProveedorEv)="setProveedor($event)"></app-lista-proveedor>
+    </div>
+    <div class="col m7 s12">        
+        <app-form-proveedor #frmProveedor [proveedor]="proveedor" (proveedorSavedEv)="refreshProveedorList()"></app-form-proveedor>
+    </div>
+</div>

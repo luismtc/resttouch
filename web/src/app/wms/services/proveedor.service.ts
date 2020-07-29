@@ -32,4 +32,13 @@ export class ProveedorService {
     };
     return this.http.get<Proveedor[]>(`${GLOBAL.urlCatalogos}/get_proveedor?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  save(entidad: Proveedor): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };    
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/proveedor/guardar${!!entidad.proveedor ? ('/' + entidad.proveedor) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
 }
