@@ -120,7 +120,7 @@ class Cuenta_model extends General_Model {
 					 ->join("forma_pago b", "a.forma_pago = b.forma_pago")
 					 ->where("cuenta", $this->getPK())
 					 ->where("b.descuento", 1)
-					 ->get("cuenta_forma_pago")
+					 ->get("cuenta_forma_pago a")
 					 ->row();
 
 		if ($desc->descuento) {
