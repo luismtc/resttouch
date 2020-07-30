@@ -84,7 +84,7 @@ class Comanda extends CI_Controller {
 
 								if ($cuenta->cerrada == 0) {
 									$row['comanda'] = $comanda->comanda;
-									$cuenta->guardar($row);	
+									$cuenta->guardarCuenta($row);	
 								}							
 							}
 							$datos['exito'] = true;

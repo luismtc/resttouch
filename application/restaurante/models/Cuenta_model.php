@@ -6,7 +6,7 @@ class Cuenta_model extends General_Model {
 	public $cuenta;
 	public $comanda;
 	public $nombre;
-	public $numero;
+	public $numero = null;
 	public $propina_monto = 0;
 	public $propina_porcentaje = 0;
 	public $cerrada = 0;
@@ -33,6 +33,25 @@ class Cuenta_model extends General_Model {
 		}
 	}
 
+	public function guardarCuenta($args = [])
+	{
+		if (is_array($args) && count($args) > 0) {
+			if ($this->numero === null) {
+				$args['numero'] = $this->getNumero($args);
+			} else {
+				$args['numero'] = $this->numero;
+			}
+
+			if ($args['numero'] !== null && !empty($args['numero'])) {
+				return $this->guardar($args);
+			} 
+		} else {
+			$this->setMensaje("Datos invalidos");
+		}
+
+		return false;
+	}
+
 	public function guardarDetalle(Array $args, $id = '')
 	{
 		$det = new Dcuenta_model($id);
@@ -44,6 +63,17 @@ class Cuenta_model extends General_Model {
 		}
 
 		return $result;
+	}
+
+	private function getNumero($args = [])
+	{
+		$tmp = $this->db
+					->select("(ifnull(max(numero), 0) +1) as correlativo")
+					->where("comanda", $args['comanda'])
+					->get("cuenta")
+					->row();
+
+		return $tmp->correlativo;
 	}
 
 	public function facturada()
