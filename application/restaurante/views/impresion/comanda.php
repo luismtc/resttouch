@@ -18,7 +18,10 @@
 			<h4>Comanda: <?php echo $comanda->comanda ?></h4>
 			<span>Cuenta: <?php echo $comanda->cuentas[0]->nombre ?></span><br>
 			<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['numero_orden'])): ?>
-				<span>Número de Orden <?php echo $comanda->origen_datos['numero_orden'] ?></span>
+				<span>Número de Orden <?php echo $comanda->origen_datos['numero_orden'] ?></span><br>
+			<?php endif ?>
+			<?php if (isset($comanda->mesa) && isset($comanda->mesa->numero)): ?>
+				<span>Mesa Número: <?php echo $comanda->mesa->numero ?></span>
 			<?php endif ?>
 		</div>
 	</div>
