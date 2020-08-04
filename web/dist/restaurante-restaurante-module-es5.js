@@ -4410,7 +4410,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <span class=\"bld\" style=\"font-size: 14pt;\">{{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\" [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cobrarCuenta()\" [disabled]=\"!cuentaActiva.nombre\">\n                Cobrar cuenta\n            </button>\n        </div>\n    </div>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <span class=\"bld\" style=\"font-size: 14pt;\">{{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\" [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cobrarCuenta()\" [disabled]=\"!cuentaActiva.nombre\">\n                Cobrar cuenta\n            </button>\n        </div>\n    </div>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/turno-tipo/form-turno/form-turno.component.html": 
@@ -6881,11 +6881,12 @@
             /* harmony import */ var _unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../unir-cuenta/unir-cuenta.component */ "./src/app/restaurante/components/unir-cuenta/unir-cuenta.component.ts");
             /* harmony import */ var _pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../pos/components/cobrar-pedido/cobrar-pedido.component */ "./src/app/pos/components/cobrar-pedido/cobrar-pedido.component.ts");
             /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+            /* harmony import */ var _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
             // import { SignalRService } from '../../../shared/services/signal-r.service';
             var TranComandaComponent = /** @class */ (function () {
                 function TranComandaComponent(router, dialog, _snackBar, comandaSrvc, socket, 
                 // private signalRSrvc: SignalRService
-                ls) {
+                ls, pdfServicio) {
                     var _this = this;
                     this.router = router;
                     this.dialog = dialog;
@@ -6893,6 +6894,7 @@
                     this.comandaSrvc = comandaSrvc;
                     this.socket = socket;
                     this.ls = ls;
+                    this.pdfServicio = pdfServicio;
                     // public noCuentaSeleccionada: number = null;
                     this.showPortalComanda = false;
                     this.showPortalCuenta = false;
@@ -6939,16 +6941,22 @@
                     };
                     this.printToBT = function (msgToPrint) {
                         if (msgToPrint === void 0) { msgToPrint = ''; }
-                        /*
-                        const a = document.createElement('a');
-                        document.body.appendChild(a);
-                        a.href = `'com.restouch.impresion://impresion/${msgToPrint}'`;
-                        a.onclick = (e) => { e.preventDefault(); };
-                        a.click();
-                        */
                         var AppHref = "com.restouch.impresion://impresion/" + msgToPrint;
                         var wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
                         setTimeout(function () { return wref.close(); }, 1000);
+                    };
+                    this.printComandaPDF = function () {
+                        var noCuenta = +_this.cuentaActiva.cuenta;
+                        _this.pdfServicio.getComanda(noCuenta).subscribe(function (res) {
+                            if (res) {
+                                var blob = new Blob([res], { type: 'application/pdf' });
+                                var url = window.URL.createObjectURL(blob);
+                                window.open(url, "cuenta_" + noCuenta, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+                            }
+                            else {
+                                _this._snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
+                            }
+                        });
                     };
                     this.sumaDetalle = function (detalle) {
                         var total = 0.00;
@@ -7074,8 +7082,9 @@
                     }
                     return tmp;
                 };
-                TranComandaComponent.prototype.printComanda = function () {
+                TranComandaComponent.prototype.printComanda = function (toPdf) {
                     var _this = this;
+                    if (toPdf === void 0) { toPdf = false; }
                     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(function (p) { return +p.impreso === 0 && +p.cantidad > 0; });
                     if (this.lstProductosAImprimir.length > 0) {
                         this.lstProductosDeCuenta.map(function (p) { return p.impreso = 1; });
@@ -7106,35 +7115,30 @@
                                 }
                             });
                         }
-                        /*
-                        const msgToSocket = JSON.stringify({
-                          Tipo: 'Comanda',
-                          Nombre: this.cuentaActiva.nombre,
-                          Numero: this.noComanda,
-                          DetalleCuenta: this.lstProductosAImprimir,
-                          Total: null
-                        });
-                        console.log('MENSAJE = ', msgToSocket);
-                        */
                         var AImpresoraNormal = this.lstProductosAImprimir.filter(function (p) { return +p.impresora.bluetooth === 0; });
                         var AImpresoraBT = this.lstProductosAImprimir.filter(function (p) { return +p.impresora.bluetooth === 1; });
-                        if (AImpresoraNormal.length > 0) {
-                            this.socket.emit('print:comanda', "" + JSON.stringify({
-                                Tipo: 'Comanda',
-                                Nombre: this.cuentaActiva.nombre,
-                                Numero: this.noComanda,
-                                DetalleCuenta: AImpresoraNormal,
-                                Total: null
-                            }));
+                        if (!toPdf) {
+                            if (AImpresoraNormal.length > 0) {
+                                this.socket.emit('print:comanda', "" + JSON.stringify({
+                                    Tipo: 'Comanda',
+                                    Nombre: this.cuentaActiva.nombre,
+                                    Numero: this.noComanda,
+                                    DetalleCuenta: AImpresoraNormal,
+                                    Total: null
+                                }));
+                            }
+                            if (AImpresoraBT.length > 0) {
+                                this.printToBT(JSON.stringify({
+                                    Tipo: 'Comanda',
+                                    Nombre: this.cuentaActiva.nombre,
+                                    Numero: this.noComanda,
+                                    DetalleCuenta: AImpresoraBT,
+                                    Total: null
+                                }));
+                            }
                         }
-                        if (AImpresoraBT.length > 0) {
-                            this.printToBT(JSON.stringify({
-                                Tipo: 'Comanda',
-                                Nombre: this.cuentaActiva.nombre,
-                                Numero: this.noComanda,
-                                DetalleCuenta: AImpresoraBT,
-                                Total: null
-                            }));
+                        else {
+                            this.printComandaPDF();
                         }
                     }
                     else {
@@ -7219,7 +7223,8 @@
                 { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__["MatSnackBar"] },
                 { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__["ComandaService"] },
                 { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_5__["Socket"] },
-                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__["LocalstorageService"] }
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__["LocalstorageService"] },
+                { type: _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_11__["ReportePdfService"] }
             ]; };
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()

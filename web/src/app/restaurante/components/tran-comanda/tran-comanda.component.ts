@@ -16,6 +16,7 @@ import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
 
 import { ComandaService } from '../../services/comanda.service';
+import { ReportePdfService } from '../../services/reporte-pdf.service';
 
 interface productoSelected {
   id: number;
@@ -61,6 +62,7 @@ export class TranComandaComponent implements OnInit {
     private socket: Socket,
     // private signalRSrvc: SignalRService
     private ls: LocalstorageService,
+    private pdfServicio: ReportePdfService,
   ) { }
 
   ngOnInit() {
@@ -217,7 +219,7 @@ export class TranComandaComponent implements OnInit {
     return tmp;
   }
 
-  printComanda() {
+  printComanda(toPdf = false) {
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
     if (this.lstProductosAImprimir.length > 0) {
       this.lstProductosDeCuenta.map(p => p.impreso = 1);
@@ -248,40 +250,34 @@ export class TranComandaComponent implements OnInit {
           }
         });
       }
-      /*
-      const msgToSocket = JSON.stringify({
-        Tipo: 'Comanda',
-        Nombre: this.cuentaActiva.nombre,
-        Numero: this.noComanda,
-        DetalleCuenta: this.lstProductosAImprimir,
-        Total: null
-      });
-      console.log('MENSAJE = ', msgToSocket);
-      */
 
       const AImpresoraNormal: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
       const AImpresoraBT: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
 
-      if (AImpresoraNormal.length > 0) {
-        this.socket.emit('print:comanda', `${JSON.stringify({
-          Tipo: 'Comanda',
-          Nombre: this.cuentaActiva.nombre,
-          Numero: this.noComanda,
-          DetalleCuenta: AImpresoraNormal,
-          Total: null
-        })}`);
-      }
-
-      if (AImpresoraBT.length > 0) {
-        this.printToBT(
-          JSON.stringify({
+      if(!toPdf){
+        if (AImpresoraNormal.length > 0) {
+          this.socket.emit('print:comanda', `${JSON.stringify({
             Tipo: 'Comanda',
             Nombre: this.cuentaActiva.nombre,
             Numero: this.noComanda,
-            DetalleCuenta: AImpresoraBT,
+            DetalleCuenta: AImpresoraNormal,
             Total: null
-          })
-        );
+          })}`);
+        }
+  
+        if (AImpresoraBT.length > 0) {
+          this.printToBT(
+            JSON.stringify({
+              Tipo: 'Comanda',
+              Nombre: this.cuentaActiva.nombre,
+              Numero: this.noComanda,
+              DetalleCuenta: AImpresoraBT,
+              Total: null
+            })
+          );
+        }
+      } else {
+        this.printComandaPDF();        
       }
     } else {
       this._snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
@@ -289,18 +285,23 @@ export class TranComandaComponent implements OnInit {
   }
 
   printToBT = (msgToPrint: string = '') => {
-    /*
-    const a = document.createElement('a');
-    document.body.appendChild(a);
-    a.href = `'com.restouch.impresion://impresion/${msgToPrint}'`;
-    a.onclick = (e) => { e.preventDefault(); };
-    a.click();
-    */
    const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
    const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
    setTimeout(() => wref.close(), 1000);
   }
 
+  printComandaPDF = () => {
+    const noCuenta = +this.cuentaActiva.cuenta;
+    this.pdfServicio.getComanda(noCuenta).subscribe(res => {
+      if (res) {
+        const blob = new Blob([res], { type: 'application/pdf' });        
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+      } else {
+        this._snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
+      }
+    });
+  }
 
   sumaDetalle = (detalle: productoSelected[]) => {
     let total = 0.00;
