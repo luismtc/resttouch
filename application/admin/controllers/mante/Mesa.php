@@ -27,6 +27,7 @@ class Mesa extends CI_Controller {
 
 			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
+				$datos['mesa'] = $mesa;
 			} else {
 				$datos['mensaje'] = $mesa->getMensaje();
 			}	

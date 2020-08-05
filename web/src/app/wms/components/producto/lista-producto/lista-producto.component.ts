@@ -25,7 +25,7 @@ export class ListaProductoComponent implements OnInit {
     private ls: LocalstorageService,
     private articuloSrvc: ArticuloService
   ) {
-    //this.dataSource.data = TREE_DATA;
+    // this.dataSource.data = TREE_DATA;
   }
 
   ngOnInit() {
@@ -42,10 +42,10 @@ export class ListaProductoComponent implements OnInit {
 
   loadArbolArticulos() {
     this.articuloSrvc.getArbolArticulos((this.ls.get(GLOBAL.usrTokenVar).sede || 0)).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res) {
         this.arbol = this.articuloSrvc.convertToArbolNodoProducto(res);
-        //console.log(this.arbol);
+        // console.log(this.arbol);
         this.dataSource.data = this.arbol;
       }
     });

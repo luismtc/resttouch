@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Mesa } from '../../../interfaces/mesa';
+import { MesaService } from '../../../services/mesa.service';
 
 @Component({
   selector: 'app-area-designer',
@@ -14,7 +15,8 @@ export class AreaDesignerComponent implements OnInit {
   public mesas: Mesa[] = [];
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
+    private mesaSrvc: MesaService,
     public dialogRef: MatDialogRef<AreaDesignerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
@@ -25,7 +27,10 @@ export class AreaDesignerComponent implements OnInit {
     // console.log(this.mesas);
   }
 
-  getNextTableNumber = () => this.mesas.length > 0 ? (this.mesas.reduce((max, p) => +p.numero > max ? +p.numero : max, (!!this.mesas[0].numero ? +this.mesas[0].numero : 0)) + 1) : 1;
+  getNextTableNumber = () =>
+    this.mesas.length > 0 ?
+    (this.mesas.reduce((max, p) => +p.numero > max ? +p.numero : max, (!!this.mesas[0].numero ? +this.mesas[0].numero : 0)) + 1) :
+    1
 
   addTable = () => {
     this.mesas.push({
@@ -37,9 +42,21 @@ export class AreaDesignerComponent implements OnInit {
       tamanio: 72,
       estatus: 1
     });
+    this.saveNewMesa(this.mesas[this.mesas.length - 1], this.mesas.length - 1);
   }
 
-  onClickMesa = (obj: any) => { }
+  saveNewMesa = (mesa: Mesa, pos: number) => {
+    this.mesaSrvc.save(mesa).subscribe(res => {
+      // console.log(res);
+      if (res.exito) {
+        if (!!res.mesa) {
+          this.mesas[pos] = res.mesa;
+        }
+      }
+    });
+  }
+
+  onClickMesa = (obj: any) => { };
 
   terminar = () => {
     // console.log(this.mesas);

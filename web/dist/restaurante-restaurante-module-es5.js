@@ -4658,14 +4658,18 @@
             /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
             /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
             /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _services_mesa_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/mesa.service */ "./src/app/restaurante/services/mesa.service.ts");
             var AreaDesignerComponent = /** @class */ (function () {
-                function AreaDesignerComponent(_snackBar, dialogRef, data) {
+                function AreaDesignerComponent(snackBar, mesaSrvc, dialogRef, data) {
                     var _this = this;
-                    this._snackBar = _snackBar;
+                    this.snackBar = snackBar;
+                    this.mesaSrvc = mesaSrvc;
                     this.dialogRef = dialogRef;
                     this.data = data;
                     this.mesas = [];
-                    this.getNextTableNumber = function () { return _this.mesas.length > 0 ? (_this.mesas.reduce(function (max, p) { return +p.numero > max ? +p.numero : max; }, (!!_this.mesas[0].numero ? +_this.mesas[0].numero : 0)) + 1) : 1; };
+                    this.getNextTableNumber = function () { return _this.mesas.length > 0 ?
+                        (_this.mesas.reduce(function (max, p) { return +p.numero > max ? +p.numero : max; }, (!!_this.mesas[0].numero ? +_this.mesas[0].numero : 0)) + 1) :
+                        1; };
                     this.addTable = function () {
                         _this.mesas.push({
                             mesa: null,
@@ -4675,6 +4679,17 @@
                             posy: 1,
                             tamanio: 72,
                             estatus: 1
+                        });
+                        _this.saveNewMesa(_this.mesas[_this.mesas.length - 1], _this.mesas.length - 1);
+                    };
+                    this.saveNewMesa = function (mesa, pos) {
+                        _this.mesaSrvc.save(mesa).subscribe(function (res) {
+                            // console.log(res);
+                            if (res.exito) {
+                                if (!!res.mesa) {
+                                    _this.mesas[pos] = res.mesa;
+                                }
+                            }
                         });
                     };
                     this.onClickMesa = function (obj) { };
@@ -4692,6 +4707,7 @@
             }());
             AreaDesignerComponent.ctorParameters = function () { return [
                 { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
+                { type: _services_mesa_service__WEBPACK_IMPORTED_MODULE_4__["MesaService"] },
                 { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
                 { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
             ]; };
@@ -4701,7 +4717,7 @@
                     template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./area-designer.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/area/area-designer/area-designer.component.html")).default,
                     styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./area-designer.component.css */ "./src/app/restaurante/components/area/area-designer/area-designer.component.css")).default]
                 }),
-                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
             ], AreaDesignerComponent);
             /***/ 
         }),
@@ -5629,9 +5645,9 @@
             /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
             /* harmony import */ var _services_mesa_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/mesa.service */ "./src/app/restaurante/services/mesa.service.ts");
             var MesaComponent = /** @class */ (function () {
-                function MesaComponent(_snackBar, mesaSrvc) {
+                function MesaComponent(snackBar, mesaSrvc) {
                     var _this = this;
-                    this._snackBar = _snackBar;
+                    this.snackBar = snackBar;
                     this.mesaSrvc = mesaSrvc;
                     this.configuracion = {
                         mesa: 0,
@@ -5667,14 +5683,14 @@
                             if (res.exito) {
                                 if (!!res.mesa) {
                                     _this.configuracion.mesa = res.mesa.mesa;
-                                    _this._snackBar.open("Mesa #" + res.mesa.numero + " actualizada...", 'Diseño de área', { duration: 3000 });
+                                    _this.snackBar.open("Mesa #" + res.mesa.numero + " actualizada...", 'Diseño de área', { duration: 3000 });
                                 }
                                 else {
-                                    _this._snackBar.open("Mesa #" + _this.configuracion.numero + " actualizada...", 'Diseño de área', { duration: 3000 });
+                                    _this.snackBar.open("Mesa #" + _this.configuracion.numero + " actualizada...", 'Diseño de área', { duration: 3000 });
                                 }
                             }
                             else {
-                                _this._snackBar.open("ERROR:" + res.mensaje + ".", 'Diseño de área', { duration: 3000 });
+                                _this.snackBar.open("ERROR:" + res.mensaje + ".", 'Diseño de área', { duration: 3000 });
                             }
                         });
                     };

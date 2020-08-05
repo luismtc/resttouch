@@ -129,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\" class=\"example-tree\" [style.height]=\"treeHeight\">\n    <!-- This is the tree node template for leaf nodes -->\n    <mat-tree-node *matTreeNodeDef=\"let node\" matTreeNodeToggle>\n        <li class=\"mat-tree-node\">\n            <!-- use a disabled button to provide padding for tree leaf -->\n            <button mat-icon-button disabled></button>\n            <span *ngIf=\"tieneHijos(node)\">{{node.nombre}}</span>\n            <button mat-raised-button type=\"button\" *ngIf=\"!tieneHijos(node)\" (click)=\"onProductoClicked(node)\">{{node.nombre}}</button>\n        </li>\n    </mat-tree-node>\n    <!-- This is the tree node template for expandable nodes -->\n    <mat-nested-tree-node *matTreeNodeDef=\"let node; when: hasChild\">\n        <li>\n            <div class=\"mat-tree-node\">\n                <button mat-icon-button matTreeNodeToggle [attr.aria-label]=\"'toggle ' + node.nombre\">\n                    <mat-icon class=\"mat-icon-rtl-mirror\" style=\"font-size: 24pt !important;\">\n                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}\n                    </mat-icon>\n                </button>\n                <span *ngIf=\"tieneHijos(node)\">{{node.nombre}}</span>\n                <button mat-raised-button type=\"button\" *ngIf=\"!tieneHijos(node)\" (click)=\"onProductoClicked(node)\">{{node.nombre}}</button>\n            </div>\n            <ul [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\">\n                <ng-container matTreeNodeOutlet></ng-container>\n            </ul>\n        </li>\n    </mat-nested-tree-node>\n</mat-tree>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\" class=\"example-tree\" [style.height]=\"treeHeight\">\n    <!-- This is the tree node template for leaf nodes -->\n    <mat-tree-node *matTreeNodeDef=\"let node\" matTreeNodeToggle>\n        <li class=\"mat-tree-node\">\n            <!-- use a disabled button to provide padding for tree leaf -->\n            <button mat-icon-button disabled></button>\n            <span *ngIf=\"tieneHijos(node)\">{{node.nombre}}</span>\n            <button mat-raised-button type=\"button\" *ngIf=\"!tieneHijos(node)\"\n                (click)=\"onProductoClicked(node)\">{{node.nombre}}</button>\n        </li>\n    </mat-tree-node>\n    <!-- This is the tree node template for expandable nodes -->\n    <mat-nested-tree-node *matTreeNodeDef=\"let node; when: hasChild\">\n        <li>\n            <div class=\"mat-tree-node\">\n                <button mat-icon-button matTreeNodeToggle [attr.aria-label]=\"'toggle ' + node.nombre\">\n                    <mat-icon class=\"mat-icon-rtl-mirror\" style=\"font-size: 24pt !important;\">\n                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}\n                    </mat-icon>\n                </button>\n                <span *ngIf=\"tieneHijos(node)\">{{node.nombre}}</span>                \n                <button mat-raised-button type=\"button\" *ngIf=\"!tieneHijos(node)\"\n                    (click)=\"onProductoClicked(node)\">{{node.nombre}}</button>\n            </div>\n            <ul [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\">\n                <ng-container matTreeNodeOutlet></ng-container>\n            </ul>\n        </li>\n    </mat-nested-tree-node>\n</mat-tree>\n<!--\n<mat-tree [dataSource]=\"dataSource\" [treeControl]=\"treeControl\" class=\"example-tree\">\n    \n    <mat-tree-node *matTreeNodeDef=\"let node\" matTreeNodeToggle>\n        <li class=\"mat-tree-node\">\n            \n            <button mat-icon-button disabled></button>\n            {{node.nombre}}\n        </li>\n    </mat-tree-node>\n    \n    <mat-nested-tree-node *matTreeNodeDef=\"let node; when: hasChild\">\n        <li>\n            <div class=\"mat-tree-node\">\n                <button mat-icon-button matTreeNodeToggle [attr.aria-label]=\"'toggle ' + node.nombre\">\n                    <mat-icon class=\"mat-icon-rtl-mirror\">\n                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}\n                    </mat-icon>\n                </button>\n                {{node.nombre}}\n            </div>\n            <ul [class.example-tree-invisible]=\"!treeControl.isExpanded(node)\">\n                <ng-container matTreeNodeOutlet></ng-container>\n            </ul>\n        </li>\n    </mat-nested-tree-node>\n</mat-tree>\n-->");
 
 /***/ }),
 
@@ -1456,7 +1456,7 @@ let ListaProductoComponent = class ListaProductoComponent {
         this.dataSource = new _angular_material_tree__WEBPACK_IMPORTED_MODULE_3__["MatTreeNestedDataSource"]();
         this.hasChild = (_, node) => !!node.hijos && node.hijos.length > 0;
         this.tieneHijos = (node) => !!node.hijos && node.hijos.length > 0;
-        //this.dataSource.data = TREE_DATA;
+        // this.dataSource.data = TREE_DATA;
     }
     ngOnInit() {
         this.loadArbolArticulos();
@@ -1466,10 +1466,10 @@ let ListaProductoComponent = class ListaProductoComponent {
     }
     loadArbolArticulos() {
         this.articuloSrvc.getArbolArticulos((this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede || 0)).subscribe(res => {
-            //console.log(res);
+            // console.log(res);
             if (res) {
                 this.arbol = this.articuloSrvc.convertToArbolNodoProducto(res);
-                //console.log(this.arbol);
+                // console.log(this.arbol);
                 this.dataSource.data = this.arbol;
             }
         });

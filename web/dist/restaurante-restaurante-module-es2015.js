@@ -4676,17 +4676,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
 /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _services_mesa_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/mesa.service */ "./src/app/restaurante/services/mesa.service.ts");
+
 
 
 
 
 let AreaDesignerComponent = class AreaDesignerComponent {
-    constructor(_snackBar, dialogRef, data) {
-        this._snackBar = _snackBar;
+    constructor(snackBar, mesaSrvc, dialogRef, data) {
+        this.snackBar = snackBar;
+        this.mesaSrvc = mesaSrvc;
         this.dialogRef = dialogRef;
         this.data = data;
         this.mesas = [];
-        this.getNextTableNumber = () => this.mesas.length > 0 ? (this.mesas.reduce((max, p) => +p.numero > max ? +p.numero : max, (!!this.mesas[0].numero ? +this.mesas[0].numero : 0)) + 1) : 1;
+        this.getNextTableNumber = () => this.mesas.length > 0 ?
+            (this.mesas.reduce((max, p) => +p.numero > max ? +p.numero : max, (!!this.mesas[0].numero ? +this.mesas[0].numero : 0)) + 1) :
+            1;
         this.addTable = () => {
             this.mesas.push({
                 mesa: null,
@@ -4696,6 +4701,17 @@ let AreaDesignerComponent = class AreaDesignerComponent {
                 posy: 1,
                 tamanio: 72,
                 estatus: 1
+            });
+            this.saveNewMesa(this.mesas[this.mesas.length - 1], this.mesas.length - 1);
+        };
+        this.saveNewMesa = (mesa, pos) => {
+            this.mesaSrvc.save(mesa).subscribe(res => {
+                // console.log(res);
+                if (res.exito) {
+                    if (!!res.mesa) {
+                        this.mesas[pos] = res.mesa;
+                    }
+                }
             });
         };
         this.onClickMesa = (obj) => { };
@@ -4712,6 +4728,7 @@ let AreaDesignerComponent = class AreaDesignerComponent {
 };
 AreaDesignerComponent.ctorParameters = () => [
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
+    { type: _services_mesa_service__WEBPACK_IMPORTED_MODULE_4__["MesaService"] },
     { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
     { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
 ];
@@ -4721,7 +4738,7 @@ AreaDesignerComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./area-designer.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/area/area-designer/area-designer.component.html")).default,
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./area-designer.component.css */ "./src/app/restaurante/components/area/area-designer/area-designer.component.css")).default]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
 ], AreaDesignerComponent);
 
 
@@ -5734,8 +5751,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let MesaComponent = class MesaComponent {
-    constructor(_snackBar, mesaSrvc) {
-        this._snackBar = _snackBar;
+    constructor(snackBar, mesaSrvc) {
+        this.snackBar = snackBar;
         this.mesaSrvc = mesaSrvc;
         this.configuracion = {
             mesa: 0,
@@ -5771,14 +5788,14 @@ let MesaComponent = class MesaComponent {
                 if (res.exito) {
                     if (!!res.mesa) {
                         this.configuracion.mesa = res.mesa.mesa;
-                        this._snackBar.open(`Mesa #${res.mesa.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
+                        this.snackBar.open(`Mesa #${res.mesa.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
                     }
                     else {
-                        this._snackBar.open(`Mesa #${this.configuracion.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
+                        this.snackBar.open(`Mesa #${this.configuracion.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
                     }
                 }
                 else {
-                    this._snackBar.open(`ERROR:${res.mensaje}.`, 'Diseño de área', { duration: 3000 });
+                    this.snackBar.open(`ERROR:${res.mensaje}.`, 'Diseño de área', { duration: 3000 });
                 }
             });
         };

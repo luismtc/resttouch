@@ -27,7 +27,7 @@ export class MesaComponent implements OnInit, AfterViewInit {
   public objMesa: HTMLElement;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private mesaSrvc: MesaService
   ) { }
 
@@ -64,12 +64,12 @@ export class MesaComponent implements OnInit, AfterViewInit {
       if (res.exito) {
         if (!!res.mesa) {
           this.configuracion.mesa = res.mesa.mesa;
-          this._snackBar.open(`Mesa #${res.mesa.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
+          this.snackBar.open(`Mesa #${res.mesa.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
         } else {
-          this._snackBar.open(`Mesa #${this.configuracion.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
+          this.snackBar.open(`Mesa #${this.configuracion.numero} actualizada...`, 'Diseño de área', { duration: 3000 });
         }
       } else {
-        this._snackBar.open(`ERROR:${res.mensaje}.`, 'Diseño de área', { duration: 3000 });
+        this.snackBar.open(`ERROR:${res.mensaje}.`, 'Diseño de área', { duration: 3000 });
       }
     });
   }
