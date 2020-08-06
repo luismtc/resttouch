@@ -4812,11 +4812,14 @@
                     this.onSubmit = function () {
                         // console.log(this.entidad); return;
                         _this.entidadSrvc.save(_this.entidad).subscribe(function (res) {
-                            if (res) {
-                                _this._snackBar.open('Guardado con éxito...', 'Guardar', { duration: 3000 });
+                            if (res.exito) {
+                                _this._snackBar.open("" + res.mensaje, 'Área', { duration: 3000 });
                                 _this.resetEntidad();
                                 _this.loadAreas();
                                 _this.entidadSavedEv.emit();
+                            }
+                            else {
+                                _this._snackBar.open("ERROR: " + res.mensaje, 'Área', { duration: 3000 });
                             }
                         });
                     };
@@ -8097,7 +8100,7 @@
                             'Authorization': this.usrToken
                         })
                     };
-                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url + "/" + this.moduleUrl + "/guardar", entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url + "/" + this.moduleUrl + "/guardar" + (entidad.area ? ('/' + entidad.area) : ''), entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
                 };
                 return AreaService;
             }());

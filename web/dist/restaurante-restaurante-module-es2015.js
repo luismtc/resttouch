@@ -4852,11 +4852,14 @@ let FormAreaComponent = class FormAreaComponent {
         this.onSubmit = () => {
             // console.log(this.entidad); return;
             this.entidadSrvc.save(this.entidad).subscribe(res => {
-                if (res) {
-                    this._snackBar.open('Guardado con éxito...', 'Guardar', { duration: 3000 });
+                if (res.exito) {
+                    this._snackBar.open(`${res.mensaje}`, 'Área', { duration: 3000 });
                     this.resetEntidad();
                     this.loadAreas();
                     this.entidadSavedEv.emit();
+                }
+                else {
+                    this._snackBar.open(`ERROR: ${res.mensaje}`, 'Área', { duration: 3000 });
                 }
             });
         };
@@ -8476,7 +8479,7 @@ let AreaService = class AreaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url}/${this.moduleUrl}/guardar${entidad.area ? ('/' + entidad.area) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 AreaService.ctorParameters = () => [

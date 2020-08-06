@@ -19,8 +19,8 @@ export class AreaService {
 
   constructor(
     private http: HttpClient,
-    private ls: LocalstorageService    
-  ) { 
+    private ls: LocalstorageService
+  ) {
     this.srvcErrHndl = new ServiceErrorHandler();
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
@@ -31,7 +31,10 @@ export class AreaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Area[]>(`${GLOBAL.url}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Area[]>(
+      `${GLOBAL.url}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`,
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Area) {
@@ -39,7 +42,11 @@ export class AreaService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
-    return this.http.post<Area>(`${GLOBAL.url}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    };
+    return this.http.post<any>(
+      `${GLOBAL.url}/${this.moduleUrl}/guardar${entidad.area ? ('/' + entidad.area) : ''}`,
+      entidad,
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

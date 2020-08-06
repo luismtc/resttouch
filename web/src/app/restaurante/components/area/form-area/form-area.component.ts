@@ -42,11 +42,13 @@ export class FormAreaComponent implements OnInit {
   onSubmit = () => {
     // console.log(this.entidad); return;
     this.entidadSrvc.save(this.entidad).subscribe(res => {
-      if (res) {
-        this._snackBar.open('Guardado con éxito...', 'Guardar', { duration: 3000 });
+      if (res.exito) {
+        this._snackBar.open(`${res.mensaje}`, 'Área', { duration: 3000 });
         this.resetEntidad();
         this.loadAreas();
         this.entidadSavedEv.emit();
+      } else {
+        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Área', { duration: 3000 });
       }
     });
   }

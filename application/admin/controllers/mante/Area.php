@@ -31,6 +31,7 @@ class Area extends CI_Controller {
 
 			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
+				$datos['area'] = $mesa;
 			} else {
 				$datos['mensaje'] = $mesa->getMensaje();
 			}	
