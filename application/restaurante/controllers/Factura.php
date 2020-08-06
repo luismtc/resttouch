@@ -16,7 +16,8 @@ class Factura extends CI_Controller {
 			'Dcuenta_model',
 			'Factura_model',
 			'Articulo_model',
-			'Cliente_model'
+			'Cliente_model',
+			'Receta_model'
 		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
