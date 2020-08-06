@@ -4802,7 +4802,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         })
                     };
                     if (entidad.usuario) {
-                        return this.http.put(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url + "/" + this.moduleUrl + "/guardar_usuario/" + entidad.usuario, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                        return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url + "/" + this.moduleUrl + "/guardar_usuario/" + entidad.usuario, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
                     }
                     else {
                         if (!entidad.contrasenia) {

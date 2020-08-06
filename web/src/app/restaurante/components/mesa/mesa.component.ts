@@ -42,13 +42,13 @@ export class MesaComponent implements OnInit, AfterViewInit {
   }
 
   dragEnded = (obj: any) => {
-    // console.log(obj);
+    console.log('Drag ended = ', obj);
     const item = obj.source.element.nativeElement;
     const parentSize = { x: item.offsetParent.scrollWidth, y: item.offsetParent.scrollHeight };
-    // console.log(`x = ${this.objMesa.offsetLeft}\ny = ${this.objMesa.offsetTop}`);
-    // console.log('Parent = ', parentWidth);
+    console.log(`x = ${this.objMesa.offsetLeft}\ny = ${this.objMesa.offsetTop}`);
+    console.log('Parent Size = ', parentSize);
     const distancia = obj.distance;
-    // console.log(distancia);
+    console.log('Distancia = ', distancia);
     const updMesa: Mesa = {
       mesa: this.configuracion.mesa,
       area: this.configuracion.area,

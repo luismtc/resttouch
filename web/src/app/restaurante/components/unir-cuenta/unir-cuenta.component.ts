@@ -1,18 +1,24 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-interface datosCuentas {
+import { Impresora } from '../../../admin/interfaces/impresora';
+
+interface IDatosCuentas {
   lstProductosSeleccionados: [{
     id: number;
     nombre: string;
-    noCuenta?: number;
+    cuenta?: number;
     cantidad: number;
-    impreso: boolean;
+    impreso: number;
     precio?: number;
+    total?: number;
     notas?: string;
     showInputNotas: boolean;
     itemListHeight: string;
-  }],
+    detalle_comanda?: number;
+    detalle_cuenta?: number;
+    impresora?: Impresora;
+  }];
   mesaEnUso: {
     area: string;
     noMesa: number;
@@ -20,7 +26,7 @@ interface datosCuentas {
       numero: number,
       nombre: string
     }];
-  }
+  };
 }
 
 @Component({
@@ -35,11 +41,11 @@ export class UnirCuentaComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<UnirCuentaComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: datosCuentas
+    @Inject(MAT_DIALOG_DATA) public data: IDatosCuentas
   ) { }
 
   ngOnInit() {
-    // console.log(this.data.lstProductosSeleccionados);
+    console.log('Productos enviados = ', this.data.lstProductosSeleccionados);
   }
 
   cancelar() {
@@ -47,20 +53,24 @@ export class UnirCuentaComponent implements OnInit {
   }
 
   unirCuentas(deCuenta: number = 1, aCuenta: number = 1) {
+    console.log(`De cuenta = ${deCuenta} a cuenta ${aCuenta}`);
     if (+deCuenta !== +aCuenta) {
+      console.log('deCuenta y aCuenta son diferentes');
+      console.log('Productos seleccionados (Antes) = ', this.data.lstProductosSeleccionados);
       this.data.lstProductosSeleccionados.map((p) => {
-        if (+p.noCuenta === +deCuenta) {
-          p.noCuenta = aCuenta
+        if (+p.cuenta === +deCuenta) {
+          p.cuenta = aCuenta;
         }
       });
+      console.log('Productos seleccionados (Después) = ', this.data.lstProductosSeleccionados);
     } else {
-      this.data.lstProductosSeleccionados.map(p => p.noCuenta = +deCuenta);
+      this.data.lstProductosSeleccionados.map(p => p.cuenta = +deCuenta);
     }
     this.dialogRef.close(this.data.lstProductosSeleccionados);
   }
 
   unirTodas() {
-    this.unirCuentas()
+    this.unirCuentas();
   }
 
 }

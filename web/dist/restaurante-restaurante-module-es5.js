@@ -5661,13 +5661,13 @@
                     this.dontAllowDrag = true;
                     this.onClickMesa = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
                     this.dragEnded = function (obj) {
-                        // console.log(obj);
+                        console.log('Drag ended = ', obj);
                         var item = obj.source.element.nativeElement;
                         var parentSize = { x: item.offsetParent.scrollWidth, y: item.offsetParent.scrollHeight };
-                        // console.log(`x = ${this.objMesa.offsetLeft}\ny = ${this.objMesa.offsetTop}`);
-                        // console.log('Parent = ', parentWidth);
+                        console.log("x = " + _this.objMesa.offsetLeft + "\ny = " + _this.objMesa.offsetTop);
+                        console.log('Parent Size = ', parentSize);
                         var distancia = obj.distance;
-                        // console.log(distancia);
+                        console.log('Distancia = ', distancia);
                         var updMesa = {
                             mesa: _this.configuracion.mesa,
                             area: _this.configuracion.area,
@@ -7823,7 +7823,7 @@
                     this.cuentaA = null;
                 }
                 UnirCuentaComponent.prototype.ngOnInit = function () {
-                    // console.log(this.data.lstProductosSeleccionados);
+                    console.log('Productos enviados = ', this.data.lstProductosSeleccionados);
                 };
                 UnirCuentaComponent.prototype.cancelar = function () {
                     this.dialogRef.close();
@@ -7831,15 +7831,19 @@
                 UnirCuentaComponent.prototype.unirCuentas = function (deCuenta, aCuenta) {
                     if (deCuenta === void 0) { deCuenta = 1; }
                     if (aCuenta === void 0) { aCuenta = 1; }
+                    console.log("De cuenta = " + deCuenta + " a cuenta " + aCuenta);
                     if (+deCuenta !== +aCuenta) {
+                        console.log('deCuenta y aCuenta son diferentes');
+                        console.log('Productos seleccionados (Antes) = ', this.data.lstProductosSeleccionados);
                         this.data.lstProductosSeleccionados.map(function (p) {
-                            if (+p.noCuenta === +deCuenta) {
-                                p.noCuenta = aCuenta;
+                            if (+p.cuenta === +deCuenta) {
+                                p.cuenta = aCuenta;
                             }
                         });
+                        console.log('Productos seleccionados (Después) = ', this.data.lstProductosSeleccionados);
                     }
                     else {
-                        this.data.lstProductosSeleccionados.map(function (p) { return p.noCuenta = +deCuenta; });
+                        this.data.lstProductosSeleccionados.map(function (p) { return p.cuenta = +deCuenta; });
                     }
                     this.dialogRef.close(this.data.lstProductosSeleccionados);
                 };

@@ -5766,13 +5766,13 @@ let MesaComponent = class MesaComponent {
         this.dontAllowDrag = true;
         this.onClickMesa = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.dragEnded = (obj) => {
-            // console.log(obj);
+            console.log('Drag ended = ', obj);
             const item = obj.source.element.nativeElement;
             const parentSize = { x: item.offsetParent.scrollWidth, y: item.offsetParent.scrollHeight };
-            // console.log(`x = ${this.objMesa.offsetLeft}\ny = ${this.objMesa.offsetTop}`);
-            // console.log('Parent = ', parentWidth);
+            console.log(`x = ${this.objMesa.offsetLeft}\ny = ${this.objMesa.offsetTop}`);
+            console.log('Parent Size = ', parentSize);
             const distancia = obj.distance;
-            // console.log(distancia);
+            console.log('Distancia = ', distancia);
             const updMesa = {
                 mesa: this.configuracion.mesa,
                 area: this.configuracion.area,
@@ -8110,21 +8110,25 @@ let UnirCuentaComponent = class UnirCuentaComponent {
         this.cuentaA = null;
     }
     ngOnInit() {
-        // console.log(this.data.lstProductosSeleccionados);
+        console.log('Productos enviados = ', this.data.lstProductosSeleccionados);
     }
     cancelar() {
         this.dialogRef.close();
     }
     unirCuentas(deCuenta = 1, aCuenta = 1) {
+        console.log(`De cuenta = ${deCuenta} a cuenta ${aCuenta}`);
         if (+deCuenta !== +aCuenta) {
+            console.log('deCuenta y aCuenta son diferentes');
+            console.log('Productos seleccionados (Antes) = ', this.data.lstProductosSeleccionados);
             this.data.lstProductosSeleccionados.map((p) => {
-                if (+p.noCuenta === +deCuenta) {
-                    p.noCuenta = aCuenta;
+                if (+p.cuenta === +deCuenta) {
+                    p.cuenta = aCuenta;
                 }
             });
+            console.log('Productos seleccionados (Después) = ', this.data.lstProductosSeleccionados);
         }
         else {
-            this.data.lstProductosSeleccionados.map(p => p.noCuenta = +deCuenta);
+            this.data.lstProductosSeleccionados.map(p => p.cuenta = +deCuenta);
         }
         this.dialogRef.close(this.data.lstProductosSeleccionados);
     }
