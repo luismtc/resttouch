@@ -25,17 +25,41 @@
             <div class="form-group">
                 <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput type="datetime-locale" placeholder="Inicio" name="inicio" [(ngModel)]="turno.inicio" required>
+                    <button type="button" *ngIf="!turno.inicio" mat-button matSuffix mat-icon-button (click)="turno.inicio=getNow()">
+                        <mat-icon class="iconFontSize">query_builder</mat-icon>
+                    </button>
+                    <button type="button" mat-button *ngIf="turno.inicio" matSuffix mat-icon-button aria-label="Clear" (click)="turno.inicio=null">
+                        <mat-icon class="iconFontSize">close</mat-icon>
+                    </button>
                 </mat-form-field>
                 <mat-form-field class="fullWidth" *ngIf="!esMovil">
                     <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="phone" ng-virtual-keyboard-placeholder="Inicio" type="datetime-locale" placeholder="Inicio" name="inicio" [(ngModel)]="turno.inicio" required>
+                    <button type="button" *ngIf="!turno.inicio" mat-button matSuffix mat-icon-button (click)="turno.inicio=getNow()">
+                        <mat-icon class="iconFontSize">query_builder</mat-icon>
+                    </button>
+                    <button type="button" mat-button *ngIf="turno.inicio" matSuffix mat-icon-button aria-label="Clear" (click)="turno.inicio=null">
+                        <mat-icon class="iconFontSize">close</mat-icon>
+                    </button>                    
                 </mat-form-field>
             </div>
             <div class="form-group">
                 <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input matInput type="datetime-locale" placeholder="Fin" name="fin" [(ngModel)]="turno.fin">
+                    <button type="button" *ngIf="!turno.fin" mat-button matSuffix mat-icon-button (click)="turno.fin=getNow()">
+                        <mat-icon class="iconFontSize">query_builder</mat-icon>
+                    </button>
+                    <button type="button" mat-button *ngIf="turno.fin" matSuffix mat-icon-button aria-label="Clear" (click)="turno.fin=null">
+                        <mat-icon class="iconFontSize">close</mat-icon>
+                    </button>
                 </mat-form-field>
                 <mat-form-field class="fullWidth" *ngIf="!esMovil">
                     <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="phone" ng-virtual-keyboard-placeholder="Fin" type="datetime-locale" placeholder="Fin" name="fin" [(ngModel)]="turno.fin">
+                    <button type="button" *ngIf="!turno.fin" mat-button matSuffix mat-icon-button (click)="turno.fin=getNow()">
+                        <mat-icon class="iconFontSize">query_builder</mat-icon>
+                    </button>
+                    <button type="button" mat-button *ngIf="turno.fin" matSuffix mat-icon-button aria-label="Clear" (click)="turno.fin=null">
+                        <mat-icon class="iconFontSize">close</mat-icon>
+                    </button>                    
                 </mat-form-field>
             </div>
             <div role="group" align="end">

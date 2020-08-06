@@ -162,4 +162,6 @@ export class FormTurnoComponent implements OnInit {
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesTurno);
 
+  getNow = () => moment().format(GLOBAL.dbDateTimeFormat);
+
 }
