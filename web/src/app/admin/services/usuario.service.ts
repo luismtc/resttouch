@@ -112,6 +112,15 @@ export class UsuarioService {
     return this.http.post<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios_post`, filtros, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  getMeserosTurno(): Observable<Usuario[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };    
+    return this.http.get<Usuario[]>(`${GLOBAL.urlCatalogos}/get_mesero`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   save(entidad: Usuario): Observable<Usuario> {
     const httpOptions = {
       headers: new HttpHeaders({

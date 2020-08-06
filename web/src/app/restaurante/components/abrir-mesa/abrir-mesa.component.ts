@@ -33,7 +33,7 @@ export class AbrirMesaComponent implements OnInit {
   }
 
   loadMeseros = () => {
-    this.usuarioSrvc.get({ debaja: 0, sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0), esmesero: 1 }).subscribe(res => {
+    this.usuarioSrvc.getMeserosTurno().subscribe(res => {
       if (res) {
         this.lstMeseros = res;
       }

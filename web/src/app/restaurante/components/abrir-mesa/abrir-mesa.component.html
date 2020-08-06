@@ -4,8 +4,8 @@
             <mat-form-field class="separatorMargin">
             <mat-label>Mesero</mat-label>
             <mat-select name="mesero" [(ngModel)]="data.mesero">
-                <mat-option *ngFor="let usr of lstMeseros" [value]="usr.usuario">
-                    {{usr.nombres}} {{usr.apellidos}}
+                <mat-option *ngFor="let usr of lstMeseros" [value]="usr.usuario.usuario">
+                    {{usr.usuario.nombres}} {{usr.usuario.apellidos}}
                 </mat-option>
             </mat-select>
             </mat-form-field>
