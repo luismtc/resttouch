@@ -1,20 +1,25 @@
 <?php
 
-class Usuario_model extends CI_Model
+class Usuario_model extends General_model
 {
     private $tabla = 'usuario';
     public $columnas = [];
+    public $sede;
+    public $nombres;
+    public $apellidos;
+    public $usrname;
+    public $contrasenia;
+    public $debaja = 0;
+    public $esmesero = 0;
 
-    public function __construct()
+    public function __construct($id = '')
     {
         parent::__construct();
-        $this->setColumnas();
-    }
+        $this->setTabla($this->tabla);
 
-    private function setColumnas()
-    {
-        $this->load->model('Db_model');
-        $this->columnas = $this->Db_model->getTableColumns($this->db->database, $this->tabla);
+        if(!empty($id)) {
+            $this->cargar($id);
+        }
     }
 
     function logIn($credenciales = null)
@@ -108,8 +113,7 @@ class Usuario_model extends CI_Model
 
     function crear($dataToInsert = null)
     {
-        $dataToInsert = $this->getValidData($dataToInsert, $this->columnas);
-
+        //$dataToInsert = $this->getValidData($dataToInsert, $this->columnas);
         if ($dataToInsert) {
             $idusr = $this->checkUserExists($dataToInsert['usrname'], $dataToInsert['sede']);
             if ($idusr < 0) {
@@ -117,10 +121,10 @@ class Usuario_model extends CI_Model
                     $dataToInsert['contrasenia'] = password_hash($dataToInsert['contrasenia'], PASSWORD_BCRYPT, array('cost' => 12));
                 }
 
-                $this->db->insert($this->tabla, $dataToInsert);
+                $this->guardar($dataToInsert);
                 return array(
                     'mensaje' => 'Usuario creado con éxito.',
-                    'id' => $this->db->insert_id()
+                    'id' => $this->getPK()
                 );
             } else {
                 return array(
@@ -136,18 +140,18 @@ class Usuario_model extends CI_Model
         }
     }
 
-    function actualizar($id = 0, $dataToUpdate = null)
+    function actualizar($dataToUpdate = null)
     {
-        $dataToUpdate = $this->getValidData($dataToUpdate, $this->columnas);
+        //$dataToUpdate = $this->getValidData($dataToUpdate, $this->columnas);
         if ($dataToUpdate) {
             if (array_key_exists('contrasenia', $dataToUpdate)) {
                 $dataToUpdate['contrasenia'] = password_hash($dataToUpdate['contrasenia'], PASSWORD_BCRYPT, array('cost' => 12));
             }
-            $this->db->where('usuario', $id);
-            $this->db->update($this->tabla, $dataToUpdate);
+            
+            $this->guardar($dataToUpdate);
             return array(
                 'mensaje' => 'Usuario actualizado con éxito.',
-                'usuario' => $id
+                'usuario' => $this->getPK()
             );
         } else {
             return array(

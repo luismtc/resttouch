@@ -120,7 +120,7 @@ export class UsuarioService {
     };
 
     if (entidad.usuario) {
-      return this.http.put<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
     } else {
       if (!entidad.contrasenia) {
         delete entidad.contrasenia;

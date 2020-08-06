@@ -91,11 +91,12 @@ class Usuario extends CI_Controller
         $datos = ['status' => false];
         if ($this->input->method() == 'post') {
             $req = json_decode(file_get_contents('php://input'), true);
-            //$status = parent::HTTP_OK;
+            $usu = new Usuario_model($id);
+
             if (empty($id)) {                
-                $datos = $this->Usuario_model->crear($req);
-            } else {
-                $datos = $this->Usuario_model->actualizar($id, $req);
+                $datos = $usu->crear($req);
+            } else {      
+                $datos = $usu->actualizar($req);
             }
         } else {
             $datos['error'] = "Parametros invalidos";

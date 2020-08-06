@@ -16,7 +16,6 @@
 	<div class="row">
 		<div class="col-sm-12 text-center">
 			<h4>Comanda: <?php echo $comanda->comanda ?></h4>
-			<span>Cuenta: <?php echo $comanda->cuentas[0]->nombre ?></span><br>
 			<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['numero_orden'])): ?>
 				<span>Número de Orden <?php echo $comanda->origen_datos['numero_orden'] ?></span><br>
 			<?php endif ?>
@@ -25,7 +24,14 @@
 			<?php endif ?>
 		</div>
 	</div>
+	<?php foreach ($comanda->cuentas as $cuenta): ?>
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<span>Cuenta: <?php echo $cuenta->nombre ?></span><br>
+		</div>
+	</div>
 	<br>
+	<?php if (isset($comanda->origen_datos)): ?>
 	<div>
 		<span><b>Datos del Cliente</b></span>
 	</div>
@@ -65,6 +71,7 @@
 	<?php endif ?>
 	
 	</table>
+	<?php endif ?>
 	<br>
 	<div class="row">
 		<div class="col-sm-12">
@@ -77,7 +84,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($comanda->cuentas[0]->productos as $key => $det): ?>
+						<?php foreach ($cuenta->productos as $key => $det): ?>
 							<tr>
 								<td style="padding: 5px;" class="text-center"><?php echo $det->cantidad ?></td>
 								<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>
@@ -95,5 +102,8 @@
 			</div>
 		</div>
 	</div>
+	<hr>
+	<br>
+	<?php endforeach ?>
 </body>
 </html>

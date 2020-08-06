@@ -79,6 +79,17 @@ class Comanda extends CI_Controller {
 
 									if ($tmpCuenta) {
 										$cuenta->cargar($tmpCuenta->cuenta);
+									} else if(count($comanda->getCuentas()) == 1){
+
+										$tmpCuenta = $this->Cuenta_model->buscar([
+											"nombre" => "Unica",
+											"comanda" => $comanda->comanda,
+											"_uno" => true
+										]);
+
+										if ($tmpCuenta) {
+											$cuenta->cargar($tmpCuenta->cuenta);
+										}
 									}
 								}
 
@@ -257,12 +268,11 @@ class Comanda extends CI_Controller {
 				'tempDir' => sys_get_temp_dir(), //produccion
 				'format' => 'Legal'
 			]);
-
+			
 			$mpdf->WriteHTML($this->load->view('impresion/comanda', $datos, true));
 			$mpdf->Output("Detalle de Comandas.pdf", "D");
 		}
 	}
-
 }
 
 /* End of file Comanda.php */
