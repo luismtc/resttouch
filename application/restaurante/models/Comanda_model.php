@@ -148,10 +148,8 @@ class Comanda_model extends General_Model {
 		return $cuentas;
 	}
 
-	public function getComanda()
+	public function getComanda($args = [])
 	{
-		
-		
 		$tmp = $this->db
 		->select("
 		a.comanda,
@@ -170,7 +168,7 @@ class Comanda_model extends General_Model {
 			$mesa->area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
 			$tmp->mesa = $mesa;			
 		}
-		$det = $this->getDetalle();
+		$det = $this->getDetalle($args);
 		$turno = new Turno_model($tmp->turno);
 		$tmp->mesero = $turno->getUsuarios(["usuario_tipo" => 1]);
 		$tmp->total = suma_field($det, 'total');

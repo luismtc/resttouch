@@ -135,12 +135,12 @@ class Cuenta_model extends General_Model {
 				"_uno" => true
 			]);
 
-			if (strtolower($fpago->descripcion) == "tarjeta") {
+			/*if (strtolower($fpago->descripcion) == "tarjeta") {
 				$this->load->library('Cobro');
 				$cobro = new Cobro($this->getEmpresa());
 				$cobro->setTestVenta();
 				$cobro->cobrar();
-			}
+			}*/
 
 			if (isset($pago->documento)) {
 				$this->db->set("documento", $pago->documento);
