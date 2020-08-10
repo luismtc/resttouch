@@ -63,18 +63,22 @@
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion">
                     <mat-icon>save</mat-icon>
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="firmarFactura()">
+                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion || detallesFactura.length === 0 || refacturacion" (click)="firmarFactura()">
                     <!--<mat-icon>save</mat-icon>-->Firmar
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="imprimirFactura()">
+                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0 || refacturacion" (click)="imprimirFactura()">
                     <!--<mat-icon>save</mat-icon>-->Imprimir
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="anularFactura()">
                     <!--<mat-icon>save</mat-icon>-->Anular
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button mat-flat-button type="button" color="accent" *ngIf="!!factura.fel_uuid_anulacion" (click)="refacturar()">
+                    Refacturar
+                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button mat-icon-button type="button" color="accent" (click)="resetFactura()" *ngIf="factura.factura">
                     <mat-icon>add</mat-icon>
                 </button>
+
             </div>
         </form>
     </mat-card-content>
@@ -161,7 +165,7 @@
             <ng-container matColumnDef="editItem">
                 <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td mat-cell *matCellDef="let element" class="text-wrap">
-                    <button mat-icon-button type="button" color="accent" (click)="getDetalleFactura(element.factura, element.detalle_factura)" [disabled]="!!factura.fel_uuid || !!factura.fel_uuid_anulacion">
+                    <button mat-icon-button type="button" color="accent" (click)="getDetalleFactura(element.factura, element.detalle_factura)" [disabled]="!!factura.fel_uuid || !!factura.fel_uuid_anulacion || refacturacion">
                         <mat-icon>edit</mat-icon>
                     </button>
                 </td>

@@ -202,6 +202,44 @@ class Factura extends CI_Controller {
 		->set_output(json_encode($datos));	
 	}
 
+	public function refacturar($factura)
+	{
+		$datos = ["exito" => false];
+		if ($this->input->method() == 'post') {
+			$fac = new Factura_model($factura);
+			$req = json_decode(file_get_contents('php://input'), true);
+			if (!empty($fac->fel_uuid_anulacion)) {
+				$refac = new Factura_model();
+				$headers = $this->input->request_headers();
+				$data = AUTHORIZATION::validateToken($headers['Authorization']);
+
+				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
+				$clt = new Cliente_model($req['cliente']);
+
+				$req['usuario'] = $data->idusuario;
+				$req['certificador_fel'] = $sede->certificador_fel;	
+				$req['sede'] = $data->sede;
+				$req["correo_receptor"] = $clt->correo;
+				unset($req['factura']);
+				if ($refac->guardar($req)) {
+					$fac->copiarDetalle($refac->getPK());
+					$datos['exito'] = true;
+					$datos['mensaje'] = "Datos actualizados con exito";
+				} else {
+					$datos['mensaje'] = "Ocurrió un error al guardar la factura";
+				}
+			} else {
+				$datos['mensaje'] = "La factura debe estar anulada";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode($datos));	
+	}
+
 	public function anular($factura)
 	{
 		$datos = ['exito' => false];
@@ -223,7 +261,7 @@ class Factura extends CI_Controller {
 
 				$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
 				if (!empty($fac->fel_uuid_anulacion)) {
-					$fac->anularComandas();
+					//$fac->anularComandas();
 
 					$datos['exito'] = true;
 					$datos['factura'] = $fac;

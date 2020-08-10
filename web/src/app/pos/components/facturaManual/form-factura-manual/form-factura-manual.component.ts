@@ -43,6 +43,7 @@ export class FormFacturaManualComponent implements OnInit {
   public displayedColumns: string[] = ['articulo', 'cantidad', 'precio_unitario', 'total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleFactura>;
   public esMovil: boolean = false;
+  public refacturacion: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -59,6 +60,7 @@ export class FormFacturaManualComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    this.refacturacion = false;
     this.resetFactura();
     this.loadFacturaSeries();
     this.loadClientes();
@@ -94,6 +96,14 @@ export class FormFacturaManualComponent implements OnInit {
     });
   }
 
+  refacturar = () => {
+    this.factura = {
+      factura: this.factura.factura, factura_serie: null, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
+      fel_uuid: null, fel_uuid_anulacion: null
+    };
+    this.refacturacion = true;
+  }
+
   resetFactura = () => {
     this.factura = {
       factura: null, factura_serie: null, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
@@ -104,25 +114,45 @@ export class FormFacturaManualComponent implements OnInit {
   }
 
   onSubmit = () => {
-    //console.log(this.factura); return;
-    this.facturaSrvc.save(this.factura).subscribe(res => {
-      //console.log(res);
-      if (res.exito) {
-        this.facturaSavedEv.emit();
-        this.resetFactura();
-        this.factura = {
-          factura: res.factura.factura,
-          factura_serie: res.factura.factura_serie,
-          cliente: res.factura.cliente,
-          fecha_factura: res.factura.fecha_factura,
-          moneda: res.factura.moneda,
-          exenta: +res.factura.exenta,
-          notas: res.factura.notas,
-          fel_uuid: res.factura.fel_uuid
+    if (this.refacturacion) {
+      this.facturaSrvc.refacturar(this.factura).subscribe(res => {
+        if (res.exito) {
+          this.facturaSavedEv.emit();
+          this.resetFactura();
+          this.refacturacion = false;
+          this.factura = {
+            factura: res.factura.factura,
+            factura_serie: res.factura.factura_serie,
+            cliente: res.factura.cliente,
+            fecha_factura: res.factura.fecha_factura,
+            moneda: res.factura.moneda,
+            exenta: +res.factura.exenta,
+            notas: res.factura.notas,
+            fel_uuid: res.factura.fel_uuid
+          }
+          this._snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
         }
-        this._snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
-      }
-    });
+      });
+    } else {
+      this.facturaSrvc.save(this.factura).subscribe(res => {
+        if (res.exito) {
+          this.facturaSavedEv.emit();
+          this.resetFactura();
+          this.factura = {
+            factura: res.factura.factura,
+            factura_serie: res.factura.factura_serie,
+            cliente: res.factura.cliente,
+            fecha_factura: res.factura.fecha_factura,
+            moneda: res.factura.moneda,
+            exenta: +res.factura.exenta,
+            notas: res.factura.notas,
+            fel_uuid: res.factura.fel_uuid
+          }
+          this._snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
+        }
+      });      
+    }
+
   }
 
   firmarFactura = () => {

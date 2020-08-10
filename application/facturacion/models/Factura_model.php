@@ -123,6 +123,28 @@ class Factura_model extends General_model {
 		return $datos;
 	}
 
+	public function copiarDetalle($factura)
+	{
+		$det = $this->db
+		->where("factura", $this->factura)
+		->get("detalle_factura")
+		->result();
+
+		foreach ($det as $row) {
+			$this->db
+			->set("factura", $factura)
+			->set("articulo", $row->articulo)
+			->set("cantidad", $row->cantidad)
+			->set("precio_unitario", $row->precio_unitario)
+			->set("total", $row->total)
+			->set("monto_base", $row->monto_base)
+			->set("monto_iva", $row->monto_iva)
+			->set("bien_servicio", $row->bien_servicio)
+			->set("descuento", $row->descuento)
+			->insert("detalle_factura");
+		}
+	}
+
 	public function getMesa()
 	{
 		$tmp = $this->db
