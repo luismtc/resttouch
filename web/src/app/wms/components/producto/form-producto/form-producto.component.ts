@@ -63,9 +63,9 @@ export class FormProductoComponent implements OnInit {
   setArticuloCategoriaGrupo = (idcatgrp: number) => this.articulo.categoria_grupo = +idcatgrp;
 
   onSubmit = () => {
-    //console.log(this.articulo);
+    // console.log(this.articulo);
     this.articuloSrvc.saveArticulo(this.articulo).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res.exito) {
         this.articuloSvd.emit();
         this.resetArticulo();
@@ -99,12 +99,16 @@ export class FormProductoComponent implements OnInit {
       if (res) {
         this.articulos = res;
       }
-    })
+    });
   }
 
-  resetReceta = () => this.receta = {
-    articulo_detalle: null, receta: (this.articulo.articulo || 0), racionable: 0, articulo: null, cantidad: 1.00, medida: null
-  };
+  resetReceta = () => {
+    this.receta = {
+      articulo_detalle: null, receta: (this.articulo.articulo || 0), racionable: 0, articulo: null, cantidad: 1.00, medida: null
+    };
+    this.recetas = [];
+    this.updateTableDataSource();
+  }
 
   loadRecetas = (idarticulo: number = +this.articulo.articulo) => {
     this.articuloSrvc.getArticuloDetalle(+idarticulo, { receta: +idarticulo }).subscribe(res => {
@@ -134,10 +138,10 @@ export class FormProductoComponent implements OnInit {
 
   onSubmitDetail = () => {
     this.receta.receta = this.articulo.articulo;
-    //console.log(this.articulo);
-    //console.log(this.receta); return;
+    // console.log(this.articulo);
+    // console.log(this.receta); return;
     this.articuloSrvc.saveArticuloDetalle(this.receta).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res) {
         this.loadRecetas();
         this.resetReceta();

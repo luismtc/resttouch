@@ -24,37 +24,48 @@
                         {{cat.descripcion}}
                     </mat-option>
                 </mat-select>
+                <!--Inicio de botones para edición y nueva-->
+                <button mat-raised-button type="button" matSuffix color="accent" class="btnAccion"
+                    (click)="editCategoriaMode = true;" *ngIf="!editCategoriaMode && +categoria.categoria > 0">
+                    Editar
+                </button>
+                <button mat-raised-button type="button" matSuffix color="accent"
+                    (click)="resetCategoria(); editCategoriaMode = true;" *ngIf="!editCategoriaMode">
+                    Nueva
+                </button>
+                <!--Fin de botones para edición y nueva-->
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="esMovil && editCategoriaMode">
                 <input matInput placeholder="Descripcion de la categoría" name="descripcion"
                     [(ngModel)]="categoria.descripcion" [required]="editCategoriaMode">
+                <!--Inicia botones de guardar y cancelar-->
+                <button mat-raised-button type="button" matSuffix color="accent" class="btnAccion"
+                    (click)="onSubmitCategoria()" [disabled]="!frmCategoria.form.valid" *ngIf="editCategoriaMode">
+                    Guardar
+                </button>
+                <button mat-raised-button type="button" matSuffix color="warn" (click)="resetCategoria()"
+                    *ngIf="editCategoriaMode">
+                    Cancelar
+                </button>
+                <!--Fin de botones de guardar y cancelar-->
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="!esMovil && editCategoriaMode">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Descripcion de la categoría"
                     placeholder="Descripcion de la categoría" name="descripcion" [(ngModel)]="categoria.descripcion"
                     [required]="editCategoriaMode">
+                <!--Inicia botones de guardar y cancelar cuando no es móvil-->
+                <button mat-raised-button type="button" matSuffix color="accent" class="btnAccion"
+                    (click)="onSubmitCategoria()" [disabled]="!frmCategoria.form.valid" *ngIf="editCategoriaMode">
+                    Guardar
+                </button>
+                <button mat-raised-button type="button" matSuffix color="warn" (click)="resetCategoria()"
+                    *ngIf="editCategoriaMode">
+                    Cancelar
+                </button>
+                <!--Fin de botones de guardar y cancelar cuando no es móvil-->
             </mat-form-field>
         </form>
-    </div>
-    <div>
-        <div align="end">
-            <button mat-icon-button type="button" color="accent" (click)="editCategoriaMode = true;"
-                *ngIf="!editCategoriaMode && +categoria.categoria > 0">
-                <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button type="button" color="accent" (click)="resetCategoria(); editCategoriaMode = true;"
-                *ngIf="!editCategoriaMode">
-                <mat-icon>add</mat-icon>
-            </button>
-            <button mat-icon-button type="button" color="accent" (click)="onSubmitCategoria()"
-                [disabled]="!frmCategoria.form.valid" *ngIf="editCategoriaMode">
-                <mat-icon>save</mat-icon>
-            </button>
-            <button mat-icon-button type="button" color="warn" (click)="resetCategoria()" *ngIf="editCategoriaMode">
-                <mat-icon>cancel</mat-icon>
-            </button>
-        </div>
     </div>
 </div>
 <div *ngIf="showCategoriasForm">
@@ -68,6 +79,7 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
+
         <mat-form-field class="fullWidth" *ngIf="!editSubCategoriaMode">
             <mat-label>Sub-categoría</mat-label>
             <mat-select name="categoriaGrupo" [(ngModel)]="categoriaGrupo"
@@ -76,6 +88,15 @@
                     {{subcat.descripcion}}
                 </mat-option>
             </mat-select>
+            <button mat-raised-button type="button" matSuffix color="accent" class="btnAccion"
+                (click)="editSubCategoriaMode = true;"
+                *ngIf="!editSubCategoriaMode && +categoriaGrupo.categoria_grupo > 0">
+                Editar
+            </button>
+            <button mat-raised-button type="button" matSuffix color="accent"
+                (click)="resetCategoriaGrupo(); editSubCategoriaMode = true;" *ngIf="!editSubCategoriaMode">
+                Nueva
+            </button>
         </mat-form-field>
         <mat-form-field class="fullWidth" *ngIf="esMovil && editSubCategoriaMode">
             <input matInput placeholder="Descripcion de la sub - categoría" name="descripcion"
@@ -87,31 +108,23 @@
                 placeholder="Descripcion de la sub - categoría" name="descripcion"
                 [(ngModel)]="categoriaGrupo.descripcion" [required]="editCategoriaMode">
         </mat-form-field>
+        <mat-checkbox name="descuento" class="fullWidth" [(ngModel)]="+categoriaGrupo.descuento">¿Aplica Descuento?
+        </mat-checkbox>
         <mat-form-field class="fullWidth" *ngIf="editSubCategoriaMode">
             <mat-label>Impresora</mat-label>
-            <mat-select name="impresora" [(ngModel)]="categoriaGrupo.impresora"im>
+            <mat-select name="impresora" [(ngModel)]="categoriaGrupo.impresora" im>
                 <mat-option *ngFor="let imp of impresoras" [value]="imp.impresora">
                     {{imp.nombre}}
                 </mat-option>
             </mat-select>
+            <button mat-raised-button type="button" matSuffix color="accent" class="btnAccion" (click)="onSubmitSubCategoria()"
+                [disabled]="!frmCategoriaGrupo.form.valid" *ngIf="editSubCategoriaMode">
+                Guardar
+            </button>
+            <button mat-raised-button type="button" matSuffix color="warn" (click)="resetCategoriaGrupo()"
+                *ngIf="editSubCategoriaMode">
+                Cancelar
+            </button>
         </mat-form-field>
-        <mat-checkbox name="descuento" class="fullWidth" [(ngModel)]="+categoriaGrupo.descuento">¿Aplica Descuento?</mat-checkbox>
     </form>
-    <div align="end">
-        <button mat-icon-button type="button" color="accent" (click)="editSubCategoriaMode = true;"
-            *ngIf="!editSubCategoriaMode && +categoriaGrupo.categoria_grupo > 0">
-            <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button type="button" color="accent"
-            (click)="resetCategoriaGrupo(); editSubCategoriaMode = true;" *ngIf="!editSubCategoriaMode">
-            <mat-icon>add</mat-icon>
-        </button>
-        <button mat-icon-button type="button" color="accent" (click)="onSubmitSubCategoria()"
-            [disabled]="!frmCategoriaGrupo.form.valid" *ngIf="editSubCategoriaMode">
-            <mat-icon>save</mat-icon>
-        </button>
-        <button mat-icon-button type="button" color="warn" (click)="resetCategoriaGrupo()" *ngIf="editSubCategoriaMode">
-            <mat-icon>cancel</mat-icon>
-        </button>
-    </div>
 </div>

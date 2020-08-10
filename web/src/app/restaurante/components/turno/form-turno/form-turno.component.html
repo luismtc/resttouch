@@ -109,8 +109,8 @@
                 </mat-form-field>
             </div>
             <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmDetalleTurno.form.valid || !!turno.fin">
-                    <mat-icon>save</mat-icon>
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleTurno.form.valid || !!turno.fin">
+                    Guardar
                 </button>
                 <!--
                 <button mat-icon-button type="button" color="accent" (click)="resetDetalleIngreso()"
