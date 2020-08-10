@@ -85,17 +85,19 @@
 					</thead>
 					<tbody>
 						<?php foreach ($cuenta->productos as $key => $det): ?>
-							<tr>
-								<td style="padding: 5px;" class="text-center"><?php echo $det->cantidad ?></td>
-								<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>
-							</tr>
-							<?php if (!empty($det->notas)): ?>
+							<?php if ($det->impreso == 0): ?>
 								<tr>
-									<td colspan="2" style="padding: 8px; margin: 10px;">
-										<?php echo "<b>Notas:</b> {$det->notas}" ?>
-									</td>
+									<td style="padding: 5px;" class="text-center"><?php echo $det->cantidad ?></td>
+									<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>
 								</tr>
-							<?php endif ?>
+								<?php if (!empty($det->notas)): ?>
+									<tr>
+										<td colspan="2" style="padding: 8px; margin: 10px;">
+											<?php echo "<b>Notas:</b> {$det->notas}" ?>
+										</td>
+									</tr>
+								<?php endif ?>
+							<?php endif ?>							
 						<?php endforeach ?>
 					</tbody>
 				</table>
