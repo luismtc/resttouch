@@ -59,24 +59,24 @@
                     <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Notas" type="text" placeholder="Notas" name="notas" [(ngModel)]="factura.notas">
                 </mat-form-field>
             </div>
-            <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion">
-                    <mat-icon>save</mat-icon>
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion || detallesFactura.length === 0 || refacturacion" (click)="firmarFactura()">
-                    <!--<mat-icon>save</mat-icon>-->Firmar
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0 || refacturacion" (click)="imprimirFactura()">
-                    <!--<mat-icon>save</mat-icon>-->Imprimir
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="anularFactura()">
-                    <!--<mat-icon>save</mat-icon>-->Anular
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-flat-button type="button" color="accent" *ngIf="!!factura.fel_uuid_anulacion" (click)="refacturar()">
+            <div align="end">
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion">
+                    Guardar
+                </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" [disabled]="!frmFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion || detallesFactura.length === 0 || refacturacion" (click)="firmarFactura()">
+                    Firmar
+                </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0 || refacturacion" (click)="imprimirFactura()">
+                    Imprimir
+                </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="anularFactura()">
+                    Anular
+                </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" *ngIf="!!factura.fel_uuid_anulacion" (click)="refacturar()">
                     Refacturar
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button mat-icon-button type="button" color="accent" (click)="resetFactura()" *ngIf="factura.factura">
-                    <mat-icon>add</mat-icon>
+                </button>
+                <button mat-raised-button type="button" color="accent" (click)="resetFactura()" *ngIf="factura.factura">
+                    Nueva
                 </button>
 
             </div>
@@ -134,13 +134,12 @@
                         required>
                 </mat-form-field>
             </div>
-            <div class="btn-group d-flex justify-content-end" role="group">
-                <button mat-icon-button type="submit" color="accent" [disabled]="!frmDetalleFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion">
-                    <mat-icon>save</mat-icon>
+            <div align="end">
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleFactura.form.valid || !!factura.fel_uuid || !!factura.fel_uuid_anulacion">
+                    Guardar
                 </button>
-                <button mat-icon-button type="button" color="accent" (click)="resetDetalleFactura()"
-                    *ngIf="detalleFactura.detalle_factura">
-                    <mat-icon>add</mat-icon>
+                <button mat-raised-button type="button" color="accent" (click)="resetDetalleFactura()" *ngIf="detalleFactura.detalle_factura">
+                    Nuevo
                 </button>
             </div>
         </form>
@@ -165,8 +164,8 @@
             <ng-container matColumnDef="editItem">
                 <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td mat-cell *matCellDef="let element" class="text-wrap">
-                    <button mat-icon-button type="button" color="accent" (click)="getDetalleFactura(element.factura, element.detalle_factura)" [disabled]="!!factura.fel_uuid || !!factura.fel_uuid_anulacion || refacturacion">
-                        <mat-icon>edit</mat-icon>
+                    <button mat-raised-button type="button" color="accent" (click)="getDetalleFactura(element.factura, element.detalle_factura)" [disabled]="!!factura.fel_uuid || !!factura.fel_uuid_anulacion || refacturacion">
+                        Editar
                     </button>
                 </td>
             </ng-container>

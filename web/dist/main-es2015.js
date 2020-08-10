@@ -2687,10 +2687,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-/* harmony import */ var _models_usuario__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../models/usuario */ "./src/app/admin/models/usuario.ts");
-/* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
-/* harmony import */ var _services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _models_usuario__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../models/usuario */ "./src/app/admin/models/usuario.ts");
+/* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
+/* harmony import */ var _services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
+
 
 
 
@@ -2699,10 +2701,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let LoginComponent = class LoginComponent {
-    constructor(usrSrvc, ls, router) {
+    constructor(usrSrvc, ls, router, snackBar) {
         this.usrSrvc = usrSrvc;
         this.ls = ls;
         this.router = router;
+        this.snackBar = snackBar;
         this.checkIfLogged = () => tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
             const valido = yield this.usrSrvc.checkUserToken();
             if (valido) {
@@ -2721,8 +2724,8 @@ let LoginComponent = class LoginComponent {
             }
             return estoyEnMovil;
         };
-        this.usr = new _models_usuario__WEBPACK_IMPORTED_MODULE_3__["usrLogin"](null, null);
-        this.usuario = new _models_usuario__WEBPACK_IMPORTED_MODULE_3__["Usuario"](null, null, null, null, null, null, 0, 0);
+        this.usr = new _models_usuario__WEBPACK_IMPORTED_MODULE_4__["usrLogin"](null, null);
+        this.usuario = new _models_usuario__WEBPACK_IMPORTED_MODULE_4__["Usuario"](null, null, null, null, null, null, 0, 0);
     }
     ngOnInit() {
         this.checkIfLogged();
@@ -2730,7 +2733,7 @@ let LoginComponent = class LoginComponent {
     doLogin() {
         this.usrSrvc.login(this.usr).subscribe(res => {
             if (res.token) {
-                this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].usrTokenVar, {
+                this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar, {
                     token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
                     idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso,
                     sede_uuid: res.sede_uuid
@@ -2738,7 +2741,7 @@ let LoginComponent = class LoginComponent {
                 this.router.navigate(['/admin/dashboard']);
             }
             else {
-                console.log(res);
+                this.snackBar.open(res.mensaje, 'Login', { duration: 7000 });
             }
         }, (error) => {
             console.log(error);
@@ -2746,9 +2749,10 @@ let LoginComponent = class LoginComponent {
     }
 };
 LoginComponent.ctorParameters = () => [
-    { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__["UsuarioService"] },
-    { type: _services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
-    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }
+    { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__["UsuarioService"] },
+    { type: _services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__["LocalstorageService"] },
+    { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
+    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] }
 ];
 LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -5856,8 +5860,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function() { return MultiFiltro; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo
-const urlBase = location.origin; // Producción
+const urlBase = 'http://localhost/resttouch'; // Desarrollo
+// const urlBase = location.origin; // Producción
 const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -6059,8 +6063,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-const config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+const config = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
+// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
 let SharedModule = class SharedModule {
 };
 SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

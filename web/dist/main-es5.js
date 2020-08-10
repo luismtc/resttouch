@@ -2487,16 +2487,18 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
             /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
             /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
-            /* harmony import */ var _models_usuario__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../models/usuario */ "./src/app/admin/models/usuario.ts");
-            /* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
-            /* harmony import */ var _services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _models_usuario__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../models/usuario */ "./src/app/admin/models/usuario.ts");
+            /* harmony import */ var _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/usuario.service */ "./src/app/admin/services/usuario.service.ts");
+            /* harmony import */ var _services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
             var LoginComponent = /** @class */ (function () {
-                function LoginComponent(usrSrvc, ls, router) {
+                function LoginComponent(usrSrvc, ls, router, snackBar) {
                     var _this = this;
                     this.usrSrvc = usrSrvc;
                     this.ls = ls;
                     this.router = router;
+                    this.snackBar = snackBar;
                     this.checkIfLogged = function () { return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](_this, void 0, void 0, function () {
                         var valido;
                         return __generator(this, function (_a) {
@@ -2523,8 +2525,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         }
                         return estoyEnMovil;
                     };
-                    this.usr = new _models_usuario__WEBPACK_IMPORTED_MODULE_3__["usrLogin"](null, null);
-                    this.usuario = new _models_usuario__WEBPACK_IMPORTED_MODULE_3__["Usuario"](null, null, null, null, null, null, 0, 0);
+                    this.usr = new _models_usuario__WEBPACK_IMPORTED_MODULE_4__["usrLogin"](null, null);
+                    this.usuario = new _models_usuario__WEBPACK_IMPORTED_MODULE_4__["Usuario"](null, null, null, null, null, null, 0, 0);
                 }
                 LoginComponent.prototype.ngOnInit = function () {
                     this.checkIfLogged();
@@ -2533,7 +2535,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     var _this = this;
                     this.usrSrvc.login(this.usr).subscribe(function (res) {
                         if (res.token) {
-                            _this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].usrTokenVar, {
+                            _this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar, {
                                 token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
                                 idusr: +res.idusr, enmovil: _this.esMovil(), acceso: res.acceso,
                                 sede_uuid: res.sede_uuid
@@ -2541,7 +2543,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                             _this.router.navigate(['/admin/dashboard']);
                         }
                         else {
-                            console.log(res);
+                            _this.snackBar.open(res.mensaje, 'Login', { duration: 7000 });
                         }
                     }, function (error) {
                         console.log(error);
@@ -2550,9 +2552,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 return LoginComponent;
             }());
             LoginComponent.ctorParameters = function () { return [
-                { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_4__["UsuarioService"] },
-                { type: _services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
-                { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }
+                { type: _services_usuario_service__WEBPACK_IMPORTED_MODULE_5__["UsuarioService"] },
+                { type: _services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__["LocalstorageService"] },
+                { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] }
             ]; };
             LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -5326,8 +5329,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CheckObjectType", function () { return CheckObjectType; });
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function () { return MultiFiltro; });
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            // const urlBase = 'http://localhost/resttouch'; // Desarrollo
-            var urlBase = location.origin; // Producción
+            var urlBase = 'http://localhost/resttouch'; // Desarrollo
+            // const urlBase = location.origin; // Producción
             var GLOBAL = {
                 dbDateFormat: 'YYYY-MM-DD',
                 dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -5497,8 +5500,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
             /* harmony import */ var _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/rpt-fechas/rpt-fechas.component */ "./src/app/shared/components/rpt-fechas/rpt-fechas.component.ts");
             /* harmony import */ var _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/rpt-botones/rpt-botones.component */ "./src/app/shared/components/rpt-botones/rpt-botones.component.ts");
-            // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-            var config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+            var config = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
+            // const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
             var SharedModule = /** @class */ (function () {
                 function SharedModule() {
                 }

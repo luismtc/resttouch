@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { usrLogin, Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { LocalstorageService } from '../../services/localstorage.service';
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private usrSrvc: UsuarioService,
     private ls: LocalstorageService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.usr = new usrLogin(null, null);
     this.usuario = new Usuario(null, null, null, null, null, null, 0, 0);
@@ -38,7 +40,7 @@ export class LoginComponent implements OnInit {
   }
 
   esMovil = (): boolean => {
-    let estoyEnMovil: boolean = false;
+    let estoyEnMovil = false;
     estoyEnMovil = true; // Solo para desarrollo
     const ua = navigator.userAgent;
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
@@ -57,11 +59,11 @@ export class LoginComponent implements OnInit {
         });
         this.router.navigate(['/admin/dashboard']);
       } else {
-        console.log(res);
+        this.snackBar.open(res.mensaje, 'Login', { duration: 7000 });
       }
     }, (error) => {
       console.log(error);
-    })
+    });
   }
 
 }
