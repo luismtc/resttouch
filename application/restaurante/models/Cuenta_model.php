@@ -21,6 +21,18 @@ class Cuenta_model extends General_Model {
 		}
 	}
 
+	public function getEmpresa()
+	{
+		return $this->db
+					->select("c.*")
+					->from("comanda a")
+					->join("sede b", "a.sede = b.sede")
+					->join("empresa c", "b.empresa = c.empresa")
+					->where("a.comanda", $this->comanda)
+					->get()
+					->row();
+	}
+
 	public function imprimirDetalle()
 	{
 		$com = new Comanda_model($this->comanda);
@@ -117,6 +129,19 @@ class Cuenta_model extends General_Model {
 	public function cobrar($pago)
 	{
 		if (is_object($pago) && isset($pago->forma_pago) && isset($pago->monto)) {	
+
+			$fpago = $this->Catalogo_model->getFormaPago([
+				"forma_pago" => $pago->forma_pago,
+				"_uno" => true
+			]);
+
+			if (strtolower($fpago->descripcion) == "tarjeta") {
+				$this->load->library('Cobro');
+				$cobro = new Cobro($this->getEmpresa());
+				$cobro->setTestVenta();
+				$cobro->cobrar();
+			}
+
 			if (isset($pago->documento)) {
 				$this->db->set("documento", $pago->documento);
 			}

@@ -268,10 +268,28 @@ class Comanda extends CI_Controller {
 				'tempDir' => sys_get_temp_dir(), //produccion
 				'format' => 'Legal'
 			]);
-			
+
 			$mpdf->WriteHTML($this->load->view('impresion/comanda', $datos, true));
 			$mpdf->Output("Detalle de Comandas.pdf", "D");
 		}
+	}
+
+	public function test_cobro()
+	{
+		$this->load->library('Cobro');
+		$empresa = $this->Catalogo_model->getEmpresa([
+			"empresa" => 1,
+			"_uno" => true
+		]);
+
+		$cobro = new Cobro($empresa);
+
+		$cobro->setTestVenta();
+		$rep = $cobro->cobrar();
+
+		echo "<pre>";
+		print_r ($rep);
+		echo "</pre>";
 	}
 }
 
