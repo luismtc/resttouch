@@ -281,6 +281,43 @@ class Comanda extends CI_Controller {
 		}
 	}
 
+	public function cerrar_mesa($mesa = null)
+	{
+		$res = ["exito" => false];
+		if ($this->input->method() == 'post') {
+			if ($mesa !== null) {
+				$_mesa = new Mesa_model($mesa);
+				if ($_mesa->estatus == 2) {
+					$comanda = $_mesa->get_comanda();
+					if ($comanda) {
+						$com = new Comanda_model($comanda->comanda);
+						$det = $com->getDetalle();
+						if (count($det) == 0) {
+							$_mesa->guardar(["estatus" => 1]);
+							$com->guardar(["estatus" => 2]);
+							$res['exito'] = true;
+							$res['mensaje'] = "Datos actualizados con exito";
+						} else {
+							$res['mensaje'] = "La comanda no debe tener productos";
+						}
+					} else {
+						$res['mensaje'] = "La mesa debe tener una comanda activa";
+					}
+				} else {
+					$res['mensaje'] = "La mesa debe estar en estatus Abierto";
+				}
+			} else {
+				$res['mensaje'] = "Debe seleccionar una mesa";
+			}
+		} else {
+			$res['mensaje'] = "Metodo de envío invalido";
+		}
+
+		$this->output
+			 ->set_content_type('application/json')
+			 ->set_output(json_encode($res));
+	}
+
 	public function test_cobro()
 	{
 		$this->load->library('Cobro');
