@@ -33,6 +33,12 @@ class Usuario_model extends General_model
                     a.nombres, 
                     a.apellidos, 
                     a.sede,
+                    b.empresa,
+                    b.nombre as sede_nombre,
+                    b.direccion as sede_direccion,
+                    b.correo as sede_correo,
+                    c.nombre as empresa_nombre,
+                    c.nit as empresa_nit,
                     CONCAT(d.admin_llave, '-', c.empresa, '-', b.sede) AS sede_uuid")
                 ->from("{$this->tabla} a")
                 ->join("sede b", "b.sede = a.sede")
@@ -51,7 +57,7 @@ class Usuario_model extends General_model
                         'usuario' => $credenciales['usr'],
                         'inicia' => date('Y-m-d H:i:s'),
                         'hasta' => date('Y-m-d H:i:s', strtotime('+12 hours')),
-                        'dominio' => $credenciales['dominio'] 
+                        'dominio' => $credenciales['dominio']
                     );
                     return array(
                         'mensaje' => 'El usuario tiene acceso.',
@@ -61,7 +67,16 @@ class Usuario_model extends General_model
                         'apellidos' => $dbusr->apellidos,
                         'sede' => $dbusr->sede,
                         'idusr' => $dbusr->usuario,
-                        'sede_uuid' => $dbusr->sede_uuid
+                        'sede_uuid' => $dbusr->sede_uuid,
+                        'restaurante' => [
+                            "nombre" => $dbusr->sede_nombre,
+                            "direccion" => $dbusr->sede_direccion,
+                            "correo" => $dbusr->sede_correo
+                        ],
+                        'empresa' => [
+                            "nombre" => $dbusr->sede_nombre,
+                            "nit" => $dbusr->sede_nit
+                        ]
                     );
                 } else {
                     return array(
