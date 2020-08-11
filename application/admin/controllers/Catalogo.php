@@ -151,11 +151,12 @@ class Catalogo extends CI_Controller {
 			'abierto' => true, 
 			"_uno" => true
 		]);
+		
 		if ($tmp) {
 			$turno = new Turno_model($tmp->turno);
 
 			foreach ($turno->getUsuarios() as $key => $value) {
-				if ($value->usuario_tipo->descripcion == 'Mesero') {
+				if (strtolower(trim($value->usuario_tipo->descripcion)) == 'mesero') {
 					$datos[] = $value;
 				}
 			}

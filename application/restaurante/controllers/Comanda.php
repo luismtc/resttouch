@@ -233,7 +233,7 @@ class Comanda extends CI_Controller {
 
 			foreach ($tmp as $row) {
 				$comanda = new Comanda_model($row->comanda);
-				$datos[] = $comanda->getComanda();
+				$datos[] = $comanda->getComanda(["_usuario" => $data->idusuario]);
 			}
 		} else {
 			$mesa = new Mesa_model($mesa);
@@ -241,7 +241,7 @@ class Comanda extends CI_Controller {
 
 			if ($tmp) {
 				$comanda = new Comanda_model($tmp->comanda);
-				$datos = $comanda->getComanda();
+				$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
 			}
 		}
 
