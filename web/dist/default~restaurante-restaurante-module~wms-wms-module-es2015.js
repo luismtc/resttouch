@@ -120,6 +120,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.html":
+/*!************************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.html ***!
+  \************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<p>lista-producto-alt works!</p>\n");
+
+/***/ }),
+
 /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto/lista-producto.component.html":
 /*!****************************************************************************************************************************!*\
   !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto/lista-producto.component.html ***!
@@ -1413,6 +1426,74 @@ FormProductoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.css":
+/*!*********************************************************************************************!*\
+  !*** ./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.css ***!
+  \*********************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3dtcy9jb21wb25lbnRzL3Byb2R1Y3RvL2xpc3RhLXByb2R1Y3RvLWFsdC9saXN0YS1wcm9kdWN0by1hbHQuY29tcG9uZW50LmNzcyJ9 */");
+
+/***/ }),
+
+/***/ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.ts":
+/*!********************************************************************************************!*\
+  !*** ./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.ts ***!
+  \********************************************************************************************/
+/*! exports provided: ListaProductoAltComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaProductoAltComponent", function() { return ListaProductoAltComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var _services_articulo_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/articulo.service */ "./src/app/wms/services/articulo.service.ts");
+
+
+
+
+// import { ArbolArticulos, NodoProducto } from '../../../interfaces/articulo';
+
+let ListaProductoAltComponent = class ListaProductoAltComponent {
+    constructor(articuloSrvc, ls) {
+        this.articuloSrvc = articuloSrvc;
+        this.ls = ls;
+        this.productoClickedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.loadArbolArticulos = () => {
+            this.articuloSrvc.getArbolArticulos((this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_2__["GLOBAL"].usrTokenVar).sede || 0)).subscribe(res => {
+                console.log(res);
+            });
+        };
+    }
+    ngOnInit() {
+        this.loadArbolArticulos();
+    }
+};
+ListaProductoAltComponent.ctorParameters = () => [
+    { type: _services_articulo_service__WEBPACK_IMPORTED_MODULE_4__["ArticuloService"] },
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__["LocalstorageService"] }
+];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+], ListaProductoAltComponent.prototype, "productoClickedEv", void 0);
+ListaProductoAltComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-lista-producto-alt',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./lista-producto-alt.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-producto-alt.component.css */ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.css")).default]
+    })
+], ListaProductoAltComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/app/wms/components/producto/lista-producto/lista-producto.component.css":
 /*!*************************************************************************************!*\
   !*** ./src/app/wms/components/producto/lista-producto/lista-producto.component.css ***!
@@ -2358,6 +2439,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_transformacion_service__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./services/transformacion.service */ "./src/app/wms/services/transformacion.service.ts");
 /* harmony import */ var _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/reporte/existencias/existencias.component */ "./src/app/wms/components/reporte/existencias/existencias.component.ts");
 /* harmony import */ var _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/reporte/kardex/kardex.component */ "./src/app/wms/components/reporte/kardex/kardex.component.ts");
+/* harmony import */ var _components_producto_lista_producto_alt_lista_producto_alt_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/producto/lista-producto-alt/lista-producto-alt.component */ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.ts");
+
 
 
 
@@ -2404,7 +2487,7 @@ let WmsModule = class WmsModule {
 };
 WmsModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-        declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"], _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__["ExistenciasComponent"], _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__["KardexComponent"]],
+        declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"], _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__["ExistenciasComponent"], _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__["KardexComponent"], _components_producto_lista_producto_alt_lista_producto_alt_component__WEBPACK_IMPORTED_MODULE_42__["ListaProductoAltComponent"]],
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
             _wms_routing_module__WEBPACK_IMPORTED_MODULE_27__["WmsRoutingModule"],
@@ -2437,7 +2520,7 @@ WmsModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _services_transformacion_service__WEBPACK_IMPORTED_MODULE_39__["TransformacionService"]
         ],
         exports: [
-            _components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"]
+            _components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_producto_lista_producto_alt_lista_producto_alt_component__WEBPACK_IMPORTED_MODULE_42__["ListaProductoAltComponent"]
         ]
     })
 ], WmsModule);

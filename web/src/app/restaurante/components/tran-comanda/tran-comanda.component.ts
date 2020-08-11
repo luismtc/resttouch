@@ -381,8 +381,8 @@ export class TranComandaComponent implements OnInit {
         data: {
           cuenta: this.cuentaActiva.nombre,
           idcuenta: this.cuentaActiva.cuenta,
-          productosACobrar: productosACobrar,
-          porcentajePropina: 10
+          productosACobrar,
+          porcentajePropina: 0.00
         }
       });
 
@@ -402,4 +402,6 @@ export class TranComandaComponent implements OnInit {
     const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +obj.cuenta);
     this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada;
   }
+
+  esCajero = (roles: string[] = []) => roles.find(r => r.trim().toLocaleLowerCase() === 'cajero');
 }

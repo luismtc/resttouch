@@ -26,12 +26,12 @@ export class CobrarPedidoComponent implements OnInit {
   public formasPagoDeCuenta: any[] = [];
   public factReq: FacturaRequest;
   public clienteSelected: Cliente;
-  public esMovil: boolean = false;
+  public esMovil = false;
 
   constructor(
     public dialogRef: MatDialogRef<CobrarPedidoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     public formaPagoSrvc: FormaPagoService,
     public cobroSrvc: CobroService,
     public facturaSrvc: FacturaService,
@@ -86,8 +86,9 @@ export class CobrarPedidoComponent implements OnInit {
 
   addFormaPago = () => {
     this.formasPagoDeCuenta.push({
-      forma_pago: this.lstFormasPago.filter(f => +f.forma_pago == +this.formaPago.forma_pago)[0],
-      monto: this.formaPago.monto
+      forma_pago: this.lstFormasPago.filter(f => +f.forma_pago === +this.formaPago.forma_pago)[0],
+      monto: this.formaPago.monto,
+      propina: (this.formaPago.propina || 0.00)
     });
     this.actualizaSaldo();
   }
@@ -98,7 +99,7 @@ export class CobrarPedidoComponent implements OnInit {
   }
 
   actualizaSaldo = () => {
-    let sumFormasPago: number = 0.00;
+    let sumFormasPago = 0.00;
     this.formasPagoDeCuenta.forEach(fp => sumFormasPago += +fp.monto);
     this.inputData.saldo = this.inputData.totalDeCuenta + this.inputData.montoPropina - sumFormasPago;
     this.formaPago = { monto: this.inputData.saldo };
@@ -123,26 +124,27 @@ export class CobrarPedidoComponent implements OnInit {
     for (const fp of this.formasPagoDeCuenta) {
       objCobro.forma_pago.push({
         forma_pago: +fp.forma_pago.forma_pago,
-        monto: fp.monto
+        monto: fp.monto,
+        propina: (fp.propina || 0.00)
       });
     }
 
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
     this.cobroSrvc.save(objCobro).subscribe(res => {
       if (res.exito || !res.facturada) {
-        this._snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
+        this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
         this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
           if (resFact.exito) {
             this.resetFactReq();
-            this._snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+            this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
             this.dialogRef.close(res.cuenta);
           } else {
-            this._snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 3000 });
+            this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 3000 });
             this.dialogRef.close(res.cuenta);
           }
         });
       } else {
-        this._snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 3000 });
+        this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 3000 });
       }
     });
   }

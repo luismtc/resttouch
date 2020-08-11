@@ -24,6 +24,7 @@
     <div class="row">
         <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto;">
             <app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>
+            <!--<app-lista-producto-alt (productoClickedEv)="addProductoSelected($event)"></app-lista-producto-alt>-->            
         </div>
         <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto;">
             <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero" [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta"
@@ -44,7 +45,8 @@
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2">
                 Unir cuentas
             </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="cobrarCuenta()" [disabled]="!cuentaActiva.nombre || mesaEnUso.turno_rol.toLowerCase().trim() !== 'cajero'">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="cobrarCuenta()" 
+                    [disabled]="!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0)">
                 Cobrar cuenta
             </button>
             <button mat-raised-button type="button" color="accent" class="btnAccionComanda" (click)="cerrarMesa()" *ngIf="lstProductosDeCuenta.length <= 0">

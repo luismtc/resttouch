@@ -31,5 +31,5 @@ export interface ComandaGetResponse {
         estatus: number;
     };
     cuentas: Cuenta[];
-    turno_rol?: string;
+    turno_rol?: string[];
 }

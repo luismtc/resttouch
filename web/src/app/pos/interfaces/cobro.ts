@@ -1,6 +1,7 @@
 export interface CobroFormaPago {
     forma_pago: number;
     monto: number;
+    propina?: number;
 }
 
 export interface Cobro {

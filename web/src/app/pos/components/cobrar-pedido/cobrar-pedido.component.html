@@ -29,25 +29,42 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
+        <!--Inicia input de monto por forma de pago-->
         <mat-form-field class="fullWidth" *ngIf="esMovil">
           <input matInput placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
         </mat-form-field>
         <mat-form-field class="fullWidth" *ngIf="!esMovil">
           <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Monto" placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
         </mat-form-field>
+        <!--Fin de input de monto por forma de pago-->
+        <!--Inicia input de propina por forma de pago-->
+        <mat-form-field class="fullWidth" *ngIf="esMovil">
+          <input matInput placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
+        </mat-form-field>
+        <mat-form-field class="fullWidth" *ngIf="!esMovil">
+          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Propina" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
+        </mat-form-field>
+        <!--Fin de input de propina por forma de pago-->
         <div align="end">
-          <button mat-icon-button type="button" color="accent" (click)="addFormaPago()"
-            [disabled]="!frmFormasPago.form.valid || inputData.saldo <= 0">
-            <mat-icon>add</mat-icon>
+          <button mat-raised-button type="button" color="accent" (click)="addFormaPago()" [disabled]="!frmFormasPago.form.valid || inputData.saldo <= 0">
+            Agregar
           </button>
         </div>
       </form>
       <hr />
       <table class="table table-sm">
+        <thead>
+          <tr>
+            <th class="text-left">FP</th>
+            <th class="text-right">Mon</th>
+            <th class="text-right">Prop</th>
+          </tr>
+        </thead>
         <tbody>
           <tr *ngFor="let fpCta of formasPagoDeCuenta; let i = index">
             <td>{{fpCta.forma_pago.descripcion}}</td>
             <td class="text-right">{{fpCta.monto | number:'1.2-2'}}</td>
+            <td class="text-right">{{fpCta.propina | number:'1.2-2'}}</td>
             <td class="text-center">
               <button mat-icon-button type="button" color="warn" (click)="delFormaPago(i)">
                 <mat-icon>delete_forever</mat-icon>
@@ -62,6 +79,7 @@
     <div class="col m12 s12 overflow-auto d-flex justify-content-end">
       <table class="table table-sm table-borderless">
         <tbody>
+          <!--
           <tr class="propina">
             <td class="text-right" style="max-width: 15%;">
               <mat-form-field *ngIf="esMovil">
@@ -84,6 +102,7 @@
               </mat-form-field>
             </td>
           </tr>
+          -->
           <tr>
             <td class="text-right font-weight-bold">TOTAL DE CUENTA:</td>
             <td class="text-right font-weight-bold totalCuenta" style="max-width: 15%;">{{inputData.totalDeCuenta | number:'1.2-2'}}</td>

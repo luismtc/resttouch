@@ -43,9 +43,10 @@ import { TransformacionComponent } from './components/transformacion/transformac
 import { TransformacionService } from './services/transformacion.service';
 import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
 import { KardexComponent } from './components/reporte/kardex/kardex.component';
+import { ListaProductoAltComponent } from './components/producto/lista-producto-alt/lista-producto-alt.component';
 
 @NgModule({
-  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent, KardexComponent],
+  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent, KardexComponent, ListaProductoAltComponent],
   imports: [
     CommonModule,
     WmsRoutingModule,
@@ -78,7 +79,7 @@ import { KardexComponent } from './components/reporte/kardex/kardex.component';
     TransformacionService
   ],
   exports: [
-    ListaProductoComponent
+    ListaProductoComponent, ListaProductoAltComponent
   ]
 })
 export class WmsModule { }

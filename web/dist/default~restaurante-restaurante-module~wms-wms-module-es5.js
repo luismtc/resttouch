@@ -137,6 +137,17 @@
             /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Artículo {{!!articulo.articulo ? articulo.descripcion: ''}}\n            <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"showArticuloForm = true;\"\n                *ngIf=\"!showArticuloForm\">\n                <mat-icon class=\"iconFontSize\">expand_more</mat-icon>\n            </button>\n            <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"showArticuloForm = false;\"\n                *ngIf=\"showArticuloForm\">\n                <mat-icon class=\"iconFontSize\">expand_less</mat-icon>\n            </button>\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmArticulo=\"ngForm\" *ngIf=\"showArticuloForm\" (ngSubmit)=\"frmArticulo.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Descripcion\" name=\"descripcion\"\n                    [(ngModel)]=\"articulo.descripcion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Descripción\" type=\"text\" placeholder=\"Descripción\"\n                    name=\"descripcion\" [(ngModel)]=\"articulo.descripcion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"number\" placeholder=\"Precio\" name=\"precio\" [(ngModel)]=\"articulo.precio\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\"\n                    ng-virtual-keyboard-placeholder=\"Precio\" type=\"number\" placeholder=\"Precio\" name=\"precio\"\n                    [(ngModel)]=\"articulo.precio\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Presentación</mat-label>\n                <mat-select name=\"presentacion\" [(ngModel)]=\"articulo.presentacion\">\n                    <mat-option *ngFor=\"let p of presentaciones\" [value]=\"p.presentacion\">\n                        {{p.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Código\" name=\"codigo\" [(ngModel)]=\"articulo.codigo\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\"\n                    ng-virtual-keyboard-placeholder=\"Código\" type=\"text\" placeholder=\"Código\" name=\"codigo\"\n                    [(ngModel)]=\"articulo.codigo\" required>\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmArticulo.form.valid || !articulo.categoria_grupo\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetArticulo()\" *ngIf=\"articulo.articulo\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>\n<hr *ngIf=\"articulo.articulo\" />\n<mat-card class=\"mat-elevation-z4 fullWidth\" *ngIf=\"articulo.articulo\">\n    <mat-card-title>\n        <h4>\n            Detalle del artículo {{articulo.descripcion}}\n            <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"showDetalleForm = true;\"\n                *ngIf=\"!showDetalleForm\">\n                <mat-icon class=\"iconFontSize\">expand_more</mat-icon>\n            </button>\n            <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"showDetalleForm = false;\"\n                *ngIf=\"showDetalleForm\">\n                <mat-icon class=\"iconFontSize\">expand_less</mat-icon>\n            </button>\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmDetalleArticulo=\"ngForm\" *ngIf=\"showDetalleForm\" (ngSubmit)=\"frmDetalleArticulo.form.valid && onSubmitDetail()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Artículo</mat-label>\n                <mat-select name=\"articulo\" [(ngModel)]=\"receta.articulo\" required>\n                    <mat-option *ngFor=\"let a of articulos\" [value]=\"a.articulo\">\n                        {{a.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput placeholder=\"Cantidad\" name=\"cantidad\" [(ngModel)]=\"receta.cantidad\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\"\n                    ng-virtual-keyboard-placeholder=\"Cantidad\" placeholder=\"Cantidad\" name=\"cantidad\"\n                    [(ngModel)]=\"receta.cantidad\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Unidad de medida</mat-label>\n                <mat-select name=\"medida\" [(ngModel)]=\"receta.medida\" required>\n                    <mat-option *ngFor=\"let m of medidas\" [value]=\"m.medida\">\n                        {{m.descripcion}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-checkbox name=\"racionable\" class=\"fullWidth\" [(ngModel)]=\"+receta.racionable\">¿Es racionable?</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmDetalleArticulo.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetReceta()\" *ngIf=\"receta.articulo_detalle\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n        <hr *ngIf=\"recetas.length > 0\" />\n        <table mat-table [dataSource]=\"dataSource\" class=\"mat-elevation-z4 full-width\" *ngIf=\"recetas.length > 0\">\n            <ng-container matColumnDef=\"articulo\">\n                <th mat-header-cell *matHeaderCellDef>Artículo</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">{{element.articulo.descripcion}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"cantidad\">\n                <th mat-header-cell *matHeaderCellDef class=\"text-right\">Cantidad</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"text-right\">{{element.cantidad | number:'1.2-2'}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"medida\">\n                <th mat-header-cell *matHeaderCellDef class=\"text-right\">Unida de medida</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"text-right\">{{element.medida.descripcion}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"editItem\">\n                <th mat-header-cell *matHeaderCellDef>&nbsp;</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"text-wrap\">\n                    <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"getReceta(element.receta, element.articulo_detalle)\">\n                        Editar\n                    </button>\n                </td>\n            </ng-container>\n            <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n            <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\">\n            </tr>\n        </table>\n    </mat-card-content>\n</mat-card>");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.html": 
+        /*!************************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.html ***!
+          \************************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<p>lista-producto-alt works!</p>\n");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto/lista-producto.component.html": 
         /*!****************************************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto/lista-producto.component.html ***!
@@ -1324,6 +1335,65 @@
             ], FormProductoComponent);
             /***/ 
         }),
+        /***/ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.css": 
+        /*!*********************************************************************************************!*\
+          !*** ./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.css ***!
+          \*********************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3dtcy9jb21wb25lbnRzL3Byb2R1Y3RvL2xpc3RhLXByb2R1Y3RvLWFsdC9saXN0YS1wcm9kdWN0by1hbHQuY29tcG9uZW50LmNzcyJ9 */");
+            /***/ 
+        }),
+        /***/ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.ts": 
+        /*!********************************************************************************************!*\
+          !*** ./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.ts ***!
+          \********************************************************************************************/
+        /*! exports provided: ListaProductoAltComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaProductoAltComponent", function () { return ListaProductoAltComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var _services_articulo_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/articulo.service */ "./src/app/wms/services/articulo.service.ts");
+            // import { ArbolArticulos, NodoProducto } from '../../../interfaces/articulo';
+            var ListaProductoAltComponent = /** @class */ (function () {
+                function ListaProductoAltComponent(articuloSrvc, ls) {
+                    var _this = this;
+                    this.articuloSrvc = articuloSrvc;
+                    this.ls = ls;
+                    this.productoClickedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.loadArbolArticulos = function () {
+                        _this.articuloSrvc.getArbolArticulos((_this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_2__["GLOBAL"].usrTokenVar).sede || 0)).subscribe(function (res) {
+                            console.log(res);
+                        });
+                    };
+                }
+                ListaProductoAltComponent.prototype.ngOnInit = function () {
+                    this.loadArbolArticulos();
+                };
+                return ListaProductoAltComponent;
+            }());
+            ListaProductoAltComponent.ctorParameters = function () { return [
+                { type: _services_articulo_service__WEBPACK_IMPORTED_MODULE_4__["ArticuloService"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__["LocalstorageService"] }
+            ]; };
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], ListaProductoAltComponent.prototype, "productoClickedEv", void 0);
+            ListaProductoAltComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-lista-producto-alt',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./lista-producto-alt.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./lista-producto-alt.component.css */ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.css")).default]
+                })
+            ], ListaProductoAltComponent);
+            /***/ 
+        }),
         /***/ "./src/app/wms/components/producto/lista-producto/lista-producto.component.css": 
         /*!*************************************************************************************!*\
           !*** ./src/app/wms/components/producto/lista-producto/lista-producto.component.css ***!
@@ -2164,6 +2234,7 @@
             /* harmony import */ var _services_transformacion_service__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./services/transformacion.service */ "./src/app/wms/services/transformacion.service.ts");
             /* harmony import */ var _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/reporte/existencias/existencias.component */ "./src/app/wms/components/reporte/existencias/existencias.component.ts");
             /* harmony import */ var _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/reporte/kardex/kardex.component */ "./src/app/wms/components/reporte/kardex/kardex.component.ts");
+            /* harmony import */ var _components_producto_lista_producto_alt_lista_producto_alt_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/producto/lista-producto-alt/lista-producto-alt.component */ "./src/app/wms/components/producto/lista-producto-alt/lista-producto-alt.component.ts");
             var WmsModule = /** @class */ (function () {
                 function WmsModule() {
                 }
@@ -2171,7 +2242,7 @@
             }());
             WmsModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
-                    declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"], _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__["ExistenciasComponent"], _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__["KardexComponent"]],
+                    declarations: [_components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_ingreso_lista_ingreso_lista_ingreso_component__WEBPACK_IMPORTED_MODULE_29__["ListaIngresoComponent"], _components_ingreso_form_ingreso_form_ingreso_component__WEBPACK_IMPORTED_MODULE_30__["FormIngresoComponent"], _components_ingreso_ingreso_ingreso_component__WEBPACK_IMPORTED_MODULE_31__["IngresoComponent"], _components_producto_producto_producto_component__WEBPACK_IMPORTED_MODULE_32__["ProductoComponent"], _components_producto_form_producto_form_producto_component__WEBPACK_IMPORTED_MODULE_33__["FormProductoComponent"], _components_producto_categoria_producto_categoria_producto_component__WEBPACK_IMPORTED_MODULE_34__["CategoriaProductoComponent"], _components_egreso_egreso_egreso_component__WEBPACK_IMPORTED_MODULE_35__["EgresoComponent"], _components_egreso_lista_egreso_lista_egreso_component__WEBPACK_IMPORTED_MODULE_36__["ListaEgresoComponent"], _components_egreso_form_egreso_form_egreso_component__WEBPACK_IMPORTED_MODULE_37__["FormEgresoComponent"], _components_transformacion_transformacion_component__WEBPACK_IMPORTED_MODULE_38__["TransformacionComponent"], _components_reporte_existencias_existencias_component__WEBPACK_IMPORTED_MODULE_40__["ExistenciasComponent"], _components_reporte_kardex_kardex_component__WEBPACK_IMPORTED_MODULE_41__["KardexComponent"], _components_producto_lista_producto_alt_lista_producto_alt_component__WEBPACK_IMPORTED_MODULE_42__["ListaProductoAltComponent"]],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
                         _wms_routing_module__WEBPACK_IMPORTED_MODULE_27__["WmsRoutingModule"],
@@ -2204,7 +2275,7 @@
                         _services_transformacion_service__WEBPACK_IMPORTED_MODULE_39__["TransformacionService"]
                     ],
                     exports: [
-                        _components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"]
+                        _components_producto_lista_producto_lista_producto_component__WEBPACK_IMPORTED_MODULE_28__["ListaProductoComponent"], _components_producto_lista_producto_alt_lista_producto_alt_component__WEBPACK_IMPORTED_MODULE_42__["ListaProductoAltComponent"]
                     ]
                 })
             ], WmsModule);
