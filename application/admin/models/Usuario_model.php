@@ -74,8 +74,8 @@ class Usuario_model extends General_model
                             "correo" => $dbusr->sede_correo
                         ],
                         'empresa' => [
-                            "nombre" => $dbusr->sede_nombre,
-                            "nit" => $dbusr->sede_nit
+                            "nombre" => $dbusr->empresa_nombre,
+                            "nit" => $dbusr->empresa_nit
                         ]
                     );
                 } else {
