@@ -133,6 +133,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
             this.mesaSeleccionada = res.comanda;
             // console.log('m', m);
             this.setEstatusMesa(m, +res.comanda.mesa.estatus);
+            this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
+            this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
             this.toggleRightSidenav();
           } else {
             this._snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
