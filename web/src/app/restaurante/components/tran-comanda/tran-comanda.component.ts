@@ -94,6 +94,9 @@ export class TranComandaComponent implements OnInit {
   resetCuentaActiva = () => this.cuentaActiva = { cuenta: null, numero: null, nombre: null, productos: [] };
 
   llenaProductosSeleccionados = (conQueMesa: ComandaGetResponse = this.mesaEnUso) => {
+    if (this.mesaEnUso.comanda == null) {
+      this.mesaEnUso = conQueMesa;
+    }
     this.lstProductosSeleccionados = [];
     for (let i = 0; i < conQueMesa.cuentas.length; i++) {
       const cta = conQueMesa.cuentas[i];
@@ -118,6 +121,12 @@ export class TranComandaComponent implements OnInit {
       }
     }
     // console.log('SELECCIONADOS = ', this.lstProductosSeleccionados);
+  }
+
+  cerrarMesa = () => {
+    this.comandaSrvc.carrarMesa(this.mesaEnUso.mesa.mesa).subscribe(res => {
+      this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
+    });
   }
 
   setSelectedCuenta(noCuenta: number) {

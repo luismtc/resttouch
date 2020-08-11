@@ -269,6 +269,15 @@ export class ComandaService {
     return comandasOnLine;
   }
 
+  carrarMesa(idMesa: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_mesa/${idMesa}`, null, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getComandasOnLIne(): Observable<ComandaGetResponse[]> {
     const httpOptions = {
       headers: new HttpHeaders({

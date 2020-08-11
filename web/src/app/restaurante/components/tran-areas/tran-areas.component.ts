@@ -191,8 +191,12 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         console.log('MESA SELECTED = ', this.mesaSeleccionada);
         this.checkEstatusMesa();
         if (shouldToggle) {
+          var cuentas = this.mesaSeleccionada.cuentas;
           this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
           this.toggleRightSidenav();
+          if(cuentas.length === 1){
+            this.snTrancomanda.setSelectedCuenta(cuentas[0].numero);
+          }
         }
 
       } else {
