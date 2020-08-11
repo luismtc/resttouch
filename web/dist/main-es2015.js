@@ -2735,8 +2735,8 @@ let LoginComponent = class LoginComponent {
             if (res.token) {
                 this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar, {
                     token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
-                    idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso,
-                    sede_uuid: res.sede_uuid
+                    idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso, sede_uuid: res.sede_uuid,
+                    empresa: res.empresa, restaurante: res.restaurante
                 });
                 this.router.navigate(['/admin/dashboard']);
             }
@@ -4185,7 +4185,7 @@ class usrLogin {
     }
 }
 class usrLogInResponse {
-    constructor(mensaje, token, usrname, nombres, apellidos, sede, idusr, sede_uuid, acceso) {
+    constructor(mensaje, token, usrname, nombres, apellidos, sede, idusr, sede_uuid, acceso, empresa, restaurante) {
         this.mensaje = mensaje;
         this.token = token;
         this.usrname = usrname;
@@ -4195,6 +4195,8 @@ class usrLogInResponse {
         this.idusr = idusr;
         this.sede_uuid = sede_uuid;
         this.acceso = acceso;
+        this.empresa = empresa;
+        this.restaurante = restaurante;
     }
 }
 class Usuario {
@@ -5860,8 +5862,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function() { return MultiFiltro; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo
-const urlBase = location.origin; // Producción
+const urlBase = 'http://localhost/resttouch'; // Desarrollo
+// const urlBase = location.origin; // Producción
 const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -6063,8 +6065,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-const config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+const config = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
+// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
 let SharedModule = class SharedModule {
 };
 SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

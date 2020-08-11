@@ -4410,7 +4410,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <span class=\"bld\" style=\"font-size: 14pt;\">{{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\" [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cobrarCuenta()\" [disabled]=\"!cuentaActiva.nombre || mesaEnUso.turno_rol.toLowerCase().trim() !== 'cajero'\">\n                Cobrar cuenta\n            </button>\n        </div>\n    </div>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <span class=\"bld\" style=\"font-size: 14pt;\">{{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\" [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"cobrarCuenta()\" [disabled]=\"!cuentaActiva.nombre || mesaEnUso.turno_rol.toLowerCase().trim() !== 'cajero'\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\" *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/turno-tipo/form-turno/form-turno.component.html": 
@@ -6766,8 +6766,12 @@
                                 console.log('MESA SELECTED = ', _this.mesaSeleccionada);
                                 _this.checkEstatusMesa();
                                 if (shouldToggle) {
+                                    var cuentas = _this.mesaSeleccionada.cuentas;
                                     _this.snTrancomanda.llenaProductosSeleccionados(_this.mesaSeleccionada);
                                     _this.toggleRightSidenav();
+                                    if (cuentas.length === 1) {
+                                        _this.snTrancomanda.setSelectedCuenta(cuentas[0].numero);
+                                    }
                                 }
                             }
                             else {
@@ -6942,6 +6946,9 @@
                     this.resetCuentaActiva = function () { return _this.cuentaActiva = { cuenta: null, numero: null, nombre: null, productos: [] }; };
                     this.llenaProductosSeleccionados = function (conQueMesa) {
                         if (conQueMesa === void 0) { conQueMesa = _this.mesaEnUso; }
+                        if (_this.mesaEnUso.comanda == null) {
+                            _this.mesaEnUso = conQueMesa;
+                        }
                         _this.lstProductosSeleccionados = [];
                         for (var i = 0; i < conQueMesa.cuentas.length; i++) {
                             var cta = conQueMesa.cuentas[i];
@@ -6966,6 +6973,11 @@
                             }
                         }
                         // console.log('SELECCIONADOS = ', this.lstProductosSeleccionados);
+                    };
+                    this.cerrarMesa = function () {
+                        _this.comandaSrvc.cerrarMesa(_this.mesaEnUso.mesa.mesa).subscribe(function (res) {
+                            _this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
+                        });
                     };
                     this.printToBT = function (msgToPrint) {
                         if (msgToPrint === void 0) { msgToPrint = ''; }
@@ -7188,17 +7200,6 @@
                 TranComandaComponent.prototype.printCuenta = function () {
                     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(function (p) { return +p.impreso === 1; });
                     this.setSumaCuenta(this.lstProductosAImprimir);
-                    this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
-                    // this.showPortalCuenta = true;
-                    /*
-                    this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
-                      Tipo: 'Cuenta',
-                      Nombre: this.cuentaActiva.nombre,
-                      Numero: null,
-                      DetalleCuenta: this.lstProductosAImprimir,
-                      Total: this.sumaDetalle(this.lstProductosAImprimir)
-                    })}`);
-                    */
                     /*
                     const msgToSocket = JSON.stringify({
                       Tipo: 'Cuenta',
@@ -7209,12 +7210,16 @@
                     });
                     console.log('MENSAJE = ', msgToSocket);
                     */
+                    var totalCuenta = this.sumaDetalle(this.lstProductosAImprimir);
                     this.socket.emit("print:cuenta", "" + JSON.stringify({
                         Tipo: 'Cuenta',
                         Nombre: this.cuentaActiva.nombre,
                         Numero: null,
                         DetalleCuenta: this.lstProductosAImprimir,
-                        Total: this.sumaDetalle(this.lstProductosAImprimir)
+                        Total: totalCuenta,
+                        Empresa: this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar).empresa,
+                        Restaurante: this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar).restaurante,
+                        PropinaSugerida: (totalCuenta * 0.10).toFixed(2)
                     }));
                 };
                 TranComandaComponent.prototype.unirCuentas = function () {
@@ -8548,6 +8553,14 @@
                         }
                     ];
                     return comandasOnLine;
+                };
+                ComandaService.prototype.cerrarMesa = function (idMesa) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/cerrar_mesa/" + idMesa, null, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
                 };
                 ComandaService.prototype.getComandasOnLIne = function () {
                     var httpOptions = {

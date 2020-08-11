@@ -2537,8 +2537,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         if (res.token) {
                             _this.ls.set(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar, {
                                 token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
-                                idusr: +res.idusr, enmovil: _this.esMovil(), acceso: res.acceso,
-                                sede_uuid: res.sede_uuid
+                                idusr: +res.idusr, enmovil: _this.esMovil(), acceso: res.acceso, sede_uuid: res.sede_uuid,
+                                empresa: res.empresa, restaurante: res.restaurante
                             });
                             _this.router.navigate(['/admin/dashboard']);
                         }
@@ -3848,7 +3848,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 return usrLogin;
             }());
             var usrLogInResponse = /** @class */ (function () {
-                function usrLogInResponse(mensaje, token, usrname, nombres, apellidos, sede, idusr, sede_uuid, acceso) {
+                function usrLogInResponse(mensaje, token, usrname, nombres, apellidos, sede, idusr, sede_uuid, acceso, empresa, restaurante) {
                     this.mensaje = mensaje;
                     this.token = token;
                     this.usrname = usrname;
@@ -3858,6 +3858,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     this.idusr = idusr;
                     this.sede_uuid = sede_uuid;
                     this.acceso = acceso;
+                    this.empresa = empresa;
+                    this.restaurante = restaurante;
                 }
                 return usrLogInResponse;
             }());
@@ -5329,8 +5331,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CheckObjectType", function () { return CheckObjectType; });
             /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function () { return MultiFiltro; });
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-            // const urlBase = 'http://localhost/resttouch'; // Desarrollo
-            var urlBase = location.origin; // Producción
+            var urlBase = 'http://localhost/resttouch'; // Desarrollo
+            // const urlBase = location.origin; // Producción
             var GLOBAL = {
                 dbDateFormat: 'YYYY-MM-DD',
                 dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -5500,8 +5502,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
             /* harmony import */ var _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/rpt-fechas/rpt-fechas.component */ "./src/app/shared/components/rpt-fechas/rpt-fechas.component.ts");
             /* harmony import */ var _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/rpt-botones/rpt-botones.component */ "./src/app/shared/components/rpt-botones/rpt-botones.component.ts");
-            // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-            var config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+            var config = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
+            // const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
             var SharedModule = /** @class */ (function () {
                 function SharedModule() {
                 }

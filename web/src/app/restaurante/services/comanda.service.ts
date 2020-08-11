@@ -269,7 +269,7 @@ export class ComandaService {
     return comandasOnLine;
   }
 
-  carrarMesa(idMesa: number): Observable<any> {
+  cerrarMesa(idMesa: number): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken

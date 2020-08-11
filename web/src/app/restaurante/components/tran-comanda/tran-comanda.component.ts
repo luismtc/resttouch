@@ -124,8 +124,8 @@ export class TranComandaComponent implements OnInit {
   }
 
   cerrarMesa = () => {
-    this.comandaSrvc.carrarMesa(this.mesaEnUso.mesa.mesa).subscribe(res => {
-      this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
+    this.comandaSrvc.cerrarMesa(this.mesaEnUso.mesa.mesa).subscribe(res => {
+        this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
     });
   }
 
@@ -346,14 +346,16 @@ export class TranComandaComponent implements OnInit {
     });
     console.log('MENSAJE = ', msgToSocket);
     */
+    const totalCuenta = this.sumaDetalle(this.lstProductosAImprimir);
     this.socket.emit(`print:cuenta`, `${JSON.stringify({
       Tipo: 'Cuenta',
       Nombre: this.cuentaActiva.nombre,
       Numero: null,
       DetalleCuenta: this.lstProductosAImprimir,
-      Total: this.sumaDetalle(this.lstProductosAImprimir),
+      Total: totalCuenta,
       Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
-      Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante
+      Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
+      PropinaSugerida: (totalCuenta * 0.10).toFixed(2)
     })}`);
   }
 
