@@ -42,7 +42,8 @@ interface productoSelected {
 export class TranComandaComponent implements OnInit {
 
   @Input() mesaEnUso: ComandaGetResponse;
-  @Output() mesaSavedEv = new EventEmitter();
+  @Output("actualizar") mesaSavedEv: EventEmitter<any> = new EventEmitter();
+
   public lstProductosSeleccionados: productoSelected[];
   public lstProductosDeCuenta: productoSelected[];
   public lstProductosAImprimir: productoSelected[];
