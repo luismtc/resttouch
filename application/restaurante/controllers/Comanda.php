@@ -335,6 +335,17 @@ class Comanda extends CI_Controller {
 		print_r ($rep);
 		echo "</pre>";
 	}
+
+	public function validapwdgerenteturno() {
+		$res = ["exito" => false];
+		if ($this->input->method() == 'post') {
+			$data = json_decode(file_get_contents('php://input'), true);			
+			$res['esgerente'] = $this->Usuario_model->validaPwdGerenteTurno($data['pwd']);
+			$res['exito'] = true;
+			$res['mensaje'] = 'Datos validados con éxito.';
+		}
+		$this->output->set_content_type('application/json')->set_output(json_encode($res));
+	}
 }
 
 /* End of file Comanda.php */

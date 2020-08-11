@@ -289,4 +289,19 @@ export class ComandaService {
       httpOptions
     ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  validaPwdGerenteTurno(pwd: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/validapwdgerenteturno`,
+      { pwd },
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+
 }

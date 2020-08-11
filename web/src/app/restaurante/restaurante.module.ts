@@ -67,6 +67,7 @@ import { AutoconsultaComponent } from './components/reportes/autoconsulta/autoco
 import { CajacorteComponent } from './components/caja-corte/cajacorte/cajacorte.component';
 import { CajacorteListaComponent } from './components/caja-corte/cajacorte-lista/cajacorte-lista.component';
 import { CajacorteFormComponent } from './components/caja-corte/cajacorte-form/cajacorte-form.component';
+import { ValidaPwdGerenteTurnoComponent } from './components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 
@@ -74,10 +75,13 @@ import { CajacorteFormComponent } from './components/caja-corte/cajacorte-form/c
   declarations: [
     TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent,
     ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent,
-    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent, PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent,FormTurnoTipoComponent,TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent, CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent
+    FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent,
+    PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent, FormTurnoTipoComponent,
+    TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent,
+    CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent
   ],
   entryComponents: [
-    AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent
+    AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent, ValidaPwdGerenteTurnoComponent
   ],
   imports: [
     CommonModule,
