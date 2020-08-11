@@ -20,6 +20,7 @@
           <mat-form-field class="fullWidth">            
             <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
+          <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
           <div align="end">
             <button mat-button color="accent" type="submit">GENERAR</button>
           </div>

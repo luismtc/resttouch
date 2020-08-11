@@ -241,7 +241,8 @@ class Venta extends CI_Controller {
 		
 		$_GET['sede'] = $this->data->sede;
 		$facts = $this->Factura_model->get_facturas($_GET);
-		$datos = [];
+		$datos = $_GET;
+		$datos['propina'] = [];
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);
 			$propina = $fac->getPropina();
@@ -254,12 +255,18 @@ class Venta extends CI_Controller {
 						"porcentaje" => number_format(suma_field($propina, "propina_porcentaje"), 2)
 					]
 				];
-				$datos[] = $dato;
+				$datos['propina'][] = $dato;
 			}
 		}
-		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));
+		$vista = $this->load->view('reporte/venta/propina', $datos, true);
+		
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => sys_get_temp_dir(), //Produccion
+			'format' => 'Legal'
+		]);
+
+		$mpdf->WriteHTML($vista);
+		$mpdf->Output("Propinas.pdf", "D");
 	}
 }
 
