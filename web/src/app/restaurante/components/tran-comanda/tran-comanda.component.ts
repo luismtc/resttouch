@@ -327,17 +327,6 @@ export class TranComandaComponent implements OnInit {
   printCuenta() {
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
     this.setSumaCuenta(this.lstProductosAImprimir);
-    this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
-    // this.showPortalCuenta = true;
-    /*
-    this.signalRSrvc.broadcastData(`restaurante_01`, `${JSON.stringify({
-      Tipo: 'Cuenta', 
-      Nombre: this.cuentaActiva.nombre, 
-      Numero: null, 
-      DetalleCuenta: this.lstProductosAImprimir,
-      Total: this.sumaDetalle(this.lstProductosAImprimir)
-    })}`);
-    */
     /*
     const msgToSocket = JSON.stringify({
       Tipo: 'Cuenta',
@@ -353,7 +342,9 @@ export class TranComandaComponent implements OnInit {
       Nombre: this.cuentaActiva.nombre,
       Numero: null,
       DetalleCuenta: this.lstProductosAImprimir,
-      Total: this.sumaDetalle(this.lstProductosAImprimir)
+      Total: this.sumaDetalle(this.lstProductosAImprimir),
+      Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
+      Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante
     })}`);
   }
 

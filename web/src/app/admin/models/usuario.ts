@@ -15,8 +15,10 @@ export class usrLogInResponse {
         public sede: number,
         public idusr: number,
         public sede_uuid: string,
-        public acceso: any
-    ) { }    
+        public acceso: any,
+        public empresa: any,
+        public restaurante: any
+    ) { }
 }
 
 export class Usuario {
