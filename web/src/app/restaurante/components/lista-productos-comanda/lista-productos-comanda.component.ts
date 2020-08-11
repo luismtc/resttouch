@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 import { Impresora } from '../../../admin/interfaces/impresora';
@@ -10,10 +10,11 @@ import { ComandaService } from '../../services/comanda.service';
 interface productoSelected {
   id: number;
   nombre: string;
-  noCuenta?: number;
+  cuenta?: number;
   cantidad: number;
-  impreso: boolean;
+  impreso: number;
   precio?: number;
+  total?: number;
   notas?: string;
   showInputNotas: boolean;
   itemListHeight: string;
@@ -27,7 +28,7 @@ interface productoSelected {
   templateUrl: './lista-productos-comanda.component.html',
   styleUrls: ['./lista-productos-comanda.component.css']
 })
-export class ListaProductosComandaComponent implements OnInit {
+export class ListaProductosComandaComponent implements OnInit, DoCheck {
 
   @Input() listaProductos: productoSelected[] = [];
   @Input() noCuenta: number = null;
@@ -46,6 +47,10 @@ export class ListaProductosComandaComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+  }
+
+  ngDoCheck() {
+    // console.log('Desde lista productos comanda = ', this.listaProductos);
   }
 
   removeProducto = (p: productoSelected, idx: number) => {

@@ -95,9 +95,9 @@ export class TranComandaComponent implements OnInit {
   llenaProductosSeleccionados = (conQueMesa: ComandaGetResponse = this.mesaEnUso) => {
     this.lstProductosSeleccionados = [];
     for (let i = 0; i < conQueMesa.cuentas.length; i++) {
-      let cta = conQueMesa.cuentas[i];
+      const cta = conQueMesa.cuentas[i];
       for (let j = 0; j < cta.productos.length; j++) {
-        let p = cta.productos[j];
+        const p = cta.productos[j];
         // console.log(p);
         this.lstProductosSeleccionados.push({
           id: +p.articulo.articulo,
@@ -221,10 +221,13 @@ export class TranComandaComponent implements OnInit {
 
   printComanda(toPdf = false) {
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
+    // console.log('Productos a imprimir = ', this.lstProductosAImprimir);
     if (this.lstProductosAImprimir.length > 0) {
       this.lstProductosDeCuenta.map(p => p.impreso = 1);
       this.noComanda = this.mesaEnUso.comanda;
-      this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
+      /*this.windowConfig =
+      { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
+      */
       // this.showPortalComanda = true;
 
       this.cuentaActiva.productos = this.prepProductosComanda(this.lstProductosDeCuenta);
@@ -238,9 +241,12 @@ export class TranComandaComponent implements OnInit {
           comanda: this.mesaEnUso.comanda,
           cuentas: this.mesaEnUso.cuentas
         };
+        // console.log('Comanda a guardar = ', objCmd);
         this.comandaSrvc.save(objCmd).subscribe((res) => {
+          // console.log('Respuesta del save = ', res);
           if (res.exito) {
             this.comandaSrvc.setProductoImpreso(this.cuentaActiva.cuenta).subscribe(resImp => {
+              // console.log('Respuesta de poner impreso = ', resImp);
               this.llenaProductosSeleccionados(resImp.comanda);
               this.setSelectedCuenta(this.cuentaActiva.numero);
               this._snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
@@ -254,7 +260,7 @@ export class TranComandaComponent implements OnInit {
       const AImpresoraNormal: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
       const AImpresoraBT: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
 
-      if(!toPdf){
+      if (!toPdf) {
         if (AImpresoraNormal.length > 0) {
           this.socket.emit('print:comanda', `${JSON.stringify({
             Tipo: 'Comanda',
@@ -264,7 +270,7 @@ export class TranComandaComponent implements OnInit {
             Total: null
           })}`);
         }
-  
+
         if (AImpresoraBT.length > 0) {
           this.printToBT(
             JSON.stringify({
@@ -277,7 +283,7 @@ export class TranComandaComponent implements OnInit {
           );
         }
       } else {
-        this.printComandaPDF();        
+        this.printComandaPDF();
       }
     } else {
       this._snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
@@ -285,16 +291,16 @@ export class TranComandaComponent implements OnInit {
   }
 
   printToBT = (msgToPrint: string = '') => {
-   const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
-   const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-   setTimeout(() => wref.close(), 1000);
+    const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
+    const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+    setTimeout(() => wref.close(), 1000);
   }
 
   printComandaPDF = () => {
     const noCuenta = +this.cuentaActiva.cuenta;
     this.pdfServicio.getComanda(noCuenta).subscribe(res => {
       if (res) {
-        const blob = new Blob([res], { type: 'application/pdf' });        
+        const blob = new Blob([res], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
       } else {

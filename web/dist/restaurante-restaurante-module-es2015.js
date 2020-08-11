@@ -4196,7 +4196,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-list class=\"fullWidth\" [style.height]=\"listHeight\">\n    <mat-list-item *ngFor=\"let p of listaProductos; let i = index;\" [ngClass]=\"{'noImpreso': +p.impreso === 0}\"\n        [style.height]=\"p.itemListHeight\">\n        <div matLine class=\"fullWidth\">\n            <div class=\"row\">\n                <div class=\"col m6 s12\">\n                    <span>{{p.cantidad}}&nbsp;{{p.nombre}}</span>\n                </div>\n                <div class=\"col m6 s12\" align=\"end\">\n                    <!--<span class=\"spacer\"></span>-->\n                    <span>{{(p.cantidad * p.precio) | number: '1.2-2'}}</span>&nbsp;\n                    <eco-fab-speed-dial direction=\"left\" *ngIf=\"!p.impreso\">\n                        <eco-fab-speed-dial-trigger>\n                            <button mat-fab>\n                                <mat-icon style=\"font-size: 18pt !important;\">keyboard_arrow_left</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-trigger>\n                        <eco-fab-speed-dial-actions>\n                            <button mat-mini-fab (click)=\"deleteProductoFromList(i)\" color=\"warn\">\n                                <mat-icon style=\"font-size: 16pt !important;\">delete_forever</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"removeProducto(p, i)\" color=\"warn\">\n                                <mat-icon style=\"font-size: 16pt !important;\">remove_circle</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"toggleShowInputNotas(p)\" color=\"accent\">\n                                <mat-icon style=\"font-size: 16pt !important;\">notes</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-actions>\n                    </eco-fab-speed-dial>\n                </div>\n            </div>\n        </div>\n        <div matLine class=\"fullWidth\">\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && esMovil\">\n                <input matInput placeholder=\"Notas de producto\" [(ngModel)]=\"p.notas\"\n                    (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && !esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Notas de producto\" placeholder=\"Notas de producto\"\n                    [(ngModel)]=\"p.notas\" (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n        </div>\n    </mat-list-item>\n</mat-list>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-list class=\"fullWidth\" [style.height]=\"listHeight\">\n    <mat-list-item *ngFor=\"let p of listaProductos; let i = index;\" [ngClass]=\"{'noImpreso': +p.impreso === 0}\"\n        [style.height]=\"p.itemListHeight\">\n        <div matLine class=\"fullWidth\">\n            <div class=\"row\">\n                <div class=\"col m6 s12\">\n                    <span>{{p.cantidad}}&nbsp;{{p.nombre}}</span>\n                </div>\n                <div class=\"col m6 s12\" align=\"end\">\n                    <!--<span class=\"spacer\"></span>-->\n                    <span>{{(p.cantidad * p.precio) | number: '1.2-2'}}</span>&nbsp;\n                    <eco-fab-speed-dial direction=\"left\" *ngIf=\"+p.impreso === 0\">\n                        <eco-fab-speed-dial-trigger>\n                            <button mat-fab>\n                                <mat-icon style=\"font-size: 18pt !important;\">keyboard_arrow_left</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-trigger>\n                        <eco-fab-speed-dial-actions>\n                            <button mat-mini-fab (click)=\"deleteProductoFromList(i)\" color=\"warn\">\n                                <mat-icon style=\"font-size: 16pt !important;\">delete_forever</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"removeProducto(p, i)\" color=\"warn\">\n                                <mat-icon style=\"font-size: 16pt !important;\">remove_circle</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"toggleShowInputNotas(p)\" color=\"accent\">\n                                <mat-icon style=\"font-size: 16pt !important;\">notes</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-actions>\n                    </eco-fab-speed-dial>\n                </div>\n            </div>\n        </div>\n        <div matLine class=\"fullWidth\">\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && esMovil\">\n                <input matInput placeholder=\"Notas de producto\" [(ngModel)]=\"p.notas\"\n                    (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && !esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Notas de producto\" placeholder=\"Notas de producto\"\n                    [(ngModel)]=\"p.notas\" (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n        </div>\n    </mat-list-item>\n</mat-list>");
 
 /***/ }),
 
@@ -5667,6 +5667,9 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
     }
     ngOnInit() {
         this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).enmovil || false;
+    }
+    ngDoCheck() {
+        // console.log('Desde lista productos comanda = ', this.listaProductos);
     }
     /*
     deleteProductoFromList = (idx: number) => {
@@ -7168,9 +7171,9 @@ let TranComandaComponent = class TranComandaComponent {
         this.llenaProductosSeleccionados = (conQueMesa = this.mesaEnUso) => {
             this.lstProductosSeleccionados = [];
             for (let i = 0; i < conQueMesa.cuentas.length; i++) {
-                let cta = conQueMesa.cuentas[i];
+                const cta = conQueMesa.cuentas[i];
                 for (let j = 0; j < cta.productos.length; j++) {
-                    let p = cta.productos[j];
+                    const p = cta.productos[j];
                     // console.log(p);
                     this.lstProductosSeleccionados.push({
                         id: +p.articulo.articulo,
@@ -7331,10 +7334,13 @@ let TranComandaComponent = class TranComandaComponent {
     }
     printComanda(toPdf = false) {
         this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
+        // console.log('Productos a imprimir = ', this.lstProductosAImprimir);
         if (this.lstProductosAImprimir.length > 0) {
             this.lstProductosDeCuenta.map(p => p.impreso = 1);
             this.noComanda = this.mesaEnUso.comanda;
-            this.windowConfig = { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
+            /*this.windowConfig =
+            { width: 325, height: 550, left: 200, top: 200, menubar: 'no', resizable: 'no', titlebar: 'no', toolbar: 'no' };
+            */
             // this.showPortalComanda = true;
             this.cuentaActiva.productos = this.prepProductosComanda(this.lstProductosDeCuenta);
             const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +this.cuentaActiva.cuenta);
@@ -7347,9 +7353,12 @@ let TranComandaComponent = class TranComandaComponent {
                     comanda: this.mesaEnUso.comanda,
                     cuentas: this.mesaEnUso.cuentas
                 };
+                // console.log('Comanda a guardar = ', objCmd);
                 this.comandaSrvc.save(objCmd).subscribe((res) => {
+                    // console.log('Respuesta del save = ', res);
                     if (res.exito) {
                         this.comandaSrvc.setProductoImpreso(this.cuentaActiva.cuenta).subscribe(resImp => {
+                            // console.log('Respuesta de poner impreso = ', resImp);
                             this.llenaProductosSeleccionados(resImp.comanda);
                             this.setSelectedCuenta(this.cuentaActiva.numero);
                             this._snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });

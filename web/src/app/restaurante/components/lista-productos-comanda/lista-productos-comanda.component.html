@@ -9,7 +9,7 @@
                 <div class="col m6 s12" align="end">
                     <!--<span class="spacer"></span>-->
                     <span>{{(p.cantidad * p.precio) | number: '1.2-2'}}</span>&nbsp;
-                    <eco-fab-speed-dial direction="left" *ngIf="!p.impreso">
+                    <eco-fab-speed-dial direction="left" *ngIf="+p.impreso === 0">
                         <eco-fab-speed-dial-trigger>
                             <button mat-fab>
                                 <mat-icon style="font-size: 18pt !important;">keyboard_arrow_left</mat-icon>
