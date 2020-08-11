@@ -9,8 +9,13 @@ class Usuario extends CI_Controller
         if ($method == "OPTIONS") {
             die();
         }
+
         parent::__construct();
-        $this->load->model(['Usuario_model', 'Catalogo_model']);
+        $this->load->model([
+            'Usuario_model', 
+            'Catalogo_model'
+        ]);
+
         $this->output
         ->set_content_type("application/json", "UTF-8");
     }
@@ -43,7 +48,7 @@ class Usuario extends CI_Controller
             $credenciales['dominio'] = $usr[0];
             $logged = $this->Usuario_model->logIn($credenciales);
             
-            if (!empty($logged['token'])) {            
+            if (!empty($logged['token'])) {
                 $datos = [];
                 $tmp = [];
                 $menu = $this->config->item("menu");
