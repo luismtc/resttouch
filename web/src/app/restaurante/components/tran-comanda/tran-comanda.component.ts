@@ -77,6 +77,7 @@ export class TranComandaComponent implements OnInit {
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
     }
+    // console.log('MESA EN USO = ', this.mesaEnUso);
   }
 
   resetMesaEnUso = () => this.mesaEnUso = {
@@ -200,12 +201,18 @@ export class TranComandaComponent implements OnInit {
     }
   }
 
-  updProductosCuenta(nvaLista: productoSelected[] = []) {
-    const lstTemp: productoSelected[] = this.lstProductosSeleccionados.filter(p => p.cuenta != +this.cuentaActiva.numero);
+  updProductosCuenta(obj: any) {
+    const nvaLista: productoSelected[] = obj.listaProductos || [];
+    const lstTemp: productoSelected[] = this.lstProductosSeleccionados.filter(p => +p.cuenta !== +this.cuentaActiva.numero);
     if (nvaLista.length > 0) {
       this.lstProductosSeleccionados = lstTemp.concat(nvaLista);
     } else {
       this.lstProductosSeleccionados = lstTemp;
+    }
+    if (obj.comanda) {
+      this.mesaEnUso = obj.comanda;
+      this.llenaProductosSeleccionados(this.mesaEnUso);
+      this.setSelectedCuenta(+this.cuentaActiva.numero);
     }
   }
 

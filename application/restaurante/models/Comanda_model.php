@@ -11,6 +11,7 @@ class Comanda_model extends General_Model {
 	public $domicilio = 0;
 	public $comanda_origen;
 	public $comanda_origen_datos;
+	public $mesero;
 
 	public function __construct($id = '')
 	{
@@ -148,9 +149,9 @@ class Comanda_model extends General_Model {
 		return $cuentas;
 	}
 
-	public function getComanda($args = [])
+	public function getTurno()
 	{
-		$tmp = $this->db
+		return $this->db
 		->select("
 		a.comanda,
 		a.usuario,
@@ -162,15 +163,32 @@ class Comanda_model extends General_Model {
 		->join("turno t", "a.turno = t.turno")
 		->get("comanda a")
 		->row();
+	}
 
+	public function getComanda($args = [])
+	{
+		$tmp = $this->getTurno();
 		$mesa = $this->getMesas();
+		
 		if($mesa){
 			$mesa->area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
 			$tmp->mesa = $mesa;			
 		}
+
 		$det = $this->getDetalle($args);
 		$turno = new Turno_model($tmp->turno);
+
 		$tmp->mesero = $turno->getUsuarios(["usuario_tipo" => 1]);
+		$tmp->turno_rol = '';
+
+		if (isset($args["_usuario"])) {
+			foreach ($turno->getUsuarios() as $row) {
+				if ($row->usuario->usuario == $args["_usuario"]) {
+					$tmp->turno_rol = $row->usuario_tipo->descripcion;
+				}
+			}
+		}
+
 		$tmp->total = suma_field($det, 'total');
 		$tmp->cuentas = $this->getCuentas();
 		$tmp->factura = $this->getFactura();

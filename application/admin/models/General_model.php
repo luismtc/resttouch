@@ -111,16 +111,27 @@ class General_model extends CI_Model {
 
 	public function buscar($args = [])
 	{
+		if (isset($args["_like"])) {
+        	foreach ($args["_like"] as $campo => $valor) {
+        		$this->db->like($campo, $valor);
+        	}
+        }
+
+        if (isset($args["_in"])) {
+        	foreach ($args["_in"] as $campo => $valor) {
+        		$this->db->where_in($campo, $valor);
+        	}
+        }
+
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
-				if($key != "_uno"){
+				if (substr($key, 0, 1) != "_") {
 					$this->db->where($key, $row);
 				}
 			}	
 		}
 
-		$tmp = $this->db
-					->get($this->_tabla);
+		$tmp = $this->db->get($this->_tabla);
 
 		if(isset($args['_uno'])) {
 			return $tmp->row();
