@@ -17,13 +17,13 @@ class Cobro extends SoapClient
     public function setVenta($venta)
     {
     	$request = new stdClass();
-    	$request->merchantID = $this->empresa->merchant_id;
+    	$request->merchantID = $this->empresa->visa_merchant_id;
 
 		$request->merchantReferenceCode = uniqid();
 
 		$request->clientLibrary = "PHP";
-	        $request->clientLibraryVersion = phpversion();
-	        $request->clientEnvironment = php_uname();
+		$request->clientLibraryVersion = phpversion();
+		$request->clientEnvironment = php_uname();
 
 		$ccAuthService = new stdClass();
 		$ccAuthService->run = "true";
@@ -48,6 +48,7 @@ class Cobro extends SoapClient
 		$purchaseTotals->currency = "GTQ";
 		$request->purchaseTotals = $purchaseTotals;
 		$request->item = array();
+		
 		foreach ($venta->detall as $key => $row) {
 			$item = new stdClass();
 			$item->unitPrice = $row->precio_unitario;
@@ -62,28 +63,27 @@ class Cobro extends SoapClient
     public function setTestVenta()
     {
     	$request = new stdClass();
-    	$request->merchantID = $this->empresa->merchant_id;
+    	$request->merchantID = $this->empresa->visa_merchant_id;
 
 		$request->merchantReferenceCode = uniqid();
 
 		$request->clientLibrary = "PHP";
-	        $request->clientLibraryVersion = phpversion();
-	        $request->clientEnvironment = php_uname();
+		$request->clientLibraryVersion = phpversion();
+		$request->clientEnvironment = php_uname();
 
 		$ccAuthService = new stdClass();
 		$ccAuthService->run = "true";
 		$request->ccAuthService = $ccAuthService;
 
 		$billTo = new stdClass();
-		$billTo->firstName = "John";
-		$billTo->lastName = "Doe";
-		$billTo->street1 = "1295 Charleston Road";
-		$billTo->city = "Mountain View";
+		$billTo->firstName = "Luis Miguel";
+		$billTo->lastName = "Tziná";
+		$billTo->street1 = "6 avenida 6-68 zona 12";
+		$billTo->city = "Guatemala";
 		$billTo->state = "CA";
-		$billTo->postalCode = "94043";
-		$billTo->country = "US";
-		$billTo->email = "null@cybersource.com";
-		$billTo->ipAddress = "10.7.111.111";
+		$billTo->postalCode = "01012";
+		$billTo->country = "GT";
+		$billTo->email = "lmtzina@gmail.com";
 		$request->billTo = $billTo;
 
 		$card = new stdClass();
@@ -97,45 +97,62 @@ class Cobro extends SoapClient
 		$request->purchaseTotals = $purchaseTotals;
 
 		$item0 = new stdClass();
-		$item0->unitPrice = "12.34";
-		$item0->quantity = "2";
+		$item0->unitPrice = "0.5";
+		$item0->quantity = "1";
 		$item0->id = "0";
 
 		$item1 = new stdClass();
-		$item1->unitPrice = "56.78";
+		$item1->unitPrice = "0.5";
 		$item1->id = "1";
 
 		$request->item = array($item0, $item1);
-		$this->request = $request;
+		return $request;
     }
 
     public function __doRequest($request, $location, $action, $version, $one_way = false)
     {
-    	$user = $this->empresa->merchant_id;
-	    $password = $this->empresa->transaction_key;
+    	#header ("Content-Type:text/xml");
 
-	    $soapHeader = "<SOAP-ENV:Header xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\"><wsse:Security SOAP-ENV:mustUnderstand=\"1\"><wsse:UsernameToken><wsse:Username>{$user}</wsse:Username><wsse:Password Type=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText\">{$password}</wsse:Password></wsse:UsernameToken></wsse:Security></SOAP-ENV:Header>";
+    	$soapHeader = "
+	    <SOAP-ENV:Header 
+	    	xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" 
+	    	xmlns:wsse=\"http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd\"
+	    >
+	    	<wsse:Security SOAP-ENV:mustUnderstand=\"1\">
+	    		<wsse:UsernameToken>
+	    			<wsse:Username>{$this->empresa->visa_merchant_id}</wsse:Username>
+	    			<wsse:Password>{$this->empresa->visa_password}</wsse:Password>
+	    		</wsse:UsernameToken>
+	    	</wsse:Security>
+	    </SOAP-ENV:Header>";
+
+	    #echo "<pre>";
+	    #print_r ($soapHeader);
+	    #echo "</pre>";
+
+	    echo $soapHeader;
+	    #die();
 
 	    $requestDOM = new DOMDocument('1.0');
 	    $soapHeaderDOM = new DOMDocument('1.0');
 
 	    try {
-
 	        $requestDOM->loadXML($request);
 			$soapHeaderDOM->loadXML($soapHeader);
 
 			$node = $requestDOM->importNode($soapHeaderDOM->firstChild, true);
+
 			$requestDOM->firstChild->insertBefore(
-	       	$node, $requestDOM->firstChild->firstChild);
+				$node, 
+				$requestDOM->firstChild->firstChild
+			);
 
 	    	$request = $requestDOM->saveXML();
-	    	return parent::__doRequest($request, $location, $action, $version);
-
 	    } catch (DOMException $e) {
-	         die("hola");
+	         die('Error adding UsernameToken: ' . $e->code);
 	    }
 
-		return false;	    
+		return parent::__doRequest($request, $location, $action, $version);
     }
 
     public function cobrar()
