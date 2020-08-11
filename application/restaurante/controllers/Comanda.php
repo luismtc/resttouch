@@ -52,8 +52,8 @@ class Comanda extends CI_Controller {
 					]);
 					$comanda = new Comanda_model($req['comanda']);
 					$mesa = new Mesa_model($req['mesa']);
-					$req['usuario'] = $usu->usuario;
-					$req['sede'] = $usu->sede;
+					$req['usuario'] = $data->idusuario;
+					$req['sede'] = $data->sede;
 
 					if ($turno) {
 						$req['turno'] = $turno->turno;

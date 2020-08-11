@@ -48,11 +48,7 @@ class Cuenta extends CI_Controller {
 						}			
 
 						if ($exito) {
-							$cta->guardar([
-								"cerrada" => 1,
-								"propina_monto" => $req->propina_monto,
-								"propina_porcentaje" => $req->propina_porcentaje
-							]);
+							$cta->guardar(["cerrada" => 1]);
 							$com = new Comanda_model($cta->comanda);
 							$cuentas = $com->getCuentas();
 							$cerrada = 0;
