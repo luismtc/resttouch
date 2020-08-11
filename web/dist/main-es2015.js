@@ -5862,8 +5862,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MultiFiltro", function() { return MultiFiltro; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 
-const urlBase = 'http://localhost/resttouch'; // Desarrollo
-// const urlBase = location.origin; // Producción
+// const urlBase = 'http://localhost/resttouch'; // Desarrollo
+const urlBase = location.origin; // Producción
 const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -6065,8 +6065,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const config = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
+const config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
 let SharedModule = class SharedModule {
 };
 SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
