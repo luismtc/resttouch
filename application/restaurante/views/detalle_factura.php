@@ -80,6 +80,29 @@
 									<?php echo "0.00" ?>
 								</td>
 							</tr>
+							<?php if (isset($_detalle)): ?>
+								<tr>
+									<td class="text-center" colspan="3"></td>
+									<td class="text-center">Articulo</td>
+									<td class="text-center">Cantidad</td>
+									<td class="text-center">Total</td>
+									<td class="text-center"></td>
+									<td class="text-center">Descuento</td>
+								</tr>
+								<?php foreach ($row->getDetalle() as $det): ?>
+									<tr>
+										<td colspan="3"></td>
+										<td><?php echo $det->articulo->descripcion ?></td>
+										<td><?php echo $det->cantidad ?></td>
+										<td class="text-right">
+											<?php echo number_format($det->total,2) ?></td>
+										<td></td>
+										<td class="text-right">
+											<?php echo number_format($det->descuento,2) ?>
+										</td>
+									</tr>
+								<?php endforeach ?>
+							<?php endif ?>
 						<?php endforeach ?>
 					</tbody>
 					<tfoot>

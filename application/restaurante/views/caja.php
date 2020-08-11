@@ -98,5 +98,35 @@
 			</div>
 		</div>
 	</div>
+
+	<?php if (isset($detalle)): ?>
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table table-bordered">
+					<?php foreach ($detalle as $key => $row): ?>
+						<tr>
+							<th colspan="3"><?php echo $key ?></th>
+						</tr>
+						<tr>
+							<td>Factura</td>
+							<td>Fecha</td>
+							<td>Monto</td>
+						</tr>
+						<?php foreach ($row as $det): ?>
+							<tr>
+								<td><?php echo $det->numero_factura ?></td>
+								<td><?php echo formatoFecha($det->fecha_factura, 2) ?></td>
+								<td><?php echo number_format($det->monto, 2) ?></td>
+							</tr>
+						<?php endforeach ?>
+						<tr>
+							<td colspan="3"><p><br></p></td>
+						</tr>
+					<?php endforeach ?>
+				</table>
+			</div>
+		</div>		
+	<?php endif ?>
+
 </body>
 </html>

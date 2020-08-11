@@ -46,6 +46,14 @@ class Reporte extends CI_Controller {
 
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
 
+		if (isset($_GET['_detalle'])) {
+			$det = $this->Reporte_model->getDetalleCaja($_GET);
+			$data['detalle'] = [];
+			foreach ($det as $row) {
+				$data['detalle'][$row->descripcion][] = $row;
+			}
+		}
+		
 		if ($this->input->get('turno_tipo')) {
 			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
 		}

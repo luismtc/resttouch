@@ -15,7 +15,7 @@ class Reporte_model extends CI_Model {
 		}
 
 		return $this->db
-		->select("'Propina' as descripcion, sum( distinct g.propina_monto) as monto")
+		->select("'Propina' as descripcion, sum(g.propina_monto) as monto")
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
 		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
@@ -48,7 +48,7 @@ class Reporte_model extends CI_Model {
 		}
 
 		return $this->db
-		->select("f.descripcion, sum( distinct a.monto) as monto")					
+		->select("f.descripcion, sum(a.monto) as monto")					
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
 		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
@@ -82,6 +82,42 @@ class Reporte_model extends CI_Model {
 				 	->where("b.sede", $args['sede'])
 					->get("comanda a")
 					->row();	
+	}
+
+	public function getDetalleCaja($args = [])
+	{
+		if (isset($args['turno_tipo'])) {
+			$this->db->where('i.turno_tipo', $args['turno_tipo']);
+		}
+
+		if (isset($args['facturadas'])) {
+			$this->db->where('e.numero_factura is not null');
+			$this->db->where("e.fel_uuid_anulacion is null");
+		}
+
+		return $this->db
+		->select("
+			f.descripcion, 
+			a.monto, 
+			e.factura,
+			e.numero_factura,
+			e.fecha_factura")	
+		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
+		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
+		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
+		->join("factura e", "d.factura = e.factura")
+		->join("forma_pago f", "a.forma_pago = f.forma_pago")
+		->join("cuenta g", "g.cuenta = b.cuenta_cuenta")
+		->join("comanda h", "h.comanda = g.comanda")
+		->join("turno i", "i.turno = h.turno")
+		->where("e.sede", $args['sede'])
+		->where("e.fecha_factura >=", $args['fdel'])
+	 	->where("e.fecha_factura <=", $args['fal'])
+	 	->where("e.fel_uuid_anulacion is null")
+		->group_by("a.forma_pago")
+		->group_by("e.factura")
+		->get("cuenta_forma_pago a")
+		->result();
 	}
 
 	public function getTablas($args = [])
