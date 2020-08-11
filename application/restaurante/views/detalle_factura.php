@@ -43,24 +43,50 @@
 						</tr>
 					</thead>
 					<tbody>
+						<?php 
+							$totalFactura = 0;
+							$totalPropina = 0;
+						?>
 						<?php foreach ($facturas as $row): ?>
 							<tr>
-								<td style="padding: 5px;"><?php echo $row->numero_factura ?></td>
-								<td style="padding: 5px;" class="text-center"><?php echo isset($row->mesa->mesa) ? $row->mesa->mesa : '' ?></td>
+								<td style="padding: 5px;">
+									<?php echo $row->numero_factura ?>
+								</td>
+								<td style="padding: 5px;" class="text-center">
+									<?php echo isset($row->mesa->mesa) ? $row->mesa->mesa : '' ?>
+								</td>
 								<td style="padding: 5px;"><?php echo formatoFecha($row->fecha_factura,2) ?></td>
-								<td style="padding: 5px;"><?php echo $row->receptor->nit ?></td>
-								<td style="padding: 5px;"><?php echo $row->receptor->nombre ?></td>
-								<td style="padding: 5px;" class="text-right"><?php echo $row->total ?></td>
-								<td style="padding: 5px;" class="text-right"><?php echo $row->propina ?></td>
-								<td style="padding: 5px;" class="text-right"><?php echo "0.00" ?></td>
+								<td style="padding: 5px;">
+									<?php echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nit : '') ?>
+								</td>
+								<td style="padding: 5px;">
+									<?php echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA') ?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo (empty($row->fel_uuid_anulacion) ? number_format($row->total, 2) : 0) ?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php 
+										if (empty($row->fel_uuid_anulacion)) {
+											echo number_format($row->propina, 2);
+											$totalFactura += $row->total;
+											$totalPropina += $row->propina;
+										} else {
+											echo 0;
+										}
+									?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo "0.00" ?>
+								</td>
 							</tr>
 						<?php endforeach ?>
 					</tbody>
 					<tfoot>
 						<tr>
 							<td colspan="5" style="padding: 5px;" class="text-right">Total:</td>
-							<td style="padding: 5px;" class="text-right"><?php echo number_format(suma_field($facturas, "total"),2) ?></td>
-							<td style="padding: 5px;" class="text-right"><?php echo number_format(suma_field($facturas, "propina"),2) ?></td>
+							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
+							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
 							<td style="padding: 5px;" class="text-right">0.00</td>
 						</tr>
 					</tfoot>

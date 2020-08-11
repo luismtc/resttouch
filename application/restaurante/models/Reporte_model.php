@@ -3,34 +3,67 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Reporte_model extends CI_Model {
 
+	public function get_propinas($args=[])
+	{
+		if (isset($args['turno_tipo'])) {
+			$this->db->where('i.turno_tipo', $args['turno_tipo']);
+		}
+
+		if (isset($args['facturadas'])) {
+			$this->db->where('e.numero_factura is not null');
+			$this->db->where("e.fel_uuid_anulacion is null");
+		}
+
+		return $this->db
+		->select("'Propina' as descripcion, sum( distinct g.propina_monto) as monto")
+		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
+		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
+		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
+		->join("factura e", "d.factura = e.factura")
+		->join("forma_pago f", "a.forma_pago = f.forma_pago")
+		->join("cuenta g", "g.cuenta = b.cuenta_cuenta")
+		->join("comanda h", "h.comanda = g.comanda")
+		->join("turno i", "i.turno = h.turno")
+		->where("e.sede", $args['sede'])
+		->where("e.fecha_factura >=", $args['fdel'])
+	 	->where("e.fecha_factura <=", $args['fal'])
+	 	->where("e.fel_uuid_anulacion is null")
+		->get("cuenta_forma_pago a")
+		->row();
+	}
+
 	public function get_ingresos($args = [])
 	{
 		if (isset($args['turno_tipo'])) {
 			$this->db->where('i.turno_tipo', $args['turno_tipo']);
 		}
 
-		$tmp = $this->db
-					->select("f.*, sum(a.monto) as monto")					
-					->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
-					->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
-					->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
-					->join("factura e", "d.factura = e.factura")
-					->join("forma_pago f", "a.forma_pago = f.forma_pago")
-					->join("cuenta g", "g.cuenta = b.cuenta_cuenta")
-					->join("comanda h", "h.comanda = g.comanda")
-					->join("turno i", "i.turno = h.turno")
-					->where("e.sede", $args['sede'])
-					->where("e.fecha_factura >=", $args['fdel'])
-				 	->where("e.fecha_factura <=", $args['fal'])
-				 	->where("e.fel_uuid_anulacion is null")
-					->group_by("a.forma_pago")
-					->get("cuenta_forma_pago a");
-
-		if ($tmp && $tmp->num_rows() > 0) {
-			return $tmp->result();
+		if (isset($args['descuento'])) {
+			$this->db->where('f.descuento', $args['descuento']);
 		}
 
-		return [];
+		if (isset($args['facturadas'])) {
+			$this->db->where('e.numero_factura is not null');
+			$this->db->where("e.fel_uuid_anulacion is null");
+		}
+
+		return $this->db
+		->select("f.descripcion, sum( distinct a.monto) as monto")					
+		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
+		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
+		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
+		->join("factura e", "d.factura = e.factura")
+		->join("forma_pago f", "a.forma_pago = f.forma_pago")
+		->join("cuenta g", "g.cuenta = b.cuenta_cuenta")
+		->join("comanda h", "h.comanda = g.comanda")
+		->join("turno i", "i.turno = h.turno")
+		->where("e.sede", $args['sede'])
+		->where("e.fecha_factura >=", $args['fdel'])
+	 	->where("e.fecha_factura <=", $args['fal'])
+	 	->where("e.fel_uuid_anulacion is null")
+		->group_by("a.forma_pago")
+		->get("cuenta_forma_pago a")
+		->result();
 	}	
 
 	public function getRangoComandas($args)

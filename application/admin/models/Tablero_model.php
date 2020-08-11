@@ -40,6 +40,7 @@ class Tablero_model extends General_model {
 		->join("turno j", "j.turno = i.turno", "left")
 		->join("turno_tipo k", "k.turno_tipo = j.turno_tipo", "left")
 		->where("b.fel_uuid is not null")
+		->where("b.fel_uuid_anulacion is null")
 		->get()
 		->result();
 	}

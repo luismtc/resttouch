@@ -17,7 +17,8 @@ class Reporte extends CI_Controller {
 			'Area_model',
 			'Dcomanda_model',
 			'Cuenta_model',
-			'Usuario_model'
+			'Usuario_model',
+			'TurnoTipo_model'
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -31,9 +32,24 @@ class Reporte extends CI_Controller {
 	public function caja()
 	{
 		$_GET['sede'] = $this->data->sede;
+		$_GET["_facturadas"] = true;
+
 		$data = $_GET;
+		
+		$_GET["descuento"] = 0;
 		$data['ingresos'] = $this->Reporte_model->get_ingresos($_GET);
+		
+		$_GET["descuento"] = 1;
+		$data['descuentos'] = $this->Reporte_model->get_ingresos($_GET);
+
+		$data['propinas'] = $this->Reporte_model->get_propinas($_GET);
+
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
+
+		if ($this->input->get('turno_tipo')) {
+			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
+		}
+
 		$mpdf = new \Mpdf\Mpdf([
 			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
@@ -45,7 +61,10 @@ class Reporte extends CI_Controller {
 	public function factura()
 	{
 		$_GET['sede'] = $this->data->sede;
+		$_GET["_facturadas"] = true;
+
 		$facts = $this->Factura_model->get_facturas($_GET);
+		
 		$data = $_GET;
 		$mpdf = new \Mpdf\Mpdf([
 			'tempDir' => sys_get_temp_dir(),

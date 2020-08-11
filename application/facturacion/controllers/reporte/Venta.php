@@ -11,7 +11,8 @@ class Venta extends CI_Controller {
 			'Dfactura_model',
 			'Articulo_model',
 			'Categoria_model',
-			'Catalogo_model'
+			'Catalogo_model',
+			'TurnoTipo_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
@@ -25,6 +26,7 @@ class Venta extends CI_Controller {
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
 		$req['sede'] = $this->data->sede;
+		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 
 		$datos = [];
@@ -81,6 +83,7 @@ class Venta extends CI_Controller {
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
 		$req['sede'] = $this->data->sede;
+		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 
 		$datos = [];
@@ -125,6 +128,11 @@ class Venta extends CI_Controller {
 		}
 		
 		$data = ["detalle" => $datos];
+
+		if ($this->input->get('turno_tipo')) {
+			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
+		}
+
 		$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([
@@ -144,6 +152,7 @@ class Venta extends CI_Controller {
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
 		$req['sede'] = $data->sede;
+		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 
 		$datos = [];
@@ -182,6 +191,8 @@ class Venta extends CI_Controller {
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
 		$req['sede'] = $data->sede;
+
+		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 
 		$datos = [];
@@ -208,6 +219,11 @@ class Venta extends CI_Controller {
 
 		
 		$data = ["detalle" => $datos];
+
+		if ($this->input->get('turno_tipo')) {
+			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
+		}
+		
 		$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([

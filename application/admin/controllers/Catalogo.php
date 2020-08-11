@@ -153,7 +153,12 @@ class Catalogo extends CI_Controller {
 		]);
 		if ($tmp) {
 			$turno = new Turno_model($tmp->turno);
-			$datos = $turno->getUsuarios(["usuario_tipo" => 1]);
+
+			foreach ($turno->getUsuarios() as $key => $value) {
+				if ($value->usuario_tipo->descripcion == 'Mesero') {
+					$datos[] = $value;
+				}
+			}
 		}
 
 		$this->output

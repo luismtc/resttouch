@@ -11,6 +11,9 @@
 	<div class="row">
 		<div class="col-sm-12 text-center">
 			<h3>Reporte de ventas</h3>
+			<?php if (isset($turno)): ?>
+				<h4>Turno: <?php echo $turno->descripcion ?> </h4>
+			<?php endif ?>
 			<span>Por Articulo</span>
 		</div>
 	</div>
@@ -39,15 +42,24 @@
 						<?php foreach ($detalle as $det): ?>
 							<?php $total+=$det['total'] ?>
 							<tr>
-								<td style="padding: 5px;" ><?php echo $det['articulo']->descripcion ?></td>
-								<td style="padding: 5px;" class="text-right"><?php echo $det['cantidad'] ?></td>
-								<td style="padding: 5px;" class="text-right"><?php echo number_format($det['total'], 2) ?></td>
+								<td style="padding: 5px;" >
+									<?php echo $det['articulo']->descripcion ?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo $det['cantidad'] ?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($det['total'], 2) ?>
+								</td>
 							</tr>
 						<?php endforeach ?>
 						<tr>
-							<td style="padding: 5px;" colspan="2" class="text-right"><b>Total</b></td>
-							<td style="padding: 5px;" class="text-right"><?php echo number_format($total, 2
-								) ?></td>
+							<td style="padding: 5px;" colspan="2" class="text-right">
+								<b>Total</b>
+							</td>
+							<td style="padding: 5px;" class="text-right">
+								<?php echo number_format($total, 2) ?>
+							</td>
 						</tr>
 					</tbody>
 				</table>

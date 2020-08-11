@@ -644,7 +644,15 @@ class Factura_model extends General_model {
 
 	public function get_facturas($args = [])
 	{
-		$this->db->where("fel_uuid_anulacion is null");
+		if (isset($args["_facturadas"])) {
+			$this->db->where("a.numero_factura is not null");
+		}
+
+		if (isset($args["_vivas"])) {
+			$this->db
+			->where("a.numero_factura is not null")
+			->where("a.fel_uuid_anulacion is null");
+		}
 
 		if (isset($args['fdel']) && isset($args['fal'])) {
 			$this->db
@@ -666,7 +674,7 @@ class Factura_model extends General_model {
 
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
-				if($key != "_uno"){
+				if(substr($key, 0, 1) != "_"){
 					$this->db->where("a.{$key}", $row);
 				}
 			}	

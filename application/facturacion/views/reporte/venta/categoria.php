@@ -11,6 +11,9 @@
 	<div class="row">
 		<div class="col-sm-12 text-center">
 			<h3>Reporte de ventas</h3>
+			<?php if (isset($turno)): ?>
+				<h4>Turno: <?php echo $turno->descripcion ?> </h4>
+			<?php endif ?>
 			<span>Por Categoria</span>
 		</div>
 	</div>
@@ -36,6 +39,9 @@
 							<th style="padding: 5px;" class="text-center">Total</th>
 						</tr>
 					</thead>
+
+					<?php $granTotal = 0; ?>
+
 					<tbody>
 						<?php foreach ($detalle as $det): ?>
 							<tr>
@@ -63,17 +69,31 @@
 											<td style="padding: 5px;" class="text-right"><?php echo $row->precio_unitario ?></td>
 											<td style="padding: 5px;" class="text-right"><?php echo number_format($row->total, 2) ?></td>
 										</tr>	
-										<?php $total += $row->total ?>	
+										<?php 
+											$total += $row->total;
+											$granTotal += $row->total;
+										?>	
 									<?php endforeach ?>
 									<tr>
 										<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoria</b></td>
-										<td style="padding: 5px;" class="text-right"><?php echo number_format($total, 2) ?></td>
+										<td style="padding: 5px;" class="text-right">
+											<?php echo number_format($total, 2) ?>
+										</td>
 									</tr>
 								<?php endif ?>
-									
 							<?php endforeach ?>
 						<?php endforeach ?>
 					</tbody>
+					<tfoot>
+						<tr>
+							<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+								<h4>TOTAL</h4>
+							</td>
+							<td style="padding: 5px;" class="text-right">
+								<?php echo number_format($granTotal, 2) ?>
+							</td>
+						</tr>
+					</tfoot>
 				</table>
 			</div>
 		</div>
