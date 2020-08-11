@@ -58,7 +58,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       numero: null, posx: null, posy: null, tamanio: null, estatus: null
     },
     cuentas: []
-  };
+  }
 
   loadAreas = () => {
     this.areaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res) => {
@@ -117,8 +117,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     };
 
     const abrirMesaRef = this.dialog.open(AbrirMesaComponent, {
-      width: '50%',      
-      height : 'auto',
+      width: '50%',
+      height: 'auto',
       disableClose: true,
       data: this.mesaSeleccionadaToOpen
     });
@@ -188,6 +188,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
             };
           }
         }
+        console.log('MESA SELECTED = ', this.mesaSeleccionada);
         this.checkEstatusMesa();
         if (shouldToggle) {
           this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);

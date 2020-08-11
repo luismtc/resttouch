@@ -40,7 +40,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   public detalleComanda: DetalleComanda;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private comandaSrvc: ComandaService
   ) { }
@@ -56,7 +56,9 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   removeProducto = (p: productoSelected, idx: number) => {
 
     this.detalleComanda = {
-      detalle_cuenta: p.detalle_cuenta, detalle_comanda: p.detalle_comanda, articulo: p.id,
+      detalle_cuenta: p.detalle_cuenta,
+      detalle_comanda: p.detalle_comanda,
+      articulo: p.id,
       cantidad: +p.cantidad > 1 ? (+p.cantidad) - 1 : 0,
       precio: +p.precio,
       total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
@@ -66,19 +68,24 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     this.comandaSrvc.saveDetalle(this.IdComanda, this.IdCuenta, this.detalleComanda).subscribe(res => {
       if (res.exito) {
         p.cantidad = this.detalleComanda.cantidad;
-        this.productoRemovedEv.emit(this.listaProductos);
+        this.productoRemovedEv.emit({listaProductos: this.listaProductos, comanda: res.comanda});
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
       }
     });
   }
 
-  /*
-  deleteProductoFromList = (idx: number) => {
-    this.listaProductos.splice(idx, 1);
-    this.productoRemovedEv.emit(this.listaProductos);
+  deleteProductoFromList = (p: productoSelected, idx: number) => {
+    // this.listaProductos.splice(idx, 1);
+    // this.productoRemovedEv.emit(this.listaProductos);
+    p.cantidad = 0;
+    p.notas = '';
+    this.removeProducto(p, idx);
   }
-  */
+
+  deleteProductoFromListAfterPrinted = (p: productoSelected, idx: number) => {
+
+  }
 
   toggleShowInputNotas(p: productoSelected) {
     p.showInputNotas = !p.showInputNotas;
