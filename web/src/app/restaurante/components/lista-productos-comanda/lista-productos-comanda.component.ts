@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 import { Impresora } from '../../../admin/interfaces/impresora';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ValidaPwdGerenteTurnoComponent } from '../valida-pwd-gerente-turno/valida-pwd-gerente-turno.component';
 
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { ComandaService } from '../../services/comanda.service';
@@ -42,7 +44,8 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   constructor(
     private snackBar: MatSnackBar,
     private ls: LocalstorageService,
-    private comandaSrvc: ComandaService
+    private comandaSrvc: ComandaService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -76,15 +79,25 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   }
 
   deleteProductoFromList = (p: productoSelected, idx: number) => {
-    // this.listaProductos.splice(idx, 1);
-    // this.productoRemovedEv.emit(this.listaProductos);
     p.cantidad = 0;
     p.notas = '';
     this.removeProducto(p, idx);
   }
 
   deleteProductoFromListAfterPrinted = (p: productoSelected, idx: number) => {
+    const dialogoRef = this.dialog.open(ValidaPwdGerenteTurnoComponent, {
+      width: '20%', disableClose: true
+    });
 
+    dialogoRef.afterClosed().subscribe(res => {
+      // console.log(res);
+      if (res) {
+        this.deleteProductoFromList(p, idx);
+        this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
+      } else {
+        this.snackBar.open('La contraseña no es correcta', 'Comanda', { duration: 5000 });
+      }
+    });
   }
 
   toggleShowInputNotas(p: productoSelected) {

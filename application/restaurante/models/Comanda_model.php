@@ -178,13 +178,18 @@ class Comanda_model extends General_Model {
 		$det = $this->getDetalle($args);
 		$turno = new Turno_model($tmp->turno);
 
-		$tmp->mesero = $turno->getUsuarios(["usuario_tipo" => 1]);
-		$tmp->turno_rol = '';
+		$tmpMesero = new Usuario_model($this->mesero);
+		$tmp->mesero = [
+			"nombres" => $tmpMesero->nombres,
+			"apellidos" => $tmpMesero->apellidos
+		];
+
+		$tmp->turno_rol = [];
 
 		if (isset($args["_usuario"])) {
 			foreach ($turno->getUsuarios() as $row) {
 				if ($row->usuario->usuario == $args["_usuario"]) {
-					$tmp->turno_rol = $row->usuario_tipo->descripcion;
+					$tmp->turno_rol[] = $row->usuario_tipo->descripcion;
 				}
 			}
 		}

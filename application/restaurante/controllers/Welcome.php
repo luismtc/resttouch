@@ -22,4 +22,31 @@ class Welcome extends CI_Controller {
 	{
 		$this->load->view('welcome_message');
 	}
+
+	public function cobro()
+	{
+		$this->load->library('Cobro');
+		/*$empresa = $this->Catalogo_model->getEmpresa([
+			"empresa" => 1,
+			"_uno" => true
+		]);*/
+
+		$empresa = new stdClass();
+		$empresa->visa_merchant_id = "visanetgt_antiguabrewing";
+        
+        $empresa->visa_transaction_key = "Visa2020";
+        $empresa->visa_user = 'aponce';
+
+        $empresa->visa_password = 'e76205c04da226f7ed8a52c33abd5759ccb1cab8';
+
+		$cobro = new Cobro($empresa);
+		
+		# $cobro->setTestVenta();
+		$rep = $cobro->runTransaction($cobro->setTestVenta());
+		# $rep = $cobro->cobrar();
+
+		echo "<pre>";
+		print_r ($rep);
+		echo "</pre>";
+	}
 }

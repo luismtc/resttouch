@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Contraseña del gerente de turno</h1>
+<mat-dialog-content>
+    <form #frmValidarPwdGerenteTurno="ngForm" (ngSubmit)="frmValidarPwdGerenteTurno.form.valid" novalidate>
+        <mat-form-field class="fullWidth">
+            <input type="password" matInput placeholder="Contraseña del gerente de turno" name="pwd" [(ngModel)]="data.pwd" required>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cancelar()" color="secondary" class="btnAccion">
+        Cancelar
+    </button>
+    <button mat-raised-button (click)="terminar()" [disabled]="!frmValidarPwdGerenteTurno.form.valid" color="accent">
+        Eliminar producto
+    </button>
+</mat-dialog-actions>

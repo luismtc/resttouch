@@ -22,6 +22,26 @@ class Usuario_model extends General_model
         }
     }
 
+    function validaPwdGerenteTurno($pwd = null) {
+        if($pwd){
+            $dbusr = $this->db
+                ->select("c.contrasenia")
+                ->from("turno_has_usuario a")
+                ->join("usuario_tipo b", "b.usuario_tipo = a.usuario_tipo")
+                ->join("usuario c", "c.usuario = a.usuario")                 
+                ->where("TRIM(LOWER(b.descripcion)) = 'gerente'")
+                ->get()
+                ->row();
+
+            if(isset($dbusr)) {
+                if (password_verify($pwd, $dbusr->contrasenia)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     function logIn($credenciales = null)
     {
         if ($credenciales) {

@@ -4486,6 +4486,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.html":
+/*!***********************************************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.html ***!
+  \***********************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>Contraseña del gerente de turno</h1>\n<mat-dialog-content>\n    <form #frmValidarPwdGerenteTurno=\"ngForm\" (ngSubmit)=\"frmValidarPwdGerenteTurno.form.valid\" novalidate>\n        <mat-form-field class=\"fullWidth\">\n            <input type=\"password\" matInput placeholder=\"Contraseña del gerente de turno\" name=\"pwd\" [(ngModel)]=\"data.pwd\" required>\n        </mat-form-field>\n    </form>\n</mat-dialog-content>\n<mat-dialog-actions align=\"end\">\n    <button mat-raised-button (click)=\"cancelar()\" color=\"secondary\" class=\"btnAccion\">\n        Cancelar\n    </button>\n    <button mat-raised-button (click)=\"terminar()\" [disabled]=\"!frmValidarPwdGerenteTurno.form.valid\" color=\"accent\">\n        Eliminar producto\n    </button>\n</mat-dialog-actions>");
+
+/***/ }),
+
 /***/ "./src/app/admin/services/usuario-tipo.service.ts":
 /*!********************************************************!*\
   !*** ./src/app/admin/services/usuario-tipo.service.ts ***!
@@ -5624,10 +5637,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListaProductosComandaComponent", function() { return ListaProductosComandaComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
-/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
-/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../valida-pwd-gerente-turno/valida-pwd-gerente-turno.component */ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.ts");
+/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+
+
 
 
 
@@ -5635,10 +5652,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ListaProductosComandaComponent = class ListaProductosComandaComponent {
-    constructor(snackBar, ls, comandaSrvc) {
+    constructor(snackBar, ls, comandaSrvc, dialog) {
         this.snackBar = snackBar;
         this.ls = ls;
         this.comandaSrvc = comandaSrvc;
+        this.dialog = dialog;
         this.listaProductos = [];
         this.noCuenta = null;
         this.listHeight = '450px';
@@ -5667,17 +5685,28 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
             });
         };
         this.deleteProductoFromList = (p, idx) => {
-            // this.listaProductos.splice(idx, 1);
-            // this.productoRemovedEv.emit(this.listaProductos);
             p.cantidad = 0;
             p.notas = '';
             this.removeProducto(p, idx);
         };
         this.deleteProductoFromListAfterPrinted = (p, idx) => {
+            const dialogoRef = this.dialog.open(_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_6__["ValidaPwdGerenteTurnoComponent"], {
+                width: '20%', disableClose: true
+            });
+            dialogoRef.afterClosed().subscribe(res => {
+                // console.log(res);
+                if (res) {
+                    this.deleteProductoFromList(p, idx);
+                    this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
+                }
+                else {
+                    this.snackBar.open('La contraseña no es correcta', 'Comanda', { duration: 5000 });
+                }
+            });
         };
     }
     ngOnInit() {
-        this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).enmovil || false;
+        this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).enmovil || false;
     }
     ngDoCheck() {
         // console.log('Desde lista productos comanda = ', this.listaProductos);
@@ -5696,9 +5725,10 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
     }
 };
 ListaProductosComandaComponent.ctorParameters = () => [
-    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__["MatSnackBar"] },
-    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_2__["LocalstorageService"] },
-    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_5__["ComandaService"] }
+    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_5__["MatSnackBar"] },
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__["LocalstorageService"] },
+    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_7__["ComandaService"] },
+    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
@@ -6983,7 +7013,7 @@ let TranAreasComponent = class TranAreasComponent {
                             };
                         }
                     }
-                    console.log('MESA SELECTED = ', this.mesaSeleccionada);
+                    // console.log('MESA SELECTED = ', this.mesaSeleccionada);
                     this.checkEstatusMesa();
                     if (shouldToggle) {
                         var cuentas = this.mesaSeleccionada.cuentas;
@@ -8184,6 +8214,74 @@ UnirCuentaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.css":
+/*!********************************************************************************************************!*\
+  !*** ./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.css ***!
+  \********************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Jlc3RhdXJhbnRlL2NvbXBvbmVudHMvdmFsaWRhLXB3ZC1nZXJlbnRlLXR1cm5vL3ZhbGlkYS1wd2QtZ2VyZW50ZS10dXJuby5jb21wb25lbnQuY3NzIn0= */");
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.ts":
+/*!*******************************************************************************************************!*\
+  !*** ./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.ts ***!
+  \*******************************************************************************************************/
+/*! exports provided: ValidaPwdGerenteTurnoComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ValidaPwdGerenteTurnoComponent", function() { return ValidaPwdGerenteTurnoComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+
+
+
+
+let ValidaPwdGerenteTurnoComponent = class ValidaPwdGerenteTurnoComponent {
+    constructor(dialogRef, comandaSrvc) {
+        this.dialogRef = dialogRef;
+        this.comandaSrvc = comandaSrvc;
+        this.data = { pwd: undefined };
+        this.cancelar = () => this.dialogRef.close();
+        this.terminar = () => {
+            this.comandaSrvc.validaPwdGerenteTurno(this.data.pwd).subscribe(res => {
+                // console.log(res);
+                if (res.exito) {
+                    this.dialogRef.close(res.esgerente);
+                }
+                else {
+                    this.dialogRef.close(false);
+                }
+            });
+        };
+    }
+    ngOnInit() {
+    }
+};
+ValidaPwdGerenteTurnoComponent.ctorParameters = () => [
+    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
+    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_3__["ComandaService"] }
+];
+ValidaPwdGerenteTurnoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-valida-pwd-gerente-turno',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./valida-pwd-gerente-turno.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./valida-pwd-gerente-turno.component.css */ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.css")).default]
+    })
+], ValidaPwdGerenteTurnoComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/app/restaurante/restaurante-routing.module.ts":
 /*!***********************************************************!*\
   !*** ./src/app/restaurante/restaurante-routing.module.ts ***!
@@ -8333,6 +8431,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/caja-corte/cajacorte/cajacorte.component */ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts");
 /* harmony import */ var _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-lista/cajacorte-lista.component */ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.ts");
 /* harmony import */ var _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-form/cajacorte-form.component */ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.ts");
+/* harmony import */ var _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component */ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.ts");
 
 
 
@@ -8399,6 +8498,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
 let RestauranteModule = class RestauranteModule {
 };
@@ -8407,10 +8507,13 @@ RestauranteModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         declarations: [
             _components_tran_areas_tran_areas_component__WEBPACK_IMPORTED_MODULE_33__["TranAreasComponent"], _components_mesa_mesa_component__WEBPACK_IMPORTED_MODULE_34__["MesaComponent"], _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_tran_comanda_tran_comanda_component__WEBPACK_IMPORTED_MODULE_36__["TranComandaComponent"], _components_lista_productos_comanda_lista_productos_comanda_component__WEBPACK_IMPORTED_MODULE_37__["ListaProductosComandaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"],
             _components_area_lista_area_lista_area_component__WEBPACK_IMPORTED_MODULE_39__["ListaAreaComponent"], _components_area_form_area_form_area_component__WEBPACK_IMPORTED_MODULE_40__["FormAreaComponent"], _components_area_area_area_component__WEBPACK_IMPORTED_MODULE_41__["AreaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_turno_turno_turno_component__WEBPACK_IMPORTED_MODULE_43__["TurnoComponent"], _components_turno_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_44__["ListaTurnoComponent"],
-            _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_45__["FormTurnoComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_47__["RptVentasComponent"], _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_48__["PorCategoriaComponent"], _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_49__["PorArticuloComponent"], _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_50__["TurnosComponent"], _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_51__["PropinasComponent"], _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_52__["ComandaEnLineaComponent"], _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_53__["CajaComponent"], _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_54__["FacturaComponent"], _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_55__["ListaTurnoTipoComponent"], _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_56__["FormTurnoTipoComponent"], _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_57__["TurnoTipoComponent"], _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_58__["PropinaComponent"], _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__["FormPropinaComponent"], _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__["ListaPropinaComponent"], _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__["AutoconsultaComponent"], _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__["CajacorteComponent"], _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__["CajacorteListaComponent"], _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__["CajacorteFormComponent"]
+            _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_45__["FormTurnoComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_47__["RptVentasComponent"], _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_48__["PorCategoriaComponent"], _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_49__["PorArticuloComponent"], _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_50__["TurnosComponent"],
+            _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_51__["PropinasComponent"], _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_52__["ComandaEnLineaComponent"], _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_53__["CajaComponent"], _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_54__["FacturaComponent"], _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_55__["ListaTurnoTipoComponent"], _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_56__["FormTurnoTipoComponent"],
+            _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_57__["TurnoTipoComponent"], _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_58__["PropinaComponent"], _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__["FormPropinaComponent"], _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__["ListaPropinaComponent"], _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__["AutoconsultaComponent"],
+            _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__["CajacorteComponent"], _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__["CajacorteListaComponent"], _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__["CajacorteFormComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"]
         ],
         entryComponents: [
-            _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"]
+            _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"]
         ],
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
@@ -8975,6 +9078,14 @@ let ComandaService = class ComandaService {
             })
         };
         return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/get_comanda`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    validaPwdGerenteTurno(pwd) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/validapwdgerenteturno`, { pwd }, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 ComandaService.ctorParameters = () => [

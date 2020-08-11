@@ -516,56 +516,62 @@ class Factura_model extends General_model {
 		curl_close($ch);
 		# para imprimir errores
 		
-		if ($jsonFirma->resultado) {
-			$datos = array(
-				"nit_emisor"   => str_replace('-','',$this->empresa->nit),
-				"xml_dte"      => $jsonFirma->archivo
-			);
+		if (is_object($jsonFirma)) {
+			if ($jsonFirma->resultado) {
+				$datos = array(
+					"nit_emisor"   => str_replace('-','',$this->empresa->nit),
+					"xml_dte"      => $jsonFirma->archivo
+				);
 
-			$prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
-			$identificador = "{$prefijo}-{$this->factura}";
+				$prefijo = $this->esAnulacion === 'S' ? 'AN':'VT';
+				$identificador = "{$prefijo}-{$this->factura}";
 
-			$url = $this->esAnulacion === 'N' ? $this->certificador->vinculo_factura : $this->certificador->vinculo_anulacion;
+				$url = $this->esAnulacion === 'N' ? $this->certificador->vinculo_factura : $this->certificador->vinculo_anulacion;
 
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
-			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-				"Content-Type: application/json",
-				"Usuario: " . $this->certificador->usuario,
-				"llave: " . $this->certificador->llave,
-				"identificador: " . $identificador
-			));
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					"Content-Type: application/json",
+					"Usuario: " . $this->certificador->usuario,
+					"llave: " . $this->certificador->llave,
+					"identificador: " . $identificador
+				));
 
-			$query = curl_exec($ch);
+				$query = curl_exec($ch);
 
-			curl_close($ch);
+				curl_close($ch);
 
-			$res = json_decode($query);
+				$res = json_decode($query);
 
-			if ($res->resultado) {
-				if ($this->esAnulacion === 'S') {
-					$this->fel_uuid_anulacion = $res->uuid;
+				if ($res->resultado) {
+					if ($this->esAnulacion === 'S') {
+						$this->fel_uuid_anulacion = $res->uuid;
+					} else {
+						$this->numero_factura = $res->numero;
+						$this->serie_factura = $res->serie;
+						$this->fel_uuid = $res->uuid;
+					}
+
+					$this->guardar();
 				} else {
-					$this->numero_factura = $res->numero;
-					$this->serie_factura = $res->serie;
-					$this->fel_uuid = $res->uuid;
+					foreach ($res->descripcion_errores as $row) {
+						$error = explode('|', $row->mensaje_error);
+						$this->setMensaje($error[count($error)-1]);
+					}
 				}
 
-				$this->guardar();
+				return $res;
 			} else {
-				foreach ($res->descripcion_errores as $row) {
-					$error = explode('|', $row->mensaje_error);
-					$this->setMensaje($error[count($error)-1]);
-				}
+				$this->setMensaje($jsonFirma->descripcion);
 			}
-
-			return $res;
 		} else {
-			return $jsonFirma;
+			$this->setMensaje("Error al firmar documento. Intente nuevamente.");
 		}
+
+		return null;
 	}
 
 	public function enviarDigiFact($args = [])
