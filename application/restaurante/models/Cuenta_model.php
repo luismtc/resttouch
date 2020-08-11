@@ -150,6 +150,18 @@ class Cuenta_model extends General_Model {
 				$this->db->set("observaciones", $pago->observaciones);
 			}
 
+			if (isset($pago->propina)) {
+				$this->db->set("propina", $pago->propina);
+			}
+
+			if (isset($pago->comision_monto)) {
+				$this->db->set("comision_monto", $pago->comision_monto);
+			}
+
+			if (isset($pago->retencion_monto)) {
+				$this->db->set("retencion_monto", $pago->retencion_monto);
+			}
+
 			$this->db
 			->set("cuenta", $this->cuenta)
 			->set("forma_pago", $pago->forma_pago)

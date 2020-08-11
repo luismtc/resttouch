@@ -109,7 +109,7 @@
 						<tr>
 							<td colspan="5" style="padding: 5px;" class="text-right">Total:</td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
-							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
+							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalPropina,2) ?></td>
 							<td style="padding: 5px;" class="text-right">0.00</td>
 						</tr>
 					</tfoot>

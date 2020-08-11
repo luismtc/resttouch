@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,6 +42,7 @@ interface productoSelected {
 export class TranComandaComponent implements OnInit {
 
   @Input() mesaEnUso: ComandaGetResponse;
+  @Output() mesaSavedEv = new EventEmitter();
   public lstProductosSeleccionados: productoSelected[];
   public lstProductosDeCuenta: productoSelected[];
   public lstProductosAImprimir: productoSelected[];
@@ -126,6 +127,10 @@ export class TranComandaComponent implements OnInit {
   cerrarMesa = () => {
     this.comandaSrvc.cerrarMesa(this.mesaEnUso.mesa.mesa).subscribe(res => {
         this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
+        if (res.exito) {
+          this.mesaEnUso.mesa.estatus = 1;
+          this.mesaSavedEv.emit();
+        }
     });
   }
 
