@@ -252,8 +252,6 @@ class Comanda extends CI_Controller {
 	public function imprimir($idCta, $pdf = 0)
 	{
 		$cta = new Cuenta_model($idCta);
-		$cta->imprimirDetalle();
-
 		$com = new Comanda_model($cta->comanda);
 		
 		$datos = [
@@ -262,9 +260,11 @@ class Comanda extends CI_Controller {
 		];
 
 		if ($pdf === 0) {
+			$cta->imprimirDetalle();
 			$datos["comanda"] = $com->getComanda();
 		} else {
 			$datos["comanda"] = $com->getComanda(['impreso' => "0"]);
+			$cta->imprimirDetalle();
 		}
 
 		if ($pdf === 0) {
