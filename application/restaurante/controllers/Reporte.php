@@ -45,8 +45,8 @@ class Reporte extends CI_Controller {
 		$data['propinas'] = $this->Reporte_model->get_propinas($_GET);
 
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
-
-		if (isset($_GET['_detalle'])) {
+		
+		if (isset($_GET['_detalle']) && $_GET['_detalle'] !== "false") {
 			$det = $this->Reporte_model->getDetalleCaja($_GET);
 			$data['detalle'] = [];
 			foreach ($det as $row) {

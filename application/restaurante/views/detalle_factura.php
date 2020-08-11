@@ -80,7 +80,7 @@
 									<?php echo "0.00" ?>
 								</td>
 							</tr>
-							<?php if (isset($_detalle)): ?>
+							<?php if (isset($_detalle) && $_detalle !== "false"): ?>
 								<tr>
 									<td class="text-center" colspan="3"></td>
 									<td class="text-center">Articulo</td>
