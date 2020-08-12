@@ -145,7 +145,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<p>lista-producto-alt works!</p>\n");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"primary\" *ngFor=\"let sc of subcategorias\"\n            (click)=\"clickOnSubCategoria(sc)\">\n            {{sc.descripcion}}\n        </button>\n    </div>\n</div>\n<hr *ngIf=\"articulos.length > 0\" />\n<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"warn\" *ngFor=\"let art of articulos\"\n            (click)=\"clickOnArticulo(art)\">\n            {{art.descripcion}}\n        </button>\n    </div>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/wms/components/producto/lista-producto/lista-producto.component.html": 
@@ -1360,17 +1360,69 @@
             /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
             /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
             /* harmony import */ var _services_articulo_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/articulo.service */ "./src/app/wms/services/articulo.service.ts");
-            // import { ArbolArticulos, NodoProducto } from '../../../interfaces/articulo';
             var ListaProductoAltComponent = /** @class */ (function () {
                 function ListaProductoAltComponent(articuloSrvc, ls) {
                     var _this = this;
                     this.articuloSrvc = articuloSrvc;
                     this.ls = ls;
                     this.productoClickedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.categoriasFilledEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+                    this.categorias = [];
+                    this.subcategorias = [];
+                    this.articulos = [];
                     this.loadArbolArticulos = function () {
                         _this.articuloSrvc.getArbolArticulos((_this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_2__["GLOBAL"].usrTokenVar).sede || 0)).subscribe(function (res) {
-                            console.log(res);
+                            _this.fillCategorias(res);
                         });
+                    };
+                    this.fillCategorias = function (cats) {
+                        _this.categorias = [];
+                        _this.subcategorias = [];
+                        _this.articulos = [];
+                        for (var _i = 0, cats_1 = cats; _i < cats_1.length; _i++) {
+                            var cat = cats_1[_i];
+                            _this.categorias.push(cat);
+                        }
+                        _this.categoriasFilledEv.emit(_this.categorias);
+                    };
+                    this.fillSubCategorias = function (subcats) {
+                        _this.subcategorias = [];
+                        _this.articulos = [];
+                        for (var _i = 0, subcats_1 = subcats; _i < subcats_1.length; _i++) {
+                            var subcat = subcats_1[_i];
+                            _this.subcategorias.push(subcat);
+                        }
+                    };
+                    this.fillArticulos = function (arts) {
+                        _this.articulos = [];
+                        for (var _i = 0, arts_1 = arts; _i < arts_1.length; _i++) {
+                            var a = arts_1[_i];
+                            _this.articulos.push(a);
+                        }
+                    };
+                    this.clickOnCategoria = function (cat) {
+                        if (cat.categoria_grupo.length > 0) {
+                            _this.fillSubCategorias(cat.categoria_grupo);
+                        }
+                    };
+                    this.clickOnSubCategoria = function (scat) {
+                        if (scat.articulo.length > 0) {
+                            _this.fillArticulos(scat.articulo);
+                        }
+                    };
+                    this.clickOnArticulo = function (art) {
+                        var obj = {
+                            id: +art.articulo,
+                            nombre: art.descripcion,
+                            precio: +art.precio,
+                            impresora: art.impresora,
+                            presentacion: art.presentacion,
+                            codigo: art.codigo
+                        };
+                        // console.log(obj);
+                        _this.productoClickedEv.emit(obj);
+                        _this.subcategorias = [];
+                        _this.articulos = [];
                     };
                 }
                 ListaProductoAltComponent.prototype.ngOnInit = function () {
@@ -1385,6 +1437,9 @@
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
             ], ListaProductoAltComponent.prototype, "productoClickedEv", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+            ], ListaProductoAltComponent.prototype, "categoriasFilledEv", void 0);
             ListaProductoAltComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
                     selector: 'app-lista-producto-alt',

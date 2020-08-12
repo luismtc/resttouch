@@ -129,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<p>lista-producto-alt works!</p>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"primary\" *ngFor=\"let sc of subcategorias\"\n            (click)=\"clickOnSubCategoria(sc)\">\n            {{sc.descripcion}}\n        </button>\n    </div>\n</div>\n<hr *ngIf=\"articulos.length > 0\" />\n<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"warn\" *ngFor=\"let art of articulos\"\n            (click)=\"clickOnArticulo(art)\">\n            {{art.descripcion}}\n        </button>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -1458,17 +1458,66 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import { ArbolArticulos, NodoProducto } from '../../../interfaces/articulo';
 
 let ListaProductoAltComponent = class ListaProductoAltComponent {
     constructor(articuloSrvc, ls) {
         this.articuloSrvc = articuloSrvc;
         this.ls = ls;
         this.productoClickedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.categoriasFilledEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.categorias = [];
+        this.subcategorias = [];
+        this.articulos = [];
         this.loadArbolArticulos = () => {
-            this.articuloSrvc.getArbolArticulos((this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_2__["GLOBAL"].usrTokenVar).sede || 0)).subscribe(res => {
-                console.log(res);
+            this.articuloSrvc.getArbolArticulos((this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_2__["GLOBAL"].usrTokenVar).sede || 0)).subscribe((res) => {
+                this.fillCategorias(res);
             });
+        };
+        this.fillCategorias = (cats) => {
+            this.categorias = [];
+            this.subcategorias = [];
+            this.articulos = [];
+            for (const cat of cats) {
+                this.categorias.push(cat);
+            }
+            this.categoriasFilledEv.emit(this.categorias);
+        };
+        this.fillSubCategorias = (subcats) => {
+            this.subcategorias = [];
+            this.articulos = [];
+            for (const subcat of subcats) {
+                this.subcategorias.push(subcat);
+            }
+        };
+        this.fillArticulos = (arts) => {
+            this.articulos = [];
+            for (const a of arts) {
+                this.articulos.push(a);
+            }
+        };
+        this.clickOnCategoria = (cat) => {
+            if (cat.categoria_grupo.length > 0) {
+                this.fillSubCategorias(cat.categoria_grupo);
+            }
+        };
+        this.clickOnSubCategoria = (scat) => {
+            if (scat.articulo.length > 0) {
+                this.fillArticulos(scat.articulo);
+            }
+        };
+        this.clickOnArticulo = (art) => {
+            const obj = {
+                id: +art.articulo,
+                nombre: art.descripcion,
+                precio: +art.precio,
+                impresora: art.impresora,
+                presentacion: art.presentacion,
+                codigo: art.codigo
+            };
+            // console.log(obj);
+            this.productoClickedEv.emit(obj);
+            this.subcategorias = [];
+            this.articulos = [];
         };
     }
     ngOnInit() {
@@ -1482,6 +1531,9 @@ ListaProductoAltComponent.ctorParameters = () => [
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaProductoAltComponent.prototype, "productoClickedEv", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
+], ListaProductoAltComponent.prototype, "categoriasFilledEv", void 0);
 ListaProductoAltComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-lista-producto-alt',

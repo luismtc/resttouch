@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,10 +10,13 @@ import { GLOBAL } from '../../../shared/global';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
+import { ListaProductoAltComponent } from '../../../wms/components/producto/lista-producto-alt/lista-producto-alt.component';
+
 import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
+import { ArbolArticulos} from '../../../wms/interfaces/articulo';
 
 import { ComandaService } from '../../services/comanda.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
@@ -43,6 +46,9 @@ export class TranComandaComponent implements OnInit {
 
   @Input() mesaEnUso: ComandaGetResponse;
   @Output() mesaSavedEv = new EventEmitter();
+  @Output() closeSideNavEv = new EventEmitter();
+  @ViewChild('appLstProdAlt', { static: false }) appLstProdAlt: ListaProductoAltComponent;
+
   public lstProductosSeleccionados: productoSelected[];
   public lstProductosDeCuenta: productoSelected[];
   public lstProductosAImprimir: productoSelected[];
@@ -54,6 +60,7 @@ export class TranComandaComponent implements OnInit {
   public sumCuenta: number = 0;
   public cuentaActiva: Cuenta;
   public detalleComanda: DetalleComanda;
+  public categorias: ArbolArticulos[] = [];
 
   constructor(
     private router: Router,
@@ -89,10 +96,15 @@ export class TranComandaComponent implements OnInit {
       numero: null, posx: null, posy: null, tamanio: null, estatus: null
     },
     cuentas: []
-  };
+  }
   resetLstProductosSeleccionados = () => this.lstProductosSeleccionados = [];
   resetLstProductosDeCuenta = () => this.lstProductosDeCuenta = [];
   resetCuentaActiva = () => this.cuentaActiva = { cuenta: null, numero: null, nombre: null, productos: [] };
+  resetListadoArticulos = () => this.appLstProdAlt.loadArbolArticulos();
+
+  setListaCategorias = (cats: ArbolArticulos[] = []) => this.categorias = cats;
+
+  clickOnCategoria = (c: ArbolArticulos) => this.appLstProdAlt.fillSubCategorias(c.categoria_grupo);
 
   llenaProductosSeleccionados = (conQueMesa: ComandaGetResponse = this.mesaEnUso) => {
     if (this.mesaEnUso.comanda == null) {
@@ -153,17 +165,18 @@ export class TranComandaComponent implements OnInit {
   }
 
   addProductoSelected(producto: any) {
-    // console.log(producto); return;
+    // console.log('PRODUCTO = ', producto);
+    // return;
     if (+this.cuentaActiva.numero) {
       const idx = this.lstProductosSeleccionados
-        .findIndex(p => p.id == producto.id && p.cuenta == +this.cuentaActiva.numero && +p.impreso === 0);
+        .findIndex(p => +p.id === +producto.id && +p.cuenta === +this.cuentaActiva.numero && +p.impreso === 0);
 
       if (idx < 0) {
         this.detalleComanda = {
-          articulo: producto.id, cantidad: 1, precio: producto.precio, total: 1 * producto.precio, notas: ''
+          articulo: producto.id, cantidad: 1, precio: +producto.precio, total: 1 * +producto.precio, notas: ''
         };
         this.comandaSrvc.saveDetalle(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, this.detalleComanda).subscribe(res => {
-          //console.log('DETALLE COMANDA = ', res);
+          // console.log('NUEVO DETALLE COMANDA = ', res);
           if (res.exito) {
             /*
             this.lstProductosSeleccionados.push({
@@ -201,7 +214,6 @@ export class TranComandaComponent implements OnInit {
           }
         });
       }
-
       this.setLstProductosDeCuenta();
     }
   }

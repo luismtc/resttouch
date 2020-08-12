@@ -14,7 +14,7 @@ import { ArticuloService } from '../../../services/articulo.service';
 })
 export class ListaProductoComponent implements OnInit {
 
-  @Input() treeHeight: string = '450px';
+  @Input() treeHeight = '450px';
   @Output() productoClickedEv = new EventEmitter();
 
   treeControl = new NestedTreeControl<NodoProducto>(node => node.hijos);

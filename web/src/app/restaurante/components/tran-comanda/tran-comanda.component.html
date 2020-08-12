@@ -1,9 +1,15 @@
-<div class="divFullSize">
-    <div class="row">
-        <div class="col m12 s12" align="center">
-            <span class="bld" style="font-size: 14pt;">{{mesaEnUso.mesa.area.nombre}} - Mesa #{{mesaEnUso.mesa.numero}}</span>
-        </div>
+<div style="width: 100%; overflow: hidden;">
+    <div style="width: 50%; float: left;" align="center">
+        <span class="bld" style="font-size: 16pt; margin-left: 10px;">{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>
+        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->
     </div>
+    <div style="overflow: hidden; margin-right: 10px;" align="end">
+        <button mat-raised-button type="button" color="accent" style="margin-left: 8px;" (click)="closeSideNavEv.emit()">
+            Cerrar Panel
+        </button>
+    </div>
+</div>
+<div class="divFullSize">
     <div class="row">
         <div class="col m12 s12" align="center" style="padding: 0 !important;">
             <button mat-raised-button type="button" color="accent" class="btnAccion" *ngFor="let cta of mesaEnUso.cuentas" [disabled]="+cta.cerrada == 1"
@@ -14,7 +20,10 @@
     </div>
     <div class="row">
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
-            <span class="bld">Productos</span>
+            <span class="bld">Productos</span><br/>
+            <button mat-raised-button class="btnAccion" color="accent" *ngFor="let c of categorias" (click)="clickOnCategoria(c)">
+                {{c.descripcion}}
+            </button>            
         </div>
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
             <span class="bld" *ngIf="cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</span>
@@ -22,11 +31,11 @@
         </div>
     </div>
     <div class="row">
-        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto;">
-            <app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>
-            <!--<app-lista-producto-alt (productoClickedEv)="addProductoSelected($event)"></app-lista-producto-alt>-->            
+        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto; height: 425px !important;">
+            <!--<app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>-->
+            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)="addProductoSelected($event)" (categoriasFilledEv)="setListaCategorias($event)"></app-lista-producto-alt>
         </div>
-        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto;">
+        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto; height: 425px !important;">
             <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero" [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta"
                 (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>

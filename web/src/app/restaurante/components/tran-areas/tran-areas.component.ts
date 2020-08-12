@@ -156,6 +156,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     // console.log('Antes de "resetCuentaActiva"');
     this.snTrancomanda.resetCuentaActiva();
     // console.log('Antes de "loadComandaMesa"');
+    this.snTrancomanda.resetListadoArticulos();
     this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
   }
 
