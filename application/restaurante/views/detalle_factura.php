@@ -48,6 +48,7 @@
 							$totalPropina = 0;
 						?>
 						<?php foreach ($facturas as $row): ?>
+							<?php $detalle = $row->getDetalle() ?>
 							<tr>
 								<td style="padding: 5px;">
 									<?php echo $row->numero_factura ?>
@@ -77,7 +78,7 @@
 									?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo "0.00" ?>
+									<?php echo number_format(suma_field($detalle, "descuento"),2) ?>
 								</td>
 							</tr>
 							<?php if (isset($_detalle) && $_detalle !== "false"): ?>
@@ -89,7 +90,7 @@
 									<td class="text-center"></td>
 									<td class="text-center">Descuento</td>
 								</tr>
-								<?php foreach ($row->getDetalle() as $det): ?>
+								<?php foreach ($detalle as $det): ?>
 									<tr>
 										<td colspan="3"></td>
 										<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>

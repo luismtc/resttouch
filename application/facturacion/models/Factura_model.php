@@ -724,7 +724,7 @@ class Factura_model extends General_model {
 					->join("cuenta_forma_pago e", "d.cuenta_cuenta = e.cuenta")
 					->join("cliente f", "f.cliente = a.cliente")
 					->where("a.factura", $this->factura)
-					->group_by("a.factura")
+					->group_by("e.cuenta_forma_pago")
 					->get();
 
 		if($tmp && $tmp->num_rows() > 0) {
