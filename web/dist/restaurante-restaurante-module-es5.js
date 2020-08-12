@@ -7030,6 +7030,7 @@
                             if (res.exito) {
                                 _this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
                                 _this.mesaEnUso.mesa.estatus = 1;
+                                _this.closeSideNavEv.emit();
                                 _this.mesaSavedEv.emit();
                             }
                             else {

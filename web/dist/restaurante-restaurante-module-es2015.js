@@ -7265,6 +7265,7 @@ let TranComandaComponent = class TranComandaComponent {
                 if (res.exito) {
                     this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
                     this.mesaEnUso.mesa.estatus = 1;
+                    this.closeSideNavEv.emit();
                     this.mesaSavedEv.emit();
                 }
                 else {
