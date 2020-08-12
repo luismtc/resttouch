@@ -1424,6 +1424,7 @@
                         // this.subcategorias = [];
                         // this.articulos = [];
                     };
+                    this.haceAlgo = function () { };
                 }
                 ListaProductoAltComponent.prototype.ngOnInit = function () {
                     this.loadArbolArticulos();

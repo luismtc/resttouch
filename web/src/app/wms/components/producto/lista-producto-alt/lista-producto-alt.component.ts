@@ -85,4 +85,6 @@ export class ListaProductoAltComponent implements OnInit {
     // this.subcategorias = [];
     // this.articulos = [];
   }
+
+  haceAlgo = () => { };
 }
