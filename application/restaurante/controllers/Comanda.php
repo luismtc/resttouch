@@ -292,7 +292,13 @@ class Comanda extends CI_Controller {
 					if ($comanda) {
 						$com = new Comanda_model($comanda->comanda);
 						$det = $com->getDetalle();
-						if (count($det) == 0) {
+						$cntConCantidad = 0;
+						foreach($det as $d) {
+							if ((float)$d->cantidad > 0) {
+								$cntConCantidad++;
+							}
+						}
+						if ($cntConCantidad == 0) {
 							$_mesa->guardar(["estatus" => 1]);
 							$com->guardar(["estatus" => 2]);
 							$res['exito'] = true;
