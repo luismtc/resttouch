@@ -1421,8 +1421,8 @@
                         };
                         // console.log(obj);
                         _this.productoClickedEv.emit(obj);
-                        _this.subcategorias = [];
-                        _this.articulos = [];
+                        // this.subcategorias = [];
+                        // this.articulos = [];
                     };
                 }
                 ListaProductoAltComponent.prototype.ngOnInit = function () {

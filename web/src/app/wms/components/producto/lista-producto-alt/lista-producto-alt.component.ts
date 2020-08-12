@@ -82,7 +82,7 @@ export class ListaProductoAltComponent implements OnInit {
     };
     // console.log(obj);
     this.productoClickedEv.emit(obj);
-    this.subcategorias = [];
-    this.articulos = [];
+    // this.subcategorias = [];
+    // this.articulos = [];
   }
 }
