@@ -1519,7 +1519,6 @@ let ListaProductoAltComponent = class ListaProductoAltComponent {
             // this.subcategorias = [];
             // this.articulos = [];
         };
-        this.haceAlgo = () => { };
     }
     ngOnInit() {
         this.loadArbolArticulos();

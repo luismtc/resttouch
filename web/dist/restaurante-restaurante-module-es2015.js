@@ -6900,7 +6900,7 @@ TurnosComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".divAreaMesa {\n    width: 100%;\n    height: 700px;\n    background-color: #c7c7c749;\n}\n\nmat-sidenav {\n    width: 75%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxhQUFhO0lBQ2IsMkJBQTJCO0FBQy9COztBQUVBO0lBQ0ksVUFBVTtBQUNkIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5kaXZBcmVhTWVzYSB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgaGVpZ2h0OiA3MDBweDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjYzdjN2M3NDk7XG59XG5cbm1hdC1zaWRlbmF2IHtcbiAgICB3aWR0aDogNzUlO1xufSJdfQ== */");
+/* harmony default export */ __webpack_exports__["default"] = (".divAreaMesa {\n    width: 100%;\n    height: 700px;\n    background-color: #c7c7c749;\n}\n\nmat-sidenav {\n    width: 97%;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxhQUFhO0lBQ2IsMkJBQTJCO0FBQy9COztBQUVBO0lBQ0ksVUFBVTtBQUNkIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5kaXZBcmVhTWVzYSB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgaGVpZ2h0OiA3MDBweDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjYzdjN2M3NDk7XG59XG5cbm1hdC1zaWRlbmF2IHtcbiAgICB3aWR0aDogOTclO1xufVxuIl19 */");
 
 /***/ }),
 
@@ -7192,12 +7192,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let TranComandaComponent = class TranComandaComponent {
-    constructor(router, dialog, _snackBar, comandaSrvc, socket, 
+    constructor(router, dialog, snackBar, comandaSrvc, socket, 
     // private signalRSrvc: SignalRService
     ls, pdfServicio) {
         this.router = router;
         this.dialog = dialog;
-        this._snackBar = _snackBar;
+        this.snackBar = snackBar;
         this.comandaSrvc = comandaSrvc;
         this.socket = socket;
         this.ls = ls;
@@ -7256,10 +7256,13 @@ let TranComandaComponent = class TranComandaComponent {
         };
         this.cerrarMesa = () => {
             this.comandaSrvc.cerrarMesa(this.mesaEnUso.mesa.mesa).subscribe(res => {
-                this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
                 if (res.exito) {
+                    this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
                     this.mesaEnUso.mesa.estatus = 1;
                     this.mesaSavedEv.emit();
+                }
+                else {
+                    this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
                 }
             });
         };
@@ -7277,7 +7280,7 @@ let TranComandaComponent = class TranComandaComponent {
                     window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
                 }
                 else {
-                    this._snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
+                    this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
                 }
             });
         };
@@ -7348,7 +7351,7 @@ let TranComandaComponent = class TranComandaComponent {
                         this.setSelectedCuenta(+this.cuentaActiva.numero);
                     }
                     else {
-                        this._snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
+                        this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
                     }
                 });
             }
@@ -7371,7 +7374,7 @@ let TranComandaComponent = class TranComandaComponent {
                         this.setSelectedCuenta(+this.cuentaActiva.numero);
                     }
                     else {
-                        this._snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
+                        this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
                     }
                 });
             }
@@ -7439,11 +7442,11 @@ let TranComandaComponent = class TranComandaComponent {
                             // console.log('Respuesta de poner impreso = ', resImp);
                             this.llenaProductosSeleccionados(resImp.comanda);
                             this.setSelectedCuenta(this.cuentaActiva.numero);
-                            this._snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+                            this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
                         });
                     }
                     else {
-                        this._snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+                        this.snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
                     }
                 });
             }
@@ -7474,7 +7477,7 @@ let TranComandaComponent = class TranComandaComponent {
             }
         }
         else {
-            this._snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+            this.snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
         }
     }
     printCuenta() {
@@ -7535,7 +7538,7 @@ let TranComandaComponent = class TranComandaComponent {
             });
         }
         else {
-            this._snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
+            this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
         }
     }
 };

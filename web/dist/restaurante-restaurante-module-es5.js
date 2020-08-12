@@ -6685,7 +6685,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = (".divAreaMesa {\n    width: 100%;\n    height: 700px;\n    background-color: #c7c7c749;\n}\n\nmat-sidenav {\n    width: 75%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxhQUFhO0lBQ2IsMkJBQTJCO0FBQy9COztBQUVBO0lBQ0ksVUFBVTtBQUNkIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5kaXZBcmVhTWVzYSB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgaGVpZ2h0OiA3MDBweDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjYzdjN2M3NDk7XG59XG5cbm1hdC1zaWRlbmF2IHtcbiAgICB3aWR0aDogNzUlO1xufSJdfQ== */");
+            /* harmony default export */ __webpack_exports__["default"] = (".divAreaMesa {\n    width: 100%;\n    height: 700px;\n    background-color: #c7c7c749;\n}\n\nmat-sidenav {\n    width: 97%;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxhQUFhO0lBQ2IsMkJBQTJCO0FBQy9COztBQUVBO0lBQ0ksVUFBVTtBQUNkIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWFyZWFzL3RyYW4tYXJlYXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5kaXZBcmVhTWVzYSB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgaGVpZ2h0OiA3MDBweDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjYzdjN2M3NDk7XG59XG5cbm1hdC1zaWRlbmF2IHtcbiAgICB3aWR0aDogOTclO1xufVxuIl19 */");
             /***/ 
         }),
         /***/ "./src/app/restaurante/components/tran-areas/tran-areas.component.ts": 
@@ -6953,13 +6953,13 @@
             /* harmony import */ var _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
             // import { SignalRService } from '../../../shared/services/signal-r.service';
             var TranComandaComponent = /** @class */ (function () {
-                function TranComandaComponent(router, dialog, _snackBar, comandaSrvc, socket, 
+                function TranComandaComponent(router, dialog, snackBar, comandaSrvc, socket, 
                 // private signalRSrvc: SignalRService
                 ls, pdfServicio) {
                     var _this = this;
                     this.router = router;
                     this.dialog = dialog;
-                    this._snackBar = _snackBar;
+                    this.snackBar = snackBar;
                     this.comandaSrvc = comandaSrvc;
                     this.socket = socket;
                     this.ls = ls;
@@ -7022,10 +7022,13 @@
                     };
                     this.cerrarMesa = function () {
                         _this.comandaSrvc.cerrarMesa(_this.mesaEnUso.mesa.mesa).subscribe(function (res) {
-                            _this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
                             if (res.exito) {
+                                _this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
                                 _this.mesaEnUso.mesa.estatus = 1;
                                 _this.mesaSavedEv.emit();
+                            }
+                            else {
+                                _this.snackBar.open("ERROR: " + res.mensaje, 'Comanda', { duration: 3000 });
                             }
                         });
                     };
@@ -7044,7 +7047,7 @@
                                 window.open(url, "cuenta_" + noCuenta, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
                             }
                             else {
-                                _this._snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
+                                _this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
                             }
                         });
                     };
@@ -7120,7 +7123,7 @@
                                     _this.setSelectedCuenta(+_this.cuentaActiva.numero);
                                 }
                                 else {
-                                    _this._snackBar.open("ERROR:" + res.mensaje, 'Comanda', { duration: 3000 });
+                                    _this.snackBar.open("ERROR:" + res.mensaje, 'Comanda', { duration: 3000 });
                                 }
                             });
                         }
@@ -7143,7 +7146,7 @@
                                     _this.setSelectedCuenta(+_this.cuentaActiva.numero);
                                 }
                                 else {
-                                    _this._snackBar.open("ERROR:" + res.mensaje, 'Comanda', { duration: 3000 });
+                                    _this.snackBar.open("ERROR:" + res.mensaje, 'Comanda', { duration: 3000 });
                                 }
                             });
                         }
@@ -7214,11 +7217,11 @@
                                         // console.log('Respuesta de poner impreso = ', resImp);
                                         _this.llenaProductosSeleccionados(resImp.comanda);
                                         _this.setSelectedCuenta(_this.cuentaActiva.numero);
-                                        _this._snackBar.open('Cuenta actualizada', "Cuenta #" + _this.cuentaActiva.numero, { duration: 3000 });
+                                        _this.snackBar.open('Cuenta actualizada', "Cuenta #" + _this.cuentaActiva.numero, { duration: 3000 });
                                     });
                                 }
                                 else {
-                                    _this._snackBar.open("ERROR: " + res.mensaje, "Cuenta #" + _this.cuentaActiva.numero, { duration: 3000 });
+                                    _this.snackBar.open("ERROR: " + res.mensaje, "Cuenta #" + _this.cuentaActiva.numero, { duration: 3000 });
                                 }
                             });
                         }
@@ -7249,7 +7252,7 @@
                         }
                     }
                     else {
-                        this._snackBar.open('Nada para enviar...', "Cuenta #" + this.cuentaActiva.numero, { duration: 3000 });
+                        this.snackBar.open('Nada para enviar...', "Cuenta #" + this.cuentaActiva.numero, { duration: 3000 });
                     }
                 };
                 TranComandaComponent.prototype.printCuenta = function () {
@@ -7312,7 +7315,7 @@
                         });
                     }
                     else {
-                        this._snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
+                        this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
                     }
                 };
                 return TranComandaComponent;

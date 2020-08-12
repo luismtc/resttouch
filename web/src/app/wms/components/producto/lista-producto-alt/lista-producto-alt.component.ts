@@ -84,7 +84,5 @@ export class ListaProductoAltComponent implements OnInit {
     this.productoClickedEv.emit(obj);
     // this.subcategorias = [];
     // this.articulos = [];
-  }
-
-  haceAlgo = () => { };
+  }  
 }

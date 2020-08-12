@@ -275,7 +275,11 @@ export class ComandaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_mesa/${idMesa}`, null, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_mesa/${idMesa}`,
+      null,
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getComandasOnLIne(): Observable<ComandaGetResponse[]> {

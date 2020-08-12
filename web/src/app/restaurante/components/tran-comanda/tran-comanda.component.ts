@@ -65,7 +65,7 @@ export class TranComandaComponent implements OnInit {
   constructor(
     private router: Router,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     public comandaSrvc: ComandaService,
     private socket: Socket,
     // private signalRSrvc: SignalRService
@@ -138,10 +138,12 @@ export class TranComandaComponent implements OnInit {
 
   cerrarMesa = () => {
     this.comandaSrvc.cerrarMesa(this.mesaEnUso.mesa.mesa).subscribe(res => {
-        this._snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
         if (res.exito) {
+          this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
           this.mesaEnUso.mesa.estatus = 1;
           this.mesaSavedEv.emit();
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
         }
     });
   }
@@ -189,7 +191,7 @@ export class TranComandaComponent implements OnInit {
             this.llenaProductosSeleccionados(this.mesaEnUso);
             this.setSelectedCuenta(+this.cuentaActiva.numero);
           } else {
-            this._snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
+            this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
           }
         });
       } else {
@@ -210,7 +212,7 @@ export class TranComandaComponent implements OnInit {
             this.llenaProductosSeleccionados(this.mesaEnUso);
             this.setSelectedCuenta(+this.cuentaActiva.numero);
           } else {
-            this._snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
+            this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
           }
         });
       }
@@ -282,10 +284,10 @@ export class TranComandaComponent implements OnInit {
               // console.log('Respuesta de poner impreso = ', resImp);
               this.llenaProductosSeleccionados(resImp.comanda);
               this.setSelectedCuenta(this.cuentaActiva.numero);
-              this._snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+              this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
             });
           } else {
-            this._snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+            this.snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
           }
         });
       }
@@ -319,7 +321,7 @@ export class TranComandaComponent implements OnInit {
         this.printComandaPDF();
       }
     } else {
-      this._snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+      this.snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
     }
   }
 
@@ -337,7 +339,7 @@ export class TranComandaComponent implements OnInit {
         const url = window.URL.createObjectURL(blob);
         window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
       } else {
-        this._snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
+        this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
       }
     });
   }
@@ -411,7 +413,7 @@ export class TranComandaComponent implements OnInit {
         }
       });
     } else {
-      this._snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
+      this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
     }
   }
 
