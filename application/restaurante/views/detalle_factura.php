@@ -92,12 +92,12 @@
 								<?php foreach ($row->getDetalle() as $det): ?>
 									<tr>
 										<td colspan="3"></td>
-										<td><?php echo $det->articulo->descripcion ?></td>
-										<td class="text-center"><?php echo $det->cantidad ?></td>
-										<td class="text-right">
+										<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>
+										<td style="padding: 5px;" class="text-center"><?php echo $det->cantidad ?></td>
+										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format($det->total,2) ?></td>
-										<td></td>
-										<td class="text-right">
+										<td style="padding: 5px;"></td>
+										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format($det->descuento,2) ?>
 										</td>
 									</tr>
