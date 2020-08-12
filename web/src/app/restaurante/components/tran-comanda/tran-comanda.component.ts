@@ -140,6 +140,7 @@ export class TranComandaComponent implements OnInit {
         if (res.exito) {
           this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
           this.mesaEnUso.mesa.estatus = 1;
+          this.closeSideNavEv.emit();
           this.mesaSavedEv.emit();
         } else {
           this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
