@@ -29,33 +29,28 @@
 					<?php $total = 0; $ptotal = 0; ?>
 					<?php foreach ($propina as $row): ?>
 						<?php $total += $row['total']['monto'] ?>
-						<?php $ptotal += $row['total']['porcentaje'] ?>
 						<tr>
 							<th>
 								Factura: <?php echo $row['factura']['numero'] ?>
 							</th>
 							<th class="text-center">Monto</th>
-							<th class="text-center">Porcentaje</th>
 						</tr>
 						<?php foreach ($row['cuentas'] as $det): ?>
 							<tr>
 								<td>Cuenta: <?php echo $det->nombre ?></td>
 								<td class="text-right"><?php echo number_format($det->propina_monto,2) ?></td>
-								<td class="text-right"><?php echo number_format($det->propina_porcentaje,2) ?> %
 								</td>
 							</tr>
 						<?php endforeach ?>
 						<tr>
 							<td class="text-right">Total</td>
 							<td class="text-right"><?php echo number_format($row['total']['monto'], 2) ?></td>
-							<td class="text-right"><?php echo number_format($row['total']['porcentaje'],2) ?> %</td>
 						</tr>
 					<?php endforeach ?>
 					<tfoot>
 						<tr>
 							<th class="text-right">Total:</th>
 							<td class="text-right"><?php echo number_format($total, 2); ?></td>
-							<td class="text-right"><?php echo number_format($ptotal, 2); ?></td>
 						</tr>
 					</tfoot>
 				</table>

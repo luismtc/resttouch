@@ -249,15 +249,17 @@ class Venta extends CI_Controller {
 			if ($propina) {
 				$dato = [
 					"cuentas" => $propina, 
-					"factura" => ["numero" => $fac->numero_factura, "fecha" => $fac->fecha_factura], 
+					"factura" => [
+						"numero" => $fac->numero_factura, "fecha" => $fac->fecha_factura
+					], 
 					"total" => [
-						"monto" => number_format(suma_field($propina, "propina_monto"),2),
-						"porcentaje" => number_format(suma_field($propina, "propina_porcentaje"), 2)
+						"monto" => number_format(suma_field($propina, "propina_monto"),2)
 					]
 				];
 				$datos['propina'][] = $dato;
 			}
 		}
+		
 		$vista = $this->load->view('reporte/venta/propina', $datos, true);
 		
 		$mpdf = new \Mpdf\Mpdf([
