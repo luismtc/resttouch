@@ -21,7 +21,8 @@ class Comanda extends CI_Controller {
 			"Catalogo_model",
 			"Turno_model",
 			"Factura_model",
-			"Receta_model"
+			"Receta_model",
+			"Impresora_model"
 		]);
 
 		$this->output

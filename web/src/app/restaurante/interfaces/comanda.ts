@@ -1,4 +1,5 @@
 import { Cuenta } from './cuenta';
+import { Impresora } from '../../admin/interfaces/impresora';
 
 export interface Comanda {
     area: number;
@@ -23,6 +24,7 @@ export interface ComandaGetResponse {
             sede: number;
             area_padre?: number;
             nombre: string;
+            impresora?: Impresora;
         };
         numero: number;
         posx: number;

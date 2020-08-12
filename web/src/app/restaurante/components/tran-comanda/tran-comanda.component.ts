@@ -4,7 +4,6 @@ import { WindowConfiguration } from '../../../shared/interfaces/window-configura
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
-// import { SignalRService } from '../../../shared/services/signal-r.service';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 
@@ -353,6 +352,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   printCuenta() {
+    // console.log(this.mesaEnUso.mesa.area.impresora); return;
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
     this.setSumaCuenta(this.lstProductosAImprimir);
     /*
@@ -374,7 +374,8 @@ export class TranComandaComponent implements OnInit {
       Total: totalCuenta,
       Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
       Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
-      PropinaSugerida: (totalCuenta * 0.10).toFixed(2)
+      PropinaSugerida: (totalCuenta * 0.10).toFixed(2),
+      Impresora: this.mesaEnUso.mesa.area.impresora
     })}`);
   }
 

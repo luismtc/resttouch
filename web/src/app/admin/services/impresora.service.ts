@@ -14,13 +14,13 @@ import * as qs from 'qs';
 export class ImpresoraService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'impresora';
+  private moduleUrl = 'impresora';
   private usrToken: string = null;
 
   constructor(
     private http: HttpClient,
-    private ls: LocalstorageService    
-  ) { 
+    private ls: LocalstorageService
+  ) {
     this.srvcErrHndl = new ServiceErrorHandler();
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
@@ -31,7 +31,10 @@ export class ImpresoraService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Impresora[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Impresora[]>(
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`,
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Impresora): Observable<any> {
@@ -39,7 +42,11 @@ export class ImpresoraService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${!!entidad.impresora ? ('/' + entidad.impresora) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${!!entidad.impresora ? ('/' + entidad.impresora) : ''}`,
+      entidad,
+      httpOptions
+    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
   }
 }

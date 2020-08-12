@@ -6,7 +6,9 @@ import { GLOBAL } from '../../../../shared/global';
 import { AreaDesignerComponent } from '../area-designer/area-designer.component';
 
 import { Area } from '../../../interfaces/area';
+import { Impresora } from '../../../../admin/interfaces/impresora';
 import { AreaService } from '../../../services/area.service';
+import { ImpresoraService } from '../../../../admin/services/impresora.service';
 
 @Component({
   selector: 'app-form-area',
@@ -20,11 +22,13 @@ export class FormAreaComponent implements OnInit {
   public sedeUsr: number = 0;
   public lstAreas: Area[] = [];
   public esMovil: boolean = false;
+  public impresoras: Impresora[] = [];
 
   constructor(
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
     private entidadSrvc: AreaService,
+    private impresoraSrvc: ImpresoraService,
     private ls: LocalstorageService
   ) { }
 
@@ -33,9 +37,12 @@ export class FormAreaComponent implements OnInit {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetEntidad();
     this.loadAreas();
+    this.loadImpresoras();
   }
 
   loadAreas = () => this.entidadSrvc.get({ sede: this.sedeUsr }).subscribe(res => this.lstAreas = res);
+
+  loadImpresoras = () => this.impresoraSrvc.get().subscribe(res => this.impresoras = res);
 
   resetEntidad = () => this.entidad = { area: null, sede: this.sedeUsr, nombre: null, mesas: [] };
 
