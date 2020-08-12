@@ -117,7 +117,7 @@
 							<tr>
 								<td><?php echo $det->numero_factura ?></td>
 								<td><?php echo formatoFecha($det->fecha_factura, 2) ?></td>
-								<td><?php echo number_format($det->monto, 2) ?></td>
+								<td class="text-right"><?php echo number_format($det->monto, 2) ?></td>
 							</tr>
 						<?php endforeach ?>
 						<tr>
