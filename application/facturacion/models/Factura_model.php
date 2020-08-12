@@ -148,7 +148,7 @@ class Factura_model extends General_model {
 			$det = $this->db
 						->where("detalle_factura", $row->detalle_factura)
 						->get("detalle_factura_detalle_cuenta");
-						
+
 			if ($det->num_rows() > 0) {
 				$det = $det->row();
 				$this->db
@@ -716,12 +716,13 @@ class Factura_model extends General_model {
 
 	public function getPropina(){
 		$tmp = $this->db
-					->select("sum(e.propina) propina_monto")
+					->select("sum(e.propina) propina_monto, f.nombre")
 					->from("factura a")
 					->join("detalle_factura b", "a.factura = b.factura")
 					->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
 					->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
 					->join("cuenta_forma_pago e", "d.cuenta_cuenta = e.cuenta")
+					->join("cliente f", "f.cliente = a.cliente")
 					->where("a.factura", $this->factura)
 					->group_by("a.factura")
 					->get();
