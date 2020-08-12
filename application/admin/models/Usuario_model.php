@@ -31,12 +31,12 @@ class Usuario_model extends General_model
                 ->join("usuario c", "c.usuario = a.usuario")                 
                 ->where("TRIM(LOWER(b.descripcion)) = 'gerente'")
                 ->get()
-                ->row();
+                ->result();
 
-            if(isset($dbusr)) {
-                if (password_verify($pwd, $dbusr->contrasenia)) {
+            foreach($dbusr as $usr) {
+                if (password_verify($pwd, $usr->contrasenia)) {
                     return true;
-                }
+                } 
             }
         }
         return false;

@@ -76,6 +76,7 @@ class Turno_model extends General_model {
 					->where("turno", $this->turno)
 					->where("usuario", $args['usuario'])
 					->where("usuario_tipo", $args['usuario_tipo'])
+					->where("anulado", 0)
 					->get("turno_has_usuario");
 
 		if($tmp->num_rows() == 0) {
