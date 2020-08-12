@@ -716,7 +716,7 @@ class Factura_model extends General_model {
 
 	public function getPropina(){
 		$tmp = $this->db
-					->select("sum(e.propina) propina_monto, f.nombre")
+					->select("sum(distinct e.propina) propina_monto, f.nombre")
 					->from("factura a")
 					->join("detalle_factura b", "a.factura = b.factura")
 					->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
