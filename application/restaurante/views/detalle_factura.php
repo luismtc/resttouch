@@ -46,6 +46,7 @@
 						<?php 
 							$totalFactura = 0;
 							$totalPropina = 0;
+							$totalDescuento = 0;
 						?>
 						<?php foreach ($facturas as $row): ?>
 							<?php $detalle = $row->getDetalle() ?>
@@ -78,7 +79,15 @@
 									?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo number_format(suma_field($detalle, "descuento"),2) ?>
+									<?php 
+										if (empty($row->fel_uuid_anulacion)) {
+											$desc = suma_field($detalle, "descuento");
+											echo number_format($desc, 2);
+											$totalDescuento += $desc;
+										} else {
+											echo "0.00";
+										}
+									 ?>
 								</td>
 							</tr>
 							<?php if (isset($_detalle) && $_detalle !== "false"): ?>
@@ -111,7 +120,7 @@
 							<td colspan="5" style="padding: 5px;" class="text-right">Total:</td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalPropina,2) ?></td>
-							<td style="padding: 5px;" class="text-right">0.00</td>
+							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalDescuento, 2) ?></td>
 						</tr>
 					</tfoot>
 				</table>
