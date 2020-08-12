@@ -28,6 +28,10 @@
 				<table class="table table-bordered" style="padding: 5px">
 					<?php $total = 0; $ptotal = 0; ?>
 					<?php foreach ($propina as $row): ?>
+						<?php 
+							$monto = suma_field($row['cuentas'], "propina_monto");
+						 ?>
+						<?php if ($monto > 0): ?>
 						<?php $total += $row['total']['monto'] ?>
 						<tr>
 							<th>
@@ -46,6 +50,7 @@
 							<td class="text-right">Total</td>
 							<td class="text-right"><?php echo number_format($row['total']['monto'], 2) ?></td>
 						</tr>
+						<?php endif ?>
 					<?php endforeach ?>
 					<tfoot>
 						<tr>
