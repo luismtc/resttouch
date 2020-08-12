@@ -45,9 +45,9 @@ interface productoSelected {
 export class TranComandaComponent implements OnInit {
 
   @Input() mesaEnUso: ComandaGetResponse;
-  @Output() mesaSavedEv = new EventEmitter();
   @Output() closeSideNavEv = new EventEmitter();
   @ViewChild('appLstProdAlt', { static: false }) appLstProdAlt: ListaProductoAltComponent;
+  @Output('actualizar') mesaSavedEv: EventEmitter<any> = new EventEmitter();
 
   public lstProductosSeleccionados: productoSelected[];
   public lstProductosDeCuenta: productoSelected[];

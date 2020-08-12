@@ -50,6 +50,15 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     }, 600);
   }
 
+  actualizar = () => {
+    // console.log(this.mesaSeleccionada);
+    const area = this.lstTabsAreas.find((c: Area) => +c.area === +this.mesaSeleccionada.mesa.area.area);
+    const areaIndex = this.lstTabsAreas.findIndex((c: Area) => +c.area === +this.mesaSeleccionada.mesa.area.area);
+    const mesaIndex = area.mesas.findIndex(x => x.mesa = this.mesaSeleccionada.mesa.mesa);
+    this.lstTabsAreas[areaIndex].mesas[mesaIndex].estatus = 1;
+    this.toggleRightSidenav();
+  }
+
   resetMesaSeleccionada = () => this.mesaSeleccionada = {
     comanda: null, usuario: null, sede: null, estatus: null,
     mesa: {

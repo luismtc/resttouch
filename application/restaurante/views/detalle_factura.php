@@ -93,7 +93,7 @@
 									<tr>
 										<td colspan="3"></td>
 										<td><?php echo $det->articulo->descripcion ?></td>
-										<td><?php echo $det->cantidad ?></td>
+										<td class="text-center"><?php echo $det->cantidad ?></td>
 										<td class="text-right">
 											<?php echo number_format($det->total,2) ?></td>
 										<td></td>

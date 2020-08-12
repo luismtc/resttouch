@@ -8,7 +8,7 @@ class Factura extends CI_Controller {
         parent::__construct();
         $this->load->add_package_path('application/admin');
 		$this->load->add_package_path('application/restaurante');
-
+		$this->load->helper('api');
         $this->load->model([
 			'Dfactura_model',
 			'Usuario_model',
@@ -223,8 +223,7 @@ class Factura extends CI_Controller {
 				unset($req['factura']);
 				if ($refac->guardar($req)) {
 					$fac->copiarDetalle($refac->getPK());
-					$datos['exito'] = true;
-					$datos['mensaje'] = "Datos actualizados con exito";
+					$datos = facturar($refac);
 				} else {
 					$datos['mensaje'] = "Ocurrió un error al guardar la factura";
 				}

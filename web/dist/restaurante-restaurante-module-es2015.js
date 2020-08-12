@@ -4378,7 +4378,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-sidenav-container class=\"matSideNavContainer\">\n    <mat-sidenav #rightSidenav mode=\"over\" [(opened)]=\"openedRightPanel\" (closedStart)=\"cerrandoRightSideNav()\" position=\"end\">\n        <app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>\n    </mat-sidenav>\n    <mat-sidenav-content>\n        <mat-tab-group dynamicHeight backgroundColor=\"primary\">\n            <mat-tab #tabArea *ngFor=\"let tabA of lstTabsAreas\" label=\"{{tabA.nombre}}\">\n                <div #matTabArea class=\"divAreaMesa\" (window:resize)=\"onResize($event)\">\n                    <app-mesa *ngFor=\"let m of tabA.mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\"></app-mesa>\n                </div>\n            </mat-tab>\n        </mat-tab-group>\n    </mat-sidenav-content>\n</mat-sidenav-container>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-sidenav-container class=\"matSideNavContainer\">\n    <mat-sidenav #rightSidenav mode=\"over\" [(opened)]=\"openedRightPanel\" (closedStart)=\"cerrandoRightSideNav()\" position=\"end\">\n        <!--<app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>-->\n        <app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (actualizar)=\"actualizar()\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>\n    </mat-sidenav>\n    <mat-sidenav-content>\n        <mat-tab-group dynamicHeight backgroundColor=\"primary\">\n            <mat-tab #tabArea *ngFor=\"let tabA of lstTabsAreas\" label=\"{{tabA.nombre}}\">\n                <div #matTabArea class=\"divAreaMesa\" (window:resize)=\"onResize($event)\">\n                    <app-mesa *ngFor=\"let m of tabA.mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\"></app-mesa>\n                </div>\n            </mat-tab>\n        </mat-tab-group>\n    </mat-sidenav-content>\n</mat-sidenav-container>");
 
 /***/ }),
 
@@ -6941,6 +6941,14 @@ let TranAreasComponent = class TranAreasComponent {
         this.comandaSrvc = comandaSrvc;
         this.divSize = { h: 0, w: 0 };
         this.lstTabsAreas = [];
+        this.actualizar = () => {
+            // console.log(this.mesaSeleccionada);
+            const area = this.lstTabsAreas.find((c) => +c.area === +this.mesaSeleccionada.mesa.area.area);
+            const areaIndex = this.lstTabsAreas.findIndex((c) => +c.area === +this.mesaSeleccionada.mesa.area.area);
+            const mesaIndex = area.mesas.findIndex(x => x.mesa = this.mesaSeleccionada.mesa.mesa);
+            this.lstTabsAreas[areaIndex].mesas[mesaIndex].estatus = 1;
+            this.toggleRightSidenav();
+        };
         this.resetMesaSeleccionada = () => this.mesaSeleccionada = {
             comanda: null, usuario: null, sede: null, estatus: null,
             mesa: {
@@ -7194,8 +7202,8 @@ let TranComandaComponent = class TranComandaComponent {
         this.socket = socket;
         this.ls = ls;
         this.pdfServicio = pdfServicio;
-        this.mesaSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.closeSideNavEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
+        this.mesaSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         // public noCuentaSeleccionada: number = null;
         this.showPortalComanda = false;
         this.showPortalCuenta = false;
@@ -7545,13 +7553,13 @@ tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 ], TranComandaComponent.prototype, "mesaEnUso", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
-], TranComandaComponent.prototype, "mesaSavedEv", void 0);
-tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], TranComandaComponent.prototype, "closeSideNavEv", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('appLstProdAlt', { static: false })
 ], TranComandaComponent.prototype, "appLstProdAlt", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])('actualizar')
+], TranComandaComponent.prototype, "mesaSavedEv", void 0);
 TranComandaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
         selector: 'app-tran-comanda',

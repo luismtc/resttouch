@@ -288,7 +288,7 @@ class Comanda extends CI_Controller {
 			if ($mesa !== null) {
 				$_mesa = new Mesa_model($mesa);
 				if ($_mesa->estatus == 2) {
-					$comanda = $_mesa->get_comanda();
+					$comanda = $_mesa->get_comanda(["estatus" => 1]);
 					if ($comanda) {
 						$com = new Comanda_model($comanda->comanda);
 						$det = $com->getDetalle();

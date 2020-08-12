@@ -42,8 +42,6 @@ class Reporte extends CI_Controller {
 		$_GET["descuento"] = 1;
 		$data['descuentos'] = $this->Reporte_model->get_ingresos($_GET);
 
-		$data['propinas'] = $this->Reporte_model->get_propinas($_GET);
-
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
 		
 		if (isset($_GET['_detalle']) && $_GET['_detalle'] !== "false") {

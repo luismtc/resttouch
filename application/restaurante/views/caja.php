@@ -39,27 +39,37 @@
 						<tr>
 							<th style="padding: 5px;" class="text-center">Descripcion</th>
 							<th style="padding: 5px;" class="text-center">Monto</th>
+							<th style="padding: 5px;" class="text-center">Propina</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr>
-							<td style="padding: 10px;" colspan="2"><b>Ingresos</b></td>
+							<td style="padding: 10px;" colspan="3"><b>Ingresos</b></td>
 						</tr>
 						<?php foreach ($ingresos as $row): ?>
 							<tr>
 								<td style="padding: 5px;"><?php echo $row->descripcion ?></td>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo $row->monto ?>
+									<?php echo number_format($row->monto, 2) ?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($row->propina, 2) ?>
 								</td>
 							</tr>
 						<?php endforeach ?>
 						<tr>
-							<td style="padding: 5px;" class="text-right"><b>Total Ingresos:</b></td>
-							<td style="padding: 5px;" class="text-right"><?php echo number_format(suma_field($ingresos,"monto"),2) ?></td>
+							<td style="padding: 5px;" class="text-right">
+								<b>Total Ingresos:</b>
+							</td>
+							<td style="padding: 5px;" class="text-right">
+								<?php echo number_format(suma_field($ingresos,"monto"),2) ?>
+							</td>
+							<td style="padding: 5px;" class="text-right">
+								<?php echo number_format(suma_field($ingresos,"propina"),2) ?>
+							</td>
 						</tr>
-
 						<tr>
-							<td style="padding: 10px;" colspan="2"><b>Descuentos</b></td>
+							<td style="padding: 10px;" colspan="3"><b>Descuentos</b></td>
 						</tr>
 						<?php foreach ($descuentos as $row): ?>
 							<tr>
@@ -67,6 +77,7 @@
 								<td style="padding: 5px;" class="text-right">
 									<?php echo $row->monto ?>
 								</td>
+								<td></td>
 							</tr>
 						<?php endforeach ?>
 						<tr>
@@ -74,26 +85,16 @@
 							<td style="padding: 5px;" class="text-right">
 								<?php echo number_format(suma_field($descuentos,"monto"),2) ?>
 							</td>
+							<td></td>
 						</tr>
 						<tr>
 							<td style="padding: 5px;" class="text-right"><b>TOTAL:</b></td>
 							<td style="padding: 5px;" class="text-right">
 								<?php echo number_format((suma_field($descuentos,"monto")+suma_field($ingresos,"monto")),2) ?>
 							</td>
+							<td></td>
 						</tr>
 					</tbody>
-
-					<?php if ($propinas): ?>
-					<tfoot>
-						<tr>
-							<td style="padding: 5px;" class="text-right"><h4>PROPINA</h4></td>
-							<td style="padding: 5px;" class="text-right">
-								<?php echo number_format($propinas->monto,2) ?>
-							</td>
-						</tr>
-					</tfoot>	
-					<?php endif ?>
-					
 				</table>
 			</div>
 		</div>
@@ -116,7 +117,7 @@
 							<tr>
 								<td><?php echo $det->numero_factura ?></td>
 								<td><?php echo formatoFecha($det->fecha_factura, 2) ?></td>
-								<td><?php echo number_format($det->monto, 2) ?></td>
+								<td class="text-right"><?php echo number_format($det->monto, 2) ?></td>
 							</tr>
 						<?php endforeach ?>
 						<tr>
