@@ -4118,7 +4118,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>Área</h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmEntidad=\"ngForm\" (ngSubmit)=\"frmEntidad.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input type=\"text\" matInput placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input type=\"text\" matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Área padre</mat-label>\n                <mat-select name=\"area_padre\" [(ngModel)]=\"entidad.area_padre\">\n                    <mat-option *ngFor=\"let ar of lstAreas\" [value]=\"ar.area\">\n                        {{ar.nombre}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <h5>Mesas en el área: {{entidad.mesas.length}}</h5>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmEntidad.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" (click)=\"openDesigner()\" *ngIf=\"entidad.area\">\n                    Diseñar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetEntidad()\" *ngIf=\"entidad.area\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>Área</h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmEntidad=\"ngForm\" (ngSubmit)=\"frmEntidad.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input type=\"text\" matInput placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input type=\"text\" matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"entidad.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Área padre</mat-label>\n                <mat-select name=\"area_padre\" [(ngModel)]=\"entidad.area_padre\">\n                    <mat-option *ngFor=\"let ar of lstAreas\" [value]=\"ar.area\">\n                        {{ar.nombre}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <mat-label>Impresora</mat-label>\n                <mat-select name=\"impresora\" [(ngModel)]=\"entidad.impresora\" required>\n                    <mat-option *ngFor=\"let imp of impresoras\" [value]=\"imp.impresora\">\n                        {{imp.nombre}}\n                    </mat-option>\n                </mat-select>\n            </mat-form-field>\n            <h5>Mesas en el área: {{entidad.mesas.length}}</h5>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmEntidad.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" (click)=\"openDesigner()\" *ngIf=\"entidad.area\">\n                    Diseñar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetEntidad()\" *ngIf=\"entidad.area\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -4842,6 +4842,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
 /* harmony import */ var _area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../area-designer/area-designer.component */ "./src/app/restaurante/components/area/area-designer/area-designer.component.ts");
 /* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
+/* harmony import */ var _admin_services_impresora_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../admin/services/impresora.service */ "./src/app/admin/services/impresora.service.ts");
+
 
 
 
@@ -4851,16 +4853,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let FormAreaComponent = class FormAreaComponent {
-    constructor(_snackBar, dialog, entidadSrvc, ls) {
+    constructor(_snackBar, dialog, entidadSrvc, impresoraSrvc, ls) {
         this._snackBar = _snackBar;
         this.dialog = dialog;
         this.entidadSrvc = entidadSrvc;
+        this.impresoraSrvc = impresoraSrvc;
         this.ls = ls;
         this.entidadSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.sedeUsr = 0;
         this.lstAreas = [];
         this.esMovil = false;
+        this.impresoras = [];
         this.loadAreas = () => this.entidadSrvc.get({ sede: this.sedeUsr }).subscribe(res => this.lstAreas = res);
+        this.loadImpresoras = () => this.impresoraSrvc.get().subscribe(res => this.impresoras = res);
         this.resetEntidad = () => this.entidad = { area: null, sede: this.sedeUsr, nombre: null, mesas: [] };
         this.onSubmit = () => {
             // console.log(this.entidad); return;
@@ -4900,12 +4905,14 @@ let FormAreaComponent = class FormAreaComponent {
         this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_5__["GLOBAL"].usrTokenVar).enmovil || false;
         this.resetEntidad();
         this.loadAreas();
+        this.loadImpresoras();
     }
 };
 FormAreaComponent.ctorParameters = () => [
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
     { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_3__["MatDialog"] },
     { type: _services_area_service__WEBPACK_IMPORTED_MODULE_7__["AreaService"] },
+    { type: _admin_services_impresora_service__WEBPACK_IMPORTED_MODULE_8__["ImpresoraService"] },
     { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_4__["LocalstorageService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -7184,7 +7191,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import { SignalRService } from '../../../shared/services/signal-r.service';
 
 
 
@@ -7481,6 +7487,7 @@ let TranComandaComponent = class TranComandaComponent {
         }
     }
     printCuenta() {
+        // console.log(this.mesaEnUso.mesa.area.impresora); return;
         this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
         this.setSumaCuenta(this.lstProductosAImprimir);
         /*
@@ -7502,7 +7509,8 @@ let TranComandaComponent = class TranComandaComponent {
             Total: totalCuenta,
             Empresa: this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar).empresa,
             Restaurante: this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].usrTokenVar).restaurante,
-            PropinaSugerida: (totalCuenta * 0.10).toFixed(2)
+            PropinaSugerida: (totalCuenta * 0.10).toFixed(2),
+            Impresora: this.mesaEnUso.mesa.area.impresora
         })}`);
     }
     unirCuentas() {
