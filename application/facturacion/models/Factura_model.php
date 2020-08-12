@@ -125,6 +125,7 @@ class Factura_model extends General_model {
 
 	public function copiarDetalle($factura)
 	{
+		$fac = new Factura_model($factura);
 		$det = $this->db
 		->where("factura", $this->factura)
 		->get("detalle_factura")
@@ -142,6 +143,17 @@ class Factura_model extends General_model {
 			->set("bien_servicio", $row->bien_servicio)
 			->set("descuento", $row->descuento)
 			->insert("detalle_factura");
+
+			$id = $this->db->insert_id();
+			$det = $this->db
+						->where("detalle_factura", $row->detalle_factura)
+						->get("detalle_factura_detalle_cuenta")
+						->row();
+						
+			$this->db
+				 ->set("detalle_factura", $id)
+				 ->set("detalle_cuenta", $det->detalle_cuenta)
+				 ->insert("detalle_factura_detalle_cuenta");
 		}
 	}
 

@@ -18,3 +18,39 @@ if ( ! function_exists('post_request'))
 		return $res;
 	}
 }
+
+if (! function_exists('facturar')) {
+	function facturar($fac)
+	{
+		$datos = ["exito" => false];
+		$fac->cargarFacturaSerie();
+		$fac->cargarEmpresa();
+		$fac->cargarMoneda();
+		$fac->cargarReceptor();
+		$fac->cargarSede();
+		$fac->cargarCertificadorFel();
+		$fac->procesar_factura();
+		$cer = $fac->getCertificador();
+
+		$funcion = $cer->metodo_factura;
+		$resp = $fac->$funcion();
+		$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+				
+		if (!empty($fac->numero_factura)) {
+			$fac->certificador_fel = $cer;
+			$fac->detalle = $fac->getDetalle();
+			$fac->fecha_autorizacion = $resp->fecha;
+
+			$comanda = $fac->getComanda();
+			$fac->origen_datos = ($comanda) ? $comanda->getOrigenDatos() : null;
+
+			$datos['exito'] = true;
+			$datos['factura'] = $fac;
+			$datos['mensaje'] = "Datos actualizados con exito";	
+		} else {
+			$datos['mensaje'] = implode(". ", $fac->getMensaje());
+		}
+
+		return $datos;
+	}
+}
