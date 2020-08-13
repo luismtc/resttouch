@@ -415,7 +415,7 @@ export class TranComandaComponent implements OnInit {
         if (res) {
           // console.log(res);
           this.cambiarEstatusCuenta(res);
-          // this.socket.emit('print:doccontable', JSON.stringify(res));
+          this.closeSideNavEv.emit();
         }
       });
     } else {

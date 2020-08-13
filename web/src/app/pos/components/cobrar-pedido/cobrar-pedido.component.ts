@@ -1,9 +1,11 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GLOBAL } from '../../../shared/global';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import * as moment from 'moment';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { Socket } from 'ngx-socket-io';
 
 import { FormaPago } from '../../interfaces/forma-pago';
 import { Cobro } from '../../interfaces/cobro';
@@ -29,6 +31,7 @@ export class CobrarPedidoComponent implements OnInit {
   public esMovil = false;
 
   constructor(
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<CobrarPedidoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private snackBar: MatSnackBar,
@@ -36,6 +39,7 @@ export class CobrarPedidoComponent implements OnInit {
     public cobroSrvc: CobroService,
     public facturaSrvc: FacturaService,
     private ls: LocalstorageService,
+    private socket: Socket,
   ) { }
 
   ngOnInit() {
@@ -43,6 +47,9 @@ export class CobrarPedidoComponent implements OnInit {
     this.processData();
     this.loadFormasPago();
     this.resetFactReq();
+    if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
+      this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+    }
   }
 
   resetFactReq = () => {
@@ -134,17 +141,79 @@ export class CobrarPedidoComponent implements OnInit {
       if (res.exito || !res.facturada) {
         this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
         this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
+          // console.log('RESPUESTA DE FACTURAR = ', resFact);
           if (resFact.exito) {
-            this.resetFactReq();
-            this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
-            this.dialogRef.close(res.cuenta);
+
+            const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+              maxWidth: '400px',
+              data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
+            });
+
+            confirmRef.afterClosed().subscribe((confirma: boolean) => {
+              if (confirma) {
+                this.printFactura(resFact.factura);
+              }
+              this.resetFactReq();
+              this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+              this.dialogRef.close(res.cuenta);
+            });
           } else {
-            this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 3000 });
+            this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
             this.dialogRef.close(res.cuenta);
           }
         });
       } else {
-        this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 3000 });
+        this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
+      }
+    });
+  }
+
+  procesaDetalleFactura = (detalle: any[]) => {
+    const detFact: any[] = [];
+    detalle.forEach(d => detFact.push({
+      Cantidad: +d.cantidad,
+      Descripcion: d.articulo.descripcion,
+      Total: +d.total
+    }));
+    return detFact;
+  }
+
+  getTotalDetalle = (detalle: any[]): number => {
+    let suma = 0.00;
+    detalle.forEach(d => suma += +d.total);
+    return suma;
+  }
+
+  printFactura = (factura: any) => {
+    // console.log('FACTURA = ', factura);
+    this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
+      if (res.factura) {
+        this.socket.emit(`print:factura`, `${JSON.stringify({
+          NombreEmpresa: res.factura.empresa.nombre,
+          NitEmpresa: res.factura.empresa.nit,
+          SedeEmpresa: res.factura.sedeFactura.nombre,
+          DireccionEmpresa: res.factura.empresa.direccion,
+          Fecha: moment(res.factura.fecha_factura).format(GLOBAL.dateFormat),
+          Nit: res.factura.receptor.nit,
+          Nombre: res.factura.receptor.nombre,
+          Direccion: res.factura.receptor.direccion,
+          Serie: res.factura.serie_factura,
+          Numero: res.factura.numero_factura,
+          Total: this.getTotalDetalle(res.factura.detalle),
+          NoAutorizacion: res.factura.fel_uuid,
+          NombreCertificador: res.factura.certificador_fel.nombre,
+          NitCertificador: res.factura.certificador_fel.nit,
+          FechaDeAutorizacion: res.factura.fecha_autorizacion,
+          NoOrdenEnLinea: '',
+          FormaDePago: '',
+          DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
+        })}`);
+        this.snackBar.open(
+          `Imprimiendo factura ${res.factura.serie_factura}-${res.factura.numero_factura}`,
+          'Impresión', { duration: 3000 }
+        );
+      } else {
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 7000 });
       }
     });
   }

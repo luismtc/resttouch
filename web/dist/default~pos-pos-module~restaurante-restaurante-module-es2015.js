@@ -690,9 +690,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/forma-pago.service */ "./src/app/pos/services/forma-pago.service.ts");
-/* harmony import */ var _services_cobro_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/cobro.service */ "./src/app/pos/services/cobro.service.ts");
-/* harmony import */ var _services_factura_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/factura.service */ "./src/app/pos/services/factura.service.ts");
+/* harmony import */ var _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
+/* harmony import */ var ngx_socket_io__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ngx-socket-io */ "./node_modules/ngx-socket-io/fesm2015/ngx-socket-io.js");
+/* harmony import */ var _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/forma-pago.service */ "./src/app/pos/services/forma-pago.service.ts");
+/* harmony import */ var _services_cobro_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/cobro.service */ "./src/app/pos/services/cobro.service.ts");
+/* harmony import */ var _services_factura_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/factura.service */ "./src/app/pos/services/factura.service.ts");
+
+
 
 
 
@@ -704,7 +708,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let CobrarPedidoComponent = class CobrarPedidoComponent {
-    constructor(dialogRef, data, snackBar, formaPagoSrvc, cobroSrvc, facturaSrvc, ls) {
+    constructor(dialog, dialogRef, data, snackBar, formaPagoSrvc, cobroSrvc, facturaSrvc, ls, socket) {
+        this.dialog = dialog;
         this.dialogRef = dialogRef;
         this.data = data;
         this.snackBar = snackBar;
@@ -712,6 +717,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
         this.cobroSrvc = cobroSrvc;
         this.facturaSrvc = facturaSrvc;
         this.ls = ls;
+        this.socket = socket;
         this.inputData = {};
         this.lstFormasPago = [];
         this.formaPago = {};
@@ -789,19 +795,74 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
                 if (res.exito || !res.facturada) {
                     this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
                     this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
+                        // console.log('RESPUESTA DE FACTURAR = ', resFact);
                         if (resFact.exito) {
-                            this.resetFactReq();
-                            this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
-                            this.dialogRef.close(res.cuenta);
+                            const confirmRef = this.dialog.open(_shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_7__["ConfirmDialogComponent"], {
+                                maxWidth: '400px',
+                                data: new _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_7__["ConfirmDialogModel"]('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
+                            });
+                            confirmRef.afterClosed().subscribe((confirma) => {
+                                if (confirma) {
+                                    this.printFactura(resFact.factura);
+                                }
+                                this.resetFactReq();
+                                this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+                                this.dialogRef.close(res.cuenta);
+                            });
                         }
                         else {
-                            this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 3000 });
+                            this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
                             this.dialogRef.close(res.cuenta);
                         }
                     });
                 }
                 else {
-                    this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 3000 });
+                    this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
+                }
+            });
+        };
+        this.procesaDetalleFactura = (detalle) => {
+            const detFact = [];
+            detalle.forEach(d => detFact.push({
+                Cantidad: +d.cantidad,
+                Descripcion: d.articulo.descripcion,
+                Total: +d.total
+            }));
+            return detFact;
+        };
+        this.getTotalDetalle = (detalle) => {
+            let suma = 0.00;
+            detalle.forEach(d => suma += +d.total);
+            return suma;
+        };
+        this.printFactura = (factura) => {
+            // console.log('FACTURA = ', factura);
+            this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
+                if (res.factura) {
+                    this.socket.emit(`print:factura`, `${JSON.stringify({
+                        NombreEmpresa: res.factura.empresa.nombre,
+                        NitEmpresa: res.factura.empresa.nit,
+                        SedeEmpresa: res.factura.sedeFactura.nombre,
+                        DireccionEmpresa: res.factura.empresa.direccion,
+                        Fecha: moment__WEBPACK_IMPORTED_MODULE_6__(res.factura.fecha_factura).format(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].dateFormat),
+                        Nit: res.factura.receptor.nit,
+                        Nombre: res.factura.receptor.nombre,
+                        Direccion: res.factura.receptor.direccion,
+                        Serie: res.factura.serie_factura,
+                        Numero: res.factura.numero_factura,
+                        Total: this.getTotalDetalle(res.factura.detalle),
+                        NoAutorizacion: res.factura.fel_uuid,
+                        NombreCertificador: res.factura.certificador_fel.nombre,
+                        NitCertificador: res.factura.certificador_fel.nit,
+                        FechaDeAutorizacion: res.factura.fecha_autorizacion,
+                        NoOrdenEnLinea: '',
+                        FormaDePago: '',
+                        DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
+                    })}`);
+                    this.snackBar.open(`Imprimiendo factura ${res.factura.serie_factura}-${res.factura.numero_factura}`, 'Impresión', { duration: 3000 });
+                }
+                else {
+                    this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 7000 });
                 }
             });
         };
@@ -811,6 +872,9 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
         this.processData();
         this.loadFormasPago();
         this.resetFactReq();
+        if (!!this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid) {
+            this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid);
+        }
     }
     calculaPorcentajePropina() {
         this.inputData.porcentajePropina = parseFloat((this.inputData.montoPropina * 100 / this.inputData.totalDeCuenta).toFixed(2));
@@ -818,13 +882,15 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
     }
 };
 CobrarPedidoComponent.ctorParameters = () => [
+    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"] },
     { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
     { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] },
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
-    { type: _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_7__["FormaPagoService"] },
-    { type: _services_cobro_service__WEBPACK_IMPORTED_MODULE_8__["CobroService"] },
-    { type: _services_factura_service__WEBPACK_IMPORTED_MODULE_9__["FacturaService"] },
-    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+    { type: _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_9__["FormaPagoService"] },
+    { type: _services_cobro_service__WEBPACK_IMPORTED_MODULE_10__["CobroService"] },
+    { type: _services_factura_service__WEBPACK_IMPORTED_MODULE_11__["FacturaService"] },
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
+    { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_8__["Socket"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
@@ -835,7 +901,7 @@ CobrarPedidoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./cobrar-pedido.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/pos/components/cobrar-pedido/cobrar-pedido.component.html")).default,
         styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./cobrar-pedido.component.css */ "./src/app/pos/components/cobrar-pedido/cobrar-pedido.component.css")).default]
     }),
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
 ], CobrarPedidoComponent);
 
 
@@ -1101,7 +1167,7 @@ let FormFacturaManualComponent = class FormFacturaManualComponent {
             });
         };
         this.procesaDetalleFactura = (detalle) => {
-            let detFact = [];
+            const detFact = [];
             detalle.forEach(d => detFact.push({
                 Cantidad: +d.cantidad,
                 Descripcion: d.articulo.descripcion,

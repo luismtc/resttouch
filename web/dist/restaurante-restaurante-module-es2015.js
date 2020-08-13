@@ -6949,11 +6949,15 @@ let TranAreasComponent = class TranAreasComponent {
         this.divSize = { h: 0, w: 0 };
         this.lstTabsAreas = [];
         this.actualizar = () => {
-            // console.log(this.mesaSeleccionada);
+            // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
             const area = this.lstTabsAreas.find((c) => +c.area === +this.mesaSeleccionada.mesa.area.area);
+            // console.log('AREA = ', area);
             const areaIndex = this.lstTabsAreas.findIndex((c) => +c.area === +this.mesaSeleccionada.mesa.area.area);
-            const mesaIndex = area.mesas.findIndex(x => x.mesa = this.mesaSeleccionada.mesa.mesa);
+            // console.log('AREA IDX = ', areaIndex);
+            const mesaIndex = area.mesas.findIndex(x => +x.mesa === +this.mesaSeleccionada.mesa.mesa);
+            // console.log('MESA IDX = ', mesaIndex);
             this.lstTabsAreas[areaIndex].mesas[mesaIndex].estatus = 1;
+            // console.log('MESA = ', this.lstTabsAreas[areaIndex].mesas[mesaIndex]);
             this.toggleRightSidenav();
         };
         this.resetMesaSeleccionada = () => this.mesaSeleccionada = {
@@ -7549,7 +7553,7 @@ let TranComandaComponent = class TranComandaComponent {
                 if (res) {
                     // console.log(res);
                     this.cambiarEstatusCuenta(res);
-                    // this.socket.emit('print:doccontable', JSON.stringify(res));
+                    this.closeSideNavEv.emit();
                 }
             });
         }

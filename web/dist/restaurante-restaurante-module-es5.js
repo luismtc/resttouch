@@ -6723,11 +6723,15 @@
                     this.divSize = { h: 0, w: 0 };
                     this.lstTabsAreas = [];
                     this.actualizar = function () {
-                        // console.log(this.mesaSeleccionada);
+                        // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
                         var area = _this.lstTabsAreas.find(function (c) { return +c.area === +_this.mesaSeleccionada.mesa.area.area; });
+                        // console.log('AREA = ', area);
                         var areaIndex = _this.lstTabsAreas.findIndex(function (c) { return +c.area === +_this.mesaSeleccionada.mesa.area.area; });
-                        var mesaIndex = area.mesas.findIndex(function (x) { return x.mesa = _this.mesaSeleccionada.mesa.mesa; });
+                        // console.log('AREA IDX = ', areaIndex);
+                        var mesaIndex = area.mesas.findIndex(function (x) { return +x.mesa === +_this.mesaSeleccionada.mesa.mesa; });
+                        // console.log('MESA IDX = ', mesaIndex);
                         _this.lstTabsAreas[areaIndex].mesas[mesaIndex].estatus = 1;
+                        // console.log('MESA = ', this.lstTabsAreas[areaIndex].mesas[mesaIndex]);
                         _this.toggleRightSidenav();
                     };
                     this.resetMesaSeleccionada = function () { return _this.mesaSeleccionada = {
@@ -7325,7 +7329,7 @@
                             if (res) {
                                 // console.log(res);
                                 _this.cambiarEstatusCuenta(res);
-                                // this.socket.emit('print:doccontable', JSON.stringify(res));
+                                _this.closeSideNavEv.emit();
                             }
                         });
                     }
