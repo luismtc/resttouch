@@ -15,7 +15,7 @@ import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
-import { ArbolArticulos} from '../../../wms/interfaces/articulo';
+import { ArbolArticulos } from '../../../wms/interfaces/articulo';
 
 import { ComandaService } from '../../services/comanda.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
@@ -46,7 +46,7 @@ export class TranComandaComponent implements OnInit {
   @Input() mesaEnUso: ComandaGetResponse;
   @Output() closeSideNavEv = new EventEmitter();
   @ViewChild('appLstProdAlt', { static: false }) appLstProdAlt: ListaProductoAltComponent;
-  @Output('actualizar') mesaSavedEv: EventEmitter<any> = new EventEmitter();
+  @Output() mesaSavedEv: EventEmitter<any> = new EventEmitter();
 
   public lstProductosSeleccionados: productoSelected[];
   public lstProductosDeCuenta: productoSelected[];
@@ -136,15 +136,19 @@ export class TranComandaComponent implements OnInit {
   }
 
   cerrarMesa = () => {
+    // console.log('CERRAR MESA; MESA EN USO = ', this.mesaEnUso);
     this.comandaSrvc.cerrarMesa(this.mesaEnUso.mesa.mesa).subscribe(res => {
-        if (res.exito) {
-          this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
-          this.mesaEnUso.mesa.estatus = 1;
-          this.closeSideNavEv.emit();
-          this.mesaSavedEv.emit();
-        } else {
-          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
-        }
+      // console.log('RESPUESTA DE CERRAR MESA = ', res);
+      if (res.exito) {
+        // console.log('EXITO PARA CERRAR LA MESA...', res);
+        this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
+        this.mesaEnUso.mesa.estatus = 1;
+        // this.closeSideNavEv.emit();
+        this.mesaSavedEv.emit();
+      } else {
+        console.log('FALLA PARA CERRAR LA MESA...', res);
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 7000 });
+      }
     });
   }
 

@@ -153,7 +153,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     });
   }
 
-  toggleRightSidenav = () => this.rightSidenav.toggle();
+  toggleRightSidenav = () => {
+    // console.log('PASO POR EL TOGGLE DEL RIGHT SIDE NAV...');
+    this.rightSidenav.toggle();
+  }
 
   cerrandoRightSideNav = () => {
     // console.log('Antes de "resetMesaEnUso"');

@@ -1,7 +1,7 @@
 <mat-sidenav-container class="matSideNavContainer">
     <mat-sidenav #rightSidenav mode="over" [(opened)]="openedRightPanel" (closedStart)="cerrandoRightSideNav()" position="end">
         <!--<app-tran-comanda #snTranComanda [mesaEnUso]="mesaSeleccionada" (closeSideNavEv)="toggleRightSidenav()"></app-tran-comanda>-->
-        <app-tran-comanda #snTranComanda [mesaEnUso]="mesaSeleccionada" (actualizar)="actualizar()" (closeSideNavEv)="toggleRightSidenav()"></app-tran-comanda>
+        <app-tran-comanda #snTranComanda [mesaEnUso]="mesaSeleccionada" (mesaSavedEv)="actualizar()" (closeSideNavEv)="toggleRightSidenav()"></app-tran-comanda>
     </mat-sidenav>
     <mat-sidenav-content>
         <mat-tab-group dynamicHeight backgroundColor="primary">

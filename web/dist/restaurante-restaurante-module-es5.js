@@ -4399,7 +4399,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<mat-sidenav-container class=\"matSideNavContainer\">\n    <mat-sidenav #rightSidenav mode=\"over\" [(opened)]=\"openedRightPanel\" (closedStart)=\"cerrandoRightSideNav()\" position=\"end\">\n        <!--<app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>-->\n        <app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (actualizar)=\"actualizar()\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>\n    </mat-sidenav>\n    <mat-sidenav-content>\n        <mat-tab-group dynamicHeight backgroundColor=\"primary\">\n            <mat-tab #tabArea *ngFor=\"let tabA of lstTabsAreas\" label=\"{{tabA.nombre}}\">\n                <div #matTabArea class=\"divAreaMesa\" (window:resize)=\"onResize($event)\">\n                    <app-mesa *ngFor=\"let m of tabA.mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\"></app-mesa>\n                </div>\n            </mat-tab>\n        </mat-tab-group>\n    </mat-sidenav-content>\n</mat-sidenav-container>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-sidenav-container class=\"matSideNavContainer\">\n    <mat-sidenav #rightSidenav mode=\"over\" [(opened)]=\"openedRightPanel\" (closedStart)=\"cerrandoRightSideNav()\" position=\"end\">\n        <!--<app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>-->\n        <app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (mesaSavedEv)=\"actualizar()\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>\n    </mat-sidenav>\n    <mat-sidenav-content>\n        <mat-tab-group dynamicHeight backgroundColor=\"primary\">\n            <mat-tab #tabArea *ngFor=\"let tabA of lstTabsAreas\" label=\"{{tabA.nombre}}\">\n                <div #matTabArea class=\"divAreaMesa\" (window:resize)=\"onResize($event)\">\n                    <app-mesa *ngFor=\"let m of tabA.mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\"></app-mesa>\n                </div>\n            </mat-tab>\n        </mat-tab-group>\n    </mat-sidenav-content>\n</mat-sidenav-container>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/tran-comanda/tran-comanda.component.html": 
@@ -6758,7 +6758,10 @@
                             }
                         }
                     };
-                    this.toggleRightSidenav = function () { return _this.rightSidenav.toggle(); };
+                    this.toggleRightSidenav = function () {
+                        // console.log('PASO POR EL TOGGLE DEL RIGHT SIDE NAV...');
+                        _this.rightSidenav.toggle();
+                    };
                     this.cerrandoRightSideNav = function () {
                         // console.log('Antes de "resetMesaEnUso"');
                         _this.snTrancomanda.resetMesaEnUso();
@@ -7026,15 +7029,19 @@
                         // console.log('SELECCIONADOS = ', this.lstProductosSeleccionados);
                     };
                     this.cerrarMesa = function () {
+                        // console.log('CERRAR MESA; MESA EN USO = ', this.mesaEnUso);
                         _this.comandaSrvc.cerrarMesa(_this.mesaEnUso.mesa.mesa).subscribe(function (res) {
+                            // console.log('RESPUESTA DE CERRAR MESA = ', res);
                             if (res.exito) {
+                                // console.log('EXITO PARA CERRAR LA MESA...', res);
                                 _this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
                                 _this.mesaEnUso.mesa.estatus = 1;
-                                _this.closeSideNavEv.emit();
+                                // this.closeSideNavEv.emit();
                                 _this.mesaSavedEv.emit();
                             }
                             else {
-                                _this.snackBar.open("ERROR: " + res.mensaje, 'Comanda', { duration: 3000 });
+                                console.log('FALLA PARA CERRAR LA MESA...', res);
+                                _this.snackBar.open("ERROR: " + res.mensaje, 'Comanda', { duration: 7000 });
                             }
                         });
                     };
@@ -7347,7 +7354,7 @@
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('appLstProdAlt', { static: false })
             ], TranComandaComponent.prototype, "appLstProdAlt", void 0);
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])('actualizar')
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
             ], TranComandaComponent.prototype, "mesaSavedEv", void 0);
             TranComandaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
