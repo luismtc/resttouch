@@ -13,6 +13,7 @@ export interface Comanda {
 }
 
 export interface ComandaGetResponse {
+    exito: boolean,
     comanda: number;
     usuario: number;
     sede: number;

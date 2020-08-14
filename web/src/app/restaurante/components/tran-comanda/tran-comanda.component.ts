@@ -88,6 +88,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   resetMesaEnUso = () => this.mesaEnUso = {
+    exito: true,
     comanda: null, usuario: null, sede: null, estatus: null,
     mesa: {
       mesa: null,

@@ -55,60 +55,68 @@ class Comanda extends CI_Controller {
 					$mesa = new Mesa_model($req['mesa']);
 					$req['usuario'] = $data->idusuario;
 					$req['sede'] = $data->sede;
+					$continuar = true;
 
 					if ($turno) {
 						$req['turno'] = $turno->turno;
-						$datos['exito'] = $comanda->guardar($req);
-
-						if (empty($req['comanda'])) {
-							$comanda->setMesa($req['mesa']);
-							$mesa->guardar(["estatus" => 2]);
+						if (($mesa->estatus == 2) && (empty($req['comanda']))) {
+							$continuar = false;
 						}
+						if ($continuar) {
+							$comanda->comandaenuso = 1;
+							$datos['exito'] = $comanda->guardar($req);
 
-						if (count($req['cuentas']) > 0) {
-							foreach ($req['cuentas'] as $row) {
-								$cuenta = new Cuenta_model();
+							if (empty($req['comanda'])) {
+								$comanda->setMesa($req['mesa']);
+								$mesa->guardar(["estatus" => 2]);
+							}
 
-								if (isset($row['cuenta']) && !empty($row['cuenta'])) {
-									$cuenta->cargar($row['cuenta']);
-								} else {
-									$tmpCuenta = $this->Cuenta_model->buscar([
-										"nombre" => trim($row["nombre"]),
-										"comanda" => $comanda->comanda,
-										"_uno" => true
-									]);
+							if (count($req['cuentas']) > 0) {
+								foreach ($req['cuentas'] as $row) {
+									$cuenta = new Cuenta_model();
 
-									if ($tmpCuenta) {
-										$cuenta->cargar($tmpCuenta->cuenta);
-									} else if(count($comanda->getCuentas()) == 1){
-
+									if (isset($row['cuenta']) && !empty($row['cuenta'])) {
+										$cuenta->cargar($row['cuenta']);
+									} else {
 										$tmpCuenta = $this->Cuenta_model->buscar([
-											"nombre" => "Unica",
+											"nombre" => trim($row["nombre"]),
 											"comanda" => $comanda->comanda,
 											"_uno" => true
 										]);
 
 										if ($tmpCuenta) {
 											$cuenta->cargar($tmpCuenta->cuenta);
+										} else if(count($comanda->getCuentas()) == 1){
+
+											$tmpCuenta = $this->Cuenta_model->buscar([
+												"nombre" => "Unica",
+												"comanda" => $comanda->comanda,
+												"_uno" => true
+											]);
+
+											if ($tmpCuenta) {
+												$cuenta->cargar($tmpCuenta->cuenta);
+											}
 										}
 									}
+
+									if ($cuenta->cerrada == 0) {
+										$row['comanda'] = $comanda->comanda;
+										$cuenta->guardarCuenta($row);	
+									}							
 								}
+								$datos['exito'] = true;
+							}	
 
-								if ($cuenta->cerrada == 0) {
-									$row['comanda'] = $comanda->comanda;
-									$cuenta->guardarCuenta($row);	
-								}							
-							}
-							$datos['exito'] = true;
-						}	
-
-						if($datos['exito']) {
-							$datos['mensaje'] = "Datos Actualizados con Exito";
-							$datos['comanda'] = $comanda->getComanda();	
+							if($datos['exito']) {
+								$datos['mensaje'] = "Datos Actualizados con Exito";
+								$datos['comanda'] = $comanda->getComanda();	
+							} else {
+								$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+							}	
 						} else {
-							$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+							$datos['mensaje'] = "La mesa ya está siendo utilizada en otra estación";
 						}
-
 					} else {
 						$datos['mensaje'] = "No existe ningun turno abierto";
 					}
@@ -126,34 +134,53 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function cerrar_estacion($comanda)
+	{
+		$datos = ["exito" => false];
+		$com = new Comanda_model($comanda);
+		$com->comandaenuso = 0;
+		if ($com->guardar()) {
+			$datos['exito'] = true;
+			$mensaje = "Datos actualizados con exito";
+		} else {
+			$datos['mensaje'] = "Ocurrió un error al guardar la comanda";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
 	public function guardar_detalle($com, $cuenta)
 	{
 		$comanda = new Comanda_model($com);
+		$mesa = $comanda->getMesas();
 		$cuenta = new Cuenta_model($cuenta);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
 		$datos = ["exito" => false];
 		if ($this->input->method() == 'post') {
-			if ($cuenta->cerrada == 0) {
-				
-				$det = $comanda->guardarDetalle($req);
-				$id = isset($req['detalle_cuenta']) ? $req['detalle_cuenta'] : '';
-				if ($det) {
-					$cuenta->guardarDetalle([
-						'detalle_comanda' => $det->detalle_comanda
-					], $id);	
-					$datos['exito'] = true;
+			if ($mesa->estatus == 2) {
+				if ($cuenta->cerrada == 0) {				
+					$det = $comanda->guardarDetalle($req);
+					$id = isset($req['detalle_cuenta']) ? $req['detalle_cuenta'] : '';
+					if ($det) {
+						$cuenta->guardarDetalle([
+							'detalle_comanda' => $det->detalle_comanda
+						], $id);	
+						$datos['exito'] = true;
+					} else {
+						$datos['exito'] = false;						
+					}	
+					if ($datos['exito']) {
+						$datos['comanda'] = $comanda->getComanda();	
+					} else {
+						$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+					}
 				} else {
-					$datos['exito'] = false;						
-				}	
-				if ($datos['exito']) {
-					$datos['comanda'] = $comanda->getComanda();	
-				} else {
-					$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+					$datos['mensaje'] = "La cuenta ya esta cerrada";
 				}
-
 			} else {
-				$datos['mensaje'] = "La cuenta ya esta cerrada";
+				$datos['mensaje'] = "La mesa debe estar en estatus abierto";
 			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
@@ -242,7 +269,15 @@ class Comanda extends CI_Controller {
 
 			if ($tmp) {
 				$comanda = new Comanda_model($tmp->comanda);
-				$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
+				if ($comanda->comandaenuso == 1) {
+					$datos['exito'] = false;
+					$datos['mensaje'] = "La mesa ya está abierta en otra estación";
+				} else {
+					$comanda->comandaenuso = 1;
+					$comanda->guardar();
+					$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
+					$datos->exito = true;
+				}
 			}
 		}
 
