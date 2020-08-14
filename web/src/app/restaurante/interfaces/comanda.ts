@@ -34,4 +34,5 @@ export interface ComandaGetResponse {
     };
     cuentas: Cuenta[];
     turno_rol?: string[];
+    mesero?: any;
 }
