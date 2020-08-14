@@ -37,7 +37,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Categoria[]>(`${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Categoria[]>(`${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getImpresoras(fltr: any = {}): Observable<Impresora[]> {
@@ -46,7 +46,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Impresora[]>(`${GLOBAL.urlMantenimientos}/impresora/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Impresora[]>(`${GLOBAL.urlMantenimientos}/impresora/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveCategoria(entidad: Categoria) {
@@ -55,7 +55,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/guardar${+entidad.categoria > 0 ? ('/' + entidad.categoria) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/guardar${+entidad.categoria > 0 ? ('/' + entidad.categoria) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getCategoriasGrupos(fltr: any = {}): Observable<CategoriaGrupoResponse[]> {
@@ -64,7 +64,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<CategoriaGrupoResponse[]>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<CategoriaGrupoResponse[]>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   adaptCategoriaGrupoResponse(lista: CategoriaGrupoResponse[]): CategoriaGrupo[] {
@@ -88,7 +88,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo)  : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo)  : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulos(fltr: any = {}): Observable<Articulo[]> {
@@ -97,7 +97,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Articulo[]>(`${GLOBAL.urlCatalogos}/get_articulo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Articulo[]>(`${GLOBAL.urlCatalogos}/get_articulo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulo(fltr: any = {}): Observable<ArticuloResponse[]> {
@@ -106,7 +106,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<ArticuloResponse[]>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ArticuloResponse[]>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArbolArticulos(idsede: number): Observable<ArbolArticulos[]> {
@@ -115,7 +115,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<ArbolArticulos[]>(`${GLOBAL.urlCatalogos}/get_lista_articulo/${idsede}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ArbolArticulos[]>(`${GLOBAL.urlCatalogos}/get_lista_articulo/${idsede}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   transformArticuloToNodo = (grps: ArbolCategoriaGrupo[]): NodoProducto[] => {
@@ -182,7 +182,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar${entidad.articulo ? ('/' + entidad.articulo)  : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));    
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar${entidad.articulo ? ('/' + entidad.articulo)  : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
   }
 
   getArticuloDetalle(idarticulo: number, fltr: any = {}): Observable<ArticuloDetalle[]> {
@@ -191,7 +191,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<ArticuloDetalle[]>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar_receta/${idarticulo}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ArticuloDetalle[]>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar_receta/${idarticulo}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveArticuloDetalle(entidad: ArticuloDetalle){
@@ -200,7 +200,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar_receta/${entidad.receta}${entidad.articulo_detalle ? ('/' + entidad.articulo_detalle)  : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));    
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar_receta/${entidad.receta}${entidad.articulo_detalle ? ('/' + entidad.articulo_detalle)  : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
   }
 
 }

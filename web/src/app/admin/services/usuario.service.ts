@@ -71,7 +71,7 @@ export class UsuarioService {
       })
     };
 
-    return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login`, JSON.stringify(obj), httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login`, JSON.stringify(obj), httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getAll(debaja: number = 0): Observable<Usuario[]> {
@@ -80,8 +80,8 @@ export class UsuarioService {
         'Authorization': this.usrToken
       })
     };
-    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?debaja=${debaja}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
-    return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?debaja=${debaja}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   async checkUserToken() {
@@ -108,8 +108,8 @@ export class UsuarioService {
         'Authorization': this.usrToken
       })
     };
-    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?${qs.stringify(filtros)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
-    return this.http.post<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios_post`, filtros, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?${qs.stringify(filtros)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios_post`, filtros, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getMeserosTurno(): Observable<Usuario[]> {
@@ -118,7 +118,7 @@ export class UsuarioService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.get<Usuario[]>(`${GLOBAL.urlCatalogos}/get_mesero`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Usuario[]>(`${GLOBAL.urlCatalogos}/get_mesero`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Usuario): Observable<Usuario> {
@@ -129,12 +129,12 @@ export class UsuarioService {
     };
 
     if (entidad.usuario) {
-      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     } else {
       if (!entidad.contrasenia) {
         delete entidad.contrasenia;
       }
-      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     }
 
   }

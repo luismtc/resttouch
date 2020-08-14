@@ -32,7 +32,7 @@ export class FormaPagoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<FormaPago[]>(`${GLOBAL.url}/${this.moduleUrl}/get_forma_pago?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<FormaPago[]>(`${GLOBAL.url}/${this.moduleUrl}/get_forma_pago?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
   
   buscar(fltr: any = {}): Observable<FormaPago[]> {
@@ -41,7 +41,7 @@ export class FormaPagoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<FormaPago[]>(`${GLOBAL.urlMantenimientos}/${this.manteUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<FormaPago[]>(`${GLOBAL.urlMantenimientos}/${this.manteUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: FormaPago): Observable<any> {
@@ -50,7 +50,7 @@ export class FormaPagoService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.manteUrl}/guardar${!!entidad.forma_pago ? ('/' + entidad.forma_pago) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.manteUrl}/guardar${!!entidad.forma_pago ? ('/' + entidad.forma_pago) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 }

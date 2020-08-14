@@ -29,6 +29,7 @@ export class CobrarPedidoComponent implements OnInit {
   public factReq: FacturaRequest;
   public clienteSelected: Cliente;
   public esMovil = false;
+  public facturando = false;
 
   constructor(
     public dialog: MatDialog,
@@ -120,6 +121,7 @@ export class CobrarPedidoComponent implements OnInit {
   }
 
   cobrar = () => {
+    this.facturando = true;
     const objCobro: Cobro = {
       cuenta: this.inputData.idcuenta,
       forma_pago: [],
@@ -143,7 +145,6 @@ export class CobrarPedidoComponent implements OnInit {
         this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
           // console.log('RESPUESTA DE FACTURAR = ', resFact);
           if (resFact.exito) {
-
             const confirmRef = this.dialog.open(ConfirmDialogComponent, {
               maxWidth: '400px',
               data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
@@ -155,14 +156,17 @@ export class CobrarPedidoComponent implements OnInit {
               }
               this.resetFactReq();
               this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+              this.facturando = false;
               this.dialogRef.close(res.cuenta);
             });
           } else {
+            this.facturando = false;
             this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
             this.dialogRef.close(res.cuenta);
           }
         });
       } else {
+        this.facturando = false;
         this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
       }
     });

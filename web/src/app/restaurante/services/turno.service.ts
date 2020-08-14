@@ -32,7 +32,7 @@ export class TurnoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Turno[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Turno[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Turno) {
@@ -41,7 +41,7 @@ export class TurnoService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${entidad.turno ? ('/' + entidad.turno) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${entidad.turno ? ('/' + entidad.turno) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getDetalle(idturno: number, fltr: any = {}): Observable<DetalleTurno[]> {
@@ -50,7 +50,7 @@ export class TurnoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<DetalleTurno[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar_usuario/${idturno}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<DetalleTurno[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar_usuario/${idturno}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
   
   saveDetalle(entidad: DetalleTurno) {
@@ -59,7 +59,7 @@ export class TurnoService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/agregar_usuario/${entidad.turno}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/agregar_usuario/${entidad.turno}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   anularDetalle(entidad: DetalleTurno) {
@@ -68,7 +68,7 @@ export class TurnoService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/anular_usuario/${entidad.turno}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/anular_usuario/${entidad.turno}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
   
 }

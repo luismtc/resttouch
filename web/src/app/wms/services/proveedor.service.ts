@@ -30,7 +30,7 @@ export class ProveedorService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Proveedor[]>(`${GLOBAL.urlCatalogos}/get_proveedor?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Proveedor[]>(`${GLOBAL.urlCatalogos}/get_proveedor?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Proveedor): Observable<any> {
@@ -39,6 +39,6 @@ export class ProveedorService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/proveedor/guardar${!!entidad.proveedor ? ('/' + entidad.proveedor) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/proveedor/guardar${!!entidad.proveedor ? ('/' + entidad.proveedor) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

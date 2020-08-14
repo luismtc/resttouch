@@ -32,7 +32,7 @@ export class ComandaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Comanda[]>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Comanda[]>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getComandaDeMesa(idmesa: number): Observable<ComandaGetResponse> {
@@ -41,7 +41,7 @@ export class ComandaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<ComandaGetResponse>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda/${idmesa}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ComandaGetResponse>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda/${idmesa}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Comanda) {
@@ -50,7 +50,7 @@ export class ComandaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar${entidad.comanda ? ('/' + entidad.comanda) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar${entidad.comanda ? ('/' + entidad.comanda) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveDetalle(idcomanda: number, idcuenta: number, detalle: DetalleComanda) {
@@ -62,7 +62,7 @@ export class ComandaService {
     // const urlComplement = detalle.detalle_comanda && detalle.detalle_cuenta  ? `/${detalle.detalle_cuenta}` : '';
     return this.http
       .post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_detalle/${idcomanda}/${idcuenta}`, detalle, httpOptions)
-      .pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   setProductoImpreso(idcuenta: number = 0) {
@@ -74,7 +74,7 @@ export class ComandaService {
     return this.http.get<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/imprimir/${idcuenta}`,
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getComandasOnLine_Test(): any[] {
@@ -279,7 +279,7 @@ export class ComandaService {
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_mesa/${idMesa}`,
       null,
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getComandasOnLIne(): Observable<ComandaGetResponse[]> {
@@ -291,7 +291,7 @@ export class ComandaService {
     return this.http.get<ComandaGetResponse[]>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda`,
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   validaPwdGerenteTurno(pwd: string): Observable<any> {
@@ -304,7 +304,7 @@ export class ComandaService {
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/validapwdgerenteturno`,
       { pwd },
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 

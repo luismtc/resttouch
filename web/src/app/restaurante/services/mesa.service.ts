@@ -34,7 +34,7 @@ export class MesaService {
     return this.http.get<Mesa[]>(
       `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`,
       httpOptions
-      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Mesa) {
@@ -47,6 +47,6 @@ export class MesaService {
       `${GLOBAL.urlMantenimientos}/mesa/guardar${entidad.mesa ? ('/' + entidad.mesa) : ''}`,
       entidad,
       httpOptions
-      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

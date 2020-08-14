@@ -120,6 +120,6 @@
   </div>
 </div>
 <div mat-dialog-actions class="d-flex justify-content-end">
-  <button mat-raised-button color="accent" (click)="cancelar()">Cancelar</button>
-  <button mat-raised-button color="accent" (click)="cobrar()" [disabled]="formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente">Terminar</button>
+  <button mat-raised-button color="accent" (click)="cancelar()" [disabled]="facturando">Cancelar</button>
+  <button mat-raised-button color="accent" (click)="cobrar()" [disabled]="formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente || facturando">Facturar</button>
 </div>

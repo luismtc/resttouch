@@ -30,6 +30,6 @@ export class OpcionService {
 				'Authorization': this.usrToken
 			})
 		};
-		return this.http.get<any[]>(`${GLOBAL.urlCatalogos}/get_opcion/${idmodulo}/${idsubmodulo}/?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+		return this.http.get<any[]>(`${GLOBAL.urlCatalogos}/get_opcion/${idmodulo}/${idsubmodulo}/?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
 	}
 }

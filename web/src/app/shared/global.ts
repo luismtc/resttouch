@@ -11,7 +11,8 @@ export const GLOBAL = {
     urlMantenimientos: `${urlBase}/index.php/mante`,
     urlWms: `${urlBase}/wms.php`,
     urlFacturacion: `${urlBase}/facturacion.php`,
-    usrTokenVar: 'rttoken'
+    usrTokenVar: 'rttoken',
+    reintentos: 0
 };
 
 export const PaginarArray = (array: any[], page_size: number, page_number: number) =>

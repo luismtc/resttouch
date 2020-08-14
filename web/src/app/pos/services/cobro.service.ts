@@ -31,6 +31,6 @@ export class CobroService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cobrar/${entidad.cuenta}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cobrar/${entidad.cuenta}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

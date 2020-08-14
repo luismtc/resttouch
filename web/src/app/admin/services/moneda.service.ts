@@ -31,6 +31,6 @@ export class MonedaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Moneda[]>(`${GLOBAL.urlCatalogos}/get_moneda?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Moneda[]>(`${GLOBAL.urlCatalogos}/get_moneda?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

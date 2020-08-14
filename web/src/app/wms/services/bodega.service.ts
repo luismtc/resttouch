@@ -30,6 +30,6 @@ export class BodegaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Bodega[]>(`${GLOBAL.urlCatalogos}/get_bodega?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Bodega[]>(`${GLOBAL.urlCatalogos}/get_bodega?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

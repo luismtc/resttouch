@@ -35,7 +35,7 @@ export class TableroService {
       `${GLOBAL.url}/tablero/get_datos`,
       this.httpOptions
     ).pipe(
-      retry(1), 
+      retry(GLOBAL.reintentos), 
       catchError(this.srvcErrHndl.errorHandler)
     );
   }

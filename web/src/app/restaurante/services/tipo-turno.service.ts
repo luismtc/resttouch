@@ -31,7 +31,7 @@ export class TipoTurnoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<TipoTurno[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/get_turno_tipo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<TipoTurno[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/get_turno_tipo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: TipoTurno) {
@@ -40,6 +40,6 @@ export class TipoTurnoService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar_turno_tipo${entidad.turno_tipo ? ('/' + entidad.turno_tipo) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar_turno_tipo${entidad.turno_tipo ? ('/' + entidad.turno_tipo) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

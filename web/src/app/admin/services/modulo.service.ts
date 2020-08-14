@@ -30,6 +30,6 @@ export class ModuloService {
 				'Authorization': this.usrToken
 			})
 		};
-		return this.http.get<Modulo[]>(`${GLOBAL.urlCatalogos}/get_modulo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+		return this.http.get<Modulo[]>(`${GLOBAL.urlCatalogos}/get_modulo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
 	}
 }

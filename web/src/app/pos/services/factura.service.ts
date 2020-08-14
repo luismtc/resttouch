@@ -32,7 +32,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   get(fltr: any = {}): Observable<Factura[]> {
@@ -41,7 +41,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Factura[]>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/buscar_factura?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Factura[]>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/buscar_factura?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   imprimir(idfactura: number): Observable<any> {
@@ -50,7 +50,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/imprimir/${idfactura}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/imprimir/${idfactura}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Factura): Observable<any> {
@@ -59,7 +59,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/guardar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/guardar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   refacturar(entidad: Factura): Observable<any> {
@@ -68,7 +68,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/refacturar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/refacturar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   firmar(identidad: number): Observable<any> {
@@ -77,7 +77,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/facturar/${identidad}`, {}, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/facturar/${identidad}`, {}, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   anular(identidad: number): Observable<any> {
@@ -87,7 +87,7 @@ export class FacturaService {
       })
     };
     return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/anular/${identidad}`, {}, httpOptions)
-      .pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getDetalle(idfactura: number, fltr: any = {}): Observable<DetalleFactura[]> {
@@ -96,7 +96,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<DetalleFactura[]>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/buscar_detalle/${idfactura}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<DetalleFactura[]>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/buscar_detalle/${idfactura}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveDetalle(entidad: DetalleFactura): Observable<any> {
@@ -105,7 +105,7 @@ export class FacturaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/guardar_detalle/${entidad.factura}${!!entidad.detalle_factura ? ('/' + entidad.detalle_factura) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/guardar_detalle/${entidad.factura}${!!entidad.detalle_factura ? ('/' + entidad.detalle_factura) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 }

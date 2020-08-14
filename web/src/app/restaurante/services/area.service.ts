@@ -34,7 +34,7 @@ export class AreaService {
     return this.http.get<Area[]>(
       `${GLOBAL.url}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`,
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Area) {
@@ -47,6 +47,6 @@ export class AreaService {
       `${GLOBAL.url}/${this.moduleUrl}/guardar${entidad.area ? ('/' + entidad.area) : ''}`,
       entidad,
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

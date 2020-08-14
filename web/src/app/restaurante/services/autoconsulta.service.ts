@@ -30,7 +30,7 @@ export class AutoconsultaService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Campo[]>(`${GLOBAL.urlCatalogos}/get_campos?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Campo[]>(`${GLOBAL.urlCatalogos}/get_campos?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getReporte(fltr:any={}) {
@@ -41,6 +41,6 @@ export class AutoconsultaService {
       }),
       responseType:'blob' as 'json'
     };    
-    return this.http.post<string>(`${GLOBAL.urlAppRestaurante}/reporte/autoconsulta`, fltr, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<string>(`${GLOBAL.urlAppRestaurante}/reporte/autoconsulta`, fltr, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

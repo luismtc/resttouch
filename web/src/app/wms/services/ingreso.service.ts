@@ -32,7 +32,7 @@ export class IngresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Ingreso[]>(`${GLOBAL.urlWms}/${this.ingresoUrl}/buscar_ingreso?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Ingreso[]>(`${GLOBAL.urlWms}/${this.ingresoUrl}/buscar_ingreso?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Ingreso) {
@@ -41,7 +41,7 @@ export class IngresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ingresoUrl}/guardar${+entidad.ingreso > 0 ? ('/' + entidad.ingreso) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ingresoUrl}/guardar${+entidad.ingreso > 0 ? ('/' + entidad.ingreso) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getDetalle(idingreso: number, fltr: any = {}): Observable<DetalleIngreso[]> {
@@ -50,7 +50,7 @@ export class IngresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<DetalleIngreso[]>(`${GLOBAL.urlWms}/${this.ingresoUrl}/buscar_detalle/${idingreso}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<DetalleIngreso[]>(`${GLOBAL.urlWms}/${this.ingresoUrl}/buscar_detalle/${idingreso}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveDetalle(entidad: DetalleIngreso){
@@ -59,7 +59,7 @@ export class IngresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ingresoUrl}/guardar_detalle/${entidad.ingreso}${+entidad.ingreso_detalle > 0 ? ('/' + entidad.ingreso_detalle) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ingresoUrl}/guardar_detalle/${entidad.ingreso}${+entidad.ingreso_detalle > 0 ? ('/' + entidad.ingreso_detalle) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 

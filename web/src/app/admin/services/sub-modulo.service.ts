@@ -30,6 +30,6 @@ export class SubModuloService {
 				'Authorization': this.usrToken
 			})
 		};
-		return this.http.get<any[]>(`${GLOBAL.urlCatalogos}/get_sub_modulo/${idmodulo}/?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+		return this.http.get<any[]>(`${GLOBAL.urlCatalogos}/get_sub_modulo/${idmodulo}/?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
 	}
 }

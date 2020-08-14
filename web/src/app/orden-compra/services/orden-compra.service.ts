@@ -32,7 +32,7 @@ export class OrdenCompraService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<OrdenCompra[]>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<OrdenCompra[]>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: OrdenCompra) {
@@ -41,7 +41,7 @@ export class OrdenCompraService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/guardar${+entidad.orden_compra > 0 ? ('/' + entidad.orden_compra) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/guardar${+entidad.orden_compra > 0 ? ('/' + entidad.orden_compra) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getDetalle(idoc: number, fltr: any = {}): Observable<DetalleOrdenCompra[]> {
@@ -50,7 +50,7 @@ export class OrdenCompraService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<DetalleOrdenCompra[]>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/buscar_detalle/${idoc}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<DetalleOrdenCompra[]>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/buscar_detalle/${idoc}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveDetalle(entidad: DetalleOrdenCompra){
@@ -59,6 +59,6 @@ export class OrdenCompraService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/guardar_detalle/${entidad.orden_compra}${+entidad.orden_compra_detalle > 0 ? ('/' + entidad.orden_compra_detalle) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlWms}/${this.ordenCompraUrl}/guardar_detalle/${entidad.orden_compra}${+entidad.orden_compra_detalle > 0 ? ('/' + entidad.orden_compra_detalle) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

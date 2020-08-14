@@ -34,7 +34,7 @@ export class ImpresoraService {
     return this.http.get<Impresora[]>(
       `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`,
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Impresora): Observable<any> {
@@ -47,6 +47,6 @@ export class ImpresoraService {
       `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${!!entidad.impresora ? ('/' + entidad.impresora) : ''}`,
       entidad,
       httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

@@ -31,7 +31,7 @@ export class CajacorteService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<ccGeneral[]>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ccGeneral[]>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getCajaCorteTipo(fltr: any = {}): Observable<ccTipo[]> {
@@ -40,7 +40,7 @@ export class CajacorteService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<ccTipo[]>(`${GLOBAL.urlCatalogos}/get_caja_corte_tipo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ccTipo[]>(`${GLOBAL.urlCatalogos}/get_caja_corte_tipo?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getCajaCorteNominacion(fltr: any = {}): Observable<ccNominacion[]> {
@@ -49,7 +49,7 @@ export class CajacorteService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<ccNominacion[]>(`${GLOBAL.urlCatalogos}/get_caja_corte_nominacion?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ccNominacion[]>(`${GLOBAL.urlCatalogos}/get_caja_corte_nominacion?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   guardar(entidad: ccGeneral): Observable<any> {
@@ -58,7 +58,7 @@ export class CajacorteService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   anularCorte(entidad: ccGeneral): Observable<any> {
@@ -67,7 +67,7 @@ export class CajacorteService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_caja`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler)); 
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_caja`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler)); 
   }
 
   anularDetalle(entidad: ccDetalle): Observable<any> {
@@ -76,6 +76,6 @@ export class CajacorteService {
         'Authorization': this.usrToken
       })
     };    
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_caja_detalle`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler)); 
+    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_caja_detalle`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler)); 
   }
 }

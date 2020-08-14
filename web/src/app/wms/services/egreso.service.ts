@@ -32,7 +32,7 @@ export class EgresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Egreso[]>(`${GLOBAL.urlWms}/${this.egresoUrl}/buscar_egreso?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Egreso[]>(`${GLOBAL.urlWms}/${this.egresoUrl}/buscar_egreso?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Egreso) {
@@ -41,7 +41,7 @@ export class EgresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlWms}/${this.egresoUrl}/guardar${+entidad.egreso > 0 ? ('/' + entidad.egreso) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlWms}/${this.egresoUrl}/guardar${+entidad.egreso > 0 ? ('/' + entidad.egreso) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getDetalle(idegreso: number, fltr: any = {}): Observable<DetalleEgreso[]> {
@@ -50,7 +50,7 @@ export class EgresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<DetalleEgreso[]>(`${GLOBAL.urlWms}/${this.egresoUrl}/buscar_detalle/${idegreso}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<DetalleEgreso[]>(`${GLOBAL.urlWms}/${this.egresoUrl}/buscar_detalle/${idegreso}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveDetalle(entidad: DetalleEgreso){
@@ -59,6 +59,6 @@ export class EgresoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlWms}/${this.egresoUrl}/guardar_detalle/${entidad.egreso}${+entidad.egreso_detalle > 0 ? ('/' + entidad.egreso_detalle) : ''}`, entidad, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlWms}/${this.egresoUrl}/guardar_detalle/${entidad.egreso}${+entidad.egreso_detalle > 0 ? ('/' + entidad.egreso_detalle) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

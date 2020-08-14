@@ -33,7 +33,7 @@ export class ReportePdfService {
     return this.http.get<string>(
         `${GLOBAL.urlAppRestaurante}/reporte/caja`,
         this.httpOptions
-        ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+        ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getReporteExistencia(params: Object) {
@@ -42,7 +42,7 @@ export class ReportePdfService {
     return this.http.get<string>(
         `${GLOBAL.urlWms}/reporte/existencia`,
         this.httpOptions
-        ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+        ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getReporteKardex(params: Object) {
@@ -51,7 +51,7 @@ export class ReportePdfService {
     return this.http.get<string>(
         `${GLOBAL.urlWms}/reporte/kardex`,
         this.httpOptions
-        ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+        ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getReporteFactura(params: Object) {
@@ -60,7 +60,7 @@ export class ReportePdfService {
     return this.http.get<string>(
       `${GLOBAL.urlAppRestaurante}/reporte/factura`,
       this.httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getReportePropina(params: Object) {
@@ -69,13 +69,13 @@ export class ReportePdfService {
     return this.http.get<string>(
       `${GLOBAL.urlFacturacion}/reporte/venta/propina`,
       this.httpOptions
-    ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getComanda(idcuenta: number) {
     return this.http.get<string>(
         `${GLOBAL.urlAppRestaurante}/comanda/imprimir/${idcuenta}/1`,
         this.httpOptions
-        ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+        ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

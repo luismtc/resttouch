@@ -31,6 +31,6 @@ export class FacturaSerieService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<FacturaSerie[]>(`${GLOBAL.urlCatalogos}/get_factura_serie?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<FacturaSerie[]>(`${GLOBAL.urlCatalogos}/get_factura_serie?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

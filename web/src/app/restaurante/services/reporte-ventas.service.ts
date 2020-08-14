@@ -35,7 +35,7 @@ export class ReporteVentasService {
     return this.http.get<PorCategoria[]>(
       `${GLOBAL.urlFacturacion}/${this.moduleUrl}/categoria?${qs.stringify(params)}`,
       httpOptions
-      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   porArticulo(params: any): Observable<PorArticulo[]> {
@@ -48,7 +48,7 @@ export class ReporteVentasService {
     return this.http.get<PorArticulo[]>(
       `${GLOBAL.urlFacturacion}/${this.moduleUrl}/articulo?${qs.stringify(params)}`,
       httpOptions
-      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   porCategoriaPdf(params: Object) {
@@ -63,7 +63,7 @@ export class ReporteVentasService {
     return this.http.get<string>(
       `${GLOBAL.urlFacturacion}/${this.moduleUrl}/categoriapdf/1?${qs.stringify(params)}`,
       httpOptions
-      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   porArticuloPdf(params: Object) {
@@ -78,6 +78,6 @@ export class ReporteVentasService {
     return this.http.get<string>(
       `${GLOBAL.urlFacturacion}/${this.moduleUrl}/articulopdf/1?${qs.stringify(params)}`,
       httpOptions
-      ).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

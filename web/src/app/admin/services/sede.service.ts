@@ -31,7 +31,7 @@ export class SedeService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Sede[]>(`${GLOBAL.urlCatalogos}/get_sede?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Sede[]>(`${GLOBAL.urlCatalogos}/get_sede?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 }

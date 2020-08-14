@@ -18,8 +18,8 @@ export class JerarquiaService {
 
 	constructor(
 		private http: HttpClient,
-		private ls: LocalstorageService    
-	) { 
+		private ls: LocalstorageService
+	) {
 		this.srvcErrHndl = new ServiceErrorHandler();
 		this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
 	}
@@ -30,6 +30,6 @@ export class JerarquiaService {
 				'Authorization': this.usrToken
 			})
 		};
-		return this.http.get<Jerarquia[]>(`${GLOBAL.urlCatalogos}/get_jerarquia?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+		return this.http.get<Jerarquia[]>(`${GLOBAL.urlCatalogos}/get_jerarquia?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
 	}
 }

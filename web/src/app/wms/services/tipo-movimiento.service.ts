@@ -30,6 +30,6 @@ export class TipoMovimientoService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<TipoMovimiento[]>(`${GLOBAL.urlCatalogos}/get_tipo_movimiento?${qs.stringify(fltr)}`, httpOptions).pipe(retry(1), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<TipoMovimiento[]>(`${GLOBAL.urlCatalogos}/get_tipo_movimiento?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }
