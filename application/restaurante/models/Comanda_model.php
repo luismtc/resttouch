@@ -12,6 +12,7 @@ class Comanda_model extends General_Model {
 	public $comanda_origen;
 	public $comanda_origen_datos;
 	public $mesero;
+	public $comandaenuso = 0;
 
 	public function __construct($id = '')
 	{
@@ -172,7 +173,7 @@ class Comanda_model extends General_Model {
 		
 		if($mesa){
 			$area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
-			$area->impresora = $this->Impresora_model->buscar(['impresora' => $area->impresora, "_uno" => true]);
+			//$area->impresora = $this->Impresora_model->buscar(['impresora' => $area->impresora, "_uno" => true]);
 			$mesa->area = $area;
 			$tmp->mesa = $mesa;			
 		}
