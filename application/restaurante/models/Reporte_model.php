@@ -5,6 +5,7 @@ class Reporte_model extends CI_Model {
 
 	public function get_ingresos($args = [])
 	{
+		$group = "";
 		if (isset($args['turno_tipo'])) {
 			$this->db->where('i.turno_tipo', $args['turno_tipo']);
 		}
@@ -18,12 +19,19 @@ class Reporte_model extends CI_Model {
 			$this->db->where("e.fel_uuid_anulacion is null");
 		}
 
+		if (isset($args['detalle'])) {
+			$group = ", a.factura";
+		}
+
 		$tmp = $this->db
 		->select("
 			a.forma_pago, 
 			f.descripcion, 
 			a.monto, 
-			a.propina")
+			a.propina,
+			e.factura,
+			e.numero_factura,
+			e.fecha_factura")
 		->from("cuenta_forma_pago a")
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
@@ -44,9 +52,11 @@ class Reporte_model extends CI_Model {
 			select 
 				a.descripcion, 
 				sum(a.monto) as monto, 
-				sum(a.propina) as propina
+				sum(a.propina) as propina,
+				a.fecha_factura,
+				a.numero_factura
 			from ( {$tmp} ) a
-			group by a.forma_pago")
+			group by a.forma_pago {$group}")
 			->result();
 	}
 
