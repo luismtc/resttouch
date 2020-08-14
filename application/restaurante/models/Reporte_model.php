@@ -21,8 +21,8 @@ class Reporte_model extends CI_Model {
 		return $this->db
 		->select("
 			f.descripcion, 
-			sum(distinct a.monto) as monto, 
-			sum(distinct a.propina) as propina")
+			suma.monto) as monto, 
+			sum(a.propina) as propina")
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
 		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
@@ -72,7 +72,7 @@ class Reporte_model extends CI_Model {
 		return $this->db
 		->select("
 			f.descripcion, 
-			a.monto, 
+			sum(a.monto), 
 			e.factura,
 			e.numero_factura,
 			e.fecha_factura")	
