@@ -5,6 +5,7 @@ class Reporte_model extends CI_Model {
 
 	public function get_ingresos($args = [])
 	{
+		/*
 		if (isset($args['turno_tipo'])) {
 			$this->db->where('i.turno_tipo', $args['turno_tipo']);
 		}
@@ -38,6 +39,29 @@ class Reporte_model extends CI_Model {
 		->group_by("a.forma_pago")
 		->get("cuenta_forma_pago a")
 		->result();
+		*/
+		$query = "SELECT f.descripcion, SUM(a.monto) AS monto, SUM(a.propina) AS propina
+		FROM cuenta_forma_pago a
+		INNER JOIN cuenta b ON b.cuenta = a.cuenta
+		INNER JOIN comanda c ON c.comanda = b.comanda
+		INNER JOIN turno d ON d.turno = c.turno
+		INNER JOIN turno_tipo e ON e.turno_tipo = d.turno_tipo
+		INNER JOIN forma_pago f ON f.forma_pago = a.forma_pago
+		WHERE c.sede = ".$args['sede']." AND c.comanda IN (
+			SELECT DISTINCT u.comanda
+			FROM comanda u 
+			INNER JOIN detalle_comanda v ON u.comanda = v.comanda
+			INNER JOIN detalle_cuenta w ON v.detalle_comanda = w.detalle_comanda
+			INNER JOIN detalle_factura_detalle_cuenta x ON w.detalle_cuenta = x.detalle_cuenta
+			INNER JOIN detalle_factura y ON y.detalle_factura = x.detalle_factura
+			INNER JOIN factura z ON z.factura = y.factura
+			WHERE z.fecha_factura >= '".$args['fdel']."' AND z.fecha_factura <= '".$args['fal']."' AND z.fel_uuid_anulacion IS NULL ";
+		$query.= isset($args['facturadas']) ? "AND z.numero_factura IS NOT NULL " : '';
+		$query.= ") ";
+		$query.= isset($args['descuento']) ? ('AND f.descuento = '.$args['descuento'].' ') : '';
+		$query.= isset($args['turno_tipo']) ? ('AND e.turno_tipo = '.$args['turno_tipo'].' ') : '';
+		$query.= "GROUP BY a.forma_pago";
+		return $this->db->query($query)->result();
 	}	
 
 	public function getRangoComandas($args)
