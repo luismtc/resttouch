@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angula
 import { MatDialog } from '@angular/material/dialog';
 import { MatTab } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSidenav, MatDrawerToggleResult } from '@angular/material/sidenav';
 import { GLOBAL } from '../../../shared/global';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 
@@ -11,6 +12,7 @@ import { Area } from '../../interfaces/area';
 import { AreaService } from '../../services/area.service';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { ComandaService } from '../../services/comanda.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-tran-areas',
@@ -23,7 +25,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   public openedRightPanel: boolean;
 
   @ViewChild('matTabArea', { static: false }) pestania: ElementRef;
-  @ViewChild('rightSidenav', { static: false }) rightSidenav: any;
+  @ViewChild('rightSidenav', { static: false }) rightSidenav: MatSidenav;
   @ViewChild('tabArea', { static: false }) tabArea: MatTab;
   @ViewChild('snTranComanda', { static: false }) snTrancomanda: TranComandaComponent;
   public lstTabsAreas: Area[] = [];
@@ -158,8 +160,17 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   toggleRightSidenav = () => {
-    // console.log('PASO POR EL TOGGLE DEL RIGHT SIDE NAV...');
-    this.rightSidenav.toggle();
+    // console.log('ESTATUS DEL PANEL DERECHO = ', this.rightSidenav.opened);
+    this.rightSidenav.toggle().then((res: MatDrawerToggleResult) => {
+      // console.log('RESULTADO DEL TOGGLE = ', res);
+      if (res === 'close') {
+        // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
+        // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
+        this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {
+          // console.log('CERRANDO RIGHT SIDE PANEL.', resCierre);
+        });
+      }
+    });
   }
 
   cerrandoRightSideNav = () => {
@@ -173,7 +184,14 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     this.snTrancomanda.resetCuentaActiva();
     // console.log('Antes de "loadComandaMesa"');
     this.snTrancomanda.resetListadoArticulos();
-    this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
+    // console.log('MESA SELECCIONADA EN CERRANDO RIGHT SIDE PANEL = ', this.mesaSeleccionada);
+    /*this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(res => {
+      console.log('CERRANDO RIGHT SIDE PANEL.', res);
+      this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
+    });*/
+    // console.log(`CERRANDO ${moment().format(GLOBAL.dateTimeFormat)}`);
+    // this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
+    this.fuerzaCierreComanda(false);
   }
 
   checkEstatusMesa = () => {
@@ -188,6 +206,12 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         }, 1);
       }
     }
+  }
+
+  fuerzaCierreComanda = (shouldToggle: boolean) => {
+    this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {
+      this.loadComandaMesa(this.mesaSeleccionada.mesa, shouldToggle);
+    });
   }
 
   loadComandaMesa = (obj: any, shouldToggle = true) => {
@@ -213,13 +237,17 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
           const cuentas = this.mesaSeleccionada.cuentas;
           this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
           this.toggleRightSidenav();
-          if (cuentas.length === 1){
+          if (cuentas.length === 1) {
             this.snTrancomanda.setSelectedCuenta(cuentas[0].numero);
           }
+        } else {
+          // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
         }
-
       } else {
-        this._snackBar.open(`Problema al mostrar la comanda de la mesa #${obj.numero}`, 'ERROR', { duration: 5000 });
+        if (res.mensaje) {
+          this._snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+        }
+        this.checkEstatusMesa();
       }
     });
   }

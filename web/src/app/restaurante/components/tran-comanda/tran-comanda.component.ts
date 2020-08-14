@@ -362,7 +362,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   printCuenta() {
-    console.log(this.mesaEnUso); return;
+    // console.log(this.mesaEnUso); return;
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
     this.setSumaCuenta(this.lstProductosAImprimir);
     /*

@@ -518,7 +518,7 @@ EcoFabSpeedDialModule.decorators = [
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>\n  Cobrar cuenta de {{data.cuenta}}\n  <small *ngIf=\"clienteSelected && !!clienteSelected.cliente\">\n     - Factura a nombre de {{clienteSelected.nombre}}\n  </small>\n</h1>\n<div mat-dialog-content style=\"height: 650px;\">\n  <div class=\"row\">\n    <div class=\"col m5 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <app-lista-cliente #lstClientes (getClienteEv)=\"setClienteFacturar($event)\" [showAddButton]=\"true\"></app-lista-cliente>\n    </div>\n    <div class=\"col m3 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <table class=\"table table-sm table-borderless table-striped\">\n        <tbody>\n          <tr *ngFor=\"let p of inputData.productosACobrar; let i = index;\">\n            <td>{{p.cantidad}}&nbsp;{{p.nombre || p.articulo.descripcion}}</td>\n            <td class=\"text-right\">{{(p.cantidad * p.precio) | number: '1.2-2'}}</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n    <div class=\"col m4 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <form #frmFormasPago=\"ngForm\" novalidate>\n        <mat-form-field class=\"fullWidth\">\n          <mat-label>Forma de pago</mat-label>\n          <mat-select name=\"forma_pago\" [(ngModel)]=\"formaPago.forma_pago\" cdkFocusInitial required>\n            <mat-option *ngFor=\"let fp of lstFormasPago\" [value]=\"fp.forma_pago\">\n              {{fp.descripcion}}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <!--Inicia input de monto por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Monto\" placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <!--Fin de input de monto por forma de pago-->\n        <!--Inicia input de propina por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Propina\" placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <!--Fin de input de propina por forma de pago-->\n        <div align=\"end\">\n          <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"addFormaPago()\" [disabled]=\"!frmFormasPago.form.valid || inputData.saldo <= 0\">\n            Agregar\n          </button>\n        </div>\n      </form>\n      <hr />\n      <table class=\"table table-sm\">\n        <thead>\n          <tr>\n            <th class=\"text-left\">FP</th>\n            <th class=\"text-right\">Mon</th>\n            <th class=\"text-right\">Prop</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let fpCta of formasPagoDeCuenta; let i = index\">\n            <td>{{fpCta.forma_pago.descripcion}}</td>\n            <td class=\"text-right\">{{fpCta.monto | number:'1.2-2'}}</td>\n            <td class=\"text-right\">{{fpCta.propina | number:'1.2-2'}}</td>\n            <td class=\"text-center\">\n              <button mat-icon-button type=\"button\" color=\"warn\" (click)=\"delFormaPago(i)\">\n                <mat-icon>delete_forever</mat-icon>\n              </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col m12 s12 overflow-auto d-flex justify-content-end\">\n      <table class=\"table table-sm table-borderless\">\n        <tbody>\n          <!--\n          <tr class=\"propina\">\n            <td class=\"text-right\" style=\"max-width: 15%;\">\n              <mat-form-field *ngIf=\"esMovil\">\n                <input matInput placeholder=\"% propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.porcentajePropina\" (keyup.enter)=\"calculaPropina()\" (blur)=\"calculaPropina()\">\n              </mat-form-field>\n              <mat-form-field *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"% propina\" placeholder=\"% propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.porcentajePropina\" (keyup.enter)=\"calculaPropina()\" (blur)=\"calculaPropina()\">\n              </mat-form-field>\n            </td>\n            <td class=\"text-right\" style=\"max-width: 15%;\">\n              <mat-form-field *ngIf=\"esMovil\">\n                <input matInput placeholder=\"Propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.montoPropina\" (keyup.enter)=\"calculaPorcentajePropina()\" (blur)=\"calculaPorcentajePropina()\">\n              </mat-form-field>\n              <mat-form-field *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Propina\" placeholder=\"Propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.montoPropina\" (keyup.enter)=\"calculaPorcentajePropina()\" (blur)=\"calculaPorcentajePropina()\">\n              </mat-form-field>\n            </td>\n          </tr>\n          -->\n          <tr>\n            <td class=\"text-right font-weight-bold\">TOTAL DE CUENTA:</td>\n            <td class=\"text-right font-weight-bold totalCuenta\" style=\"max-width: 15%;\">{{inputData.totalDeCuenta | number:'1.2-2'}}</td>\n          </tr>\n          <tr>\n            <td class=\"text-right font-weight-bold\">PENDIENTE:</td>\n            <td class=\"text-right font-weight-bold\" style=\"max-width: 15%;\">\n              <span\n                [ngClass]=\"{'saldo-pendiente': +inputData.saldo > 0, 'saldo-exacto': +inputData.saldo == 0, 'saldo-extra': +inputData.saldo < 0 }\">{{inputData.saldo | number:'1.2-2'}}</span>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>\n<div mat-dialog-actions class=\"d-flex justify-content-end\">\n  <button mat-raised-button color=\"accent\" (click)=\"cancelar()\">Cancelar</button>\n  <button mat-raised-button color=\"accent\" (click)=\"cobrar()\" [disabled]=\"formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente\">Terminar</button>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>\n  Cobrar cuenta de {{data.cuenta}}\n  <small *ngIf=\"clienteSelected && !!clienteSelected.cliente\">\n     - Factura a nombre de {{clienteSelected.nombre}}\n  </small>\n</h1>\n<div mat-dialog-content style=\"height: 650px;\">\n  <div class=\"row\">\n    <div class=\"col m5 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <app-lista-cliente #lstClientes (getClienteEv)=\"setClienteFacturar($event)\" [showAddButton]=\"true\"></app-lista-cliente>\n    </div>\n    <div class=\"col m3 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <table class=\"table table-sm table-borderless table-striped\">\n        <tbody>\n          <tr *ngFor=\"let p of inputData.productosACobrar; let i = index;\">\n            <td>{{p.cantidad}}&nbsp;{{p.nombre || p.articulo.descripcion}}</td>\n            <td class=\"text-right\">{{(p.cantidad * p.precio) | number: '1.2-2'}}</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n    <div class=\"col m4 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <form #frmFormasPago=\"ngForm\" novalidate>\n        <mat-form-field class=\"fullWidth\">\n          <mat-label>Forma de pago</mat-label>\n          <mat-select name=\"forma_pago\" [(ngModel)]=\"formaPago.forma_pago\" cdkFocusInitial required>\n            <mat-option *ngFor=\"let fp of lstFormasPago\" [value]=\"fp.forma_pago\">\n              {{fp.descripcion}}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <!--Inicia input de monto por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Monto\" placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <!--Fin de input de monto por forma de pago-->\n        <!--Inicia input de propina por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Propina\" placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <!--Fin de input de propina por forma de pago-->\n        <div align=\"end\">\n          <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"addFormaPago()\" [disabled]=\"!frmFormasPago.form.valid || inputData.saldo <= 0\">\n            Agregar\n          </button>\n        </div>\n      </form>\n      <hr />\n      <table class=\"table table-sm\">\n        <thead>\n          <tr>\n            <th class=\"text-left\">FP</th>\n            <th class=\"text-right\">Mon</th>\n            <th class=\"text-right\">Prop</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let fpCta of formasPagoDeCuenta; let i = index\">\n            <td>{{fpCta.forma_pago.descripcion}}</td>\n            <td class=\"text-right\">{{fpCta.monto | number:'1.2-2'}}</td>\n            <td class=\"text-right\">{{fpCta.propina | number:'1.2-2'}}</td>\n            <td class=\"text-center\">\n              <button mat-icon-button type=\"button\" color=\"warn\" (click)=\"delFormaPago(i)\">\n                <mat-icon>delete_forever</mat-icon>\n              </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col m12 s12 overflow-auto d-flex justify-content-end\">\n      <table class=\"table table-sm table-borderless\">\n        <tbody>\n          <!--\n          <tr class=\"propina\">\n            <td class=\"text-right\" style=\"max-width: 15%;\">\n              <mat-form-field *ngIf=\"esMovil\">\n                <input matInput placeholder=\"% propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.porcentajePropina\" (keyup.enter)=\"calculaPropina()\" (blur)=\"calculaPropina()\">\n              </mat-form-field>\n              <mat-form-field *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"% propina\" placeholder=\"% propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.porcentajePropina\" (keyup.enter)=\"calculaPropina()\" (blur)=\"calculaPropina()\">\n              </mat-form-field>\n            </td>\n            <td class=\"text-right\" style=\"max-width: 15%;\">\n              <mat-form-field *ngIf=\"esMovil\">\n                <input matInput placeholder=\"Propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.montoPropina\" (keyup.enter)=\"calculaPorcentajePropina()\" (blur)=\"calculaPorcentajePropina()\">\n              </mat-form-field>\n              <mat-form-field *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Propina\" placeholder=\"Propina\" name=\"monto\" type=\"number\"\n                  [(ngModel)]=\"inputData.montoPropina\" (keyup.enter)=\"calculaPorcentajePropina()\" (blur)=\"calculaPorcentajePropina()\">\n              </mat-form-field>\n            </td>\n          </tr>\n          -->\n          <tr>\n            <td class=\"text-right font-weight-bold\">TOTAL DE CUENTA:</td>\n            <td class=\"text-right font-weight-bold totalCuenta\" style=\"max-width: 15%;\">{{inputData.totalDeCuenta | number:'1.2-2'}}</td>\n          </tr>\n          <tr>\n            <td class=\"text-right font-weight-bold\">PENDIENTE:</td>\n            <td class=\"text-right font-weight-bold\" style=\"max-width: 15%;\">\n              <span\n                [ngClass]=\"{'saldo-pendiente': +inputData.saldo > 0, 'saldo-exacto': +inputData.saldo == 0, 'saldo-extra': +inputData.saldo < 0 }\">{{inputData.saldo | number:'1.2-2'}}</span>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n</div>\n<div mat-dialog-actions class=\"d-flex justify-content-end\">\n  <button mat-raised-button color=\"accent\" (click)=\"cancelar()\" [disabled]=\"facturando\">Cancelar</button>\n  <button mat-raised-button color=\"accent\" (click)=\"cobrar()\" [disabled]=\"formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente || facturando\">Facturar</button>\n</div>");
 
 /***/ }),
 
@@ -642,7 +642,7 @@ let MonedaService = class MonedaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos}/get_moneda?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos}/get_moneda?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 MonedaService.ctorParameters = () => [
@@ -723,6 +723,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
         this.formaPago = {};
         this.formasPagoDeCuenta = [];
         this.esMovil = false;
+        this.facturando = false;
         this.resetFactReq = () => {
             this.factReq = { cuentas: [], factura_serie: 1, cliente: null, fecha_factura: moment__WEBPACK_IMPORTED_MODULE_6__().format(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].dbDateFormat), moneda: 1 };
         };
@@ -776,6 +777,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
             this.factReq.cliente = +obj.cliente;
         };
         this.cobrar = () => {
+            this.facturando = true;
             const objCobro = {
                 cuenta: this.inputData.idcuenta,
                 forma_pago: [],
@@ -807,16 +809,19 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
                                 }
                                 this.resetFactReq();
                                 this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+                                this.facturando = false;
                                 this.dialogRef.close(res.cuenta);
                             });
                         }
                         else {
+                            this.facturando = false;
                             this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
                             this.dialogRef.close(res.cuenta);
                         }
                     });
                 }
                 else {
+                    this.facturando = false;
                     this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
                 }
             });
@@ -1861,7 +1866,7 @@ let CobroService = class CobroService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/cobrar/${entidad.cuenta}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/cobrar/${entidad.cuenta}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 CobroService.ctorParameters = () => [
@@ -1920,7 +1925,7 @@ let FacturaSerieService = class FacturaSerieService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos}/get_factura_serie?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlCatalogos}/get_factura_serie?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 FacturaSerieService.ctorParameters = () => [
@@ -1979,7 +1984,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/guardar`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     get(fltr = {}) {
         const httpOptions = {
@@ -1987,7 +1992,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/buscar_factura?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/buscar_factura?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     imprimir(idfactura) {
         const httpOptions = {
@@ -1995,7 +2000,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/imprimir/${idfactura}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/imprimir/${idfactura}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     save(entidad) {
         const httpOptions = {
@@ -2003,7 +2008,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/guardar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/guardar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     refacturar(entidad) {
         const httpOptions = {
@@ -2011,7 +2016,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/refacturar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/refacturar${!!entidad.factura ? ('/' + entidad.factura) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     firmar(identidad) {
         const httpOptions = {
@@ -2019,7 +2024,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/facturar/${identidad}`, {}, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/facturar/${identidad}`, {}, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     anular(identidad) {
         const httpOptions = {
@@ -2028,7 +2033,7 @@ let FacturaService = class FacturaService {
             })
         };
         return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/anular/${identidad}`, {}, httpOptions)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     getDetalle(idfactura, fltr = {}) {
         const httpOptions = {
@@ -2036,7 +2041,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/buscar_detalle/${idfactura}?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/buscar_detalle/${idfactura}?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     saveDetalle(entidad) {
         const httpOptions = {
@@ -2044,7 +2049,7 @@ let FacturaService = class FacturaService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/guardar_detalle/${entidad.factura}${!!entidad.detalle_factura ? ('/' + entidad.detalle_factura) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlFacturacion}/${this.moduleUrl}/guardar_detalle/${entidad.factura}${!!entidad.detalle_factura ? ('/' + entidad.detalle_factura) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 FacturaService.ctorParameters = () => [
@@ -2104,7 +2109,7 @@ let FormaPagoService = class FormaPagoService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url}/${this.moduleUrl}/get_forma_pago?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url}/${this.moduleUrl}/get_forma_pago?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     buscar(fltr = {}) {
         const httpOptions = {
@@ -2112,7 +2117,7 @@ let FormaPagoService = class FormaPagoService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/${this.manteUrl}/buscar?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/${this.manteUrl}/buscar?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
     save(entidad) {
         const httpOptions = {
@@ -2120,7 +2125,7 @@ let FormaPagoService = class FormaPagoService {
                 'Authorization': this.usrToken
             })
         };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/${this.manteUrl}/guardar${!!entidad.forma_pago ? ('/' + entidad.forma_pago) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(1), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/${this.manteUrl}/guardar${!!entidad.forma_pago ? ('/' + entidad.forma_pago) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 FormaPagoService.ctorParameters = () => [

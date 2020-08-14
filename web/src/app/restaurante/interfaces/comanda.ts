@@ -13,7 +13,7 @@ export interface Comanda {
 }
 
 export interface ComandaGetResponse {
-    exito: boolean,
+    exito?: boolean;
     comanda: number;
     usuario: number;
     sede: number;
@@ -36,4 +36,5 @@ export interface ComandaGetResponse {
     cuentas: Cuenta[];
     turno_rol?: string[];
     mesero?: any;
+    mensaje?: string;
 }
