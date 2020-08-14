@@ -5345,7 +5345,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 urlWms: urlBase + "/wms.php",
                 urlFacturacion: urlBase + "/facturacion.php",
                 usrTokenVar: 'rttoken',
-                reintentos: 0
+                reintentos: 0,
+                infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='
             };
             var PaginarArray = function (array, page_size, page_number) { return array.slice((page_number - 1) * page_size, page_number * page_size); };
             var CheckObjectType = function (objeto, tipo) { return Object.prototype.toString.call(objeto).toLowerCase().substring(7).indexOf(tipo.trim().toLowerCase()) > -1; };

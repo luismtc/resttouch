@@ -12,7 +12,8 @@ export const GLOBAL = {
     urlWms: `${urlBase}/wms.php`,
     urlFacturacion: `${urlBase}/facturacion.php`,
     usrTokenVar: 'rttoken',
-    reintentos: 0
+    reintentos: 0,
+    infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='
 };
 
 export const PaginarArray = (array: any[], page_size: number, page_number: number) =>

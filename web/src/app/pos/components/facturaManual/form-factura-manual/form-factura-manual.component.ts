@@ -98,7 +98,8 @@ export class FormFacturaManualComponent implements OnInit {
 
   refacturar = () => {
     this.factura = {
-      factura: this.factura.factura, factura_serie: null, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
+      factura: this.factura.factura, factura_serie: null, cliente: null,
+      fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
       fel_uuid: null, fel_uuid_anulacion: null
     };
     this.refacturacion = true;
@@ -106,7 +107,8 @@ export class FormFacturaManualComponent implements OnInit {
 
   resetFactura = () => {
     this.factura = {
-      factura: null, factura_serie: null, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
+      factura: null, factura_serie: null, cliente: null,
+      fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
       fel_uuid: null, fel_uuid_anulacion: null
     };
     this.resetDetalleFactura();
@@ -150,7 +152,7 @@ export class FormFacturaManualComponent implements OnInit {
           }
           this._snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
         }
-      });      
+      });
     }
 
   }
@@ -158,7 +160,11 @@ export class FormFacturaManualComponent implements OnInit {
   firmarFactura = () => {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '400px',
-      data: new ConfirmDialogModel('Firmar factura', 'Luego de firmar la factura no podrá hacer ninguna modificación. ¿Desea continuar?', 'Sí', 'No')
+      data: new ConfirmDialogModel(
+        'Firmar factura',
+        'Luego de firmar la factura no podrá hacer ninguna modificación. ¿Desea continuar?',
+        'Sí', 'No'
+      )
     });
 
     dialogRef.afterClosed().subscribe(res => {
@@ -317,4 +323,11 @@ export class FormFacturaManualComponent implements OnInit {
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesFactura);
 
+  representacionGrafica = () => {
+    window.open(
+      `${GLOBAL.infilePdfUrl}${this.factura.fel_uuid}`,
+      'winFactPdf',
+      'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no'
+    );
+  }
 }

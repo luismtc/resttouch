@@ -69,6 +69,9 @@
                 <button mat-raised-button type="button" color="accent" class="btnAccion" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0 || refacturacion" (click)="imprimirFactura()">
                     Imprimir
                 </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || detallesFactura.length === 0 || refacturacion" (click)="representacionGrafica()">
+                    PDF
+                </button>
                 <button mat-raised-button type="button" color="accent" class="btnAccion" [disabled]="!frmFactura.form.valid || factura.fel_uuid == undefined || factura.fel_uuid == null || !!factura.fel_uuid_anulacion || detallesFactura.length === 0" (click)="anularFactura()">
                     Anular
                 </button>
