@@ -21,19 +21,19 @@ export class FormProductoComponent implements OnInit {
 
   @Input() articulo: Articulo;
   @Output() articuloSvd = new EventEmitter();
-  public showArticuloForm: boolean = true;
+  public showArticuloForm = true;
   public medidas: Medida[] = [];
   public presentaciones: Presentacion[] = [];
   public articulos: Articulo[] = [];
   public recetas: ArticuloDetalle[] = [];
   public receta: ArticuloDetalle;
-  public showDetalleForm: boolean = true;
+  public showDetalleForm = true;
   public displayedColumns: string[] = ['articulo', 'cantidad', 'medida', 'editItem'];
   public dataSource: MatTableDataSource<ArticuloDetalle>;
-  public esMovil: boolean = false;
+  public esMovil = false;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private articuloSrvc: ArticuloService,
     private medidaSrvc: MedidaService,
@@ -71,9 +71,9 @@ export class FormProductoComponent implements OnInit {
         this.resetArticulo();
         this.articulo = res.articulo;
         this.loadArticulos();
-        this._snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
+        this.snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
       }
     });
   }

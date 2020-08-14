@@ -88,7 +88,7 @@ export class ArticuloService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo)  : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulos(fltr: any = {}): Observable<Articulo[]> {
@@ -176,13 +176,17 @@ export class ArticuloService {
     return arbol;
   }
 
-  saveArticulo(entidad: Articulo){
+  saveArticulo(entidad: Articulo) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar${entidad.articulo ? ('/' + entidad.articulo)  : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
+    return this.http.post<any>(
+      `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar${entidad.articulo ? ('/' + entidad.articulo) : ''}`,
+      entidad,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticuloDetalle(idarticulo: number, fltr: any = {}): Observable<ArticuloDetalle[]> {
@@ -194,13 +198,13 @@ export class ArticuloService {
     return this.http.get<ArticuloDetalle[]>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar_receta/${idarticulo}?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  saveArticuloDetalle(entidad: ArticuloDetalle){
+  saveArticuloDetalle(entidad: ArticuloDetalle) {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar_receta/${entidad.receta}${entidad.articulo_detalle ? ('/' + entidad.articulo_detalle)  : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar_receta/${entidad.receta}${entidad.articulo_detalle ? ('/' + entidad.articulo_detalle) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 }
