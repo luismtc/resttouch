@@ -141,7 +141,7 @@ class Comanda extends CI_Controller {
 		$com->comandaenuso = 0;
 		if ($com->guardar()) {
 			$datos['exito'] = true;
-			$mensaje = "Datos actualizados con exito";
+			$datos['mensaje'] = "Datos actualizados con exito";
 		} else {
 			$datos['mensaje'] = "Ocurrió un error al guardar la comanda";
 		}
