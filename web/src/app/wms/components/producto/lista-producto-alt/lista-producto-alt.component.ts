@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 import { GLOBAL } from '../../../../shared/global';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
@@ -13,6 +13,7 @@ import { ArticuloService } from '../../../services/articulo.service';
 })
 export class ListaProductoAltComponent implements OnInit {
 
+  @Input() bloqueoBotones = false;
   @Output() productoClickedEv = new EventEmitter();
   @Output() categoriasFilledEv = new EventEmitter();
   public categorias: ArbolArticulos[] = [];
@@ -84,5 +85,5 @@ export class ListaProductoAltComponent implements OnInit {
     this.productoClickedEv.emit(obj);
     // this.subcategorias = [];
     // this.articulos = [];
-  }  
+  }
 }

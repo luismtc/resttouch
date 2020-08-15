@@ -129,7 +129,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"primary\" *ngFor=\"let sc of subcategorias\"\n            (click)=\"clickOnSubCategoria(sc)\">\n            {{sc.descripcion}}\n        </button>\n    </div>\n</div>\n<hr *ngIf=\"articulos.length > 0\" />\n<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"warn\" *ngFor=\"let art of articulos\"\n            (click)=\"clickOnArticulo(art)\">\n            {{art.descripcion}}\n        </button>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"primary\" *ngFor=\"let sc of subcategorias\" (click)=\"clickOnSubCategoria(sc)\" [disabled]=\"bloqueoBotones\">\n            {{sc.descripcion}}\n        </button>\n    </div>\n</div>\n<hr *ngIf=\"articulos.length > 0\" />\n<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <button mat-raised-button class=\"btnAccion\" color=\"warn\" *ngFor=\"let art of articulos\" (click)=\"clickOnArticulo(art)\" [disabled]=\"bloqueoBotones\">\n            {{art.descripcion}}\n        </button>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -1463,6 +1463,7 @@ let ListaProductoAltComponent = class ListaProductoAltComponent {
     constructor(articuloSrvc, ls) {
         this.articuloSrvc = articuloSrvc;
         this.ls = ls;
+        this.bloqueoBotones = false;
         this.productoClickedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.categoriasFilledEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.categorias = [];
@@ -1528,6 +1529,9 @@ ListaProductoAltComponent.ctorParameters = () => [
     { type: _services_articulo_service__WEBPACK_IMPORTED_MODULE_4__["ArticuloService"] },
     { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_3__["LocalstorageService"] }
 ];
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+], ListaProductoAltComponent.prototype, "bloqueoBotones", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaProductoAltComponent.prototype, "productoClickedEv", void 0);

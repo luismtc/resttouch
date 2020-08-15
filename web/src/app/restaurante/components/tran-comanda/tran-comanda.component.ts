@@ -60,6 +60,7 @@ export class TranComandaComponent implements OnInit {
   public cuentaActiva: Cuenta;
   public detalleComanda: DetalleComanda;
   public categorias: ArbolArticulos[] = [];
+  public bloqueoBotones = false;
 
   constructor(
     private router: Router,
@@ -174,6 +175,7 @@ export class TranComandaComponent implements OnInit {
   addProductoSelected(producto: any) {
     // console.log('PRODUCTO = ', producto);
     // return;
+    this.bloqueoBotones = true;
     if (+this.cuentaActiva.numero) {
       const idx = this.lstProductosSeleccionados
         .findIndex(p => +p.id === +producto.id && +p.cuenta === +this.cuentaActiva.numero && +p.impreso === 0);
@@ -198,6 +200,7 @@ export class TranComandaComponent implements OnInit {
           } else {
             this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
           }
+          this.bloqueoBotones = false;
         });
       } else {
         const tmp: productoSelected = this.lstProductosSeleccionados[idx];
@@ -219,6 +222,7 @@ export class TranComandaComponent implements OnInit {
           } else {
             this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
           }
+          this.bloqueoBotones = false;
         });
       }
       this.setLstProductosDeCuenta();
@@ -260,6 +264,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   printComanda(toPdf = false) {
+    this.bloqueoBotones = true;
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
     // console.log('Productos a imprimir = ', this.lstProductosAImprimir);
     if (this.lstProductosAImprimir.length > 0) {
@@ -294,6 +299,7 @@ export class TranComandaComponent implements OnInit {
           } else {
             this.snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
           }
+          this.bloqueoBotones = false;
         });
       }
 
@@ -362,6 +368,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   printCuenta() {
+    this.bloqueoBotones = true;
     // console.log(this.mesaEnUso); return;
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
     this.setSumaCuenta(this.lstProductosAImprimir);
@@ -389,6 +396,7 @@ export class TranComandaComponent implements OnInit {
       Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero} - Comanda ${this.mesaEnUso.comanda}`,
       Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
     })}`);
+    this.bloqueoBotones = false;
   }
 
   unirCuentas() {

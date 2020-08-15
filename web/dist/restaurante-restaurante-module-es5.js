@@ -4410,7 +4410,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\" (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br/>\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\" (click)=\"clickOnCategoria(c)\">\n                {{c.descripcion}}\n            </button>            \n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\" (categoriasFilledEv)=\"setListaCategorias($event)\"></app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\" [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"cobrarCuenta()\" \n                    [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0)\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\" *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\" (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br/>\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\" (click)=\"clickOnCategoria(c)\">\n                {{c.descripcion}}\n            </button>            \n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\" (categoriasFilledEv)=\"setListaCategorias($event)\" [bloqueoBotones]=\"bloqueoBotones\"></app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\" [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2 || bloqueoBotones\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"cobrarCuenta()\" \n                    [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\" *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/turno-tipo/form-turno/form-turno.component.html": 
@@ -7011,6 +7011,7 @@
                     this.noComanda = 0;
                     this.sumCuenta = 0;
                     this.categorias = [];
+                    this.bloqueoBotones = false;
                     this.resetMesaEnUso = function () { return _this.mesaEnUso = {
                         exito: true,
                         comanda: null, usuario: null, sede: null, estatus: null,
@@ -7146,6 +7147,7 @@
                     var _this = this;
                     // console.log('PRODUCTO = ', producto);
                     // return;
+                    this.bloqueoBotones = true;
                     if (+this.cuentaActiva.numero) {
                         var idx = this.lstProductosSeleccionados
                             .findIndex(function (p) { return +p.id === +producto.id && +p.cuenta === +_this.cuentaActiva.numero && +p.impreso === 0; });
@@ -7170,6 +7172,7 @@
                                 else {
                                     _this.snackBar.open("ERROR:" + res.mensaje, 'Comanda', { duration: 3000 });
                                 }
+                                _this.bloqueoBotones = false;
                             });
                         }
                         else {
@@ -7193,6 +7196,7 @@
                                 else {
                                     _this.snackBar.open("ERROR:" + res.mensaje, 'Comanda', { duration: 3000 });
                                 }
+                                _this.bloqueoBotones = false;
                             });
                         }
                         this.setLstProductosDeCuenta();
@@ -7234,6 +7238,7 @@
                 TranComandaComponent.prototype.printComanda = function (toPdf) {
                     var _this = this;
                     if (toPdf === void 0) { toPdf = false; }
+                    this.bloqueoBotones = true;
                     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(function (p) { return +p.impreso === 0 && +p.cantidad > 0; });
                     // console.log('Productos a imprimir = ', this.lstProductosAImprimir);
                     if (this.lstProductosAImprimir.length > 0) {
@@ -7268,6 +7273,7 @@
                                 else {
                                     _this.snackBar.open("ERROR: " + res.mensaje, "Cuenta #" + _this.cuentaActiva.numero, { duration: 3000 });
                                 }
+                                _this.bloqueoBotones = false;
                             });
                         }
                         var AImpresoraNormal = this.lstProductosAImprimir.filter(function (p) { return +p.impresora.bluetooth === 0; });
@@ -7305,6 +7311,7 @@
                     }
                 };
                 TranComandaComponent.prototype.printCuenta = function () {
+                    this.bloqueoBotones = true;
                     // console.log(this.mesaEnUso); return;
                     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(function (p) { return +p.impreso === 1; });
                     this.setSumaCuenta(this.lstProductosAImprimir);
@@ -7332,6 +7339,7 @@
                         Ubicacion: this.mesaEnUso.mesa.area.nombre + " - Mesa " + this.mesaEnUso.mesa.numero + " - Comanda " + this.mesaEnUso.comanda,
                         Mesero: this.mesaEnUso.mesero.nombres + " " + this.mesaEnUso.mesero.apellidos
                     }));
+                    this.bloqueoBotones = false;
                 };
                 TranComandaComponent.prototype.unirCuentas = function () {
                     var _this = this;

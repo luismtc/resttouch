@@ -1,7 +1,6 @@
 <div class="row">
     <div class="col m12 s12">
-        <button mat-raised-button class="btnAccion" color="primary" *ngFor="let sc of subcategorias"
-            (click)="clickOnSubCategoria(sc)">
+        <button mat-raised-button class="btnAccion" color="primary" *ngFor="let sc of subcategorias" (click)="clickOnSubCategoria(sc)" [disabled]="bloqueoBotones">
             {{sc.descripcion}}
         </button>
     </div>
@@ -9,8 +8,7 @@
 <hr *ngIf="articulos.length > 0" />
 <div class="row">
     <div class="col m12 s12">
-        <button mat-raised-button class="btnAccion" color="warn" *ngFor="let art of articulos"
-            (click)="clickOnArticulo(art)">
+        <button mat-raised-button class="btnAccion" color="warn" *ngFor="let art of articulos" (click)="clickOnArticulo(art)" [disabled]="bloqueoBotones">
             {{art.descripcion}}
         </button>
     </div>
