@@ -284,7 +284,8 @@ class Comanda extends CI_Controller {
 					$datos['exito'] = false;
 					$datos['mensaje'] = "La mesa ya está abierta en otra estación";
 				} else {
-					$comanda->comandaenuso = 1;
+					// $comanda->comandaenuso = 1; //Se quita por instruccion de AP. 14/08/2020 19:56.
+					$comanda->comandaenuso = 0;
 					$comanda->guardar();
 					$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
 					$datos->exito = true;
