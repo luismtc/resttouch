@@ -715,8 +715,8 @@ class Factura_model extends General_model {
 	}
 
 	public function getPropina(){
-		$tmp = $this->db
-					->select("sum(e.propina) propina_monto, f.nombre")
+		return $this->db
+					->select("e.propina as propina_monto, f.nombre")
 					->from("factura a")
 					->join("detalle_factura b", "a.factura = b.factura")
 					->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
@@ -725,13 +725,8 @@ class Factura_model extends General_model {
 					->join("cliente f", "f.cliente = a.cliente")
 					->where("a.factura", $this->factura)
 					->group_by("e.cuenta_forma_pago")
-					->get();
-
-		if($tmp && $tmp->num_rows() > 0) {
-			return $tmp->result();
-		}
-
-		return [];
+					->get()
+					->result();
 	}
 
 	public function anularComandas()

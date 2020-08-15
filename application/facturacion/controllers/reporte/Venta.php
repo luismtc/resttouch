@@ -240,6 +240,7 @@ class Venta extends CI_Controller {
 	{
 		
 		$_GET['sede'] = $this->data->sede;
+		$_GET['_vivas'] = true;
 		$facts = $this->Factura_model->get_facturas($_GET);
 		$datos = $_GET;
 		$datos['propina'] = [];
