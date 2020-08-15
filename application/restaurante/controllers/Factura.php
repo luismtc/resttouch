@@ -52,11 +52,7 @@ class Factura extends CI_Controller {
 							$det->bien_servicio = $det->articulo->bien_servicio;
 							$det->articulo = $det->articulo->articulo;
 							
-							//if ($det->descuento == 1) {
-							$det->descuento = $det->total * $pdesc;	
-							/*} else {
-								$det->descuento = 0;
-							}*/
+							$det->descuento = $pdesc > 0 ? ($det->total * $pdesc) : 0;
 							
 							$det->precio_unitario = $det->precio;
 							$total = $det->total - $det->descuento;

@@ -59,11 +59,11 @@ class Comanda extends CI_Controller {
 
 					if ($turno) {
 						$req['turno'] = $turno->turno;
-						if (($mesa->estatus == 2) && (empty($req['comanda']))) {
+						if ($mesa->estatus == 2 && empty($req['comanda'])) {
 							$continuar = false;
 						}
 						if ($continuar) {
-							$comanda->comandaenuso = 1;
+							# $comanda->comandaenuso = 1;
 							$datos['exito'] = $comanda->guardar($req);
 
 							if (empty($req['comanda'])) {
@@ -115,7 +115,7 @@ class Comanda extends CI_Controller {
 								$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
 							}	
 						} else {
-							$datos['mensaje'] = "La mesa ya está siendo utilizada en otra estación";
+							$datos['mensaje'] = "La mesa ya fue abierta en otra estación, por favor actualice la pantalla.";
 						}
 					} else {
 						$datos['mensaje'] = "No existe ningun turno abierto";
@@ -169,23 +169,38 @@ class Comanda extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
 		$datos = ["exito" => false];
+
 		if ($this->input->method() == 'post') {
 			if ($mesa->estatus == 2) {
-				if ($cuenta->cerrada == 0) {				
-					$det = $comanda->guardarDetalle($req);
-					$id = isset($req['detalle_cuenta']) ? $req['detalle_cuenta'] : '';
-					if ($det) {
-						$cuenta->guardarDetalle([
-							'detalle_comanda' => $det->detalle_comanda
-						], $id);	
-						$datos['exito'] = true;
+				if ($cuenta->cerrada == 0) {
+					if (isset($req["detalle_comanda"])) {
+						$dcom = new Dcomanda_model($req["detalle_comanda"]);
+						$datos["exito"] = $dcom->impreso == 0;
+
+						if ($dcom->impreso == 1) {
+							$datos['mensaje'] = "El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.";
+						}
 					} else {
-						$datos['exito'] = false;						
-					}	
-					if ($datos['exito']) {
-						$datos['comanda'] = $comanda->getComanda();	
-					} else {
-						$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+						$datos["exito"] = true;
+					}
+
+					if ($datos["exito"]) {
+						$det = $comanda->guardarDetalle($req);
+						$id = isset($req['detalle_cuenta']) ? $req['detalle_cuenta'] : '';
+						if ($det) {
+							$cuenta->guardarDetalle([
+								'detalle_comanda' => $det->detalle_comanda
+							], $id);	
+							$datos['exito'] = true;
+						} else {
+							$datos['exito'] = false;						
+						}
+
+						if ($datos['exito']) {
+							$datos['comanda'] = $comanda->getComanda();	
+						} else {
+							$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+						}
 					}
 				} else {
 					$datos['mensaje'] = "La cuenta ya esta cerrada";
@@ -280,16 +295,10 @@ class Comanda extends CI_Controller {
 
 			if ($tmp) {
 				$comanda = new Comanda_model($tmp->comanda);
-				if ($comanda->comandaenuso == 1) {
-					$datos['exito'] = false;
-					$datos['mensaje'] = "La mesa ya está abierta en otra estación";
-				} else {
-					// $comanda->comandaenuso = 1; //Se quita por instruccion de AP. 14/08/2020 19:56.
-					$comanda->comandaenuso = 0;
-					$comanda->guardar();
-					$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
-					$datos->exito = true;
-				}
+				$comanda->comandaenuso = 0;
+
+				$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
+				$datos->exito = true;
 			}
 		}
 
@@ -301,6 +310,7 @@ class Comanda extends CI_Controller {
 	{
 		$cta = new Cuenta_model($idCta);
 		$com = new Comanda_model($cta->comanda);
+		$req = json_decode(file_get_contents('php://input'), true);
 		
 		$datos = [
 			'exito' => true, 
