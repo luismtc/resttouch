@@ -1192,9 +1192,9 @@
             /* harmony import */ var _admin_services_medida_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../admin/services/medida.service */ "./src/app/admin/services/medida.service.ts");
             /* harmony import */ var _admin_services_presentacion_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../../admin/services/presentacion.service */ "./src/app/admin/services/presentacion.service.ts");
             var FormProductoComponent = /** @class */ (function () {
-                function FormProductoComponent(_snackBar, ls, articuloSrvc, medidaSrvc, presentacionSrvc) {
+                function FormProductoComponent(snackBar, ls, articuloSrvc, medidaSrvc, presentacionSrvc) {
                     var _this = this;
-                    this._snackBar = _snackBar;
+                    this.snackBar = snackBar;
                     this.ls = ls;
                     this.articuloSrvc = articuloSrvc;
                     this.medidaSrvc = medidaSrvc;
@@ -1229,10 +1229,10 @@
                                 _this.resetArticulo();
                                 _this.articulo = res.articulo;
                                 _this.loadArticulos();
-                                _this._snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
+                                _this.snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
                             }
                             else {
-                                _this._snackBar.open("ERROR: " + res.mensaje, 'Articulo', { duration: 3000 });
+                                _this.snackBar.open("ERROR: " + res.mensaje, 'Articulo', { duration: 3000 });
                             }
                         });
                     };

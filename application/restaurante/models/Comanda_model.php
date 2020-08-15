@@ -344,6 +344,11 @@ class Comanda_model extends General_Model {
 			"texto"  => $this->load->view("correo_comanda", ["datos" => $datos], true)
 		]);
 	}
+
+	public function cierra_estacion($comanda) {
+		$query = "UPDATE comanda SET comandaenuso = 0 WHERE comanda = $comanda";
+		return $this->db->simple_query($query);
+	}
 }
 
 /* End of file Comanda_model.php */

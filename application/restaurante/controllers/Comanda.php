@@ -136,14 +136,25 @@ class Comanda extends CI_Controller {
 
 	public function cerrar_estacion($comanda)
 	{
-		$datos = ["exito" => false];
+		/*
+		$datos = ["exito" => false];		
 		$com = new Comanda_model($comanda);
 		$com->comandaenuso = 0;
 		if ($com->guardar()) {
 			$datos['exito'] = true;
 			$datos['mensaje'] = "Datos actualizados con exito";
+		} else {			
+			$datos['mensaje'] = $com->getMensaje();
+		}
+		*/
+
+		$datos = ["exito" => false];
+		$com = new Comanda_model($comanda);
+		if($com->cierra_estacion($comanda)) {
+			$datos['exito'] = true;
+			$datos['mensaje'] = "Datos actualizados con exito";			
 		} else {
-			$datos['mensaje'] = "Ocurrió un error al guardar la comanda";
+			$datos['mensaje'] = "No se pudo habilitar la comanda $comanda. Por favor comuníquese con el administrador del sistema.";
 		}
 
 		$this->output

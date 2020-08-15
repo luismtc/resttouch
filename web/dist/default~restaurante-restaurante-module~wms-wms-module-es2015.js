@@ -1284,8 +1284,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let FormProductoComponent = class FormProductoComponent {
-    constructor(_snackBar, ls, articuloSrvc, medidaSrvc, presentacionSrvc) {
-        this._snackBar = _snackBar;
+    constructor(snackBar, ls, articuloSrvc, medidaSrvc, presentacionSrvc) {
+        this.snackBar = snackBar;
         this.ls = ls;
         this.articuloSrvc = articuloSrvc;
         this.medidaSrvc = medidaSrvc;
@@ -1320,10 +1320,10 @@ let FormProductoComponent = class FormProductoComponent {
                     this.resetArticulo();
                     this.articulo = res.articulo;
                     this.loadArticulos();
-                    this._snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
+                    this.snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
                 }
                 else {
-                    this._snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
+                    this.snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
                 }
             });
         };
