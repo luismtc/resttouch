@@ -178,7 +178,7 @@ class Comanda extends CI_Controller {
 						$datos["exito"] = $dcom->impreso == 0;
 
 						if ($dcom->impreso == 1) {
-							if (isset($req->autorizado) && $req->autorizado == true) {
+							if (isset($req["autorizado"]) && $req["autorizado"] == true) {
 								$datos["exito"] = true;
 							} else {
 								$datos['mensaje'] = "El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.";
