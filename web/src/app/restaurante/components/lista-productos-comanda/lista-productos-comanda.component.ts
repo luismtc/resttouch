@@ -5,6 +5,7 @@ import { GLOBAL } from '../../../shared/global';
 import { Impresora } from '../../../admin/interfaces/impresora';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ValidaPwdGerenteTurnoComponent } from '../valida-pwd-gerente-turno/valida-pwd-gerente-turno.component';
+import { Socket } from 'ngx-socket-io';
 
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { ComandaService } from '../../services/comanda.service';
@@ -38,6 +39,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   @Input() IdComanda = 0;
   @Input() IdCuenta = 0;
   @Input() bloqueoBotones = false;
+  @Input() mesaEnUso: any = {};
   @Output() productoRemovedEv = new EventEmitter();
   public esMovil = false;
   public detalleComanda: DetalleComanda;
@@ -47,11 +49,15 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private comandaSrvc: ComandaService,
-    public dialog: MatDialog
+    private socket: Socket,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
+      this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+    }
   }
 
   ngDoCheck() {
@@ -74,7 +80,10 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     this.comandaSrvc.saveDetalle(this.IdComanda, this.IdCuenta, this.detalleComanda).subscribe(res => {
       if (res.exito) {
         p.cantidad = this.detalleComanda.cantidad;
-        this.productoRemovedEv.emit({listaProductos: this.listaProductos, comanda: res.comanda});
+        this.productoRemovedEv.emit({ listaProductos: this.listaProductos, comanda: res.comanda });
+        if (+p.cantidad === 0) {
+          this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+        }
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
       }
@@ -91,7 +100,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   deleteProductoFromListAfterPrinted = (p: productoSelected, idx: number) => {
     this.bloqueoBotones = true;
     const dialogoRef = this.dialog.open(ValidaPwdGerenteTurnoComponent, {
-      width: '20%', disableClose: true
+      width: '40%', disableClose: true
     });
 
     dialogoRef.afterClosed().subscribe(res => {

@@ -43,7 +43,7 @@
         </div>
         <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto; height: 425px !important;">
             <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero"
-                [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones"
+                [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones" [mesaEnUso]="mesaEnUso"
                 (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>
     </div>

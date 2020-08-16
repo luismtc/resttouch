@@ -147,6 +147,7 @@ export class TranComandaComponent implements OnInit {
         this.mesaEnUso.mesa.estatus = 1;
         // this.closeSideNavEv.emit();
         this.mesaSavedEv.emit();
+        this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
       } else {
         console.log('FALLA PARA CERRAR LA MESA...', res);
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 7000 });
