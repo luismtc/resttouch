@@ -162,7 +162,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   setSumaCuenta(lista: productoSelected[]) {
-    let suma: number = 0.00;
+    let suma = 0.00;
     for (let i = 0; i < lista.length; i++) {
       suma += (lista[i].precio * lista[i].cantidad);
     }
@@ -297,45 +297,49 @@ export class TranComandaComponent implements OnInit {
               this.llenaProductosSeleccionados(resImp.comanda);
               this.setSelectedCuenta(this.cuentaActiva.numero);
               this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+
+              //------------------------------------------------------------------------------------------------------------------------------------------------//
+              const AImpresoraNormal: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
+              const AImpresoraBT: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+
+              if (!toPdf) {
+                if (AImpresoraNormal.length > 0) {
+                  this.socket.emit('print:comanda', `${JSON.stringify({
+                    Tipo: 'Comanda',
+                    Nombre: this.cuentaActiva.nombre,
+                    Numero: this.noComanda,
+                    DetalleCuenta: AImpresoraNormal,
+                    Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
+                    Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
+                    Total: null
+                  })}`);
+                  this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
+                }
+
+                if (AImpresoraBT.length > 0) {
+                  this.printToBT(
+                    JSON.stringify({
+                      Tipo: 'Comanda',
+                      Nombre: this.cuentaActiva.nombre,
+                      Numero: this.noComanda,
+                      DetalleCuenta: AImpresoraBT,
+                      Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
+                      Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
+                      Total: null
+                    })
+                  );
+                }
+              } else {
+                this.printComandaPDF();
+              }
+              this.closeSideNavEv.emit();
+              //------------------------------------------------------------------------------------------------------------------------------------------------//
             });
           } else {
             this.snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
           }
           this.bloqueoBotones = false;
         });
-      }
-
-      const AImpresoraNormal: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
-      const AImpresoraBT: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
-
-      if (!toPdf) {
-        if (AImpresoraNormal.length > 0) {
-          this.socket.emit('print:comanda', `${JSON.stringify({
-            Tipo: 'Comanda',
-            Nombre: this.cuentaActiva.nombre,
-            Numero: this.noComanda,
-            DetalleCuenta: AImpresoraNormal,
-            Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
-            Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-            Total: null
-          })}`);
-        }
-
-        if (AImpresoraBT.length > 0) {
-          this.printToBT(
-            JSON.stringify({
-              Tipo: 'Comanda',
-              Nombre: this.cuentaActiva.nombre,
-              Numero: this.noComanda,
-              DetalleCuenta: AImpresoraBT,
-              Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
-              Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-              Total: null
-            })
-          );
-        }
-      } else {
-        this.printComandaPDF();
       }
     } else {
       this.snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
@@ -346,6 +350,7 @@ export class TranComandaComponent implements OnInit {
   printToBT = (msgToPrint: string = '') => {
     const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
     const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+    this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
     setTimeout(() => wref.close(), 1000);
   }
 
@@ -356,6 +361,7 @@ export class TranComandaComponent implements OnInit {
         const blob = new Blob([res], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+        this.closeSideNavEv.emit();
       } else {
         this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
       }
@@ -399,7 +405,9 @@ export class TranComandaComponent implements OnInit {
       Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero} - Comanda ${this.mesaEnUso.comanda}`,
       Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
     })}`);
+    this.snackBar.open(`Imprimiendo cuenta de ${this.cuentaActiva.nombre}`, 'Cuenta', { duration: 7000 });
     this.bloqueoBotones = false;
+    this.closeSideNavEv.emit();
   }
 
   unirCuentas() {

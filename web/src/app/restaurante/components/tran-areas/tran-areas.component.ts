@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSidenav, MatDrawerToggleResult } from '@angular/material/sidenav';
 import { GLOBAL } from '../../../shared/global';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
+import { Socket } from 'ngx-socket-io';
 
 import { AbrirMesaComponent } from '../abrir-mesa/abrir-mesa.component';
 import { TranComandaComponent } from '../tran-comanda/tran-comanda.component';
@@ -29,6 +30,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   @ViewChild('tabArea', { static: false }) tabArea: MatTab;
   @ViewChild('snTranComanda', { static: false }) snTrancomanda: TranComandaComponent;
   public lstTabsAreas: Area[] = [];
+  public lstTabsAreasForUpdate: Area[] = [];
   public mesaSeleccionada: any;
   public mesaSeleccionadaToOpen: any;
 
@@ -37,12 +39,19 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     private _snackBar: MatSnackBar,
     private ls: LocalstorageService,
     public areaSrvc: AreaService,
-    public comandaSrvc: ComandaService
+    public comandaSrvc: ComandaService,
+    private socket: Socket
   ) { }
 
   ngOnInit() {
     this.loadAreas();
     this.resetMesaSeleccionada();
+    if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
+      this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+      this.socket.on('refrescar:mesa', (obj: any) => {
+        this.loadAreas(true);
+      });
+    }
   }
 
   ngAfterViewInit() {
@@ -75,10 +84,23 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     cuentas: []
   }
 
-  loadAreas = () => {
+  loadAreas = (saveOnTemp = false) => {
     this.areaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res) => {
-      this.lstTabsAreas = res;
+      if (!saveOnTemp) {
+        this.lstTabsAreas = res;
+      } else {
+        this.lstTabsAreasForUpdate = res;
+        this.updateTableStatus();
+      }
     });
+  }
+
+  updateTableStatus = () => {
+    for (const a of this.lstTabsAreasForUpdate) {
+      for (const m of a.mesas) {
+        this.setEstatusMesa({ area: +a.area, mesa: +m.mesa }, +m.estatus);
+      }
+    }
   }
 
   setDivSize() {
@@ -145,6 +167,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
           // console.log(res);
           if (res.exito) {
+            this.socket.emit('refrescar:mesa', {});
             this.mesaSeleccionada = res.comanda;
             // console.log('m', m);
             this.setEstatusMesa(m, +res.comanda.mesa.estatus);
@@ -167,6 +190,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
         // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
         // this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {});
+        this.checkEstatusMesa();
       } else if (res === 'open') {
         // console.log('CUENTAS DE LA MESA CON EL RIGHT PANEL YA ABIERTO', this.mesaSeleccionada.cuentas);
         if (this.mesaSeleccionada.cuentas.length === 1) {
@@ -198,10 +222,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   checkEstatusMesa = () => {
-    // console.log('MESA = ', this.mesaSeleccionada);
+    // console.log('MESA EN CHECK ESTATUS MESA = ', this.mesaSeleccionada);
     if (!!this.mesaSeleccionada && !!this.mesaSeleccionada.cuentas && this.mesaSeleccionada.cuentas.length > 0) {
       const abiertas = this.mesaSeleccionada.cuentas.filter(cta => +cta.cerrada === 0).length || 0;
-      // console.log(`ABIERTAS = ${abiertas}`);
+      // console.log('ABIERTAS = ', abiertas);
       if (abiertas === 0) {
         this.setEstatusMesa({
           area: this.mesaSeleccionada.mesa.area.area,
@@ -218,9 +242,9 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   loadComandaMesa = (obj: any, shouldToggle = true) => {
-    // console.log(obj);
+    // console.log('OBJETO = ', obj);
     this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
-      // console.log(res); return;
+      // console.log('RESPUESTA DE GET COMANDA = ', res);
       if (res.exito) {
         if (!Array.isArray(res)) {
           this.mesaSeleccionada = res;
@@ -232,21 +256,32 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
                 { cerrada: 1 }
               ]
             };
-            this.checkEstatusMesa();
           }
+          this.checkEstatusMesa();
         }
         // console.log('MESA SELECTED = ', this.mesaSeleccionada);
         this.checkEstatusMesa();
         if (shouldToggle) {
-          const cuentas = this.mesaSeleccionada.cuentas;
+          // const cuentas = this.mesaSeleccionada.cuentas;
           this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
           this.toggleRightSidenav();
         } else {
           // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
+          this.checkEstatusMesa();
         }
       } else {
         if (res.mensaje) {
           this._snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+        }
+        if (Array.isArray(res)) {
+          if (res.length === 0) {
+            this.mesaSeleccionada = {
+              mesa: this.mesaSeleccionada.mesa,
+              cuentas: [
+                { cerrada: 1 }
+              ]
+            };
+          }
         }
         this.checkEstatusMesa();
       }

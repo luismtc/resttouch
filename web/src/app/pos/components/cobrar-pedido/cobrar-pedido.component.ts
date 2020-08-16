@@ -159,6 +159,7 @@ export class CobrarPedidoComponent implements OnInit {
               this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
               this.facturando = false;
               this.dialogRef.close(res.cuenta);
+              this.socket.emit('refrescar:mesa', {});
             });
           } else {
             this.facturando = false;
