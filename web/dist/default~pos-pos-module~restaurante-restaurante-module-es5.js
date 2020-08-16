@@ -734,7 +734,8 @@
                     this.actualizaSaldo = function () {
                         var sumFormasPago = 0.00;
                         _this.formasPagoDeCuenta.forEach(function (fp) { return sumFormasPago += +fp.monto; });
-                        _this.inputData.saldo = _this.inputData.totalDeCuenta + _this.inputData.montoPropina - sumFormasPago;
+                        // this.inputData.saldo = this.inputData.totalDeCuenta + this.inputData.montoPropina - sumFormasPago;
+                        _this.inputData.saldo = (+_this.inputData.totalDeCuenta - sumFormasPago).toFixed(2);
                         _this.formaPago = { monto: _this.inputData.saldo };
                     };
                     this.cancelar = function () { return _this.dialogRef.close(); };

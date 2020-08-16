@@ -109,7 +109,8 @@ export class CobrarPedidoComponent implements OnInit {
   actualizaSaldo = () => {
     let sumFormasPago = 0.00;
     this.formasPagoDeCuenta.forEach(fp => sumFormasPago += +fp.monto);
-    this.inputData.saldo = this.inputData.totalDeCuenta + this.inputData.montoPropina - sumFormasPago;
+    // this.inputData.saldo = this.inputData.totalDeCuenta + this.inputData.montoPropina - sumFormasPago;
+    this.inputData.saldo = (+this.inputData.totalDeCuenta - sumFormasPago).toFixed(2);
     this.formaPago = { monto: this.inputData.saldo };
   }
 
