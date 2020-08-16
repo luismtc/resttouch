@@ -183,6 +183,8 @@ class Comanda extends CI_Controller {
 							} else {
 								$datos['mensaje'] = "El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.";
 							}
+
+							unset($req["autorizado"]);
 						}
 					} else {
 						$datos["exito"] = true;
