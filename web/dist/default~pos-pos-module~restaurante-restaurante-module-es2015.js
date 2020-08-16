@@ -812,6 +812,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
                                 this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
                                 this.facturando = false;
                                 this.dialogRef.close(res.cuenta);
+                                this.socket.emit('refrescar:mesa', {});
                             });
                         }
                         else {

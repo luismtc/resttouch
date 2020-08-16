@@ -5672,6 +5672,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
         this.bloqueoBotones = false;
         this.productoRemovedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.esMovil = false;
+        this.autorizar = false;
         this.removeProducto = (p, idx) => {
             this.bloqueoBotones = true;
             this.detalleComanda = {
@@ -5681,7 +5682,8 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
                 cantidad: +p.cantidad > 1 ? (+p.cantidad) - 1 : 0,
                 precio: +p.precio,
                 total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
-                notas: p.notas
+                notas: p.notas,
+                autorizado: this.autorizar
             };
             this.comandaSrvc.saveDetalle(this.IdComanda, this.IdCuenta, this.detalleComanda).subscribe(res => {
                 if (res.exito) {
@@ -5707,6 +5709,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
             dialogoRef.afterClosed().subscribe(res => {
                 // console.log(res);
                 if (res) {
+                    this.autorizar = true;
                     this.deleteProductoFromList(p, idx);
                     this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
                 }
@@ -6935,9 +6938,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
 /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
 /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var _abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../abrir-mesa/abrir-mesa.component */ "./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.ts");
-/* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
-/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+/* harmony import */ var ngx_socket_io__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ngx-socket-io */ "./node_modules/ngx-socket-io/fesm2015/ngx-socket-io.js");
+/* harmony import */ var _abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../abrir-mesa/abrir-mesa.component */ "./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.ts");
+/* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
+/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+
 
 
 
@@ -6948,14 +6953,16 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let TranAreasComponent = class TranAreasComponent {
-    constructor(dialog, _snackBar, ls, areaSrvc, comandaSrvc) {
+    constructor(dialog, _snackBar, ls, areaSrvc, comandaSrvc, socket) {
         this.dialog = dialog;
         this._snackBar = _snackBar;
         this.ls = ls;
         this.areaSrvc = areaSrvc;
         this.comandaSrvc = comandaSrvc;
+        this.socket = socket;
         this.divSize = { h: 0, w: 0 };
         this.lstTabsAreas = [];
+        this.lstTabsAreasForUpdate = [];
         this.actualizar = () => {
             // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
             const area = this.lstTabsAreas.find((c) => +c.area === +this.mesaSeleccionada.mesa.area.area);
@@ -6977,10 +6984,23 @@ let TranAreasComponent = class TranAreasComponent {
             },
             cuentas: []
         };
-        this.loadAreas = () => {
+        this.loadAreas = (saveOnTemp = false) => {
             this.areaSrvc.get({ sede: (+this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe((res) => {
-                this.lstTabsAreas = res;
+                if (!saveOnTemp) {
+                    this.lstTabsAreas = res;
+                }
+                else {
+                    this.lstTabsAreasForUpdate = res;
+                    this.updateTableStatus();
+                }
             });
+        };
+        this.updateTableStatus = () => {
+            for (const a of this.lstTabsAreasForUpdate) {
+                for (const m of a.mesas) {
+                    this.setEstatusMesa({ area: +a.area, mesa: +m.mesa }, +m.estatus);
+                }
+            }
         };
         this.onResize = (event) => this.setDivSize();
         this.setEstatusMesa = (m, estatus) => {
@@ -7004,6 +7024,7 @@ let TranAreasComponent = class TranAreasComponent {
                     // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
                     // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
                     // this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {});
+                    this.checkEstatusMesa();
                 }
                 else if (res === 'open') {
                     // console.log('CUENTAS DE LA MESA CON EL RIGHT PANEL YA ABIERTO', this.mesaSeleccionada.cuentas);
@@ -7034,10 +7055,10 @@ let TranAreasComponent = class TranAreasComponent {
             this.fuerzaCierreComanda(false);
         };
         this.checkEstatusMesa = () => {
-            // console.log('MESA = ', this.mesaSeleccionada);
+            // console.log('MESA EN CHECK ESTATUS MESA = ', this.mesaSeleccionada);
             if (!!this.mesaSeleccionada && !!this.mesaSeleccionada.cuentas && this.mesaSeleccionada.cuentas.length > 0) {
                 const abiertas = this.mesaSeleccionada.cuentas.filter(cta => +cta.cerrada === 0).length || 0;
-                // console.log(`ABIERTAS = ${abiertas}`);
+                // console.log('ABIERTAS = ', abiertas);
                 if (abiertas === 0) {
                     this.setEstatusMesa({
                         area: this.mesaSeleccionada.mesa.area.area,
@@ -7052,9 +7073,9 @@ let TranAreasComponent = class TranAreasComponent {
             });
         };
         this.loadComandaMesa = (obj, shouldToggle = true) => {
-            // console.log(obj);
+            // console.log('OBJETO = ', obj);
             this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res) => {
-                // console.log(res); return;
+                // console.log('RESPUESTA DE GET COMANDA = ', res);
                 if (res.exito) {
                     if (!Array.isArray(res)) {
                         this.mesaSeleccionada = res;
@@ -7067,23 +7088,34 @@ let TranAreasComponent = class TranAreasComponent {
                                     { cerrada: 1 }
                                 ]
                             };
-                            this.checkEstatusMesa();
                         }
+                        this.checkEstatusMesa();
                     }
                     // console.log('MESA SELECTED = ', this.mesaSeleccionada);
                     this.checkEstatusMesa();
                     if (shouldToggle) {
-                        const cuentas = this.mesaSeleccionada.cuentas;
+                        // const cuentas = this.mesaSeleccionada.cuentas;
                         this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
                         this.toggleRightSidenav();
                     }
                     else {
                         // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
+                        this.checkEstatusMesa();
                     }
                 }
                 else {
                     if (res.mensaje) {
                         this._snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+                    }
+                    if (Array.isArray(res)) {
+                        if (res.length === 0) {
+                            this.mesaSeleccionada = {
+                                mesa: this.mesaSeleccionada.mesa,
+                                cuentas: [
+                                    { cerrada: 1 }
+                                ]
+                            };
+                        }
                     }
                     this.checkEstatusMesa();
                 }
@@ -7094,6 +7126,12 @@ let TranAreasComponent = class TranAreasComponent {
     ngOnInit() {
         this.loadAreas();
         this.resetMesaSeleccionada();
+        if (!!this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid) {
+            this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid);
+            this.socket.on('refrescar:mesa', (obj) => {
+                this.loadAreas(true);
+            });
+        }
     }
     ngAfterViewInit() {
         setTimeout(() => {
@@ -7136,7 +7174,7 @@ let TranAreasComponent = class TranAreasComponent {
                 }
             ]
         };
-        const abrirMesaRef = this.dialog.open(_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_6__["AbrirMesaComponent"], {
+        const abrirMesaRef = this.dialog.open(_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_7__["AbrirMesaComponent"], {
             width: '50%',
             height: 'auto',
             disableClose: true,
@@ -7149,6 +7187,7 @@ let TranAreasComponent = class TranAreasComponent {
                 this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
                     // console.log(res);
                     if (res.exito) {
+                        this.socket.emit('refrescar:mesa', {});
                         this.mesaSeleccionada = res.comanda;
                         // console.log('m', m);
                         this.setEstatusMesa(m, +res.comanda.mesa.estatus);
@@ -7168,8 +7207,9 @@ TranAreasComponent.ctorParameters = () => [
     { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"] },
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
     { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
-    { type: _services_area_service__WEBPACK_IMPORTED_MODULE_7__["AreaService"] },
-    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_8__["ComandaService"] }
+    { type: _services_area_service__WEBPACK_IMPORTED_MODULE_8__["AreaService"] },
+    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_9__["ComandaService"] },
+    { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_6__["Socket"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('matTabArea', { static: false })
@@ -7327,6 +7367,7 @@ let TranComandaComponent = class TranComandaComponent {
         this.printToBT = (msgToPrint = '') => {
             const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
             const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+            this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
             setTimeout(() => wref.close(), 1000);
         };
         this.printComandaPDF = () => {
@@ -7336,6 +7377,7 @@ let TranComandaComponent = class TranComandaComponent {
                     const blob = new Blob([res], { type: 'application/pdf' });
                     const url = window.URL.createObjectURL(blob);
                     window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+                    this.closeSideNavEv.emit();
                 }
                 else {
                     this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
@@ -7507,6 +7549,39 @@ let TranComandaComponent = class TranComandaComponent {
                             this.llenaProductosSeleccionados(resImp.comanda);
                             this.setSelectedCuenta(this.cuentaActiva.numero);
                             this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+                            //------------------------------------------------------------------------------------------------------------------------------------------------//
+                            const AImpresoraNormal = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
+                            const AImpresoraBT = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+                            if (!toPdf) {
+                                if (AImpresoraNormal.length > 0) {
+                                    this.socket.emit('print:comanda', `${JSON.stringify({
+                                        Tipo: 'Comanda',
+                                        Nombre: this.cuentaActiva.nombre,
+                                        Numero: this.noComanda,
+                                        DetalleCuenta: AImpresoraNormal,
+                                        Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
+                                        Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
+                                        Total: null
+                                    })}`);
+                                    this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
+                                }
+                                if (AImpresoraBT.length > 0) {
+                                    this.printToBT(JSON.stringify({
+                                        Tipo: 'Comanda',
+                                        Nombre: this.cuentaActiva.nombre,
+                                        Numero: this.noComanda,
+                                        DetalleCuenta: AImpresoraBT,
+                                        Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
+                                        Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
+                                        Total: null
+                                    }));
+                                }
+                            }
+                            else {
+                                this.printComandaPDF();
+                            }
+                            this.closeSideNavEv.emit();
+                            //------------------------------------------------------------------------------------------------------------------------------------------------//
                         });
                     }
                     else {
@@ -7514,35 +7589,6 @@ let TranComandaComponent = class TranComandaComponent {
                     }
                     this.bloqueoBotones = false;
                 });
-            }
-            const AImpresoraNormal = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
-            const AImpresoraBT = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
-            if (!toPdf) {
-                if (AImpresoraNormal.length > 0) {
-                    this.socket.emit('print:comanda', `${JSON.stringify({
-                        Tipo: 'Comanda',
-                        Nombre: this.cuentaActiva.nombre,
-                        Numero: this.noComanda,
-                        DetalleCuenta: AImpresoraNormal,
-                        Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
-                        Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-                        Total: null
-                    })}`);
-                }
-                if (AImpresoraBT.length > 0) {
-                    this.printToBT(JSON.stringify({
-                        Tipo: 'Comanda',
-                        Nombre: this.cuentaActiva.nombre,
-                        Numero: this.noComanda,
-                        DetalleCuenta: AImpresoraBT,
-                        Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
-                        Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-                        Total: null
-                    }));
-                }
-            }
-            else {
-                this.printComandaPDF();
             }
         }
         else {
@@ -7579,7 +7625,9 @@ let TranComandaComponent = class TranComandaComponent {
             Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero} - Comanda ${this.mesaEnUso.comanda}`,
             Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
         })}`);
+        this.snackBar.open(`Imprimiendo cuenta de ${this.cuentaActiva.nombre}`, 'Cuenta', { duration: 7000 });
         this.bloqueoBotones = false;
+        this.closeSideNavEv.emit();
     }
     unirCuentas() {
         const unirCuentaRef = this.dialog.open(_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_8__["UnirCuentaComponent"], {
@@ -7594,33 +7642,40 @@ let TranComandaComponent = class TranComandaComponent {
         });
     }
     cobrarCuenta() {
-        const productosACobrar = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
-        if (productosACobrar.length > 0) {
-            const cobrarCtaRef = this.dialog.open(_pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__["CobrarPedidoComponent"], {
-                width: '95%',
-                data: {
-                    cuenta: this.cuentaActiva.nombre,
-                    idcuenta: this.cuentaActiva.cuenta,
-                    productosACobrar,
-                    porcentajePropina: 0.00
-                }
-            });
-            cobrarCtaRef.afterClosed().subscribe(res => {
-                if (res && res !== 'closePanel') {
-                    // console.log(res);
-                    this.cambiarEstatusCuenta(res);
-                    this.closeSideNavEv.emit();
+        this.comandaSrvc.getCuenta(this.cuentaActiva.cuenta).subscribe(res => {
+            if (res.pendiente.length > 0) {
+                this.snackBar.open('Cobro', 'Tiene productos sin comandar', { duration: 3000 });
+            }
+            else {
+                const productosACobrar = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
+                if (productosACobrar.length > 0) {
+                    const cobrarCtaRef = this.dialog.open(_pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__["CobrarPedidoComponent"], {
+                        width: '95%',
+                        data: {
+                            cuenta: this.cuentaActiva.nombre,
+                            idcuenta: this.cuentaActiva.cuenta,
+                            productosACobrar,
+                            porcentajePropina: 0.00
+                        }
+                    });
+                    cobrarCtaRef.afterClosed().subscribe(res => {
+                        if (res && res !== 'closePanel') {
+                            // console.log(res);
+                            this.cambiarEstatusCuenta(res);
+                            this.closeSideNavEv.emit();
+                        }
+                        else {
+                            if (res === 'closePanel') {
+                                this.closeSideNavEv.emit();
+                            }
+                        }
+                    });
                 }
                 else {
-                    if (res === 'closePanel') {
-                        this.closeSideNavEv.emit();
-                    }
+                    this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
                 }
-            });
-        }
-        else {
-            this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
-        }
+            }
+        });
     }
 };
 TranComandaComponent.ctorParameters = () => [
@@ -9210,6 +9265,14 @@ let ComandaService = class ComandaService {
             })
         };
         return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/cerrar_estacion/${idcomanda}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
+    getCuenta(idcuenta) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/cuenta/get_cuenta/${idcuenta}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
 };
 ComandaService.ctorParameters = () => [

@@ -97,7 +97,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     dialogoRef.afterClosed().subscribe(res => {
       // console.log(res);
       if (res) {
-        this.autorizar = res.esgerente;
+        this.autorizar = true;
         this.deleteProductoFromList(p, idx);
         this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
       } else {

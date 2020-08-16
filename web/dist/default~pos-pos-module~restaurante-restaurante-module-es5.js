@@ -779,6 +779,7 @@
                                             _this.snackBar.open('Factura', "" + resFact.mensaje, { duration: 3000 });
                                             _this.facturando = false;
                                             _this.dialogRef.close(res.cuenta);
+                                            _this.socket.emit('refrescar:mesa', {});
                                         });
                                     }
                                     else {

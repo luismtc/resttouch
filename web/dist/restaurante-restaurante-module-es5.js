@@ -5570,6 +5570,7 @@
                     this.bloqueoBotones = false;
                     this.productoRemovedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
                     this.esMovil = false;
+                    this.autorizar = false;
                     this.removeProducto = function (p, idx) {
                         _this.bloqueoBotones = true;
                         _this.detalleComanda = {
@@ -5579,7 +5580,8 @@
                             cantidad: +p.cantidad > 1 ? (+p.cantidad) - 1 : 0,
                             precio: +p.precio,
                             total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
-                            notas: p.notas
+                            notas: p.notas,
+                            autorizado: _this.autorizar
                         };
                         _this.comandaSrvc.saveDetalle(_this.IdComanda, _this.IdCuenta, _this.detalleComanda).subscribe(function (res) {
                             if (res.exito) {
@@ -5605,6 +5607,7 @@
                         dialogoRef.afterClosed().subscribe(function (res) {
                             // console.log(res);
                             if (res) {
+                                _this.autorizar = true;
                                 _this.deleteProductoFromList(p, idx);
                                 _this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
                             }
@@ -6717,19 +6720,22 @@
             /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
             /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
             /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-            /* harmony import */ var _abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../abrir-mesa/abrir-mesa.component */ "./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.ts");
-            /* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
-            /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+            /* harmony import */ var ngx_socket_io__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ngx-socket-io */ "./node_modules/ngx-socket-io/fesm2015/ngx-socket-io.js");
+            /* harmony import */ var _abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../abrir-mesa/abrir-mesa.component */ "./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.ts");
+            /* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
+            /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
             var TranAreasComponent = /** @class */ (function () {
-                function TranAreasComponent(dialog, _snackBar, ls, areaSrvc, comandaSrvc) {
+                function TranAreasComponent(dialog, _snackBar, ls, areaSrvc, comandaSrvc, socket) {
                     var _this = this;
                     this.dialog = dialog;
                     this._snackBar = _snackBar;
                     this.ls = ls;
                     this.areaSrvc = areaSrvc;
                     this.comandaSrvc = comandaSrvc;
+                    this.socket = socket;
                     this.divSize = { h: 0, w: 0 };
                     this.lstTabsAreas = [];
+                    this.lstTabsAreasForUpdate = [];
                     this.actualizar = function () {
                         // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
                         var area = _this.lstTabsAreas.find(function (c) { return +c.area === +_this.mesaSeleccionada.mesa.area.area; });
@@ -6751,10 +6757,26 @@
                         },
                         cuentas: []
                     }; };
-                    this.loadAreas = function () {
+                    this.loadAreas = function (saveOnTemp) {
+                        if (saveOnTemp === void 0) { saveOnTemp = false; }
                         _this.areaSrvc.get({ sede: (+_this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe(function (res) {
-                            _this.lstTabsAreas = res;
+                            if (!saveOnTemp) {
+                                _this.lstTabsAreas = res;
+                            }
+                            else {
+                                _this.lstTabsAreasForUpdate = res;
+                                _this.updateTableStatus();
+                            }
                         });
+                    };
+                    this.updateTableStatus = function () {
+                        for (var _i = 0, _a = _this.lstTabsAreasForUpdate; _i < _a.length; _i++) {
+                            var a = _a[_i];
+                            for (var _b = 0, _c = a.mesas; _b < _c.length; _b++) {
+                                var m = _c[_b];
+                                _this.setEstatusMesa({ area: +a.area, mesa: +m.mesa }, +m.estatus);
+                            }
+                        }
                     };
                     this.onResize = function (event) { return _this.setDivSize(); };
                     this.setEstatusMesa = function (m, estatus) {
@@ -6778,6 +6800,7 @@
                                 // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
                                 // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
                                 // this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {});
+                                _this.checkEstatusMesa();
                             }
                             else if (res === 'open') {
                                 // console.log('CUENTAS DE LA MESA CON EL RIGHT PANEL YA ABIERTO', this.mesaSeleccionada.cuentas);
@@ -6808,10 +6831,10 @@
                         _this.fuerzaCierreComanda(false);
                     };
                     this.checkEstatusMesa = function () {
-                        // console.log('MESA = ', this.mesaSeleccionada);
+                        // console.log('MESA EN CHECK ESTATUS MESA = ', this.mesaSeleccionada);
                         if (!!_this.mesaSeleccionada && !!_this.mesaSeleccionada.cuentas && _this.mesaSeleccionada.cuentas.length > 0) {
                             var abiertas = _this.mesaSeleccionada.cuentas.filter(function (cta) { return +cta.cerrada === 0; }).length || 0;
-                            // console.log(`ABIERTAS = ${abiertas}`);
+                            // console.log('ABIERTAS = ', abiertas);
                             if (abiertas === 0) {
                                 _this.setEstatusMesa({
                                     area: _this.mesaSeleccionada.mesa.area.area,
@@ -6827,9 +6850,9 @@
                     };
                     this.loadComandaMesa = function (obj, shouldToggle) {
                         if (shouldToggle === void 0) { shouldToggle = true; }
-                        // console.log(obj);
+                        // console.log('OBJETO = ', obj);
                         _this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe(function (res) {
-                            // console.log(res); return;
+                            // console.log('RESPUESTA DE GET COMANDA = ', res);
                             if (res.exito) {
                                 if (!Array.isArray(res)) {
                                     _this.mesaSeleccionada = res;
@@ -6842,23 +6865,34 @@
                                                 { cerrada: 1 }
                                             ]
                                         };
-                                        _this.checkEstatusMesa();
                                     }
+                                    _this.checkEstatusMesa();
                                 }
                                 // console.log('MESA SELECTED = ', this.mesaSeleccionada);
                                 _this.checkEstatusMesa();
                                 if (shouldToggle) {
-                                    var cuentas = _this.mesaSeleccionada.cuentas;
+                                    // const cuentas = this.mesaSeleccionada.cuentas;
                                     _this.snTrancomanda.llenaProductosSeleccionados(_this.mesaSeleccionada);
                                     _this.toggleRightSidenav();
                                 }
                                 else {
                                     // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
+                                    _this.checkEstatusMesa();
                                 }
                             }
                             else {
                                 if (res.mensaje) {
                                     _this._snackBar.open("" + res.mensaje, 'ERROR', { duration: 5000 });
+                                }
+                                if (Array.isArray(res)) {
+                                    if (res.length === 0) {
+                                        _this.mesaSeleccionada = {
+                                            mesa: _this.mesaSeleccionada.mesa,
+                                            cuentas: [
+                                                { cerrada: 1 }
+                                            ]
+                                        };
+                                    }
                                 }
                                 _this.checkEstatusMesa();
                             }
@@ -6867,8 +6901,15 @@
                     };
                 }
                 TranAreasComponent.prototype.ngOnInit = function () {
+                    var _this = this;
                     this.loadAreas();
                     this.resetMesaSeleccionada();
+                    if (!!this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid) {
+                        this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid);
+                        this.socket.on('refrescar:mesa', function (obj) {
+                            _this.loadAreas(true);
+                        });
+                    }
                 };
                 TranAreasComponent.prototype.ngAfterViewInit = function () {
                     var _this = this;
@@ -6913,7 +6954,7 @@
                             }
                         ]
                     };
-                    var abrirMesaRef = this.dialog.open(_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_6__["AbrirMesaComponent"], {
+                    var abrirMesaRef = this.dialog.open(_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_7__["AbrirMesaComponent"], {
                         width: '50%',
                         height: 'auto',
                         disableClose: true,
@@ -6926,6 +6967,7 @@
                             _this.comandaSrvc.save(_this.mesaSeleccionadaToOpen).subscribe(function (res) {
                                 // console.log(res);
                                 if (res.exito) {
+                                    _this.socket.emit('refrescar:mesa', {});
                                     _this.mesaSeleccionada = res.comanda;
                                     // console.log('m', m);
                                     _this.setEstatusMesa(m, +res.comanda.mesa.estatus);
@@ -6946,8 +6988,9 @@
                 { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"] },
                 { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
                 { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
-                { type: _services_area_service__WEBPACK_IMPORTED_MODULE_7__["AreaService"] },
-                { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_8__["ComandaService"] }
+                { type: _services_area_service__WEBPACK_IMPORTED_MODULE_8__["AreaService"] },
+                { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_9__["ComandaService"] },
+                { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_6__["Socket"] }
             ]; };
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('matTabArea', { static: false })
@@ -7093,6 +7136,7 @@
                         if (msgToPrint === void 0) { msgToPrint = ''; }
                         var AppHref = "com.restouch.impresion://impresion/" + msgToPrint;
                         var wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+                        _this.snackBar.open("Imprimiendo comanda #" + _this.noComanda, 'Comanda', { duration: 7000 });
                         setTimeout(function () { return wref.close(); }, 1000);
                     };
                     this.printComandaPDF = function () {
@@ -7102,6 +7146,7 @@
                                 var blob = new Blob([res], { type: 'application/pdf' });
                                 var url = window.URL.createObjectURL(blob);
                                 window.open(url, "cuenta_" + noCuenta, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+                                _this.closeSideNavEv.emit();
                             }
                             else {
                                 _this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
@@ -7281,6 +7326,39 @@
                                         _this.llenaProductosSeleccionados(resImp.comanda);
                                         _this.setSelectedCuenta(_this.cuentaActiva.numero);
                                         _this.snackBar.open('Cuenta actualizada', "Cuenta #" + _this.cuentaActiva.numero, { duration: 3000 });
+                                        //------------------------------------------------------------------------------------------------------------------------------------------------//
+                                        var AImpresoraNormal = _this.lstProductosAImprimir.filter(function (p) { return +p.impresora.bluetooth === 0; });
+                                        var AImpresoraBT = _this.lstProductosAImprimir.filter(function (p) { return +p.impresora.bluetooth === 1; });
+                                        if (!toPdf) {
+                                            if (AImpresoraNormal.length > 0) {
+                                                _this.socket.emit('print:comanda', "" + JSON.stringify({
+                                                    Tipo: 'Comanda',
+                                                    Nombre: _this.cuentaActiva.nombre,
+                                                    Numero: _this.noComanda,
+                                                    DetalleCuenta: AImpresoraNormal,
+                                                    Ubicacion: _this.mesaEnUso.mesa.area.nombre + " - Mesa " + _this.mesaEnUso.mesa.numero,
+                                                    Mesero: _this.mesaEnUso.mesero.nombres + " " + _this.mesaEnUso.mesero.apellidos,
+                                                    Total: null
+                                                }));
+                                                _this.snackBar.open("Imprimiendo comanda #" + _this.noComanda, 'Comanda', { duration: 7000 });
+                                            }
+                                            if (AImpresoraBT.length > 0) {
+                                                _this.printToBT(JSON.stringify({
+                                                    Tipo: 'Comanda',
+                                                    Nombre: _this.cuentaActiva.nombre,
+                                                    Numero: _this.noComanda,
+                                                    DetalleCuenta: AImpresoraBT,
+                                                    Ubicacion: _this.mesaEnUso.mesa.area.nombre + " - Mesa " + _this.mesaEnUso.mesa.numero,
+                                                    Mesero: _this.mesaEnUso.mesero.nombres + " " + _this.mesaEnUso.mesero.apellidos,
+                                                    Total: null
+                                                }));
+                                            }
+                                        }
+                                        else {
+                                            _this.printComandaPDF();
+                                        }
+                                        _this.closeSideNavEv.emit();
+                                        //------------------------------------------------------------------------------------------------------------------------------------------------//
                                     });
                                 }
                                 else {
@@ -7288,35 +7366,6 @@
                                 }
                                 _this.bloqueoBotones = false;
                             });
-                        }
-                        var AImpresoraNormal = this.lstProductosAImprimir.filter(function (p) { return +p.impresora.bluetooth === 0; });
-                        var AImpresoraBT = this.lstProductosAImprimir.filter(function (p) { return +p.impresora.bluetooth === 1; });
-                        if (!toPdf) {
-                            if (AImpresoraNormal.length > 0) {
-                                this.socket.emit('print:comanda', "" + JSON.stringify({
-                                    Tipo: 'Comanda',
-                                    Nombre: this.cuentaActiva.nombre,
-                                    Numero: this.noComanda,
-                                    DetalleCuenta: AImpresoraNormal,
-                                    Ubicacion: this.mesaEnUso.mesa.area.nombre + " - Mesa " + this.mesaEnUso.mesa.numero,
-                                    Mesero: this.mesaEnUso.mesero.nombres + " " + this.mesaEnUso.mesero.apellidos,
-                                    Total: null
-                                }));
-                            }
-                            if (AImpresoraBT.length > 0) {
-                                this.printToBT(JSON.stringify({
-                                    Tipo: 'Comanda',
-                                    Nombre: this.cuentaActiva.nombre,
-                                    Numero: this.noComanda,
-                                    DetalleCuenta: AImpresoraBT,
-                                    Ubicacion: this.mesaEnUso.mesa.area.nombre + " - Mesa " + this.mesaEnUso.mesa.numero,
-                                    Mesero: this.mesaEnUso.mesero.nombres + " " + this.mesaEnUso.mesero.apellidos,
-                                    Total: null
-                                }));
-                            }
-                        }
-                        else {
-                            this.printComandaPDF();
                         }
                     }
                     else {
@@ -7353,7 +7402,9 @@
                         Ubicacion: this.mesaEnUso.mesa.area.nombre + " - Mesa " + this.mesaEnUso.mesa.numero + " - Comanda " + this.mesaEnUso.comanda,
                         Mesero: this.mesaEnUso.mesero.nombres + " " + this.mesaEnUso.mesero.apellidos
                     }));
+                    this.snackBar.open("Imprimiendo cuenta de " + this.cuentaActiva.nombre, 'Cuenta', { duration: 7000 });
                     this.bloqueoBotones = false;
+                    this.closeSideNavEv.emit();
                 };
                 TranComandaComponent.prototype.unirCuentas = function () {
                     var _this = this;
@@ -7370,33 +7421,40 @@
                 };
                 TranComandaComponent.prototype.cobrarCuenta = function () {
                     var _this = this;
-                    var productosACobrar = this.lstProductosDeCuenta.filter(function (p) { return +p.impreso === 1; });
-                    if (productosACobrar.length > 0) {
-                        var cobrarCtaRef = this.dialog.open(_pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__["CobrarPedidoComponent"], {
-                            width: '95%',
-                            data: {
-                                cuenta: this.cuentaActiva.nombre,
-                                idcuenta: this.cuentaActiva.cuenta,
-                                productosACobrar: productosACobrar,
-                                porcentajePropina: 0.00
-                            }
-                        });
-                        cobrarCtaRef.afterClosed().subscribe(function (res) {
-                            if (res && res !== 'closePanel') {
-                                // console.log(res);
-                                _this.cambiarEstatusCuenta(res);
-                                _this.closeSideNavEv.emit();
+                    this.comandaSrvc.getCuenta(this.cuentaActiva.cuenta).subscribe(function (res) {
+                        if (res.pendiente.length > 0) {
+                            _this.snackBar.open('Cobro', 'Tiene productos sin comandar', { duration: 3000 });
+                        }
+                        else {
+                            var productosACobrar = _this.lstProductosDeCuenta.filter(function (p) { return +p.impreso === 1; });
+                            if (productosACobrar.length > 0) {
+                                var cobrarCtaRef = _this.dialog.open(_pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__["CobrarPedidoComponent"], {
+                                    width: '95%',
+                                    data: {
+                                        cuenta: _this.cuentaActiva.nombre,
+                                        idcuenta: _this.cuentaActiva.cuenta,
+                                        productosACobrar: productosACobrar,
+                                        porcentajePropina: 0.00
+                                    }
+                                });
+                                cobrarCtaRef.afterClosed().subscribe(function (res) {
+                                    if (res && res !== 'closePanel') {
+                                        // console.log(res);
+                                        _this.cambiarEstatusCuenta(res);
+                                        _this.closeSideNavEv.emit();
+                                    }
+                                    else {
+                                        if (res === 'closePanel') {
+                                            _this.closeSideNavEv.emit();
+                                        }
+                                    }
+                                });
                             }
                             else {
-                                if (res === 'closePanel') {
-                                    _this.closeSideNavEv.emit();
-                                }
+                                _this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
                             }
-                        });
-                    }
-                    else {
-                        this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
-                    }
+                        }
+                    });
                 };
                 return TranComandaComponent;
             }());
@@ -8796,6 +8854,14 @@
                         })
                     };
                     return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/cerrar_estacion/" + idcomanda, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.getCuenta = function (idcuenta) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/cuenta/get_cuenta/" + idcuenta, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
                 };
                 return ComandaService;
             }());
