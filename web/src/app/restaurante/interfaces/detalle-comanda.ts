@@ -6,4 +6,5 @@ export interface DetalleComanda {
     precio: number;
     total: number;
     notas: string;
+    autorizado?: boolean;
 }

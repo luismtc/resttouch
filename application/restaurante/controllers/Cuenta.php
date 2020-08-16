@@ -34,7 +34,7 @@ class Cuenta extends CI_Controller {
 				$pagos = $cta->get_forma_pago();
 
 				if (count($pagos) == 0) {
-					$det = $cta->getDetalle();
+					$det = $cta->getDetalle(["impreso" => 1]);
 					$total = 0;
 					$datos['facturada'] = $cta->facturada();
 
@@ -96,6 +96,24 @@ class Cuenta extends CI_Controller {
 		}
 		$this->output
 		->set_output(json_encode($datos));
+	}
+
+	public function get_cuenta($id)
+	{
+		$cuenta = new Cuenta_model($id);
+		$detalle = $cuenta->getDetalle();
+		$pendiente = $cuenta->getDetalle(["impreso" => 0]);
+
+		$this->output
+		->set_output(json_encode([
+			"cuenta" => [
+				"nombre" => $cuenta->nombre,
+				"numero" => $cuenta->numero,
+				"cerrada" => $cuenta->cerrada
+			],
+			"detalle" => $detalle,
+			"pendiente" => $pendiente
+		]));
 	}
 
 }

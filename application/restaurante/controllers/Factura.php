@@ -48,7 +48,8 @@ class Factura extends CI_Controller {
 					foreach ($req['cuentas'] as $row) {
 						$cta = new Cuenta_model($row['cuenta']);
 						$pdesc = $cta->get_descuento();
-						foreach ($cta->getDetalle() as $det) {
+
+						foreach ($cta->getDetalle(["impreso" => 1]) as $det) {
 							$det->bien_servicio = $det->articulo->bien_servicio;
 							$det->articulo = $det->articulo->articulo;
 							

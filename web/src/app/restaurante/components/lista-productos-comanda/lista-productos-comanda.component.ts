@@ -41,6 +41,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   @Output() productoRemovedEv = new EventEmitter();
   public esMovil = false;
   public detalleComanda: DetalleComanda;
+  public autorizar = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -66,7 +67,8 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
       cantidad: +p.cantidad > 1 ? (+p.cantidad) - 1 : 0,
       precio: +p.precio,
       total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
-      notas: p.notas
+      notas: p.notas,
+      autorizado: this.autorizar
     };
 
     this.comandaSrvc.saveDetalle(this.IdComanda, this.IdCuenta, this.detalleComanda).subscribe(res => {
@@ -95,6 +97,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     dialogoRef.afterClosed().subscribe(res => {
       // console.log(res);
       if (res) {
+        this.autorizar = res.esgerente;
         this.deleteProductoFromList(p, idx);
         this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
       } else {
