@@ -4196,7 +4196,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-list class=\"fullWidth\" [style.height]=\"listHeight\">\n    <mat-list-item *ngFor=\"let p of listaProductos; let i = index;\" [ngClass]=\"{'noImpreso': +p.impreso === 0}\" [style.height]=\"p.itemListHeight\">\n        <div matLine class=\"fullWidth\" *ngIf=\"+p.cantidad > 0\">\n            <div class=\"row\">\n                <div class=\"col m6 s12\">\n                    <span>{{p.cantidad}}&nbsp;{{p.nombre}}</span>\n                </div>\n                <div class=\"col m6 s12\" align=\"end\">\n                    <!--<span class=\"spacer\"></span>-->\n                    <span>{{(p.cantidad * p.precio) | number: '1.2-2'}}</span>&nbsp;\n                    <eco-fab-speed-dial direction=\"left\" *ngIf=\"+p.impreso === 0\">\n                        <eco-fab-speed-dial-trigger>\n                            <button mat-fab>\n                                <mat-icon style=\"font-size: 18pt !important;\">keyboard_arrow_left</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-trigger>\n                        <eco-fab-speed-dial-actions>\n                            <button mat-mini-fab (click)=\"deleteProductoFromList(p, i)\" color=\"warn\">\n                                <mat-icon style=\"font-size: 16pt !important;\">delete_forever</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"removeProducto(p, i)\" color=\"warn\">\n                                <mat-icon style=\"font-size: 16pt !important;\">remove_circle</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"toggleShowInputNotas(p)\" color=\"accent\">\n                                <mat-icon style=\"font-size: 16pt !important;\">notes</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-actions>\n                    </eco-fab-speed-dial>\n                    <eco-fab-speed-dial direction=\"left\" *ngIf=\"+p.impreso === 1\">\n                        <eco-fab-speed-dial-trigger>\n                            <button mat-fab>\n                                <mat-icon style=\"font-size: 18pt !important;\">keyboard_arrow_left</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-trigger>\n                        <eco-fab-speed-dial-actions>\n                            <button mat-mini-fab (click)=\"deleteProductoFromListAfterPrinted(p, i)\" color=\"warn\">\n                                <mat-icon style=\"font-size: 16pt !important;\">delete_forever</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-actions>\n                    </eco-fab-speed-dial>\n                </div>\n            </div>\n        </div>\n        <div matLine class=\"fullWidth\" *ngIf=\"+p.cantidad > 0\">\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && esMovil\">\n                <input matInput placeholder=\"Notas de producto\" [(ngModel)]=\"p.notas\"\n                    (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && !esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Notas de producto\" placeholder=\"Notas de producto\"\n                    [(ngModel)]=\"p.notas\" (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n        </div>\n    </mat-list-item>\n</mat-list>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-list class=\"fullWidth\" [style.height]=\"listHeight\">\n    <mat-list-item *ngFor=\"let p of listaProductos; let i = index;\" [ngClass]=\"{'noImpreso': +p.impreso === 0}\" [style.height]=\"p.itemListHeight\">\n        <div matLine class=\"fullWidth\" *ngIf=\"+p.cantidad > 0\">\n            <div class=\"row\">\n                <div class=\"col m6 s12\">\n                    <span>{{p.cantidad}}&nbsp;{{p.nombre}}</span>\n                </div>\n                <div class=\"col m6 s12\" align=\"end\">\n                    <!--<span class=\"spacer\"></span>-->\n                    <span>{{(p.cantidad * p.precio) | number: '1.2-2'}}</span>&nbsp;\n                    <eco-fab-speed-dial direction=\"left\" *ngIf=\"+p.impreso === 0\">\n                        <eco-fab-speed-dial-trigger>\n                            <button mat-fab>\n                                <mat-icon style=\"font-size: 18pt !important;\">keyboard_arrow_left</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-trigger>\n                        <eco-fab-speed-dial-actions>\n                            <button mat-mini-fab (click)=\"deleteProductoFromList(p, i)\" color=\"warn\" [disabled]=\"bloqueoBotones\">\n                                <mat-icon style=\"font-size: 16pt !important;\">delete_forever</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"removeProducto(p, i)\" color=\"warn\" [disabled]=\"bloqueoBotones\">\n                                <mat-icon style=\"font-size: 16pt !important;\">remove_circle</mat-icon>\n                            </button>\n                            <button mat-mini-fab (click)=\"toggleShowInputNotas(p)\" color=\"accent\" [disabled]=\"bloqueoBotones\">\n                                <mat-icon style=\"font-size: 16pt !important;\">notes</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-actions>\n                    </eco-fab-speed-dial>\n                    <eco-fab-speed-dial direction=\"left\" *ngIf=\"+p.impreso === 1\">\n                        <eco-fab-speed-dial-trigger>\n                            <button mat-fab>\n                                <mat-icon style=\"font-size: 18pt !important;\">keyboard_arrow_left</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-trigger>\n                        <eco-fab-speed-dial-actions>\n                            <button mat-mini-fab (click)=\"deleteProductoFromListAfterPrinted(p, i)\" color=\"warn\" [disabled]=\"bloqueoBotones\">\n                                <mat-icon style=\"font-size: 16pt !important;\">delete_forever</mat-icon>\n                            </button>\n                        </eco-fab-speed-dial-actions>\n                    </eco-fab-speed-dial>\n                </div>\n            </div>\n        </div>\n        <div matLine class=\"fullWidth\" *ngIf=\"+p.cantidad > 0\">\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && esMovil\">\n                <input matInput placeholder=\"Notas de producto\" [(ngModel)]=\"p.notas\"\n                    (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"p.showInputNotas && !esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Notas de producto\" placeholder=\"Notas de producto\"\n                    [(ngModel)]=\"p.notas\" (keyup.enter)=\"toggleShowInputNotas(p)\">\n            </mat-form-field>\n        </div>\n    </mat-list-item>\n</mat-list>");
 
 /***/ }),
 
@@ -4391,7 +4391,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\" (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\" *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br/>\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\" (click)=\"clickOnCategoria(c)\">\n                {{c.descripcion}}\n            </button>            \n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\" (categoriasFilledEv)=\"setListaCategorias($event)\" [bloqueoBotones]=\"bloqueoBotones\"></app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\" [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2 || bloqueoBotones\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\" (click)=\"cobrarCuenta()\" \n                    [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\" *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa\n            {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\"\n            (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\"\n                *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br />\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\"\n                (click)=\"clickOnCategoria(c)\" [disabled]=\"bloqueoBotones\">\n                {{c.descripcion}}\n            </button>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\"\n                (categoriasFilledEv)=\"setListaCategorias($event)\" [bloqueoBotones]=\"bloqueoBotones\">\n            </app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\"\n                [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\" [bloqueoBotones]=\"bloqueoBotones\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2 || bloqueoBotones\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"cobrarCuenta()\"\n                [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\"\n                *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -5669,9 +5669,11 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
         this.listHeight = '450px';
         this.IdComanda = 0;
         this.IdCuenta = 0;
+        this.bloqueoBotones = false;
         this.productoRemovedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.esMovil = false;
         this.removeProducto = (p, idx) => {
+            this.bloqueoBotones = true;
             this.detalleComanda = {
                 detalle_cuenta: p.detalle_cuenta,
                 detalle_comanda: p.detalle_comanda,
@@ -5689,6 +5691,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
                 else {
                     this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
                 }
+                this.bloqueoBotones = false;
             });
         };
         this.deleteProductoFromList = (p, idx) => {
@@ -5697,6 +5700,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
             this.removeProducto(p, idx);
         };
         this.deleteProductoFromListAfterPrinted = (p, idx) => {
+            this.bloqueoBotones = true;
             const dialogoRef = this.dialog.open(_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_6__["ValidaPwdGerenteTurnoComponent"], {
                 width: '20%', disableClose: true
             });
@@ -5709,6 +5713,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
                 else {
                     this.snackBar.open('La contraseña no es correcta', 'Comanda', { duration: 5000 });
                 }
+                this.bloqueoBotones = false;
             });
         };
     }
@@ -5752,6 +5757,9 @@ tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
 ], ListaProductosComandaComponent.prototype, "IdCuenta", void 0);
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+], ListaProductosComandaComponent.prototype, "bloqueoBotones", void 0);
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
 ], ListaProductosComandaComponent.prototype, "productoRemovedEv", void 0);
@@ -6995,9 +7003,13 @@ let TranAreasComponent = class TranAreasComponent {
                 if (res === 'close') {
                     // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
                     // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
-                    this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {
-                        // console.log('CERRANDO RIGHT SIDE PANEL.', resCierre);
-                    });
+                    // this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {});
+                }
+                else if (res === 'open') {
+                    // console.log('CUENTAS DE LA MESA CON EL RIGHT PANEL YA ABIERTO', this.mesaSeleccionada.cuentas);
+                    if (this.mesaSeleccionada.cuentas.length === 1) {
+                        this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
+                    }
                 }
             });
         };
@@ -7063,9 +7075,6 @@ let TranAreasComponent = class TranAreasComponent {
                         const cuentas = this.mesaSeleccionada.cuentas;
                         this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
                         this.toggleRightSidenav();
-                        if (cuentas.length === 1) {
-                            this.snTrancomanda.setSelectedCuenta(cuentas[0].numero);
-                        }
                     }
                     else {
                         // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
@@ -7077,6 +7086,7 @@ let TranAreasComponent = class TranAreasComponent {
                     }
                     this.checkEstatusMesa();
                 }
+                this.checkEstatusMesa();
             });
         };
     }
@@ -7359,8 +7369,10 @@ let TranComandaComponent = class TranComandaComponent {
         // console.log('MESA EN USO = ', this.mesaEnUso);
     }
     setSelectedCuenta(noCuenta) {
+        this.bloqueoBotones = true;
         this.cuentaActiva = this.mesaEnUso.cuentas.find((c) => +c.numero === +noCuenta);
         this.setLstProductosDeCuenta();
+        this.bloqueoBotones = false;
     }
     setSumaCuenta(lista) {
         let suma = 0.00;
@@ -7370,7 +7382,7 @@ let TranComandaComponent = class TranComandaComponent {
         this.sumCuenta = suma;
     }
     setLstProductosDeCuenta() {
-        this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => p.cuenta == +this.cuentaActiva.numero);
+        this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
         // console.log(this.lstProductosDeCuenta);
     }
     addProductoSelected(producto) {
@@ -7592,10 +7604,15 @@ let TranComandaComponent = class TranComandaComponent {
                 }
             });
             cobrarCtaRef.afterClosed().subscribe(res => {
-                if (res) {
+                if (res && res !== 'closePanel') {
                     // console.log(res);
                     this.cambiarEstatusCuenta(res);
                     this.closeSideNavEv.emit();
+                }
+                else {
+                    if (res === 'closePanel') {
+                        this.closeSideNavEv.emit();
+                    }
                 }
             });
         }

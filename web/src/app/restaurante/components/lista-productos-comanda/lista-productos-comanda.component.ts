@@ -34,11 +34,12 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
 
   @Input() listaProductos: productoSelected[] = [];
   @Input() noCuenta: number = null;
-  @Input() listHeight: string = '450px';
-  @Input() IdComanda: number = 0;
-  @Input() IdCuenta: number = 0;
+  @Input() listHeight = '450px';
+  @Input() IdComanda = 0;
+  @Input() IdCuenta = 0;
+  @Input() bloqueoBotones = false;
   @Output() productoRemovedEv = new EventEmitter();
-  public esMovil: boolean = false;
+  public esMovil = false;
   public detalleComanda: DetalleComanda;
 
   constructor(
@@ -57,7 +58,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   }
 
   removeProducto = (p: productoSelected, idx: number) => {
-
+    this.bloqueoBotones = true;
     this.detalleComanda = {
       detalle_cuenta: p.detalle_cuenta,
       detalle_comanda: p.detalle_comanda,
@@ -75,6 +76,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
       }
+      this.bloqueoBotones = false;
     });
   }
 
@@ -85,6 +87,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   }
 
   deleteProductoFromListAfterPrinted = (p: productoSelected, idx: number) => {
+    this.bloqueoBotones = true;
     const dialogoRef = this.dialog.open(ValidaPwdGerenteTurnoComponent, {
       width: '20%', disableClose: true
     });
@@ -97,6 +100,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
       } else {
         this.snackBar.open('La contraseña no es correcta', 'Comanda', { duration: 5000 });
       }
+      this.bloqueoBotones = false;
     });
   }
 

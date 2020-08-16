@@ -1,10 +1,12 @@
 <div style="width: 100%; overflow: hidden;">
     <div style="width: 50%; float: left;" align="center">
-        <span class="bld" style="font-size: 16pt; margin-left: 10px;">{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>
+        <span class="bld" style="font-size: 16pt; margin-left: 10px;">{{mesaEnUso.mesa.area.nombre}} - Mesa
+            {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>
         <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->
     </div>
     <div style="overflow: hidden; margin-right: 10px;" align="end">
-        <button mat-raised-button type="button" color="accent" style="margin-left: 8px;" (click)="closeSideNavEv.emit()">
+        <button mat-raised-button type="button" color="accent" style="margin-left: 8px;"
+            (click)="closeSideNavEv.emit()">
             Cerrar Panel
         </button>
     </div>
@@ -12,7 +14,8 @@
 <div class="divFullSize">
     <div class="row">
         <div class="col m12 s12" align="center" style="padding: 0 !important;">
-            <button mat-raised-button type="button" color="accent" class="btnAccion" *ngFor="let cta of mesaEnUso.cuentas" [disabled]="+cta.cerrada == 1"
+            <button mat-raised-button type="button" color="accent" class="btnAccion"
+                *ngFor="let cta of mesaEnUso.cuentas" [disabled]="+cta.cerrada == 1"
                 (click)="setSelectedCuenta(cta.numero)">
                 {{cta.nombre}}
             </button>
@@ -20,10 +23,11 @@
     </div>
     <div class="row">
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
-            <span class="bld">Productos</span><br/>
-            <button mat-raised-button class="btnAccion" color="accent" *ngFor="let c of categorias" (click)="clickOnCategoria(c)">
+            <span class="bld">Productos</span><br />
+            <button mat-raised-button class="btnAccion" color="accent" *ngFor="let c of categorias"
+                (click)="clickOnCategoria(c)" [disabled]="bloqueoBotones">
                 {{c.descripcion}}
-            </button>            
+            </button>
         </div>
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
             <span class="bld" *ngIf="cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</span>
@@ -33,32 +37,41 @@
     <div class="row">
         <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto; height: 425px !important;">
             <!--<app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>-->
-            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)="addProductoSelected($event)" (categoriasFilledEv)="setListaCategorias($event)" [bloqueoBotones]="bloqueoBotones"></app-lista-producto-alt>
+            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)="addProductoSelected($event)"
+                (categoriasFilledEv)="setListaCategorias($event)" [bloqueoBotones]="bloqueoBotones">
+            </app-lista-producto-alt>
         </div>
         <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto; height: 425px !important;">
-            <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero" [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta"
+            <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero"
+                [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones"
                 (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>
     </div>
     <div class="row">
         <div class="col m12 s12" align="center">
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="printComanda()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
+                (click)="printComanda()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
                 Comanda
             </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="printComanda(true)" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
+                (click)="printComanda(true)" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
                 Comanda (PDF)
             </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="printCuenta()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
+                (click)="printCuenta()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
                 Cuenta
             </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2 || bloqueoBotones">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
+                (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2 || bloqueoBotones">
                 Unir cuentas
             </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda" (click)="cobrarCuenta()" 
-                    [disabled]="!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones">
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
+                (click)="cobrarCuenta()"
+                [disabled]="!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones">
                 Cobrar cuenta
             </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccionComanda" (click)="cerrarMesa()" *ngIf="lstProductosDeCuenta.length <= 0">
+            <button mat-raised-button type="button" color="accent" class="btnAccionComanda" (click)="cerrarMesa()"
+                *ngIf="lstProductosDeCuenta.length <= 0">
                 Cerrar Mesa
             </button>
         </div>

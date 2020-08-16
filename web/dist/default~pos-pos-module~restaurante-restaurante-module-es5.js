@@ -761,7 +761,7 @@
                         }
                         _this.factReq.cuentas.push({ cuenta: +_this.inputData.idcuenta });
                         _this.cobroSrvc.save(objCobro).subscribe(function (res) {
-                            if (res.exito || !res.facturada) {
+                            if (res.exito && !res.facturada) {
                                 _this.snackBar.open('Cobro', "" + res.mensaje, { duration: 3000 });
                                 _this.facturaSrvc.facturar(_this.factReq).subscribe(function (resFact) {
                                     // console.log('RESPUESTA DE FACTURAR = ', resFact);
@@ -790,6 +790,7 @@
                             else {
                                 _this.facturando = false;
                                 _this.snackBar.open('Cobro', "ERROR: " + res.mensaje, { duration: 7000 });
+                                _this.dialogRef.close('closePanel');
                             }
                         });
                     };

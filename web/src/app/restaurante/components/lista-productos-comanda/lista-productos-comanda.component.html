@@ -15,13 +15,13 @@
                             </button>
                         </eco-fab-speed-dial-trigger>
                         <eco-fab-speed-dial-actions>
-                            <button mat-mini-fab (click)="deleteProductoFromList(p, i)" color="warn">
+                            <button mat-mini-fab (click)="deleteProductoFromList(p, i)" color="warn" [disabled]="bloqueoBotones">
                                 <mat-icon style="font-size: 16pt !important;">delete_forever</mat-icon>
                             </button>
-                            <button mat-mini-fab (click)="removeProducto(p, i)" color="warn">
+                            <button mat-mini-fab (click)="removeProducto(p, i)" color="warn" [disabled]="bloqueoBotones">
                                 <mat-icon style="font-size: 16pt !important;">remove_circle</mat-icon>
                             </button>
-                            <button mat-mini-fab (click)="toggleShowInputNotas(p)" color="accent">
+                            <button mat-mini-fab (click)="toggleShowInputNotas(p)" color="accent" [disabled]="bloqueoBotones">
                                 <mat-icon style="font-size: 16pt !important;">notes</mat-icon>
                             </button>
                         </eco-fab-speed-dial-actions>
@@ -33,7 +33,7 @@
                             </button>
                         </eco-fab-speed-dial-trigger>
                         <eco-fab-speed-dial-actions>
-                            <button mat-mini-fab (click)="deleteProductoFromListAfterPrinted(p, i)" color="warn">
+                            <button mat-mini-fab (click)="deleteProductoFromListAfterPrinted(p, i)" color="warn" [disabled]="bloqueoBotones">
                                 <mat-icon style="font-size: 16pt !important;">delete_forever</mat-icon>
                             </button>
                         </eco-fab-speed-dial-actions>

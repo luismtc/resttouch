@@ -155,8 +155,10 @@ export class TranComandaComponent implements OnInit {
   }
 
   setSelectedCuenta(noCuenta: number) {
+    this.bloqueoBotones = true;
     this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +noCuenta);
     this.setLstProductosDeCuenta();
+    this.bloqueoBotones = false;
   }
 
   setSumaCuenta(lista: productoSelected[]) {
@@ -168,7 +170,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   setLstProductosDeCuenta() {
-    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => p.cuenta == +this.cuentaActiva.numero);
+    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
     // console.log(this.lstProductosDeCuenta);
   }
 
@@ -427,10 +429,14 @@ export class TranComandaComponent implements OnInit {
       });
 
       cobrarCtaRef.afterClosed().subscribe(res => {
-        if (res) {
+        if (res && res !== 'closePanel') {
           // console.log(res);
           this.cambiarEstatusCuenta(res);
           this.closeSideNavEv.emit();
+        } else {
+          if (res === 'closePanel') {
+            this.closeSideNavEv.emit();
+          }
         }
       });
     } else {

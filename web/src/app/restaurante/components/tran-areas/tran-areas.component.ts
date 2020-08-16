@@ -166,9 +166,12 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       if (res === 'close') {
         // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
         // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
-        this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {
-          // console.log('CERRANDO RIGHT SIDE PANEL.', resCierre);
-        });
+        // this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {});
+      } else if (res === 'open') {
+        // console.log('CUENTAS DE LA MESA CON EL RIGHT PANEL YA ABIERTO', this.mesaSeleccionada.cuentas);
+        if (this.mesaSeleccionada.cuentas.length === 1) {
+          this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
+        }
       }
     });
   }
@@ -237,9 +240,6 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
           const cuentas = this.mesaSeleccionada.cuentas;
           this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
           this.toggleRightSidenav();
-          if (cuentas.length === 1) {
-            this.snTrancomanda.setSelectedCuenta(cuentas[0].numero);
-          }
         } else {
           // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
         }
@@ -249,6 +249,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         }
         this.checkEstatusMesa();
       }
+      this.checkEstatusMesa();
     });
   }
 

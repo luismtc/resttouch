@@ -140,7 +140,7 @@ export class CobrarPedidoComponent implements OnInit {
 
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
     this.cobroSrvc.save(objCobro).subscribe(res => {
-      if (res.exito || !res.facturada) {
+      if (res.exito && !res.facturada) {
         this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
         this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
           // console.log('RESPUESTA DE FACTURAR = ', resFact);
@@ -168,6 +168,7 @@ export class CobrarPedidoComponent implements OnInit {
       } else {
         this.facturando = false;
         this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
+        this.dialogRef.close('closePanel');
       }
     });
   }
