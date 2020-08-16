@@ -425,32 +425,38 @@ export class TranComandaComponent implements OnInit {
   }
 
   cobrarCuenta() {
-    const productosACobrar = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
-    if (productosACobrar.length > 0) {
-      const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
-        width: '95%',
-        data: {
-          cuenta: this.cuentaActiva.nombre,
-          idcuenta: this.cuentaActiva.cuenta,
-          productosACobrar,
-          porcentajePropina: 0.00
-        }
-      });
+    this.comandaSrvc.getCuenta(this.cuentaActiva.cuenta).subscribe(res => {
+      if (res.pendiente.length > 0) { 
+        this.snackBar.open('Cobro', 'Tiene productos sin comandar', { duration: 3000 });
+      } else {
+        const productosACobrar = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
+        if (productosACobrar.length > 0) {
+          const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
+            width: '95%',
+            data: {
+              cuenta: this.cuentaActiva.nombre,
+              idcuenta: this.cuentaActiva.cuenta,
+              productosACobrar,
+              porcentajePropina: 0.00
+            }
+          });
 
-      cobrarCtaRef.afterClosed().subscribe(res => {
-        if (res && res !== 'closePanel') {
-          // console.log(res);
-          this.cambiarEstatusCuenta(res);
-          this.closeSideNavEv.emit();
+          cobrarCtaRef.afterClosed().subscribe(res => {
+            if (res && res !== 'closePanel') {
+              // console.log(res);
+              this.cambiarEstatusCuenta(res);
+              this.closeSideNavEv.emit();
+            } else {
+              if (res === 'closePanel') {
+                this.closeSideNavEv.emit();
+              }
+            }
+          });
         } else {
-          if (res === 'closePanel') {
-            this.closeSideNavEv.emit();
-          }
+          this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
         }
-      });
-    } else {
-      this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
-    }
+      }
+    });
   }
 
   cambiarEstatusCuenta = (obj: any) => {
