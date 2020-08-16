@@ -339,6 +339,7 @@ export class TranComandaComponent implements OnInit {
       }
     } else {
       this.snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+      this.bloqueoBotones = false;
     }
   }
 

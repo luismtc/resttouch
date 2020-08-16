@@ -232,6 +232,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
                 { cerrada: 1 }
               ]
             };
+            this.checkEstatusMesa();
           }
         }
         // console.log('MESA SELECTED = ', this.mesaSeleccionada);

@@ -7067,6 +7067,7 @@ let TranAreasComponent = class TranAreasComponent {
                                     { cerrada: 1 }
                                 ]
                             };
+                            this.checkEstatusMesa();
                         }
                     }
                     // console.log('MESA SELECTED = ', this.mesaSeleccionada);
@@ -7546,6 +7547,7 @@ let TranComandaComponent = class TranComandaComponent {
         }
         else {
             this.snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+            this.bloqueoBotones = false;
         }
     }
     printCuenta() {
