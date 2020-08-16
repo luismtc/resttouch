@@ -196,6 +196,14 @@ class Cuenta_model extends General_Model {
 		
 		return 0;
 	}
+
+	public function get_forma_pago()
+	{
+		return $this->db
+		->where("cuenta", $this->getPK())
+		->get("cuenta_forma_pago")
+		->result();
+	}
 }
 
 /* End of file Cuenta_model.php */

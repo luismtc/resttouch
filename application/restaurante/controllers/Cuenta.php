@@ -27,57 +27,67 @@ class Cuenta extends CI_Controller {
 	{
 		$req =  json_decode(file_get_contents('php://input'));
 		$datos = ["exito" => false, "facturada" => false];
+
 		if ($this->input->method() == 'post') {
 			if (isset($req->forma_pago)) {		
 				$cta = new Cuenta_model($cuenta);
-				$det = $cta->getDetalle();
-				$total = 0;
-				$datos['facturada'] = $cta->facturada();
-				if ($cta->cerrada == 0) {
-					foreach ($det as $row) {
-						$total+= ($row->cantidad * $row->precio);
-					}
+				$pagos = $cta->get_forma_pago();
 
-					$total += $req->propina_monto;
-					if($total == $req->total) {
-						$exito = true;
-						foreach ($req->forma_pago as $row) {
-							if(!$cta->cobrar($row)) {
-								$exito = false;
-							} 	
-						}			
+				if (count($pagos) == 0) {
+					$det = $cta->getDetalle();
+					$total = 0;
+					$datos['facturada'] = $cta->facturada();
 
-						if ($exito) {
-							$cta->guardar(["cerrada" => 1]);
-							$com = new Comanda_model($cta->comanda);
-							$cuentas = $com->getCuentas();
-							$cerrada = 0;
-							foreach ($cuentas as $row) {
-								if ($row->cerrada == 1) {
-									$cerrada++;
-								}
-							}
-							if ($cerrada == count($cuentas)) {
-								$tmp = $com->getMesas();
-								if ($tmp) {
-									$mesa = new Mesa_model($tmp->mesa);
-									$mesa->guardar(["estatus" => 1]);
-								}
-								$com->guardar(["estatus" => 2]);
-							}
-							$datos['exito'] = true;
-							$datos['mensaje'] = "Cobro realizado exitosamente";
-							$datos['cuenta'] = $cta;							
-						} else {
-							$datos['mensaje'] = "Ocurrio un error al realizar el cobro, intentelo nuevamente";
+					if ($cta->cerrada == 0) {
+						foreach ($det as $row) {
+							$total+= ($row->cantidad * $row->precio);
 						}
 
+						$total += $req->propina_monto;
+						
+						if($total == $req->total) {
+							$exito = true;
+							foreach ($req->forma_pago as $row) {
+								if(!$cta->cobrar($row)) {
+									$exito = false;
+								} 	
+							}			
+
+							if ($exito) {
+								$cta->guardar(["cerrada" => 1]);
+								$com = new Comanda_model($cta->comanda);
+								$cuentas = $com->getCuentas();
+								$cerrada = 0;
+								foreach ($cuentas as $row) {
+									if ($row->cerrada == 1) {
+										$cerrada++;
+									}
+								}
+								if ($cerrada == count($cuentas)) {
+									$tmp = $com->getMesas();
+									
+									if ($tmp) {
+										$mesa = new Mesa_model($tmp->mesa);
+										$mesa->guardar(["estatus" => 1]);
+									}
+
+									$com->guardar(["estatus" => 2]);
+								}
+								$datos['exito'] = true;
+								$datos['mensaje'] = "Cobro realizado exitosamente";
+								$datos['cuenta'] = $cta;							
+							} else {
+								$datos['mensaje'] = "Ocurrio un error al realizar el cobro, intentelo nuevamente";
+							}
+						} else {
+							$datos['mensaje'] = "El monto no conincide con el total de la cuenta";
+						}	
 					} else {
-						$datos['mensaje'] = "El monto no conincide con el total de la cuenta";
-					}	
+						$datos['mensaje'] = "La cuenta ya esta cerrada";
+					}
 				} else {
-					$datos['mensaje'] = "La cuenta ya esta cerrada";
-				}			
+					$datos['mensaje'] = "La cuenta ya fue cobrada en otra estación.";
+				}
 			} else {
 				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
 			}
