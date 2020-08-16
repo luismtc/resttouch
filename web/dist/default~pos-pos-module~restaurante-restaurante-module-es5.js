@@ -706,7 +706,7 @@
                         });
                         _this.calculaPropina();
                         _this.actualizaSaldo();
-                        _this.formaPago.monto = _this.inputData.saldo;
+                        _this.formaPago.monto = parseFloat(_this.inputData.saldo).toFixed(2);
                     };
                     this.calculaPropina = function () {
                         _this.inputData.montoPropina = parseFloat((_this.inputData.porcentajePropina * _this.inputData.totalDeCuenta / 100).toFixed(2));
@@ -722,7 +722,7 @@
                     this.addFormaPago = function () {
                         _this.formasPagoDeCuenta.push({
                             forma_pago: _this.lstFormasPago.filter(function (f) { return +f.forma_pago === +_this.formaPago.forma_pago; })[0],
-                            monto: _this.formaPago.monto,
+                            monto: parseFloat(_this.formaPago.monto).toFixed(2),
                             propina: (_this.formaPago.propina || 0.00)
                         });
                         _this.actualizaSaldo();

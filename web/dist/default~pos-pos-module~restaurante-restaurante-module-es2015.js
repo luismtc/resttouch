@@ -740,7 +740,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
             });
             this.calculaPropina();
             this.actualizaSaldo();
-            this.formaPago.monto = this.inputData.saldo;
+            this.formaPago.monto = parseFloat(this.inputData.saldo).toFixed(2);
         };
         this.calculaPropina = () => {
             this.inputData.montoPropina = parseFloat((this.inputData.porcentajePropina * this.inputData.totalDeCuenta / 100).toFixed(2));
@@ -756,7 +756,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
         this.addFormaPago = () => {
             this.formasPagoDeCuenta.push({
                 forma_pago: this.lstFormasPago.filter(f => +f.forma_pago === +this.formaPago.forma_pago)[0],
-                monto: this.formaPago.monto,
+                monto: parseFloat(this.formaPago.monto).toFixed(2),
                 propina: (this.formaPago.propina || 0.00)
             });
             this.actualizaSaldo();

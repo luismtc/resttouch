@@ -66,12 +66,12 @@ export class CobrarPedidoComponent implements OnInit {
 
     this.inputData.totalDeCuenta = 0.00;
     this.inputData.productosACobrar.forEach((item: any) => {
-      this.inputData.totalDeCuenta += (item.precio * item.cantidad)
+      this.inputData.totalDeCuenta += (item.precio * item.cantidad);
     });
 
     this.calculaPropina();
     this.actualizaSaldo();
-    this.formaPago.monto = this.inputData.saldo;
+    this.formaPago.monto = parseFloat(this.inputData.saldo).toFixed(2);
   }
 
   calculaPropina = () => {
@@ -95,7 +95,7 @@ export class CobrarPedidoComponent implements OnInit {
   addFormaPago = () => {
     this.formasPagoDeCuenta.push({
       forma_pago: this.lstFormasPago.filter(f => +f.forma_pago === +this.formaPago.forma_pago)[0],
-      monto: this.formaPago.monto,
+      monto: parseFloat(this.formaPago.monto).toFixed(2),
       propina: (this.formaPago.propina || 0.00)
     });
     this.actualizaSaldo();
