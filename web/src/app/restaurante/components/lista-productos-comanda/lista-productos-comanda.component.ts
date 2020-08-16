@@ -41,7 +41,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   @Output() productoRemovedEv = new EventEmitter();
   public esMovil = false;
   public detalleComanda: DetalleComanda;
-  public autorizar = false;
+  // public autorizar = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -58,7 +58,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     // console.log('Desde lista productos comanda = ', this.listaProductos);
   }
 
-  removeProducto = (p: productoSelected, idx: number) => {
+  removeProducto = (p: productoSelected, idx: number, estaAutorizado = false) => {
     this.bloqueoBotones = true;
     this.detalleComanda = {
       detalle_cuenta: p.detalle_cuenta,
@@ -68,7 +68,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
       precio: +p.precio,
       total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
       notas: p.notas,
-      autorizado: this.autorizar
+      autorizado: estaAutorizado
     };
 
     this.comandaSrvc.saveDetalle(this.IdComanda, this.IdCuenta, this.detalleComanda).subscribe(res => {
@@ -82,10 +82,10 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     });
   }
 
-  deleteProductoFromList = (p: productoSelected, idx: number) => {
+  deleteProductoFromList = (p: productoSelected, idx: number, estaAutorizado = false) => {
     p.cantidad = 0;
     p.notas = '';
-    this.removeProducto(p, idx);
+    this.removeProducto(p, idx, estaAutorizado);
   }
 
   deleteProductoFromListAfterPrinted = (p: productoSelected, idx: number) => {
@@ -97,8 +97,8 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     dialogoRef.afterClosed().subscribe(res => {
       // console.log(res);
       if (res) {
-        this.autorizar = true;
-        this.deleteProductoFromList(p, idx);
+        // this.autorizar = true;
+        this.deleteProductoFromList(p, idx, true);
         this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
       } else {
         this.snackBar.open('La contraseña no es correcta', 'Comanda', { duration: 5000 });

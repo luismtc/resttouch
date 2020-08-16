@@ -49,7 +49,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('refrescar:mesa', (obj: any) => {
-        this.loadAreas(true);
+        // console.log(obj);
+        this.loadAreas(true, obj);
       });
     }
   }
@@ -84,21 +85,28 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     cuentas: []
   }
 
-  loadAreas = (saveOnTemp = false) => {
+  loadAreas = (saveOnTemp = false, objMesaEnUso: any = {}) => {
     this.areaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res) => {
       if (!saveOnTemp) {
         this.lstTabsAreas = res;
       } else {
         this.lstTabsAreasForUpdate = res;
-        this.updateTableStatus();
+        this.updateTableStatus(objMesaEnUso.mesaenuso);
       }
     });
   }
 
-  updateTableStatus = () => {
+  updateTableStatus = (objMesaEnUso: any = {}) => {
     for (const a of this.lstTabsAreasForUpdate) {
       for (const m of a.mesas) {
         this.setEstatusMesa({ area: +a.area, mesa: +m.mesa }, +m.estatus);
+      }
+    }
+    // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
+    // console.log('MESA ENVIADA = ', objMesaEnUso);
+    if (this.rightSidenav.opened) {
+      if (+this.mesaSeleccionada.comanda === +objMesaEnUso.comanda) {
+        this.toggleRightSidenav();
       }
     }
   }

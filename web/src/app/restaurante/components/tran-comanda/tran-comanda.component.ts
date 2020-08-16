@@ -189,13 +189,6 @@ export class TranComandaComponent implements OnInit {
         this.comandaSrvc.saveDetalle(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, this.detalleComanda).subscribe(res => {
           // console.log('NUEVO DETALLE COMANDA = ', res);
           if (res.exito) {
-            /*
-            this.lstProductosSeleccionados.push({
-              id: producto.id, nombre: producto.nombre, cuenta: +this.cuentaActiva.numero, cantidad: 1, impreso: 0,
-              precio: producto.precio, notas: '', showInputNotas: false, itemListHeight: '70px', total: 1 * producto.precio,
-              impresora: producto.impresora
-            });
-            */
             this.mesaEnUso = res.comanda;
             this.llenaProductosSeleccionados(this.mesaEnUso);
             this.setSelectedCuenta(+this.cuentaActiva.numero);
@@ -213,11 +206,6 @@ export class TranComandaComponent implements OnInit {
         this.comandaSrvc.saveDetalle(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, this.detalleComanda).subscribe(res => {
           // console.log('UPDATE DETALLE COMANDA = ', res);
           if (res.exito) {
-            /*
-            this.lstProductosSeleccionados[idx].cantidad++;
-            this.lstProductosSeleccionados[idx].total =
-              this.lstProductosSeleccionados[idx].cantidad * this.lstProductosSeleccionados[idx].precio;
-            */
             this.mesaEnUso = res.comanda;
             this.llenaProductosSeleccionados(this.mesaEnUso);
             this.setSelectedCuenta(+this.cuentaActiva.numero);
@@ -332,6 +320,7 @@ export class TranComandaComponent implements OnInit {
               } else {
                 this.printComandaPDF();
               }
+              this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
               this.closeSideNavEv.emit();
               //------------------------------------------------------------------------------------------------------------------------------------------------//
             });
@@ -361,7 +350,7 @@ export class TranComandaComponent implements OnInit {
         const blob = new Blob([res], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-        this.closeSideNavEv.emit();
+        // this.closeSideNavEv.emit();
       } else {
         this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
       }
@@ -426,7 +415,7 @@ export class TranComandaComponent implements OnInit {
 
   cobrarCuenta() {
     this.comandaSrvc.getCuenta(this.cuentaActiva.cuenta).subscribe(res => {
-      if (res.pendiente.length > 0) { 
+      if (res.pendiente.length > 0) {
         this.snackBar.open('Cobro', 'Tiene productos sin comandar', { duration: 3000 });
       } else {
         const productosACobrar = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
@@ -434,6 +423,7 @@ export class TranComandaComponent implements OnInit {
           const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
             width: '95%',
             data: {
+              mesaenuso: this.mesaEnUso,
               cuenta: this.cuentaActiva.nombre,
               idcuenta: this.cuentaActiva.cuenta,
               productosACobrar,

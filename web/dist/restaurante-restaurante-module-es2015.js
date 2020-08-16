@@ -4391,7 +4391,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa\n            {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\"\n            (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\"\n                *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br />\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\"\n                (click)=\"clickOnCategoria(c)\" [disabled]=\"bloqueoBotones\">\n                {{c.descripcion}}\n            </button>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\"\n                (categoriasFilledEv)=\"setListaCategorias($event)\" [bloqueoBotones]=\"bloqueoBotones\">\n            </app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\"\n                [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\" [bloqueoBotones]=\"bloqueoBotones\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda (PDF)\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2 || bloqueoBotones\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"cobrarCuenta()\"\n                [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\"\n                *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa\n            {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\"\n            (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\"\n                *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br />\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\"\n                (click)=\"clickOnCategoria(c)\" [disabled]=\"bloqueoBotones\">\n                {{c.descripcion}}\n            </button>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\"\n                (categoriasFilledEv)=\"setListaCategorias($event)\" [bloqueoBotones]=\"bloqueoBotones\">\n            </app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\"\n                [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\" [bloqueoBotones]=\"bloqueoBotones\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda\n            </button>\n            <!--\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda (PDF)\n            </button>\n            -->\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2 || bloqueoBotones\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"cobrarCuenta()\"\n                [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\"\n                *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -5659,6 +5659,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ListaProductosComandaComponent = class ListaProductosComandaComponent {
+    // public autorizar = false;
     constructor(snackBar, ls, comandaSrvc, dialog) {
         this.snackBar = snackBar;
         this.ls = ls;
@@ -5672,8 +5673,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
         this.bloqueoBotones = false;
         this.productoRemovedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.esMovil = false;
-        this.autorizar = false;
-        this.removeProducto = (p, idx) => {
+        this.removeProducto = (p, idx, estaAutorizado = false) => {
             this.bloqueoBotones = true;
             this.detalleComanda = {
                 detalle_cuenta: p.detalle_cuenta,
@@ -5683,7 +5683,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
                 precio: +p.precio,
                 total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
                 notas: p.notas,
-                autorizado: this.autorizar
+                autorizado: estaAutorizado
             };
             this.comandaSrvc.saveDetalle(this.IdComanda, this.IdCuenta, this.detalleComanda).subscribe(res => {
                 if (res.exito) {
@@ -5696,10 +5696,10 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
                 this.bloqueoBotones = false;
             });
         };
-        this.deleteProductoFromList = (p, idx) => {
+        this.deleteProductoFromList = (p, idx, estaAutorizado = false) => {
             p.cantidad = 0;
             p.notas = '';
-            this.removeProducto(p, idx);
+            this.removeProducto(p, idx, estaAutorizado);
         };
         this.deleteProductoFromListAfterPrinted = (p, idx) => {
             this.bloqueoBotones = true;
@@ -5709,8 +5709,8 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
             dialogoRef.afterClosed().subscribe(res => {
                 // console.log(res);
                 if (res) {
-                    this.autorizar = true;
-                    this.deleteProductoFromList(p, idx);
+                    // this.autorizar = true;
+                    this.deleteProductoFromList(p, idx, true);
                     this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
                 }
                 else {
@@ -6984,21 +6984,28 @@ let TranAreasComponent = class TranAreasComponent {
             },
             cuentas: []
         };
-        this.loadAreas = (saveOnTemp = false) => {
+        this.loadAreas = (saveOnTemp = false, objMesaEnUso = {}) => {
             this.areaSrvc.get({ sede: (+this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe((res) => {
                 if (!saveOnTemp) {
                     this.lstTabsAreas = res;
                 }
                 else {
                     this.lstTabsAreasForUpdate = res;
-                    this.updateTableStatus();
+                    this.updateTableStatus(objMesaEnUso.mesaenuso);
                 }
             });
         };
-        this.updateTableStatus = () => {
+        this.updateTableStatus = (objMesaEnUso = {}) => {
             for (const a of this.lstTabsAreasForUpdate) {
                 for (const m of a.mesas) {
                     this.setEstatusMesa({ area: +a.area, mesa: +m.mesa }, +m.estatus);
+                }
+            }
+            // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
+            // console.log('MESA ENVIADA = ', objMesaEnUso);
+            if (this.rightSidenav.opened) {
+                if (+this.mesaSeleccionada.comanda === +objMesaEnUso.comanda) {
+                    this.toggleRightSidenav();
                 }
             }
         };
@@ -7129,7 +7136,8 @@ let TranAreasComponent = class TranAreasComponent {
         if (!!this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid) {
             this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid);
             this.socket.on('refrescar:mesa', (obj) => {
-                this.loadAreas(true);
+                // console.log(obj);
+                this.loadAreas(true, obj);
             });
         }
     }
@@ -7377,7 +7385,7 @@ let TranComandaComponent = class TranComandaComponent {
                     const blob = new Blob([res], { type: 'application/pdf' });
                     const url = window.URL.createObjectURL(blob);
                     window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-                    this.closeSideNavEv.emit();
+                    // this.closeSideNavEv.emit();
                 }
                 else {
                     this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
@@ -7442,13 +7450,6 @@ let TranComandaComponent = class TranComandaComponent {
                 this.comandaSrvc.saveDetalle(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, this.detalleComanda).subscribe(res => {
                     // console.log('NUEVO DETALLE COMANDA = ', res);
                     if (res.exito) {
-                        /*
-                        this.lstProductosSeleccionados.push({
-                          id: producto.id, nombre: producto.nombre, cuenta: +this.cuentaActiva.numero, cantidad: 1, impreso: 0,
-                          precio: producto.precio, notas: '', showInputNotas: false, itemListHeight: '70px', total: 1 * producto.precio,
-                          impresora: producto.impresora
-                        });
-                        */
                         this.mesaEnUso = res.comanda;
                         this.llenaProductosSeleccionados(this.mesaEnUso);
                         this.setSelectedCuenta(+this.cuentaActiva.numero);
@@ -7468,11 +7469,6 @@ let TranComandaComponent = class TranComandaComponent {
                 this.comandaSrvc.saveDetalle(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, this.detalleComanda).subscribe(res => {
                     // console.log('UPDATE DETALLE COMANDA = ', res);
                     if (res.exito) {
-                        /*
-                        this.lstProductosSeleccionados[idx].cantidad++;
-                        this.lstProductosSeleccionados[idx].total =
-                          this.lstProductosSeleccionados[idx].cantidad * this.lstProductosSeleccionados[idx].precio;
-                        */
                         this.mesaEnUso = res.comanda;
                         this.llenaProductosSeleccionados(this.mesaEnUso);
                         this.setSelectedCuenta(+this.cuentaActiva.numero);
@@ -7580,6 +7576,7 @@ let TranComandaComponent = class TranComandaComponent {
                             else {
                                 this.printComandaPDF();
                             }
+                            this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
                             this.closeSideNavEv.emit();
                             //------------------------------------------------------------------------------------------------------------------------------------------------//
                         });
@@ -7652,6 +7649,7 @@ let TranComandaComponent = class TranComandaComponent {
                     const cobrarCtaRef = this.dialog.open(_pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__["CobrarPedidoComponent"], {
                         width: '95%',
                         data: {
+                            mesaenuso: this.mesaEnUso,
                             cuenta: this.cuentaActiva.nombre,
                             idcuenta: this.cuentaActiva.cuenta,
                             productosACobrar,

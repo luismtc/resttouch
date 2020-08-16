@@ -53,10 +53,12 @@
                 (click)="printComanda()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
                 Comanda
             </button>
+            <!--
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
                 (click)="printComanda(true)" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
                 Comanda (PDF)
             </button>
+            -->
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
                 (click)="printCuenta()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
                 Cuenta
