@@ -273,6 +273,17 @@ class Api extends CI_Controller {
 												}
 											}
 
+											//Inicia fix para los descuentos que son por monto fijo. JA 20/08/2020.
+											if(isset($req['discount_codes']) && is_array($req['discount_codes'])) {
+												foreach($req['discount_codes'] as $desc) {
+													if (strtolower($desc['type']) == 'fixed_amount') {
+														$descuento += ($total * $desc['amount'] /100);
+														$pdescuento += $desc['amount'];
+													}													
+												}
+											}
+											//Fin del fix para los descuentos que son por monto fijo. JA 20/08/2020.
+
 											$pagos[] = [
 												"forma_pago" => 3, 
 												"monto" => $descuento
