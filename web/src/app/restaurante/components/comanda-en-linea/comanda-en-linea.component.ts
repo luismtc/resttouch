@@ -48,7 +48,7 @@ interface productoSelected {
 export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   public dataSource: any[] = [];
-  public columnsToDisplay = ['comanda', 'orden', 'nombre', 'total', 'pdf', 'imprimir', 'facturar'];
+  public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'pdf', 'imprimir', 'facturar'];
   public expandedElement: any | null;
 
   public comandasEnLinea: any[] = [];
@@ -96,8 +96,10 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   loadComandasEnLinea = () => {
     this.comandaSrvc.getComandasOnLIne().subscribe((res: any[]) => {
-      this.comandasEnLinea = res;
-      // console.log(this.comandasEnLinea);
+      this.comandasEnLinea = res.map(cel => {
+        cel.fhcreacion = moment.utc(cel.fhcreacion).local().format(GLOBAL.dbDateTimeFormat);
+        return cel;
+      });
       this.dataSource = this.comandasEnLinea;
     });
   }
@@ -124,11 +126,11 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     return lstArticulos;
   }
 
-  getPdf = (obj: any) => {   
+  getPdf = (obj: any) => {
     const noCuenta = +obj.cuentas[0].cuenta;
     this.pdfServicio.getComanda(noCuenta).subscribe(res => {
       if (res) {
-        const blob = new Blob([res], { type: 'application/pdf' });        
+        const blob = new Blob([res], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
         window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
       } else {

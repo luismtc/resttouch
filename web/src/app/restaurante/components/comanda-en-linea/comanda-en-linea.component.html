@@ -9,6 +9,10 @@
                 <th mat-header-cell *matHeaderCellDef>Orden</th>
                 <td mat-cell *matCellDef="let element">{{element.origen_datos.numero_orden || ''}}</td>
             </ng-container>
+            <ng-container matColumnDef="fechahora">
+                <th mat-header-cell *matHeaderCellDef>Fecha/Hora</th>
+                <td mat-cell *matCellDef="let element">{{(element.fhcreacion | date:'dd/MM/yyyy HH:mm:ss') || ''}}</td>
+            </ng-container>
             <ng-container matColumnDef="nombre">
                 <th mat-header-cell *matHeaderCellDef>Cliente</th>
                 <td mat-cell *matCellDef="let element">{{element.cuentas[0].nombre}}</td>

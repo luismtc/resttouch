@@ -13,6 +13,7 @@ class Comanda_model extends General_Model {
 	public $comanda_origen_datos;
 	public $mesero;
 	public $comandaenuso = 0;
+	public $fhcreacion;
 
 	public function __construct($id = '')
 	{
@@ -201,6 +202,7 @@ class Comanda_model extends General_Model {
 		$tmp->cuentas = $this->getCuentas();
 		$tmp->factura = $this->getFactura();
 		$tmp->origen_datos = $this->getOrigenDatos();
+		$tmp->fhcreacion = empty($tmp->origen_datos['fhcreacion']) ?  $this->fhcreacion : $tmp->origen_datos['fhcreacion'];
 		
 		return $tmp;
 	}
@@ -279,7 +281,8 @@ class Comanda_model extends General_Model {
 			"nombre" => "",
 			"numero_orden" => "",
 			"metodo_pago" => [],
-			"direccion_entrega" => new StdClass
+			"direccion_entrega" => new StdClass,
+			'fhcreacion' => ''
 		];
 
 		if ($this->comanda_origen_datos) {
@@ -292,7 +295,8 @@ class Comanda_model extends General_Model {
 
 			if ($nombre == 'shopify') {
 				$datos["numero_orden"] = isset($json->order_number) ? $json->order_number : '';
-				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
+				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';				
+				$datos['fhcreacion'] = isset($json->created_at) ? $json->created_at : '';
 			} else if ($nombre == 'api') {
 				$datos["numero_orden"] = $json->numero_orden;
 				$datos["metodo_pago"] = $json->metodo_pago;
