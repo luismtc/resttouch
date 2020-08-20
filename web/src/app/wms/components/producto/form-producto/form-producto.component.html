@@ -126,8 +126,11 @@
             <ng-container matColumnDef="editItem">
                 <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td mat-cell *matCellDef="let element" class="text-wrap">
-                    <button mat-raised-button type="button" color="accent" (click)="getReceta(element.receta, element.articulo_detalle)">
+                    <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="getReceta(element.receta, element.articulo_detalle)">
                         Editar
+                    </button>
+                    <button mat-raised-button type="button" color="accent" (click)="eliminaReceta(element)">
+                        Eliminar
                     </button>
                 </td>
             </ng-container>

@@ -5,4 +5,5 @@ export interface ArticuloDetalle {
     articulo: number;
     cantidad: number;
     medida: number;
+    anulado?: number;
 }

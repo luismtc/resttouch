@@ -9,6 +9,7 @@ class Receta_model extends General_model {
 	public $articulo;
 	public $cantidad;
 	public $medida;
+	public $anulado;
 
 	public function __construct($id = "")
 	{

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 
@@ -11,6 +12,7 @@ import { Medida } from '../../../../admin/interfaces/medida';
 import { MedidaService } from '../../../../admin/services/medida.service';
 import { Presentacion } from '../../../../admin/interfaces/presentacion';
 import { PresentacionService } from '../../../../admin/services/presentacion.service';
+import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-form-producto',
@@ -33,6 +35,7 @@ export class FormProductoComponent implements OnInit {
   public esMovil = false;
 
   constructor(
+    public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private articuloSrvc: ArticuloService,
@@ -104,7 +107,7 @@ export class FormProductoComponent implements OnInit {
 
   resetReceta = () => {
     this.receta = {
-      articulo_detalle: null, receta: (this.articulo.articulo || 0), racionable: 0, articulo: null, cantidad: 1.00, medida: null
+      articulo_detalle: null, receta: (this.articulo.articulo || 0), racionable: 0, articulo: null, cantidad: 1.00, medida: null, anulado: 0
     };
     this.recetas = [];
     this.updateTableDataSource();
@@ -121,7 +124,7 @@ export class FormProductoComponent implements OnInit {
 
   getReceta = (idarticulo: number = +this.articulo.articulo, iddetalle: number) => {
     this.articuloSrvc.getArticuloDetalle(idarticulo, { articulo_detalle: iddetalle }).subscribe((res: any[]) => {
-      console.log(res);
+      // console.log(res);
       if (res) {
         this.receta = {
           articulo_detalle: res[0].articulo_detalle,
@@ -129,9 +132,34 @@ export class FormProductoComponent implements OnInit {
           racionable: res[0].articulo.articulo,
           articulo: res[0].articulo.articulo,
           cantidad: +res[0].cantidad,
-          medida: res[0].medida.medida
+          medida: res[0].medida.medida,
+          anulado: res[0].anulado || 0
         };
         this.showDetalleForm = true;
+      }
+    });
+  }
+
+  eliminaReceta = (item: any) => {
+    // console.log('ITEM A ELIMINAR = ', item);
+    const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel(
+        'Eliminar detalle',
+        `¿Desea eliminar '${item.cantidad} de ${item.articulo.descripcion}' de la receta?`,
+        'Sí',
+        'No'
+      )
+    });
+
+    confirmRef.afterClosed().subscribe((conf: boolean) => {
+      if (conf) {
+        item.anulado = 1;
+        this.articuloSrvc.saveArticuloDetalle(item).subscribe(res => {
+          // console.log(res);
+          this.loadRecetas();
+          this.resetReceta();
+        });
       }
     });
   }
