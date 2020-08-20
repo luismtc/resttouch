@@ -10,6 +10,8 @@ class Cuenta_model extends General_Model {
 	public $propina_monto = 0;
 	public $propina_porcentaje = 0;
 	public $cerrada = 0;
+	private $cobro = null;
+	
 
 	public function __construct($id = '')
 	{
@@ -21,16 +23,22 @@ class Cuenta_model extends General_Model {
 		}
 	}
 
+	public function setCobro($value)
+	{
+		$this->cobro = $value;
+		return $this;
+	}
+
 	public function getEmpresa()
 	{
 		return $this->db
-					->select("c.*")
-					->from("comanda a")
-					->join("sede b", "a.sede = b.sede")
-					->join("empresa c", "b.empresa = c.empresa")
-					->where("a.comanda", $this->comanda)
-					->get()
-					->row();
+		->select("c.*")
+		->from("comanda a")
+		->join("sede b", "a.sede = b.sede")
+		->join("empresa c", "b.empresa = c.empresa")
+		->where("a.comanda", $this->comanda)
+		->get()
+		->row();
 	}
 
 	public function imprimirDetalle()
@@ -141,12 +149,18 @@ class Cuenta_model extends General_Model {
 				"_uno" => true
 			]);
 
-			/*if (strtolower($fpago->descripcion) == "tarjeta") {
-				$this->load->library('Cobro');
-				$cobro = new Cobro($this->getEmpresa());
-				$cobro->setTestVenta();
-				$cobro->cobrar();
-			}*/
+			if (strtolower($fpago->descripcion) == "tarjeta") {
+				if ($this->cobro !== null) {
+					$this->cobro->setReferencia($this->getPK());
+					$this->cobro->setTotal($pago->monto);
+					$tmp = $this->cobro->cobrar();
+
+					if ($tmp->reasonCode != 100) {
+						$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
+						return false;
+					}
+				}
+			}
 
 			if (isset($pago->documento)) {
 				$this->db->set("documento", $pago->documento);

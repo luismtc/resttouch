@@ -398,6 +398,8 @@ class Api extends CI_Controller {
 						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['nit']));
 					}
 
+					$datosCliente['nit'] = $nit;
+
 					$cliente = $this->Cliente_model->buscar([
 						"nit" => $nit,
 						"_uno" => true
@@ -409,15 +411,15 @@ class Api extends CI_Controller {
 					]);
 
 					if (!$cliente) {
-						$clt = new Cliente_model();
-						$clt->guardar([
+						$cliente = new Cliente_model();
+						$cliente->guardar([
 							"nombre" => $datosCliente['nombre'].' '.$datosCliente['apellidos'],
 							"direccion" => ($datosCliente['direccion'] ?? 'CIUDAD'),
 							"correo" => $datosCliente['correo'],
 							"telefono" => $datosCliente['telefono'],
 							"nit" => $nit
 						]);
-						$idCliente = $clt->getPK();
+						$idCliente = $cliente->getPK();
 						$correoReceptor = $datosCliente['correo'];
 					} else {
 						$idCliente = $cliente->cliente;
@@ -506,7 +508,7 @@ class Api extends CI_Controller {
 										}
 										
 										$total = 0;		
-										$exito = true;			
+										$exito = true;
 										foreach ($req['detalle'] as $row) {
 											$art = $this->Articulo_model->buscarArticulo([
 												'codigo' => $row['codigo'],
@@ -572,47 +574,62 @@ class Api extends CI_Controller {
 											}
 											array_push($pagos, $tmpCobro);
 
-											foreach ($pagos as $pago) {
-												$exito = $cuenta->cobrar((object) $pago);	
-											}							
+											if (isset($req['tarjeta']['numero']) && !empty($req['tarjeta']['numero'])) {
+												$this->load->library('Cobro');
 
-											if($exito) {
-												$cuenta->guardar(["cerrada" => 1]);
-												if ($idCliente) {
-													$fac = new Factura_model();
-													$fac->guardar($datosFac);
-													$fac->cargarEmpresa();
-													$pimpuesto = $fac->empresa->porcentaje_iva +1;
-													$detalle = $cuenta->getDetalle([
-														"descuento" => 1
-													]);
-													foreach ($cuenta->getDetalle() as $det) {
-														$det->bien_servicio = $det->articulo->bien_servicio;
-														$det->articulo = $det->articulo->articulo;
-														$det->precio_unitario = $det->precio;
-														if ($det->descuento == 1) {
-															$det->descuento = 0; // $det->total * $pdescuento/100;	
-														} else {
-															$det->descuento = 0;
-														}
-														$total = $det->total-$det->descuento;
-														if ($fac->exenta) {
-															$det->monto_base = $total;
-														} else {
-															$det->monto_base = $total / $pimpuesto;
-														}
-														$det->monto_iva = $total - $det->monto_base;	
-														$fac->setDetalle((array) $det);
-													}
+												$cobro = new Cobro($cuenta->getEmpresa());
+												$cobro->setTarjeta($req['tarjeta']);
+												$cobro->setCliente($datosCliente);
+												$cuenta->setCobro($cobro);
+											}
+
+											$pagosContador = 0;
+
+											foreach ($pagos as $pago) {
+												if ($cuenta->cobrar((object) $pago)) {
+													$pagosContador++;
 												} else {
-													$datos['exito'] = false;
-													$datos['mensaje'] .= "\nHacen falta datos para facturacion";
+													break;
 												}
 											}
-											$datos['comanda'] = $comanda->getComanda();	
+
+											$datos['exito'] = count($pagos) == $pagosContador;
+
+											if ($datos['exito']) {
+												$cuenta->guardar(["cerrada" => 1]);
+												
+												$fac = new Factura_model();
+												$fac->guardar($datosFac);
+												$fac->cargarEmpresa();
+												$pimpuesto = $fac->empresa->porcentaje_iva +1;
+												$detalle = $cuenta->getDetalle([
+													"descuento" => 1
+												]);
+
+												foreach ($cuenta->getDetalle() as $det) {
+													$det->bien_servicio = $det->articulo->bien_servicio;
+													$det->articulo = $det->articulo->articulo;
+													$det->precio_unitario = $det->precio;
+													if ($det->descuento == 1) {
+														$det->descuento = 0; // $det->total * $pdescuento/100;	
+													} else {
+														$det->descuento = 0;
+													}
+													$total = $det->total-$det->descuento;
+													if ($fac->exenta) {
+														$det->monto_base = $total;
+													} else {
+														$det->monto_base = $total / $pimpuesto;
+													}
+													$det->monto_iva = $total - $det->monto_base;	
+													$fac->setDetalle((array) $det);
+												}
+											} else {
+												$datos['mensaje'] = implode("\n", $cuenta->getMensaje());
+											}
 										} 							
 											
-										if($datos['exito']) {
+										if ($datos['exito']) {
 											$datos['mensaje'] = "Datos Actualizados con Exito";
 											$datos['comanda'] = $comanda->getComanda();	
 										} 
