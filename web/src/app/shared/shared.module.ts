@@ -29,6 +29,7 @@ import { WindowComponent } from './components/window/window.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { RptFechasComponent } from './components/rpt-fechas/rpt-fechas.component';
 import { RptBotonesComponent } from './components/rpt-botones/rpt-botones.component';
+import { CargandoComponent } from './components/cargando/cargando.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
 const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
@@ -39,7 +40,8 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
     WindowComponent,
     ConfirmDialogComponent,
     RptFechasComponent,
-    RptBotonesComponent
+    RptBotonesComponent,
+    CargandoComponent
   ],
   entryComponents: [
     ConfirmDialogComponent
@@ -74,7 +76,8 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
     WindowComponent,
     ConfirmDialogComponent,
     RptFechasComponent,
-    RptBotonesComponent
+    RptBotonesComponent,
+    CargandoComponent
   ]
 })
 export class SharedModule { }

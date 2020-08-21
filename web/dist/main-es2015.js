@@ -797,6 +797,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/cargando/cargando.component.html":
+/*!**********************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/cargando/cargando.component.html ***!
+  \**********************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div [align]=\"configuracion.align\" [style.width.%]=\"configuracion.size\">\n    <img id=\"imgCargando\" src=\"/assets/img/loading.gif\" alt=\"Cargando...\" [style.width.px]=\"configuracion.w\" [style.height.px]=\"configuracion.h\" >\n</div>");
+
+/***/ }),
+
 /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/confirm-dialog/confirm-dialog.component.html":
 /*!**********************************************************************************************************************!*\
   !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/confirm-dialog/confirm-dialog.component.html ***!
@@ -819,7 +832,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div align=\"end\">\n    <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"onHtmlClick()\" [disabled]=\"configuracion.isHtmlDisabled\">\n        <mat-icon>code</mat-icon>\n    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n    <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"onPdfClick()\" [disabled]=\"configuracion.isPdfDisabled\">\n        <mat-icon>picture_as_pdf</mat-icon>\n    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n    <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"onExcelClick()\" [disabled]=\"configuracion.isExcelDisabled\">\n        <mat-icon>library_books</mat-icon>\n    </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n    <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"onResetParamsClick()\">\n        <mat-icon>restore</mat-icon>\n    </button>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div align=\"end\">\n    <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"onHtmlClick()\" [disabled]=\"configuracion.isHtmlDisabled\" *ngIf=\"configuracion.showHtml\">\n        Generar\n    </button>\n    <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"onPdfClick()\" [disabled]=\"configuracion.isPdfDisabled\" *ngIf=\"configuracion.showPdf\">\n        PDF\n    </button>    \n    <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"onExcelClick()\" [disabled]=\"configuracion.isExcelDisabled\" *ngIf=\"configuracion.showExcel\">\n        Excel\n    </button>    \n    <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"onResetParamsClick()\">\n        Restaurar\n    </button>\n</div>");
 
 /***/ }),
 
@@ -5522,6 +5535,55 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/shared/components/cargando/cargando.component.css":
+/*!*******************************************************************!*\
+  !*** ./src/app/shared/components/cargando/cargando.component.css ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3NoYXJlZC9jb21wb25lbnRzL2NhcmdhbmRvL2NhcmdhbmRvLmNvbXBvbmVudC5jc3MifQ== */");
+
+/***/ }),
+
+/***/ "./src/app/shared/components/cargando/cargando.component.ts":
+/*!******************************************************************!*\
+  !*** ./src/app/shared/components/cargando/cargando.component.ts ***!
+  \******************************************************************/
+/*! exports provided: CargandoComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CargandoComponent", function() { return CargandoComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+
+
+let CargandoComponent = class CargandoComponent {
+    constructor() {
+        this.configuracion = { w: 150, h: 150, align: 'center', size: 100 };
+    }
+    ngOnInit() {
+    }
+};
+tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+], CargandoComponent.prototype, "configuracion", void 0);
+CargandoComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-cargando',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./cargando.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/cargando/cargando.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./cargando.component.css */ "./src/app/shared/components/cargando/cargando.component.css")).default]
+    })
+], CargandoComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.css":
 /*!*******************************************************************************!*\
   !*** ./src/app/shared/components/confirm-dialog/confirm-dialog.component.css ***!
@@ -5629,7 +5691,7 @@ let RptBotonesComponent = class RptBotonesComponent {
         this.excelClick = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.resetParamsClick = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.configuracion = {
-            isHtmlDisabled: false, isPdfDisabled: false, isExcelDisabled: false
+            isHtmlDisabled: false, isPdfDisabled: false, isExcelDisabled: false, showHtml: true, showPdf: true, showExcel: true
         };
         this.onHtmlClick = () => this.htmlClick.emit();
         this.onPdfClick = () => this.pdfClick.emit();
@@ -6037,6 +6099,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
 /* harmony import */ var _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/rpt-fechas/rpt-fechas.component */ "./src/app/shared/components/rpt-fechas/rpt-fechas.component.ts");
 /* harmony import */ var _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/rpt-botones/rpt-botones.component */ "./src/app/shared/components/rpt-botones/rpt-botones.component.ts");
+/* harmony import */ var _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/cargando/cargando.component */ "./src/app/shared/components/cargando/cargando.component.ts");
+
 
 
 
@@ -6078,7 +6142,8 @@ SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__["WindowComponent"],
             _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"],
             _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__["RptFechasComponent"],
-            _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"]
+            _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"],
+            _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_30__["CargandoComponent"]
         ],
         entryComponents: [
             _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"]
@@ -6113,7 +6178,8 @@ SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__["WindowComponent"],
             _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"],
             _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__["RptFechasComponent"],
-            _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"]
+            _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"],
+            _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_30__["CargandoComponent"]
         ]
     })
 ], SharedModule);

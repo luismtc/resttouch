@@ -4,8 +4,10 @@ export interface ConfiguracionFechas {
 }
 
 export interface ConfiguracionBotones {
-    isHtmlDisabled: boolean;
-    isPdfDisabled: boolean;
-    isExcelDisabled: boolean;
-
+    isHtmlDisabled?: boolean;
+    isPdfDisabled?: boolean;
+    isExcelDisabled?: boolean;
+    showHtml?: boolean;
+    showPdf?: boolean;
+    showExcel?: boolean;
 }

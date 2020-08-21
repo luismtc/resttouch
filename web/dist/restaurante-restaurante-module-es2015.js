@@ -4183,7 +4183,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\">\n            <ng-container matColumnDef=\"comanda\">\n                <th mat-header-cell *matHeaderCellDef>No.</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.comanda}} </td>\n            </ng-container>\n            <ng-container matColumnDef=\"orden\">\n                <th mat-header-cell *matHeaderCellDef>Orden</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.origen_datos.numero_orden || ''}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"nombre\">\n                <th mat-header-cell *matHeaderCellDef>Cliente</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.cuentas[0].nombre}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"total\">\n                <th mat-header-cell *matHeaderCellDef>Total</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.total | number: '1.2-2'}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"pdf\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">PDF</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" class=\"btnCelSize\" color=\"accent\" (click)=\"getPdf(element)\">\n                        PDF\n                    </button>\n                </td>\n            </ng-container>\n            <ng-container matColumnDef=\"imprimir\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Imprimir</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" class=\"btnCelSize\" color=\"accent\" (click)=\"imprimir(element)\">\n                        Imprimir\n                    </button>\n                </td>\n            </ng-container>\n            <ng-container matColumnDef=\"facturar\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Facturar</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" class=\"btnCelSize\" color=\"accent\" (click)=\"firmar(element)\">\n                        Facturar\n                    </button>\n                </td>\n            </ng-container>\n\n            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->\n            <ng-container matColumnDef=\"expandedDetail\">\n                <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"columnsToDisplay.length\">\n                    <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n                        <table style=\"width: 50%; background-color:#f5f5f5;\">\n                            <caption>\n                                <h5>Detalle del pedido #{{element.comanda}}</h5>\n                                <h6 *ngIf=\"element.origen_datos.numero_orden\">Orden #{{element.origen_datos.numero_orden}}</h6>\n                            </caption>\n                            <thead>\n                                <th>Producto</th>\n                                <th class=\"rtxt\">Precio</th>\n                                <th class=\"rtxt\">Total</th>\n                            </thead>\n                            <tbody>\n                                <tr *ngFor=\"let det of element.cuentas[0].productos\">\n                                    <td>{{det.cantidad}} {{det.articulo.descripcion}}</td>\n                                    <td class=\"rtxt\">{{det.precio | number: '1.2-2'}}</td>\n                                    <td class=\"rtxt\">{{det.total | number: '1.2-2'}}</td>\n                                </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                </td>\n            </ng-container>\n\n            <tr mat-header-row *matHeaderRowDef=\"columnsToDisplay\"></tr>\n            <tr mat-row *matRowDef=\"let element; columns: columnsToDisplay;\" class=\"example-element-row\"\n                [class.example-expanded-row]=\"expandedElement === element\"\n                (click)=\"expandedElement = expandedElement === element ? null : element\">\n            </tr>\n            <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n        </table>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <table mat-table [dataSource]=\"dataSource\" multiTemplateDataRows class=\"mat-elevation-z8\">\n            <ng-container matColumnDef=\"comanda\">\n                <th mat-header-cell *matHeaderCellDef>No.</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.comanda}} </td>\n            </ng-container>\n            <ng-container matColumnDef=\"orden\">\n                <th mat-header-cell *matHeaderCellDef>Orden</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.origen_datos.numero_orden || ''}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"fechahora\">\n                <th mat-header-cell *matHeaderCellDef>Fecha/Hora</th>\n                <td mat-cell *matCellDef=\"let element\">{{(element.fhcreacion | date:'dd/MM/yyyy HH:mm:ss') || ''}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"nombre\">\n                <th mat-header-cell *matHeaderCellDef>Cliente</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.cuentas[0].nombre}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"total\">\n                <th mat-header-cell *matHeaderCellDef>Total</th>\n                <td mat-cell *matCellDef=\"let element\">{{element.total | number: '1.2-2'}}</td>\n            </ng-container>\n            <ng-container matColumnDef=\"pdf\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">PDF</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" class=\"btnCelSize\" color=\"accent\" (click)=\"getPdf(element)\">\n                        PDF\n                    </button>\n                </td>\n            </ng-container>\n            <ng-container matColumnDef=\"imprimir\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Imprimir</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" class=\"btnCelSize\" color=\"accent\" (click)=\"imprimir(element)\">\n                        Imprimir\n                    </button>\n                </td>\n            </ng-container>\n            <ng-container matColumnDef=\"facturar\">\n                <th mat-header-cell *matHeaderCellDef style=\"width: 10%;\">Facturar</th>\n                <td mat-cell *matCellDef=\"let element\" class=\"tamanioAmigable\" style=\"width: 10%;\">\n                    <button mat-flat-button type=\"button\" class=\"btnCelSize\" color=\"accent\" (click)=\"firmar(element)\">\n                        Facturar\n                    </button>\n                </td>\n            </ng-container>\n\n            <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->\n            <ng-container matColumnDef=\"expandedDetail\">\n                <td mat-cell *matCellDef=\"let element\" [attr.colspan]=\"columnsToDisplay.length\">\n                    <div class=\"example-element-detail\" [@detailExpand]=\"element == expandedElement ? 'expanded' : 'collapsed'\">\n                        <table style=\"width: 50%; background-color:#f5f5f5;\">\n                            <caption>\n                                <h5>Detalle del pedido #{{element.comanda}}</h5>\n                                <h6 *ngIf=\"element.origen_datos.numero_orden\">Orden #{{element.origen_datos.numero_orden}}</h6>\n                            </caption>\n                            <thead>\n                                <th>Producto</th>\n                                <th class=\"rtxt\">Precio</th>\n                                <th class=\"rtxt\">Total</th>\n                            </thead>\n                            <tbody>\n                                <tr *ngFor=\"let det of element.cuentas[0].productos\">\n                                    <td>{{det.cantidad}} {{det.articulo.descripcion}}</td>\n                                    <td class=\"rtxt\">{{det.precio | number: '1.2-2'}}</td>\n                                    <td class=\"rtxt\">{{det.total | number: '1.2-2'}}</td>\n                                </tr>\n                            </tbody>\n                        </table>\n                    </div>\n                </td>\n            </ng-container>\n\n            <tr mat-header-row *matHeaderRowDef=\"columnsToDisplay\"></tr>\n            <tr mat-row *matRowDef=\"let element; columns: columnsToDisplay;\" class=\"example-element-row\"\n                [class.example-expanded-row]=\"expandedElement === element\"\n                (click)=\"expandedElement = expandedElement === element ? null : element\">\n            </tr>\n            <tr mat-row *matRowDef=\"let row; columns: ['expandedDetail']\" class=\"example-detail-row\"></tr>\n        </table>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -4274,7 +4274,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <mat-card class=\"mat-elevation-z4 fullWidth\">\n            <mat-card-title>\n                <h4>Autoconsulta</h4>\n            </mat-card-title>\n            <mat-card-content>\n                <form #frmEntidad=\"ngForm\" (ngSubmit)=\"frmEntidad.form.valid && onSubmit()\" novalidate>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Campos</mat-label>\n                        <mat-select name=\"campos\" [(ngModel)]=\"params.campos\" multiple=\"multiple\" required>\n                            <mat-option *ngFor=\"let campo of campos\" [value]=\"campo.tabla_campo\">\n                                {{campo.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Del\" name=\"fdel\" [(ngModel)]=\"params.fdel\" required>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Al\" name=\"fal\" [(ngModel)]=\"params.fal\" required>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Filtrar Por</mat-label>\n                        <mat-select name=\"campos\" [(ngModel)]=\"params.fecha\" required>\n                            <mat-option *ngFor=\"let campo of fechas\" [value]=\"campo.tabla_campo\">\n                                {{campo.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Ordenar Por</mat-label>\n                        <mat-select name=\"campos\" [(ngModel)]=\"params.orden\">\n                            <mat-option *ngFor=\"let campo of orden\" [value]=\"campo.tabla_campo\">\n                                {{campo.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <div align=\"end\">\n                        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"getReporte()\" [disabled]=\"!frmEntidad.form.valid\">\n                            <mat-icon>library_books</mat-icon>\n                        </button>                    \n                    </div>\n                </form>\n            </mat-card-content>\n        </mat-card>\n    </div>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <mat-card class=\"mat-elevation-z4 fullWidth\">\n            <mat-card-title>\n                <h4>Autoconsulta</h4>\n            </mat-card-title>\n            <mat-card-content>\n                <form #frmEntidad=\"ngForm\" novalidate>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Campos</mat-label>\n                        <mat-select name=\"campos\" [(ngModel)]=\"params.campos\" multiple=\"multiple\" required>\n                            <mat-option *ngFor=\"let campo of campos\" [value]=\"campo.tabla_campo\">\n                                {{campo.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Del\" name=\"fdel\" [(ngModel)]=\"params.fdel\" required>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Al\" name=\"fal\" [(ngModel)]=\"params.fal\" required>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Filtrar Por</mat-label>\n                        <mat-select name=\"campos\" [(ngModel)]=\"params.fecha\" required>\n                            <mat-option *ngFor=\"let campo of fechas\" [value]=\"campo.tabla_campo\">\n                                {{campo.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Ordenar Por</mat-label>\n                        <mat-select name=\"campos\" [(ngModel)]=\"params.orden\">\n                            <mat-option *ngFor=\"let campo of orden\" [value]=\"campo.tabla_campo\">\n                                {{campo.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <app-rpt-botones [configuracion]=\"configBotones\" (excelClick)=\"getReporte()\" (resetParamsClick)=\"resetParams()\"></app-rpt-botones>\n                </form>\n                <app-cargando *ngIf=\"cargando\"></app-cargando>\n            </mat-card-content>\n        </mat-card>\n    </div>\n</div>\n");
 
 /***/ }),
 
@@ -4287,7 +4287,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de caja</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Tipo de turno</mat-label>\n              <mat-select name=\"turno_tipo\" [(ngModel)]=\"params.turno_tipo\">\n                  <mat-option *ngFor=\"let tt of tiposTurno\" [value]=\"tt.turno_tipo\">\n                      {{tt.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-checkbox name=\"traslado\" class=\"fullWidth\" [(ngModel)]=\"+params._detalle\">Mostrar Detalle</mat-checkbox>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de caja</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form #frmRptCaja=\"ngForm\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n              <mat-label>Tipo de turno</mat-label>\n              <mat-select name=\"turno_tipo\" [(ngModel)]=\"params.turno_tipo\">\n                  <mat-option *ngFor=\"let tt of tiposTurno\" [value]=\"tt.turno_tipo\">\n                      {{tt.descripcion}}\n                  </mat-option>\n              </mat-select>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-checkbox name=\"traslado\" class=\"fullWidth\" [(ngModel)]=\"+params._detalle\">Mostrar Detalle</mat-checkbox>\n          <app-rpt-botones [configuracion]=\"configBotones\" (pdfClick)=\"onSubmit()\" (resetParamsClick)=\"resetParams()\"></app-rpt-botones>\n        </form>\n        <app-cargando *ngIf=\"cargando\"></app-cargando>\n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
 
 /***/ }),
 
@@ -4300,7 +4300,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de facturas</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-checkbox name=\"traslado\" class=\"fullWidth\" [(ngModel)]=\"+params._detalle\">Mostrar Detalle</mat-checkbox>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de facturas</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form #frmRptFactura=\"ngForm\" novalidate>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-checkbox name=\"traslado\" class=\"fullWidth\" [(ngModel)]=\"+params._detalle\">Mostrar Detalle</mat-checkbox>\n          <app-rpt-botones [configuracion]=\"configBotones\" (pdfClick)=\"onSubmit()\" (resetParamsClick)=\"resetParams()\"></app-rpt-botones>\n        </form>\n        <app-cargando *ngIf=\"cargando\"></app-cargando>\n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>\n");
 
 /***/ }),
 
@@ -4313,7 +4313,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de propinas</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form (ngSubmit)=\"onSubmit()\" novalidate>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">            \n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <div align=\"end\">\n            <button mat-button color=\"accent\" type=\"submit\">GENERAR</button>\n          </div>\n        </form>        \n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n  <div class=\"col m12 s12\">\n    <mat-card class=\"mat-elevation-z4 fullWidth\">\n      <mat-card-title>\n        <h4>Reporte de propinas</h4>\n      </mat-card-title>\n      <mat-card-content>\n        <form #frmRptPropinas=\"ngForm\" novalidate>\n          <mat-form-field class=\"fullWidth\">\n            <input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <mat-form-field class=\"fullWidth\">\n            <input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n          </mat-form-field>\n          <app-rpt-botones [configuracion]=\"configBotones\" (pdfClick)=\"onSubmit()\" (resetParamsClick)=\"resetParams()\"></app-rpt-botones>\n        </form>\n        <app-cargando *ngIf=\"cargando\"></app-cargando>\n      </mat-card-content>\n    </mat-card>\n  </div>\n</div>");
 
 /***/ }),
 
@@ -4352,7 +4352,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <mat-card class=\"mat-elevation-z4 fullWidth\">\n            <mat-card-title>\n                <h4>Reporte de ventas</h4>\n            </mat-card-title>\n            <mat-card-content>\n                <form #frmEntidad=\"ngForm\" (ngSubmit)=\"frmEntidad.form.valid && onSubmit()\" novalidate>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Tipo</mat-label>\n                        <mat-select name=\"tipo_reporte\" [(ngModel)]=\"params.tipo_reporte\" required>\n                            <mat-option *ngFor=\"let tr of tiposReporte\" [value]=\"tr.tipo_reporte\">\n                                {{tr.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                      <mat-label>Tipo de turno</mat-label>\n                      <mat-select name=\"turno_tipo\" [(ngModel)]=\"params.turno_tipo\">\n                          <mat-option *ngFor=\"let tt of tiposTurno\" [value]=\"tt.turno_tipo\">\n                              {{tt.descripcion}}\n                          </mat-option>\n                      </mat-select>\n                  </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Del\" name=\"fdel\" [(ngModel)]=\"params.fdel\" required>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Al\" name=\"fal\" [(ngModel)]=\"params.fal\" required>\n                    </mat-form-field>\n                    <div align=\"end\">\n                        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"getReporte(1)\" [disabled]=\"!frmEntidad.form.valid\">\n                            <mat-icon>code</mat-icon>\n                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n                        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"getReporte(2)\" [disabled]=\"!frmEntidad.form.valid\">\n                            <mat-icon>picture_as_pdf</mat-icon>\n                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n                        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"getReporte(3)\" [disabled]=\"!frmEntidad.form.valid\">\n                            <mat-icon>library_books</mat-icon>\n                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n                        <button mat-icon-button type=\"button\" color=\"accent\" (click)=\"resetParams()\">\n                            <mat-icon>restore</mat-icon>\n                        </button>\n                    </div>\n                </form>\n            </mat-card-content>\n            <!--\n            <mat-card-footer>\n                <div align=\"center\" *ngIf=\"!!msgGenerandoReporte\">\n                    <h2>{{msgGenerandoReporte}}</h2>\n                    <h4>{{params | json}}</h4>\n                </div>\n            </mat-card-footer>\n            -->\n        </mat-card>\n    </div>\n</div>\n<div class=\"row\" *ngIf=\"params.tipo_reporte === 1 && porCategoria.length > 0\">\n    <div class=\"col m12 s12\">\n        <app-por-categoria [params]=\"params\" [data]=\"porCategoria\"></app-por-categoria>\n    </div>\n</div>\n<div class=\"row\" *ngIf=\"params.tipo_reporte === 2 && porArticulo.length > 0\">\n    <div class=\"col m12 s12\">\n        <app-por-articulo [params]=\"params\" [data]=\"porArticulo\"></app-por-articulo>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <mat-card class=\"mat-elevation-z4 fullWidth\">\n            <mat-card-title>\n                <h4>Reporte de ventas</h4>\n            </mat-card-title>\n            <mat-card-content>\n                <form #frmEntidad=\"ngForm\" (ngSubmit)=\"frmEntidad.form.valid && onSubmit()\" novalidate>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Tipo</mat-label>\n                        <mat-select name=\"tipo_reporte\" [(ngModel)]=\"params.tipo_reporte\" required>\n                            <mat-option *ngFor=\"let tr of tiposReporte\" [value]=\"tr.tipo_reporte\">\n                                {{tr.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <mat-label>Tipo de turno</mat-label>\n                        <mat-select name=\"turno_tipo\" [(ngModel)]=\"params.turno_tipo\">\n                            <mat-option *ngFor=\"let tt of tiposTurno\" [value]=\"tt.turno_tipo\">\n                                {{tt.descripcion}}\n                            </mat-option>\n                        </mat-select>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Del\" name=\"fdel\" [(ngModel)]=\"params.fdel\" required>\n                    </mat-form-field>\n                    <mat-form-field class=\"fullWidth\">\n                        <input type=\"date\" matInput placeholder=\"Al\" name=\"fal\" [(ngModel)]=\"params.fal\" required>\n                    </mat-form-field>\n                    <app-rpt-botones [configuracion]=\"configBotones\" (htmlClick)=\"getReporte(1)\" (pdfClick)=\"getReporte(2)\" (resetParamsClick)=\"resetParams()\"></app-rpt-botones>\n                </form>\n                <app-cargando *ngIf=\"cargando\"></app-cargando>\n            </mat-card-content>\n        </mat-card>\n    </div>\n</div>\n<div class=\"row\" *ngIf=\"params.tipo_reporte === 1 && porCategoria.length > 0\">\n    <div class=\"col m12 s12\">\n        <app-por-categoria [params]=\"params\" [data]=\"porCategoria\"></app-por-categoria>\n    </div>\n</div>\n<div class=\"row\" *ngIf=\"params.tipo_reporte === 2 && porArticulo.length > 0\">\n    <div class=\"col m12 s12\">\n        <app-por-articulo [params]=\"params\" [data]=\"porArticulo\"></app-por-articulo>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -4365,7 +4365,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <mat-card class=\"mat-elevation-z4 fullWidth\">\n            <mat-card-title>\n                <h4>Reporte de Turnos</h4>\n            </mat-card-title>\n            <mat-card-content>\n                <form #frmEntidad=\"ngForm\" novalidate>\n                    <app-rpt-fechas [(fdel)]=\"params.fdel\" [(fal)]=\"params.fal\" [configuracion]=\"configParams\"></app-rpt-fechas>\n                    <app-rpt-botones\n                        [configuracion]=\"configBotones\"\n                        (htmlClick)=\"getReporte()\"\n                        (pdfClick)=\"getReporte()\"\n                        (excelClick)=\"getReporte()\"\n                        (resetParamsClick)=\"resetParams()\">\n                    </app-rpt-botones>\n                </form>\n            </mat-card-content>\n        </mat-card>                \n    </div>\n</div>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m12 s12\">\n        <mat-card class=\"mat-elevation-z4 fullWidth\">\n            <mat-card-title>\n                <h4>Reporte de Turnos</h4>\n            </mat-card-title>\n            <mat-card-content>\n                <form #frmEntidad=\"ngForm\" novalidate>\n                    <app-rpt-fechas [(fdel)]=\"params.fdel\" [(fal)]=\"params.fal\" [configuracion]=\"configParams\"></app-rpt-fechas>\n                    <app-rpt-botones\n                        [configuracion]=\"configBotones\"\n                        (htmlClick)=\"getReporte()\"\n                        (pdfClick)=\"getReporte()\"\n                        (excelClick)=\"getReporte()\"\n                        (resetParamsClick)=\"resetParams()\">\n                    </app-rpt-botones>\n                </form>\n                <app-cargando *ngIf=\"cargando\"></app-cargando>\n            </mat-card-content>\n        </mat-card>                \n    </div>\n</div>\n");
 
 /***/ }),
 
@@ -5431,7 +5431,7 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
         this.dns = dns;
         this.pdfServicio = pdfServicio;
         this.dataSource = [];
-        this.columnsToDisplay = ['comanda', 'orden', 'nombre', 'total', 'pdf', 'imprimir', 'facturar'];
+        this.columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'pdf', 'imprimir', 'facturar'];
         this.comandasEnLinea = [];
         this.notificarUsuario = () => {
             const opciones = {
@@ -5443,8 +5443,10 @@ let ComandaEnLineaComponent = class ComandaEnLineaComponent {
         };
         this.loadComandasEnLinea = () => {
             this.comandaSrvc.getComandasOnLIne().subscribe((res) => {
-                this.comandasEnLinea = res;
-                // console.log(this.comandasEnLinea);
+                this.comandasEnLinea = res.map(cel => {
+                    cel.fhcreacion = moment__WEBPACK_IMPORTED_MODULE_8__["utc"](cel.fhcreacion).local().format(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].dbDateTimeFormat);
+                    return cel;
+                });
                 this.dataSource = this.comandasEnLinea;
             });
         };
@@ -6267,34 +6269,45 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
-/* harmony import */ var _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
-/* harmony import */ var _services_autoconsulta_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/autoconsulta.service */ "./src/app/restaurante/services/autoconsulta.service.ts");
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
-/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _services_autoconsulta_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/autoconsulta.service */ "./src/app/restaurante/services/autoconsulta.service.ts");
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! file-saver */ "./node_modules/file-saver/dist/FileSaver.min.js");
+/* harmony import */ var file_saver__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(file_saver__WEBPACK_IMPORTED_MODULE_4__);
 
 
 
-
+// import { ReportePdfService } from '../../../services/reporte-pdf.service';
 
 
 let AutoconsultaComponent = class AutoconsultaComponent {
-    constructor(snackBar, pdfServicio, autoconsultaSrvc) {
+    constructor(snackBar, 
+    // private pdfServicio: ReportePdfService,
+    autoconsultaSrvc) {
         this.snackBar = snackBar;
-        this.pdfServicio = pdfServicio;
         this.autoconsultaSrvc = autoconsultaSrvc;
         this.params = { campos: [], datos: [] };
         this.titulo = 'Autoconsulta';
         this.campos = [];
         this.fechas = [];
         this.orden = [];
+        this.cargando = false;
+        this.configBotones = {
+            showPdf: false, showHtml: false, showExcel: true
+        };
+        this.resetParams = () => {
+            this.params = { campos: [], datos: [] };
+            this.cargando = false;
+        };
         this.getReporte = () => {
-            for (var key in this.params.campos) {
+            this.cargando = true;
+            // tslint:disable-next-line: forin
+            for (const key in this.params.campos) {
                 this.params.datos.push(this.params.campos[key]);
             }
             this.autoconsultaSrvc.getReporte(this.params).subscribe(res => {
+                this.cargando = false;
                 if (res) {
                     const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
-                    Object(file_saver__WEBPACK_IMPORTED_MODULE_5__["saveAs"])(blob, `${this.titulo}.xls`);
+                    Object(file_saver__WEBPACK_IMPORTED_MODULE_4__["saveAs"])(blob, `${this.titulo}.xls`);
                 }
                 else {
                     this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
@@ -6302,7 +6315,9 @@ let AutoconsultaComponent = class AutoconsultaComponent {
             });
         };
         this.getCampos = (params = {}, tipo = 1) => {
+            this.cargando = true;
             this.autoconsultaSrvc.getCampos(params).subscribe(res => {
+                this.cargando = false;
                 switch (tipo) {
                     case 1:
                         this.campos = res;
@@ -6325,8 +6340,7 @@ let AutoconsultaComponent = class AutoconsultaComponent {
 };
 AutoconsultaComponent.ctorParameters = () => [
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MatSnackBar"] },
-    { type: _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_3__["ReportePdfService"] },
-    { type: _services_autoconsulta_service__WEBPACK_IMPORTED_MODULE_4__["AutoconsultaService"] }
+    { type: _services_autoconsulta_service__WEBPACK_IMPORTED_MODULE_3__["AutoconsultaService"] }
 ];
 AutoconsultaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -6384,6 +6398,10 @@ let CajaComponent = class CajaComponent {
         this.params = {};
         this.titulo = 'Resumen de caja';
         this.tiposTurno = [];
+        this.cargando = false;
+        this.configBotones = {
+            showPdf: true, showHtml: false, showExcel: false
+        };
         this.loadTiposTurno = () => {
             this.tipoTurnoSrvc.get().subscribe(res => {
                 if (res) {
@@ -6391,12 +6409,18 @@ let CajaComponent = class CajaComponent {
                 }
             });
         };
+        this.resetParams = () => {
+            this.params = {};
+            this.cargando = false;
+        };
     }
     ngOnInit() {
         this.loadTiposTurno();
     }
     onSubmit() {
+        this.cargando = true;
         this.pdfServicio.getReporteCaja(this.params).subscribe(res => {
+            this.cargando = false;
             if (res) {
                 const blob = new Blob([res], { type: 'application/pdf' });
                 Object(file_saver__WEBPACK_IMPORTED_MODULE_5__["saveAs"])(blob, `${this.titulo}.pdf`);
@@ -6464,10 +6488,20 @@ let FacturaComponent = class FacturaComponent {
         this.pdfServicio = pdfServicio;
         this.params = {};
         this.titulo = 'Facturas';
+        this.cargando = false;
+        this.configBotones = {
+            showPdf: true, showHtml: false, showExcel: false
+        };
+        this.resetParams = () => {
+            this.params = {};
+            this.cargando = false;
+        };
     }
     ngOnInit() { }
     onSubmit() {
+        this.cargando = true;
         this.pdfServicio.getReporteFactura(this.params).subscribe(res => {
+            this.cargando = false;
             if (res) {
                 const blob = new Blob([res], { type: 'application/pdf' });
                 Object(file_saver__WEBPACK_IMPORTED_MODULE_4__["saveAs"])(blob, `${this.titulo}.pdf`);
@@ -6534,11 +6568,21 @@ let PropinasComponent = class PropinasComponent {
         this.pdfServicio = pdfServicio;
         this.params = {};
         this.titulo = 'Propinas';
+        this.configBotones = {
+            isHtmlDisabled: true, isPdfDisabled: false, isExcelDisabled: true, showHtml: false, showExcel: false, showPdf: true
+        };
+        this.cargando = false;
+        this.resetParams = () => {
+            this.params = {};
+            this.cargando = false;
+        };
     }
     ngOnInit() {
     }
     onSubmit() {
+        this.cargando = true;
         this.pdfServicio.getReportePropina(this.params).subscribe(res => {
+            this.cargando = false;
             if (res) {
                 const blob = new Blob([res], { type: 'application/pdf' });
                 Object(file_saver__WEBPACK_IMPORTED_MODULE_4__["saveAs"])(blob, `${this.titulo}.pdf`);
@@ -6724,8 +6768,12 @@ let RptVentasComponent = class RptVentasComponent {
         this.porCategoria = [];
         this.porArticulo = [];
         this.tiposTurno = [];
-        this.tituloCategoria = "Ventas por categoria";
-        this.tituloArticulo = "Ventas por articulo";
+        this.tituloCategoria = 'Ventas por categoria';
+        this.tituloArticulo = 'Ventas por articulo';
+        this.cargando = false;
+        this.configBotones = {
+            showPdf: true, showHtml: true, showExcel: false
+        };
         this.loadTiposTurno = () => {
             this.tipoTurnoSrvc.get().subscribe(res => {
                 if (res) {
@@ -6748,6 +6796,7 @@ let RptVentasComponent = class RptVentasComponent {
                 fdel: moment__WEBPACK_IMPORTED_MODULE_4__().startOf('week').format(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].dbDateFormat),
                 fal: moment__WEBPACK_IMPORTED_MODULE_4__().endOf('week').format(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].dbDateFormat)
             };
+            this.cargando = false;
         };
         this.getReporte = (tipo = 1) => {
             this.paramsToSend = JSON.parse(JSON.stringify(this.params));
@@ -6775,8 +6824,10 @@ let RptVentasComponent = class RptVentasComponent {
             }
         };
         this.getPorCategoriaPdf = () => {
+            this.cargando = true;
             this.cleanParams();
             this.rptVentasSrvc.porCategoriaPdf(this.paramsToSend).subscribe(res => {
+                this.cargando = false;
                 if (res) {
                     const blob = new Blob([res], { type: 'application/pdf' });
                     Object(file_saver__WEBPACK_IMPORTED_MODULE_7__["saveAs"])(blob, `${this.tituloCategoria}.pdf`);
@@ -6787,8 +6838,10 @@ let RptVentasComponent = class RptVentasComponent {
             });
         };
         this.getPorArticuloPdf = () => {
+            this.cargando = true;
             this.cleanParams();
             this.rptVentasSrvc.porArticuloPdf(this.paramsToSend).subscribe(res => {
+                this.cargando = false;
                 if (res) {
                     const blob = new Blob([res], { type: 'application/pdf' });
                     Object(file_saver__WEBPACK_IMPORTED_MODULE_7__["saveAs"])(blob, `${this.tituloArticulo}.pdf`);
@@ -6810,8 +6863,10 @@ let RptVentasComponent = class RptVentasComponent {
         };
         this.cleanParams = () => delete this.paramsToSend.tipo_reporte;
         this.getPorCategoriaEnPantalla = () => {
+            this.cargando = true;
             this.cleanParams();
             this.rptVentasSrvc.porCategoria(this.paramsToSend).subscribe(res => {
+                this.cargando = false;
                 if (res) {
                     this.porCategoria = res;
                 }
@@ -6821,8 +6876,10 @@ let RptVentasComponent = class RptVentasComponent {
             });
         };
         this.getPorArticuloEnPantalla = () => {
+            this.cargando = true;
             this.cleanParams();
             this.rptVentasSrvc.porArticulo(this.paramsToSend).subscribe(res => {
+                this.cargando = false;
                 if (res) {
                     this.porArticulo = res;
                 }
@@ -6896,6 +6953,7 @@ let TurnosComponent = class TurnosComponent {
         this.configBotones = {
             isHtmlDisabled: false, isPdfDisabled: false, isExcelDisabled: false
         };
+        this.cargando = false;
         this.resetParams = () => {
             this.params = {
                 fdel: moment__WEBPACK_IMPORTED_MODULE_3__().startOf('week').format(_shared_global__WEBPACK_IMPORTED_MODULE_2__["GLOBAL"].dbDateFormat),

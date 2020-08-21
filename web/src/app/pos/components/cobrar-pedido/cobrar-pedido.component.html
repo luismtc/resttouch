@@ -79,30 +79,6 @@
     <div class="col m12 s12 overflow-auto d-flex justify-content-end">
       <table class="table table-sm table-borderless">
         <tbody>
-          <!--
-          <tr class="propina">
-            <td class="text-right" style="max-width: 15%;">
-              <mat-form-field *ngIf="esMovil">
-                <input matInput placeholder="% propina" name="monto" type="number"
-                  [(ngModel)]="inputData.porcentajePropina" (keyup.enter)="calculaPropina()" (blur)="calculaPropina()">
-              </mat-form-field>
-              <mat-form-field *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="% propina" placeholder="% propina" name="monto" type="number"
-                  [(ngModel)]="inputData.porcentajePropina" (keyup.enter)="calculaPropina()" (blur)="calculaPropina()">
-              </mat-form-field>
-            </td>
-            <td class="text-right" style="max-width: 15%;">
-              <mat-form-field *ngIf="esMovil">
-                <input matInput placeholder="Propina" name="monto" type="number"
-                  [(ngModel)]="inputData.montoPropina" (keyup.enter)="calculaPorcentajePropina()" (blur)="calculaPorcentajePropina()">
-              </mat-form-field>
-              <mat-form-field *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Propina" placeholder="Propina" name="monto" type="number"
-                  [(ngModel)]="inputData.montoPropina" (keyup.enter)="calculaPorcentajePropina()" (blur)="calculaPorcentajePropina()">
-              </mat-form-field>
-            </td>
-          </tr>
-          -->
           <tr>
             <td class="text-right font-weight-bold">TOTAL DE CUENTA:</td>
             <td class="text-right font-weight-bold totalCuenta" style="max-width: 15%;">{{inputData.totalDeCuenta | number:'1.2-2'}}</td>
@@ -117,9 +93,10 @@
         </tbody>
       </table>
     </div>
-  </div>
+  </div>  
 </div>
-<div mat-dialog-actions class="d-flex justify-content-end">
+<div mat-dialog-actions align="end">
+  <app-cargando *ngIf="facturando" [configuracion]="cargandoConf"></app-cargando>
   <button mat-raised-button color="accent" (click)="cancelar()" [disabled]="facturando">Cancelar</button>
-  <button mat-raised-button color="accent" (click)="cobrar()" [disabled]="formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente || facturando">Facturar</button>
+  <button mat-raised-button color="accent" (click)="cobrar()" [disabled]="formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente || facturando">Facturar</button>  
 </div>

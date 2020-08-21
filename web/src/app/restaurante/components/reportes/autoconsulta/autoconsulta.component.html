@@ -5,7 +5,7 @@
                 <h4>Autoconsulta</h4>
             </mat-card-title>
             <mat-card-content>
-                <form #frmEntidad="ngForm" (ngSubmit)="frmEntidad.form.valid && onSubmit()" novalidate>
+                <form #frmEntidad="ngForm" novalidate>
                     <mat-form-field class="fullWidth">
                         <mat-label>Campos</mat-label>
                         <mat-select name="campos" [(ngModel)]="params.campos" multiple="multiple" required>
@@ -36,12 +36,9 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <div align="end">
-                        <button mat-icon-button type="button" color="accent" (click)="getReporte()" [disabled]="!frmEntidad.form.valid">
-                            <mat-icon>library_books</mat-icon>
-                        </button>                    
-                    </div>
+                    <app-rpt-botones [configuracion]="configBotones" (excelClick)="getReporte()" (resetParamsClick)="resetParams()"></app-rpt-botones>
                 </form>
+                <app-cargando *ngIf="cargando"></app-cargando>
             </mat-card-content>
         </mat-card>
     </div>

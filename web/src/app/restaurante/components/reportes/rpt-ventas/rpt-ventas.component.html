@@ -15,43 +15,23 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                      <mat-label>Tipo de turno</mat-label>
-                      <mat-select name="turno_tipo" [(ngModel)]="params.turno_tipo">
-                          <mat-option *ngFor="let tt of tiposTurno" [value]="tt.turno_tipo">
-                              {{tt.descripcion}}
-                          </mat-option>
-                      </mat-select>
-                  </mat-form-field>
+                        <mat-label>Tipo de turno</mat-label>
+                        <mat-select name="turno_tipo" [(ngModel)]="params.turno_tipo">
+                            <mat-option *ngFor="let tt of tiposTurno" [value]="tt.turno_tipo">
+                                {{tt.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                     <mat-form-field class="fullWidth">
                         <input type="date" matInput placeholder="Del" name="fdel" [(ngModel)]="params.fdel" required>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
                         <input type="date" matInput placeholder="Al" name="fal" [(ngModel)]="params.fal" required>
                     </mat-form-field>
-                    <div align="end">
-                        <button mat-icon-button type="button" color="accent" (click)="getReporte(1)" [disabled]="!frmEntidad.form.valid">
-                            <mat-icon>code</mat-icon>
-                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button mat-icon-button type="button" color="accent" (click)="getReporte(2)" [disabled]="!frmEntidad.form.valid">
-                            <mat-icon>picture_as_pdf</mat-icon>
-                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button mat-icon-button type="button" color="accent" (click)="getReporte(3)" [disabled]="!frmEntidad.form.valid">
-                            <mat-icon>library_books</mat-icon>
-                        </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <button mat-icon-button type="button" color="accent" (click)="resetParams()">
-                            <mat-icon>restore</mat-icon>
-                        </button>
-                    </div>
+                    <app-rpt-botones [configuracion]="configBotones" (htmlClick)="getReporte(1)" (pdfClick)="getReporte(2)" (resetParamsClick)="resetParams()"></app-rpt-botones>
                 </form>
+                <app-cargando *ngIf="cargando"></app-cargando>
             </mat-card-content>
-            <!--
-            <mat-card-footer>
-                <div align="center" *ngIf="!!msgGenerandoReporte">
-                    <h2>{{msgGenerandoReporte}}</h2>
-                    <h4>{{params | json}}</h4>
-                </div>
-            </mat-card-footer>
-            -->
         </mat-card>
     </div>
 </div>

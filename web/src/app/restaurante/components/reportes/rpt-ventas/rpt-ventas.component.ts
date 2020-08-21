@@ -8,6 +8,7 @@ import { ReporteVentasService } from '../../../services/reporte-ventas.service';
 import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
 import { saveAs } from 'file-saver';
+import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 
 @Component({
   selector: 'app-rpt-ventas',
@@ -23,8 +24,12 @@ export class RptVentasComponent implements OnInit {
   public porCategoria: PorCategoria[] = [];
   public porArticulo: PorArticulo[] = [];
   public tiposTurno: TipoTurno[] = [];
-  public tituloCategoria: string = "Ventas por categoria";
-  public tituloArticulo: string = "Ventas por articulo";
+  public tituloCategoria = 'Ventas por categoria';
+  public tituloArticulo = 'Ventas por articulo';
+  public cargando = false;
+  public configBotones: ConfiguracionBotones = {
+    showPdf: true, showHtml: true, showExcel: false
+  };
 
   constructor(
     private snackBar: MatSnackBar,
@@ -62,6 +67,7 @@ export class RptVentasComponent implements OnInit {
       fdel: moment().startOf('week').format(GLOBAL.dbDateFormat),
       fal: moment().endOf('week').format(GLOBAL.dbDateFormat)
     };
+    this.cargando = false;
   }
 
   getReporte = (tipo: number = 1) => {
@@ -82,8 +88,10 @@ export class RptVentasComponent implements OnInit {
   }
 
   getPorCategoriaPdf = () => {
+    this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porCategoriaPdf(this.paramsToSend).subscribe(res => {
+      this.cargando = false;
       if (res) {
         const blob = new Blob([res], { type: 'application/pdf' });
         saveAs(blob, `${this.tituloCategoria}.pdf`);
@@ -94,8 +102,10 @@ export class RptVentasComponent implements OnInit {
   }
 
   getPorArticuloPdf = () => {
+    this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porArticuloPdf(this.paramsToSend).subscribe(res => {
+      this.cargando = false;
       if (res) {
         const blob = new Blob([res], { type: 'application/pdf' });
         saveAs(blob, `${this.tituloArticulo}.pdf`);
@@ -115,8 +125,10 @@ export class RptVentasComponent implements OnInit {
   cleanParams = () => delete this.paramsToSend.tipo_reporte;
 
   getPorCategoriaEnPantalla = () => {
+    this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porCategoria(this.paramsToSend).subscribe(res => {
+      this.cargando = false;
       if (res) {
         this.porCategoria = res;
       } else {
@@ -126,8 +138,10 @@ export class RptVentasComponent implements OnInit {
   }
 
   getPorArticuloEnPantalla = () => {
+    this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porArticulo(this.paramsToSend).subscribe(res => {
+      this.cargando = false;
       if (res) {
         this.porArticulo = res;
       } else {

@@ -5,7 +5,7 @@
         <h4>Reporte de facturas</h4>
       </mat-card-title>
       <mat-card-content>
-        <form (ngSubmit)="onSubmit()" novalidate>
+        <form #frmRptFactura="ngForm" novalidate>
           <mat-form-field class="fullWidth">            
             <input matInput type="date" placeholder="Del" [(ngModel)]="params.fdel" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
@@ -13,10 +13,9 @@
             <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
           <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
-          <div align="end">
-            <button mat-button color="accent" type="submit">GENERAR</button>
-          </div>
-        </form>        
+          <app-rpt-botones [configuracion]="configBotones" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>
+        </form>
+        <app-cargando *ngIf="cargando"></app-cargando>
       </mat-card-content>
     </mat-card>
   </div>

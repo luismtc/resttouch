@@ -30,6 +30,7 @@ export class CobrarPedidoComponent implements OnInit {
   public clienteSelected: Cliente;
   public esMovil = false;
   public facturando = false;
+  public cargandoConf: any = { w: 75, h: 75 };
 
   constructor(
     public dialog: MatDialog,

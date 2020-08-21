@@ -18,6 +18,7 @@ export class TurnosComponent implements OnInit {
   public configBotones: ConfiguracionBotones = {
     isHtmlDisabled: false, isPdfDisabled: false, isExcelDisabled: false
   };
+  public cargando = false;
 
   constructor() { }
 

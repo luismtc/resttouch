@@ -9,11 +9,11 @@ import { Propina } from '../../../interfaces/propina';
   styleUrls: ['./propina.component.css']
 })
 export class PropinaComponent implements OnInit {
-public propina: Propina;
-@ViewChild('lstPropina', { static: false }) lstPropinaComponent: ListaPropinaComponent;
+  public propina: Propina;
+  @ViewChild('lstPropina', { static: false }) lstPropinaComponent: ListaPropinaComponent;
   constructor() {
-  	this.propina = { 
-      propina_distribucion: null, usuario_tipo: null, porcentaje:null, anulado:null
+    this.propina = {
+      propina_distribucion: null, usuario_tipo: null, porcentaje: null, anulado: null
     };
   }
 
@@ -25,6 +25,7 @@ public propina: Propina;
     usuario_tipo: pres.usuario_tipo.usuario_tipo,
     porcentaje: pres.porcentaje,
     anulado: pres.anulado
-  };
+  }
+
   refreshPropinaList = () => this.lstPropinaComponent.loadPropinas();
 }

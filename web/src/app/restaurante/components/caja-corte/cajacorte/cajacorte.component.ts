@@ -13,7 +13,7 @@ export class CajacorteComponent implements OnInit {
   @ViewChild('lstCortecaja', { static: false }) lstCajacorteComponent: CajacorteListaComponent;
 
   constructor() {
-    this.ccorte = { 
+    this.ccorte = {
       caja_corte: 0,
       creacion: null,
       usuario: 0,
