@@ -466,7 +466,21 @@ class Api extends CI_Controller {
 								'abierto' => true, 
 								"_uno" => true
 							]);
+
 							$comanda = new Comanda_model();
+							$tmpTarjeta = $req["tarjeta"];
+
+							if (isset($req["tarjeta"]["codigo_seguridad"])) {
+								unset($req["tarjeta"]["codigo_seguridad"]);
+							}
+
+							if (isset($req["tarjeta"]["anio"])) {
+								unset($req["tarjeta"]["anio"]);
+							}
+
+							if (isset($req["tarjeta"]["mes"])) {
+								unset($req["tarjeta"]["mes"]);
+							}
 
 							$datosComanda = [
 								'usuario' => $usu->usuario, 
@@ -480,7 +494,11 @@ class Api extends CI_Controller {
 							$propina = false;
 							$insert = false;
 							$propinaMonto = 0;
-							$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+							$menu = $this->Catalogo_model->getModulo([
+								"modulo" => 4, 
+								"_uno" => true
+							]);
+							
 							$existencia = true;
 							foreach ($req['detalle'] as $row) {
 								
@@ -583,13 +601,14 @@ class Api extends CI_Controller {
 													$tmpCobro["observaciones"] = $req['transferencia']["observaciones"];
 												}
 											}
+											
 											array_push($pagos, $tmpCobro);
 
-											if (isset($req['tarjeta']['numero']) && !empty($req['tarjeta']['numero'])) {
+											if (isset($tmpTarjeta['numero']) && !empty($tmpTarjeta['numero'])) {
 												$this->load->library('Cobro');
 
 												$cobro = new Cobro($cuenta->getEmpresa());
-												$cobro->setTarjeta($req['tarjeta']);
+												$cobro->setTarjeta($tmpTarjeta);
 												$cobro->setCliente($datosCliente);
 												$cuenta->setCobro($cobro);
 											}
