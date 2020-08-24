@@ -22,6 +22,8 @@ class Comanda_model extends General_Model {
 
 		if(!empty($id)) {
 			$this->cargar($id);
+		} else {
+			$this->fhcreacion = date('Y-m-d H:i:s');
 		}
 	}
 
