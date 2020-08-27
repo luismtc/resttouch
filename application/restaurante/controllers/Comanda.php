@@ -161,6 +161,43 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function unir_cuentas($cuentaDe, $cuentaA) {
+		$deCuenta = new Cuenta_model($cuentaDe);
+		$aCuenta = new Cuenta_model($cuentaA);
+		$datos = ['exito' => false];
+		if ($deCuenta->cerrada == 0) {			
+			if ($aCuenta->cerrada == 0) {
+				$detOrigen = $deCuenta->getDetalle();				
+				if (count($detOrigen) > 0) {
+					foreach($detOrigen as $do) {
+						$deCuenta->guardarDetalle(['cuenta_cuenta' => $cuentaA], $do->detalle_cuenta, true);
+					}
+					$datos['cuenta_origen'] = $deCuenta->guardarCuenta(['cerrada' => 1]);
+					$datos['exito'] = true;
+					$datos['mensaje'] = 'Unificación de cuentas con éxito.';
+				} else {
+					$datos['mensaje'] = 'No existe ningún producto para unificar en la cuenta de origen.';
+				}
+			} else {
+				$datos['mensaje'] = 'La cuenta de destino ya está cerrada.';
+			}
+		} else {
+			$datos['mensaje'] = 'La cuenta de origen ya está cerrada.';
+		}
+		$this->output->set_output(json_encode($datos));
+	}
+
+	public function trasladar_mesa($comanda, $origen, $destino) {		
+		$cmd = new Comanda_model($comanda);
+		$mesaOrigen = new Mesa_model($origen);
+		$mesaDestino = new Mesa_model($destino);
+		$mesaDestino->guardar(['estatus' => 2]);
+		$cmd->trasladar_mesa($destino, $comanda);
+		$mesaOrigen->guardar(['estatus' => 1]);
+		$datos = ['exito' => true, 'mensaje' => 'Mesa trasladada con éxito.'];
+		$this->output->set_output(json_encode($datos));
+	}
+
 	public function guardar_detalle($com, $cuenta)
 	{
 		$comanda = new Comanda_model($com);

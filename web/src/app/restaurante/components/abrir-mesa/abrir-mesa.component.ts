@@ -45,7 +45,7 @@ export class AbrirMesaComponent implements OnInit {
     const pideDatosCuentasRef = this.dialogDatosCuentas.open(PideDatosCuentasComponent, {
       width: '50%',
       disableClose: true,
-      data: obj.cuentas
+      data: { cuentas: obj.cuentas, comensales: this.data.comensales }
     });
 
     pideDatosCuentasRef.afterClosed().subscribe((result: Cuenta[]) => {

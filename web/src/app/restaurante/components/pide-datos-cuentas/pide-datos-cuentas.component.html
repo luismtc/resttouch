@@ -12,21 +12,27 @@
             <td mat-cell *matCellDef="let element">
                 <mat-form-field class="fullWidth" *ngIf="esMovil">
                     <input type="text" matInput name="nombre" [(ngModel)]="element.nombre" required>
+                    <button type="button" mat-button matSuffix mat-icon-button (click)="eliminarFila(element)">
+                        <mat-icon class="iconFontSize">close</mat-icon>
+                    </button>
                 </mat-form-field>
                 <mat-form-field class="fullWidth" *ngIf="!esMovil">
                     <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Nombre" name="nombre" [(ngModel)]="element.nombre" required>
+                    <button type="button" mat-button matSuffix mat-icon-button (click)="eliminarFila(element)">
+                        <mat-icon class="iconFontSize">close</mat-icon>
+                    </button>
                 </mat-form-field>
             </td>
-        </ng-container>
+        </ng-container>        
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 </div>
-<div mat-dialog-actions class="d-flex justify-content-end">
-    <button mat-icon-button (click)="agregarFila()" color="accent">
-        <mat-icon>add</mat-icon>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="agregarFila()" color="accent" [disabled]="this.data.cuentas.length === +this.data.comensales">
+        Agregar
     </button>
-    <button mat-icon-button (click)="terminar(data)" color="accent">
-        <mat-icon>check_circle</mat-icon>
+    <button mat-raised-button (click)="terminar()" color="accent" [disabled]="this.data.cuentas.length !== +this.data.comensales">
+        Terminar        
     </button>
 </div>

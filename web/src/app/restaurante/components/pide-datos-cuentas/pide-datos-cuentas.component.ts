@@ -7,13 +7,10 @@ import { GLOBAL } from '../../../shared/global';
 
 import { Cuenta } from '../../interfaces/cuenta';
 
-/*
-interface ICuenta {
-  numero: number;
-  nombre: string;
-  productos: any[];
+interface IDataDialog {
+  cuentas: Cuenta[];
+  comensales: number;
 }
-*/
 
 @Component({
   selector: 'app-pide-datos-cuentas',
@@ -24,18 +21,22 @@ export class PideDatosCuentasComponent implements OnInit {
 
   public displayedColumns: string[] = ['numero', 'nombre'];
   public dataSource: MatTableDataSource<Cuenta>;
-  public esMovil: boolean = false;
+  public esMovil = false;
 
   constructor(
     public dialogRef: MatDialogRef<PideDatosCuentasComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Cuenta[],
-    private _snackBar: MatSnackBar,
+    @Inject(MAT_DIALOG_DATA) public data: IDataDialog,
+    private snackBar: MatSnackBar,
     private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.setTableDataSource();
+    for (let i = 0; i < (+this.data.comensales - 1); i++) {
+      this.agregarFila();
+    }
+    // console.log(this.data);
   }
 
   todosConNombre(ctas: Cuenta[]): number {
@@ -47,26 +48,39 @@ export class PideDatosCuentasComponent implements OnInit {
     return -1;
   }
 
-  terminar = (obj: Cuenta[]) => {
-    const tcn = this.todosConNombre(obj);
+  terminar = () => {
+    const tcn = this.todosConNombre(this.data.cuentas);
     if (tcn < 0) {
-      this.dialogRef.close(obj);
+      this.dialogRef.close(this.data.cuentas);
     } else {
-      this._snackBar.open(`Favor ingresar nombre a la cuenta #${obj[tcn].cuenta}...`, 'Cuentas', { duration: 5000 });
+      this.snackBar.open(`Favor ingresar nombre a la cuenta #${this.data.cuentas[tcn].cuenta}...`, 'Cuentas', { duration: 5000 });
     }
   }
 
-  setTableDataSource = () => this.dataSource = new MatTableDataSource(this.data);
+  setTableDataSource = () => this.dataSource = new MatTableDataSource(this.data.cuentas);
 
   agregarFila() {
-    this.data.push(
+    this.data.cuentas.push(
       {
         cuenta: 0,
-        numero: this.data.length + 1,
+        numero: this.data.cuentas.length + 1,
         nombre: null,
         productos: []
       }
     );
-    this.dataSource.data = this.data;
+    this.dataSource.data = this.data.cuentas;
+  }
+
+  eliminarFila = (obj: Cuenta) => {
+    const idx = this.data.cuentas.findIndex(cta => +cta.numero === +obj.numero);
+    if (idx > 0) {
+      this.data.cuentas.splice(idx, 1);
+      this.data.cuentas.map((cta, i) => cta.numero = (i + 1));
+      this.dataSource.data = this.data.cuentas;
+    } else {
+      // console.log('ELIMINAR = ', obj);
+      // console.log('CUENTAS = ', this.data.cuentas);
+      console.log('No se encuentra esta cuenta...');
+    }
   }
 }

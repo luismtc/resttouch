@@ -468,7 +468,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFpago=\"ngForm\" (ngSubmit)=\"frmFpago.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"fpago.descripcion\" required>\n            </mat-form-field>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"fpago.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmFpago.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"fpago.forma_pago\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFpago=\"ngForm\" (ngSubmit)=\"frmFpago.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"fpago.descripcion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"number\" placeholder=\"Porcentaje de comisión\" name=\"comision_porcentaje\" [(ngModel)]=\"fpago.comision_porcentaje\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"number\" placeholder=\"Porcentaje de retención\" name=\"retencion_porcentaje\" [(ngModel)]=\"fpago.retencion_porcentaje\">            \n            </mat-form-field>\n            <mat-checkbox name=\"pedirdocumento\" class=\"btnAccion\" [(ngModel)]=\"fpago.pedirdocumento\">Pedir número de documento</mat-checkbox>\n            <mat-checkbox name=\"adjuntararchivo\" class=\"btnAccion\" [(ngModel)]=\"fpago.adjuntararchivo\">Debe adjuntar archivo de respaldo</mat-checkbox>\n            <mat-checkbox name=\"pedirautorizacion\" class=\"btnAccion\" [(ngModel)]=\"fpago.pedirautorizacion\">Pedir autorización del gerente de turno</mat-checkbox>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"fpago.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmFpago.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"fpago.forma_pago\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/fpago/fpago/fpago.component.html": 
@@ -2014,25 +2014,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
             /* harmony import */ var _services_fpago_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/fpago.service */ "./src/app/admin/services/fpago.service.ts");
             var FormPagoComponent = /** @class */ (function () {
-                function FormPagoComponent(_snackBar, fpagoSrvc) {
+                function FormPagoComponent(snackBar, fpagoSrvc) {
                     var _this = this;
-                    this._snackBar = _snackBar;
+                    this.snackBar = snackBar;
                     this.fpagoSrvc = fpagoSrvc;
                     this.fpagoSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
                     this.resetFormaPago = function () { return _this.fpago = {
-                        forma_pago: null,
-                        descripcion: null,
-                        activo: 1
+                        forma_pago: null, descripcion: null, activo: 1, descuento: 0, comision_porcentaje: 0.00,
+                        retencion_porcentaje: 0.00, pedirdocumento: 0, adjuntararchivo: 0, pedirautorizacion: 0
                     }; };
                     this.onSubmit = function () {
                         _this.fpagoSrvc.save(_this.fpago).subscribe(function (res) {
                             if (res.exito) {
                                 _this.fpagoSavedEv.emit();
                                 _this.resetFormaPago();
-                                _this._snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
+                                _this.snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
                             }
                             else {
-                                _this._snackBar.open("ERROR: " + res.mensaje, 'Forma de pago', { duration: 3000 });
+                                _this.snackBar.open("ERROR: " + res.mensaje, 'Forma de pago', { duration: 3000 });
                             }
                         });
                     };
@@ -2147,6 +2146,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         _this.fpagoSrvc.get().subscribe(function (lst) {
                             if (lst) {
                                 if (lst.length > 0) {
+                                    lst = lst.map(function (fp) {
+                                        fp.pedirdocumento = +fp.pedirdocumento;
+                                        fp.adjuntararchivo = +fp.adjuntararchivo;
+                                        fp.pedirautorizacion = +fp.pedirautorizacion;
+                                        fp.activo = +fp.activo;
+                                        return fp;
+                                    });
                                     _this.listaFpago = lst;
                                     _this.applyFilter();
                                 }

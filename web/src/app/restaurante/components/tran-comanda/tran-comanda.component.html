@@ -66,11 +66,15 @@
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
                 (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2 || bloqueoBotones">
                 Unir cuentas
-            </button>
+            </button>            
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
                 (click)="cobrarCuenta()"
                 [disabled]="!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones">
                 Cobrar cuenta
+            </button>
+            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
+                (click)="trasladoMesa()" [disabled]="bloqueoBotones">
+                Trasladar
             </button>
             <button mat-raised-button type="button" color="accent" class="btnAccionComanda" (click)="cerrarMesa()"
                 *ngIf="lstProductosDeCuenta.length <= 0">

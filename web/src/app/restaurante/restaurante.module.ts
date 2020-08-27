@@ -68,8 +68,7 @@ import { CajacorteComponent } from './components/caja-corte/cajacorte/cajacorte.
 import { CajacorteListaComponent } from './components/caja-corte/cajacorte-lista/cajacorte-lista.component';
 import { CajacorteFormComponent } from './components/caja-corte/cajacorte-form/cajacorte-form.component';
 import { ValidaPwdGerenteTurnoComponent } from './components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component';
-
-// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
+import { TrasladoMesaComponent } from './components/traslado-mesa/traslado-mesa.component';
 
 @NgModule({
   declarations: [
@@ -78,10 +77,11 @@ import { ValidaPwdGerenteTurnoComponent } from './components/valida-pwd-gerente-
     FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent,
     PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent, FormTurnoTipoComponent,
     TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent,
-    CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent
+    CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent
   ],
   entryComponents: [
-    AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent, ValidaPwdGerenteTurnoComponent
+    AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent, ValidaPwdGerenteTurnoComponent,
+    TrasladoMesaComponent
   ],
   imports: [
     CommonModule,

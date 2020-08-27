@@ -15,7 +15,7 @@ import * as qs from 'qs';
 export class ComandaService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'comanda';
+  private moduleUrl = 'comanda';
   private usrToken: string = null;
 
   constructor(
@@ -327,6 +327,30 @@ export class ComandaService {
     };
     return this.http.get<any>(
       `${GLOBAL.urlAppRestaurante}/cuenta/get_cuenta/${idcuenta}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  unificarCuentas(deCuenta: number, aCuenta: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/unir_cuentas/${deCuenta}/${aCuenta}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  trasladarMesa(idComanda: number, idMesaOrigen: number, idMesaDestino: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/trasladar_mesa/${idComanda}/${idMesaOrigen}/${idMesaDestino}`,
       httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }

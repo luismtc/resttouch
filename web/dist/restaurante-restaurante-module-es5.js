@@ -4256,7 +4256,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div #divMesa cdkDrag (cdkDragEnded)=\"dragEnded($event)\" cdkDragBoundary=\".areaPosicionamiento\" [cdkDragDisabled]=\"dontAllowDrag\" class=\"divMesa mat-elevation-z6\" \n    [ngClass]=\"{'disponible': +configuracion.estatus == 1, 'ocupada': +configuracion.estatus == 2}\"\n    (click)=\"clickMesa()\"\n    [style.width.px]=\"configuracion.tamanio\" \n    [style.height.px]=\"configuracion.tamanio\" \n    [style.left.%]=\"configuracion.posx\" \n    [style.top.%]=\"configuracion.posy\">\n    <span>{{configuracion.numero}}</span>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div #divMesa cdkDrag (cdkDragEnded)=\"dragEnded($event)\" cdkDragBoundary=\".areaPosicionamiento\" [cdkDragDisabled]=\"dontAllowDrag\" class=\"divMesa mat-elevation-z6\" \n    [ngClass]=\"{'disponible': +configuracion.estatus == 1, 'ocupada': +configuracion.estatus == 2}\"\n    (click)=\"clickMesa()\"\n    [style.width.px]=\"configuracion.tamanio\" \n    [style.height.px]=\"configuracion.tamanio\" \n    [style.left.%]=\"configuracion.posx\" \n    [style.top.%]=\"configuracion.posy\"\n    [attr.disabled]=\"isDisabled ? true : null\">\n    <span>{{configuracion.numero}}</span>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/pide-datos-cuentas/pide-datos-cuentas.component.html": 
@@ -4267,7 +4267,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>Ingreso de datos de cuentas</h1>\n<div mat-dialog-content>\n    <table #tblCuentas mat-table [dataSource]=\"dataSource\" class=\"fullWidth\">\n        <ng-container matColumnDef=\"numero\">\n            <th mat-header-cell *matHeaderCellDef>No.</th>\n            <td mat-cell *matCellDef=\"let element\">\n                <span>{{element.numero}}</span>\n            </td>\n        </ng-container>\n        <ng-container matColumnDef=\"nombre\">\n            <th mat-header-cell *matHeaderCellDef>Nombre</th>\n            <td mat-cell *matCellDef=\"let element\">\n                <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                    <input type=\"text\" matInput name=\"nombre\" [(ngModel)]=\"element.nombre\" required>\n                </mat-form-field>\n                <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                    <input type=\"text\" matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\" ng-virtual-keyboard-placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"element.nombre\" required>\n                </mat-form-field>\n            </td>\n        </ng-container>\n        <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n        <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </table>\n</div>\n<div mat-dialog-actions class=\"d-flex justify-content-end\">\n    <button mat-icon-button (click)=\"agregarFila()\" color=\"accent\">\n        <mat-icon>add</mat-icon>\n    </button>\n    <button mat-icon-button (click)=\"terminar(data)\" color=\"accent\">\n        <mat-icon>check_circle</mat-icon>\n    </button>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>Ingreso de datos de cuentas</h1>\n<div mat-dialog-content>\n    <table #tblCuentas mat-table [dataSource]=\"dataSource\" class=\"fullWidth\">\n        <ng-container matColumnDef=\"numero\">\n            <th mat-header-cell *matHeaderCellDef>No.</th>\n            <td mat-cell *matCellDef=\"let element\">\n                <span>{{element.numero}}</span>\n            </td>\n        </ng-container>\n        <ng-container matColumnDef=\"nombre\">\n            <th mat-header-cell *matHeaderCellDef>Nombre</th>\n            <td mat-cell *matCellDef=\"let element\">\n                <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                    <input type=\"text\" matInput name=\"nombre\" [(ngModel)]=\"element.nombre\" required>\n                    <button type=\"button\" mat-button matSuffix mat-icon-button (click)=\"eliminarFila(element)\">\n                        <mat-icon class=\"iconFontSize\">close</mat-icon>\n                    </button>\n                </mat-form-field>\n                <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                    <input type=\"text\" matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\" ng-virtual-keyboard-placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"element.nombre\" required>\n                    <button type=\"button\" mat-button matSuffix mat-icon-button (click)=\"eliminarFila(element)\">\n                        <mat-icon class=\"iconFontSize\">close</mat-icon>\n                    </button>\n                </mat-form-field>\n            </td>\n        </ng-container>        \n        <tr mat-header-row *matHeaderRowDef=\"displayedColumns\"></tr>\n        <tr mat-row *matRowDef=\"let row; columns: displayedColumns;\"></tr>\n    </table>\n</div>\n<div mat-dialog-actions align=\"end\">\n    <button mat-raised-button (click)=\"agregarFila()\" color=\"accent\" [disabled]=\"this.data.cuentas.length === +this.data.comensales\">\n        Agregar\n    </button>\n    <button mat-raised-button (click)=\"terminar()\" color=\"accent\" [disabled]=\"this.data.cuentas.length !== +this.data.comensales\">\n        Terminar        \n    </button>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/propina/form-propina/form-propina.component.html": 
@@ -4399,7 +4399,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<mat-sidenav-container class=\"matSideNavContainer\">\n    <mat-sidenav #rightSidenav mode=\"over\" [(opened)]=\"openedRightPanel\" (closedStart)=\"cerrandoRightSideNav()\" position=\"end\" disableClose>\n        <!--<app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>-->\n        <app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (mesaSavedEv)=\"actualizar()\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>\n    </mat-sidenav>\n    <mat-sidenav-content>\n        <mat-tab-group dynamicHeight backgroundColor=\"primary\">\n            <mat-tab #tabArea *ngFor=\"let tabA of lstTabsAreas\" label=\"{{tabA.nombre}}\">\n                <div #matTabArea class=\"divAreaMesa\" (window:resize)=\"onResize($event)\">\n                    <app-mesa *ngFor=\"let m of tabA.mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\"></app-mesa>\n                </div>\n            </mat-tab>\n        </mat-tab-group>\n    </mat-sidenav-content>\n</mat-sidenav-container>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<mat-sidenav-container class=\"matSideNavContainer\">\n    <mat-sidenav #rightSidenav mode=\"over\" [(opened)]=\"openedRightPanel\" (closedStart)=\"cerrandoRightSideNav()\" position=\"end\" disableClose>\n        <!--<app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>-->\n        <app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (mesaSavedEv)=\"actualizar()\" (closeSideNavEv)=\"toggleRightSidenav($event)\"></app-tran-comanda>\n    </mat-sidenav>\n    <mat-sidenav-content>\n        <mat-tab-group dynamicHeight backgroundColor=\"primary\">\n            <mat-tab #tabArea *ngFor=\"let tabA of lstTabsAreas\" label=\"{{tabA.nombre}}\">\n                <div #matTabArea class=\"divAreaMesa\" (window:resize)=\"onResize($event)\">\n                    <app-mesa *ngFor=\"let m of tabA.mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\" [isDisabled]=\"cargando\"></app-mesa>\n                </div>\n            </mat-tab>\n        </mat-tab-group>\n    </mat-sidenav-content>\n</mat-sidenav-container>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/tran-comanda/tran-comanda.component.html": 
@@ -4410,7 +4410,18 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa\n            {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\"\n            (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\"\n                *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br />\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\"\n                (click)=\"clickOnCategoria(c)\" [disabled]=\"bloqueoBotones\">\n                {{c.descripcion}}\n            </button>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\"\n                (categoriasFilledEv)=\"setListaCategorias($event)\" [bloqueoBotones]=\"bloqueoBotones\">\n            </app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\"\n                [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\" [bloqueoBotones]=\"bloqueoBotones\" [mesaEnUso]=\"mesaEnUso\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda\n            </button>\n            <!--\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda (PDF)\n            </button>\n            -->\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2 || bloqueoBotones\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"cobrarCuenta()\"\n                [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\"\n                *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div style=\"width: 100%; overflow: hidden;\">\n    <div style=\"width: 50%; float: left;\" align=\"center\">\n        <span class=\"bld\" style=\"font-size: 16pt; margin-left: 10px;\">{{mesaEnUso.mesa.area.nombre}} - Mesa\n            {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>\n        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->\n    </div>\n    <div style=\"overflow: hidden; margin-right: 10px;\" align=\"end\">\n        <button mat-raised-button type=\"button\" color=\"accent\" style=\"margin-left: 8px;\"\n            (click)=\"closeSideNavEv.emit()\">\n            Cerrar Panel\n        </button>\n    </div>\n</div>\n<div class=\"divFullSize\">\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion\"\n                *ngFor=\"let cta of mesaEnUso.cuentas\" [disabled]=\"+cta.cerrada == 1\"\n                (click)=\"setSelectedCuenta(cta.numero)\">\n                {{cta.nombre}}\n            </button>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\">Productos</span><br />\n            <button mat-raised-button class=\"btnAccion\" color=\"accent\" *ngFor=\"let c of categorias\"\n                (click)=\"clickOnCategoria(c)\" [disabled]=\"bloqueoBotones\">\n                {{c.descripcion}}\n            </button>\n        </div>\n        <div class=\"col m6 s12\" align=\"center\" style=\"padding: 0 !important;\">\n            <span class=\"bld\" *ngIf=\"cuentaActiva.nombre\">Cuenta de {{cuentaActiva.nombre}}</span>\n            <span class=\"bld\" *ngIf=\"!cuentaActiva.nombre\">Por favor seleccione una cuenta. Gracias.</span>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <!--<app-lista-producto (productoClickedEv)=\"addProductoSelected($event)\"></app-lista-producto>-->\n            <app-lista-producto-alt #appLstProdAlt (productoClickedEv)=\"addProductoSelected($event)\"\n                (categoriasFilledEv)=\"setListaCategorias($event)\" [bloqueoBotones]=\"bloqueoBotones\">\n            </app-lista-producto-alt>\n        </div>\n        <div class=\"col m6 s12 mat-elevation-z3\" style=\"overflow-y: auto; height: 425px !important;\">\n            <app-lista-productos-comanda [listaProductos]=\"lstProductosDeCuenta\" [noCuenta]=\"+cuentaActiva.numero\"\n                [IdComanda]=\"mesaEnUso.comanda\" [IdCuenta]=\"cuentaActiva.cuenta\" [bloqueoBotones]=\"bloqueoBotones\" [mesaEnUso]=\"mesaEnUso\"\n                (productoRemovedEv)=\"updProductosCuenta($event)\"></app-lista-productos-comanda>\n        </div>\n    </div>\n    <div class=\"row\">\n        <div class=\"col m12 s12\" align=\"center\">\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda\n            </button>\n            <!--\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printComanda(true)\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Comanda (PDF)\n            </button>\n            -->\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"printCuenta()\" [disabled]=\"!cuentaActiva.nombre || bloqueoBotones\">\n                Cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"unirCuentas()\" [disabled]=\"mesaEnUso.cuentas.length < 2 || bloqueoBotones\">\n                Unir cuentas\n            </button>            \n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"cobrarCuenta()\"\n                [disabled]=\"!cuentaActiva.nombre || (esCajero(mesaEnUso.turno_rol) < 0) || bloqueoBotones\">\n                Cobrar cuenta\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccion btnAccionComanda\"\n                (click)=\"trasladoMesa()\" [disabled]=\"bloqueoBotones\">\n                Trasladar\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" class=\"btnAccionComanda\" (click)=\"cerrarMesa()\"\n                *ngIf=\"lstProductosDeCuenta.length <= 0\">\n                Cerrar Mesa\n            </button>\n        </div>\n    </div>\n</div>");
+            /***/ 
+        }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.html": 
+        /*!*************************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.html ***!
+          \*************************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>Trasladar a otra mesa</h1>\n<div mat-dialog-content>\n    <form #frmTrasladarMesa=\"ngForm\" novalidate>\n        <mat-form-field class=\"fullWidth\">\n            <mat-label>Trasladar a mesa:</mat-label>\n            <mat-select name=\"destino\" [(ngModel)]=\"destino\" required>\n                <mat-option *ngFor=\"let mDispon of mesasDisponibles\" [value]=\"mDispon\">\n                    {{mDispon.area.nombre}} - {{mDispon.numero}}\n                </mat-option>\n            </mat-select>\n        </mat-form-field>\n    </form>\n</div>\n<div mat-dialog-actions align=\"end\">\n    <button mat-raised-button (click)=\"cancelar()\" color=\"warn\">\n        Cancelar\n    </button>\n    <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"trasladar()\" [disabled]=\"!frmTrasladarMesa.form.valid\">\n        Trasladar\n    </button>\n</div>\n");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/turno-tipo/form-turno/form-turno.component.html": 
@@ -4487,7 +4498,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>Unir cuentas</h1>\n<div mat-dialog-content>\n    <form #frmUnirCuenta=\"ngForm\" novalidate>\n        <mat-form-field>\n            <mat-label>Unir cuenta de</mat-label>\n            <mat-select name=\"cuentaDe\" [(ngModel)]=\"cuentaDe\" required>\n                <mat-option *ngFor=\"let ctaDe of data.mesaEnUso.cuentas\" [value]=\"ctaDe.numero\">\n                    {{ctaDe.nombre}}\n                </mat-option>\n            </mat-select>\n        </mat-form-field>\n        <mat-form-field>\n            <mat-label>con la cuenta de</mat-label>\n            <mat-select name=\"cuentaA\" [(ngModel)]=\"cuentaA\"  required>\n                <mat-option *ngFor=\"let ctaA of data.mesaEnUso.cuentas\" [value]=\"ctaA.numero\">\n                    {{ctaA.nombre}}\n                </mat-option>\n            </mat-select>\n        </mat-form-field>\n        <div class=\"d-flex justify-content-end\" style=\"width: 100%;\">\n            <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"unirCuentas(cuentaDe, cuentaA)\" [disabled]=\"!frmUnirCuenta.form.valid || +cuentaDe === +cuentaA\">\n                Unir cuentas\n            </button>\n            <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"unirTodas()\">\n                Unir todas en una sola\n            </button>\n        </div>\n    </form>\n</div>\n<div mat-dialog-actions class=\"d-flex justify-content-end\">\n    <button mat-icon-button (click)=\"cancelar()\" color=\"warn\">\n        <mat-icon>cancel_presentation</mat-icon>\n    </button>\n    <!--\n    <button mat-icon-button [mat-dialog-close]=\"data\" [disabled]=\"!frmUnirCuenta.form.valid\" color=\"accent\">\n        <mat-icon>check_circle</mat-icon>\n    </button>\n    -->\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>Unir cuentas</h1>\n<div mat-dialog-content>\n    <form #frmUnirCuenta=\"ngForm\" novalidate>\n        <mat-form-field>\n            <mat-label>Unir cuenta de</mat-label>\n            <mat-select name=\"cuentaDe\" [(ngModel)]=\"cuentaDe\" required>\n                <mat-option *ngFor=\"let ctaDe of data.mesaEnUso.cuentas\" [value]=\"ctaDe\">\n                    {{ctaDe.nombre}}\n                </mat-option>\n            </mat-select>\n        </mat-form-field>\n        <mat-form-field>\n            <mat-label>con la cuenta de</mat-label>\n            <mat-select name=\"cuentaA\" [(ngModel)]=\"cuentaA\" required>\n                <mat-option *ngFor=\"let ctaA of data.mesaEnUso.cuentas\" [value]=\"ctaA\">\n                    {{ctaA.nombre}}\n                </mat-option>\n            </mat-select>\n        </mat-form-field>\n    </form>\n</div>\n<div mat-dialog-actions align=\"end\">\n    <button mat-raised-button (click)=\"cancelar()\" color=\"warn\">\n        Cancelar\n    </button>\n    <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"unirCuentas(cuentaDe, cuentaA)\" [disabled]=\"!frmUnirCuenta.form.valid || +cuentaDe === +cuentaA\">\n        Unir cuentas\n    </button>\n    <!--\n    <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"unirTodas()\">\n        Unir todas en una sola\n    </button>\n    -->\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.html": 
@@ -4605,7 +4616,7 @@
                     var pideDatosCuentasRef = this.dialogDatosCuentas.open(_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_3__["PideDatosCuentasComponent"], {
                         width: '50%',
                         disableClose: true,
-                        data: obj.cuentas
+                        data: { cuentas: obj.cuentas, comensales: this.data.comensales }
                     });
                     pideDatosCuentasRef.afterClosed().subscribe(function (result) {
                         obj.cuentas = result;
@@ -5730,6 +5741,7 @@
                         estatus: 1
                     };
                     this.dontAllowDrag = true;
+                    this.isDisabled = false;
                     this.onClickMesa = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
                     this.dragEnded = function (obj) {
                         console.log('Drag ended = ', obj);
@@ -5786,6 +5798,9 @@
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
             ], MesaComponent.prototype, "dontAllowDrag", void 0);
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+            ], MesaComponent.prototype, "isDisabled", void 0);
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()
             ], MesaComponent.prototype, "onClickMesa", void 0);
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -5808,7 +5823,7 @@
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = (".fullWidth { width: 100%; }\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9waWRlLWRhdG9zLWN1ZW50YXMvcGlkZS1kYXRvcy1jdWVudGFzLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsYUFBYSxXQUFXLEVBQUUiLCJmaWxlIjoic3JjL2FwcC9yZXN0YXVyYW50ZS9jb21wb25lbnRzL3BpZGUtZGF0b3MtY3VlbnRhcy9waWRlLWRhdG9zLWN1ZW50YXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5mdWxsV2lkdGggeyB3aWR0aDogMTAwJTsgfSJdfQ== */");
+            /* harmony default export */ __webpack_exports__["default"] = (".fullWidth { width: 100%; }\r\n.iconFontSize {\r\n    font-size: 34pt !important;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9waWRlLWRhdG9zLWN1ZW50YXMvcGlkZS1kYXRvcy1jdWVudGFzLmNvbXBvbmVudC5jc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsYUFBYSxXQUFXLEVBQUU7QUFDMUI7SUFDSSwwQkFBMEI7QUFDOUIiLCJmaWxlIjoic3JjL2FwcC9yZXN0YXVyYW50ZS9jb21wb25lbnRzL3BpZGUtZGF0b3MtY3VlbnRhcy9waWRlLWRhdG9zLWN1ZW50YXMuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5mdWxsV2lkdGggeyB3aWR0aDogMTAwJTsgfVxyXG4uaWNvbkZvbnRTaXplIHtcclxuICAgIGZvbnQtc2l6ZTogMzRwdCAhaW1wb3J0YW50O1xyXG59Il19 */");
             /***/ 
         }),
         /***/ "./src/app/restaurante/components/pide-datos-cuentas/pide-datos-cuentas.component.ts": 
@@ -5827,36 +5842,46 @@
             /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
             /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
             /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
-            /*
-            interface ICuenta {
-              numero: number;
-              nombre: string;
-              productos: any[];
-            }
-            */
             var PideDatosCuentasComponent = /** @class */ (function () {
-                function PideDatosCuentasComponent(dialogRef, data, _snackBar, ls) {
+                function PideDatosCuentasComponent(dialogRef, data, snackBar, ls) {
                     var _this = this;
                     this.dialogRef = dialogRef;
                     this.data = data;
-                    this._snackBar = _snackBar;
+                    this.snackBar = snackBar;
                     this.ls = ls;
                     this.displayedColumns = ['numero', 'nombre'];
                     this.esMovil = false;
-                    this.terminar = function (obj) {
-                        var tcn = _this.todosConNombre(obj);
+                    this.terminar = function () {
+                        var tcn = _this.todosConNombre(_this.data.cuentas);
                         if (tcn < 0) {
-                            _this.dialogRef.close(obj);
+                            _this.dialogRef.close(_this.data.cuentas);
                         }
                         else {
-                            _this._snackBar.open("Favor ingresar nombre a la cuenta #" + obj[tcn].cuenta + "...", 'Cuentas', { duration: 5000 });
+                            _this.snackBar.open("Favor ingresar nombre a la cuenta #" + _this.data.cuentas[tcn].cuenta + "...", 'Cuentas', { duration: 5000 });
                         }
                     };
-                    this.setTableDataSource = function () { return _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.data); };
+                    this.setTableDataSource = function () { return _this.dataSource = new _angular_material_table__WEBPACK_IMPORTED_MODULE_3__["MatTableDataSource"](_this.data.cuentas); };
+                    this.eliminarFila = function (obj) {
+                        var idx = _this.data.cuentas.findIndex(function (cta) { return +cta.numero === +obj.numero; });
+                        if (idx > 0) {
+                            _this.data.cuentas.splice(idx, 1);
+                            _this.data.cuentas.map(function (cta, i) { return cta.numero = (i + 1); });
+                            _this.dataSource.data = _this.data.cuentas;
+                        }
+                        else {
+                            // console.log('ELIMINAR = ', obj);
+                            // console.log('CUENTAS = ', this.data.cuentas);
+                            console.log('No se encuentra esta cuenta...');
+                        }
+                    };
                 }
                 PideDatosCuentasComponent.prototype.ngOnInit = function () {
                     this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].usrTokenVar).enmovil || false;
                     this.setTableDataSource();
+                    for (var i = 0; i < (+this.data.comensales - 1); i++) {
+                        this.agregarFila();
+                    }
+                    // console.log(this.data);
                 };
                 PideDatosCuentasComponent.prototype.todosConNombre = function (ctas) {
                     for (var i = 0; i < ctas.length; i++) {
@@ -5867,19 +5892,19 @@
                     return -1;
                 };
                 PideDatosCuentasComponent.prototype.agregarFila = function () {
-                    this.data.push({
+                    this.data.cuentas.push({
                         cuenta: 0,
-                        numero: this.data.length + 1,
+                        numero: this.data.cuentas.length + 1,
                         nombre: null,
                         productos: []
                     });
-                    this.dataSource.data = this.data;
+                    this.dataSource.data = this.data.cuentas;
                 };
                 return PideDatosCuentasComponent;
             }());
             PideDatosCuentasComponent.ctorParameters = function () { return [
                 { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
-                { type: Array, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] },
+                { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] },
                 { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__["MatSnackBar"] },
                 { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
             ]; };
@@ -6800,16 +6825,18 @@
             /* harmony import */ var _abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../abrir-mesa/abrir-mesa.component */ "./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.ts");
             /* harmony import */ var _services_area_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../services/area.service */ "./src/app/restaurante/services/area.service.ts");
             /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+            // import * as moment from 'moment';
             var TranAreasComponent = /** @class */ (function () {
-                function TranAreasComponent(dialog, _snackBar, ls, areaSrvc, comandaSrvc, socket) {
+                function TranAreasComponent(dialog, snackBar, ls, areaSrvc, comandaSrvc, socket) {
                     var _this = this;
                     this.dialog = dialog;
-                    this._snackBar = _snackBar;
+                    this.snackBar = snackBar;
                     this.ls = ls;
                     this.areaSrvc = areaSrvc;
                     this.comandaSrvc = comandaSrvc;
                     this.socket = socket;
                     this.divSize = { h: 0, w: 0 };
+                    this.cargando = false;
                     this.lstTabsAreas = [];
                     this.lstTabsAreasForUpdate = [];
                     this.actualizar = function () {
@@ -6836,9 +6863,11 @@
                     this.loadAreas = function (saveOnTemp, objMesaEnUso) {
                         if (saveOnTemp === void 0) { saveOnTemp = false; }
                         if (objMesaEnUso === void 0) { objMesaEnUso = {}; }
+                        _this.cargando = true;
                         _this.areaSrvc.get({ sede: (+_this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede || 0) }).subscribe(function (res) {
                             if (!saveOnTemp) {
                                 _this.lstTabsAreas = res;
+                                _this.cargando = false;
                             }
                             else {
                                 _this.lstTabsAreasForUpdate = res;
@@ -6855,8 +6884,7 @@
                                 _this.setEstatusMesa({ area: +a.area, mesa: +m.mesa }, +m.estatus);
                             }
                         }
-                        // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
-                        // console.log('MESA ENVIADA = ', objMesaEnUso);
+                        _this.cargando = false;
                         if (_this.rightSidenav.opened) {
                             if (+_this.mesaSeleccionada.comanda === +objMesaEnUso.comanda) {
                                 _this.toggleRightSidenav();
@@ -6877,18 +6905,16 @@
                             }
                         }
                     };
-                    this.toggleRightSidenav = function () {
-                        // console.log('ESTATUS DEL PANEL DERECHO = ', this.rightSidenav.opened);
+                    this.toggleRightSidenav = function (obj) {
+                        if (obj === void 0) { obj = null; }
                         _this.rightSidenav.toggle().then(function (res) {
-                            // console.log('RESULTADO DEL TOGGLE = ', res);
                             if (res === 'close') {
-                                // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
-                                // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
-                                // this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {});
                                 _this.checkEstatusMesa();
+                                if (obj) {
+                                    _this.loadAreas(true, { mesaenuso: obj });
+                                }
                             }
                             else if (res === 'open') {
-                                // console.log('CUENTAS DE LA MESA CON EL RIGHT PANEL YA ABIERTO', this.mesaSeleccionada.cuentas);
                                 if (_this.mesaSeleccionada.cuentas.length === 1) {
                                     _this.snTrancomanda.setSelectedCuenta(_this.mesaSeleccionada.cuentas[0].numero);
                                 }
@@ -6967,7 +6993,7 @@
                             }
                             else {
                                 if (res.mensaje) {
-                                    _this._snackBar.open("" + res.mensaje, 'ERROR', { duration: 5000 });
+                                    _this.snackBar.open("" + res.mensaje, 'ERROR', { duration: 5000 });
                                 }
                                 if (Array.isArray(res)) {
                                     if (res.length === 0) {
@@ -7062,7 +7088,7 @@
                                     _this.toggleRightSidenav();
                                 }
                                 else {
-                                    _this._snackBar.open("" + res.mensaje, 'ERROR', { duration: 5000 });
+                                    _this.snackBar.open("" + res.mensaje, 'ERROR', { duration: 5000 });
                                 }
                             });
                         }
@@ -7128,9 +7154,10 @@
             /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
             /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
             /* harmony import */ var _unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../unir-cuenta/unir-cuenta.component */ "./src/app/restaurante/components/unir-cuenta/unir-cuenta.component.ts");
-            /* harmony import */ var _pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../pos/components/cobrar-pedido/cobrar-pedido.component */ "./src/app/pos/components/cobrar-pedido/cobrar-pedido.component.ts");
-            /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
-            /* harmony import */ var _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
+            /* harmony import */ var _traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../traslado-mesa/traslado-mesa.component */ "./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.ts");
+            /* harmony import */ var _pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../pos/components/cobrar-pedido/cobrar-pedido.component */ "./src/app/pos/components/cobrar-pedido/cobrar-pedido.component.ts");
+            /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+            /* harmony import */ var _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../services/reporte-pdf.service */ "./src/app/restaurante/services/reporte-pdf.service.ts");
             var TranComandaComponent = /** @class */ (function () {
                 function TranComandaComponent(router, dialog, snackBar, comandaSrvc, socket, 
                 // private signalRSrvc: SignalRService
@@ -7254,6 +7281,18 @@
                     this.esCajero = function (roles) {
                         if (roles === void 0) { roles = []; }
                         return roles.find(function (r) { return r.trim().toLocaleLowerCase() === 'cajero'; });
+                    };
+                    this.trasladoMesa = function () {
+                        var trasladoRef = _this.dialog.open(_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_9__["TrasladoMesaComponent"], {
+                            width: '55%',
+                            data: { mesaEnUso: _this.mesaEnUso }
+                        });
+                        trasladoRef.afterClosed().subscribe(function (result) {
+                            if (result) {
+                                _this.socket.emit('refrescar:mesa', { mesaenuso: _this.mesaEnUso });
+                                _this.closeSideNavEv.emit(_this.mesaEnUso);
+                            }
+                        });
                     };
                 }
                 TranComandaComponent.prototype.ngOnInit = function () {
@@ -7490,8 +7529,7 @@
                     });
                     unirCuentaRef.afterClosed().subscribe(function (result) {
                         if (result) {
-                            _this.lstProductosSeleccionados = result;
-                            _this.setLstProductosDeCuenta();
+                            _this.closeSideNavEv.emit();
                         }
                     });
                 };
@@ -7504,7 +7542,7 @@
                         else {
                             var productosACobrar = _this.lstProductosDeCuenta.filter(function (p) { return +p.impreso === 1; });
                             if (productosACobrar.length > 0) {
-                                var cobrarCtaRef = _this.dialog.open(_pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_9__["CobrarPedidoComponent"], {
+                                var cobrarCtaRef = _this.dialog.open(_pos_components_cobrar_pedido_cobrar_pedido_component__WEBPACK_IMPORTED_MODULE_10__["CobrarPedidoComponent"], {
                                     width: '95%',
                                     data: {
                                         mesaenuso: _this.mesaEnUso,
@@ -7539,10 +7577,10 @@
                 { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] },
                 { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_3__["MatDialog"] },
                 { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_4__["MatSnackBar"] },
-                { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__["ComandaService"] },
+                { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_11__["ComandaService"] },
                 { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_5__["Socket"] },
                 { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_6__["LocalstorageService"] },
-                { type: _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_11__["ReportePdfService"] }
+                { type: _services_reporte_pdf_service__WEBPACK_IMPORTED_MODULE_12__["ReportePdfService"] }
             ]; };
             tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
@@ -7563,6 +7601,77 @@
                     styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./tran-comanda.component.css */ "./src/app/restaurante/components/tran-comanda/tran-comanda.component.css")).default]
                 })
             ], TranComandaComponent);
+            /***/ 
+        }),
+        /***/ "./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.css": 
+        /*!**********************************************************************************!*\
+          !*** ./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.css ***!
+          \**********************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3Jlc3RhdXJhbnRlL2NvbXBvbmVudHMvdHJhc2xhZG8tbWVzYS90cmFzbGFkby1tZXNhLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.ts": 
+        /*!*********************************************************************************!*\
+          !*** ./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.ts ***!
+          \*********************************************************************************/
+        /*! exports provided: TrasladoMesaComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TrasladoMesaComponent", function () { return TrasladoMesaComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _services_mesa_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/mesa.service */ "./src/app/restaurante/services/mesa.service.ts");
+            /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+            var TrasladoMesaComponent = /** @class */ (function () {
+                function TrasladoMesaComponent(dialogRef, snackBar, mesaSrvc, comandaSrvc, data) {
+                    var _this = this;
+                    this.dialogRef = dialogRef;
+                    this.snackBar = snackBar;
+                    this.mesaSrvc = mesaSrvc;
+                    this.comandaSrvc = comandaSrvc;
+                    this.data = data;
+                    this.mesasDisponibles = [];
+                    this.loadMesasDisponibles = function () { return _this.mesaSrvc.getDisponibles().subscribe(function (res) { return _this.mesasDisponibles = res; }); };
+                    this.cancelar = function () { return _this.dialogRef.close(false); };
+                    this.trasladar = function () {
+                        _this.comandaSrvc.trasladarMesa(+_this.data.mesaEnUso.comanda, +_this.data.mesaEnUso.mesa.mesa, +_this.destino.mesa).subscribe(function (res) {
+                            if (res.exito) {
+                                _this.snackBar.open(res.mensaje, 'Traslado de mesa', { duration: 3000 });
+                                _this.dialogRef.close(true);
+                            }
+                            else {
+                                _this.snackBar.open("ERROR:" + res.mensaje, 'Traslado de mesa', { duration: 7000 });
+                            }
+                        });
+                    };
+                }
+                TrasladoMesaComponent.prototype.ngOnInit = function () {
+                    this.loadMesasDisponibles();
+                };
+                return TrasladoMesaComponent;
+            }());
+            TrasladoMesaComponent.ctorParameters = function () { return [
+                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
+                { type: _services_mesa_service__WEBPACK_IMPORTED_MODULE_4__["MesaService"] },
+                { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_5__["ComandaService"] },
+                { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
+            ]; };
+            TrasladoMesaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-traslado-mesa',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./traslado-mesa.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./traslado-mesa.component.css */ "./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.css")).default]
+                }),
+                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](4, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+            ], TrasladoMesaComponent);
             /***/ 
         }),
         /***/ "./src/app/restaurante/components/turno-tipo/form-turno/form-turno.component.css": 
@@ -8127,45 +8236,58 @@
             /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
             /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
             /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
             var UnirCuentaComponent = /** @class */ (function () {
-                function UnirCuentaComponent(dialogRef, data) {
+                function UnirCuentaComponent(dialogRef, comandaSrvc, snackBar, data) {
                     this.dialogRef = dialogRef;
+                    this.comandaSrvc = comandaSrvc;
+                    this.snackBar = snackBar;
                     this.data = data;
-                    this.cuentaDe = null;
-                    this.cuentaA = null;
                 }
                 UnirCuentaComponent.prototype.ngOnInit = function () {
-                    console.log('Productos enviados = ', this.data.lstProductosSeleccionados);
+                    // console.log('Productos enviados = ', this.data.lstProductosSeleccionados);
                 };
                 UnirCuentaComponent.prototype.cancelar = function () {
-                    this.dialogRef.close();
+                    this.dialogRef.close(false);
                 };
                 UnirCuentaComponent.prototype.unirCuentas = function (deCuenta, aCuenta) {
-                    if (deCuenta === void 0) { deCuenta = 1; }
-                    if (aCuenta === void 0) { aCuenta = 1; }
-                    console.log("De cuenta = " + deCuenta + " a cuenta " + aCuenta);
-                    if (+deCuenta !== +aCuenta) {
-                        console.log('deCuenta y aCuenta son diferentes');
-                        console.log('Productos seleccionados (Antes) = ', this.data.lstProductosSeleccionados);
-                        this.data.lstProductosSeleccionados.map(function (p) {
-                            if (+p.cuenta === +deCuenta) {
-                                p.cuenta = aCuenta;
-                            }
-                        });
-                        console.log('Productos seleccionados (Después) = ', this.data.lstProductosSeleccionados);
-                    }
-                    else {
-                        this.data.lstProductosSeleccionados.map(function (p) { return p.cuenta = +deCuenta; });
+                    var _this = this;
+                    console.log('ORIGEN', deCuenta);
+                    console.log('DESTINO', aCuenta);
+                    this.comandaSrvc.unificarCuentas(deCuenta.cuenta, aCuenta.cuenta).subscribe(function (res) {
+                        console.log(res);
+                        if (res.exito) {
+                            _this.snackBar.open(res.mensaje, 'Cuentas', { duration: 3000 });
+                            _this.dialogRef.close(true);
+                        }
+                        else {
+                            _this.snackBar.open("ERROR:" + res.mensaje, 'Cuentas', { duration: 7000 });
+                        }
+                    });
+                    /*
+                    if (+deCuenta.numero !== +aCuenta.numero) {
+                      this.data.lstProductosSeleccionados.map((p) => {
+                        if (+p.cuenta === +deCuenta.cuenta) {
+                          p.cuenta = aCuenta.cuenta;
+                        }
+                      });
+                      console.log('Productos seleccionados (Después) = ', this.data.lstProductosSeleccionados);
+                    } else {
+                      this.data.lstProductosSeleccionados.map(p => p.cuenta = +deCuenta.cuenta);
                     }
                     this.dialogRef.close(this.data.lstProductosSeleccionados);
+                    */
                 };
                 UnirCuentaComponent.prototype.unirTodas = function () {
-                    this.unirCuentas();
+                    // this.unirCuentas();
                 };
                 return UnirCuentaComponent;
             }());
             UnirCuentaComponent.ctorParameters = function () { return [
                 { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
+                { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_4__["ComandaService"] },
+                { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
                 { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
             ]; };
             UnirCuentaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -8174,7 +8296,7 @@
                     template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./unir-cuenta.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/unir-cuenta/unir-cuenta.component.html")).default,
                     styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./unir-cuenta.component.css */ "./src/app/restaurante/components/unir-cuenta/unir-cuenta.component.css")).default]
                 }),
-                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](1, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](3, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
             ], UnirCuentaComponent);
             /***/ 
         }),
@@ -8369,8 +8491,8 @@
             /* harmony import */ var _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-lista/cajacorte-lista.component */ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.ts");
             /* harmony import */ var _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-form/cajacorte-form.component */ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.ts");
             /* harmony import */ var _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component */ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.ts");
+            /* harmony import */ var _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./components/traslado-mesa/traslado-mesa.component */ "./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.ts");
             // import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
-            // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} };
             var RestauranteModule = /** @class */ (function () {
                 function RestauranteModule() {
                 }
@@ -8384,10 +8506,11 @@
                         _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_45__["FormTurnoComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_47__["RptVentasComponent"], _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_48__["PorCategoriaComponent"], _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_49__["PorArticuloComponent"], _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_50__["TurnosComponent"],
                         _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_51__["PropinasComponent"], _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_52__["ComandaEnLineaComponent"], _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_53__["CajaComponent"], _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_54__["FacturaComponent"], _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_55__["ListaTurnoTipoComponent"], _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_56__["FormTurnoTipoComponent"],
                         _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_57__["TurnoTipoComponent"], _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_58__["PropinaComponent"], _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__["FormPropinaComponent"], _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__["ListaPropinaComponent"], _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__["AutoconsultaComponent"],
-                        _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__["CajacorteComponent"], _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__["CajacorteListaComponent"], _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__["CajacorteFormComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"]
+                        _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__["CajacorteComponent"], _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__["CajacorteListaComponent"], _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__["CajacorteFormComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"], _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_66__["TrasladoMesaComponent"]
                     ],
                     entryComponents: [
-                        _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"]
+                        _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"],
+                        _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_66__["TrasladoMesaComponent"]
                     ],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
@@ -8940,6 +9063,22 @@
                     };
                     return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/cuenta/get_cuenta/" + idcuenta, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
                 };
+                ComandaService.prototype.unificarCuentas = function (deCuenta, aCuenta) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/unir_cuentas/" + deCuenta + "/" + aCuenta, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.trasladarMesa = function (idComanda, idMesaOrigen, idMesaDestino) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/trasladar_mesa/" + idComanda + "/" + idMesaOrigen + "/" + idMesaDestino, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
                 return ComandaService;
             }());
             ComandaService.ctorParameters = function () { return [
@@ -8996,6 +9135,14 @@
                         })
                     };
                     return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/mesa/guardar" + (entidad.mesa ? ('/' + entidad.mesa) : ''), entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                MesaService.prototype.getDisponibles = function () {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos + "/area/get_mesas_disponibles?", httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
                 };
                 return MesaService;
             }());

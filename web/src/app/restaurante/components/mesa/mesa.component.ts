@@ -21,6 +21,7 @@ export class MesaComponent implements OnInit, AfterViewInit {
     estatus: 1
   };
   @Input() dontAllowDrag: boolean = true;
+  @Input() isDisabled = false;
   @Output() onClickMesa = new EventEmitter();
   @ViewChild('divMesa', { static: false }) divMesa: ElementRef;
 

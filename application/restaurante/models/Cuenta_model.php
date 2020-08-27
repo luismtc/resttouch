@@ -72,10 +72,14 @@ class Cuenta_model extends General_Model {
 		return false;
 	}
 
-	public function guardarDetalle(Array $args, $id = '')
+	public function guardarDetalle(Array $args, $id = '', $esUnificacion = false)
 	{
 		$det = new Dcuenta_model($id);
-		$args['cuenta_cuenta'] = $this->cuenta;
+
+		if (!$esUnificacion) {
+			$args['cuenta_cuenta'] = $this->cuenta;
+		}
+
 		$result = $det->guardar($args);
 
 		if(!$result) {

@@ -9,6 +9,15 @@
             <mat-form-field class="fullWidth">
                 <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="fpago.descripcion" required>
             </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="number" placeholder="Porcentaje de comisión" name="comision_porcentaje" [(ngModel)]="fpago.comision_porcentaje">
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="number" placeholder="Porcentaje de retención" name="retencion_porcentaje" [(ngModel)]="fpago.retencion_porcentaje">            
+            </mat-form-field>
+            <mat-checkbox name="pedirdocumento" class="btnAccion" [(ngModel)]="fpago.pedirdocumento">Pedir número de documento</mat-checkbox>
+            <mat-checkbox name="adjuntararchivo" class="btnAccion" [(ngModel)]="fpago.adjuntararchivo">Debe adjuntar archivo de respaldo</mat-checkbox>
+            <mat-checkbox name="pedirautorizacion" class="btnAccion" [(ngModel)]="fpago.pedirautorizacion">Pedir autorización del gerente de turno</mat-checkbox>
             <mat-checkbox name="activo" class="fullWidth" [(ngModel)]="fpago.activo">Activo</mat-checkbox>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmFpago.form.valid">

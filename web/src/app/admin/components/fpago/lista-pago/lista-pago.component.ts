@@ -43,9 +43,16 @@ export class ListaPagoComponent implements OnInit {
   }
 
   getFormasPago = () => {
-    this.fpagoSrvc.get().subscribe(lst => {
+    this.fpagoSrvc.get().subscribe((lst: FormaPago[]) => {
       if (lst) {
         if (lst.length > 0) {
+          lst = lst.map(fp => {
+            fp.pedirdocumento = +fp.pedirdocumento;
+            fp.adjuntararchivo = +fp.adjuntararchivo;
+            fp.pedirautorizacion = +fp.pedirautorizacion;
+            fp.activo = +fp.activo;
+            return fp;
+          });
           this.listaFpago = lst;
           this.applyFilter();
         }

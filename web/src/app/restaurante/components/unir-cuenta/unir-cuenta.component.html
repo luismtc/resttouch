@@ -4,36 +4,31 @@
         <mat-form-field>
             <mat-label>Unir cuenta de</mat-label>
             <mat-select name="cuentaDe" [(ngModel)]="cuentaDe" required>
-                <mat-option *ngFor="let ctaDe of data.mesaEnUso.cuentas" [value]="ctaDe.numero">
+                <mat-option *ngFor="let ctaDe of data.mesaEnUso.cuentas" [value]="ctaDe">
                     {{ctaDe.nombre}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>con la cuenta de</mat-label>
-            <mat-select name="cuentaA" [(ngModel)]="cuentaA"  required>
-                <mat-option *ngFor="let ctaA of data.mesaEnUso.cuentas" [value]="ctaA.numero">
+            <mat-select name="cuentaA" [(ngModel)]="cuentaA" required>
+                <mat-option *ngFor="let ctaA of data.mesaEnUso.cuentas" [value]="ctaA">
                     {{ctaA.nombre}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <div class="d-flex justify-content-end" style="width: 100%;">
-            <button mat-raised-button type="button" color="accent" (click)="unirCuentas(cuentaDe, cuentaA)" [disabled]="!frmUnirCuenta.form.valid || +cuentaDe === +cuentaA">
-                Unir cuentas
-            </button>
-            <button mat-raised-button type="button" color="accent" (click)="unirTodas()">
-                Unir todas en una sola
-            </button>
-        </div>
     </form>
 </div>
-<div mat-dialog-actions class="d-flex justify-content-end">
-    <button mat-icon-button (click)="cancelar()" color="warn">
-        <mat-icon>cancel_presentation</mat-icon>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cancelar()" color="warn">
+        Cancelar
+    </button>
+    <button mat-raised-button type="button" color="accent" (click)="unirCuentas(cuentaDe, cuentaA)" [disabled]="!frmUnirCuenta.form.valid || +cuentaDe === +cuentaA">
+        Unir cuentas
     </button>
     <!--
-    <button mat-icon-button [mat-dialog-close]="data" [disabled]="!frmUnirCuenta.form.valid" color="accent">
-        <mat-icon>check_circle</mat-icon>
+    <button mat-raised-button type="button" color="accent" (click)="unirTodas()">
+        Unir todas en una sola
     </button>
     -->
 </div>

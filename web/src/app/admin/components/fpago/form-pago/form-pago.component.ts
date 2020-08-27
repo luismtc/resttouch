@@ -12,29 +12,28 @@ export class FormPagoComponent implements OnInit {
 
   @Input() fpago: FormaPago;
   @Output() fpagoSavedEv = new EventEmitter();
-  
+
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private fpagoSrvc: FpagoService
   ) { }
 
   ngOnInit() {
   }
 
-  resetFormaPago = () => this.fpago = { 
-    forma_pago: null,
-    descripcion: null,
-    activo: 1
-  };
+  resetFormaPago = () => this.fpago = {
+    forma_pago: null, descripcion: null, activo: 1, descuento: 0, comision_porcentaje: 0.00,
+    retencion_porcentaje: 0.00, pedirdocumento: 0, adjuntararchivo: 0, pedirautorizacion: 0
+  }
 
   onSubmit = () => {
     this.fpagoSrvc.save(this.fpago).subscribe(res => {
       if (res.exito) {
         this.fpagoSavedEv.emit();
         this.resetFormaPago();
-        this._snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
+        this.snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Forma de pago', { duration: 3000 });        
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Forma de pago', { duration: 3000 });
       }
     });
   }

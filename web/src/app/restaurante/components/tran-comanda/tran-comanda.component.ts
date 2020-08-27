@@ -8,6 +8,7 @@ import { LocalstorageService } from '../../../admin/services/localstorage.servic
 import { GLOBAL } from '../../../shared/global';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
+import { TrasladoMesaComponent } from '../traslado-mesa/traslado-mesa.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 import { ListaProductoAltComponent } from '../../../wms/components/producto/lista-producto-alt/lista-producto-alt.component';
 
@@ -408,8 +409,7 @@ export class TranComandaComponent implements OnInit {
 
     unirCuentaRef.afterClosed().subscribe(result => {
       if (result) {
-        this.lstProductosSeleccionados = result;
-        this.setLstProductosDeCuenta();
+        this.closeSideNavEv.emit();
       }
     });
   }
@@ -456,4 +456,18 @@ export class TranComandaComponent implements OnInit {
   }
 
   esCajero = (roles: string[] = []) => roles.find(r => r.trim().toLocaleLowerCase() === 'cajero');
+
+  trasladoMesa = () => {
+    const trasladoRef = this.dialog.open(TrasladoMesaComponent, {
+      width: '55%',
+      data: { mesaEnUso: this.mesaEnUso }
+    });
+
+    trasladoRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+        this.closeSideNavEv.emit(this.mesaEnUso);
+      }
+    });
+  }
 }

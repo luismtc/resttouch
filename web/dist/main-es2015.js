@@ -468,7 +468,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFpago=\"ngForm\" (ngSubmit)=\"frmFpago.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"fpago.descripcion\" required>\n            </mat-form-field>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"fpago.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmFpago.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"fpago.forma_pago\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Forma de pago {{!!fpago.forma_pago ? fpago.descripcion : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmFpago=\"ngForm\" (ngSubmit)=\"frmFpago.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"text\" placeholder=\"Descripción\" name=\"descripcion\" [(ngModel)]=\"fpago.descripcion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"number\" placeholder=\"Porcentaje de comisión\" name=\"comision_porcentaje\" [(ngModel)]=\"fpago.comision_porcentaje\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\">\n                <input matInput type=\"number\" placeholder=\"Porcentaje de retención\" name=\"retencion_porcentaje\" [(ngModel)]=\"fpago.retencion_porcentaje\">            \n            </mat-form-field>\n            <mat-checkbox name=\"pedirdocumento\" class=\"btnAccion\" [(ngModel)]=\"fpago.pedirdocumento\">Pedir número de documento</mat-checkbox>\n            <mat-checkbox name=\"adjuntararchivo\" class=\"btnAccion\" [(ngModel)]=\"fpago.adjuntararchivo\">Debe adjuntar archivo de respaldo</mat-checkbox>\n            <mat-checkbox name=\"pedirautorizacion\" class=\"btnAccion\" [(ngModel)]=\"fpago.pedirautorizacion\">Pedir autorización del gerente de turno</mat-checkbox>\n            <mat-checkbox name=\"activo\" class=\"fullWidth\" [(ngModel)]=\"fpago.activo\">Activo</mat-checkbox>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmFpago.form.valid\">\n                    Guardar\n                </button>\n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetFormaPago()\" *ngIf=\"fpago.forma_pago\">\n                    Nueva\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -2166,24 +2166,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let FormPagoComponent = class FormPagoComponent {
-    constructor(_snackBar, fpagoSrvc) {
-        this._snackBar = _snackBar;
+    constructor(snackBar, fpagoSrvc) {
+        this.snackBar = snackBar;
         this.fpagoSrvc = fpagoSrvc;
         this.fpagoSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.resetFormaPago = () => this.fpago = {
-            forma_pago: null,
-            descripcion: null,
-            activo: 1
+            forma_pago: null, descripcion: null, activo: 1, descuento: 0, comision_porcentaje: 0.00,
+            retencion_porcentaje: 0.00, pedirdocumento: 0, adjuntararchivo: 0, pedirautorizacion: 0
         };
         this.onSubmit = () => {
             this.fpagoSrvc.save(this.fpago).subscribe(res => {
                 if (res.exito) {
                     this.fpagoSavedEv.emit();
                     this.resetFormaPago();
-                    this._snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
+                    this.snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
                 }
                 else {
-                    this._snackBar.open(`ERROR: ${res.mensaje}`, 'Forma de pago', { duration: 3000 });
+                    this.snackBar.open(`ERROR: ${res.mensaje}`, 'Forma de pago', { duration: 3000 });
                 }
             });
         };
@@ -2309,9 +2308,16 @@ let ListaPagoComponent = class ListaPagoComponent {
         this.pageIndex = 0;
         this.txtFiltro = '';
         this.getFormasPago = () => {
-            this.fpagoSrvc.get().subscribe(lst => {
+            this.fpagoSrvc.get().subscribe((lst) => {
                 if (lst) {
                     if (lst.length > 0) {
+                        lst = lst.map(fp => {
+                            fp.pedirdocumento = +fp.pedirdocumento;
+                            fp.adjuntararchivo = +fp.adjuntararchivo;
+                            fp.pedirautorizacion = +fp.pedirautorizacion;
+                            fp.activo = +fp.activo;
+                            return fp;
+                        });
                         this.listaFpago = lst;
                         this.applyFilter();
                     }

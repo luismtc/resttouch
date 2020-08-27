@@ -4,6 +4,7 @@
     [style.width.px]="configuracion.tamanio" 
     [style.height.px]="configuracion.tamanio" 
     [style.left.%]="configuracion.posx" 
-    [style.top.%]="configuracion.posy">
+    [style.top.%]="configuracion.posy"
+    [attr.disabled]="isDisabled ? true : null">
     <span>{{configuracion.numero}}</span>
 </div>

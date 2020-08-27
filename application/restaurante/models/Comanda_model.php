@@ -355,6 +355,11 @@ class Comanda_model extends General_Model {
 		$query = "UPDATE comanda SET comandaenuso = 0 WHERE comanda = $comanda";
 		return $this->db->simple_query($query);
 	}
+
+	public function trasladar_mesa($mesa, $comanda) {
+		$query = "UPDATE comanda_has_mesa SET mesa = $mesa WHERE comanda = $comanda";
+		return $this->db->simple_query($query);		
+	}
 }
 
 /* End of file Comanda_model.php */

@@ -13,7 +13,7 @@ import { Area } from '../../interfaces/area';
 import { AreaService } from '../../services/area.service';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { ComandaService } from '../../services/comanda.service';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 
 @Component({
   selector: 'app-tran-areas',
@@ -24,6 +24,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   public divSize: any = { h: 0, w: 0 };
   public openedRightPanel: boolean;
+  public cargando = false;
 
   @ViewChild('matTabArea', { static: false }) pestania: ElementRef;
   @ViewChild('rightSidenav', { static: false }) rightSidenav: MatSidenav;
@@ -36,7 +37,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   constructor(
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     public areaSrvc: AreaService,
     public comandaSrvc: ComandaService,
@@ -86,9 +87,11 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   loadAreas = (saveOnTemp = false, objMesaEnUso: any = {}) => {
+    this.cargando = true;
     this.areaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res) => {
       if (!saveOnTemp) {
         this.lstTabsAreas = res;
+        this.cargando = false;
       } else {
         this.lstTabsAreasForUpdate = res;
         this.updateTableStatus(objMesaEnUso.mesaenuso);
@@ -102,8 +105,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         this.setEstatusMesa({ area: +a.area, mesa: +m.mesa }, +m.estatus);
       }
     }
-    // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
-    // console.log('MESA ENVIADA = ', objMesaEnUso);
+    this.cargando = false;
     if (this.rightSidenav.opened) {
       if (+this.mesaSeleccionada.comanda === +objMesaEnUso.comanda) {
         this.toggleRightSidenav();
@@ -183,24 +185,21 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
             this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
             this.toggleRightSidenav();
           } else {
-            this._snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+            this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
           }
         });
       }
     });
   }
 
-  toggleRightSidenav = () => {
-    // console.log('ESTATUS DEL PANEL DERECHO = ', this.rightSidenav.opened);
+  toggleRightSidenav = (obj: any = null) => {
     this.rightSidenav.toggle().then((res: MatDrawerToggleResult) => {
-      // console.log('RESULTADO DEL TOGGLE = ', res);
       if (res === 'close') {
-        // console.log(`YA CERRADO ${moment().format(GLOBAL.dateTimeFormat)}`);
-        // console.log('MESA SELECCIONADA DESPUÉS DEL TOGGLE DEL RIGHT SIDE PANEL = ', this.mesaSeleccionada);
-        // this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {});
         this.checkEstatusMesa();
+        if (obj) {
+          this.loadAreas(true, { mesaenuso: obj });
+        }
       } else if (res === 'open') {
-        // console.log('CUENTAS DE LA MESA CON EL RIGHT PANEL YA ABIERTO', this.mesaSeleccionada.cuentas);
         if (this.mesaSeleccionada.cuentas.length === 1) {
           this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
         }
@@ -279,7 +278,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         }
       } else {
         if (res.mensaje) {
-          this._snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+          this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
         }
         if (Array.isArray(res)) {
           if (res.length === 0) {

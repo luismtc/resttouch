@@ -6,6 +6,12 @@ class Fpago_model extends General_model {
 	public $forma_pago;
 	public $descripcion;
 	public $activo = 1;
+	public $descuento = 0;
+	public $comision_porcentaje = 0.00;
+	public $retencion_porcentaje = 0.00;
+	public $pedirdocumento = 0;
+	public $adjuntararchivo = 0;
+	public $pedirautorizacion = 0;
 
 	public function __construct($id = "")
 	{

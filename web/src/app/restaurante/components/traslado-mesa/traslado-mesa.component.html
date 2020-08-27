@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Trasladar a otra mesa</h1>
+<div mat-dialog-content>
+    <form #frmTrasladarMesa="ngForm" novalidate>
+        <mat-form-field class="fullWidth">
+            <mat-label>Trasladar a mesa:</mat-label>
+            <mat-select name="destino" [(ngModel)]="destino" required>
+                <mat-option *ngFor="let mDispon of mesasDisponibles" [value]="mDispon">
+                    {{mDispon.area.nombre}} - {{mDispon.numero}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cancelar()" color="warn">
+        Cancelar
+    </button>
+    <button mat-raised-button type="button" color="accent" (click)="trasladar()" [disabled]="!frmTrasladarMesa.form.valid">
+        Trasladar
+    </button>
+</div>
