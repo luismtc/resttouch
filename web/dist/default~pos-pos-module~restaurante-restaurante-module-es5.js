@@ -815,7 +815,7 @@
                         // console.log('FACTURA = ', factura);
                         _this.facturaSrvc.imprimir(+factura.factura).subscribe(function (res) {
                             if (res.factura) {
-                                _this.socket.emit("print:factura", "" + JSON.stringify({
+                                var msgToPrint = {
                                     NombreEmpresa: res.factura.empresa.nombre,
                                     NitEmpresa: res.factura.empresa.nit,
                                     SedeEmpresa: res.factura.sedeFactura.nombre,
@@ -833,14 +833,32 @@
                                     FechaDeAutorizacion: res.factura.fecha_autorizacion,
                                     NoOrdenEnLinea: '',
                                     FormaDePago: '',
-                                    DetalleFactura: _this.procesaDetalleFactura(res.factura.detalle)
-                                }));
+                                    DetalleFactura: _this.procesaDetalleFactura(res.factura.detalle),
+                                    Impresora: _this.data.impresora
+                                };
+                                if (!!_this.data.impresora) {
+                                    if (+_this.data.impresora.bluetooth === 0) {
+                                        _this.socket.emit("print:factura", "" + JSON.stringify(msgToPrint));
+                                    }
+                                    else {
+                                        _this.printToBT(JSON.stringify(msgToPrint));
+                                    }
+                                }
+                                else {
+                                    _this.socket.emit("print:factura", "" + JSON.stringify(msgToPrint));
+                                }
                                 _this.snackBar.open("Imprimiendo factura " + res.factura.serie_factura + "-" + res.factura.numero_factura, 'Impresión', { duration: 3000 });
                             }
                             else {
                                 _this.snackBar.open("ERROR: " + res.mensaje, 'Impresión', { duration: 7000 });
                             }
                         });
+                    };
+                    this.printToBT = function (msgToPrint) {
+                        if (msgToPrint === void 0) { msgToPrint = ''; }
+                        var AppHref = "com.restouch.impresion://impresion/" + msgToPrint;
+                        var wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+                        setTimeout(function () { return wref.close(); }, 1000);
                     };
                 }
                 CobrarPedidoComponent.prototype.ngOnInit = function () {

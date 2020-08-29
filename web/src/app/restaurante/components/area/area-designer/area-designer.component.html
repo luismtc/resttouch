@@ -1,13 +1,36 @@
 <div class="diseniador">
-    <div style="height: 50px;" align="center">
-        <button mat-flat-button type="button" color="accent" (click)="addTable()">
-            Agregar mesa
+    <div style="height: 55px;" align="center">
+        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addTable()">
+            <mat-icon class="btnIconSize">add</mat-icon>&nbsp;Mesa
         </button>
-        <button mat-flat-button type="button" color="accent" (click)="terminar()">
+        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addMostrador()">
+            <mat-icon class="btnIconSize">add</mat-icon>&nbsp;Mostrador
+        </button>
+        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addMostrador(true)">
+            <mat-icon class="btnIconSize">add</mat-icon>&nbsp;Mostrador vertical
+        </button>
+        <button mat-raised-button type="button" color="accent" (click)="terminar()">
             Terminar
         </button>
     </div>
+    <div style="height: 5px; width: 100%;"></div>
     <div id="divAreaPosicionamiento" class="areaPosicionamiento">
-        <app-mesa *ngFor="let m of mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)" [dontAllowDrag]="false"></app-mesa>
+        <app-mesa *ngFor="let m of mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)" [dontAllowDrag]="false" (contextmenu)="onContextMenu($event, m)"></app-mesa>
     </div>
+    <!-- Inicio del menu contextual -->
+    <div style="visibility: hidden; position: fixed;" [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu"></div>
+    <mat-menu #contextMenu="matMenu">
+        <ng-template matMenuContent let-item="item">
+            <button mat-menu-item (click)="configurarMesa(item)" *ngIf="+item.esmostrador === 1 && +item.debaja === 0">
+                <mat-icon class="btnIconSize">settings</mat-icon>Configuracion
+            </button>
+            <button mat-menu-item (click)="toggleDeBaja(item)" *ngIf="+item.debaja === 0" class="customize" [disabled]="+item.estatus === 2">
+                <mat-icon class="btnIconSize">thumb_down</mat-icon>Dar de baja
+            </button>
+            <button mat-menu-item (click)="toggleDeBaja(item, 0)" *ngIf="+item.debaja === 1" class="customizeUp" [disabled]="+item.estatus === 2">
+                <mat-icon class="btnIconSize">thumb_up</mat-icon>Habilitar
+            </button>
+        </ng-template>
+    </mat-menu>
+    <!-- Fin del menu contextual -->
 </div>

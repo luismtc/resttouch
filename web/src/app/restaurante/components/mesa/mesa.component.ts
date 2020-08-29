@@ -18,38 +18,64 @@ export class MesaComponent implements OnInit, AfterViewInit {
     posx: 0.0000,
     posy: 0.0000,
     tamanio: 48,
-    estatus: 1
+    estatus: 1,
+    ancho: null,
+    alto: null,
+    esmostrador: 0,
+    vertical: 0
   };
-  @Input() dontAllowDrag: boolean = true;
+  @Input() dontAllowDrag = true;
   @Input() isDisabled = false;
+  // tslint:disable-next-line: no-output-on-prefix
   @Output() onClickMesa = new EventEmitter();
   @ViewChild('divMesa', { static: false }) divMesa: ElementRef;
 
   public objMesa: HTMLElement;
+  public urlImage = '/assets/img/mesas/';
 
   constructor(
     private snackBar: MatSnackBar,
     private mesaSrvc: MesaService
   ) { }
 
-  ngOnInit() { }
-
-  ngAfterViewInit() {
-    this.objMesa = this.divMesa.nativeElement;
+  ngOnInit() {
+    if (+this.configuracion.esmostrador === 0) {
+      this.urlImage += 'table_03.svg';
+    } else {
+      if (+this.configuracion.vertical === 0) {
+        this.urlImage += 'mostrador_horizontal.svg';
+      } else {
+        this.urlImage += 'mostrador_vertical.svg';
+      }
+    }
   }
 
-  clickMesa() {
-    this.onClickMesa.emit({ mesaSelected: this.configuracion });
+  ngAfterViewInit = () => this.objMesa = this.divMesa.nativeElement;
+
+  clickMesa = () => this.onClickMesa.emit({ mesaSelected: this.configuracion });
+
+  getAncho = () => {
+    if (this.configuracion.ancho && +this.configuracion.ancho > 0) {
+      return this.configuracion.ancho;
+    }
+    return this.configuracion.tamanio;
+  }
+
+  getAlto = () => {
+    if (this.configuracion.alto && +this.configuracion.alto > 0) {
+      return this.configuracion.alto;
+    }
+    return this.configuracion.tamanio;
   }
 
   dragEnded = (obj: any) => {
-    console.log('Drag ended = ', obj);
+    // console.log('Drag ended = ', obj);
     const item = obj.source.element.nativeElement;
+    // console.log('HTML ITEM: ', item);
     const parentSize = { x: item.offsetParent.scrollWidth, y: item.offsetParent.scrollHeight };
-    console.log(`x = ${this.objMesa.offsetLeft}\ny = ${this.objMesa.offsetTop}`);
-    console.log('Parent Size = ', parentSize);
+    // console.log('Parent Size = ', parentSize);
     const distancia = obj.distance;
-    console.log('Distancia = ', distancia);
+    // console.log('Distancia = ', distancia);
     const updMesa: Mesa = {
       mesa: this.configuracion.mesa,
       area: this.configuracion.area,

@@ -14,3 +14,22 @@
     padding: 0 !important;
     position: relative;
 }
+
+.btnIconSize {
+    font-size: 17pt !important;
+}
+
+::ng-deep .customize {    
+    background: lightyellow;
+}
+
+::ng-deep .customizeUp {    
+    background: lightgreen;
+}
+
+/*
+::ng-deep .mat-menu-panel {    
+    height: 125px !important;
+    padding: 0 5px !important;    
+}
+*/

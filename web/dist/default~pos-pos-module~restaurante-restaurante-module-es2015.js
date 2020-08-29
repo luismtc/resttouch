@@ -848,7 +848,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
             // console.log('FACTURA = ', factura);
             this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
                 if (res.factura) {
-                    this.socket.emit(`print:factura`, `${JSON.stringify({
+                    const msgToPrint = {
                         NombreEmpresa: res.factura.empresa.nombre,
                         NitEmpresa: res.factura.empresa.nit,
                         SedeEmpresa: res.factura.sedeFactura.nombre,
@@ -866,14 +866,31 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
                         FechaDeAutorizacion: res.factura.fecha_autorizacion,
                         NoOrdenEnLinea: '',
                         FormaDePago: '',
-                        DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
-                    })}`);
+                        DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
+                        Impresora: this.data.impresora
+                    };
+                    if (!!this.data.impresora) {
+                        if (+this.data.impresora.bluetooth === 0) {
+                            this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
+                        }
+                        else {
+                            this.printToBT(JSON.stringify(msgToPrint));
+                        }
+                    }
+                    else {
+                        this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
+                    }
                     this.snackBar.open(`Imprimiendo factura ${res.factura.serie_factura}-${res.factura.numero_factura}`, 'Impresión', { duration: 3000 });
                 }
                 else {
                     this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 7000 });
                 }
             });
+        };
+        this.printToBT = (msgToPrint = '') => {
+            const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
+            const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+            setTimeout(() => wref.close(), 1000);
         };
     }
     ngOnInit() {

@@ -32,6 +32,8 @@ export interface ComandaGetResponse {
         posy: number;
         tamanio: number;
         estatus: number;
+        esmostrador?: number;
+        impresora?: Impresora;
     };
     cuentas: Cuenta[];
     turno_rol?: string[];

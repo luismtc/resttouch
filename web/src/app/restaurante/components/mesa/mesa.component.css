@@ -1,5 +1,6 @@
 .divMesa {
-    background-image: url('/assets/img/mesas/table_03.svg');
+    background-repeat: no-repeat;
+    background-position: center;
     position: absolute;
     text-align: right;
     padding-top: 0;
@@ -16,4 +17,8 @@ span {
 
 .ocupada {    
     background-color: #da332d;
+}
+
+.debaja {
+    background-color: black;
 }

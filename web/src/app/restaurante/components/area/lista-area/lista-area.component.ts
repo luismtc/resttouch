@@ -45,7 +45,7 @@ export class ListaAreaComponent implements OnInit {
   }
 
   loadEntidades = () => {
-    this.areaSrvc.get({ sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((lst) => {
+    this.areaSrvc.get({ sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0), debaja: 1 }).subscribe((lst) => {
       if (lst) {
         if (lst.length > 0) {
           this.lstEntidades = lst;
@@ -56,7 +56,7 @@ export class ListaAreaComponent implements OnInit {
   }
 
   getEntidad = (id: number) => {
-    this.areaSrvc.get({ area: id }).subscribe((lst) => {
+    this.areaSrvc.get({ area: id, debaja: 1 }).subscribe((lst) => {
       if (lst) {
         if (lst.length > 0) {
           this.getEntidadEv.emit(lst[0]);

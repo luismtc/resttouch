@@ -19,13 +19,13 @@ export class FormAreaComponent implements OnInit {
 
   @Input() entidad: Area;
   @Output() entidadSavedEv = new EventEmitter();
-  public sedeUsr: number = 0;
+  public sedeUsr = 0;
   public lstAreas: Area[] = [];
-  public esMovil: boolean = false;
+  public esMovil = false;
   public impresoras: Impresora[] = [];
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     public dialog: MatDialog,
     private entidadSrvc: AreaService,
     private impresoraSrvc: ImpresoraService,
@@ -40,7 +40,7 @@ export class FormAreaComponent implements OnInit {
     this.loadImpresoras();
   }
 
-  loadAreas = () => this.entidadSrvc.get({ sede: this.sedeUsr }).subscribe(res => this.lstAreas = res);
+  loadAreas = () => this.entidadSrvc.get({ sede: this.sedeUsr, debaja: 1 }).subscribe(res => this.lstAreas = res);
 
   loadImpresoras = () => this.impresoraSrvc.get().subscribe(res => this.impresoras = res);
 
@@ -50,12 +50,12 @@ export class FormAreaComponent implements OnInit {
     // console.log(this.entidad); return;
     this.entidadSrvc.save(this.entidad).subscribe(res => {
       if (res.exito) {
-        this._snackBar.open(`${res.mensaje}`, 'Área', { duration: 3000 });
+        this.snackBar.open(`${res.mensaje}`, 'Área', { duration: 3000 });
         this.resetEntidad();
         this.loadAreas();
         this.entidadSavedEv.emit();
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Área', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Área', { duration: 3000 });
       }
     });
   }
@@ -71,7 +71,7 @@ export class FormAreaComponent implements OnInit {
       if (result) {
         // console.log(result);
         this.entidadSavedEv.emit();
-        this.entidadSrvc.get({ area: +this.entidad.area }).subscribe(res => {
+        this.entidadSrvc.get({ area: +this.entidad.area, debaja: 1 }).subscribe(res => {
           if (res && res.length > 0) {
             this.entidad = res[0];
           }

@@ -16,26 +16,26 @@ export class FormImpresoraComponent implements OnInit {
   @Output() impresoraSavedEv = new EventEmitter();
 
   constructor(
-  	private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private impresoraSrvc: ImpresoraService
   ) { }
 
   ngOnInit() {
   }
 
-  resetImpresora = () => this.impresora = { 
-    impresora:null, nombre:null, direccion_ip: null, ubicacion:null, bluetooth:0, sede:null
-  };
+  resetImpresora = () => this.impresora = {
+    impresora: null, nombre: null, direccion_ip: null, ubicacion: null, bluetooth: 0, sede: null, bluetooth_mac_address: null
+  }
 
   onSubmit = () => {
     this.impresoraSrvc.save(this.impresora).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res.exito) {
         this.impresoraSavedEv.emit();
         this.resetImpresora();
-        this._snackBar.open('Impresora agregada...', 'Impresora', { duration: 3000 });
+        this.snackBar.open('Impresora agregada...', 'Impresora', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Impresora', { duration: 3000 });        
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresora', { duration: 3000 });
       }
     });
   }

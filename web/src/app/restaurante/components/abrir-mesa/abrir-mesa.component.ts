@@ -17,7 +17,7 @@ import { GLOBAL } from '../../../shared/global';
 export class AbrirMesaComponent implements OnInit {
 
   public lstMeseros: Usuario[] = [];
-  public esMovil: boolean = false;
+  public esMovil = false;
 
   constructor(
     public dialogRef: MatDialogRef<AbrirMesaComponent>,

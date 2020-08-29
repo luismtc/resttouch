@@ -142,6 +142,23 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     }
   }
 
+  guardarMesa = (m: any) => {
+    this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
+      // console.log(res);
+      if (res.exito) {
+        this.socket.emit('refrescar:mesa', {});
+        this.mesaSeleccionada = res.comanda;
+        // console.log('m', m);
+        this.setEstatusMesa(m, +res.comanda.mesa.estatus);
+        this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
+        this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
+        this.toggleRightSidenav();
+      } else {
+        this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+      }
+    });
+  }
+
   openAbrirMesaDialog(m: any) {
     this.mesaSeleccionadaToOpen = {
       nombreArea: this.tabArea.textLabel,
@@ -163,33 +180,25 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       ]
     };
 
-    const abrirMesaRef = this.dialog.open(AbrirMesaComponent, {
-      width: '50%',
-      height: 'auto',
-      disableClose: true,
-      data: this.mesaSeleccionadaToOpen
-    });
+    if (+m.esmostrador === 0) {
+      const abrirMesaRef = this.dialog.open(AbrirMesaComponent, {
+        width: '50%',
+        height: 'auto',
+        disableClose: true,
+        data: this.mesaSeleccionadaToOpen
+      });
 
-    abrirMesaRef.afterClosed().subscribe((result: Comanda) => {
-      if (result) {
-        this.mesaSeleccionadaToOpen = result;
-        // console.log(JSON.stringify(this.mesaSeleccionada));
-        this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
-          // console.log(res);
-          if (res.exito) {
-            this.socket.emit('refrescar:mesa', {});
-            this.mesaSeleccionada = res.comanda;
-            // console.log('m', m);
-            this.setEstatusMesa(m, +res.comanda.mesa.estatus);
-            this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
-            this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
-            this.toggleRightSidenav();
-          } else {
-            this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
-          }
-        });
-      }
-    });
+      abrirMesaRef.afterClosed().subscribe((result: Comanda) => {
+        if (result) {
+          this.mesaSeleccionadaToOpen = result;
+          // console.log(JSON.stringify(this.mesaSeleccionada));
+          this.guardarMesa(m);
+        }
+      });
+    } else {
+      this.mesaSeleccionadaToOpen.mesero = this.ls.get(GLOBAL.usrTokenVar).idusr;
+      this.guardarMesa(m);
+    }
   }
 
   toggleRightSidenav = (obj: any = null) => {
@@ -200,6 +209,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
           this.loadAreas(true, { mesaenuso: obj });
         }
       } else if (res === 'open') {
+        // console.log('MESA SELECTED: ', this.mesaSeleccionada);
         if (this.mesaSeleccionada.cuentas.length === 1) {
           this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
         }

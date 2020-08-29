@@ -48,17 +48,27 @@ class Area extends CI_Controller
 	{
 		$this->load->model('Mesa_model');
 		$_GET['sede'] = $this->data->sede;
+
+		// Esto es para ver solo mesas disponibles
+		$verDeBaja = false;
+		if (isset($_GET['debaja'])) {
+			$verDeBaja = (int)$_GET['debaja'] === 1 ? true : false;
+			unset($_GET['debaja']);
+		}
+		// Fin de lo que es para ver solo mesas disponibles
+
 		$areas = $this->Area_model->buscar($_GET);
 		$datos = [];
+
 		if (is_array($areas)) {
 			foreach ($areas as $row) {
 				$area = new Area_model($row->area);
-				$row->mesas = $area->get_mesas();
+				$row->mesas = $area->get_mesas($verDeBaja);
 				$datos[] = $row;
 			}
 		} else {
 			$area = new Area_model($areas->area);
-			$areas->mesas = $area->get_mesas();
+			$areas->mesas = $area->get_mesas($verDeBaja);
 			$datos[] = $areas;
 		}
 

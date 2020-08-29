@@ -10,6 +10,12 @@ class Mesa_model extends General_Model {
 	public $posy;
 	public $tamanio;
 	public $estatus;
+	public $ancho = 72.0000;
+	public $alto = 72.0000;
+	public $esmostrador = 0;
+	public $vertical = 0;
+	public $impresora = 0;
+	public $debaja = 0;
 
 	public function __construct($id = "")
 	{

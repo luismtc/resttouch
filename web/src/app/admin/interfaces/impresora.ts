@@ -5,4 +5,5 @@ export interface Impresora {
     direccion_ip?: string;
     ubicacion?: string;
     bluetooth?: number;
+    bluetooth_mac_address?: string;
 }

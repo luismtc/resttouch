@@ -9,6 +9,7 @@ class Impresora_model extends General_model {
 	public $direccion_ip;
 	public $ubicacion;
 	public $bluetooth = 0;
+	public $bluetooth_mac_address;
 
 	public function __construct($id = "")
 	{

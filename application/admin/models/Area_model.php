@@ -19,7 +19,11 @@ class Area_model extends General_Model {
 		}
 	}
 
-	public function get_mesas() {
+	public function get_mesas($verDeBaja = false) {
+		if (!$verDeBaja) {
+			$this->db->where('debaja', 0);
+		}
+
 		return $this->db
 					->where("area", $this->area)
 					->get("mesa")

@@ -1,10 +1,11 @@
 <div #divMesa cdkDrag (cdkDragEnded)="dragEnded($event)" cdkDragBoundary=".areaPosicionamiento" [cdkDragDisabled]="dontAllowDrag" class="divMesa mat-elevation-z6" 
-    [ngClass]="{'disponible': +configuracion.estatus == 1, 'ocupada': +configuracion.estatus == 2}"
+    [ngClass]="{'disponible': +configuracion.estatus == 1 && +configuracion.debaja === 0, 'ocupada': +configuracion.estatus == 2 && +configuracion.debaja === 0, 'debaja': +configuracion.debaja === 1}"
     (click)="clickMesa()"
-    [style.width.px]="configuracion.tamanio" 
-    [style.height.px]="configuracion.tamanio" 
+    [style.width.px]="getAncho()" 
+    [style.height.px]="getAlto()" 
     [style.left.%]="configuracion.posx" 
     [style.top.%]="configuracion.posy"
-    [attr.disabled]="isDisabled ? true : null">
+    [attr.disabled]="isDisabled ? true : null"
+    [style.backgroundImage]="'url('+ urlImage +')'">
     <span>{{configuracion.numero}}</span>
 </div>

@@ -1,3 +1,5 @@
+import { Impresora } from '../../admin/interfaces/impresora';
+
 export interface Mesa {
     mesa: number;
     area: number;
@@ -6,6 +8,12 @@ export interface Mesa {
     posy: number;
     tamanio: number;
     estatus: number;
+    ancho?: number;
+    alto?: number;
+    esmostrador?: number;
+    vertical?: number;
+    impresora?: Impresora;
+    debaja?: number;
 }
 
 export interface MesaDisponible {
@@ -22,4 +30,10 @@ export interface MesaDisponible {
     posy: number;
     tamanio: number;
     estatus: number;
+    ancho?: number;
+    alto?: number;
+    esmostrador?: number;
+    vertical?: number;
+    impresora?: Impresora;
+    debaja?: number;
 }

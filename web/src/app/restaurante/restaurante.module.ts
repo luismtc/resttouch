@@ -69,6 +69,7 @@ import { CajacorteListaComponent } from './components/caja-corte/cajacorte-lista
 import { CajacorteFormComponent } from './components/caja-corte/cajacorte-form/cajacorte-form.component';
 import { ValidaPwdGerenteTurnoComponent } from './components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component';
 import { TrasladoMesaComponent } from './components/traslado-mesa/traslado-mesa.component';
+import { ConfiguraMesaComponent } from './components/area/configura-mesa/configura-mesa.component';
 
 @NgModule({
   declarations: [
@@ -77,11 +78,12 @@ import { TrasladoMesaComponent } from './components/traslado-mesa/traslado-mesa.
     FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent,
     PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent, FormTurnoTipoComponent,
     TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent,
-    CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent
+    CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent,
+    ConfiguraMesaComponent
   ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent, ValidaPwdGerenteTurnoComponent,
-    TrasladoMesaComponent
+    TrasladoMesaComponent, ConfiguraMesaComponent
   ],
   imports: [
     CommonModule,

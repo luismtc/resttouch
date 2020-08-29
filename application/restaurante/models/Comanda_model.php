@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Comanda_model extends General_Model {
+class Comanda_model extends General_Model
+{
 
 	public $comanda;
 	public $usuario;
@@ -20,7 +21,7 @@ class Comanda_model extends General_Model {
 		parent::__construct();
 		$this->setTabla("comanda");
 
-		if(!empty($id)) {
+		if (!empty($id)) {
 			$this->cargar($id);
 		} else {
 			$this->fhcreacion = date('Y-m-d H:i:s');
@@ -30,32 +31,31 @@ class Comanda_model extends General_Model {
 	public function getMesas()
 	{
 		return $this->db
-		->select("
+			->select("
 			b.mesa,
 			b.area,
 			b.numero,
 			b.posx,
 			b.posy,
 			b.tamanio,
-			b.estatus")
-		->join("mesa b", "a.mesa = b.mesa")
-		->where("a.comanda", $this->comanda)
-		->get("comanda_has_mesa a")
-		->row();
+			b.estatus, b.esmostrador, b.impresora")
+			->join("mesa b", "a.mesa = b.mesa")
+			->where("a.comanda", $this->comanda)
+			->get("comanda_has_mesa a")
+			->row();
 	}
 
 	public function setMesa($mesa)
 	{
 		$this->db
-		->set("comanda", $this->comanda)
-		->set("mesa", $mesa)
-		->insert("comanda_has_mesa");
+			->set("comanda", $this->comanda)
+			->set("mesa", $mesa)
+			->insert("comanda_has_mesa");
 
 		return $this->db->affected_rows() > 0;
-
 	}
 
-	public function guardarDetalle(Array $args)
+	public function guardarDetalle(array $args)
 	{
 		$id = isset($args['detalle_comanda']) ? $args['detalle_comanda'] : '';
 		$det = new Dcomanda_model($id);
@@ -69,10 +69,10 @@ class Comanda_model extends General_Model {
 			$cantidad = $args['cantidad'];
 		} else {
 			if (isset($args['articulo'])) {
-				if($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']){
+				if ($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']) {
 					$articulo = $det->articulo;
 					$cantidad = $args['cantidad'] - $det->cantidad;
-				} else if($det->articulo != $args['articulo']){				
+				} else if ($det->articulo != $args['articulo']) {
 					$articulo = $args['articulo'];
 					$cantidad = $args['cantidad'];
 				} else {
@@ -100,10 +100,10 @@ class Comanda_model extends General_Model {
 					$detr->guardar($dato);
 				}
 			}
-			if($result) {
+			if ($result) {
 				if (isset($args['articulo'])) {
 					$art->actualizarExistencia();
-					if ($oldart->articulo) {					
+					if ($oldart->articulo) {
 						$oldart->actualizarExistencia();
 					}
 				}
@@ -111,7 +111,7 @@ class Comanda_model extends General_Model {
 			}
 			$this->mensaje = $det->getMensaje();
 
-			return $result;	
+			return $result;
 		} else {
 			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
 		}
@@ -121,14 +121,14 @@ class Comanda_model extends General_Model {
 	{
 		$args['comanda'] = $this->comanda;
 		$det = $this->Dcomanda_model->buscar($args);
-		$datos = [] ;
-		if(is_array($det)) {
+		$datos = [];
+		if (is_array($det)) {
 			foreach ($det as $row) {
 				$detalle = new Dcomanda_model($row->detalle_comanda);
 				$row->articulo = $detalle->getArticulo();
 				$datos[] = $row;
 			}
-		} else if($det) {
+		} else if ($det) {
 			$detalle = new Dcomanda_model($det->detalle_comanda);
 			$det->articulo = $detalle->getArticulo();
 			$datos[] = $det;
@@ -137,12 +137,13 @@ class Comanda_model extends General_Model {
 		return $datos;
 	}
 
-	public function getCuentas(){
+	public function getCuentas()
+	{
 		$cuentas = [];
 		$tmp = $this->db
-		->where("comanda", $this->comanda)
-		->get("cuenta")
-		->result();
+			->where("comanda", $this->comanda)
+			->get("cuenta")
+			->result();
 
 		foreach ($tmp as $row) {
 			$cta = new Cuenta_model($row->cuenta);
@@ -156,29 +157,30 @@ class Comanda_model extends General_Model {
 	public function getTurno()
 	{
 		return $this->db
-		->select("
+			->select("
 		a.comanda,
 		a.usuario,
 		a.sede,
 		a.estatus,
 		a.domicilio,
 		t.*")
-		->where("a.comanda", $this->comanda)
-		->join("turno t", "a.turno = t.turno")
-		->get("comanda a")
-		->row();
+			->where("a.comanda", $this->comanda)
+			->join("turno t", "a.turno = t.turno")
+			->get("comanda a")
+			->row();
 	}
 
 	public function getComanda($args = [])
 	{
 		$tmp = $this->getTurno();
 		$mesa = $this->getMesas();
-		
-		if($mesa){
+
+		if ($mesa) {
 			$area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
 			$area->impresora = $this->Impresora_model->buscar(['impresora' => $area->impresora, "_uno" => true]);
 			$mesa->area = $area;
-			$tmp->mesa = $mesa;			
+			$mesa->impresora = $this->Impresora_model->buscar(['impresora' => $mesa->impresora, "_uno" => true]);
+			$tmp->mesa = $mesa;
 		}
 
 		$det = $this->getDetalle($args);
@@ -205,34 +207,34 @@ class Comanda_model extends General_Model {
 		$tmp->factura = $this->getFactura();
 		$tmp->origen_datos = $this->getOrigenDatos();
 		$tmp->fhcreacion = empty($tmp->origen_datos['fhcreacion']) ?  $this->fhcreacion : $tmp->origen_datos['fhcreacion'];
-		
+
 		return $tmp;
 	}
 
-	public function getComandas($args =[])
+	public function getComandas($args = [])
 	{
 		if (isset($args['fdel']) && isset($args['fal'])) {
 			$this->db
-				 ->where('t.inicio >=', $args['fdel'])
-				 ->where('t.fin <= ', $args['fal']);
+				->where('t.inicio >=', $args['fdel'])
+				->where('t.fin <= ', $args['fal']);
 		}
 
 		$this->db
-			 ->select("a.comanda")
-			 ->from("comanda a")
-			 ->join("turno t", "a.turno = t.turno")
-			 ->where("t.sede", $args['sede'])
-			 ->group_by("a.comanda");
+			->select("a.comanda")
+			->from("comanda a")
+			->join("turno t", "a.turno = t.turno")
+			->where("t.sede", $args['sede'])
+			->group_by("a.comanda");
 
-		if(isset($args["domicilio"])){
-			$this->db				 
-				 ->join("detalle_comanda b", "a.comanda = b.comanda")
-				 ->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
-				 ->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
-				 ->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
-				 ->join("factura f", "f.factura = e.factura", "left")
-				 ->where('a.domicilio', $args['domicilio'])
-				 ->where("f.fel_uuid is null");
+		if (isset($args["domicilio"])) {
+			$this->db
+				->join("detalle_comanda b", "a.comanda = b.comanda")
+				->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
+				->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
+				->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
+				->join("factura f", "f.factura = e.factura", "left")
+				->where('a.domicilio', $args['domicilio'])
+				->where("f.fel_uuid is null");
 		}
 
 		$lista = [];
@@ -247,25 +249,26 @@ class Comanda_model extends General_Model {
 		return $lista;
 	}
 
-	public function getFactura(){
+	public function getFactura()
+	{
 		$tmp = $this->db
-		->select("a.factura")
-		->from("factura a")
-		->join("detalle_factura b", "a.factura = b.factura")
-		->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
-		->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
-		->join("cuenta e", "e.cuenta = d.cuenta_cuenta")
-		->where("e.comanda", $this->getPK())
-		->group_by("a.factura")
-		->get()
-		->row();
+			->select("a.factura")
+			->from("factura a")
+			->join("detalle_factura b", "a.factura = b.factura")
+			->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
+			->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")
+			->join("cuenta e", "e.cuenta = d.cuenta_cuenta")
+			->where("e.comanda", $this->getPK())
+			->group_by("a.factura")
+			->get()
+			->row();
 
 		if ($tmp) {
 			$fac = new Factura_model($tmp->factura);
-			$fac->total = $fac->getTotal();	
+			$fac->total = $fac->getTotal();
 			return $fac;
 		}
-		
+
 		return null;
 	}
 
@@ -297,7 +300,7 @@ class Comanda_model extends General_Model {
 
 			if ($nombre == 'shopify') {
 				$datos["numero_orden"] = isset($json->order_number) ? $json->order_number : '';
-				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';				
+				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
 				$datos['fhcreacion'] = isset($json->created_at) ? $json->created_at : '';
 			} else if ($nombre == 'api') {
 				$datos["numero_orden"] = $json->numero_orden;
@@ -305,7 +308,7 @@ class Comanda_model extends General_Model {
 				if (isset($json->transferencia)) {
 					$datos['transferencia'] = $json->transferencia;
 				}
-				
+
 				if (isset($json->direccion_entrega)) {
 					if ($json->direccion_entrega) {
 						$json->cliente->direccion = $json->direccion_entrega;
@@ -321,18 +324,18 @@ class Comanda_model extends General_Model {
 	public function getComandasAbiertas($args = [])
 	{
 		$tmp = $this->db
-					->select("a.comanda")
-					->from("comanda a")
-					->join("detalle_comanda b", "a.comanda = b.comanda")
-					->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
-					->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
-					->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
-					->join("factura f", "f.factura = e.factura", "left")
-					->where("a.turno", $args['turno'])
-					->where("f.fel_uuid is null")
-					->group_by("a.comanda")
-					->get();
-		
+			->select("a.comanda")
+			->from("comanda a")
+			->join("detalle_comanda b", "a.comanda = b.comanda")
+			->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
+			->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
+			->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
+			->join("factura f", "f.factura = e.factura", "left")
+			->where("a.turno", $args['turno'])
+			->where("f.fel_uuid is null")
+			->group_by("a.comanda")
+			->get();
+
 		return $tmp->num_rows() > 0;
 	}
 
@@ -351,14 +354,16 @@ class Comanda_model extends General_Model {
 		]);
 	}
 
-	public function cierra_estacion($comanda) {
+	public function cierra_estacion($comanda)
+	{
 		$query = "UPDATE comanda SET comandaenuso = 0 WHERE comanda = $comanda";
 		return $this->db->simple_query($query);
 	}
 
-	public function trasladar_mesa($mesa, $comanda) {
+	public function trasladar_mesa($mesa, $comanda)
+	{
 		$query = "UPDATE comanda_has_mesa SET mesa = $mesa WHERE comanda = $comanda";
-		return $this->db->simple_query($query);		
+		return $this->db->simple_query($query);
 	}
 }
 

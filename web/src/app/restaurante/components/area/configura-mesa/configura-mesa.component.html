@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Configuración de mesa {{mesa.numero}}</h1>
+<div mat-dialog-content>
+    <form #frmConfigMesa="ngForm" novalidate>
+        <mat-form-field class="fullWidth">
+            <mat-label>Impresora</mat-label>
+            <mat-select name="impresora" [(ngModel)]="mesa.impresora">
+                <mat-option *ngFor="let imp of impresoras" [value]="imp.impresora">
+                    {{imp.nombre}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cancelar()" color="warn">
+        Cancelar
+    </button>
+    <button mat-raised-button (click)="guardarConfiguracion()" color="accent" [disabled]="!frmConfigMesa.form.valid">
+        Guardar        
+    </button>
+</div>

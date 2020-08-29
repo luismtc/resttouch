@@ -15,12 +15,18 @@
             <mat-form-field class="fullWidth">
                 <input matInput type="text" placeholder="Ubicación" name="ubicacion" [(ngModel)]="impresora.ubicacion">
             </mat-form-field>
-            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+impresora.bluetooth">¿Es bluetooth?</mat-checkbox>
+            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+impresora.bluetooth">¿Es bluetooth?
+            </mat-checkbox>
+            <mat-form-field class="fullWidth" *ngIf="+impresora.bluetooth === 1">
+                <input matInput type="text" placeholder="Bluetooth MAC Address" name="bluetooth_mac_address" [(ngModel)]="impresora.bluetooth_mac_address" [required]="+impresora.bluetooth === 1">
+            </mat-form-field>
             <div align="end">
-                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmImpresora.form.valid">
+                <button mat-raised-button type="submit" color="accent" class="btnAccion"
+                    [disabled]="!frmImpresora.form.valid">
                     Guardar
                 </button>
-                <button mat-raised-button type="button" color="accent" (click)="resetImpresora()" *ngIf="impresora.impresora">
+                <button mat-raised-button type="button" color="accent" (click)="resetImpresora()"
+                    *ngIf="impresora.impresora">
                     Nueva
                 </button>
             </div>
