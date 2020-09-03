@@ -125,6 +125,10 @@ class Cuenta_model extends General_Model {
 			$this->db->where('b.impreso', $args['impreso']);
 		}
 
+		if (isset($args["cocinado"])) {
+			$this->db->where('b.cocinado', $args['cocinado']);
+		}
+
 		$tmp = $this->db
 		->select("b.*, d.descuento, a.*")
 		->join("detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")

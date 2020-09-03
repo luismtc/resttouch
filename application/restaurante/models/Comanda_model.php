@@ -118,7 +118,7 @@ class Comanda_model extends General_Model
 	}
 
 	public function getDetalle($args = [])
-	{
+	{		
 		$args['comanda'] = $this->comanda;
 		$det = $this->Dcomanda_model->buscar($args);
 		$datos = [];
@@ -137,7 +137,7 @@ class Comanda_model extends General_Model
 		return $datos;
 	}
 
-	public function getCuentas()
+	public function getCuentas($args = [])
 	{
 		$cuentas = [];
 		$tmp = $this->db
@@ -147,7 +147,7 @@ class Comanda_model extends General_Model
 
 		foreach ($tmp as $row) {
 			$cta = new Cuenta_model($row->cuenta);
-			$row->productos = $cta->getDetalle();
+			$row->productos = $cta->getDetalle($args);
 			$cuentas[] = $row;
 		}
 
@@ -203,7 +203,7 @@ class Comanda_model extends General_Model
 		}
 
 		$tmp->total = suma_field($det, 'total');
-		$tmp->cuentas = $this->getCuentas();
+		$tmp->cuentas = $this->getCuentas($args);
 		$tmp->factura = $this->getFactura();
 		$tmp->origen_datos = $this->getOrigenDatos();
 		$tmp->fhcreacion = empty($tmp->origen_datos['fhcreacion']) ?  $this->fhcreacion : $tmp->origen_datos['fhcreacion'];
@@ -226,15 +226,22 @@ class Comanda_model extends General_Model
 			->where("t.sede", $args['sede'])
 			->group_by("a.comanda");
 
-		if (isset($args["domicilio"])) {
+		if (isset($args["domicilio"]) || isset($args['cocinado'])) {						
 			$this->db
 				->join("detalle_comanda b", "a.comanda = b.comanda")
 				->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
 				->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
-				->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
-				->join("factura f", "f.factura = e.factura", "left")
-				->where('a.domicilio', $args['domicilio'])
+				->join("detalle_factura e", "e.detalle_factura = d.detalle_factura", (isset($args['cocinado']) ? "left" : ''))
+				->join("factura f", "f.factura = e.factura", "left")				
 				->where("f.fel_uuid is null");
+
+				if(isset($args["domicilio"])) {
+					$this->db->where('a.domicilio', $args['domicilio']);
+				}
+
+				if(isset($args['cocinado'])) {
+					$this->db->where('b.cocinado', $args['cocinado']);
+				}
 		}
 
 		$lista = [];

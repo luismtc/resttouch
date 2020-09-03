@@ -349,6 +349,25 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	function get_comanda_cocina() {
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		$datos = [];
+
+		$tmp = $this->Comanda_model->getComandas([
+			'sede' => $data->sede,
+			'cocinado' => 0
+		]);
+
+		foreach ($tmp as $row) {
+			$comanda = new Comanda_model($row->comanda);
+			$datos[] = $comanda->getComanda(["_usuario" => $data->idusuario, 'cocinado' => 0]);
+		}
+
+		$this->output->set_output(json_encode($datos));
+	}
+
 	public function imprimir($idCta, $pdf = 0)
 	{
 		$cta = new Cuenta_model($idCta);
