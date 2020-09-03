@@ -171,8 +171,12 @@ export class FormProductoComponent implements OnInit {
     this.articuloSrvc.saveArticuloDetalle(this.receta).subscribe(res => {
       // console.log(res);
       if (res) {
-        this.loadRecetas();
-        this.resetReceta();
+        if (res.exito) {
+          this.loadRecetas();
+          this.resetReceta();
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
+        }
       }
     });
   }

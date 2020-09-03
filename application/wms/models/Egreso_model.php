@@ -68,6 +68,7 @@ class Egreso_model extends General_Model {
 			}
 		}
 		$art = new Articulo_model($articulo);
+		$art->actualizarExistencia();
 		$oldart = new Articulo_model($det->articulo);
 		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
 			$args['egreso'] = $this->egreso;

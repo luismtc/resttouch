@@ -13,7 +13,7 @@ class Comanda_model extends General_Model
 	public $comanda_origen;
 	public $comanda_origen_datos;
 	public $mesero;
-	public $comandaenuso = 0;
+	//public $comandaenuso = 0;
 	public $fhcreacion;
 
 	public function __construct($id = '')
@@ -83,26 +83,14 @@ class Comanda_model extends General_Model
 		}
 		$art = new Articulo_model($articulo);
 		$oldart = new Articulo_model($det->articulo);
+		$art->actualizarExistencia();
 		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
 			$result = $det->guardar($args);
 			$receta = $art->getReceta();
-			if (count($receta) > 0) {
-				foreach ($receta as $rec) {
-					$detr = new Dcomanda_model();
-					$dato = [
-						"comanda" => $this->getPK(),
-						"articulo" => $rec->articulo->articulo,
-						"cantidad" => $rec->cantidad,
-						"precio" => 0,
-						"total" => 0,
-						"impreso" => 0
-					];
-					$detr->guardar($dato);
-				}
-			}
+
 			if ($result) {
+				$art->actualizarExistencia();
 				if (isset($args['articulo'])) {
-					$art->actualizarExistencia();
 					if ($oldart->articulo) {
 						$oldart->actualizarExistencia();
 					}
@@ -177,7 +165,7 @@ class Comanda_model extends General_Model
 
 		if ($mesa) {
 			$area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
-			$area->impresora = $this->Impresora_model->buscar(['impresora' => $area->impresora, "_uno" => true]);
+			//$area->impresora = $this->Impresora_model->buscar(['impresora' => $area->impresora, "_uno" => true]);
 			$mesa->area = $area;
 			$mesa->impresora = $this->Impresora_model->buscar(['impresora' => $mesa->impresora, "_uno" => true]);
 			$tmp->mesa = $mesa;

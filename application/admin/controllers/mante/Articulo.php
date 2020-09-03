@@ -95,13 +95,17 @@ class Articulo extends CI_Controller
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$det = $art->guardarReceta($req, $id);
-			if ($det) {
-				$datos['exito'] = true;
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['detalle'] = $det;
+			if ($req['cantidad'] > 0) {
+				$det = $art->guardarReceta($req, $id);
+				if ($det) {
+					$datos['exito'] = true;
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['detalle'] = $det;
+				} else {
+					$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+				}
 			} else {
-				$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+				$datos['mensaje'] = "La cantidad debe ser mayor a cero";
 			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";

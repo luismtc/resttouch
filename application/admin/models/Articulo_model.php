@@ -77,18 +77,47 @@ class Articulo_model extends General_model {
 		return $datos;
 	}
 
+	public function getVentaReceta()
+	{
+		$comandas = $this->db
+						 ->select("sum(ifnull(a.cantidad, 0)) as total")
+						 ->join("articulo b", "a.articulo = b.articulo")
+						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+						 ->join("categoria d", "d.categoria = c.categoria")
+						 ->join("comanda e", "e.comanda = a.comanda")
+						 ->join("turno f", "e.turno = f.turno and f.sede = d.sede")
+						 ->where("a.articulo", $this->articulo)
+						 ->get("detalle_comanda a")
+						 ->row();//total ventas comanda
+
+		$facturas = $this->db
+						 ->select("sum(ifnull(a.cantidad, 0)) as total")
+						 ->join("articulo b", "a.articulo = b.articulo")
+						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+						 ->join("categoria d", "d.categoria = c.categoria")
+						 ->join("detalle_factura_detalle_cuenta e", "a.detalle_factura = e.detalle_factura", "left")
+						 ->join("factura f", "a.factura = f.factura and f.sede = d.sede")
+						 ->where("a.articulo", $this->articulo)
+						 ->where("e.detalle_factura_detalle_cuenta is null")
+						 ->get("detalle_factura a")
+						 ->row();//total ventas factura manual
+		return $comandas->total + $facturas->total;
+	}
+
 	function actualizarExistencia()
 	{
 		$receta = $this->getReceta();
 
 		if (count($receta) > 0) {
 			$grupos = [];
-			foreach ($receta as $row) {
-				$existR = $this->obtenerExistencia($row->articulo->articulo);
+			foreach ($receta as $row) {				
+				$existR = $this->obtenerExistencia($row->articulo->articulo, true);
+				$venta = $this->getVentaReceta();
+				$existR = $existR - ($venta * $row->cantidad);
 				$art = new Articulo_model($row->articulo->articulo);
 				$art->guardar(['existencias' => $existR]);
 
-				$grupos[] = intdiv($art->existencias, $row->cantidad);
+				$grupos[] = (int)($art->existencias / $row->cantidad);
 			}
 
 			$exist = min($grupos);
@@ -99,7 +128,7 @@ class Articulo_model extends General_model {
 		return $this->guardar(['existencias' => $exist]);
 	}
 
-	public function obtenerExistencia($articulo)
+	public function obtenerExistencia($articulo, $receta = false)
 	{
 
 		$ingresos = $this->db
@@ -120,30 +149,14 @@ class Articulo_model extends General_model {
 						->get("egreso_detalle")
 						->row();//total egresos wms
 
-		$comandas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0)) as total")
-						 ->join("articulo b", "a.articulo = b.articulo")
-						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
-						 ->join("categoria d", "d.categoria = c.categoria")
-						 ->join("comanda e", "e.comanda = a.comanda")
-						 ->join("turno f", "e.turno = f.turno and f.sede = d.sede")
-						 ->where("a.articulo", $articulo)
-						 ->get("detalle_comanda a")
-						 ->row();//total ventas comanda
+		if (!$receta) {
+			$venta = $this->getVentaReceta();
+		} else {
+			$venta = 0;
+		}
 
-		$facturas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0)) as total")
-						 ->join("articulo b", "a.articulo = b.articulo")
-						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
-						 ->join("categoria d", "d.categoria = c.categoria")
-						 ->join("detalle_factura_detalle_cuenta e", "a.detalle_factura = e.detalle_factura", "left")
-						 ->join("factura f", "a.factura = f.factura and f.sede = d.sede")
-						 ->where("a.articulo", $articulo)
-						 ->where("e.detalle_factura_detalle_cuenta is null")
-						 ->get("detalle_factura a")
-						 ->row();//total ventas factura manual
 
-		return $ingresos->total - ($egresos->total + $comandas->total + $facturas->total);
+		return $ingresos->total - ($egresos->total + $venta);
 
 		
 	}

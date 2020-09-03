@@ -57,7 +57,7 @@ class Factura_model extends General_model {
 		}
 		$art = new Articulo_model($articulo);
 		$oldart = new Articulo_model($det->articulo);
-
+		$art->actualizarExistencia();
 		if (isset($args['detalle_cuenta']) ||empty($menu) || !$validar || $art->existencias >= $cantidad) {
 			$result = $det->guardar($args);
 

@@ -11,6 +11,7 @@ class Egreso extends CI_Controller {
         	'EDetalle_model',
         	'Ingreso_model',
         	'IDetalle_Model',
+        	'Receta_model',
         	'Articulo_model',
         	'Catalogo_model'
         ]);
