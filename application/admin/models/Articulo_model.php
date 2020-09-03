@@ -106,26 +106,28 @@ class Articulo_model extends General_model {
 
 	function actualizarExistencia()
 	{
-		$receta = $this->getReceta();
+		if ($this->getPK()) {
+			$receta = $this->getReceta();
 
-		if (count($receta) > 0) {
-			$grupos = [];
-			foreach ($receta as $row) {				
-				$existR = $this->obtenerExistencia($row->articulo->articulo, true);
-				$venta = $this->getVentaReceta();
-				$existR = $existR - ($venta * $row->cantidad);
-				$art = new Articulo_model($row->articulo->articulo);
-				$art->guardar(['existencias' => $existR]);
+			if (count($receta) > 0) {
+				$grupos = [];
+				foreach ($receta as $row) {				
+					$existR = $this->obtenerExistencia($row->articulo->articulo, true);
+					$venta = $this->getVentaReceta();
+					$existR = $existR - ($venta * $row->cantidad);
+					$art = new Articulo_model($row->articulo->articulo);
+					$art->guardar(['existencias' => $existR]);
 
-				$grupos[] = (int)($art->existencias / $row->cantidad);
+					$grupos[] = (int)($art->existencias / $row->cantidad);
+				}
+
+				$exist = min($grupos);
+			} else {
+				$exist = $this->obtenerExistencia($this->articulo);
 			}
 
-			$exist = min($grupos);
-		} else {
-			$exist = $this->obtenerExistencia($this->articulo);
+			return $this->guardar(['existencias' => $exist]);
 		}
-
-		return $this->guardar(['existencias' => $exist]);
 	}
 
 	public function obtenerExistencia($articulo, $receta = false)
