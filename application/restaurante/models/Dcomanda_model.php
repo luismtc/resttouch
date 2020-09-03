@@ -11,6 +11,7 @@ class Dcomanda_model extends General_Model {
 	public $impreso = false;
 	public $total;
 	public $notas;
+	public $cocinado = 0;
 
 	public function __construct($id = '')
 	{
