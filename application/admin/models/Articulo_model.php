@@ -120,10 +120,11 @@ class Articulo_model extends General_model {
 			$principal = $this->getReceta(["_principal" => true]);
 			if (count($receta) > 0) {
 				$grupos = [];
+				$venta = $this->getVentaReceta();
 				foreach ($receta as $row) {				
+					$ventaR = $this->getVentaReceta($row->articulo->articulo);
 					$existR = $this->obtenerExistencia($row->articulo->articulo, true);
-					$venta = $this->getVentaReceta();
-					$existR = $existR - ($venta * $row->cantidad);
+					$existR = $existR - ($venta * $row->cantidad) - $ventaR;
 					$art = new Articulo_model($row->articulo->articulo);
 					$art->guardar(['existencias' => $existR]);
 
@@ -176,8 +177,141 @@ class Articulo_model extends General_model {
 
 
 		return $ingresos->total - ($egresos->total + $venta);
+	}
 
-		
+	function getIngresoEgreso($articulo, $args=[])
+	{
+		if (isset($args['sede'])) {
+			$this->db->where('f.sede', $args['sede']);
+		}
+
+		if ($args['tipo'] == 1) {
+			$ingresos = $this->db
+						 ->select("
+						 	sum(ifnull(a.cantidad, 0)) as total")
+						 ->join("articulo b", "a.articulo = b.articulo")
+						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+						 ->join("categoria d", "d.categoria = c.categoria")
+						 ->join("ingreso e", "e.ingreso = a.ingreso")
+						 ->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
+						 ->where("a.articulo", $articulo)
+						 ->where("date(e.fecha) <= ", $args['fecha'])
+						 ->get("ingreso_detalle a")
+						 ->row(); //total ingresos
+
+			return $ingresos->total;
+		} else {
+			$egresos = $this->db
+						->select("sum(ifnull(cantidad, 0)) as total")
+						->join("articulo b", "a.articulo = b.articulo")
+						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+						->join("categoria d", "d.categoria = c.categoria")
+						->join("egreso e", "e.egreso = a.egreso")
+						->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
+						->where("a.articulo", $articulo)
+						->get("egreso_detalle a")
+						->row();//total egresos wms
+
+			return $egresos->total;
+		}
+	}
+
+	function getComandaFactura($articulo, $args = [])
+	{
+		if (isset($args['sede'])) {
+			$this->db->where('f.sede', $args['sede']);
+		}
+
+		if ($args['tipo'] == 1) {
+			$comandas = $this->db
+						 ->select("sum(ifnull(a.cantidad, 0)) as total")
+						 ->join("articulo b", "a.articulo = b.articulo")
+						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+						 ->join("categoria d", "d.categoria = c.categoria")
+						 ->join("comanda e", "e.comanda = a.comanda")
+						 ->join("turno f", "e.turno = f.turno and f.sede = d.sede")
+						 ->where("a.articulo", $articulo)
+						 ->get("detalle_comanda a")
+						 ->row();//total ventas comanda	
+
+			return $comandas->total;
+		} else {
+			$facturas = $this->db
+							 ->select("sum(ifnull(a.cantidad, 0)) as total")
+							 ->join("articulo b", "a.articulo = b.articulo")
+							 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+							 ->join("categoria d", "d.categoria = c.categoria")
+							 ->join("detalle_factura_detalle_cuenta e", "a.detalle_factura = e.detalle_factura", "left")
+							 ->join("factura f", "a.factura = f.factura and f.sede = d.sede")
+							 ->where("a.articulo", $articulo)
+							 ->where("e.detalle_factura_detalle_cuenta is null")
+							 ->get("detalle_factura a")
+							 ->row();//total ventas factura manual
+
+			return $facturas->total;
+		}
+	}
+
+	public function getExistencias($args)
+	{
+		$receta = $this->getReceta();
+		$principal = $this->getReceta(["_principal" => true]);
+		$ingresos = 0;
+		$egresos = 0;
+		$comandas = 0;
+		$facturas = 0;
+
+		if (count($receta) > 0) {
+			$grupos = [];
+			$args['tipo'] = 1;
+			$comandas = $this->getComandaFactura($this->getPK(), $args);
+			$args['tipo'] = 2;
+			$facturas = $this->getComandaFactura($this->getPK(), $args);
+				foreach ($receta as $row) {				
+					$args['tipo'] = 1;
+					$ingr = $this->getIngresoEgreso($row->articulo->articulo, $args);
+					$args['tipo'] = 2;
+					$egr = $this->getIngresoEgreso($row->articulo->articulo, $args);
+
+					$grupos[] = (int)($ingr / $row->cantidad);
+				}
+
+				$ingresos = min($grupos);
+		} else if (count($principal) > 0) {
+			$grupos = [];
+			$args['tipo'] = 1;
+			$ingresos = $this->getIngresoEgreso($this->getPK(), $args);
+			$comandas = $this->getComandaFactura($this->getPK(), $args);
+			$args['tipo'] = 2;
+			$egresos = $this->getIngresoEgreso($this->getPK(), $args);
+			$facturas = $this->getComandaFactura($this->getPK(), $args);
+
+			foreach ($principal as $row) {
+				$args['tipo'] = 1;
+				$venta = $this->getComandaFactura($row->receta, $args);
+				$comandas += ($venta * $row->cantidad);
+				$args['tipo'] = 2;
+				$venta = $this->getComandaFactura($row->receta, $args);
+				$facturas = ($venta * $row->cantidad);
+			}
+		} else {
+			$args['tipo'] = 1;
+			$ingresos = $this->getIngresoEgreso($this->getPK(), $args);
+			$comandas = $this->getComandaFactura($this->getPK(), $args);
+			$args['tipo'] = 2;
+			$egresos = $this->getIngresoEgreso($this->getPK(), $args);
+			$facturas = $this->getComandaFactura($this->getPK(), $args);
+		}
+
+		return (object)[
+			"articulo" => $this,
+			"ingresos" => $ingresos,
+			"egresos" => $egresos,
+			"comandas" => $comandas,
+			"facturas" => $facturas,
+			"total_egresos" => $comandas + $facturas + $egresos,
+			"existencia" => $this->existencias 
+		];
 	}
 
 	public function buscarArticulo($args = [])

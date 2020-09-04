@@ -42,8 +42,8 @@
 				$total_egreso += $row->total_egresos;
 			?>
 				<tr>
-					<td><?php echo (!empty($row->codigo) ? $row->codigo : $row->articulo)?></td>
-					<td><?php echo $row->descripcion?></td>
+					<td><?php echo (!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo)?></td>
+					<td><?php echo $row->articulo->descripcion?></td>
 					<td class="text-right"><?php echo number_format($row->ingresos,2)?></td>
 					<td class="text-right"><?php echo number_format($row->egresos,2)?></td>
 					<td class="text-right"><?php echo number_format($row->comandas,3)?></td>

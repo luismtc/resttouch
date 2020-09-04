@@ -6,7 +6,7 @@ class Reporte extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('Reporte_model');
+		$this->load->model(['Reporte_model', 'Articulo_model', 'Receta_model']);
 
 		$this->load->helper(['jwt', 'authorization']);
 
@@ -19,18 +19,26 @@ class Reporte extends CI_Controller {
 	public function existencia()
 	{
 		$rpt = new Reporte_model();
-
+		$data = [];
 		if (!isset($_GET['sede'])) {			
 			$_GET['sede'] = $this->data->sede;
+			$data['sede'] = $this->data->sede;
 		}
 
-		$exist = $rpt->getExistencias($_GET);
+		$arts = $this->Catalogo_model->getArticulo($data);
 		$args = [
-			"reg" => $exist,
 			"cliente" => "",
 			"sub_cuenta" => "",
 			"fecha" => formatoFecha($this->input->get('fecha'), 2)
 		];
+
+		foreach ($arts as $row) {
+			$art = new Articulo_model($row->articulo);
+			$art->actualizarExistencia();
+			$args["reg"][] = $art->getExistencias($_GET);
+
+		}
+
 		$pdf   = new \Mpdf\Mpdf([
 			'tempDir' => sys_get_temp_dir(), //produccion
 			"format" => "letter", 
