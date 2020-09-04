@@ -368,6 +368,28 @@ class Comanda extends CI_Controller {
 		$this->output->set_output(json_encode($datos));
 	}
 
+	public function set_cocinado($idcomanda) {
+		$datos = ['exito' => true];
+		$errores = '';
+		$com = new Comanda_model($idcomanda);
+		$detalle = $com->getDetalle(['cocinado' => 0]);
+
+		foreach($detalle as $det) {
+			$ld = new Dcomanda_model($det->detalle_comanda);
+			$exito = $ld->guardar(['cocinado' => 1]);
+			if (!$exito) {
+				$datos['exito'] = false;				
+				if ($errores !== '') {
+					$errores .= '; ';
+				}
+				$errores .= $ld->getMensaje();
+			}
+		}
+		$datos['mensaje'] = $datos['exito'] ? 'Datos actualizados con éxito.' : $errores;
+		
+		$this->output->set_output(json_encode($datos));
+	}
+
 	public function imprimir($idCta, $pdf = 0)
 	{
 		$cta = new Cuenta_model($idCta);

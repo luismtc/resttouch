@@ -90,6 +90,10 @@ $config['menu'] = [
 					5 => [
 						'nombre' => 'Corte de caja',
 						'link' => '/restaurante/cajacorte'
+					],
+					6 => [
+						'nombre' => 'Cocina',
+						'link' => '/restaurante/trancocina'
 					]
 				]
 			],
