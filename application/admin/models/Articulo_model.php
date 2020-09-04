@@ -286,14 +286,7 @@ class Articulo_model extends General_model {
 			$egresos = $this->getIngresoEgreso($this->getPK(), $args);
 			$facturas = $this->getComandaFactura($this->getPK(), $args);
 
-			foreach ($principal as $row) {
-				$args['tipo'] = 1;
-				$venta = $this->getComandaFactura($row->receta, $args);
-				$comandas += ($venta * $row->cantidad);
-				$args['tipo'] = 2;
-				$venta = $this->getComandaFactura($row->receta, $args);
-				$facturas = ($venta * $row->cantidad);
-			}
+			
 		} else {
 			$args['tipo'] = 1;
 			$ingresos = $this->getIngresoEgreso($this->getPK(), $args);
