@@ -56,7 +56,11 @@ class Articulo_model extends General_model {
 
 	public function getReceta($args = [])
 	{
-		$args['receta'] = $this->articulo;
+		if (isset($args['_principal'])) {
+			$args['articulo'] = $this->articulo;
+		} else {
+			$args['receta'] = $this->articulo;
+		}
 		$args['anulado'] = 0;
 		$det = $this->Receta_model->buscar($args);
 		$datos = [] ;
@@ -77,8 +81,13 @@ class Articulo_model extends General_model {
 		return $datos;
 	}
 
-	public function getVentaReceta()
+	public function getVentaReceta($art = null)
 	{
+		$articulo = $this->articulo;
+		if ($art !== null) {
+			$articulo = $art;
+		}
+
 		$comandas = $this->db
 						 ->select("sum(ifnull(a.cantidad, 0)) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
@@ -86,7 +95,7 @@ class Articulo_model extends General_model {
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("comanda e", "e.comanda = a.comanda")
 						 ->join("turno f", "e.turno = f.turno and f.sede = d.sede")
-						 ->where("a.articulo", $this->articulo)
+						 ->where("a.articulo", $articulo)
 						 ->get("detalle_comanda a")
 						 ->row();//total ventas comanda
 
@@ -97,7 +106,7 @@ class Articulo_model extends General_model {
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("detalle_factura_detalle_cuenta e", "a.detalle_factura = e.detalle_factura", "left")
 						 ->join("factura f", "a.factura = f.factura and f.sede = d.sede")
-						 ->where("a.articulo", $this->articulo)
+						 ->where("a.articulo", $articulo)
 						 ->where("e.detalle_factura_detalle_cuenta is null")
 						 ->get("detalle_factura a")
 						 ->row();//total ventas factura manual
@@ -108,7 +117,7 @@ class Articulo_model extends General_model {
 	{
 		if ($this->getPK()) {
 			$receta = $this->getReceta();
-
+			$principal = $this->getReceta(["_principal" => true]);
 			if (count($receta) > 0) {
 				$grupos = [];
 				foreach ($receta as $row) {				
@@ -122,6 +131,14 @@ class Articulo_model extends General_model {
 				}
 
 				$exist = min($grupos);
+			} else if (count($principal) > 0){
+				$grupos = [];
+				$exist = $this->obtenerExistencia($this->articulo);
+				foreach ($principal as $row) {
+					$venta = $this->getVentaReceta($row->receta);
+					$egr = $venta * $row->cantidad;
+					$exist = $exist - $egr;
+				}
 			} else {
 				$exist = $this->obtenerExistencia($this->articulo);
 			}
