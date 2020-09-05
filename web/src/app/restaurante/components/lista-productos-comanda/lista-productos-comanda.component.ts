@@ -55,9 +55,11 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    /*
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
     }
+    */
   }
 
   ngDoCheck() {
@@ -83,6 +85,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
         this.productoRemovedEv.emit({ listaProductos: this.listaProductos, comanda: res.comanda });
         if (+p.cantidad === 0) {
           this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+          this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
         }
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });

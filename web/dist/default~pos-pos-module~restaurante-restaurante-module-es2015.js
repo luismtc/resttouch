@@ -518,7 +518,7 @@ EcoFabSpeedDialModule.decorators = [
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>\n  Cobrar cuenta de {{data.cuenta}}\n  <small *ngIf=\"clienteSelected && !!clienteSelected.cliente\">\n     - Factura a nombre de {{clienteSelected.nombre}}\n  </small>\n</h1>\n<div mat-dialog-content style=\"height: 650px;\">\n  <div class=\"row\">\n    <div class=\"col m5 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <app-lista-cliente #lstClientes (getClienteEv)=\"setClienteFacturar($event)\" [showAddButton]=\"true\"></app-lista-cliente>\n    </div>\n    <div class=\"col m3 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <table class=\"table table-sm table-borderless table-striped\">\n        <tbody>\n          <tr *ngFor=\"let p of inputData.productosACobrar; let i = index;\">\n            <td>{{p.cantidad}}&nbsp;{{p.nombre || p.articulo.descripcion}}</td>\n            <td class=\"text-right\">{{(p.cantidad * p.precio) | number: '1.2-2'}}</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n    <div class=\"col m4 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <form #frmFormasPago=\"ngForm\" novalidate>\n        <mat-form-field class=\"fullWidth\">\n          <mat-label>Forma de pago</mat-label>\n          <mat-select name=\"forma_pago\" [(ngModel)]=\"formaPago.forma_pago\" cdkFocusInitial required>\n            <mat-option *ngFor=\"let fp of lstFormasPago\" [value]=\"fp.forma_pago\">\n              {{fp.descripcion}}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <!--Inicia input de monto por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Monto\" placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <!--Fin de input de monto por forma de pago-->\n        <!--Inicia input de propina por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Propina\" placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <!--Fin de input de propina por forma de pago-->\n        <div align=\"end\">\n          <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"addFormaPago()\" [disabled]=\"!frmFormasPago.form.valid || inputData.saldo <= 0\">\n            Agregar\n          </button>\n        </div>\n      </form>\n      <hr />\n      <table class=\"table table-sm\">\n        <thead>\n          <tr>\n            <th class=\"text-left\">FP</th>\n            <th class=\"text-right\">Mon</th>\n            <th class=\"text-right\">Prop</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let fpCta of formasPagoDeCuenta; let i = index\">\n            <td>{{fpCta.forma_pago.descripcion}}</td>\n            <td class=\"text-right\">{{fpCta.monto | number:'1.2-2'}}</td>\n            <td class=\"text-right\">{{fpCta.propina | number:'1.2-2'}}</td>\n            <td class=\"text-center\">\n              <button mat-icon-button type=\"button\" color=\"warn\" (click)=\"delFormaPago(i)\">\n                <mat-icon>delete_forever</mat-icon>\n              </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col m12 s12 overflow-auto d-flex justify-content-end\">\n      <table class=\"table table-sm table-borderless\">\n        <tbody>\n          <tr>\n            <td class=\"text-right font-weight-bold\">TOTAL DE CUENTA:</td>\n            <td class=\"text-right font-weight-bold totalCuenta\" style=\"max-width: 15%;\">{{inputData.totalDeCuenta | number:'1.2-2'}}</td>\n          </tr>\n          <tr>\n            <td class=\"text-right font-weight-bold\">PENDIENTE:</td>\n            <td class=\"text-right font-weight-bold\" style=\"max-width: 15%;\">\n              <span\n                [ngClass]=\"{'saldo-pendiente': +inputData.saldo > 0, 'saldo-exacto': +inputData.saldo == 0, 'saldo-extra': +inputData.saldo < 0 }\">{{inputData.saldo | number:'1.2-2'}}</span>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>  \n</div>\n<div mat-dialog-actions align=\"end\">\n  <app-cargando *ngIf=\"facturando\" [configuracion]=\"cargandoConf\"></app-cargando>\n  <button mat-raised-button color=\"accent\" (click)=\"cancelar()\" [disabled]=\"facturando\">Cancelar</button>\n  <button mat-raised-button color=\"accent\" (click)=\"cobrar()\" [disabled]=\"formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente || facturando\">Facturar</button>  \n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>\n  Cobrar cuenta de {{data.cuenta}}\n  <small *ngIf=\"clienteSelected && !!clienteSelected.cliente\">\n     - Factura a nombre de {{clienteSelected.nombre}}\n  </small>\n</h1>\n<div mat-dialog-content style=\"height: 650px;\">\n  <div class=\"row\">\n    <div class=\"col m5 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <app-lista-cliente #lstClientes (getClienteEv)=\"setClienteFacturar($event)\" [showAddButton]=\"true\"></app-lista-cliente>\n    </div>\n    <div class=\"col m3 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <table class=\"table table-sm table-borderless table-striped\">\n        <tbody>\n          <tr *ngFor=\"let p of inputData.productosACobrar; let i = index;\">\n            <td>{{p.cantidad}}&nbsp;{{p.nombre || p.articulo.descripcion}}</td>\n            <td class=\"text-right\">{{(p.cantidad * p.precio) | number: '1.2-2'}}</td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n    <div class=\"col m4 s12 mat-elevation-z4 colHeight\" style=\"overflow-y: auto;\">\n      <form #frmFormasPago=\"ngForm\" novalidate>\n        <mat-form-field class=\"fullWidth\">\n          <mat-label>Forma de pago</mat-label>\n          <mat-select name=\"forma_pago\" [(ngModel)]=\"formaPago.forma_pago\" cdkFocusInitial (selectionChange)=\"onSelectionChangeFP($event)\" required>\n            <mat-option *ngFor=\"let fp of lstFormasPago\" [value]=\"fp.forma_pago\">\n              {{fp.descripcion}}\n            </mat-option>\n          </mat-select>\n        </mat-form-field>\n        <!--Inicia input de monto por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Monto\" placeholder=\"monto\" name=\"monto\" [(ngModel)]=\"formaPago.monto\" required>\n        </mat-form-field>\n        <!--Fin de input de monto por forma de pago-->\n        <!--Inicia input de propina por forma de pago-->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n          <input matInput placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"numeric\" ng-virtual-keyboard-placeholder=\"Propina\" placeholder=\"Propina\" name=\"propina\" [(ngModel)]=\"formaPago.propina\">\n        </mat-form-field>\n        <!--Fin de input de propina por forma de pago-->\n        <!-- Inicia input de documento -->\n        <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil && pideDocumento\">\n          <input matInput placeholder=\"Documento\" name=\"documento\" [(ngModel)]=\"formaPago.documento\" [required]=\"pideDocumento\">\n        </mat-form-field>\n        <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil && pideDocumento\">\n          <input matInput ng-virtual-keyboard ng-virtual-keyboard-placeholder=\"Documento\" placeholder=\"Documento\" name=\"documento\" [(ngModel)]=\"formaPago.documento\" [required]=\"pideDocumento\">\n        </mat-form-field>\n        <!-- Fin de input de documento -->\n        <div align=\"end\">\n          <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"addFormaPago()\" [disabled]=\"!frmFormasPago.form.valid || inputData.saldo <= 0\">\n            Agregar\n          </button>\n        </div>\n      </form>\n      <hr />\n      <table class=\"table table-sm\">\n        <thead>\n          <tr>\n            <th class=\"text-left\">FP</th>\n            <th class=\"text-right\">Mon</th>\n            <th class=\"text-right\">Prop</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr *ngFor=\"let fpCta of formasPagoDeCuenta; let i = index\">\n            <td>{{fpCta.forma_pago.descripcion}}</td>\n            <td class=\"text-right\">{{fpCta.monto | number:'1.2-2'}}</td>\n            <td class=\"text-right\">{{fpCta.propina | number:'1.2-2'}}</td>\n            <td class=\"text-center\">\n              <button mat-icon-button type=\"button\" color=\"warn\" (click)=\"delFormaPago(i)\">\n                <mat-icon>delete_forever</mat-icon>\n              </button>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col m12 s12 overflow-auto d-flex justify-content-end\">\n      <table class=\"table table-sm table-borderless\">\n        <tbody>\n          <tr>\n            <td class=\"text-right font-weight-bold\">TOTAL DE CUENTA:</td>\n            <td class=\"text-right font-weight-bold totalCuenta\" style=\"max-width: 15%;\">{{inputData.totalDeCuenta | number:'1.2-2'}}</td>\n          </tr>\n          <tr>\n            <td class=\"text-right font-weight-bold\">PENDIENTE:</td>\n            <td class=\"text-right font-weight-bold\" style=\"max-width: 15%;\">\n              <span\n                [ngClass]=\"{'saldo-pendiente': +inputData.saldo > 0, 'saldo-exacto': +inputData.saldo == 0, 'saldo-extra': +inputData.saldo < 0 }\">{{inputData.saldo | number:'1.2-2'}}</span>\n            </td>\n          </tr>\n        </tbody>\n      </table>\n    </div>\n  </div>  \n</div>\n<div mat-dialog-actions align=\"end\">\n  <app-cargando *ngIf=\"facturando\" [configuracion]=\"cargandoConf\"></app-cargando>\n  <button mat-raised-button color=\"accent\" (click)=\"cancelar()\" [disabled]=\"facturando\">Cancelar</button>\n  <button mat-raised-button color=\"accent\" (click)=\"cobrar()\" [disabled]=\"formasPagoDeCuenta.length == 0 || +inputData.saldo > 0 || !factReq.cliente || facturando\">Facturar</button>  \n</div>");
 
 /***/ }),
 
@@ -691,10 +691,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
-/* harmony import */ var ngx_socket_io__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ngx-socket-io */ "./node_modules/ngx-socket-io/fesm2015/ngx-socket-io.js");
-/* harmony import */ var _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../services/forma-pago.service */ "./src/app/pos/services/forma-pago.service.ts");
-/* harmony import */ var _services_cobro_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/cobro.service */ "./src/app/pos/services/cobro.service.ts");
-/* harmony import */ var _services_factura_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/factura.service */ "./src/app/pos/services/factura.service.ts");
+/* harmony import */ var _shared_components_check_password_check_password_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../shared/components/check-password/check-password.component */ "./src/app/shared/components/check-password/check-password.component.ts");
+/* harmony import */ var ngx_socket_io__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ngx-socket-io */ "./node_modules/ngx-socket-io/fesm2015/ngx-socket-io.js");
+/* harmony import */ var _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/forma-pago.service */ "./src/app/pos/services/forma-pago.service.ts");
+/* harmony import */ var _services_cobro_service__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../services/cobro.service */ "./src/app/pos/services/cobro.service.ts");
+/* harmony import */ var _services_factura_service__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../services/factura.service */ "./src/app/pos/services/factura.service.ts");
+
 
 
 
@@ -725,6 +727,7 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
         this.esMovil = false;
         this.facturando = false;
         this.cargandoConf = { w: 75, h: 75 };
+        this.pideDocumento = false;
         this.resetFactReq = () => {
             this.factReq = { cuentas: [], factura_serie: 1, cliente: null, fecha_factura: moment__WEBPACK_IMPORTED_MODULE_6__().format(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].dbDateFormat), moneda: 1 };
         };
@@ -755,12 +758,35 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
             });
         };
         this.addFormaPago = () => {
+            const fp = this.lstFormasPago.filter(f => +f.forma_pago === +this.formaPago.forma_pago)[0];
+            if (+fp.pedirautorizacion === 1) {
+                const vpgtRef = this.dialog.open(_shared_components_check_password_check_password_component__WEBPACK_IMPORTED_MODULE_8__["CheckPasswordComponent"], {
+                    width: '40%',
+                    disableClose: true,
+                    data: new _shared_components_check_password_check_password_component__WEBPACK_IMPORTED_MODULE_8__["ConfigCheckPasswordModel"](1)
+                });
+                vpgtRef.afterClosed().subscribe(res => {
+                    if (res) {
+                        this.agregaFormaPago(fp);
+                    }
+                    else {
+                        this.snackBar.open('La contraseña no es correcta', 'Formas de pago', { duration: 5000 });
+                    }
+                });
+            }
+            else {
+                this.agregaFormaPago(fp);
+            }
+        };
+        this.agregaFormaPago = (fp) => {
             this.formasPagoDeCuenta.push({
-                forma_pago: this.lstFormasPago.filter(f => +f.forma_pago === +this.formaPago.forma_pago)[0],
+                forma_pago: fp,
                 monto: parseFloat(this.formaPago.monto).toFixed(2),
-                propina: (this.formaPago.propina || 0.00)
+                propina: (this.formaPago.propina || 0.00),
+                documento: (this.formaPago.documento || null)
             });
             this.actualizaSaldo();
+            this.pideDocumento = false;
         };
         this.delFormaPago = (idx) => {
             this.formasPagoDeCuenta.splice(idx, 1);
@@ -791,7 +817,8 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
                 objCobro.forma_pago.push({
                     forma_pago: +fp.forma_pago.forma_pago,
                     monto: fp.monto,
-                    propina: (fp.propina || 0.00)
+                    propina: (fp.propina || 0.00),
+                    documento: fp.documento
                 });
             }
             this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
@@ -892,6 +919,12 @@ let CobrarPedidoComponent = class CobrarPedidoComponent {
             const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
             setTimeout(() => wref.close(), 1000);
         };
+        this.onSelectionChangeFP = (msc) => {
+            const idx = this.lstFormasPago.findIndex(lfp => +lfp.forma_pago === +msc.value);
+            if (idx > -1) {
+                this.pideDocumento = +this.lstFormasPago[idx].pedirdocumento === 1;
+            }
+        };
     }
     ngOnInit() {
         this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).enmovil || false;
@@ -912,11 +945,11 @@ CobrarPedidoComponent.ctorParameters = () => [
     { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
     { type: undefined, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] },
     { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
-    { type: _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_9__["FormaPagoService"] },
-    { type: _services_cobro_service__WEBPACK_IMPORTED_MODULE_10__["CobroService"] },
-    { type: _services_factura_service__WEBPACK_IMPORTED_MODULE_11__["FacturaService"] },
+    { type: _services_forma_pago_service__WEBPACK_IMPORTED_MODULE_10__["FormaPagoService"] },
+    { type: _services_cobro_service__WEBPACK_IMPORTED_MODULE_11__["CobroService"] },
+    { type: _services_factura_service__WEBPACK_IMPORTED_MODULE_12__["FacturaService"] },
     { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
-    { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_8__["Socket"] }
+    { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_9__["Socket"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
@@ -1877,6 +1910,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// import * as qs from 'qs';
 let CobroService = class CobroService {
     constructor(http, ls) {
         this.http = http;

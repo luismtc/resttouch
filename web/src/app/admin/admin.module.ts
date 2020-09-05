@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +29,9 @@ import { SidebarDirective } from './directives/sidebar.directive';
 import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { PivotViewAllModule, PivotFieldListAllModule } from '@syncfusion/ej2-angular-pivotview';
+import {
+  ChartModule, LineSeriesService, CategoryService, LegendService, DataLabelService, TooltipService
+} from '@syncfusion/ej2-angular-charts';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { LoginComponent } from './components/login/login.component';
@@ -64,6 +68,7 @@ import { TableroComponent } from './components/tablero/tablero.component';
 import { ProveedorComponent } from './components/proveedor/proveedor/proveedor.component';
 import { ListaProveedorComponent } from './components/proveedor/lista-proveedor/lista-proveedor.component';
 import { FormProveedorComponent } from './components/proveedor/form-proveedor/form-proveedor.component';
+import { VentasComponent } from './components/tablero/graficas/ventas/ventas.component';
 
 
 @NgModule({
@@ -71,42 +76,26 @@ import { FormProveedorComponent } from './components/proveedor/form-proveedor/fo
     LoginComponent, DashboardComponent, HeaderComponent, ClockComponent, MenuComponent, SidebarDirective,
     UsuarioComponent, ListaUsuarioComponent, FormUsuarioComponent, ClienteComponent, ListaClienteComponent,
     FormClienteComponent, MedidaComponent, ListaMedidaComponent, FormMedidaComponent, PresentacionComponent,
-    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent, FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent, FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent, ListaProveedorComponent, FormProveedorComponent
+    ListaPresentacionComponent, FormPresentacionComponent, FormClienteDialogComponent, ImpresoraComponent,
+    FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,
+    TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent,
+    FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent,
+    ListaProveedorComponent, FormProveedorComponent, VentasComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent
   ],
   imports: [
-    CommonModule,
-    AdminRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    SharedModule,
-    MatListModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCardModule,
-    MatDividerModule,
-    MatTabsModule,
-    MatTableModule,
-    MatSelectModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatGridListModule,
-    MatPaginatorModule,
-    MatTreeModule,
-    MatDialogModule,
-    MatProgressBarModule,
-    NgVirtualKeyboardModule,
-    PivotViewAllModule, 
-    PivotFieldListAllModule
+    CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
+    MatInputModule, MatCardModule, MatDividerModule, MatTabsModule, MatTableModule, MatSelectModule, MatCheckboxModule, MatButtonModule,
+    MatSnackBarModule, MatToolbarModule, MatMenuModule, MatGridListModule, MatPaginatorModule, MatTreeModule, MatDialogModule,
+    MatProgressBarModule, NgVirtualKeyboardModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent
+  ],
+  providers: [
+    LineSeriesService, CategoryService, LegendService, DataLabelService, TooltipService
   ]
 })
 export class AdminModule { }

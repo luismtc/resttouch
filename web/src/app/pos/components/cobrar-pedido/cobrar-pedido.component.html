@@ -23,7 +23,7 @@
       <form #frmFormasPago="ngForm" novalidate>
         <mat-form-field class="fullWidth">
           <mat-label>Forma de pago</mat-label>
-          <mat-select name="forma_pago" [(ngModel)]="formaPago.forma_pago" cdkFocusInitial required>
+          <mat-select name="forma_pago" [(ngModel)]="formaPago.forma_pago" cdkFocusInitial (selectionChange)="onSelectionChangeFP($event)" required>
             <mat-option *ngFor="let fp of lstFormasPago" [value]="fp.forma_pago">
               {{fp.descripcion}}
             </mat-option>
@@ -45,6 +45,14 @@
           <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Propina" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
         </mat-form-field>
         <!--Fin de input de propina por forma de pago-->
+        <!-- Inicia input de documento -->
+        <mat-form-field class="fullWidth" *ngIf="esMovil && pideDocumento">
+          <input matInput placeholder="Documento" name="documento" [(ngModel)]="formaPago.documento" [required]="pideDocumento">
+        </mat-form-field>
+        <mat-form-field class="fullWidth" *ngIf="!esMovil && pideDocumento">
+          <input matInput ng-virtual-keyboard ng-virtual-keyboard-placeholder="Documento" placeholder="Documento" name="documento" [(ngModel)]="formaPago.documento" [required]="pideDocumento">
+        </mat-form-field>
+        <!-- Fin de input de documento -->
         <div align="end">
           <button mat-raised-button type="button" color="accent" (click)="addFormaPago()" [disabled]="!frmFormasPago.form.valid || inputData.saldo <= 0">
             Agregar

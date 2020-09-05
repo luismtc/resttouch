@@ -1318,8 +1318,13 @@
                         _this.articuloSrvc.saveArticuloDetalle(_this.receta).subscribe(function (res) {
                             // console.log(res);
                             if (res) {
-                                _this.loadRecetas();
-                                _this.resetReceta();
+                                if (res.exito) {
+                                    _this.loadRecetas();
+                                    _this.resetReceta();
+                                }
+                                else {
+                                    _this.snackBar.open("ERROR: " + res.mensaje, 'Articulo', { duration: 3000 });
+                                }
                             }
                         });
                     };

@@ -1,12 +1,10 @@
 <h1 mat-dialog-title>
-    {{title}}
-  </h1>
-  
-  <div mat-dialog-content>
-    <p>{{message}}</p>
-  </div>
-  
-  <div mat-dialog-actions>
-    <button mat-button (click)="onDismiss()">{{lblBtnDeny}}</button>
-    <button mat-raised-button color="primary" (click)="onConfirm()">{{lblBtnConfirm}}</button>
-  </div>
+  {{title}}
+</h1>
+<div mat-dialog-content>
+  <p>{{message}}</p>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-raised-button class="btnConfig" (click)="onDismiss()">{{lblBtnDeny}}</button>
+  <button mat-raised-button class="btnConfig" color="accent" (click)="onConfirm()">{{lblBtnConfirm}}</button>
+</div>

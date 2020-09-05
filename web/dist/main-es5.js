@@ -658,6 +658,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n    <div class=\"col m5 s12\">\n        <app-lista-proveedor #lstProveedor (getProveedorEv)=\"setProveedor($event)\"></app-lista-proveedor>\n    </div>\n    <div class=\"col m7 s12\">        \n        <app-form-proveedor #frmProveedor [proveedor]=\"proveedor\" (proveedorSavedEv)=\"refreshProveedorList()\"></app-form-proveedor>\n    </div>\n</div>\n");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/graficas/ventas/ventas.component.html": 
+        /*!**********************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/graficas/ventas/ventas.component.html ***!
+          \**********************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<div fxLayout=\"column\" fxLayout.xs=\"column\" fxFlexFill>\n    <!--Inicia Fila superior-->\n    <div fxLayout=\"row\" fxLayout.xs=\"column\" fxFlexFill>\n        <div fxFlex=\"50%\" fxFlex.xs=\"100%\">\n            <!--Inicia ventas por día-->\n            <ejs-chart [primaryXAxis]=\"xAxisPorDia\" [primaryYAxis]=\"yAxisPorDia\" [title]=\"chartTitlePorDia\" [legendSettings]=\"legendPorDia\" [tooltip]=\"toolTipSettingsPorDia\">\n                <e-series-collection>\n                    <e-series type=\"Line\" [dataSource]=\"datos.porDia\" xName=\"fecha\" yName=\"venta\" name=\"Ventas\" [marker]=\"markerSettingsPorDia\"></e-series>\n                </e-series-collection>\n            </ejs-chart>\n            <!--Finaliza ventas por día-->\n        </div>\n        <div fxFlex=\"50%\" fxFlex.xs=\"100%\">\n            <!--Inicia ventas por categoría-->\n            <ejs-chart [primaryXAxis]=\"xAxisPorCategoria\" [primaryYAxis]=\"yAxisPorCategoria\" [title]=\"chartTitlePorCategoria\" [legendSettings]=\"legendPorCategoria\" [tooltip]=\"toolTipSettingsPorCategoria\">\n                <e-series-collection>\n                    <e-series type=\"Line\" [dataSource]=\"datos.porCategoria\" xName=\"categoria\" yName=\"venta\" name=\"Ventas\" [marker]=\"markerSettingsPorCategoria\"></e-series>\n                </e-series-collection>\n            </ejs-chart>\n            <!--Finaliza ventas por categoría-->\n        </div>\n    </div>\n    <!--Termina fila superior-->\n    <!--Inicia fila inferior-->\n    <div fxLayout=\"row\" fxLayout.xs=\"column\" fxFlexFill>\n        <div fxFlex=\"50%\" fxFlex.xs=\"100%\">\n            <!--Inicia ventas por turno-->\n            <ejs-chart [primaryXAxis]=\"xAxisPorTurno\" [primaryYAxis]=\"yAxisPorTurno\" [title]=\"chartTitlePorTurno\" [legendSettings]=\"legendPorTurno\" [tooltip]=\"toolTipSettingsPorTurno\">\n                <e-series-collection>\n                    <e-series type=\"Line\" [dataSource]=\"datos.porTurno\" xName=\"turno\" yName=\"venta\" name=\"Ventas\" [marker]=\"markerSettingsPorTurno\"></e-series>\n                </e-series-collection>\n            </ejs-chart>\n            <!--Finaliza ventas por turno-->\n        </div>\n        <div fxFlex=\"50%\" fxFlex.xs=\"100%\">\n            <!--Inicia ventas por mesero-->\n            <ejs-chart [primaryXAxis]=\"xAxisPorMesero\" [primaryYAxis]=\"yAxisPorMesero\" [title]=\"chartTitlePorMesero\" [legendSettings]=\"legendPorMesero\" [tooltip]=\"toolTipSettingsPorMesero\">\n                <e-series-collection>\n                    <e-series type=\"Line\" [dataSource]=\"datos.porMesero\" xName=\"mesero\" yName=\"venta\" name=\"Ventas\" [marker]=\"markerSettingsPorMesero\"></e-series>\n                </e-series-collection>\n            </ejs-chart>\n            <!--Finaliza ventas por mesero-->\n        </div>\n    </div>\n    <!--Termina fila inferior-->\n</div>");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/tablero.component.html": 
         /*!*******************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/tablero.component.html ***!
@@ -666,7 +677,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n\t<div class=\"col m12 s12\">\n\t\t<mat-card class=\"mat-elevation-z4 fullWidth\">\n\t\t<mat-card-content>\n\t\t<form (ngSubmit)=\"onSubmit()\" novalidate>\n\t\t\t<mat-form-field appearance=\"legacy\">\n\t\t\t\t<mat-label>Del</mat-label>\n\t\t\t\t<input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\" [ngModelOptions]=\"{standalone: true}\" required>\n\t\t\t</mat-form-field>\n\t\t\t<mat-form-field appearance=\"legacy\" style=\"margin-left: 3px;\">\n\t\t\t\t<mat-label>Al</mat-label>\n\t\t\t\t<input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\" [ngModelOptions]=\"{standalone: true}\" required>\n\t\t\t</mat-form-field>\n\t\t\t<button mat-button color=\"accent\" type=\"submit\" style=\"margin-left: 3px;\">GENERAR</button>\n\t\t</form>\n\t\t<ng-template [ngIf]=\"cargando\">\n\t\t\t<mat-progress-bar mode=\"query\"></mat-progress-bar>\n\t\t</ng-template>\n\t\t</mat-card-content>\n\t\t</mat-card>\n\n\n\t\t\n\t\t<br><br>\n\t\t<ejs-pivotview \n\t\t\t#pivotview id='PivotView' \n\t\t\t[dataSourceSettings]=dataSourceSettings \n\t\t\twidth='100%'\n\t\t\theight='350'\n\t\t\t[gridSettings]='gridSettings' \n\t\t\tallowExcelExport='true'\n\t\t\tshowFieldList=\"true\"\n\t\t>\n\t\t</ejs-pivotview>\n\t\t<button ej-button id='export'>Export</button>\n\t</div>\n</div>\n<br><br>\n<div class=\"row\">\n\t<div class=\"col m6 s12\">\n\t\t<table>\n\t\t\t<tbody>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Cantidad de días</th>\n\t\t\t\t\t<td>{{ estDias }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Mínimo</th>\n\t\t\t\t\t<td>{{ estMin }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Máximo</th>\n\t\t\t\t\t<td>{{ estMax }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Media</th>\n\t\t\t\t\t<td>{{ estMedia }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Total</th>\n\t\t\t\t\t<td>{{ estTotal }}</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</div>\n</div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<div class=\"row\">\n\t<div class=\"col m12 s12\">\n\t\t<mat-card class=\"mat-elevation-z4 fullWidth\">\n\t\t\t<mat-card-content>\n\t\t\t\t<form (ngSubmit)=\"onSubmit()\" novalidate>\n\t\t\t\t\t<mat-form-field appearance=\"legacy\">\n\t\t\t\t\t\t<mat-label>Del</mat-label>\n\t\t\t\t\t\t<input matInput type=\"date\" placeholder=\"Del\" [(ngModel)]=\"params.fdel\"\n\t\t\t\t\t\t\t[ngModelOptions]=\"{standalone: true}\" required>\n\t\t\t\t\t</mat-form-field>\n\t\t\t\t\t<mat-form-field appearance=\"legacy\" style=\"margin-left: 3px;\">\n\t\t\t\t\t\t<mat-label>Al</mat-label>\n\t\t\t\t\t\t<input matInput type=\"date\" placeholder=\"Al\" [(ngModel)]=\"params.fal\"\n\t\t\t\t\t\t\t[ngModelOptions]=\"{standalone: true}\" required>\n\t\t\t\t\t</mat-form-field>\n\t\t\t\t\t<button mat-button color=\"accent\" type=\"submit\" style=\"margin-left: 3px;\">GENERAR</button>\n\t\t\t\t</form>\n\t\t\t\t<ng-template [ngIf]=\"cargando\">\n\t\t\t\t\t<mat-progress-bar mode=\"query\"></mat-progress-bar>\n\t\t\t\t</ng-template>\n\t\t\t</mat-card-content>\n\t\t</mat-card>\n\t</div>\n</div>\n<!-- Inicia gráficas de ventas -->\n<div class=\"row\">\n\t<div class=\"col m12 s12\">\n\t\t<app-graficas-ventas [datos]=\"datosGraficas\"></app-graficas-ventas>\n\t</div>\n</div>\n<!-- Finaliza gráficas de ventas -->\n<div class=\"row\">\n\t<div class=\"col m12 s12\">\n\t\t<ejs-pivotview #pivotview id='PivotView' [dataSourceSettings]=dataSourceSettings width='100%' height='350'\n\t\t\t[gridSettings]='gridSettings' allowExcelExport='true' showFieldList=\"true\">\n\t\t</ejs-pivotview>\n\t\t<button ej-button id='export'>Export</button>\n\t</div>\n</div>\n<div class=\"row\">\n\t<div class=\"col m6 s12\">\n\t\t<table>\n\t\t\t<tbody>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Cantidad de días</th>\n\t\t\t\t\t<td>{{ estDias }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Mínimo</th>\n\t\t\t\t\t<td>{{ estMin }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Máximo</th>\n\t\t\t\t\t<td>{{ estMax }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Media</th>\n\t\t\t\t\t<td>{{ estMedia }}</td>\n\t\t\t\t</tr>\n\t\t\t\t<tr>\n\t\t\t\t\t<th>Total</th>\n\t\t\t\t\t<td>{{ estTotal }}</td>\n\t\t\t\t</tr>\n\t\t\t</tbody>\n\t\t</table>\n\t</div>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.html": 
@@ -757,6 +768,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony default export */ __webpack_exports__["default"] = ("<div [align]=\"configuracion.align\" [style.width.%]=\"configuracion.size\">\n    <img id=\"imgCargando\" src=\"/assets/img/loading.gif\" alt=\"Cargando...\" [style.width.px]=\"configuracion.w\" [style.height.px]=\"configuracion.h\" >\n</div>");
             /***/ 
         }),
+        /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/check-password/check-password.component.html": 
+        /*!**********************************************************************************************************************!*\
+          !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/check-password/check-password.component.html ***!
+          \**********************************************************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>\n    Validar contraseña<br/>\n    {{data.subtitulo || 'Gerente de turno'}}\n</h1>\n<mat-dialog-content>\n    <form #frmValidaPwd=\"ngForm\" (ngSubmit)=\"frmValidaPwd.form.valid\" novalidate>\n        <mat-form-field class=\"fullWidth\">\n            <input type=\"password\" matInput placeholder=\"Contraseña\" name=\"pwd\" [(ngModel)]=\"pwd\" required>\n        </mat-form-field>\n    </form>\n</mat-dialog-content>\n<mat-dialog-actions align=\"end\">\n    <button mat-raised-button (click)=\"cancelar()\" color=\"secondary\" class=\"btnAccion\">\n        Cancelar\n    </button>\n    <button mat-raised-button (click)=\"terminar()\" [disabled]=\"!frmValidaPwd.form.valid\" color=\"accent\">\n        {{data.etiquetaAceptar || 'Validar'}}\n    </button>\n</mat-dialog-actions>\n");
+            /***/ 
+        }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/confirm-dialog/confirm-dialog.component.html": 
         /*!**********************************************************************************************************************!*\
           !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/confirm-dialog/confirm-dialog.component.html ***!
@@ -765,7 +787,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>\n    {{title}}\n  </h1>\n  \n  <div mat-dialog-content>\n    <p>{{message}}</p>\n  </div>\n  \n  <div mat-dialog-actions>\n    <button mat-button (click)=\"onDismiss()\">{{lblBtnDeny}}</button>\n    <button mat-raised-button color=\"primary\" (click)=\"onConfirm()\">{{lblBtnConfirm}}</button>\n  </div>");
+            /* harmony default export */ __webpack_exports__["default"] = ("<h1 mat-dialog-title>\n  {{title}}\n</h1>\n<div mat-dialog-content>\n  <p>{{message}}</p>\n</div>\n<div mat-dialog-actions align=\"center\">\n  <button mat-raised-button class=\"btnConfig\" (click)=\"onDismiss()\">{{lblBtnDeny}}</button>\n  <button mat-raised-button class=\"btnConfig\" color=\"accent\" (click)=\"onConfirm()\">{{lblBtnConfirm}}</button>\n</div>");
             /***/ 
         }),
         /***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/rpt-botones/rpt-botones.component.html": 
@@ -1158,64 +1180,67 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
             /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
             /* harmony import */ var _shared_shared_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/shared.module */ "./src/app/shared/shared.module.ts");
-            /* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
-            /* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
-            /* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/form-field */ "./node_modules/@angular/material/esm2015/form-field.js");
-            /* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm2015/input.js");
-            /* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
-            /* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/divider */ "./node_modules/@angular/material/esm2015/divider.js");
-            /* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm2015/tabs.js");
-            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-            /* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
-            /* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/checkbox */ "./node_modules/@angular/material/esm2015/checkbox.js");
-            /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
-            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
-            /* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
-            /* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/menu */ "./node_modules/@angular/material/esm2015/menu.js");
-            /* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/grid-list */ "./node_modules/@angular/material/esm2015/grid-list.js");
-            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-            /* harmony import */ var _angular_material_tree__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/tree */ "./node_modules/@angular/material/esm2015/tree.js");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-            /* harmony import */ var _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/progress-bar */ "./node_modules/@angular/material/esm2015/progress-bar.js");
-            /* harmony import */ var _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./directives/sidebar.directive */ "./src/app/admin/directives/sidebar.directive.ts");
-            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @protacon/ng-virtual-keyboard */ "./node_modules/@protacon/ng-virtual-keyboard/dist/index.js");
-            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/ __webpack_require__.n(_protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26__);
-            /* harmony import */ var _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @syncfusion/ej2-angular-pivotview */ "./node_modules/@syncfusion/ej2-angular-pivotview/@syncfusion/ej2-angular-pivotview.js");
-            /* harmony import */ var _admin_routing_module__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./admin-routing.module */ "./src/app/admin/admin-routing.module.ts");
-            /* harmony import */ var _components_login_login_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/login/login.component */ "./src/app/admin/components/login/login.component.ts");
-            /* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/dashboard/dashboard.component */ "./src/app/admin/components/dashboard/dashboard.component.ts");
-            /* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/admin/components/header/header.component.ts");
-            /* harmony import */ var _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/clock/clock.component */ "./src/app/admin/components/clock/clock.component.ts");
-            /* harmony import */ var _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/menu/menu.component */ "./src/app/admin/components/menu/menu.component.ts");
-            /* harmony import */ var _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/usuario/usuario/usuario.component */ "./src/app/admin/components/usuario/usuario/usuario.component.ts");
-            /* harmony import */ var _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/usuario/lista-usuario/lista-usuario.component */ "./src/app/admin/components/usuario/lista-usuario/lista-usuario.component.ts");
-            /* harmony import */ var _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/usuario/form-usuario/form-usuario.component */ "./src/app/admin/components/usuario/form-usuario/form-usuario.component.ts");
-            /* harmony import */ var _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/cliente/cliente/cliente.component */ "./src/app/admin/components/cliente/cliente/cliente.component.ts");
-            /* harmony import */ var _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/cliente/lista-cliente/lista-cliente.component */ "./src/app/admin/components/cliente/lista-cliente/lista-cliente.component.ts");
-            /* harmony import */ var _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/cliente/form-cliente/form-cliente.component */ "./src/app/admin/components/cliente/form-cliente/form-cliente.component.ts");
-            /* harmony import */ var _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/medida/medida/medida.component */ "./src/app/admin/components/medida/medida/medida.component.ts");
-            /* harmony import */ var _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/medida/lista-medida/lista-medida.component */ "./src/app/admin/components/medida/lista-medida/lista-medida.component.ts");
-            /* harmony import */ var _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/medida/form-medida/form-medida.component */ "./src/app/admin/components/medida/form-medida/form-medida.component.ts");
-            /* harmony import */ var _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/presentacion/presentacion/presentacion.component */ "./src/app/admin/components/presentacion/presentacion/presentacion.component.ts");
-            /* harmony import */ var _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/presentacion/lista-presentacion/lista-presentacion.component */ "./src/app/admin/components/presentacion/lista-presentacion/lista-presentacion.component.ts");
-            /* harmony import */ var _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/presentacion/form-presentacion/form-presentacion.component */ "./src/app/admin/components/presentacion/form-presentacion/form-presentacion.component.ts");
-            /* harmony import */ var _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/cliente/form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
-            /* harmony import */ var _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/impresora/impresora/impresora.component */ "./src/app/admin/components/impresora/impresora/impresora.component.ts");
-            /* harmony import */ var _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/impresora/form-impresora/form-impresora.component */ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.ts");
-            /* harmony import */ var _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/impresora/lista-impresora/lista-impresora.component */ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.ts");
-            /* harmony import */ var _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/fpago/fpago/fpago.component */ "./src/app/admin/components/fpago/fpago/fpago.component.ts");
-            /* harmony import */ var _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/fpago/form-pago/form-pago.component */ "./src/app/admin/components/fpago/form-pago/form-pago.component.ts");
-            /* harmony import */ var _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/fpago/lista-pago/lista-pago.component */ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.ts");
-            /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
-            /* harmony import */ var _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.ts");
-            /* harmony import */ var _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.ts");
-            /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
-            /* harmony import */ var _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts");
-            /* harmony import */ var _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts");
-            /* harmony import */ var _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/tablero/tablero.component */ "./src/app/admin/components/tablero/tablero.component.ts");
-            /* harmony import */ var _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/proveedor/proveedor/proveedor.component */ "./src/app/admin/components/proveedor/proveedor/proveedor.component.ts");
-            /* harmony import */ var _components_proveedor_lista_proveedor_lista_proveedor_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/proveedor/lista-proveedor/lista-proveedor.component */ "./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.ts");
-            /* harmony import */ var _components_proveedor_form_proveedor_form_proveedor_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/proveedor/form-proveedor/form-proveedor.component */ "./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.ts");
+            /* harmony import */ var _angular_flex_layout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/flex-layout */ "./node_modules/@angular/flex-layout/esm2015/flex-layout.js");
+            /* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
+            /* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
+            /* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/form-field */ "./node_modules/@angular/material/esm2015/form-field.js");
+            /* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm2015/input.js");
+            /* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
+            /* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/divider */ "./node_modules/@angular/material/esm2015/divider.js");
+            /* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm2015/tabs.js");
+            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            /* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
+            /* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/checkbox */ "./node_modules/@angular/material/esm2015/checkbox.js");
+            /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
+            /* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/menu */ "./node_modules/@angular/material/esm2015/menu.js");
+            /* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/grid-list */ "./node_modules/@angular/material/esm2015/grid-list.js");
+            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            /* harmony import */ var _angular_material_tree__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/tree */ "./node_modules/@angular/material/esm2015/tree.js");
+            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            /* harmony import */ var _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/material/progress-bar */ "./node_modules/@angular/material/esm2015/progress-bar.js");
+            /* harmony import */ var _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./directives/sidebar.directive */ "./src/app/admin/directives/sidebar.directive.ts");
+            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @protacon/ng-virtual-keyboard */ "./node_modules/@protacon/ng-virtual-keyboard/dist/index.js");
+            /* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_27___default = /*#__PURE__*/ __webpack_require__.n(_protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_27__);
+            /* harmony import */ var _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @syncfusion/ej2-angular-pivotview */ "./node_modules/@syncfusion/ej2-angular-pivotview/@syncfusion/ej2-angular-pivotview.js");
+            /* harmony import */ var _syncfusion_ej2_angular_charts__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @syncfusion/ej2-angular-charts */ "./node_modules/@syncfusion/ej2-angular-charts/@syncfusion/ej2-angular-charts.js");
+            /* harmony import */ var _admin_routing_module__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./admin-routing.module */ "./src/app/admin/admin-routing.module.ts");
+            /* harmony import */ var _components_login_login_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/login/login.component */ "./src/app/admin/components/login/login.component.ts");
+            /* harmony import */ var _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/dashboard/dashboard.component */ "./src/app/admin/components/dashboard/dashboard.component.ts");
+            /* harmony import */ var _components_header_header_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/header/header.component */ "./src/app/admin/components/header/header.component.ts");
+            /* harmony import */ var _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/clock/clock.component */ "./src/app/admin/components/clock/clock.component.ts");
+            /* harmony import */ var _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/menu/menu.component */ "./src/app/admin/components/menu/menu.component.ts");
+            /* harmony import */ var _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/usuario/usuario/usuario.component */ "./src/app/admin/components/usuario/usuario/usuario.component.ts");
+            /* harmony import */ var _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/usuario/lista-usuario/lista-usuario.component */ "./src/app/admin/components/usuario/lista-usuario/lista-usuario.component.ts");
+            /* harmony import */ var _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/usuario/form-usuario/form-usuario.component */ "./src/app/admin/components/usuario/form-usuario/form-usuario.component.ts");
+            /* harmony import */ var _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/cliente/cliente/cliente.component */ "./src/app/admin/components/cliente/cliente/cliente.component.ts");
+            /* harmony import */ var _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/cliente/lista-cliente/lista-cliente.component */ "./src/app/admin/components/cliente/lista-cliente/lista-cliente.component.ts");
+            /* harmony import */ var _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/cliente/form-cliente/form-cliente.component */ "./src/app/admin/components/cliente/form-cliente/form-cliente.component.ts");
+            /* harmony import */ var _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/medida/medida/medida.component */ "./src/app/admin/components/medida/medida/medida.component.ts");
+            /* harmony import */ var _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/medida/lista-medida/lista-medida.component */ "./src/app/admin/components/medida/lista-medida/lista-medida.component.ts");
+            /* harmony import */ var _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/medida/form-medida/form-medida.component */ "./src/app/admin/components/medida/form-medida/form-medida.component.ts");
+            /* harmony import */ var _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/presentacion/presentacion/presentacion.component */ "./src/app/admin/components/presentacion/presentacion/presentacion.component.ts");
+            /* harmony import */ var _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/presentacion/lista-presentacion/lista-presentacion.component */ "./src/app/admin/components/presentacion/lista-presentacion/lista-presentacion.component.ts");
+            /* harmony import */ var _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/presentacion/form-presentacion/form-presentacion.component */ "./src/app/admin/components/presentacion/form-presentacion/form-presentacion.component.ts");
+            /* harmony import */ var _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/cliente/form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
+            /* harmony import */ var _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/impresora/impresora/impresora.component */ "./src/app/admin/components/impresora/impresora/impresora.component.ts");
+            /* harmony import */ var _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/impresora/form-impresora/form-impresora.component */ "./src/app/admin/components/impresora/form-impresora/form-impresora.component.ts");
+            /* harmony import */ var _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/impresora/lista-impresora/lista-impresora.component */ "./src/app/admin/components/impresora/lista-impresora/lista-impresora.component.ts");
+            /* harmony import */ var _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/fpago/fpago/fpago.component */ "./src/app/admin/components/fpago/fpago/fpago.component.ts");
+            /* harmony import */ var _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/fpago/form-pago/form-pago.component */ "./src/app/admin/components/fpago/form-pago/form-pago.component.ts");
+            /* harmony import */ var _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/fpago/lista-pago/lista-pago.component */ "./src/app/admin/components/fpago/lista-pago/lista-pago.component.ts");
+            /* harmony import */ var _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/tipo-usuario/tipo-usuario/tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/tipo-usuario/tipo-usuario.component.ts");
+            /* harmony import */ var _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/lista-tipo-usuario/lista-tipo-usuario.component.ts");
+            /* harmony import */ var _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component */ "./src/app/admin/components/tipo-usuario/form-tipo-usuario/form-tipo-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/acceso-usuario/acceso-usuario/acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/acceso-usuario/acceso-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/form-acceso-usuario/form-acceso-usuario.component.ts");
+            /* harmony import */ var _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component */ "./src/app/admin/components/acceso-usuario/lista-acceso-usuario/lista-acceso-usuario.component.ts");
+            /* harmony import */ var _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/tablero/tablero.component */ "./src/app/admin/components/tablero/tablero.component.ts");
+            /* harmony import */ var _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/proveedor/proveedor/proveedor.component */ "./src/app/admin/components/proveedor/proveedor/proveedor.component.ts");
+            /* harmony import */ var _components_proveedor_lista_proveedor_lista_proveedor_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/proveedor/lista-proveedor/lista-proveedor.component */ "./src/app/admin/components/proveedor/lista-proveedor/lista-proveedor.component.ts");
+            /* harmony import */ var _components_proveedor_form_proveedor_form_proveedor_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/proveedor/form-proveedor/form-proveedor.component */ "./src/app/admin/components/proveedor/form-proveedor/form-proveedor.component.ts");
+            /* harmony import */ var _components_tablero_graficas_ventas_ventas_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./components/tablero/graficas/ventas/ventas.component */ "./src/app/admin/components/tablero/graficas/ventas/ventas.component.ts");
             var AdminModule = /** @class */ (function () {
                 function AdminModule() {
                 }
@@ -1224,45 +1249,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             AdminModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
                     declarations: [
-                        _components_login_login_component__WEBPACK_IMPORTED_MODULE_29__["LoginComponent"], _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_30__["DashboardComponent"], _components_header_header_component__WEBPACK_IMPORTED_MODULE_31__["HeaderComponent"], _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_32__["ClockComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_33__["MenuComponent"], _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_25__["SidebarDirective"],
-                        _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_34__["UsuarioComponent"], _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_35__["ListaUsuarioComponent"], _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_36__["FormUsuarioComponent"], _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_37__["ClienteComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_38__["ListaClienteComponent"],
-                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_40__["MedidaComponent"], _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_41__["ListaMedidaComponent"], _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_42__["FormMedidaComponent"], _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_43__["PresentacionComponent"],
-                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_44__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_45__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"], _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_47__["ImpresoraComponent"], _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_48__["FormImpresoraComponent"], _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_49__["ListaImpresoraComponent"], _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_50__["FpagoComponent"], _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_51__["FormPagoComponent"], _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_52__["ListaPagoComponent"], _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_53__["TipoUsuarioComponent"], _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_54__["ListaTipoUsuarioComponent"], _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__["FormTipoUsuarioComponent"], _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_56__["AccesoUsuarioComponent"], _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_57__["FormAccesoUsuarioComponent"], _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__["ListaAccesoUsuarioComponent"], _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_59__["TableroComponent"], _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_60__["ProveedorComponent"], _components_proveedor_lista_proveedor_lista_proveedor_component__WEBPACK_IMPORTED_MODULE_61__["ListaProveedorComponent"], _components_proveedor_form_proveedor_form_proveedor_component__WEBPACK_IMPORTED_MODULE_62__["FormProveedorComponent"]
+                        _components_login_login_component__WEBPACK_IMPORTED_MODULE_31__["LoginComponent"], _components_dashboard_dashboard_component__WEBPACK_IMPORTED_MODULE_32__["DashboardComponent"], _components_header_header_component__WEBPACK_IMPORTED_MODULE_33__["HeaderComponent"], _components_clock_clock_component__WEBPACK_IMPORTED_MODULE_34__["ClockComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_35__["MenuComponent"], _directives_sidebar_directive__WEBPACK_IMPORTED_MODULE_26__["SidebarDirective"],
+                        _components_usuario_usuario_usuario_component__WEBPACK_IMPORTED_MODULE_36__["UsuarioComponent"], _components_usuario_lista_usuario_lista_usuario_component__WEBPACK_IMPORTED_MODULE_37__["ListaUsuarioComponent"], _components_usuario_form_usuario_form_usuario_component__WEBPACK_IMPORTED_MODULE_38__["FormUsuarioComponent"], _components_cliente_cliente_cliente_component__WEBPACK_IMPORTED_MODULE_39__["ClienteComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_40__["ListaClienteComponent"],
+                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_41__["FormClienteComponent"], _components_medida_medida_medida_component__WEBPACK_IMPORTED_MODULE_42__["MedidaComponent"], _components_medida_lista_medida_lista_medida_component__WEBPACK_IMPORTED_MODULE_43__["ListaMedidaComponent"], _components_medida_form_medida_form_medida_component__WEBPACK_IMPORTED_MODULE_44__["FormMedidaComponent"], _components_presentacion_presentacion_presentacion_component__WEBPACK_IMPORTED_MODULE_45__["PresentacionComponent"],
+                        _components_presentacion_lista_presentacion_lista_presentacion_component__WEBPACK_IMPORTED_MODULE_46__["ListaPresentacionComponent"], _components_presentacion_form_presentacion_form_presentacion_component__WEBPACK_IMPORTED_MODULE_47__["FormPresentacionComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_48__["FormClienteDialogComponent"], _components_impresora_impresora_impresora_component__WEBPACK_IMPORTED_MODULE_49__["ImpresoraComponent"],
+                        _components_impresora_form_impresora_form_impresora_component__WEBPACK_IMPORTED_MODULE_50__["FormImpresoraComponent"], _components_impresora_lista_impresora_lista_impresora_component__WEBPACK_IMPORTED_MODULE_51__["ListaImpresoraComponent"], _components_fpago_fpago_fpago_component__WEBPACK_IMPORTED_MODULE_52__["FpagoComponent"], _components_fpago_form_pago_form_pago_component__WEBPACK_IMPORTED_MODULE_53__["FormPagoComponent"], _components_fpago_lista_pago_lista_pago_component__WEBPACK_IMPORTED_MODULE_54__["ListaPagoComponent"],
+                        _components_tipo_usuario_tipo_usuario_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_55__["TipoUsuarioComponent"], _components_tipo_usuario_lista_tipo_usuario_lista_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_56__["ListaTipoUsuarioComponent"], _components_tipo_usuario_form_tipo_usuario_form_tipo_usuario_component__WEBPACK_IMPORTED_MODULE_57__["FormTipoUsuarioComponent"], _components_acceso_usuario_acceso_usuario_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_58__["AccesoUsuarioComponent"],
+                        _components_acceso_usuario_form_acceso_usuario_form_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_59__["FormAccesoUsuarioComponent"], _components_acceso_usuario_lista_acceso_usuario_lista_acceso_usuario_component__WEBPACK_IMPORTED_MODULE_60__["ListaAccesoUsuarioComponent"], _components_tablero_tablero_component__WEBPACK_IMPORTED_MODULE_61__["TableroComponent"], _components_proveedor_proveedor_proveedor_component__WEBPACK_IMPORTED_MODULE_62__["ProveedorComponent"],
+                        _components_proveedor_lista_proveedor_lista_proveedor_component__WEBPACK_IMPORTED_MODULE_63__["ListaProveedorComponent"], _components_proveedor_form_proveedor_form_proveedor_component__WEBPACK_IMPORTED_MODULE_64__["FormProveedorComponent"], _components_tablero_graficas_ventas_ventas_component__WEBPACK_IMPORTED_MODULE_65__["VentasComponent"]
                     ],
                     entryComponents: [
-                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"]
+                        _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_41__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_48__["FormClienteDialogComponent"]
                     ],
                     imports: [
-                        _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
-                        _admin_routing_module__WEBPACK_IMPORTED_MODULE_28__["AdminRoutingModule"],
-                        _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
-                        _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
-                        _shared_shared_module__WEBPACK_IMPORTED_MODULE_5__["SharedModule"],
-                        _angular_material_list__WEBPACK_IMPORTED_MODULE_6__["MatListModule"],
-                        _angular_material_icon__WEBPACK_IMPORTED_MODULE_7__["MatIconModule"],
-                        _angular_material_form_field__WEBPACK_IMPORTED_MODULE_8__["MatFormFieldModule"],
-                        _angular_material_input__WEBPACK_IMPORTED_MODULE_9__["MatInputModule"],
-                        _angular_material_card__WEBPACK_IMPORTED_MODULE_10__["MatCardModule"],
-                        _angular_material_divider__WEBPACK_IMPORTED_MODULE_11__["MatDividerModule"],
-                        _angular_material_tabs__WEBPACK_IMPORTED_MODULE_12__["MatTabsModule"],
-                        _angular_material_table__WEBPACK_IMPORTED_MODULE_13__["MatTableModule"],
-                        _angular_material_select__WEBPACK_IMPORTED_MODULE_14__["MatSelectModule"],
-                        _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_15__["MatCheckboxModule"],
-                        _angular_material_button__WEBPACK_IMPORTED_MODULE_16__["MatButtonModule"],
-                        _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_17__["MatSnackBarModule"],
-                        _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_18__["MatToolbarModule"],
-                        _angular_material_menu__WEBPACK_IMPORTED_MODULE_19__["MatMenuModule"],
-                        _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_20__["MatGridListModule"],
-                        _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__["MatPaginatorModule"],
-                        _angular_material_tree__WEBPACK_IMPORTED_MODULE_22__["MatTreeModule"],
-                        _angular_material_dialog__WEBPACK_IMPORTED_MODULE_23__["MatDialogModule"],
-                        _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_24__["MatProgressBarModule"],
-                        _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_26__["NgVirtualKeyboardModule"],
-                        _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_27__["PivotViewAllModule"],
-                        _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_27__["PivotFieldListAllModule"]
+                        _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"], _admin_routing_module__WEBPACK_IMPORTED_MODULE_30__["AdminRoutingModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"], _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"], _shared_shared_module__WEBPACK_IMPORTED_MODULE_5__["SharedModule"], _angular_material_list__WEBPACK_IMPORTED_MODULE_7__["MatListModule"], _angular_material_icon__WEBPACK_IMPORTED_MODULE_8__["MatIconModule"], _angular_material_form_field__WEBPACK_IMPORTED_MODULE_9__["MatFormFieldModule"],
+                        _angular_material_input__WEBPACK_IMPORTED_MODULE_10__["MatInputModule"], _angular_material_card__WEBPACK_IMPORTED_MODULE_11__["MatCardModule"], _angular_material_divider__WEBPACK_IMPORTED_MODULE_12__["MatDividerModule"], _angular_material_tabs__WEBPACK_IMPORTED_MODULE_13__["MatTabsModule"], _angular_material_table__WEBPACK_IMPORTED_MODULE_14__["MatTableModule"], _angular_material_select__WEBPACK_IMPORTED_MODULE_15__["MatSelectModule"], _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_16__["MatCheckboxModule"], _angular_material_button__WEBPACK_IMPORTED_MODULE_17__["MatButtonModule"],
+                        _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_18__["MatSnackBarModule"], _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_19__["MatToolbarModule"], _angular_material_menu__WEBPACK_IMPORTED_MODULE_20__["MatMenuModule"], _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_21__["MatGridListModule"], _angular_material_paginator__WEBPACK_IMPORTED_MODULE_22__["MatPaginatorModule"], _angular_material_tree__WEBPACK_IMPORTED_MODULE_23__["MatTreeModule"], _angular_material_dialog__WEBPACK_IMPORTED_MODULE_24__["MatDialogModule"],
+                        _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_25__["MatProgressBarModule"], _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_27__["NgVirtualKeyboardModule"], _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_28__["PivotViewAllModule"], _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_28__["PivotFieldListAllModule"], _angular_flex_layout__WEBPACK_IMPORTED_MODULE_6__["FlexLayoutModule"], _syncfusion_ej2_angular_charts__WEBPACK_IMPORTED_MODULE_29__["ChartModule"]
                     ],
                     exports: [
-                        _components_header_header_component__WEBPACK_IMPORTED_MODULE_31__["HeaderComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_33__["MenuComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_38__["ListaClienteComponent"], _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_39__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_46__["FormClienteDialogComponent"]
+                        _components_header_header_component__WEBPACK_IMPORTED_MODULE_33__["HeaderComponent"], _components_menu_menu_component__WEBPACK_IMPORTED_MODULE_35__["MenuComponent"], _components_cliente_lista_cliente_lista_cliente_component__WEBPACK_IMPORTED_MODULE_40__["ListaClienteComponent"], _components_cliente_form_cliente_form_cliente_component__WEBPACK_IMPORTED_MODULE_41__["FormClienteComponent"], _components_cliente_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_48__["FormClienteDialogComponent"]
+                    ],
+                    providers: [
+                        _syncfusion_ej2_angular_charts__WEBPACK_IMPORTED_MODULE_29__["LineSeriesService"], _syncfusion_ej2_angular_charts__WEBPACK_IMPORTED_MODULE_29__["CategoryService"], _syncfusion_ej2_angular_charts__WEBPACK_IMPORTED_MODULE_29__["LegendService"], _syncfusion_ej2_angular_charts__WEBPACK_IMPORTED_MODULE_29__["DataLabelService"], _syncfusion_ej2_angular_charts__WEBPACK_IMPORTED_MODULE_29__["TooltipService"]
                     ]
                 })
             ], AdminModule);
@@ -3273,6 +3282,145 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], ProveedorComponent);
             /***/ 
         }),
+        /***/ "./src/app/admin/components/tablero/graficas/ventas/ventas.component.css": 
+        /*!*******************************************************************************!*\
+          !*** ./src/app/admin/components/tablero/graficas/ventas/ventas.component.css ***!
+          \*******************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2FkbWluL2NvbXBvbmVudHMvdGFibGVyby9ncmFmaWNhcy92ZW50YXMvdmVudGFzLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/admin/components/tablero/graficas/ventas/ventas.component.ts": 
+        /*!******************************************************************************!*\
+          !*** ./src/app/admin/components/tablero/graficas/ventas/ventas.component.ts ***!
+          \******************************************************************************/
+        /*! exports provided: VentasComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VentasComponent", function () { return VentasComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            var VentasComponent = /** @class */ (function () {
+                function VentasComponent() {
+                    var _this = this;
+                    this.datos = {};
+                    this.setGraficaPorDia = function () {
+                        _this.chartTitlePorDia = 'Ventas por día';
+                        _this.toolTipSettingsPorDia = {
+                            enable: true
+                        };
+                        _this.markerSettingsPorDia = {
+                            visible: true,
+                            dataLabel: {
+                                visible: true
+                            }
+                        };
+                        _this.legendPorDia = {
+                            visible: true
+                        };
+                        _this.xAxisPorDia = {
+                            title: 'Día',
+                            valueType: 'Category',
+                            labelIntersectAction: 'Rotate90'
+                        };
+                        _this.yAxisPorDia = {
+                            title: 'Ventas'
+                        };
+                    };
+                    this.setGraficaPorCategoria = function () {
+                        _this.chartTitlePorCategoria = 'Ventas por categoria';
+                        _this.toolTipSettingsPorCategoria = {
+                            enable: true
+                        };
+                        _this.markerSettingsPorCategoria = {
+                            visible: true,
+                            dataLabel: {
+                                visible: true
+                            }
+                        };
+                        _this.legendPorCategoria = {
+                            visible: true
+                        };
+                        _this.xAxisPorCategoria = {
+                            title: 'Categoría',
+                            valueType: 'Category',
+                            labelIntersectAction: 'Rotate90'
+                        };
+                        _this.yAxisPorCategoria = {
+                            title: 'Ventas'
+                        };
+                    };
+                    this.setGraficaPorTurno = function () {
+                        _this.chartTitlePorTurno = 'Ventas por turno';
+                        _this.toolTipSettingsPorTurno = {
+                            enable: true
+                        };
+                        _this.markerSettingsPorTurno = {
+                            visible: true,
+                            dataLabel: {
+                                visible: true
+                            }
+                        };
+                        _this.legendPorTurno = {
+                            visible: true
+                        };
+                        _this.xAxisPorTurno = {
+                            title: 'Turno',
+                            valueType: 'Category',
+                            labelIntersectAction: 'Rotate90'
+                        };
+                        _this.yAxisPorTurno = {
+                            title: 'Ventas'
+                        };
+                    };
+                    this.setGraficaPorMesero = function () {
+                        _this.chartTitlePorMesero = 'Ventas por mesero';
+                        _this.toolTipSettingsPorMesero = {
+                            enable: true
+                        };
+                        _this.markerSettingsPorMesero = {
+                            visible: true,
+                            dataLabel: {
+                                visible: true
+                            }
+                        };
+                        _this.legendPorMesero = {
+                            visible: true
+                        };
+                        _this.xAxisPorMesero = {
+                            title: 'Mesero',
+                            valueType: 'Category',
+                            labelIntersectAction: 'Rotate90'
+                        };
+                        _this.yAxisPorMesero = {
+                            title: 'Ventas'
+                        };
+                    };
+                }
+                VentasComponent.prototype.ngOnInit = function () {
+                    this.setGraficaPorDia();
+                    this.setGraficaPorCategoria();
+                    this.setGraficaPorTurno();
+                    this.setGraficaPorMesero();
+                };
+                return VentasComponent;
+            }());
+            tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
+            ], VentasComponent.prototype, "datos", void 0);
+            VentasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-graficas-ventas',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./ventas.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/admin/components/tablero/graficas/ventas/ventas.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./ventas.component.css */ "./src/app/admin/components/tablero/graficas/ventas/ventas.component.css")).default]
+                })
+            ], VentasComponent);
+            /***/ 
+        }),
         /***/ "./src/app/admin/components/tablero/tablero.component.css": 
         /*!****************************************************************!*\
           !*** ./src/app/admin/components/tablero/tablero.component.css ***!
@@ -3299,8 +3447,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _syncfusion_ej2_angular_pivotview__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @syncfusion/ej2-angular-pivotview */ "./node_modules/@syncfusion/ej2-angular-pivotview/@syncfusion/ej2-angular-pivotview.js");
             /* harmony import */ var _syncfusion_ej2_buttons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @syncfusion/ej2-buttons */ "./node_modules/@syncfusion/ej2-buttons/dist/es6/ej2-buttons.es2015.js");
             /* harmony import */ var _services_tablero_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../services/tablero.service */ "./src/app/admin/services/tablero.service.ts");
+            /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+            /* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/ __webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_6__);
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
             var TableroComponent = /** @class */ (function () {
                 function TableroComponent(snackBar, tableroService) {
+                    var _this = this;
                     this.snackBar = snackBar;
                     this.tableroService = tableroService;
                     this.params = {};
@@ -3311,6 +3463,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     this.estMedia = '';
                     this.estTotal = '';
                     this.cargando = false;
+                    this.datosGraficas = {};
+                    this.loadDataGraficas = function () {
+                        _this.cargando = true;
+                        if (!_this.params.fdel) {
+                            _this.params.fdel = moment__WEBPACK_IMPORTED_MODULE_6__().subtract(1, 'week').format(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].dbDateFormat);
+                        }
+                        if (!_this.params.fal) {
+                            _this.params.fal = moment__WEBPACK_IMPORTED_MODULE_6__().format(_shared_global__WEBPACK_IMPORTED_MODULE_7__["GLOBAL"].dbDateFormat);
+                        }
+                        _this.tableroService.getDataGraficas(_this.params).subscribe(function (res) {
+                            _this.cargando = false;
+                            console.log(res);
+                            if (res.exito) {
+                                _this.datosGraficas.porDia = res.pordia;
+                                _this.datosGraficas.porCategoria = res.porcategoria;
+                                _this.datosGraficas.porTurno = res.porturno;
+                                _this.datosGraficas.porMesero = res.pormesero;
+                            }
+                            else {
+                                _this.snackBar.open("ERROR: " + res.mensaje, 'Graficas', { duration: 7000 });
+                            }
+                        });
+                    };
                 }
                 TableroComponent.prototype.ngOnInit = function () {
                     var _this = this;
@@ -3337,6 +3512,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     this.button.element.onclick = function () {
                         _this.pivotGridObj.excelExport();
                     };
+                    this.loadDataGraficas();
                 };
                 TableroComponent.prototype.onSubmit = function () {
                     var _this = this;
@@ -3356,6 +3532,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                         }
                         _this.cargando = false;
                     });
+                    this.loadDataGraficas();
                 };
                 return TableroComponent;
             }());
@@ -4619,12 +4796,25 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
             /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
             /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            // import { Observable } from 'rxjs';
             var TableroService = /** @class */ (function () {
                 function TableroService(http, ls) {
+                    var _this = this;
                     this.http = http;
                     this.ls = ls;
                     this.usrToken = null;
                     this.httpOptions = { responseType: 'json' };
+                    this.getDataGraficas = function (params) {
+                        var httpOptions = {
+                            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                                'Authorization': _this.usrToken
+                            })
+                        };
+                        return _this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].url + "/tablero/get_datos_graficas_ventas?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](params), httpOptions)
+                            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(_this.srvcErrHndl.errorHandler));
+                    };
                     this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
                     this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
                     this.httpOptions['headers'] = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
@@ -5052,6 +5242,355 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], AppModule);
             /***/ 
         }),
+        /***/ "./src/app/restaurante/services/comanda.service.ts": 
+        /*!*********************************************************!*\
+          !*** ./src/app/restaurante/services/comanda.service.ts ***!
+          \*********************************************************/
+        /*! exports provided: ComandaService */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ComandaService", function () { return ComandaService; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+            /* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
+            /* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
+            /* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+            /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
+            /* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/ __webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
+            var ComandaService = /** @class */ (function () {
+                function ComandaService(http, ls) {
+                    this.http = http;
+                    this.ls = ls;
+                    this.moduleUrl = 'comanda';
+                    this.usrToken = null;
+                    this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
+                    this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
+                }
+                ComandaService.prototype.get = function (fltr) {
+                    if (fltr === void 0) { fltr = {}; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/buscar?" + qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr), httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.getComandaDeMesa = function (idmesa) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/get_comanda/" + idmesa, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.save = function (entidad) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/guardar" + (entidad.comanda ? ('/' + entidad.comanda) : ''), entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.saveDetalle = function (idcomanda, idcuenta, detalle) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    // const urlComplement = detalle.detalle_comanda && detalle.detalle_cuenta  ? `/${detalle.detalle_cuenta}` : '';
+                    return this.http
+                        .post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/guardar_detalle/" + idcomanda + "/" + idcuenta, detalle, httpOptions)
+                        .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.setProductoImpreso = function (idcuenta) {
+                    if (idcuenta === void 0) { idcuenta = 0; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/imprimir/" + idcuenta, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.getComandasOnLine_Test = function () {
+                    var comandasOnLine = [
+                        {
+                            comanda: 37,
+                            total: 8,
+                            usuario: 6,
+                            sede: 1,
+                            estatus: 1,
+                            turno: 2,
+                            mesa: {
+                                mesa: 1,
+                                area: {
+                                    area: 1,
+                                    sede: 1,
+                                    area_padre: null,
+                                    nombre: 'Bar'
+                                },
+                                numero: 1,
+                                posx: 23.8667,
+                                posy: 18.8333,
+                                tamanio: 72.0000,
+                                estatus: 2
+                            },
+                            cuentas: [
+                                {
+                                    cuenta: 31,
+                                    comanda: 37,
+                                    nombre: 'Única',
+                                    numero: 1,
+                                    propina_monto: 0.80,
+                                    propina_porcentaje: 10.00,
+                                    cerrada: 1,
+                                    productos: [
+                                        {
+                                            detalle_cuenta: 75,
+                                            cuenta_cuenta: 31,
+                                            detalle_comanda: 79,
+                                            comanda: 37,
+                                            articulo: {
+                                                articulo: 1,
+                                                categoria_grupo: 21,
+                                                presentacion: null,
+                                                descripcion: 'Original',
+                                                precio: 8.00,
+                                                bien_servicio: 'B',
+                                                existencias: 969.00,
+                                                impresora: {
+                                                    impresora: 1,
+                                                    sede: 1,
+                                                    nombre: 'EPSON L120 Series',
+                                                    direccion_ip: null,
+                                                    ubicacion: null,
+                                                    bluetooth: 0
+                                                }
+                                            },
+                                            cantidad: 1,
+                                            precio: 8.00,
+                                            impreso: 1,
+                                            total: 8.00,
+                                            notas: '',
+                                            numero_cuenta: 1
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            comanda: 45,
+                            total: 76,
+                            usuario: 2,
+                            sede: 1,
+                            estatus: 1,
+                            turno: 2,
+                            mesa: {
+                                mesa: 3,
+                                area: {
+                                    area: 1,
+                                    sede: 1,
+                                    area_padre: null,
+                                    nombre: 'Bar'
+                                },
+                                numero: 3,
+                                posx: 11.0667,
+                                posy: 41.5000,
+                                tamanio: 72.0000,
+                                estatus: 2
+                            },
+                            cuentas: [
+                                {
+                                    cuenta: 39,
+                                    comanda: 45,
+                                    nombre: 'uno',
+                                    numero: 1,
+                                    propina_monto: 0.80,
+                                    propina_porcentaje: 10.00,
+                                    cerrada: 1,
+                                    productos: [
+                                        {
+                                            detalle_cuenta: 84,
+                                            cuenta_cuenta: 39,
+                                            detalle_comanda: 88,
+                                            comanda: 45,
+                                            articulo: {
+                                                articulo: 1,
+                                                categoria_grupo: 21,
+                                                presentacion: null,
+                                                descripcion: 'Original',
+                                                precio: 8.00,
+                                                bien_servicio: 'B',
+                                                existencias: 969.00,
+                                                impresora: {
+                                                    impresora: 1,
+                                                    sede: 1,
+                                                    nombre: 'EPSON L120 Series',
+                                                    direccion_ip: null,
+                                                    ubicacion: null,
+                                                    bluetooth: 0
+                                                }
+                                            },
+                                            cantidad: 1,
+                                            precio: 8.00,
+                                            impreso: 1,
+                                            total: 8.00,
+                                            notas: '',
+                                            numero_cuenta: 1
+                                        },
+                                        {
+                                            detalle_cuenta: 85,
+                                            cuenta_cuenta: 40,
+                                            detalle_comanda: 89,
+                                            comanda: 45,
+                                            articulo: {
+                                                articulo: 2,
+                                                categoria_grupo: 21,
+                                                presentacion: null,
+                                                descripcion: 'Zero',
+                                                precio: 8.00,
+                                                bien_servicio: 'B',
+                                                existencias: 984.00,
+                                                impresora: {
+                                                    impresora: 1,
+                                                    sede: 1,
+                                                    nombre: 'EPSON L120 Series',
+                                                    direccion_ip: null,
+                                                    ubicacion: null,
+                                                    bluetooth: 0
+                                                }
+                                            },
+                                            cantidad: 1,
+                                            precio: 8.00,
+                                            impreso: 1,
+                                            total: 8.00,
+                                            notas: '',
+                                            numero_cuenta: 1
+                                        },
+                                        {
+                                            detalle_cuenta: 86,
+                                            cuenta_cuenta: 40,
+                                            detalle_comanda: 90,
+                                            comanda: 45,
+                                            articulo: {
+                                                articulo: 6,
+                                                categoria_grupo: 23,
+                                                presentacion: null,
+                                                descripcion: 'Fettuccine',
+                                                precio: 60.00,
+                                                bien_servicio: 'B',
+                                                existencias: 995.00,
+                                                impresora: {
+                                                    impresora: 2,
+                                                    sede: 1,
+                                                    nombre: 'EPSON L120 Series',
+                                                    direccion_ip: null,
+                                                    ubicacion: null,
+                                                    bluetooth: 0
+                                                }
+                                            },
+                                            cantidad: 1,
+                                            precio: 60.00,
+                                            impreso: 1,
+                                            total: 60.00,
+                                            notas: '',
+                                            numero_cuenta: 1
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ];
+                    return comandasOnLine;
+                };
+                ComandaService.prototype.cerrarMesa = function (idMesa) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/cerrar_mesa/" + idMesa, null, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.getComandasOnLIne = function () {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/get_comanda", httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.validaPwdGerenteTurno = function (pwd) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.post(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/validapwdgerenteturno", { pwd: pwd }, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.cerrarEstacion = function (idcomanda) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/cerrar_estacion/" + idcomanda, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.getCuenta = function (idcuenta) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/cuenta/get_cuenta/" + idcuenta, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.unificarCuentas = function (deCuenta, aCuenta) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/unir_cuentas/" + deCuenta + "/" + aCuenta, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.trasladarMesa = function (idComanda, idMesaOrigen, idMesaDestino) {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/trasladar_mesa/" + idComanda + "/" + idMesaOrigen + "/" + idMesaDestino, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.getComandasCocina = function () {
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/get_comanda_cocina", httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                ComandaService.prototype.setComandaCocinada = function (idcomanda, estatus) {
+                    if (estatus === void 0) { estatus = 2; }
+                    var httpOptions = {
+                        headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                            'Authorization': this.usrToken
+                        })
+                    };
+                    return this.http.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante + "/" + this.moduleUrl + "/set_cocinado/" + idcomanda + "/" + estatus, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+                };
+                return ComandaService;
+            }());
+            ComandaService.ctorParameters = function () { return [
+                { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
+                { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
+            ]; };
+            ComandaService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+                    providedIn: 'root'
+                })
+            ], ComandaService);
+            /***/ 
+        }),
         /***/ "./src/app/shared/components/cargando/cargando.component.css": 
         /*!*******************************************************************!*\
           !*** ./src/app/shared/components/cargando/cargando.component.css ***!
@@ -5094,6 +5633,84 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             ], CargandoComponent);
             /***/ 
         }),
+        /***/ "./src/app/shared/components/check-password/check-password.component.css": 
+        /*!*******************************************************************************!*\
+          !*** ./src/app/shared/components/check-password/check-password.component.css ***!
+          \*******************************************************************************/
+        /*! exports provided: default */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3NoYXJlZC9jb21wb25lbnRzL2NoZWNrLXBhc3N3b3JkL2NoZWNrLXBhc3N3b3JkLmNvbXBvbmVudC5jc3MifQ== */");
+            /***/ 
+        }),
+        /***/ "./src/app/shared/components/check-password/check-password.component.ts": 
+        /*!******************************************************************************!*\
+          !*** ./src/app/shared/components/check-password/check-password.component.ts ***!
+          \******************************************************************************/
+        /*! exports provided: ConfigCheckPasswordModel, CheckPasswordComponent */
+        /***/ (function (module, __webpack_exports__, __webpack_require__) {
+            "use strict";
+            __webpack_require__.r(__webpack_exports__);
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ConfigCheckPasswordModel", function () { return ConfigCheckPasswordModel; });
+            /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CheckPasswordComponent", function () { return CheckPasswordComponent; });
+            /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+            /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            /* harmony import */ var _restaurante_services_comanda_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../restaurante/services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+            var ConfigCheckPasswordModel = /** @class */ (function () {
+                function ConfigCheckPasswordModel(tipo, subtitulo, etiquetaAceptar) {
+                    this.tipo = tipo;
+                    this.subtitulo = subtitulo;
+                    this.etiquetaAceptar = etiquetaAceptar;
+                }
+                return ConfigCheckPasswordModel;
+            }());
+            var CheckPasswordComponent = /** @class */ (function () {
+                function CheckPasswordComponent(comandaSrvc, dialogRef, data) {
+                    var _this = this;
+                    this.comandaSrvc = comandaSrvc;
+                    this.dialogRef = dialogRef;
+                    this.data = data;
+                    this.pwd = undefined;
+                    this.cancelar = function () { return _this.dialogRef.close(); };
+                    this.terminar = function () {
+                        switch (+_this.data.tipo) {
+                            case 1:
+                                _this.validarPwdGerenteTurno();
+                                break;
+                        }
+                    };
+                    this.validarPwdGerenteTurno = function () {
+                        _this.comandaSrvc.validaPwdGerenteTurno(_this.pwd).subscribe(function (res) {
+                            if (res.exito) {
+                                _this.dialogRef.close(res.esgerente);
+                            }
+                            else {
+                                _this.dialogRef.close(false);
+                            }
+                        });
+                    };
+                }
+                CheckPasswordComponent.prototype.ngOnInit = function () {
+                };
+                return CheckPasswordComponent;
+            }());
+            CheckPasswordComponent.ctorParameters = function () { return [
+                { type: _restaurante_services_comanda_service__WEBPACK_IMPORTED_MODULE_3__["ComandaService"] },
+                { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialogRef"] },
+                { type: ConfigCheckPasswordModel, decorators: [{ type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"], args: [_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"],] }] }
+            ]; };
+            CheckPasswordComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+                Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+                    selector: 'app-check-password',
+                    template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./check-password.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/shared/components/check-password/check-password.component.html")).default,
+                    styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./check-password.component.css */ "./src/app/shared/components/check-password/check-password.component.css")).default]
+                }),
+                tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](2, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MAT_DIALOG_DATA"]))
+            ], CheckPasswordComponent);
+            /***/ 
+        }),
         /***/ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.css": 
         /*!*******************************************************************************!*\
           !*** ./src/app/shared/components/confirm-dialog/confirm-dialog.component.css ***!
@@ -5102,7 +5719,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         /***/ (function (module, __webpack_exports__, __webpack_require__) {
             "use strict";
             __webpack_require__.r(__webpack_exports__);
-            /* harmony default export */ __webpack_exports__["default"] = ("\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL3NoYXJlZC9jb21wb25lbnRzL2NvbmZpcm0tZGlhbG9nL2NvbmZpcm0tZGlhbG9nLmNvbXBvbmVudC5jc3MifQ== */");
+            /* harmony default export */ __webpack_exports__["default"] = (".btnConfig {\r\n    width: 70px;\r\n    height: 48px;\r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2hhcmVkL2NvbXBvbmVudHMvY29uZmlybS1kaWFsb2cvY29uZmlybS1kaWFsb2cuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtJQUNJLFdBQVc7SUFDWCxZQUFZO0FBQ2hCIiwiZmlsZSI6InNyYy9hcHAvc2hhcmVkL2NvbXBvbmVudHMvY29uZmlybS1kaWFsb2cvY29uZmlybS1kaWFsb2cuY29tcG9uZW50LmNzcyIsInNvdXJjZXNDb250ZW50IjpbIi5idG5Db25maWcge1xyXG4gICAgd2lkdGg6IDcwcHg7XHJcbiAgICBoZWlnaHQ6IDQ4cHg7XHJcbn0iXX0= */");
             /***/ 
         }),
         /***/ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts": 
@@ -5539,31 +6156,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
             /* harmony import */ var _angular_cdk_portal__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/cdk/portal */ "./node_modules/@angular/cdk/esm2015/portal.js");
             /* harmony import */ var ngx_socket_io__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ngx-socket-io */ "./node_modules/ngx-socket-io/fesm2015/ngx-socket-io.js");
-            /* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
-            /* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
-            /* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/form-field */ "./node_modules/@angular/material/esm2015/form-field.js");
-            /* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm2015/input.js");
-            /* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
-            /* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/divider */ "./node_modules/@angular/material/esm2015/divider.js");
-            /* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm2015/tabs.js");
-            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-            /* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
-            /* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/checkbox */ "./node_modules/@angular/material/esm2015/checkbox.js");
-            /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
-            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
-            /* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
-            /* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/menu */ "./node_modules/@angular/material/esm2015/menu.js");
-            /* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/grid-list */ "./node_modules/@angular/material/esm2015/grid-list.js");
-            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-            /* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/sidenav */ "./node_modules/@angular/material/esm2015/sidenav.js");
-            /* harmony import */ var _angular_material_core__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/core */ "./node_modules/@angular/material/esm2015/core.js");
-            /* harmony import */ var _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./pipes/filter.pipe */ "./src/app/shared/pipes/filter.pipe.ts");
-            /* harmony import */ var _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/window/window.component */ "./src/app/shared/components/window/window.component.ts");
-            /* harmony import */ var _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
-            /* harmony import */ var _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/rpt-fechas/rpt-fechas.component */ "./src/app/shared/components/rpt-fechas/rpt-fechas.component.ts");
-            /* harmony import */ var _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/rpt-botones/rpt-botones.component */ "./src/app/shared/components/rpt-botones/rpt-botones.component.ts");
-            /* harmony import */ var _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/cargando/cargando.component */ "./src/app/shared/components/cargando/cargando.component.ts");
+            /* harmony import */ var _angular_flex_layout__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/flex-layout */ "./node_modules/@angular/flex-layout/esm2015/flex-layout.js");
+            /* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
+            /* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
+            /* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/form-field */ "./node_modules/@angular/material/esm2015/form-field.js");
+            /* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm2015/input.js");
+            /* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
+            /* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/divider */ "./node_modules/@angular/material/esm2015/divider.js");
+            /* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm2015/tabs.js");
+            /* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+            /* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
+            /* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/checkbox */ "./node_modules/@angular/material/esm2015/checkbox.js");
+            /* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
+            /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+            /* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
+            /* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/menu */ "./node_modules/@angular/material/esm2015/menu.js");
+            /* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/grid-list */ "./node_modules/@angular/material/esm2015/grid-list.js");
+            /* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+            /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+            /* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/sidenav */ "./node_modules/@angular/material/esm2015/sidenav.js");
+            /* harmony import */ var _angular_material_core__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/material/core */ "./node_modules/@angular/material/esm2015/core.js");
+            /* harmony import */ var _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./pipes/filter.pipe */ "./src/app/shared/pipes/filter.pipe.ts");
+            /* harmony import */ var _components_window_window_component__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/window/window.component */ "./src/app/shared/components/window/window.component.ts");
+            /* harmony import */ var _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
+            /* harmony import */ var _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/rpt-fechas/rpt-fechas.component */ "./src/app/shared/components/rpt-fechas/rpt-fechas.component.ts");
+            /* harmony import */ var _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! ./components/rpt-botones/rpt-botones.component */ "./src/app/shared/components/rpt-botones/rpt-botones.component.ts");
+            /* harmony import */ var _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! ./components/cargando/cargando.component */ "./src/app/shared/components/cargando/cargando.component.ts");
+            /* harmony import */ var _components_check_password_check_password_component__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./components/check-password/check-password.component */ "./src/app/shared/components/check-password/check-password.component.ts");
             // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
             var config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
             var SharedModule = /** @class */ (function () {
@@ -5574,48 +6193,51 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
             SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
                 Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
                     declarations: [
-                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_25__["FilterPipe"],
-                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__["WindowComponent"],
-                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"],
-                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__["RptFechasComponent"],
-                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"],
-                        _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_30__["CargandoComponent"]
+                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_26__["FilterPipe"],
+                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_27__["WindowComponent"],
+                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_28__["ConfirmDialogComponent"],
+                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_29__["RptFechasComponent"],
+                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_30__["RptBotonesComponent"],
+                        _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_31__["CargandoComponent"],
+                        _components_check_password_check_password_component__WEBPACK_IMPORTED_MODULE_32__["CheckPasswordComponent"]
                     ],
                     entryComponents: [
-                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"]
+                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_28__["ConfirmDialogComponent"], _components_check_password_check_password_component__WEBPACK_IMPORTED_MODULE_32__["CheckPasswordComponent"]
                     ],
                     imports: [
                         _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
                         _angular_cdk_portal__WEBPACK_IMPORTED_MODULE_4__["PortalModule"],
                         _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
                         ngx_socket_io__WEBPACK_IMPORTED_MODULE_5__["SocketIoModule"].forRoot(config),
-                        _angular_material_list__WEBPACK_IMPORTED_MODULE_6__["MatListModule"],
-                        _angular_material_icon__WEBPACK_IMPORTED_MODULE_7__["MatIconModule"],
-                        _angular_material_form_field__WEBPACK_IMPORTED_MODULE_8__["MatFormFieldModule"],
-                        _angular_material_input__WEBPACK_IMPORTED_MODULE_9__["MatInputModule"],
-                        _angular_material_card__WEBPACK_IMPORTED_MODULE_10__["MatCardModule"],
-                        _angular_material_divider__WEBPACK_IMPORTED_MODULE_11__["MatDividerModule"],
-                        _angular_material_tabs__WEBPACK_IMPORTED_MODULE_12__["MatTabsModule"],
-                        _angular_material_table__WEBPACK_IMPORTED_MODULE_13__["MatTableModule"],
-                        _angular_material_select__WEBPACK_IMPORTED_MODULE_14__["MatSelectModule"],
-                        _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_15__["MatCheckboxModule"],
-                        _angular_material_button__WEBPACK_IMPORTED_MODULE_16__["MatButtonModule"],
-                        _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_17__["MatSnackBarModule"],
-                        _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_18__["MatToolbarModule"],
-                        _angular_material_menu__WEBPACK_IMPORTED_MODULE_19__["MatMenuModule"],
-                        _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_20__["MatGridListModule"],
-                        _angular_material_paginator__WEBPACK_IMPORTED_MODULE_21__["MatPaginatorModule"],
-                        _angular_material_dialog__WEBPACK_IMPORTED_MODULE_22__["MatDialogModule"],
-                        _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_23__["MatSidenavModule"],
-                        _angular_material_core__WEBPACK_IMPORTED_MODULE_24__["MatRippleModule"]
+                        _angular_material_list__WEBPACK_IMPORTED_MODULE_7__["MatListModule"],
+                        _angular_material_icon__WEBPACK_IMPORTED_MODULE_8__["MatIconModule"],
+                        _angular_material_form_field__WEBPACK_IMPORTED_MODULE_9__["MatFormFieldModule"],
+                        _angular_material_input__WEBPACK_IMPORTED_MODULE_10__["MatInputModule"],
+                        _angular_material_card__WEBPACK_IMPORTED_MODULE_11__["MatCardModule"],
+                        _angular_material_divider__WEBPACK_IMPORTED_MODULE_12__["MatDividerModule"],
+                        _angular_material_tabs__WEBPACK_IMPORTED_MODULE_13__["MatTabsModule"],
+                        _angular_material_table__WEBPACK_IMPORTED_MODULE_14__["MatTableModule"],
+                        _angular_material_select__WEBPACK_IMPORTED_MODULE_15__["MatSelectModule"],
+                        _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_16__["MatCheckboxModule"],
+                        _angular_material_button__WEBPACK_IMPORTED_MODULE_17__["MatButtonModule"],
+                        _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_18__["MatSnackBarModule"],
+                        _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_19__["MatToolbarModule"],
+                        _angular_material_menu__WEBPACK_IMPORTED_MODULE_20__["MatMenuModule"],
+                        _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_21__["MatGridListModule"],
+                        _angular_material_paginator__WEBPACK_IMPORTED_MODULE_22__["MatPaginatorModule"],
+                        _angular_material_dialog__WEBPACK_IMPORTED_MODULE_23__["MatDialogModule"],
+                        _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_24__["MatSidenavModule"],
+                        _angular_material_core__WEBPACK_IMPORTED_MODULE_25__["MatRippleModule"],
+                        _angular_flex_layout__WEBPACK_IMPORTED_MODULE_6__["FlexLayoutModule"]
                     ],
                     exports: [
-                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_25__["FilterPipe"],
-                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_26__["WindowComponent"],
-                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_27__["ConfirmDialogComponent"],
-                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_28__["RptFechasComponent"],
-                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_29__["RptBotonesComponent"],
-                        _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_30__["CargandoComponent"]
+                        _pipes_filter_pipe__WEBPACK_IMPORTED_MODULE_26__["FilterPipe"],
+                        _components_window_window_component__WEBPACK_IMPORTED_MODULE_27__["WindowComponent"],
+                        _components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_28__["ConfirmDialogComponent"],
+                        _components_rpt_fechas_rpt_fechas_component__WEBPACK_IMPORTED_MODULE_29__["RptFechasComponent"],
+                        _components_rpt_botones_rpt_botones_component__WEBPACK_IMPORTED_MODULE_30__["RptBotonesComponent"],
+                        _components_cargando_cargando_component__WEBPACK_IMPORTED_MODULE_31__["CargandoComponent"],
+                        _components_check_password_check_password_component__WEBPACK_IMPORTED_MODULE_32__["CheckPasswordComponent"]
                     ]
                 })
             ], SharedModule);

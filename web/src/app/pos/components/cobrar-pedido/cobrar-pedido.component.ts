@@ -1,10 +1,12 @@
 import { Component, OnInit, Inject, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSelectChange } from '@angular/material';
 import { GLOBAL } from '../../../shared/global';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ConfigCheckPasswordModel, CheckPasswordComponent } from '../../../shared/components/check-password/check-password.component';
 import { Socket } from 'ngx-socket-io';
 
 import { FormaPago } from '../../interfaces/forma-pago';
@@ -31,6 +33,7 @@ export class CobrarPedidoComponent implements OnInit {
   public esMovil = false;
   public facturando = false;
   public cargandoConf: any = { w: 75, h: 75 };
+  public pideDocumento = false;
 
   constructor(
     public dialog: MatDialog,
@@ -94,12 +97,35 @@ export class CobrarPedidoComponent implements OnInit {
   }
 
   addFormaPago = () => {
+    const fp = this.lstFormasPago.filter(f => +f.forma_pago === +this.formaPago.forma_pago)[0];
+    if (+fp.pedirautorizacion === 1) {
+      const vpgtRef = this.dialog.open(CheckPasswordComponent, {
+        width: '40%',
+        disableClose: true,
+        data: new ConfigCheckPasswordModel(1)
+      });
+
+      vpgtRef.afterClosed().subscribe(res => {
+        if (res) {
+          this.agregaFormaPago(fp);
+        } else {
+          this.snackBar.open('La contraseña no es correcta', 'Formas de pago', { duration: 5000 });
+        }
+      });
+    } else {
+      this.agregaFormaPago(fp);
+    }
+  }
+
+  agregaFormaPago = (fp: FormaPago) => {
     this.formasPagoDeCuenta.push({
-      forma_pago: this.lstFormasPago.filter(f => +f.forma_pago === +this.formaPago.forma_pago)[0],
+      forma_pago: fp,
       monto: parseFloat(this.formaPago.monto).toFixed(2),
-      propina: (this.formaPago.propina || 0.00)
+      propina: (this.formaPago.propina || 0.00),
+      documento: (this.formaPago.documento || null)
     });
     this.actualizaSaldo();
+    this.pideDocumento = false;
   }
 
   delFormaPago = (idx: number) => {
@@ -136,7 +162,8 @@ export class CobrarPedidoComponent implements OnInit {
       objCobro.forma_pago.push({
         forma_pago: +fp.forma_pago.forma_pago,
         monto: fp.monto,
-        propina: (fp.propina || 0.00)
+        propina: (fp.propina || 0.00),
+        documento: fp.documento
       });
     }
 
@@ -244,4 +271,13 @@ export class CobrarPedidoComponent implements OnInit {
     const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
     setTimeout(() => wref.close(), 1000);
   }
+
+  onSelectionChangeFP = (msc: MatSelectChange) => {
+    const idx = this.lstFormasPago.findIndex(lfp => +lfp.forma_pago === +msc.value);
+    if (idx > -1) {
+      this.pideDocumento = +this.lstFormasPago[idx].pedirdocumento === 1;
+    }
+  }
+
+
 }

@@ -1,0 +1,11 @@
+.divContenedor {
+    margin-left: 5px !important;
+}
+
+.bordeRght {
+    border-right: solid 1.5px black;    
+}
+
+.bordeLft {
+    border-left: solid 1.5px black;    
+}

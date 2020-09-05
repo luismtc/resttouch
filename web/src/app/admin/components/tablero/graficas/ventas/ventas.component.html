@@ -1,0 +1,46 @@
+<div fxLayout="column" fxLayout.xs="column" fxFlexFill>
+    <!--Inicia Fila superior-->
+    <div fxLayout="row" fxLayout.xs="column" fxFlexFill>
+        <div fxFlex="50%" fxFlex.xs="100%">
+            <!--Inicia ventas por día-->
+            <ejs-chart [primaryXAxis]="xAxisPorDia" [primaryYAxis]="yAxisPorDia" [title]="chartTitlePorDia" [legendSettings]="legendPorDia" [tooltip]="toolTipSettingsPorDia">
+                <e-series-collection>
+                    <e-series type="Line" [dataSource]="datos.porDia" xName="fecha" yName="venta" name="Ventas" [marker]="markerSettingsPorDia"></e-series>
+                </e-series-collection>
+            </ejs-chart>
+            <!--Finaliza ventas por día-->
+        </div>
+        <div fxFlex="50%" fxFlex.xs="100%">
+            <!--Inicia ventas por categoría-->
+            <ejs-chart [primaryXAxis]="xAxisPorCategoria" [primaryYAxis]="yAxisPorCategoria" [title]="chartTitlePorCategoria" [legendSettings]="legendPorCategoria" [tooltip]="toolTipSettingsPorCategoria">
+                <e-series-collection>
+                    <e-series type="Line" [dataSource]="datos.porCategoria" xName="categoria" yName="venta" name="Ventas" [marker]="markerSettingsPorCategoria"></e-series>
+                </e-series-collection>
+            </ejs-chart>
+            <!--Finaliza ventas por categoría-->
+        </div>
+    </div>
+    <!--Termina fila superior-->
+    <!--Inicia fila inferior-->
+    <div fxLayout="row" fxLayout.xs="column" fxFlexFill>
+        <div fxFlex="50%" fxFlex.xs="100%">
+            <!--Inicia ventas por turno-->
+            <ejs-chart [primaryXAxis]="xAxisPorTurno" [primaryYAxis]="yAxisPorTurno" [title]="chartTitlePorTurno" [legendSettings]="legendPorTurno" [tooltip]="toolTipSettingsPorTurno">
+                <e-series-collection>
+                    <e-series type="Line" [dataSource]="datos.porTurno" xName="turno" yName="venta" name="Ventas" [marker]="markerSettingsPorTurno"></e-series>
+                </e-series-collection>
+            </ejs-chart>
+            <!--Finaliza ventas por turno-->
+        </div>
+        <div fxFlex="50%" fxFlex.xs="100%">
+            <!--Inicia ventas por mesero-->
+            <ejs-chart [primaryXAxis]="xAxisPorMesero" [primaryYAxis]="yAxisPorMesero" [title]="chartTitlePorMesero" [legendSettings]="legendPorMesero" [tooltip]="toolTipSettingsPorMesero">
+                <e-series-collection>
+                    <e-series type="Line" [dataSource]="datos.porMesero" xName="mesero" yName="venta" name="Ventas" [marker]="markerSettingsPorMesero"></e-series>
+                </e-series-collection>
+            </ejs-chart>
+            <!--Finaliza ventas por mesero-->
+        </div>
+    </div>
+    <!--Termina fila inferior-->
+</div>

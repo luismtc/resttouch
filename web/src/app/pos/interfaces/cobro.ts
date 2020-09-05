@@ -2,6 +2,7 @@ export interface CobroFormaPago {
     forma_pago: number;
     monto: number;
     propina?: number;
+    documento?: string;
 }
 
 export interface Cobro {

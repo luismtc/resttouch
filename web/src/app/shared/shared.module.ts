@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PortalModule } from '@angular/cdk/portal';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,6 +31,7 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { RptFechasComponent } from './components/rpt-fechas/rpt-fechas.component';
 import { RptBotonesComponent } from './components/rpt-botones/rpt-botones.component';
 import { CargandoComponent } from './components/cargando/cargando.component';
+import { CheckPasswordComponent } from './components/check-password/check-password.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
 const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
@@ -41,10 +43,11 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
     ConfirmDialogComponent,
     RptFechasComponent,
     RptBotonesComponent,
-    CargandoComponent
+    CargandoComponent,
+    CheckPasswordComponent
   ],
   entryComponents: [
-    ConfirmDialogComponent
+    ConfirmDialogComponent, CheckPasswordComponent
   ],
   imports: [
     CommonModule,
@@ -69,7 +72,8 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
     MatPaginatorModule,
     MatDialogModule,
     MatSidenavModule,
-    MatRippleModule
+    MatRippleModule,
+    FlexLayoutModule
   ],
   exports: [
     FilterPipe,
@@ -77,7 +81,8 @@ const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', opti
     ConfirmDialogComponent,
     RptFechasComponent,
     RptBotonesComponent,
-    CargandoComponent
+    CargandoComponent,
+    CheckPasswordComponent
   ]
 })
 export class SharedModule { }

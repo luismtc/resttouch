@@ -316,6 +316,7 @@ export class TranComandaComponent implements OnInit {
                 this.printComandaPDF();
               }
               this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+              this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
               if (+this.mesaEnUso.mesa.esmostrador === 0) {
                 this.closeSideNavEv.emit();
               }

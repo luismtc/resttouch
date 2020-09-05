@@ -4092,7 +4092,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"diseniador\">\n    <div style=\"height: 55px;\" align=\"center\">\n        <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"addTable()\">\n            <mat-icon class=\"btnIconSize\">add</mat-icon>&nbsp;Mesa\n        </button>\n        <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"addMostrador()\">\n            <mat-icon class=\"btnIconSize\">add</mat-icon>&nbsp;Mostrador\n        </button>\n        <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"addMostrador(true)\">\n            <mat-icon class=\"btnIconSize\">add</mat-icon>&nbsp;Mostrador vertical\n        </button>\n        <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"terminar()\">\n            Terminar\n        </button>\n    </div>\n    <div style=\"height: 5px; width: 100%;\"></div>\n    <div id=\"divAreaPosicionamiento\" class=\"areaPosicionamiento\">\n        <app-mesa *ngFor=\"let m of mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\" [dontAllowDrag]=\"false\" (contextmenu)=\"onContextMenu($event, m)\"></app-mesa>\n    </div>\n    <!-- Inicio del menu contextual -->\n    <div style=\"visibility: hidden; position: fixed;\" [style.left]=\"contextMenuPosition.x\" [style.top]=\"contextMenuPosition.y\" [matMenuTriggerFor]=\"contextMenu\"></div>\n    <mat-menu #contextMenu=\"matMenu\">\n        <ng-template matMenuContent let-item=\"item\">\n            <button mat-menu-item (click)=\"configurarMesa(item)\" *ngIf=\"+item.esmostrador === 1 && +item.debaja === 0\">\n                <mat-icon class=\"btnIconSize\">settings</mat-icon>Configuracion\n            </button>\n            <button mat-menu-item (click)=\"toggleDeBaja(item)\" *ngIf=\"+item.debaja === 0\" class=\"customize\" [disabled]=\"+item.estatus === 2\">\n                <mat-icon class=\"btnIconSize\">thumb_down</mat-icon>Dar de baja\n            </button>\n            <button mat-menu-item (click)=\"toggleDeBaja(item, 0)\" *ngIf=\"+item.debaja === 1\" class=\"customizeUp\" [disabled]=\"+item.estatus === 2\">\n                <mat-icon class=\"btnIconSize\">thumb_up</mat-icon>Habilitar\n            </button>\n        </ng-template>\n    </mat-menu>\n    <!-- Fin del menu contextual -->\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"diseniador\">\n    <div style=\"height: 55px;\" align=\"center\">\n        <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"addTable()\">\n            <mat-icon class=\"btnIconSize\">add</mat-icon>&nbsp;Mesa\n        </button>\n        <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"addMostrador()\">\n            <mat-icon class=\"btnIconSize\">add</mat-icon>&nbsp;Mostrador\n        </button>\n        <button mat-raised-button type=\"button\" class=\"btnAccion\" color=\"accent\" (click)=\"addMostrador(true)\">\n            <mat-icon class=\"btnIconSize\">add</mat-icon>&nbsp;Mostrador vertical\n        </button>\n        <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"terminar()\">\n            Terminar\n        </button>\n    </div>\n    <div style=\"height: 5px; width: 100%;\"></div>\n    <div id=\"divAreaPosicionamiento\" class=\"areaPosicionamiento\">\n        <app-mesa *ngFor=\"let m of mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\" [dontAllowDrag]=\"false\" (contextmenu)=\"onContextMenu($event, m)\"></app-mesa>\n    </div>\n    <!-- Inicio del menu contextual -->\n    <div style=\"visibility: hidden; position: fixed;\" [style.left]=\"contextMenuPosition.x\" [style.top]=\"contextMenuPosition.y\" [matMenuTriggerFor]=\"contextMenu\"></div>\n    <mat-menu #contextMenu=\"matMenu\">\n        <ng-template matMenuContent let-item=\"item\">\n            <span mat-menu-item class=\"mesaTitle\" disableRipple=\"true\">Mesa #{{item.numero}} ({{item.mesa}})</span>\n            <mat-divider></mat-divider>\n            <button mat-menu-item (click)=\"configurarMesa(item)\" *ngIf=\"+item.esmostrador === 1 && +item.debaja === 0\">\n                <mat-icon class=\"btnIconSize\">settings</mat-icon>Configuracion\n            </button>\n            <button mat-menu-item (click)=\"toggleDeBaja(item)\" *ngIf=\"+item.debaja === 0\" class=\"customize\" [disabled]=\"+item.estatus === 2\">\n                <mat-icon class=\"btnIconSize\">thumb_down</mat-icon>Dar de baja\n            </button>\n            <button mat-menu-item (click)=\"toggleDeBaja(item, 0)\" *ngIf=\"+item.debaja === 1\" class=\"customizeUp\" [disabled]=\"+item.estatus === 2\">\n                <mat-icon class=\"btnIconSize\">thumb_up</mat-icon>Habilitar\n            </button>\n        </ng-template>\n    </mat-menu>\n    <!-- Fin del menu contextual -->\n</div>");
 
 /***/ }),
 
@@ -4392,6 +4392,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ("<mat-sidenav-container class=\"matSideNavContainer\">\n    <mat-sidenav #rightSidenav mode=\"over\" [(opened)]=\"openedRightPanel\" (closedStart)=\"cerrandoRightSideNav()\" position=\"end\" disableClose>\n        <!--<app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (closeSideNavEv)=\"toggleRightSidenav()\"></app-tran-comanda>-->\n        <app-tran-comanda #snTranComanda [mesaEnUso]=\"mesaSeleccionada\" (mesaSavedEv)=\"actualizar()\" (closeSideNavEv)=\"toggleRightSidenav($event)\"></app-tran-comanda>\n    </mat-sidenav>\n    <mat-sidenav-content>\n        <mat-tab-group dynamicHeight backgroundColor=\"primary\">\n            <mat-tab #tabArea *ngFor=\"let tabA of lstTabsAreas\" label=\"{{tabA.nombre}}\">\n                <div #matTabArea class=\"divAreaMesa\" (window:resize)=\"onResize($event)\">\n                    <app-mesa *ngFor=\"let m of tabA.mesas\" [configuracion]=\"m\" (onClickMesa)=\"onClickMesa($event)\" [isDisabled]=\"cargando\"></app-mesa>\n                </div>\n            </mat-tab>\n        </mat-tab-group>\n    </mat-sidenav-content>\n</mat-sidenav-container>");
+
+/***/ }),
+
+/***/ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/tran-cocina/tran-cocina.component.html":
+/*!*********************************************************************************************************************!*\
+  !*** ./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/tran-cocina/tran-cocina.component.html ***!
+  \*********************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("<div fxLayout=\"row\" fxLayout.xs=\"column\" fxFlexFill>\n    <div fxFlex=\"50%\" fxFlex.xs=\"100%\" class=\"bordeRght\">\n        <div class=\"divContenedor\" fxLayout=\"row wrap\" fxLayoutGap=\"10px grid\" fxFlexFill fxLayoutAlign=\"start start\">\n            <div fxFlex=\"100%\" fxLayoutAlign=\"center start\"><h4>Pendientes</h4></div>\n            <div fxFlex=\"33%\" fxFlex.xs=\"100%\" fxFlex.sm=\"100%\" fxFlex.md=\"50%\" *ngFor=\"let cmd of lstComandasCocina\">\n                <mat-card class=\"mat-elevation-z4\">\n                    <mat-card-header>\n                        <mat-card-title>Comanda #{{cmd.comanda}}</mat-card-title>\n                        <mat-card-subtitle>Area {{cmd.mesa.area.nombre}} - Mesa #{{cmd.mesa.numero}}</mat-card-subtitle>\n                    </mat-card-header>\n                    <mat-card-content>\n                        <ng-container *ngFor=\"let cta of cmd.cuentas\">\n                            <mat-list role=\"list\" *ngIf=\"cta.productos.length > 0\">\n                                <mat-list-item role=\"listitem\" *ngFor=\"let prod of cta.productos\">\n                                    {{prod.cantidad}} {{prod.articulo.descripcion}}\n                                    <mat-divider [inset]=\"true\"></mat-divider>\n                                </mat-list-item>                        \n                            </mat-list>\n                        </ng-container>\n                    </mat-card-content>\n                    <mat-card-actions align=\"end\">\n                        <button mat-raised-button color=\"accent\" type=\"button\" (click)=\"setCocinado(cmd, 1)\">Vista</button>\n                    </mat-card-actions>\n                </mat-card>\n            </div>\n        </div>\n    </div>\n    <div fxFlex=\"50%\" fxFlex.xs=\"100%\" class=\"bordeLft\">\n        <div class=\"divContenedor\" fxLayout=\"row wrap\" fxLayoutGap=\"10px grid\" fxFlexFill fxLayoutAlign=\"start start\">\n            <div fxFlex=\"100%\" fxLayoutAlign=\"center start\"><h4>En Proceso</h4></div>\n            <div fxFlex=\"33%\" fxFlex.xs=\"100%\" fxFlex.sm=\"100%\" fxFlex.md=\"50%\" *ngFor=\"let cmdEnProceso of lstComandasCocinaEnProceso\">\n                <mat-card class=\"mat-elevation-z4\">\n                    <mat-card-header>\n                        <mat-card-title>Comanda #{{cmdEnProceso.comanda}}</mat-card-title>\n                        <mat-card-subtitle>Area {{cmdEnProceso.mesa.area.nombre}} - Mesa #{{cmdEnProceso.mesa.numero}}</mat-card-subtitle>\n                    </mat-card-header>\n                    <mat-card-content>\n                        <ng-container *ngFor=\"let cta of cmdEnProceso.cuentas\">\n                            <mat-list role=\"list\" *ngIf=\"cta.productos.length > 0\">\n                                <mat-list-item role=\"listitem\" *ngFor=\"let prod of cta.productos\">\n                                    {{prod.cantidad}} {{prod.articulo.descripcion}}\n                                    <mat-divider [inset]=\"true\"></mat-divider>\n                                </mat-list-item>                        \n                            </mat-list>\n                        </ng-container>\n                    </mat-card-content>\n                    <mat-card-actions align=\"end\">\n                        <button mat-raised-button color=\"accent\" type=\"button\" (click)=\"setCocinado(cmdEnProceso)\">Cocinado</button>\n                    </mat-card-actions>\n                </mat-card>\n            </div>\n        </div>\n    </div>\n</div>\n\n\n\n\n");
 
 /***/ }),
 
@@ -4697,7 +4710,7 @@ AbrirMesaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (".diseniador {\n    width: 750px;\n    height: 650px;\n    overflow: hidden !important;\n    padding: 0 !important;\n    /*border: dashed 1px #c7c7c749;*/\n}\n\n.areaPosicionamiento {\n    width: 100%;\n    height: 600px;\n    overflow: hidden !important;\n    background-color: #c7c7c749;\n    padding: 0 !important;\n    position: relative;\n}\n\n.btnIconSize {\n    font-size: 17pt !important;\n}\n\n::ng-deep .customize {    \n    background: lightyellow;\n}\n\n::ng-deep .customizeUp {    \n    background: lightgreen;\n}\n\n/*\n::ng-deep .mat-menu-panel {    \n    height: 125px !important;\n    padding: 0 5px !important;    \n}\n*/\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9hcmVhL2FyZWEtZGVzaWduZXIvYXJlYS1kZXNpZ25lci5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtJQUNaLGFBQWE7SUFDYiwyQkFBMkI7SUFDM0IscUJBQXFCO0lBQ3JCLGdDQUFnQztBQUNwQzs7QUFFQTtJQUNJLFdBQVc7SUFDWCxhQUFhO0lBQ2IsMkJBQTJCO0lBQzNCLDJCQUEyQjtJQUMzQixxQkFBcUI7SUFDckIsa0JBQWtCO0FBQ3RCOztBQUVBO0lBQ0ksMEJBQTBCO0FBQzlCOztBQUVBO0lBQ0ksdUJBQXVCO0FBQzNCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBOzs7OztDQUtDIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9hcmVhL2FyZWEtZGVzaWduZXIvYXJlYS1kZXNpZ25lci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmRpc2VuaWFkb3Ige1xuICAgIHdpZHRoOiA3NTBweDtcbiAgICBoZWlnaHQ6IDY1MHB4O1xuICAgIG92ZXJmbG93OiBoaWRkZW4gIWltcG9ydGFudDtcbiAgICBwYWRkaW5nOiAwICFpbXBvcnRhbnQ7XG4gICAgLypib3JkZXI6IGRhc2hlZCAxcHggI2M3YzdjNzQ5OyovXG59XG5cbi5hcmVhUG9zaWNpb25hbWllbnRvIHtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBoZWlnaHQ6IDYwMHB4O1xuICAgIG92ZXJmbG93OiBoaWRkZW4gIWltcG9ydGFudDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjYzdjN2M3NDk7XG4gICAgcGFkZGluZzogMCAhaW1wb3J0YW50O1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLmJ0bkljb25TaXplIHtcbiAgICBmb250LXNpemU6IDE3cHQgIWltcG9ydGFudDtcbn1cblxuOjpuZy1kZWVwIC5jdXN0b21pemUgeyAgICBcbiAgICBiYWNrZ3JvdW5kOiBsaWdodHllbGxvdztcbn1cblxuOjpuZy1kZWVwIC5jdXN0b21pemVVcCB7ICAgIFxuICAgIGJhY2tncm91bmQ6IGxpZ2h0Z3JlZW47XG59XG5cbi8qXG46Om5nLWRlZXAgLm1hdC1tZW51LXBhbmVsIHsgICAgXG4gICAgaGVpZ2h0OiAxMjVweCAhaW1wb3J0YW50O1xuICAgIHBhZGRpbmc6IDAgNXB4ICFpbXBvcnRhbnQ7ICAgIFxufVxuKi8iXX0= */");
+/* harmony default export */ __webpack_exports__["default"] = (".diseniador {\n    width: 750px;\n    height: 650px;\n    overflow: hidden !important;\n    padding: 0 !important;\n    /*border: dashed 1px #c7c7c749;*/\n}\n\n.areaPosicionamiento {\n    width: 100%;\n    height: 600px;\n    overflow: hidden !important;\n    background-color: #c7c7c749;\n    padding: 0 !important;\n    position: relative;\n}\n\n.btnIconSize {\n    font-size: 17pt !important;\n}\n\n::ng-deep .customize {    \n    background: lightyellow;\n}\n\n::ng-deep .customizeUp {    \n    background: lightgreen;\n}\n\n.mesaTitle {\n    font-weight: bold;\n}\n\n/*\n::ng-deep .mat-menu-panel {    \n    height: 125px !important;\n    padding: 0 5px !important;    \n}\n*/\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9hcmVhL2FyZWEtZGVzaWduZXIvYXJlYS1kZXNpZ25lci5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksWUFBWTtJQUNaLGFBQWE7SUFDYiwyQkFBMkI7SUFDM0IscUJBQXFCO0lBQ3JCLGdDQUFnQztBQUNwQzs7QUFFQTtJQUNJLFdBQVc7SUFDWCxhQUFhO0lBQ2IsMkJBQTJCO0lBQzNCLDJCQUEyQjtJQUMzQixxQkFBcUI7SUFDckIsa0JBQWtCO0FBQ3RCOztBQUVBO0lBQ0ksMEJBQTBCO0FBQzlCOztBQUVBO0lBQ0ksdUJBQXVCO0FBQzNCOztBQUVBO0lBQ0ksc0JBQXNCO0FBQzFCOztBQUVBO0lBQ0ksaUJBQWlCO0FBQ3JCOztBQUVBOzs7OztDQUtDIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy9hcmVhL2FyZWEtZGVzaWduZXIvYXJlYS1kZXNpZ25lci5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmRpc2VuaWFkb3Ige1xuICAgIHdpZHRoOiA3NTBweDtcbiAgICBoZWlnaHQ6IDY1MHB4O1xuICAgIG92ZXJmbG93OiBoaWRkZW4gIWltcG9ydGFudDtcbiAgICBwYWRkaW5nOiAwICFpbXBvcnRhbnQ7XG4gICAgLypib3JkZXI6IGRhc2hlZCAxcHggI2M3YzdjNzQ5OyovXG59XG5cbi5hcmVhUG9zaWNpb25hbWllbnRvIHtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBoZWlnaHQ6IDYwMHB4O1xuICAgIG92ZXJmbG93OiBoaWRkZW4gIWltcG9ydGFudDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjYzdjN2M3NDk7XG4gICAgcGFkZGluZzogMCAhaW1wb3J0YW50O1xuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLmJ0bkljb25TaXplIHtcbiAgICBmb250LXNpemU6IDE3cHQgIWltcG9ydGFudDtcbn1cblxuOjpuZy1kZWVwIC5jdXN0b21pemUgeyAgICBcbiAgICBiYWNrZ3JvdW5kOiBsaWdodHllbGxvdztcbn1cblxuOjpuZy1kZWVwIC5jdXN0b21pemVVcCB7ICAgIFxuICAgIGJhY2tncm91bmQ6IGxpZ2h0Z3JlZW47XG59XG5cbi5tZXNhVGl0bGUge1xuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xufVxuXG4vKlxuOjpuZy1kZWVwIC5tYXQtbWVudS1wYW5lbCB7ICAgIFxuICAgIGhlaWdodDogMTI1cHggIWltcG9ydGFudDtcbiAgICBwYWRkaW5nOiAwIDVweCAhaW1wb3J0YW50OyAgICBcbn1cbiovIl19 */");
 
 /***/ }),
 
@@ -5875,6 +5888,7 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
                     this.productoRemovedEv.emit({ listaProductos: this.listaProductos, comanda: res.comanda });
                     if (+p.cantidad === 0) {
                         this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+                        this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
                     }
                 }
                 else {
@@ -5909,9 +5923,11 @@ let ListaProductosComandaComponent = class ListaProductosComandaComponent {
     }
     ngOnInit() {
         this.esMovil = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).enmovil || false;
-        if (!!this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid) {
-            this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_4__["GLOBAL"].usrTokenVar).sede_uuid);
+        /*
+        if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
+          this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
         }
+        */
     }
     ngDoCheck() {
         // console.log('Desde lista productos comanda = ', this.listaProductos);
@@ -7543,6 +7559,125 @@ TranAreasComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
 
 /***/ }),
 
+/***/ "./src/app/restaurante/components/tran-cocina/tran-cocina.component.css":
+/*!******************************************************************************!*\
+  !*** ./src/app/restaurante/components/tran-cocina/tran-cocina.component.css ***!
+  \******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".divContenedor {\r\n    margin-left: 5px !important;\r\n}\r\n\r\n.bordeRght {\r\n    border-right: solid 1.5px black;    \r\n}\r\n\r\n.bordeLft {\r\n    border-left: solid 1.5px black;    \r\n}\r\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWNvY2luYS90cmFuLWNvY2luYS5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0lBQ0ksMkJBQTJCO0FBQy9COztBQUVBO0lBQ0ksK0JBQStCO0FBQ25DOztBQUVBO0lBQ0ksOEJBQThCO0FBQ2xDIiwiZmlsZSI6InNyYy9hcHAvcmVzdGF1cmFudGUvY29tcG9uZW50cy90cmFuLWNvY2luYS90cmFuLWNvY2luYS5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmRpdkNvbnRlbmVkb3Ige1xyXG4gICAgbWFyZ2luLWxlZnQ6IDVweCAhaW1wb3J0YW50O1xyXG59XHJcblxyXG4uYm9yZGVSZ2h0IHtcclxuICAgIGJvcmRlci1yaWdodDogc29saWQgMS41cHggYmxhY2s7ICAgIFxyXG59XHJcblxyXG4uYm9yZGVMZnQge1xyXG4gICAgYm9yZGVyLWxlZnQ6IHNvbGlkIDEuNXB4IGJsYWNrOyAgICBcclxufSJdfQ== */");
+
+/***/ }),
+
+/***/ "./src/app/restaurante/components/tran-cocina/tran-cocina.component.ts":
+/*!*****************************************************************************!*\
+  !*** ./src/app/restaurante/components/tran-cocina/tran-cocina.component.ts ***!
+  \*****************************************************************************/
+/*! exports provided: TranCocinaComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TranCocinaComponent", function() { return TranCocinaComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var ngx_socket_io__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ngx-socket-io */ "./node_modules/ngx-socket-io/fesm2015/ngx-socket-io.js");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../shared/services/desktop-notification.service */ "./src/app/shared/services/desktop-notification.service.ts");
+/* harmony import */ var _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../shared/components/confirm-dialog/confirm-dialog.component */ "./src/app/shared/components/confirm-dialog/confirm-dialog.component.ts");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../services/comanda.service */ "./src/app/restaurante/services/comanda.service.ts");
+
+
+
+
+
+
+
+
+
+
+
+let TranCocinaComponent = class TranCocinaComponent {
+    constructor(ls, comandaSrvc, socket, dns, snackBar, dialog) {
+        this.ls = ls;
+        this.comandaSrvc = comandaSrvc;
+        this.socket = socket;
+        this.dns = dns;
+        this.snackBar = snackBar;
+        this.dialog = dialog;
+        this.lstComandasCocina = [];
+        this.lstComandasCocinaEnProceso = [];
+        this.notificarUsuario = () => {
+            const opciones = {
+                icon: 'assets/img/minilogo.png',
+                body: `Se recibió una nueva orden a las ${moment__WEBPACK_IMPORTED_MODULE_9__().format(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].dateTimeFormat)}.`,
+                dir: 'auto'
+            };
+            this.dns.createNotification('Rest-Touch Pro', 10000, opciones);
+        };
+        this.loadComandasCocina = () => this.comandaSrvc.getComandasCocina().subscribe(res => {
+            this.lstComandasCocina = res.pendientes;
+            this.lstComandasCocinaEnProceso = res.enproceso;
+        });
+        this.setCocinado = (cmd, estatus = 2) => {
+            const confirmRef = this.dialog.open(_shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_8__["ConfirmDialogComponent"], {
+                maxWidth: '400px',
+                data: new _shared_components_confirm_dialog_confirm_dialog_component__WEBPACK_IMPORTED_MODULE_8__["ConfirmDialogModel"]('Cocina', `¿Seguro de marcar como '${+estatus === 1 ? 'vista' : 'cocinada'}' la comanda #${cmd.comanda}?`, 'Sí', 'No')
+            });
+            confirmRef.afterClosed().subscribe((conf) => {
+                if (conf) {
+                    this.comandaSrvc.setComandaCocinada(+cmd.comanda, estatus).subscribe((res) => {
+                        if (res.exito) {
+                            this.snackBar.open(res.mensaje, 'Cocina', { duration: 3000 });
+                        }
+                        else {
+                            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cocina', { duration: 7000 });
+                        }
+                        this.loadComandasCocina();
+                    });
+                }
+            });
+        };
+    }
+    ngOnInit() {
+        if (!!this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].usrTokenVar).sede_uuid) {
+            this.socket.emit('joinRestaurant', this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_6__["GLOBAL"].usrTokenVar).sede_uuid);
+            this.socket.on('refrescar:listaCocina', () => {
+                this.loadComandasCocina();
+                this.notificarUsuario();
+            });
+        }
+        this.loadComandasCocina();
+    }
+};
+TranCocinaComponent.ctorParameters = () => [
+    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] },
+    { type: _services_comanda_service__WEBPACK_IMPORTED_MODULE_10__["ComandaService"] },
+    { type: ngx_socket_io__WEBPACK_IMPORTED_MODULE_2__["Socket"] },
+    { type: _shared_services_desktop_notification_service__WEBPACK_IMPORTED_MODULE_7__["DesktopNotificationService"] },
+    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
+    { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_4__["MatDialog"] }
+];
+TranCocinaComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+        selector: 'app-tran-cocina',
+        template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! raw-loader!./tran-cocina.component.html */ "./node_modules/raw-loader/dist/cjs.js!./src/app/restaurante/components/tran-cocina/tran-cocina.component.html")).default,
+        styles: [tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(/*! ./tran-cocina.component.css */ "./src/app/restaurante/components/tran-cocina/tran-cocina.component.css")).default]
+    })
+], TranCocinaComponent);
+
+
+
+/***/ }),
+
 /***/ "./src/app/restaurante/components/tran-comanda/tran-comanda.component.css":
 /*!********************************************************************************!*\
   !*** ./src/app/restaurante/components/tran-comanda/tran-comanda.component.css ***!
@@ -7884,6 +8019,7 @@ let TranComandaComponent = class TranComandaComponent {
                                 this.printComandaPDF();
                             }
                             this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+                            this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
                             if (+this.mesaEnUso.mesa.esmostrador === 0) {
                                 this.closeSideNavEv.emit();
                             }
@@ -8880,6 +9016,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/propina/propina/propina.component */ "./src/app/restaurante/components/propina/propina/propina.component.ts");
 /* harmony import */ var _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/reportes/autoconsulta/autoconsulta.component */ "./src/app/restaurante/components/reportes/autoconsulta/autoconsulta.component.ts");
 /* harmony import */ var _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/caja-corte/cajacorte/cajacorte.component */ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts");
+/* harmony import */ var _components_tran_cocina_tran_cocina_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/tran-cocina/tran-cocina.component */ "./src/app/restaurante/components/tran-cocina/tran-cocina.component.ts");
 
 
 
@@ -8894,6 +9031,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+// import { FormPropinaComponent } from './components/propina/form-propina/form-propina.component';
+// import { ListaPropinaComponent } from './components/propina/lista-propina/lista-propina.component';
 
 
 
@@ -8911,6 +9051,7 @@ const routes = [
     { path: 'propina', component: _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_14__["PropinaComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
     { path: 'autoconsulta', component: _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_15__["AutoconsultaComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
     { path: 'cajacorte', component: _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_16__["CajacorteComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
+    { path: 'trancocina', component: _components_tran_cocina_tran_cocina_component__WEBPACK_IMPORTED_MODULE_17__["TranCocinaComponent"], canActivate: [_admin_services_authguard_service__WEBPACK_IMPORTED_MODULE_3__["AuthguardService"]] },
     { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 let RestauranteRoutingModule = class RestauranteRoutingModule {
@@ -8944,67 +9085,69 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _shared_shared_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared/shared.module */ "./src/app/shared/shared.module.ts");
 /* harmony import */ var _wms_wms_module__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../wms/wms.module */ "./src/app/wms/wms.module.ts");
 /* harmony import */ var _pos_pos_module__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../pos/pos.module */ "./src/app/pos/pos.module.ts");
-/* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
-/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
-/* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/form-field */ "./node_modules/@angular/material/esm2015/form-field.js");
-/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm2015/input.js");
-/* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
-/* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/divider */ "./node_modules/@angular/material/esm2015/divider.js");
-/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm2015/tabs.js");
-/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
-/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
-/* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/checkbox */ "./node_modules/@angular/material/esm2015/checkbox.js");
-/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
-/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
-/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
-/* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/menu */ "./node_modules/@angular/material/esm2015/menu.js");
-/* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/grid-list */ "./node_modules/@angular/material/esm2015/grid-list.js");
-/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
-/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-/* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/material/sidenav */ "./node_modules/@angular/material/esm2015/sidenav.js");
-/* harmony import */ var _angular_material_datepicker__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @angular/material/datepicker */ "./node_modules/@angular/material/esm2015/datepicker.js");
-/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm2015/material.js");
-/* harmony import */ var _angular_cdk_drag_drop__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @angular/cdk/drag-drop */ "./node_modules/@angular/cdk/esm2015/drag-drop.js");
-/* harmony import */ var _ngx_material_keyboard_core__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @ngx-material-keyboard/core */ "./node_modules/@ngx-material-keyboard/core/esm2015/ngx-material-keyboard-core.js");
-/* harmony import */ var _ecodev_fab_speed_dial__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @ecodev/fab-speed-dial */ "./node_modules/@ecodev/fab-speed-dial/fesm2015/ecodev-fab-speed-dial.js");
-/* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @protacon/ng-virtual-keyboard */ "./node_modules/@protacon/ng-virtual-keyboard/dist/index.js");
-/* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_31___default = /*#__PURE__*/__webpack_require__.n(_protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_31__);
-/* harmony import */ var _restaurante_routing_module__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! ./restaurante-routing.module */ "./src/app/restaurante/restaurante-routing.module.ts");
-/* harmony import */ var _components_tran_areas_tran_areas_component__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./components/tran-areas/tran-areas.component */ "./src/app/restaurante/components/tran-areas/tran-areas.component.ts");
-/* harmony import */ var _components_mesa_mesa_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/mesa/mesa.component */ "./src/app/restaurante/components/mesa/mesa.component.ts");
-/* harmony import */ var _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/abrir-mesa/abrir-mesa.component */ "./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.ts");
-/* harmony import */ var _components_tran_comanda_tran_comanda_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/tran-comanda/tran-comanda.component */ "./src/app/restaurante/components/tran-comanda/tran-comanda.component.ts");
-/* harmony import */ var _components_lista_productos_comanda_lista_productos_comanda_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/lista-productos-comanda/lista-productos-comanda.component */ "./src/app/restaurante/components/lista-productos-comanda/lista-productos-comanda.component.ts");
-/* harmony import */ var _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/unir-cuenta/unir-cuenta.component */ "./src/app/restaurante/components/unir-cuenta/unir-cuenta.component.ts");
-/* harmony import */ var _components_area_lista_area_lista_area_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/area/lista-area/lista-area.component */ "./src/app/restaurante/components/area/lista-area/lista-area.component.ts");
-/* harmony import */ var _components_area_form_area_form_area_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/area/form-area/form-area.component */ "./src/app/restaurante/components/area/form-area/form-area.component.ts");
-/* harmony import */ var _components_area_area_area_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/area/area/area.component */ "./src/app/restaurante/components/area/area/area.component.ts");
-/* harmony import */ var _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/pide-datos-cuentas/pide-datos-cuentas.component */ "./src/app/restaurante/components/pide-datos-cuentas/pide-datos-cuentas.component.ts");
-/* harmony import */ var _components_turno_turno_turno_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/turno/turno/turno.component */ "./src/app/restaurante/components/turno/turno/turno.component.ts");
-/* harmony import */ var _components_turno_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/turno/lista-turno/lista-turno.component */ "./src/app/restaurante/components/turno/lista-turno/lista-turno.component.ts");
-/* harmony import */ var _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/turno/form-turno/form-turno.component */ "./src/app/restaurante/components/turno/form-turno/form-turno.component.ts");
-/* harmony import */ var _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/area/area-designer/area-designer.component */ "./src/app/restaurante/components/area/area-designer/area-designer.component.ts");
-/* harmony import */ var _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/reportes/rpt-ventas/rpt-ventas.component */ "./src/app/restaurante/components/reportes/rpt-ventas/rpt-ventas.component.ts");
-/* harmony import */ var _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/reportes/rpt-ventas/por-categoria/por-categoria.component */ "./src/app/restaurante/components/reportes/rpt-ventas/por-categoria/por-categoria.component.ts");
-/* harmony import */ var _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/reportes/rpt-ventas/por-articulo/por-articulo.component */ "./src/app/restaurante/components/reportes/rpt-ventas/por-articulo/por-articulo.component.ts");
-/* harmony import */ var _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/reportes/turnos/turnos.component */ "./src/app/restaurante/components/reportes/turnos/turnos.component.ts");
-/* harmony import */ var _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/reportes/propinas/propinas.component */ "./src/app/restaurante/components/reportes/propinas/propinas.component.ts");
-/* harmony import */ var _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/comanda-en-linea/comanda-en-linea.component */ "./src/app/restaurante/components/comanda-en-linea/comanda-en-linea.component.ts");
-/* harmony import */ var _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/reportes/caja/caja.component */ "./src/app/restaurante/components/reportes/caja/caja.component.ts");
-/* harmony import */ var _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/reportes/factura/factura.component */ "./src/app/restaurante/components/reportes/factura/factura.component.ts");
-/* harmony import */ var _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/turno-tipo/lista-turno/lista-turno.component */ "./src/app/restaurante/components/turno-tipo/lista-turno/lista-turno.component.ts");
-/* harmony import */ var _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/turno-tipo/form-turno/form-turno.component */ "./src/app/restaurante/components/turno-tipo/form-turno/form-turno.component.ts");
-/* harmony import */ var _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/turno-tipo/turno/turno.component */ "./src/app/restaurante/components/turno-tipo/turno/turno.component.ts");
-/* harmony import */ var _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/propina/propina/propina.component */ "./src/app/restaurante/components/propina/propina/propina.component.ts");
-/* harmony import */ var _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/propina/form-propina/form-propina.component */ "./src/app/restaurante/components/propina/form-propina/form-propina.component.ts");
-/* harmony import */ var _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/propina/lista-propina/lista-propina.component */ "./src/app/restaurante/components/propina/lista-propina/lista-propina.component.ts");
-/* harmony import */ var _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/reportes/autoconsulta/autoconsulta.component */ "./src/app/restaurante/components/reportes/autoconsulta/autoconsulta.component.ts");
-/* harmony import */ var _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/caja-corte/cajacorte/cajacorte.component */ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts");
-/* harmony import */ var _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-lista/cajacorte-lista.component */ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.ts");
-/* harmony import */ var _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-form/cajacorte-form.component */ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.ts");
-/* harmony import */ var _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component */ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.ts");
-/* harmony import */ var _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./components/traslado-mesa/traslado-mesa.component */ "./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.ts");
-/* harmony import */ var _components_area_configura_mesa_configura_mesa_component__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./components/area/configura-mesa/configura-mesa.component */ "./src/app/restaurante/components/area/configura-mesa/configura-mesa.component.ts");
+/* harmony import */ var _angular_flex_layout__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/flex-layout */ "./node_modules/@angular/flex-layout/esm2015/flex-layout.js");
+/* harmony import */ var _angular_material_list__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material/list */ "./node_modules/@angular/material/esm2015/list.js");
+/* harmony import */ var _angular_material_icon__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material/icon */ "./node_modules/@angular/material/esm2015/icon.js");
+/* harmony import */ var _angular_material_form_field__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/material/form-field */ "./node_modules/@angular/material/esm2015/form-field.js");
+/* harmony import */ var _angular_material_input__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/material/input */ "./node_modules/@angular/material/esm2015/input.js");
+/* harmony import */ var _angular_material_card__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @angular/material/card */ "./node_modules/@angular/material/esm2015/card.js");
+/* harmony import */ var _angular_material_divider__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @angular/material/divider */ "./node_modules/@angular/material/esm2015/divider.js");
+/* harmony import */ var _angular_material_tabs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @angular/material/tabs */ "./node_modules/@angular/material/esm2015/tabs.js");
+/* harmony import */ var _angular_material_table__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @angular/material/table */ "./node_modules/@angular/material/esm2015/table.js");
+/* harmony import */ var _angular_material_select__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @angular/material/select */ "./node_modules/@angular/material/esm2015/select.js");
+/* harmony import */ var _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @angular/material/checkbox */ "./node_modules/@angular/material/esm2015/checkbox.js");
+/* harmony import */ var _angular_material_button__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @angular/material/button */ "./node_modules/@angular/material/esm2015/button.js");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @angular/material/toolbar */ "./node_modules/@angular/material/esm2015/toolbar.js");
+/* harmony import */ var _angular_material_menu__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @angular/material/menu */ "./node_modules/@angular/material/esm2015/menu.js");
+/* harmony import */ var _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @angular/material/grid-list */ "./node_modules/@angular/material/esm2015/grid-list.js");
+/* harmony import */ var _angular_material_paginator__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @angular/material/paginator */ "./node_modules/@angular/material/esm2015/paginator.js");
+/* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
+/* harmony import */ var _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! @angular/material/sidenav */ "./node_modules/@angular/material/esm2015/sidenav.js");
+/* harmony import */ var _angular_material_datepicker__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! @angular/material/datepicker */ "./node_modules/@angular/material/esm2015/datepicker.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm2015/material.js");
+/* harmony import */ var _angular_cdk_drag_drop__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! @angular/cdk/drag-drop */ "./node_modules/@angular/cdk/esm2015/drag-drop.js");
+/* harmony import */ var _ngx_material_keyboard_core__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! @ngx-material-keyboard/core */ "./node_modules/@ngx-material-keyboard/core/esm2015/ngx-material-keyboard-core.js");
+/* harmony import */ var _ecodev_fab_speed_dial__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! @ecodev/fab-speed-dial */ "./node_modules/@ecodev/fab-speed-dial/fesm2015/ecodev-fab-speed-dial.js");
+/* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! @protacon/ng-virtual-keyboard */ "./node_modules/@protacon/ng-virtual-keyboard/dist/index.js");
+/* harmony import */ var _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_32___default = /*#__PURE__*/__webpack_require__.n(_protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_32__);
+/* harmony import */ var _restaurante_routing_module__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! ./restaurante-routing.module */ "./src/app/restaurante/restaurante-routing.module.ts");
+/* harmony import */ var _components_tran_areas_tran_areas_component__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! ./components/tran-areas/tran-areas.component */ "./src/app/restaurante/components/tran-areas/tran-areas.component.ts");
+/* harmony import */ var _components_mesa_mesa_component__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! ./components/mesa/mesa.component */ "./src/app/restaurante/components/mesa/mesa.component.ts");
+/* harmony import */ var _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! ./components/abrir-mesa/abrir-mesa.component */ "./src/app/restaurante/components/abrir-mesa/abrir-mesa.component.ts");
+/* harmony import */ var _components_tran_comanda_tran_comanda_component__WEBPACK_IMPORTED_MODULE_37__ = __webpack_require__(/*! ./components/tran-comanda/tran-comanda.component */ "./src/app/restaurante/components/tran-comanda/tran-comanda.component.ts");
+/* harmony import */ var _components_lista_productos_comanda_lista_productos_comanda_component__WEBPACK_IMPORTED_MODULE_38__ = __webpack_require__(/*! ./components/lista-productos-comanda/lista-productos-comanda.component */ "./src/app/restaurante/components/lista-productos-comanda/lista-productos-comanda.component.ts");
+/* harmony import */ var _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_39__ = __webpack_require__(/*! ./components/unir-cuenta/unir-cuenta.component */ "./src/app/restaurante/components/unir-cuenta/unir-cuenta.component.ts");
+/* harmony import */ var _components_area_lista_area_lista_area_component__WEBPACK_IMPORTED_MODULE_40__ = __webpack_require__(/*! ./components/area/lista-area/lista-area.component */ "./src/app/restaurante/components/area/lista-area/lista-area.component.ts");
+/* harmony import */ var _components_area_form_area_form_area_component__WEBPACK_IMPORTED_MODULE_41__ = __webpack_require__(/*! ./components/area/form-area/form-area.component */ "./src/app/restaurante/components/area/form-area/form-area.component.ts");
+/* harmony import */ var _components_area_area_area_component__WEBPACK_IMPORTED_MODULE_42__ = __webpack_require__(/*! ./components/area/area/area.component */ "./src/app/restaurante/components/area/area/area.component.ts");
+/* harmony import */ var _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_43__ = __webpack_require__(/*! ./components/pide-datos-cuentas/pide-datos-cuentas.component */ "./src/app/restaurante/components/pide-datos-cuentas/pide-datos-cuentas.component.ts");
+/* harmony import */ var _components_turno_turno_turno_component__WEBPACK_IMPORTED_MODULE_44__ = __webpack_require__(/*! ./components/turno/turno/turno.component */ "./src/app/restaurante/components/turno/turno/turno.component.ts");
+/* harmony import */ var _components_turno_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_45__ = __webpack_require__(/*! ./components/turno/lista-turno/lista-turno.component */ "./src/app/restaurante/components/turno/lista-turno/lista-turno.component.ts");
+/* harmony import */ var _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_46__ = __webpack_require__(/*! ./components/turno/form-turno/form-turno.component */ "./src/app/restaurante/components/turno/form-turno/form-turno.component.ts");
+/* harmony import */ var _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_47__ = __webpack_require__(/*! ./components/area/area-designer/area-designer.component */ "./src/app/restaurante/components/area/area-designer/area-designer.component.ts");
+/* harmony import */ var _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_48__ = __webpack_require__(/*! ./components/reportes/rpt-ventas/rpt-ventas.component */ "./src/app/restaurante/components/reportes/rpt-ventas/rpt-ventas.component.ts");
+/* harmony import */ var _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_49__ = __webpack_require__(/*! ./components/reportes/rpt-ventas/por-categoria/por-categoria.component */ "./src/app/restaurante/components/reportes/rpt-ventas/por-categoria/por-categoria.component.ts");
+/* harmony import */ var _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_50__ = __webpack_require__(/*! ./components/reportes/rpt-ventas/por-articulo/por-articulo.component */ "./src/app/restaurante/components/reportes/rpt-ventas/por-articulo/por-articulo.component.ts");
+/* harmony import */ var _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_51__ = __webpack_require__(/*! ./components/reportes/turnos/turnos.component */ "./src/app/restaurante/components/reportes/turnos/turnos.component.ts");
+/* harmony import */ var _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_52__ = __webpack_require__(/*! ./components/reportes/propinas/propinas.component */ "./src/app/restaurante/components/reportes/propinas/propinas.component.ts");
+/* harmony import */ var _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_53__ = __webpack_require__(/*! ./components/comanda-en-linea/comanda-en-linea.component */ "./src/app/restaurante/components/comanda-en-linea/comanda-en-linea.component.ts");
+/* harmony import */ var _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_54__ = __webpack_require__(/*! ./components/reportes/caja/caja.component */ "./src/app/restaurante/components/reportes/caja/caja.component.ts");
+/* harmony import */ var _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_55__ = __webpack_require__(/*! ./components/reportes/factura/factura.component */ "./src/app/restaurante/components/reportes/factura/factura.component.ts");
+/* harmony import */ var _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_56__ = __webpack_require__(/*! ./components/turno-tipo/lista-turno/lista-turno.component */ "./src/app/restaurante/components/turno-tipo/lista-turno/lista-turno.component.ts");
+/* harmony import */ var _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_57__ = __webpack_require__(/*! ./components/turno-tipo/form-turno/form-turno.component */ "./src/app/restaurante/components/turno-tipo/form-turno/form-turno.component.ts");
+/* harmony import */ var _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_58__ = __webpack_require__(/*! ./components/turno-tipo/turno/turno.component */ "./src/app/restaurante/components/turno-tipo/turno/turno.component.ts");
+/* harmony import */ var _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_59__ = __webpack_require__(/*! ./components/propina/propina/propina.component */ "./src/app/restaurante/components/propina/propina/propina.component.ts");
+/* harmony import */ var _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_60__ = __webpack_require__(/*! ./components/propina/form-propina/form-propina.component */ "./src/app/restaurante/components/propina/form-propina/form-propina.component.ts");
+/* harmony import */ var _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_61__ = __webpack_require__(/*! ./components/propina/lista-propina/lista-propina.component */ "./src/app/restaurante/components/propina/lista-propina/lista-propina.component.ts");
+/* harmony import */ var _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_62__ = __webpack_require__(/*! ./components/reportes/autoconsulta/autoconsulta.component */ "./src/app/restaurante/components/reportes/autoconsulta/autoconsulta.component.ts");
+/* harmony import */ var _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_63__ = __webpack_require__(/*! ./components/caja-corte/cajacorte/cajacorte.component */ "./src/app/restaurante/components/caja-corte/cajacorte/cajacorte.component.ts");
+/* harmony import */ var _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_64__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-lista/cajacorte-lista.component */ "./src/app/restaurante/components/caja-corte/cajacorte-lista/cajacorte-lista.component.ts");
+/* harmony import */ var _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_65__ = __webpack_require__(/*! ./components/caja-corte/cajacorte-form/cajacorte-form.component */ "./src/app/restaurante/components/caja-corte/cajacorte-form/cajacorte-form.component.ts");
+/* harmony import */ var _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component */ "./src/app/restaurante/components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component.ts");
+/* harmony import */ var _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./components/traslado-mesa/traslado-mesa.component */ "./src/app/restaurante/components/traslado-mesa/traslado-mesa.component.ts");
+/* harmony import */ var _components_area_configura_mesa_configura_mesa_component__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./components/area/configura-mesa/configura-mesa.component */ "./src/app/restaurante/components/area/configura-mesa/configura-mesa.component.ts");
+/* harmony import */ var _components_tran_cocina_tran_cocina_component__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./components/tran-cocina/tran-cocina.component */ "./src/app/restaurante/components/tran-cocina/tran-cocina.component.ts");
 
 
 
@@ -9074,59 +9217,63 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 let RestauranteModule = class RestauranteModule {
 };
 RestauranteModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
         declarations: [
-            _components_tran_areas_tran_areas_component__WEBPACK_IMPORTED_MODULE_33__["TranAreasComponent"], _components_mesa_mesa_component__WEBPACK_IMPORTED_MODULE_34__["MesaComponent"], _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_tran_comanda_tran_comanda_component__WEBPACK_IMPORTED_MODULE_36__["TranComandaComponent"], _components_lista_productos_comanda_lista_productos_comanda_component__WEBPACK_IMPORTED_MODULE_37__["ListaProductosComandaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"],
-            _components_area_lista_area_lista_area_component__WEBPACK_IMPORTED_MODULE_39__["ListaAreaComponent"], _components_area_form_area_form_area_component__WEBPACK_IMPORTED_MODULE_40__["FormAreaComponent"], _components_area_area_area_component__WEBPACK_IMPORTED_MODULE_41__["AreaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_turno_turno_turno_component__WEBPACK_IMPORTED_MODULE_43__["TurnoComponent"], _components_turno_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_44__["ListaTurnoComponent"],
-            _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_45__["FormTurnoComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_47__["RptVentasComponent"], _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_48__["PorCategoriaComponent"], _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_49__["PorArticuloComponent"], _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_50__["TurnosComponent"],
-            _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_51__["PropinasComponent"], _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_52__["ComandaEnLineaComponent"], _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_53__["CajaComponent"], _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_54__["FacturaComponent"], _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_55__["ListaTurnoTipoComponent"], _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_56__["FormTurnoTipoComponent"],
-            _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_57__["TurnoTipoComponent"], _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_58__["PropinaComponent"], _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_59__["FormPropinaComponent"], _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_60__["ListaPropinaComponent"], _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_61__["AutoconsultaComponent"],
-            _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_62__["CajacorteComponent"], _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_63__["CajacorteListaComponent"], _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_64__["CajacorteFormComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"], _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_66__["TrasladoMesaComponent"],
-            _components_area_configura_mesa_configura_mesa_component__WEBPACK_IMPORTED_MODULE_67__["ConfiguraMesaComponent"]
+            _components_tran_areas_tran_areas_component__WEBPACK_IMPORTED_MODULE_34__["TranAreasComponent"], _components_mesa_mesa_component__WEBPACK_IMPORTED_MODULE_35__["MesaComponent"], _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_36__["AbrirMesaComponent"], _components_tran_comanda_tran_comanda_component__WEBPACK_IMPORTED_MODULE_37__["TranComandaComponent"], _components_lista_productos_comanda_lista_productos_comanda_component__WEBPACK_IMPORTED_MODULE_38__["ListaProductosComandaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_39__["UnirCuentaComponent"],
+            _components_area_lista_area_lista_area_component__WEBPACK_IMPORTED_MODULE_40__["ListaAreaComponent"], _components_area_form_area_form_area_component__WEBPACK_IMPORTED_MODULE_41__["FormAreaComponent"], _components_area_area_area_component__WEBPACK_IMPORTED_MODULE_42__["AreaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_43__["PideDatosCuentasComponent"], _components_turno_turno_turno_component__WEBPACK_IMPORTED_MODULE_44__["TurnoComponent"], _components_turno_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_45__["ListaTurnoComponent"],
+            _components_turno_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_46__["FormTurnoComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_47__["AreaDesignerComponent"], _components_reportes_rpt_ventas_rpt_ventas_component__WEBPACK_IMPORTED_MODULE_48__["RptVentasComponent"], _components_reportes_rpt_ventas_por_categoria_por_categoria_component__WEBPACK_IMPORTED_MODULE_49__["PorCategoriaComponent"], _components_reportes_rpt_ventas_por_articulo_por_articulo_component__WEBPACK_IMPORTED_MODULE_50__["PorArticuloComponent"], _components_reportes_turnos_turnos_component__WEBPACK_IMPORTED_MODULE_51__["TurnosComponent"],
+            _components_reportes_propinas_propinas_component__WEBPACK_IMPORTED_MODULE_52__["PropinasComponent"], _components_comanda_en_linea_comanda_en_linea_component__WEBPACK_IMPORTED_MODULE_53__["ComandaEnLineaComponent"], _components_reportes_caja_caja_component__WEBPACK_IMPORTED_MODULE_54__["CajaComponent"], _components_reportes_factura_factura_component__WEBPACK_IMPORTED_MODULE_55__["FacturaComponent"], _components_turno_tipo_lista_turno_lista_turno_component__WEBPACK_IMPORTED_MODULE_56__["ListaTurnoTipoComponent"], _components_turno_tipo_form_turno_form_turno_component__WEBPACK_IMPORTED_MODULE_57__["FormTurnoTipoComponent"],
+            _components_turno_tipo_turno_turno_component__WEBPACK_IMPORTED_MODULE_58__["TurnoTipoComponent"], _components_propina_propina_propina_component__WEBPACK_IMPORTED_MODULE_59__["PropinaComponent"], _components_propina_form_propina_form_propina_component__WEBPACK_IMPORTED_MODULE_60__["FormPropinaComponent"], _components_propina_lista_propina_lista_propina_component__WEBPACK_IMPORTED_MODULE_61__["ListaPropinaComponent"], _components_reportes_autoconsulta_autoconsulta_component__WEBPACK_IMPORTED_MODULE_62__["AutoconsultaComponent"],
+            _components_caja_corte_cajacorte_cajacorte_component__WEBPACK_IMPORTED_MODULE_63__["CajacorteComponent"], _components_caja_corte_cajacorte_lista_cajacorte_lista_component__WEBPACK_IMPORTED_MODULE_64__["CajacorteListaComponent"], _components_caja_corte_cajacorte_form_cajacorte_form_component__WEBPACK_IMPORTED_MODULE_65__["CajacorteFormComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_66__["ValidaPwdGerenteTurnoComponent"], _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_67__["TrasladoMesaComponent"],
+            _components_area_configura_mesa_configura_mesa_component__WEBPACK_IMPORTED_MODULE_68__["ConfiguraMesaComponent"],
+            _components_tran_cocina_tran_cocina_component__WEBPACK_IMPORTED_MODULE_69__["TranCocinaComponent"]
         ],
         entryComponents: [
-            _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_35__["AbrirMesaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_38__["UnirCuentaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_42__["PideDatosCuentasComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_46__["AreaDesignerComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_65__["ValidaPwdGerenteTurnoComponent"],
-            _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_66__["TrasladoMesaComponent"], _components_area_configura_mesa_configura_mesa_component__WEBPACK_IMPORTED_MODULE_67__["ConfiguraMesaComponent"]
+            _components_abrir_mesa_abrir_mesa_component__WEBPACK_IMPORTED_MODULE_36__["AbrirMesaComponent"], _components_unir_cuenta_unir_cuenta_component__WEBPACK_IMPORTED_MODULE_39__["UnirCuentaComponent"], _components_pide_datos_cuentas_pide_datos_cuentas_component__WEBPACK_IMPORTED_MODULE_43__["PideDatosCuentasComponent"], _components_area_area_designer_area_designer_component__WEBPACK_IMPORTED_MODULE_47__["AreaDesignerComponent"], _components_valida_pwd_gerente_turno_valida_pwd_gerente_turno_component__WEBPACK_IMPORTED_MODULE_66__["ValidaPwdGerenteTurnoComponent"],
+            _components_traslado_mesa_traslado_mesa_component__WEBPACK_IMPORTED_MODULE_67__["TrasladoMesaComponent"], _components_area_configura_mesa_configura_mesa_component__WEBPACK_IMPORTED_MODULE_68__["ConfiguraMesaComponent"]
         ],
         imports: [
             _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
-            _restaurante_routing_module__WEBPACK_IMPORTED_MODULE_32__["RestauranteRoutingModule"],
+            _restaurante_routing_module__WEBPACK_IMPORTED_MODULE_33__["RestauranteRoutingModule"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
             _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
             _shared_shared_module__WEBPACK_IMPORTED_MODULE_5__["SharedModule"],
             _wms_wms_module__WEBPACK_IMPORTED_MODULE_6__["WmsModule"],
             _pos_pos_module__WEBPACK_IMPORTED_MODULE_7__["PosModule"],
+            _angular_flex_layout__WEBPACK_IMPORTED_MODULE_8__["FlexLayoutModule"],
             // SocketIoModule.forRoot(config),
-            _angular_material_list__WEBPACK_IMPORTED_MODULE_8__["MatListModule"],
-            _angular_material_icon__WEBPACK_IMPORTED_MODULE_9__["MatIconModule"],
-            _angular_material_form_field__WEBPACK_IMPORTED_MODULE_10__["MatFormFieldModule"],
-            _angular_material_input__WEBPACK_IMPORTED_MODULE_11__["MatInputModule"],
-            _angular_material_card__WEBPACK_IMPORTED_MODULE_12__["MatCardModule"],
-            _angular_material_divider__WEBPACK_IMPORTED_MODULE_13__["MatDividerModule"],
-            _angular_material_tabs__WEBPACK_IMPORTED_MODULE_14__["MatTabsModule"],
-            _angular_material_table__WEBPACK_IMPORTED_MODULE_15__["MatTableModule"],
-            _angular_material_select__WEBPACK_IMPORTED_MODULE_16__["MatSelectModule"],
-            _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_17__["MatCheckboxModule"],
-            _angular_material_button__WEBPACK_IMPORTED_MODULE_18__["MatButtonModule"],
-            _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_19__["MatSnackBarModule"],
-            _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_20__["MatToolbarModule"],
-            _angular_material_menu__WEBPACK_IMPORTED_MODULE_21__["MatMenuModule"],
-            _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_22__["MatGridListModule"],
-            _angular_material_paginator__WEBPACK_IMPORTED_MODULE_23__["MatPaginatorModule"],
-            _angular_material_dialog__WEBPACK_IMPORTED_MODULE_24__["MatDialogModule"],
-            _ngx_material_keyboard_core__WEBPACK_IMPORTED_MODULE_29__["MatKeyboardModule"],
-            _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_25__["MatSidenavModule"],
-            _angular_material_datepicker__WEBPACK_IMPORTED_MODULE_26__["MatDatepickerModule"],
-            _angular_material__WEBPACK_IMPORTED_MODULE_27__["MatNativeDateModule"],
-            _ecodev_fab_speed_dial__WEBPACK_IMPORTED_MODULE_30__["EcoFabSpeedDialModule"],
-            _angular_cdk_drag_drop__WEBPACK_IMPORTED_MODULE_28__["DragDropModule"],
-            _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_31__["NgVirtualKeyboardModule"]
+            _angular_material_list__WEBPACK_IMPORTED_MODULE_9__["MatListModule"],
+            _angular_material_icon__WEBPACK_IMPORTED_MODULE_10__["MatIconModule"],
+            _angular_material_form_field__WEBPACK_IMPORTED_MODULE_11__["MatFormFieldModule"],
+            _angular_material_input__WEBPACK_IMPORTED_MODULE_12__["MatInputModule"],
+            _angular_material_card__WEBPACK_IMPORTED_MODULE_13__["MatCardModule"],
+            _angular_material_divider__WEBPACK_IMPORTED_MODULE_14__["MatDividerModule"],
+            _angular_material_tabs__WEBPACK_IMPORTED_MODULE_15__["MatTabsModule"],
+            _angular_material_table__WEBPACK_IMPORTED_MODULE_16__["MatTableModule"],
+            _angular_material_select__WEBPACK_IMPORTED_MODULE_17__["MatSelectModule"],
+            _angular_material_checkbox__WEBPACK_IMPORTED_MODULE_18__["MatCheckboxModule"],
+            _angular_material_button__WEBPACK_IMPORTED_MODULE_19__["MatButtonModule"],
+            _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_20__["MatSnackBarModule"],
+            _angular_material_toolbar__WEBPACK_IMPORTED_MODULE_21__["MatToolbarModule"],
+            _angular_material_menu__WEBPACK_IMPORTED_MODULE_22__["MatMenuModule"],
+            _angular_material_grid_list__WEBPACK_IMPORTED_MODULE_23__["MatGridListModule"],
+            _angular_material_paginator__WEBPACK_IMPORTED_MODULE_24__["MatPaginatorModule"],
+            _angular_material_dialog__WEBPACK_IMPORTED_MODULE_25__["MatDialogModule"],
+            _ngx_material_keyboard_core__WEBPACK_IMPORTED_MODULE_30__["MatKeyboardModule"],
+            _angular_material_sidenav__WEBPACK_IMPORTED_MODULE_26__["MatSidenavModule"],
+            _angular_material_datepicker__WEBPACK_IMPORTED_MODULE_27__["MatDatepickerModule"],
+            _angular_material__WEBPACK_IMPORTED_MODULE_28__["MatNativeDateModule"],
+            _ecodev_fab_speed_dial__WEBPACK_IMPORTED_MODULE_31__["EcoFabSpeedDialModule"],
+            _angular_cdk_drag_drop__WEBPACK_IMPORTED_MODULE_29__["DragDropModule"],
+            _protacon_ng_virtual_keyboard__WEBPACK_IMPORTED_MODULE_32__["NgVirtualKeyboardModule"]
         ],
         providers: [
-            _angular_material__WEBPACK_IMPORTED_MODULE_27__["MatNativeDateModule"]
+            _angular_material__WEBPACK_IMPORTED_MODULE_28__["MatNativeDateModule"]
         ]
     })
 ], RestauranteModule);
@@ -9364,347 +9511,6 @@ CajacorteService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         providedIn: 'root'
     })
 ], CajacorteService);
-
-
-
-/***/ }),
-
-/***/ "./src/app/restaurante/services/comanda.service.ts":
-/*!*********************************************************!*\
-  !*** ./src/app/restaurante/services/comanda.service.ts ***!
-  \*********************************************************/
-/*! exports provided: ComandaService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ComandaService", function() { return ComandaService; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/global */ "./src/app/shared/global.ts");
-/* harmony import */ var _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/error-handler */ "./src/app/shared/error-handler.ts");
-/* harmony import */ var _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../admin/services/localstorage.service */ "./src/app/admin/services/localstorage.service.ts");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
-/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ "./node_modules/qs/lib/index.js");
-/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);
-
-
-
-
-
-
-
-
-let ComandaService = class ComandaService {
-    constructor(http, ls) {
-        this.http = http;
-        this.ls = ls;
-        this.moduleUrl = 'comanda';
-        this.usrToken = null;
-        this.srvcErrHndl = new _shared_error_handler__WEBPACK_IMPORTED_MODULE_4__["ServiceErrorHandler"]();
-        this.usrToken = this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar) ? this.ls.get(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].usrTokenVar).token : null;
-    }
-    get(fltr = {}) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/buscar?${qs__WEBPACK_IMPORTED_MODULE_7__["stringify"](fltr)}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    getComandaDeMesa(idmesa) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/get_comanda/${idmesa}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    save(entidad) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/guardar${entidad.comanda ? ('/' + entidad.comanda) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    saveDetalle(idcomanda, idcuenta, detalle) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        // const urlComplement = detalle.detalle_comanda && detalle.detalle_cuenta  ? `/${detalle.detalle_cuenta}` : '';
-        return this.http
-            .post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/guardar_detalle/${idcomanda}/${idcuenta}`, detalle, httpOptions)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    setProductoImpreso(idcuenta = 0) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/imprimir/${idcuenta}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    getComandasOnLine_Test() {
-        const comandasOnLine = [
-            {
-                comanda: 37,
-                total: 8,
-                usuario: 6,
-                sede: 1,
-                estatus: 1,
-                turno: 2,
-                mesa: {
-                    mesa: 1,
-                    area: {
-                        area: 1,
-                        sede: 1,
-                        area_padre: null,
-                        nombre: 'Bar'
-                    },
-                    numero: 1,
-                    posx: 23.8667,
-                    posy: 18.8333,
-                    tamanio: 72.0000,
-                    estatus: 2
-                },
-                cuentas: [
-                    {
-                        cuenta: 31,
-                        comanda: 37,
-                        nombre: 'Única',
-                        numero: 1,
-                        propina_monto: 0.80,
-                        propina_porcentaje: 10.00,
-                        cerrada: 1,
-                        productos: [
-                            {
-                                detalle_cuenta: 75,
-                                cuenta_cuenta: 31,
-                                detalle_comanda: 79,
-                                comanda: 37,
-                                articulo: {
-                                    articulo: 1,
-                                    categoria_grupo: 21,
-                                    presentacion: null,
-                                    descripcion: 'Original',
-                                    precio: 8.00,
-                                    bien_servicio: 'B',
-                                    existencias: 969.00,
-                                    impresora: {
-                                        impresora: 1,
-                                        sede: 1,
-                                        nombre: 'EPSON L120 Series',
-                                        direccion_ip: null,
-                                        ubicacion: null,
-                                        bluetooth: 0
-                                    }
-                                },
-                                cantidad: 1,
-                                precio: 8.00,
-                                impreso: 1,
-                                total: 8.00,
-                                notas: '',
-                                numero_cuenta: 1
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                comanda: 45,
-                total: 76,
-                usuario: 2,
-                sede: 1,
-                estatus: 1,
-                turno: 2,
-                mesa: {
-                    mesa: 3,
-                    area: {
-                        area: 1,
-                        sede: 1,
-                        area_padre: null,
-                        nombre: 'Bar'
-                    },
-                    numero: 3,
-                    posx: 11.0667,
-                    posy: 41.5000,
-                    tamanio: 72.0000,
-                    estatus: 2
-                },
-                cuentas: [
-                    {
-                        cuenta: 39,
-                        comanda: 45,
-                        nombre: 'uno',
-                        numero: 1,
-                        propina_monto: 0.80,
-                        propina_porcentaje: 10.00,
-                        cerrada: 1,
-                        productos: [
-                            {
-                                detalle_cuenta: 84,
-                                cuenta_cuenta: 39,
-                                detalle_comanda: 88,
-                                comanda: 45,
-                                articulo: {
-                                    articulo: 1,
-                                    categoria_grupo: 21,
-                                    presentacion: null,
-                                    descripcion: 'Original',
-                                    precio: 8.00,
-                                    bien_servicio: 'B',
-                                    existencias: 969.00,
-                                    impresora: {
-                                        impresora: 1,
-                                        sede: 1,
-                                        nombre: 'EPSON L120 Series',
-                                        direccion_ip: null,
-                                        ubicacion: null,
-                                        bluetooth: 0
-                                    }
-                                },
-                                cantidad: 1,
-                                precio: 8.00,
-                                impreso: 1,
-                                total: 8.00,
-                                notas: '',
-                                numero_cuenta: 1
-                            },
-                            {
-                                detalle_cuenta: 85,
-                                cuenta_cuenta: 40,
-                                detalle_comanda: 89,
-                                comanda: 45,
-                                articulo: {
-                                    articulo: 2,
-                                    categoria_grupo: 21,
-                                    presentacion: null,
-                                    descripcion: 'Zero',
-                                    precio: 8.00,
-                                    bien_servicio: 'B',
-                                    existencias: 984.00,
-                                    impresora: {
-                                        impresora: 1,
-                                        sede: 1,
-                                        nombre: 'EPSON L120 Series',
-                                        direccion_ip: null,
-                                        ubicacion: null,
-                                        bluetooth: 0
-                                    }
-                                },
-                                cantidad: 1,
-                                precio: 8.00,
-                                impreso: 1,
-                                total: 8.00,
-                                notas: '',
-                                numero_cuenta: 1
-                            },
-                            {
-                                detalle_cuenta: 86,
-                                cuenta_cuenta: 40,
-                                detalle_comanda: 90,
-                                comanda: 45,
-                                articulo: {
-                                    articulo: 6,
-                                    categoria_grupo: 23,
-                                    presentacion: null,
-                                    descripcion: 'Fettuccine',
-                                    precio: 60.00,
-                                    bien_servicio: 'B',
-                                    existencias: 995.00,
-                                    impresora: {
-                                        impresora: 2,
-                                        sede: 1,
-                                        nombre: 'EPSON L120 Series',
-                                        direccion_ip: null,
-                                        ubicacion: null,
-                                        bluetooth: 0
-                                    }
-                                },
-                                cantidad: 1,
-                                precio: 60.00,
-                                impreso: 1,
-                                total: 60.00,
-                                notas: '',
-                                numero_cuenta: 1
-                            }
-                        ]
-                    }
-                ]
-            }
-        ];
-        return comandasOnLine;
-    }
-    cerrarMesa(idMesa) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/cerrar_mesa/${idMesa}`, null, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    getComandasOnLIne() {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/get_comanda`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    validaPwdGerenteTurno(pwd) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/validapwdgerenteturno`, { pwd }, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    cerrarEstacion(idcomanda) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/cerrar_estacion/${idcomanda}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    getCuenta(idcuenta) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/cuenta/get_cuenta/${idcuenta}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    unificarCuentas(deCuenta, aCuenta) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/unir_cuentas/${deCuenta}/${aCuenta}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-    trasladarMesa(idComanda, idMesaOrigen, idMesaDestino) {
-        const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
-                'Authorization': this.usrToken
-            })
-        };
-        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlAppRestaurante}/${this.moduleUrl}/trasladar_mesa/${idComanda}/${idMesaOrigen}/${idMesaDestino}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
-    }
-};
-ComandaService.ctorParameters = () => [
-    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
-    { type: _admin_services_localstorage_service__WEBPACK_IMPORTED_MODULE_5__["LocalstorageService"] }
-];
-ComandaService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-        providedIn: 'root'
-    })
-], ComandaService);
 
 
 

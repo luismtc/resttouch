@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { WmsModule } from '../wms/wms.module';
 import { PosModule } from '../pos/pos.module';
 // import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -70,6 +71,7 @@ import { CajacorteFormComponent } from './components/caja-corte/cajacorte-form/c
 import { ValidaPwdGerenteTurnoComponent } from './components/valida-pwd-gerente-turno/valida-pwd-gerente-turno.component';
 import { TrasladoMesaComponent } from './components/traslado-mesa/traslado-mesa.component';
 import { ConfiguraMesaComponent } from './components/area/configura-mesa/configura-mesa.component';
+import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.component';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,8 @@ import { ConfiguraMesaComponent } from './components/area/configura-mesa/configu
     PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent, FormTurnoTipoComponent,
     TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent,
     CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent,
-    ConfiguraMesaComponent
+    ConfiguraMesaComponent,
+    TranCocinaComponent
   ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent, ValidaPwdGerenteTurnoComponent,
@@ -93,6 +96,7 @@ import { ConfiguraMesaComponent } from './components/area/configura-mesa/configu
     SharedModule,
     WmsModule,
     PosModule,
+    FlexLayoutModule,
     // SocketIoModule.forRoot(config),
     MatListModule,
     MatIconModule,

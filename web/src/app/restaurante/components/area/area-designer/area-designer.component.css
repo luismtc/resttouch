@@ -27,6 +27,10 @@
     background: lightgreen;
 }
 
+.mesaTitle {
+    font-weight: bold;
+}
+
 /*
 ::ng-deep .mat-menu-panel {    
     height: 125px !important;

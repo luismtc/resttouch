@@ -3,11 +3,11 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 export class ConfirmDialogModel {
   constructor(
-    public title: string, 
-    public message: string, 
+    public title: string,
+    public message: string,
     public lblBtnConfirm: string,
     public lblBtnDeny: string
-    ) { }
+  ) { }
 }
 
 @Component({

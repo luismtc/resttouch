@@ -13,10 +13,11 @@ import { CajaComponent } from './components/reportes/caja/caja.component';
 import { FacturaComponent } from './components/reportes/factura/factura.component';
 import { TurnoTipoComponent } from './components/turno-tipo/turno/turno.component';
 import { PropinaComponent } from './components/propina/propina/propina.component';
-import { FormPropinaComponent } from './components/propina/form-propina/form-propina.component';
-import { ListaPropinaComponent } from './components/propina/lista-propina/lista-propina.component';
+// import { FormPropinaComponent } from './components/propina/form-propina/form-propina.component';
+// import { ListaPropinaComponent } from './components/propina/lista-propina/lista-propina.component';
 import { AutoconsultaComponent } from './components/reportes/autoconsulta/autoconsulta.component';
 import { CajacorteComponent } from './components/caja-corte/cajacorte/cajacorte.component';
+import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.component';
 
 const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'propina', component: PropinaComponent, canActivate: [AuthGuard] },
   { path: 'autoconsulta', component: AutoconsultaComponent, canActivate: [AuthGuard] },
   { path: 'cajacorte', component: CajacorteComponent, canActivate: [AuthGuard] },
+  { path: 'trancocina', component: TranCocinaComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

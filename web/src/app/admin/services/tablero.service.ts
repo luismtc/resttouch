@@ -3,8 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { LocalstorageService } from '../../admin/services/localstorage.service';
-import { Observable } from 'rxjs';
+// import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
+import * as qs from 'qs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ import { retry, catchError } from 'rxjs/operators';
 export class TableroService {
   private srvcErrHndl: ServiceErrorHandler;
   private usrToken: string = null;
-  private httpOptions: Object = {responseType:'json'};
+  private httpOptions: object = { responseType: 'json' };
 
   constructor(
     private http: HttpClient,
@@ -28,15 +29,29 @@ export class TableroService {
     });
   }
 
-  getTableroDatos(params: Object) {
+  getTableroDatos(params: object) {
     this.httpOptions['params'] = params;
 
     return this.http.get<any>(
       `${GLOBAL.url}/tablero/get_datos`,
       this.httpOptions
     ).pipe(
-      retry(GLOBAL.reintentos), 
+      retry(GLOBAL.reintentos),
       catchError(this.srvcErrHndl.errorHandler)
     );
+  }
+
+  getDataGraficas = (params: object) => {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+
+    return this.http.get<any>(`${GLOBAL.url}/tablero/get_datos_graficas_ventas?${qs.stringify(params)}`, httpOptions)
+      .pipe(
+        retry(GLOBAL.reintentos),
+        catchError(this.srvcErrHndl.errorHandler)
+      );
   }
 }
