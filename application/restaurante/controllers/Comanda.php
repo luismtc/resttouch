@@ -347,42 +347,45 @@ class Comanda extends CI_Controller {
 
 		$this->output
 		->set_output(json_encode($datos));
-	}
+	}	
 
-	function get_comanda_cocina() {
+	public function get_comanda_cocina() {
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$datos = [];
 
-		$tmp = $this->Comanda_model->getComandas([
-			'sede' => $data->sede,
-			'cocinado' => 0
-		]);
+		$tmp = $this->Comanda_model->getComandas(['sede' => $data->sede, 'cocinado' => 0]);
+		$enProceso = $this->Comanda_model->getComandas(['sede' => $data->sede, 'cocinado' => 1]);
 
 		foreach ($tmp as $row) {
 			$comanda = new Comanda_model($row->comanda);
-			$datos[] = $comanda->getComanda(["_usuario" => $data->idusuario, 'cocinado' => 0]);
+			$datos['pendientes'][] = $comanda->getComanda(["_usuario" => $data->idusuario, 'cocinado' => 0]);
+		}
+
+		foreach ($enProceso as $row) {
+			$comanda = new Comanda_model($row->comanda);
+			$datos['enproceso'][] = $comanda->getComanda(["_usuario" => $data->idusuario, 'cocinado' => 1]);
 		}
 
 		$this->output->set_output(json_encode($datos));
 	}
 
-	public function set_cocinado($idcomanda) {
+	public function set_cocinado($idcomanda, $cocinado = 2) {
 		$datos = ['exito' => true];
 		$errores = '';
 		$com = new Comanda_model($idcomanda);
-		$detalle = $com->getDetalle(['cocinado' => 0]);
+		$detalle = $com->getDetalle(['cocinado' => ((int)$cocinado === 1 ? 0 : 1)]);		
 
 		foreach($detalle as $det) {
 			$ld = new Dcomanda_model($det->detalle_comanda);
-			$exito = $ld->guardar(['cocinado' => 1]);
+			$exito = $ld->guardar(['cocinado' => $cocinado]);
 			if (!$exito) {
 				$datos['exito'] = false;				
 				if ($errores !== '') {
 					$errores .= '; ';
-				}
-				$errores .= $ld->getMensaje();
+				}				
+				$errores .= implode('; ', $ld->getMensaje());
 			}
 		}
 		$datos['mensaje'] = $datos['exito'] ? 'Datos actualizados con éxito.' : $errores;

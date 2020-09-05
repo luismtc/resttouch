@@ -49,4 +49,24 @@ class Tablero extends CI_Controller {
 		$this->output
 		->set_output(json_encode($res));
 	}
+
+	public function get_datos_graficas_ventas()
+	{
+		$res = ["exito" => false];
+
+		if ($this->input->get('fdel') && $this->input->get('fal'))
+		{
+			$res['pordia'] = $this->Tablero_model->getVentasPorDia($_GET);
+			$res['porcategoria'] = $this->Tablero_model->getVentasPorCategoria($_GET);
+			$res['porturno'] = $this->Tablero_model->getVentasPorTurno($_GET);
+			$res['pormesero'] = $this->Tablero_model->getVentasPorMesero($_GET);
+
+			$res["exito"] = true;
+			$res['mensaje'] = 'Datos generados con éxito.';
+		} else {
+			$res['mensaje'] = 'Por favor ingrese los datos para generar el reporte.';
+		}
+
+		$this->output->set_output(json_encode($res));
+	}
 }
