@@ -82,8 +82,12 @@ class Articulo_model extends General_model {
 		return $datos;
 	}
 
-	public function getVentaReceta($art = null)
+	public function getVentaReceta($art = null, $args = [])
 	{
+		if (isset($args['sede'])) {
+			$this->db->where('f.sede', $args['sede']);
+		}
+
 		$articulo = $this->articulo;
 		if ($art !== null) {
 			$articulo = $art;
@@ -114,7 +118,7 @@ class Articulo_model extends General_model {
 		return $comandas->total + $facturas->total;
 	}
 
-	function actualizarExistencia()
+	function actualizarExistencia($args = [])
 	{
 		if ($this->getPK()) {
 			$receta = $this->getReceta();
@@ -123,8 +127,8 @@ class Articulo_model extends General_model {
 				$grupos = [];
 				$venta = $this->getVentaReceta();
 				foreach ($receta as $row) {				
-					$ventaR = $this->getVentaReceta($row->articulo->articulo);
-					$existR = $this->obtenerExistencia($row->articulo->articulo, true);
+					$ventaR = $this->getVentaReceta($row->articulo->articulo, $args);
+					$existR = $this->obtenerExistencia($args, $row->articulo->articulo, true);
 					$existR = $existR - ($venta * $row->cantidad) - $ventaR;
 					$art = new Articulo_model($row->articulo->articulo);
 					$art->guardar(['existencias' => $existR]);
@@ -135,22 +139,31 @@ class Articulo_model extends General_model {
 				$exist = min($grupos);
 			} else if (count($principal) > 0 && $this->produccion == 0){
 				$grupos = [];
-				$exist = $this->obtenerExistencia($this->articulo);
+				$exist = $this->obtenerExistencia($args, $this->articulo);
 				foreach ($principal as $row) {
-					$venta = $this->getVentaReceta($row->receta);
+					$venta = $this->getVentaReceta($row->receta, $args);
 					$egr = $venta * $row->cantidad;
 					$exist = $exist - $egr;
 				}
 			} else {
-				$exist = $this->obtenerExistencia($this->articulo);
+				$exist = $this->obtenerExistencia($args, $this->articulo);
 			}
 
 			return $this->guardar(['existencias' => $exist]);
 		}
 	}
 
-	public function obtenerExistencia($articulo, $receta = false)
+	public function obtenerExistencia($args = [], $articulo, $receta = false)
 	{
+		if (isset($args['sede'])) {
+			$this->db->where('f.sede', $args['sede']);
+		}
+
+		if (isset($args['bodega'])) {
+			$this->db->where('f.bodega', $args['bodega']);
+		} else {
+			$this->db->where("f.merma", 0);
+		}
 
 		$ingresos = $this->db
 						 ->select("
@@ -164,10 +177,23 @@ class Articulo_model extends General_model {
 						 ->get("ingreso_detalle a")
 						 ->row(); //total ingresos
 
+		if (isset($args['sede'])) {
+			$this->db->where('f.sede', $args['sede']);
+		}
+
+		if (isset($args['bodega'])) {
+			$this->db->where('f.bodega', $args['bodega']);
+		}
+
 		$egresos = $this->db
 						->select("sum(ifnull(cantidad, 0)) as total")
-						->where("articulo", $articulo)
-						->get("egreso_detalle")
+						->join("articulo b", "a.articulo = b.articulo")
+						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+						->join("categoria d", "d.categoria = c.categoria")
+						->join("egreso e", "e.egreso = a.egreso")
+						->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
+						->where("a.articulo", $articulo)
+						->get("egreso_detalle a")
 						->row();//total egresos wms
 
 		if (!$receta) {
@@ -184,6 +210,10 @@ class Articulo_model extends General_model {
 	{
 		if (isset($args['sede'])) {
 			$this->db->where('f.sede', $args['sede']);
+		}
+
+		if (isset($args['bodega'])) {
+			$this->db->where('f.bodega', $args['bodega']);
 		}
 
 		if ($args['tipo'] == 1) {

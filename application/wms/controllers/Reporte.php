@@ -34,7 +34,7 @@ class Reporte extends CI_Controller {
 
 		foreach ($arts as $row) {
 			$art = new Articulo_model($row->articulo);
-			$art->actualizarExistencia();
+			$art->actualizarExistencia($_GET);
 			$args["reg"][] = $art->getExistencias($_GET);
 
 		}
