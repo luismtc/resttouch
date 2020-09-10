@@ -47,6 +47,7 @@
                     ng-virtual-keyboard-placeholder="Código" type="text" placeholder="Código" name="codigo"
                     [(ngModel)]="articulo.codigo" required>
             </mat-form-field>
+            <mat-checkbox name="produccion" class="fullWidth" [(ngModel)]="+articulo.produccion">¿Es produccion?</mat-checkbox>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmArticulo.form.valid || !articulo.categoria_grupo">
                     Guardar

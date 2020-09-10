@@ -36,6 +36,8 @@ export class FormEgresoComponent implements OnInit {
 
   public detallesEgreso: DetalleEgreso[] = [];
   public detalleEgreso: DetalleEgreso;
+  public detallesMerma: DetalleEgreso[] = [];
+  public detalleMerma: DetalleEgreso;
   public displayedColumns: string[] = ['articulo', 'presentacion', 'cantidad', 'precio_unitario', 'precio_total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleEgreso>;
   public tiposMovimiento: TipoMovimiento[] = [];
@@ -104,6 +106,7 @@ export class FormEgresoComponent implements OnInit {
       egreso: null, tipo_movimiento: null, bodega: null, fecha: moment().format(GLOBAL.dbDateFormat), usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), estatus_movimiento: 1, traslado: 0
     };
     this.resetDetalleEgreso();
+    this.resetDetalleMerma();
   }
 
   onSubmit = () => {
@@ -140,6 +143,10 @@ export class FormEgresoComponent implements OnInit {
   }
 
   resetDetalleEgreso = () => this.detalleEgreso = { 
+    egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
+  };
+
+  resetDetalleMerma = () => this.detalleMerma = { 
     egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
   };
 
@@ -192,6 +199,12 @@ export class FormEgresoComponent implements OnInit {
     this.updateTableDataSource();    
   }
 
+  addToDetailMerma = () => {
+    this.detallesMerma.push(this.detalleMerma);
+    this.resetDetalleMerma();
+    this.updateTableDataSourceM(); 
+  }
+
   removeFromDetail = (idarticulo: number) => this.detallesEgreso.splice(this.detallesEgreso.findIndex(de => +de.articulo === +idarticulo), 1);
 
   getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
@@ -199,5 +212,6 @@ export class FormEgresoComponent implements OnInit {
   getDescripcionPresentacion = (idpresentacion: number) => this.presentaciones.find(p => +p.presentacion === +idpresentacion).descripcion || '';
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesEgreso);
+  updateTableDataSourceM = () => this.dataSource = new MatTableDataSource(this.detallesMerma);
 
 }

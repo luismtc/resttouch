@@ -12,6 +12,7 @@ class Articulo_model extends General_model {
 	public $existencias;
 	public $shopify_id;
 	public $codigo = '';
+	public $produccion = 0;
 
 	public function __construct($id = "")
 	{
@@ -118,7 +119,7 @@ class Articulo_model extends General_model {
 		if ($this->getPK()) {
 			$receta = $this->getReceta();
 			$principal = $this->getReceta(["_principal" => true]);
-			if (count($receta) > 0) {
+			if (count($receta) > 0 && $this->produccion == 0) {
 				$grupos = [];
 				$venta = $this->getVentaReceta();
 				foreach ($receta as $row) {				
@@ -132,7 +133,7 @@ class Articulo_model extends General_model {
 				}
 
 				$exist = min($grupos);
-			} else if (count($principal) > 0){
+			} else if (count($principal) > 0 && $this->produccion == 0){
 				$grupos = [];
 				$exist = $this->obtenerExistencia($this->articulo);
 				foreach ($principal as $row) {
@@ -261,7 +262,7 @@ class Articulo_model extends General_model {
 		$comandas = 0;
 		$facturas = 0;
 
-		if (count($receta) > 0) {
+		if (count($receta) > 0 && $this->produccion == 0) {
 			$grupos = [];
 			$args['tipo'] = 1;
 			$comandas = $this->getComandaFactura($this->getPK(), $args);
@@ -277,7 +278,7 @@ class Articulo_model extends General_model {
 				}
 
 				$ingresos = min($grupos);
-		} else if (count($principal) > 0) {
+		} else if (count($principal) > 0 && $this->produccion == 0) {
 			$grupos = [];
 			$args['tipo'] = 1;
 			$ingresos = $this->getIngresoEgreso($this->getPK(), $args);

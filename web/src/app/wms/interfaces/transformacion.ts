@@ -1,6 +1,7 @@
 export interface Transformacion {
     egreso: TransformacionEgreso;
     ingreso: TransformacionIngreso;
+    merma: TransformacionDetalleMovimiento[];
 }
 
 export interface TransformacionDetalleMovimiento {
@@ -8,6 +9,7 @@ export interface TransformacionDetalleMovimiento {
     cantidad: number;
     precio_unitario: number;
     precio_total: number;
+    presentacion: number;
 }
 
 export interface TransformacionEgreso {

@@ -8,6 +8,7 @@ import { ProductoComponent } from './components/producto/producto/producto.compo
 import { TransformacionComponent } from './components/transformacion/transformacion.component';
 import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
 import { KardexComponent } from './components/reporte/kardex/kardex.component';
+import { ProduccionComponent } from './components/produccion/produccion.component';
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'transformaciones', component: TransformacionComponent, canActivate: [AuthGuard] },
   { path: 'rptexistencia', component: ExistenciasComponent, canActivate: [AuthGuard] },
   { path: 'rptkardex', component: KardexComponent, canActivate: [AuthGuard] },
+  { path: 'produccion', component: ProduccionComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

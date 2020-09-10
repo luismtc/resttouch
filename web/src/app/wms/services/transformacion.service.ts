@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Transformacion } from '../interfaces/transformacion';
+import { TransformacionIngreso } from '../interfaces/transformacion';
 import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -32,6 +33,15 @@ export class TransformacionService {
       })
     };
     return this.http.post<any>(`${GLOBAL.urlWms}/${this.conversorUrl}/transformar`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  producir(entidad: TransformacionIngreso): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.post<any>(`${GLOBAL.urlWms}/${this.conversorUrl}/producir`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 }

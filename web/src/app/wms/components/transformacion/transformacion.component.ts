@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource } from '@angular/material/table';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 import * as moment from 'moment';
@@ -7,7 +8,7 @@ import * as moment from 'moment';
 import { FormEgresoComponent } from '../egreso/form-egreso/form-egreso.component';
 import { FormIngresoComponent } from '../ingreso/form-ingreso/form-ingreso.component';
 
-import { Transformacion } from '../../interfaces/transformacion';
+import { Transformacion, TransformacionDetalleMovimiento } from '../../interfaces/transformacion';
 import { TransformacionService } from '../../services/transformacion.service';
 import { Ingreso } from '../../interfaces/ingreso';
 import { Egreso } from '../../interfaces/egreso';
@@ -23,8 +24,11 @@ export class TransformacionComponent implements OnInit {
   @ViewChild('frmIngreso', { static: false }) frmIngreso: FormIngresoComponent;
 
   public transformacion: Transformacion;
+  public mermaDetalle: TransformacionDetalleMovimiento[] = [];
+  public merma: TransformacionDetalleMovimiento;
   public ingreso: Ingreso;
   public egreso: Egreso;
+  public showMerma: boolean = true;
 
   constructor(
     private ls: LocalstorageService,
@@ -52,7 +56,7 @@ export class TransformacionComponent implements OnInit {
       egreso: {
         tipo_movimiento: this.egreso.tipo_movimiento,
         fecha: this.egreso.fecha,
-        proveedor: 0,
+        proveedor: this.ingreso.proveedor,
         bodega: this.egreso.bodega,
         usuario: this.egreso.usuario,
         estatus_movimiento: this.egreso.estatus_movimiento,
@@ -69,21 +73,32 @@ export class TransformacionComponent implements OnInit {
         bodega_origen: this.ingreso.bodega_origen,
         comentario: this.ingreso.comentario,
         detalle: []
-      }
+      },
+      merma: []
     }
+
+    this.frmEgreso.detallesMerma.forEach(dm => this.transformacion.merma.push({
+      articulo: dm.articulo,
+      cantidad: dm.cantidad,
+      precio_unitario: dm.precio_unitario,
+      precio_total: dm.precio_total,
+      presentacion: dm.presentacion
+    }));
 
     this.frmEgreso.detallesEgreso.forEach(de => this.transformacion.egreso.detalle.push({
       articulo: de.articulo,
       cantidad: de.cantidad,
       precio_unitario: de.precio_unitario,
-      precio_total: de.precio_total
+      precio_total: de.precio_total,
+      presentacion: de.presentacion
     }));
 
     this.frmIngreso.detallesIngreso.forEach(di => this.transformacion.ingreso.detalle.push({
       articulo: di.articulo,
       cantidad: di.cantidad,
       precio_unitario: di.precio_unitario,
-      precio_total: di.precio_total
+      precio_total: di.precio_total,
+      presentacion: di.presentacion
     }));
 
     if (

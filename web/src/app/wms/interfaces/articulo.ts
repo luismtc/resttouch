@@ -11,6 +11,7 @@ export interface Articulo {
     impresora?: Impresora;
     existencias?: number;
     codigo?: string;
+    produccion: number;
 }
 
 export interface ArticuloResponse {
@@ -20,6 +21,7 @@ export interface ArticuloResponse {
     descripcion: string;
     precio: number;
     codigo?: string;
+    produccion: number;
 }
 
 export interface ArbolCategoriaGrupo {
