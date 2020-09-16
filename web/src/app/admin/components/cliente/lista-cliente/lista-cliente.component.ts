@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Cliente } from '../../../interfaces/cliente';
@@ -28,6 +29,7 @@ export class ListaClienteComponent implements OnInit {
 
   constructor(
     public dialogAddCliente: MatDialog,
+    private snackBar: MatSnackBar,
     private clienteSrvc: ClienteService
   ) { }
 
@@ -35,7 +37,7 @@ export class ListaClienteComponent implements OnInit {
     this.loadClientes();
   }
 
-  applyFilter() {
+  applyFilter = () => {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.lstClientes, this.txtFiltro);
       this.length = tmpList.length;
@@ -43,6 +45,43 @@ export class ListaClienteComponent implements OnInit {
     } else {
       this.length = this.lstClientes.length;
       this.lstClientesPaged = PaginarArray(this.lstClientes, this.pageSize, this.pageIndex + 1);
+    }
+  }
+
+  validateKey = (e: any) => {
+    const inp = String.fromCharCode(e.keyCode);
+    if (/[a-zA-Z0-9]/.test(inp)) {
+      return true;
+    } else {
+      e.preventDefault();
+      return false;
+    }
+  }
+
+  loadInfoContribuyente = (nit: string) => {
+    const tmpnit = nit.trim().toUpperCase().replace(/[^a-zA-Z0-9]/gi, '');
+    if (tmpnit !== 'CF') {
+      this.clienteSrvc.getInfoContribuyente(tmpnit).subscribe(res => {
+        if (res.exito) {
+          const tmpCliente: Cliente = {
+            cliente: undefined,
+            nombre: res.contribuyente.nombre,
+            nit: tmpnit,
+            direccion: res.contribuyente.direccion
+          };
+          this.clienteSrvc.save(tmpCliente).subscribe(resNvoCliente => {
+            if (resNvoCliente.exito) {
+              this.loadClientes();
+              this.getCliente(resNvoCliente.cliente);
+              this.snackBar.open(`${res.mensaje}. Cliente agregado.`, 'Cliente', { duration: 3000 });
+            } else {
+              this.snackBar.open(`ERROR: ${resNvoCliente.mensaje}`, 'Cliente', { duration: 7000 });
+            }
+          });
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 7000 });
+        }
+      });
     }
   }
 

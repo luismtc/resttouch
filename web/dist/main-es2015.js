@@ -416,7 +416,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Cliente {{!!cliente.cliente ? cliente.nombre : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmCliente=\"ngForm\" (ngSubmit)=\"frmCliente.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" type=\"text\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"N.I.T.\" name=\"nit\" [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"N.I.T.\" type=\"text\" placeholder=\"N.I.T.\" name=\"nit\"\n                    [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Dirección\" name=\"direccion\" [(ngModel)]=\"cliente.direccion\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Dirección\" type=\"text\" placeholder=\"Dirección\" name=\"direccion\"\n                    [(ngModel)]=\"cliente.direccion\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Teléfono\" name=\"telefono\" [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Teléfono\" type=\"text\" placeholder=\"Teléfono\" name=\"telefono\"\n                    [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"E-mail\" name=\"correo\" [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"E-mail\" type=\"text\" placeholder=\"E-mail\" name=\"correo\"\n                    [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Código postal\" name=\"codigo_postal\"\n                    [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Código postal\" type=\"text\" placeholder=\"Código postal\"\n                    name=\"codigo_postal\" [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Municipio\" name=\"municipio\" [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Municipio\" type=\"text\" placeholder=\"Municipio\" name=\"municipio\"\n                    [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Departamento\" name=\"departamento\"\n                    [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Departamento\" type=\"text\" placeholder=\"Departamento\"\n                    name=\"departamento\" [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\" name=\"pais_iso_dos\"\n                    [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"País ISO\" type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\"\n                    name=\"pais_iso_dos\" [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmCliente.form.valid\">\n                    Guardar\n                </button>                \n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetCliente()\" *ngIf=\"cliente.cliente\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-title>\n        <h4>\n            Cliente {{!!cliente.cliente ? cliente.nombre : ''}}\n        </h4>\n    </mat-card-title>\n    <mat-card-content>\n        <form #frmCliente=\"ngForm\" (ngSubmit)=\"frmCliente.form.valid && onSubmit()\" novalidate>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Nombre\" name=\"nombre\" [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Nombre\" type=\"text\" placeholder=\"Nombre\" name=\"nombre\"\n                    [(ngModel)]=\"cliente.nombre\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"N.I.T.\" name=\"nit\" [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"N.I.T.\" type=\"text\" placeholder=\"N.I.T.\" name=\"nit\"\n                    [(ngModel)]=\"cliente.nit\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Dirección\" name=\"direccion\" [(ngModel)]=\"cliente.direccion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Dirección\" type=\"text\" placeholder=\"Dirección\" name=\"direccion\"\n                    [(ngModel)]=\"cliente.direccion\" required>\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Teléfono\" name=\"telefono\" [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Teléfono\" type=\"text\" placeholder=\"Teléfono\" name=\"telefono\"\n                    [(ngModel)]=\"cliente.telefono\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"E-mail\" name=\"correo\" [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"E-mail\" type=\"text\" placeholder=\"E-mail\" name=\"correo\"\n                    [(ngModel)]=\"cliente.correo\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Código postal\" name=\"codigo_postal\"\n                    [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Código postal\" type=\"text\" placeholder=\"Código postal\"\n                    name=\"codigo_postal\" [(ngModel)]=\"cliente.codigo_postal\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Municipio\" name=\"municipio\" [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Municipio\" type=\"text\" placeholder=\"Municipio\" name=\"municipio\"\n                    [(ngModel)]=\"cliente.municipio\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" placeholder=\"Departamento\" name=\"departamento\"\n                    [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"Departamento\" type=\"text\" placeholder=\"Departamento\"\n                    name=\"departamento\" [(ngModel)]=\"cliente.departamento\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"esMovil\">\n                <input matInput type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\" name=\"pais_iso_dos\"\n                    [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <mat-form-field class=\"fullWidth\" *ngIf=\"!esMovil\">\n                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout=\"alphanumeric\"\n                    ng-virtual-keyboard-placeholder=\"País ISO\" type=\"text\" maxlength=\"2\" placeholder=\"Pais ISO\"\n                    name=\"pais_iso_dos\" [(ngModel)]=\"cliente.pais_iso_dos\">\n            </mat-form-field>\n            <div align=\"end\">\n                <button mat-raised-button type=\"submit\" color=\"accent\" class=\"btnAccion\" [disabled]=\"!frmCliente.form.valid\">\n                    Guardar\n                </button>                \n                <button mat-raised-button type=\"button\" color=\"accent\" (click)=\"resetCliente()\" *ngIf=\"cliente.cliente\">\n                    Nuevo\n                </button>\n            </div>\n        </form>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -429,7 +429,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput type=\"text\" (keyup)=\"applyFilter()\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n        </mat-form-field>\n        <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"agregarCliente()\" *ngIf=\"showAddButton\">\n            Agregar\n        </button>\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let cli of lstClientesPaged\" (click)=\"getCliente(cli)\">\n                <mat-icon mat-list-icon>person</mat-icon>\n                <h5 mat-line>{{cli.nombre}}</h5>\n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
+/* harmony default export */ __webpack_exports__["default"] = ("<mat-card class=\"mat-elevation-z4 fullWidth\">\n    <mat-card-content>\n        <mat-form-field class=\"fullWidth\">\n            <input matInput type=\"text\" (keyup)=\"applyFilter()\" (keypress)=\"validateKey($event)\" placeholder=\"Buscar...\" [(ngModel)]=\"txtFiltro\" [ngModelOptions]=\"{standalone: true}\">\n            <button type=\"button\" mat-raised-button matSuffix color=\"accent\" (click)=\"loadInfoContribuyente(txtFiltro)\" *ngIf=\"length === 0 && txtFiltro.length >= 4\">\n                Validar NIT\n            </button>\n        </mat-form-field>\n        <!--\n        <button mat-flat-button type=\"button\" color=\"accent\" (click)=\"agregarCliente()\" *ngIf=\"showAddButton\">\n            Agregar\n        </button>\n        -->\n        <mat-nav-list>\n            <mat-list-item *ngFor=\"let cli of lstClientesPaged\" (click)=\"getCliente(cli)\">\n                <mat-icon mat-list-icon>person</mat-icon>\n                <h5 mat-line>{{cli.nombre}}</h5>\n            </mat-list-item>\n        </mat-nav-list>\n        <mat-paginator [length]=\"length\" [pageSize]=\"pageSize\" [pageSizeOptions]=\"pageSizeOptions\" (page)=\"pageChange($event)\" showFirstLastButtons>\n        </mat-paginator>\n    </mat-card-content>\n</mat-card>");
 
 /***/ }),
 
@@ -1837,8 +1837,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let FormClienteComponent = class FormClienteComponent {
-    constructor(_snackBar, clienteSrvc, ls) {
-        this._snackBar = _snackBar;
+    constructor(snackBar, clienteSrvc, ls) {
+        this.snackBar = snackBar;
         this.clienteSrvc = clienteSrvc;
         this.ls = ls;
         this.clienteSavedEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
@@ -1854,10 +1854,10 @@ let FormClienteComponent = class FormClienteComponent {
                 if (res.exito) {
                     this.clienteSavedEv.emit(res.cliente);
                     this.resetCliente();
-                    this._snackBar.open('Cliente agregado...', 'Cliente', { duration: 3000 });
+                    this.snackBar.open('Cliente agregado...', 'Cliente', { duration: 3000 });
                 }
                 else {
-                    this._snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 3000 });
+                    this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 7000 });
                 }
             });
         };
@@ -1916,9 +1916,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 /* harmony import */ var _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/dialog */ "./node_modules/@angular/material/esm2015/dialog.js");
-/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
-/* harmony import */ var _services_cliente_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/cliente.service */ "./src/app/admin/services/cliente.service.ts");
-/* harmony import */ var _form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm2015/snack-bar.js");
+/* harmony import */ var _shared_global__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../shared/global */ "./src/app/shared/global.ts");
+/* harmony import */ var _services_cliente_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/cliente.service */ "./src/app/admin/services/cliente.service.ts");
+/* harmony import */ var _form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../form-cliente-dialog/form-cliente-dialog.component */ "./src/app/admin/components/cliente/form-cliente-dialog/form-cliente-dialog.component.ts");
+
 
 
 
@@ -1926,8 +1928,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 let ListaClienteComponent = class ListaClienteComponent {
-    constructor(dialogAddCliente, clienteSrvc) {
+    constructor(dialogAddCliente, snackBar, clienteSrvc) {
         this.dialogAddCliente = dialogAddCliente;
+        this.snackBar = snackBar;
         this.clienteSrvc = clienteSrvc;
         this.showAddButton = false;
         this.getClienteEv = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
@@ -1936,6 +1939,55 @@ let ListaClienteComponent = class ListaClienteComponent {
         this.pageSizeOptions = [5, 10, 15];
         this.pageIndex = 0;
         this.txtFiltro = '';
+        this.applyFilter = () => {
+            if (this.txtFiltro.length > 0) {
+                const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_4__["MultiFiltro"])(this.lstClientes, this.txtFiltro);
+                this.length = tmpList.length;
+                this.lstClientesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_4__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
+            }
+            else {
+                this.length = this.lstClientes.length;
+                this.lstClientesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_4__["PaginarArray"])(this.lstClientes, this.pageSize, this.pageIndex + 1);
+            }
+        };
+        this.validateKey = (e) => {
+            const inp = String.fromCharCode(e.keyCode);
+            if (/[a-zA-Z0-9]/.test(inp)) {
+                return true;
+            }
+            else {
+                e.preventDefault();
+                return false;
+            }
+        };
+        this.loadInfoContribuyente = (nit) => {
+            const tmpnit = nit.trim().toUpperCase().replace(/[^a-zA-Z0-9]/gi, '');
+            if (tmpnit !== 'CF') {
+                this.clienteSrvc.getInfoContribuyente(tmpnit).subscribe(res => {
+                    if (res.exito) {
+                        const tmpCliente = {
+                            cliente: undefined,
+                            nombre: res.contribuyente.nombre,
+                            nit: tmpnit,
+                            direccion: res.contribuyente.direccion
+                        };
+                        this.clienteSrvc.save(tmpCliente).subscribe(resNvoCliente => {
+                            if (resNvoCliente.exito) {
+                                this.loadClientes();
+                                this.getCliente(resNvoCliente.cliente);
+                                this.snackBar.open(`${res.mensaje}. Cliente agregado.`, 'Cliente', { duration: 3000 });
+                            }
+                            else {
+                                this.snackBar.open(`ERROR: ${resNvoCliente.mensaje}`, 'Cliente', { duration: 7000 });
+                            }
+                        });
+                    }
+                    else {
+                        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 7000 });
+                    }
+                });
+            }
+        };
         this.loadClientes = () => {
             this.clienteSrvc.get().subscribe(lst => {
                 if (lst) {
@@ -1948,7 +2000,7 @@ let ListaClienteComponent = class ListaClienteComponent {
         };
         this.getCliente = (obj) => this.getClienteEv.emit(obj);
         this.agregarCliente = () => {
-            const addClienteRef = this.dialogAddCliente.open(_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_5__["FormClienteDialogComponent"], {
+            const addClienteRef = this.dialogAddCliente.open(_form_cliente_dialog_form_cliente_dialog_component__WEBPACK_IMPORTED_MODULE_6__["FormClienteDialogComponent"], {
                 width: '50%',
                 data: { esDialogo: true }
             });
@@ -1969,21 +2021,11 @@ let ListaClienteComponent = class ListaClienteComponent {
     ngOnInit() {
         this.loadClientes();
     }
-    applyFilter() {
-        if (this.txtFiltro.length > 0) {
-            const tmpList = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["MultiFiltro"])(this.lstClientes, this.txtFiltro);
-            this.length = tmpList.length;
-            this.lstClientesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(tmpList, this.pageSize, this.pageIndex + 1);
-        }
-        else {
-            this.length = this.lstClientes.length;
-            this.lstClientesPaged = Object(_shared_global__WEBPACK_IMPORTED_MODULE_3__["PaginarArray"])(this.lstClientes, this.pageSize, this.pageIndex + 1);
-        }
-    }
 };
 ListaClienteComponent.ctorParameters = () => [
     { type: _angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"] },
-    { type: _services_cliente_service__WEBPACK_IMPORTED_MODULE_4__["ClienteService"] }
+    { type: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_3__["MatSnackBar"] },
+    { type: _services_cliente_service__WEBPACK_IMPORTED_MODULE_5__["ClienteService"] }
 ];
 tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()
@@ -4630,6 +4672,14 @@ let ClienteService = class ClienteService {
         };
         return this.http.post(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/${this.moduleUrl}/guardar${!!entidad.cliente ? ('/' + entidad.cliente) : ''}`, entidad, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
     }
+    getInfoContribuyente(nit) {
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]({
+                'Authorization': this.usrToken
+            })
+        };
+        return this.http.get(`${_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].urlMantenimientos}/${this.moduleUrl}/get_info_contribuyente/${nit}`, httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["retry"])(_shared_global__WEBPACK_IMPORTED_MODULE_3__["GLOBAL"].reintentos), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["catchError"])(this.srvcErrHndl.errorHandler));
+    }
 };
 ClienteService.ctorParameters = () => [
     { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"] },
@@ -6788,7 +6838,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-const config = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} }; // Produccion GCP
+const config = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
 let SharedModule = class SharedModule {
 };
 SharedModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

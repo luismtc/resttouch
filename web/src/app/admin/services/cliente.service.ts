@@ -14,13 +14,13 @@ import * as qs from 'qs';
 export class ClienteService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'cliente';
+  private moduleUrl = 'cliente';
   private usrToken: string = null;
 
   constructor(
     private http: HttpClient,
-    private ls: LocalstorageService    
-  ) { 
+    private ls: LocalstorageService
+  ) {
     this.srvcErrHndl = new ServiceErrorHandler();
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
@@ -31,7 +31,10 @@ export class ClienteService {
         'Authorization': this.usrToken
       })
     };
-    return this.http.get<Cliente[]>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Cliente[]>(
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Cliente): Observable<any> {
@@ -39,7 +42,23 @@ export class ClienteService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${!!entidad.cliente ? ('/' + entidad.cliente) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${!!entidad.cliente ? ('/' + entidad.cliente) : ''}`,
+      entidad,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getInfoContribuyente(nit: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/get_info_contribuyente/${nit}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

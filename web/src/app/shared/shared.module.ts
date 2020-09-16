@@ -34,7 +34,8 @@ import { CargandoComponent } from './components/cargando/cargando.component';
 import { CheckPasswordComponent } from './components/check-password/check-password.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} };
+// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} }; // Produccion GCP
+const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
 
 @NgModule({
   declarations: [

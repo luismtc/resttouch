@@ -8,5 +8,5 @@ export interface Cliente {
     codigo_postal?: string;
     municipio?: string;
     departamento?: string;
-    pais_iso_dos?: string;    
+    pais_iso_dos?: string;
 }

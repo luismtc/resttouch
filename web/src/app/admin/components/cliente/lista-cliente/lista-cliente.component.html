@@ -1,11 +1,16 @@
 <mat-card class="mat-elevation-z4 fullWidth">
     <mat-card-content>
         <mat-form-field class="fullWidth">
-            <input matInput type="text" (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
+            <input matInput type="text" (keyup)="applyFilter()" (keypress)="validateKey($event)" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
+            <button type="button" mat-raised-button matSuffix color="accent" (click)="loadInfoContribuyente(txtFiltro)" *ngIf="length === 0 && txtFiltro.length >= 4">
+                Validar NIT
+            </button>
         </mat-form-field>
+        <!--
         <button mat-flat-button type="button" color="accent" (click)="agregarCliente()" *ngIf="showAddButton">
             Agregar
         </button>
+        -->
         <mat-nav-list>
             <mat-list-item *ngFor="let cli of lstClientesPaged" (click)="getCliente(cli)">
                 <mat-icon mat-list-icon>person</mat-icon>

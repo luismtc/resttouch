@@ -23,12 +23,12 @@
                     [(ngModel)]="cliente.nit" required>
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="Dirección" name="direccion" [(ngModel)]="cliente.direccion">
+                <input matInput type="text" placeholder="Dirección" name="direccion" [(ngModel)]="cliente.direccion" required>
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Dirección" type="text" placeholder="Dirección" name="direccion"
-                    [(ngModel)]="cliente.direccion">
+                    [(ngModel)]="cliente.direccion" required>
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono">

@@ -1,17 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cliente extends CI_Controller {
+class Cliente extends CI_Controller
+{
 
 	public function __construct()
 	{
-        parent::__construct();
-        $this->load->model('Cliente_model');
-        $this->output
-		->set_content_type("application/json", "UTF-8");
+		parent::__construct();
+		$this->load->model('Cliente_model');
+		$this->output
+			->set_content_type("application/json", "UTF-8");
 	}
 
-	public function guardar($id = "") 
+	public function guardar($id = "")
 	{
 		$clt = new Cliente_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
@@ -29,24 +30,24 @@ class Cliente extends CI_Controller {
 					$continuar = false;
 				}
 			}
-			if ($continuar) {				
+			if ($continuar) {
 				$datos['exito'] = $clt->guardar($req);
 
-				if($datos['exito']) {
+				if ($datos['exito']) {
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['cliente'] = $clt;
 				} else {
 					$datos['mensaje'] = $clt->getMensaje();
-				}	
+				}
 			} else {
 				$datos['mensaje'] = "Ya existe un cliente con este nit";
 			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
-		
+
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function buscar()
@@ -54,8 +55,47 @@ class Cliente extends CI_Controller {
 		$datos = $this->Cliente_model->buscar($_GET);
 
 		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));
+	}
+
+	public function prettyNombreContribuyente($fullname)
+	{
+		$nombreCompleto = explode(',,', $fullname);
+		$cntNombreCompleto = count($nombreCompleto);
+		for ($i = 0; $i < $cntNombreCompleto; $i++) {
+			$nombreCompleto[$i] = trim(str_replace(',', ' ', $nombreCompleto[$i]));
+		}
+		$tmp = '';
+		for ($i = $cntNombreCompleto - 1; $i >= 0; $i--) {
+			if ($tmp !== '') {
+				$tmp .= ' ';
+			}
+			$tmp .= $nombreCompleto[$i];
+		}
+		return $tmp;
+	}
+
+	public function get_info_contribuyente($nit = 'CF')
+	{
+		$nit = strtoupper(trim($nit));
+		$datos = ['exito' => false];
+		if ($nit !== 'CF') {
+			$soapClient = new SoapClient('https://www.ingface.net/ServiciosIngface/ingfaceWsServices?wsdl');
+			$resultado = $soapClient->nitContribuyentes(['usuario' => 'DEMO', 'clave' => 'C2FDC80789AFAF22C372965901B16DF533A4FCB19FD9F2FD5CBDA554032983B0', 'nit' => $nit]);
+			if (!strpos($resultado->return->nombre, 'no valido')) {
+				$datos['contribuyente'] = [
+					'nombre' => $this->prettyNombreContribuyente($resultado->return->nombre),
+					// 'direccion' => trim($resultado->return->direccion_completa)
+					'direccion' => 'Ciudad'
+				];
+				$datos['exito'] = true;
+				$datos['mensaje'] = 'Contribuyente encontrado.';
+			} else {
+				$datos['mensaje'] = $resultado->return->nombre;
+			}
+		}
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
 }
 

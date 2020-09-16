@@ -15,11 +15,11 @@ export class FormClienteComponent implements OnInit {
 
   @Input() cliente: Cliente;
   @Output() clienteSavedEv = new EventEmitter();
-  public esDialogo: boolean = false;
-  public esMovil: boolean = false;
+  public esDialogo = false;
+  public esMovil = false;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private clienteSrvc: ClienteService,
     private ls: LocalstorageService
   ) { }
@@ -32,7 +32,7 @@ export class FormClienteComponent implements OnInit {
   resetCliente = () => this.cliente = {
     cliente: null, nombre: null, direccion: null, nit: null, telefono: null, correo: null,
     codigo_postal: null, municipio: null, departamento: null, pais_iso_dos: null
-  };
+  }
 
   onSubmit = () => {
     this.clienteSrvc.save(this.cliente).subscribe(res => {
@@ -40,9 +40,9 @@ export class FormClienteComponent implements OnInit {
       if (res.exito) {
         this.clienteSavedEv.emit(res.cliente);
         this.resetCliente();
-        this._snackBar.open('Cliente agregado...', 'Cliente', { duration: 3000 });
+        this.snackBar.open('Cliente agregado...', 'Cliente', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 7000 });
       }
     });
   }
