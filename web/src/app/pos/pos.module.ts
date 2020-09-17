@@ -24,7 +24,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
-import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+// import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 // import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
@@ -70,7 +70,6 @@ import { FormFacturaManualComponent } from './components/facturaManual/form-fact
     MatGridListModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatKeyboardModule,
     MatSidenavModule,
     EcoFabSpeedDialModule,
   ],

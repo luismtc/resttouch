@@ -30,7 +30,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
-import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+// import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
 // import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
@@ -115,7 +115,6 @@ import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.compon
     MatGridListModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatKeyboardModule,
     MatSidenavModule,
     MatDatepickerModule,
     MatNativeDateModule,

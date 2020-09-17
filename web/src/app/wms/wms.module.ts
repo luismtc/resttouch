@@ -24,7 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 
-import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+// import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 // import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { WmsRoutingModule } from './wms-routing.module';
@@ -75,7 +75,6 @@ import { ProduccionComponent } from './components/produccion/produccion.componen
     MatGridListModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatKeyboardModule,
     MatSidenavModule,
     MatTreeModule,
   ],

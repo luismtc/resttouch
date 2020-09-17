@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prod": "ng build --prod",
-    "prodnaot": "ng build --prod --aot=false --buildOptimizer=false --vendorChunk=true"    
+    "prodnaot": "ng build --prod --aot=false --buildOptimizer=false --vendorChunk=true"
   },
   "private": true,
   "dependencies": {
@@ -26,7 +26,6 @@
     "@angular/router": "~8.2.11",
     "@aspnet/signalr": "^1.1.4",
     "@ecodev/fab-speed-dial": "^4.0.0",
-    "@ngx-material-keyboard/core": "^0.1.1",
     "@syncfusion/ej2": "^18.2.45",
     "@syncfusion/ej2-angular-buttons": "^18.2.44",
     "@syncfusion/ej2-angular-charts": "^18.2.56",
