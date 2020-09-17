@@ -9,78 +9,96 @@
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.nombre" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Nombre" type="text" placeholder="Nombre" name="nombre"
                     [(ngModel)]="cliente.nombre" required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="N.I.T." name="nit" [(ngModel)]="cliente.nit" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="N.I.T." type="text" placeholder="N.I.T." name="nit"
                     [(ngModel)]="cliente.nit" required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Dirección" name="direccion" [(ngModel)]="cliente.direccion" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Dirección" type="text" placeholder="Dirección" name="direccion"
                     [(ngModel)]="cliente.direccion" required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono">
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Teléfono" type="text" placeholder="Teléfono" name="telefono"
                     [(ngModel)]="cliente.telefono">
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo">
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="E-mail" type="text" placeholder="E-mail" name="correo"
                     [(ngModel)]="cliente.correo">
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Código postal" name="codigo_postal"
                     [(ngModel)]="cliente.codigo_postal">
-            </mat-form-field>
+            </mat-form-field>            
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Código postal" type="text" placeholder="Código postal"
                     name="codigo_postal" [(ngModel)]="cliente.codigo_postal">
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Municipio" name="municipio" [(ngModel)]="cliente.municipio">
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Municipio" type="text" placeholder="Municipio" name="municipio"
                     [(ngModel)]="cliente.municipio">
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Departamento" name="departamento"
                     [(ngModel)]="cliente.departamento">
-            </mat-form-field>
+            </mat-form-field>            
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Departamento" type="text" placeholder="Departamento"
                     name="departamento" [(ngModel)]="cliente.departamento">
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" maxlength="2" placeholder="Pais ISO" name="pais_iso_dos"
                     [(ngModel)]="cliente.pais_iso_dos">
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="País ISO" type="text" maxlength="2" placeholder="Pais ISO"
                     name="pais_iso_dos" [(ngModel)]="cliente.pais_iso_dos">
             </mat-form-field>
+            -->
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmCliente.form.valid">
                     Guardar
