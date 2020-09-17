@@ -6073,7 +6073,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                 reintentos: 0,
                 infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='
             };
-            var PaginarArray = function (array, page_size, page_number) { return array.slice((page_number - 1) * page_size, page_number * page_size); };
+            var PaginarArray = function (array, pageSize, pageNumber) { return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize); };
             var CheckObjectType = function (objeto, tipo) { return Object.prototype.toString.call(objeto).toLowerCase().substring(7).indexOf(tipo.trim().toLowerCase()) > -1; };
             var MultiFiltro = function (array, filtro) {
                 if (array.length > 0) {

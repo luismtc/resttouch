@@ -16,8 +16,8 @@ export const GLOBAL = {
     infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='
 };
 
-export const PaginarArray = (array: any[], page_size: number, page_number: number) =>
-    array.slice((page_number - 1) * page_size, page_number * page_size);
+export const PaginarArray = (array: any[], pageSize: number, pageNumber: number) =>
+    array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 
 export const CheckObjectType = (objeto, tipo: string) =>
     Object.prototype.toString.call(objeto).toLowerCase().substring(7).indexOf(tipo.trim().toLowerCase()) > -1;

@@ -6643,7 +6643,7 @@ const GLOBAL = {
     reintentos: 0,
     infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='
 };
-const PaginarArray = (array, page_size, page_number) => array.slice((page_number - 1) * page_size, page_number * page_size);
+const PaginarArray = (array, pageSize, pageNumber) => array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 const CheckObjectType = (objeto, tipo) => Object.prototype.toString.call(objeto).toLowerCase().substring(7).indexOf(tipo.trim().toLowerCase()) > -1;
 const MultiFiltro = (array, filtro) => {
     if (array.length > 0) {
