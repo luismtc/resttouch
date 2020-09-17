@@ -1,5 +1,6 @@
-// const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo
-const urlBase = location.origin; // Producción
+// const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo local
+const urlBase = `${location.origin}/api`; // Desarrollo
+// const urlBase = location.origin; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
