@@ -7,11 +7,13 @@
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input type="text" matInput placeholder="Nombre" name="nombre" [(ngModel)]="entidad.nombre" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Nombre" placeholder="Nombre" name="nombre"
                     [(ngModel)]="entidad.nombre" required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth">
                 <mat-label>Área padre</mat-label>
                 <mat-select name="area_padre" [(ngModel)]="entidad.area_padre">
@@ -30,10 +32,12 @@
             </mat-form-field>
             <h5>Mesas en el área: {{entidad.mesas.length}}</h5>
             <div align="end">
-                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmEntidad.form.valid">
+                <button mat-raised-button type="submit" color="accent" class="btnAccion"
+                    [disabled]="!frmEntidad.form.valid">
                     Guardar
                 </button>
-                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="openDesigner()" *ngIf="entidad.area">
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="openDesigner()"
+                    *ngIf="entidad.area">
                     Diseñar
                 </button>
                 <button mat-raised-button type="button" color="accent" (click)="resetEntidad()" *ngIf="entidad.area">

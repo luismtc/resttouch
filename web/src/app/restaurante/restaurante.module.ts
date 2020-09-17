@@ -33,7 +33,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
-import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
+// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { RestauranteRoutingModule } from './restaurante-routing.module';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
@@ -79,7 +79,7 @@ import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.compon
     ListaAreaComponent, FormAreaComponent, AreaComponent, PideDatosCuentasComponent, TurnoComponent, ListaTurnoComponent,
     FormTurnoComponent, AreaDesignerComponent, RptVentasComponent, PorCategoriaComponent, PorArticuloComponent, TurnosComponent,
     PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent, FormTurnoTipoComponent,
-    TurnoTipoComponent, PropinaComponent, FormPropinaComponent,ListaPropinaComponent, AutoconsultaComponent,
+    TurnoTipoComponent, PropinaComponent, FormPropinaComponent, ListaPropinaComponent, AutoconsultaComponent,
     CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent,
     ConfiguraMesaComponent,
     TranCocinaComponent
@@ -121,7 +121,6 @@ import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.compon
     MatNativeDateModule,
     EcoFabSpeedDialModule,
     DragDropModule,
-    NgVirtualKeyboardModule
   ],
   providers: [
     MatNativeDateModule

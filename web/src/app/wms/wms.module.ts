@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 
 import { MatListModule } from '@angular/material/list';
@@ -25,7 +25,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
-import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
+// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { WmsRoutingModule } from './wms-routing.module';
 import { ListaProductoComponent } from './components/producto/lista-producto/lista-producto.component';
@@ -47,7 +47,11 @@ import { ListaProductoAltComponent } from './components/producto/lista-producto-
 import { ProduccionComponent } from './components/produccion/produccion.component';
 
 @NgModule({
-  declarations: [ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent, CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent, KardexComponent, ListaProductoAltComponent, ProduccionComponent],
+  declarations: [
+    ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent,
+    CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent,
+    KardexComponent, ListaProductoAltComponent, ProduccionComponent
+  ],
   imports: [
     CommonModule,
     WmsRoutingModule,
@@ -74,7 +78,6 @@ import { ProduccionComponent } from './components/produccion/produccion.componen
     MatKeyboardModule,
     MatSidenavModule,
     MatTreeModule,
-    NgVirtualKeyboardModule
   ],
   providers: [
     TransformacionService

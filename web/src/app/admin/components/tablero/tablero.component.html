@@ -31,9 +31,10 @@
 <!-- Finaliza gráficas de ventas -->
 <div class="row">
 	<div class="col m12 s12">
-		<ejs-pivotview #pivotview id='PivotView' [dataSourceSettings]=dataSourceSettings width='100%' height='350'
-			[gridSettings]='gridSettings' allowExcelExport='true' showFieldList="true">
-		</ejs-pivotview>
+		<!--
+		<ejs-pivotview #pivotview id='PivotView' [dataSourceSettings]=dataSourceSettings width='100%' height='350' [gridSettings]='gridSettings' allowExcelExport='true' showFieldList="true"></ejs-pivotview>
+		-->
+		<ejs-pivotview #pivotview id='PivotView' [dataSourceSettings]=dataSourceSettings width='100%' height='350' allowExcelExport='true' showFieldList="true"></ejs-pivotview>
 		<button ej-button id='export'>Export</button>
 	</div>
 </div>

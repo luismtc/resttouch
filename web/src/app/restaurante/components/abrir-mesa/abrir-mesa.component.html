@@ -1,25 +1,28 @@
 <h1 mat-dialog-title>Abrir mesa</h1>
 <mat-dialog-content>
     <form #frmAbrirMesa="ngForm" (ngSubmit)="frmAbrirMesa.form.valid" novalidate>
-            <mat-form-field class="separatorMargin">
+        <mat-form-field class="separatorMargin">
             <mat-label>Mesero</mat-label>
             <mat-select name="mesero" [(ngModel)]="data.mesero">
                 <mat-option *ngFor="let usr of lstMeseros" [value]="usr.usuario.usuario">
                     {{usr.usuario.nombres}} {{usr.usuario.apellidos}}
                 </mat-option>
             </mat-select>
-            </mat-form-field>
+        </mat-form-field>
+        <!--
             <mat-form-field class="separatorMargin" *ngIf="!esMovil">
             <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                 ng-virtual-keyboard-placeholder="# Comensales" placeholder="# Comensales" name="comensales"
                 [(ngModel)]="data.comensales" required>
             </mat-form-field>
-                    <mat-form-field class="separatorMargin" *ngIf="esMovil">
-                <input type="text" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales"
-                    required>
-            </mat-form-field>
-            <mat-checkbox name="esEvento" class="separatorMargin" [(ngModel)]="+data.esEvento">¿Es evento?</mat-checkbox>
-            <mat-checkbox name="dividirCuentasPorSillas" class="separatorMargin" [(ngModel)]="+data.dividirCuentasPorSillas" [disabled]="+data.comensales <= 1">¿Dividir cuentas?</mat-checkbox>
+            -->
+        <mat-form-field class="separatorMargin" *ngIf="esMovil">
+            <input type="text" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales"
+                required>
+        </mat-form-field>
+        <mat-checkbox name="esEvento" class="separatorMargin" [(ngModel)]="+data.esEvento">¿Es evento?</mat-checkbox>
+        <mat-checkbox name="dividirCuentasPorSillas" class="separatorMargin" [(ngModel)]="+data.dividirCuentasPorSillas"
+            [disabled]="+data.comensales <= 1">¿Dividir cuentas?</mat-checkbox>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

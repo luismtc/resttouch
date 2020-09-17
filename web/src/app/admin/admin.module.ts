@@ -26,7 +26,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { SidebarDirective } from './directives/sidebar.directive';
-import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
+// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { PivotViewAllModule, PivotFieldListAllModule } from '@syncfusion/ej2-angular-pivotview';
 import {
@@ -89,7 +89,7 @@ import { VentasComponent } from './components/tablero/graficas/ventas/ventas.com
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatCardModule, MatDividerModule, MatTabsModule, MatTableModule, MatSelectModule, MatCheckboxModule, MatButtonModule,
     MatSnackBarModule, MatToolbarModule, MatMenuModule, MatGridListModule, MatPaginatorModule, MatTreeModule, MatDialogModule,
-    MatProgressBarModule, NgVirtualKeyboardModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule
+    MatProgressBarModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent

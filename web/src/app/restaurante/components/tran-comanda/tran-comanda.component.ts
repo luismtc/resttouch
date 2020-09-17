@@ -449,7 +449,7 @@ export class TranComandaComponent implements OnInit {
     this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada;
   }
 
-  esCajero = (roles: string[] = []) => roles.find(r => r.trim().toLocaleLowerCase() === 'cajero');
+  esCajero = (roles: string[] = []) => roles.find(r => r.trim().toLocaleLowerCase() === 'cajero') === undefined;
 
   trasladoMesa = () => {
     const trasladoRef = this.dialog.open(TrasladoMesaComponent, {

@@ -59,10 +59,10 @@ export class UnirCuentaComponent implements OnInit {
   }
 
   unirCuentas(deCuenta: Cuenta, aCuenta: Cuenta) {
-    console.log('ORIGEN', deCuenta);
-    console.log('DESTINO', aCuenta);
+    // console.log('ORIGEN', deCuenta);
+    // console.log('DESTINO', aCuenta);
     this.comandaSrvc.unificarCuentas(deCuenta.cuenta, aCuenta.cuenta).subscribe(res => {
-      console.log(res);
+      // console.log(res);
       if (res.exito) {
         this.snackBar.open(res.mensaje, 'Cuentas', { duration: 3000 });
         this.dialogRef.close(true);

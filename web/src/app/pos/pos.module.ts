@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { AdminModule } from '../admin/admin.module';
 
@@ -26,7 +26,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
-import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
+// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { PosRoutingModule } from './pos-routing.module';
 import { CobrarPedidoComponent } from './components/cobrar-pedido/cobrar-pedido.component';
@@ -39,7 +39,10 @@ import { FormFacturaManualComponent } from './components/facturaManual/form-fact
 
 
 @NgModule({
-  declarations: [CobrarPedidoComponent, FormaPagoComponent, ListaFormaPagoComponent, FormFormaPagoComponent, FacturaManualComponent, ListaFacturaManualComponent, FormFacturaManualComponent],
+  declarations: [
+    CobrarPedidoComponent, FormaPagoComponent, ListaFormaPagoComponent, FormFormaPagoComponent, FacturaManualComponent,
+    ListaFacturaManualComponent, FormFacturaManualComponent
+  ],
   entryComponents: [
     CobrarPedidoComponent
   ],
@@ -70,7 +73,6 @@ import { FormFacturaManualComponent } from './components/facturaManual/form-fact
     MatKeyboardModule,
     MatSidenavModule,
     EcoFabSpeedDialModule,
-    NgVirtualKeyboardModule
   ],
   exports: [CobrarPedidoComponent]
 })

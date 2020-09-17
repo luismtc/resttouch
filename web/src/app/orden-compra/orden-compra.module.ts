@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 
 import { MatListModule } from '@angular/material/list';
@@ -25,7 +25,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 
 import { MatKeyboardModule } from '@ngx-material-keyboard/core';
-import { NgVirtualKeyboardModule }  from '@protacon/ng-virtual-keyboard';
+// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { OrdenCompraRoutingModule } from './orden-compra-routing.module';
 import { OrdenCompraComponent } from './components/orden-compra/orden-compra/orden-compra.component';
@@ -61,7 +61,6 @@ import { FormOrdenCompraComponent } from './components/orden-compra/form-orden-c
     MatKeyboardModule,
     MatSidenavModule,
     MatTreeModule,
-    NgVirtualKeyboardModule
   ]
 })
 export class OrdenCompraModule { }

@@ -18,19 +18,23 @@
                 <input matInput type="text" placeholder="Descripcion" name="descripcion"
                     [(ngModel)]="articulo.descripcion" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Descripción" type="text" placeholder="Descripción"
                     name="descripcion" [(ngModel)]="articulo.descripcion" required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="number" placeholder="Precio" name="precio" [(ngModel)]="articulo.precio" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Precio" type="number" placeholder="Precio" name="precio"
                     [(ngModel)]="articulo.precio" required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth">
                 <mat-label>Presentación</mat-label>
                 <mat-select name="presentacion" [(ngModel)]="articulo.presentacion">
@@ -42,11 +46,13 @@
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Código" name="codigo" [(ngModel)]="articulo.codigo" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Código" type="text" placeholder="Código" name="codigo"
                     [(ngModel)]="articulo.codigo" required>
             </mat-form-field>
+            -->
             <mat-checkbox name="produccion" class="fullWidth" [(ngModel)]="+articulo.produccion">¿Es produccion?</mat-checkbox>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmArticulo.form.valid || !articulo.categoria_grupo">
@@ -87,11 +93,13 @@
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="receta.cantidad" required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
                     [(ngModel)]="receta.cantidad" required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth">
                 <mat-label>Unidad de medida</mat-label>
                 <mat-select name="medida" [(ngModel)]="receta.medida" required>

@@ -115,6 +115,7 @@
                     (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                     required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
@@ -122,12 +123,14 @@
                     (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                     required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput placeholder="Costo unitario" name="precio_unitario"
                     [(ngModel)]="detalleEgreso.precio_unitario"
                     (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                     required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
@@ -135,6 +138,7 @@
                     (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                     required>
             </mat-form-field>
+            -->
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"
                     [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
@@ -238,6 +242,7 @@
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
                     required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
@@ -245,12 +250,14 @@
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
                     required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput placeholder="Costo unitario" name="precio_unitario"
                     [(ngModel)]="detalleMerma.precio_unitario"
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
                     required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
@@ -258,6 +265,7 @@
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
                     required>
             </mat-form-field>
+            -->
             <div align="end">
                 <button mat-raised-button type="button" color="accent" (click)="addToDetailMerma()"
                     [disabled]="!frmMerma.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"

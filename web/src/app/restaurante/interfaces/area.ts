@@ -6,4 +6,5 @@ export interface Area {
     area_padre?: number;
     nombre: string;
     mesas?: Mesa[];
+    impresora?: number;
 }

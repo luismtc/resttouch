@@ -52,11 +52,13 @@
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput placeholder="Comentarios" name="comentario" [(ngModel)]="ingreso.comentario">
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
                     ng-virtual-keyboard-placeholder="Comentarios" placeholder="Comentarios" name="comentario"
                     [(ngModel)]="ingreso.comentario">
             </mat-form-field>
+            -->
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmIngreso.form.valid"
                     *ngIf="saveToDB">
@@ -107,6 +109,7 @@
                     (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                     required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
@@ -114,12 +117,14 @@
                     (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                     required>
             </mat-form-field>
+            -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput placeholder="Costo unitario" name="precio_unitario"
                     [(ngModel)]="detalleIngreso.precio_unitario"
                     (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                     required>
             </mat-form-field>
+            <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
                     ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
@@ -127,6 +132,7 @@
                     (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                     required>
             </mat-form-field>
+            -->
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleIngreso.form.valid"
                     *ngIf="saveToDB">
