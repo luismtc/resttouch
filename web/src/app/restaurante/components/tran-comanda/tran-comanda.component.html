@@ -1,17 +1,26 @@
-<div style="width: 100%; overflow: hidden;">
-    <div style="width: 50%; float: left;" align="center">
-        <span class="bld" style="font-size: 16pt; margin-left: 10px;">{{mesaEnUso.mesa.area.nombre}} - Mesa
-            {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</span>
-        <!--<h4>{{mesaEnUso.mesa.area.nombre}} - Mesa {{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}</h4>-->
+<div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="50%" fxFelx.xs="100%" fxLayoutAlign="center start">
+        <span class="bld" style="font-size: 16pt; margin-left: 10px;">
+            {{mesaEnUso.mesa.area.nombre}} - Mesa{{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}
+        </span>
     </div>
-    <div style="overflow: hidden; margin-right: 10px;" align="end">
+    <div fxFlex="50%" fxFelx.xs="100%" fxLayoutAlign="end start">
         <button mat-raised-button type="button" color="accent" style="margin-left: 8px;"
             (click)="closeSideNavEv.emit()">
             Cerrar Panel
         </button>
     </div>
 </div>
-<div class="divFullSize">
+<!--
+<div fxLayout="row wrap" fxLayoutGap="8px grid" fxLayoutAlign="center center">
+    <div class="bordeTest" fxFlex="20%" fxFlex.xs="100%" fxFlex.sm="25%" fxFlex.md="25%" fxLayoutAlign="center center" *ngFor="let cta of mesaEnUso.cuentas">
+        <button mat-raised-button type="button" color="accent" [disabled]="+cta.cerrada == 1" (click)="setSelectedCuenta(cta.numero)">
+            {{cta.nombre}}
+        </button>
+    </div>
+</div>
+-->
+<div class="divFullSize">    
     <div class="row">
         <div class="col m12 s12" align="center" style="padding: 0 !important;">
             <button mat-raised-button type="button" color="accent" class="btnAccion"
@@ -20,7 +29,7 @@
                 {{cta.nombre}}
             </button>
         </div>
-    </div>
+    </div>    
     <div class="row">
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
             <span class="bld">Productos</span><br />
@@ -35,13 +44,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto; height: 425px !important;">
+        <div class="col m6 s12 mat-elevation-z3 colProductos">
             <!--<app-lista-producto (productoClickedEv)="addProductoSelected($event)"></app-lista-producto>-->
             <app-lista-producto-alt #appLstProdAlt (productoClickedEv)="addProductoSelected($event)"
                 (categoriasFilledEv)="setListaCategorias($event)" [bloqueoBotones]="bloqueoBotones">
             </app-lista-producto-alt>
         </div>
-        <div class="col m6 s12 mat-elevation-z3" style="overflow-y: auto; height: 425px !important;">
+        <div class="col m6 s12 mat-elevation-z3 colProductos">
             <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero"
                 [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones" [mesaEnUso]="mesaEnUso"
                 (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>

@@ -10,13 +10,16 @@
 @import '../node_modules/@syncfusion/ej2-angular-pivotview/styles/material.css';
 @import "m-modified.css";
 
+/*
 html, body {
-    height: 100%;
+    height: 90vh;
 }
+*/
 
 body {
+    height: 90vh;
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: Roboto, "Helvetica Neue", sans-serif;    
 }
 
 .fontFamily {
@@ -112,4 +115,8 @@ button .mat-icon {
     margin-bottom: 4px !important;
     margin-right: 8px !important;
 
+}
+
+.bordeTest {
+    border: 1px solid black;
 }

@@ -114,8 +114,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   setDivSize() {
-    this.divSize.w = this.pestania.nativeElement.offsetWidth;
-    this.divSize.h = this.pestania.nativeElement.offsetHeight;
+    // this.divSize.w = this.pestania.nativeElement.offsetWidth;
+    // this.divSize.h = this.pestania.nativeElement.offsetHeight;
   }
 
   onResize = (event: any) => this.setDivSize();
