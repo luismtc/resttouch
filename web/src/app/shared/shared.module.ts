@@ -35,7 +35,7 @@ import { CheckPasswordComponent } from './components/check-password/check-passwo
 
 // const config: SocketIoConfig = { url: 'http://192.168.1.11:8988', options: {} }; // Solo para desarrollo
 const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
-// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} }; // Produccion GCP
+// const config: SocketIoConfig = { url: 'https://resttouchapi.c807.com:8988', options: {} }; // Produccion GCP (YA NO USAR)
 
 @NgModule({
   declarations: [
