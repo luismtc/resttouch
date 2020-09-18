@@ -250,6 +250,7 @@ export class CobrarPedidoComponent implements OnInit {
           if (+this.data.impresora.bluetooth === 0) {
             this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
           } else {
+            msgToPrint.Fecha = moment(res.factura.fecha_factura).format(GLOBAL.dateFormatBT);
             this.printToBT(JSON.stringify(msgToPrint));
           }
         } else {

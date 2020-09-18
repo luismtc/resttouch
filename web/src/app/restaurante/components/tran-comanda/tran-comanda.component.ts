@@ -283,8 +283,18 @@ export class TranComandaComponent implements OnInit {
               this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
 
               // Inicio de impresión de comanda
-              const AImpresoraNormal: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
-              const AImpresoraBT: productoSelected[] = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+              let AImpresoraNormal: productoSelected[] = [];
+              let AImpresoraBT: productoSelected[] = [];
+
+              try {
+                AImpresoraNormal = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
+                AImpresoraBT = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+              } catch (error) {
+                console.log('PRODUCTOS A IMPRIMIR = ', this.lstProductosAImprimir);
+                console.log('NORMAL = ', AImpresoraNormal);
+                console.log('BT = ', AImpresoraBT);
+                console.log(error);
+              }
 
               if (!toPdf) {
                 if (AImpresoraNormal.length > 0) {
