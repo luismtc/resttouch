@@ -166,6 +166,8 @@ class Cuenta_model extends General_Model {
 					if ($tmp->reasonCode != 100) {
 						$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
 						return false;
+					} else {
+						$this->db->set("tarjeta_respuesta", json_encode($tmp));
 					}
 				}
 			}

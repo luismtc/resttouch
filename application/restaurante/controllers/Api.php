@@ -364,6 +364,10 @@ class Api extends CI_Controller {
 
 	public function guardar_comanda()
 	{
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ALL);
+		
 		$req = json_decode(file_get_contents('php://input'), true);
 
 		$datos = ["exito" => false, 'mensaje' => ''];
@@ -627,6 +631,22 @@ class Api extends CI_Controller {
 
 											if ($datos['exito']) {
 												$cuenta->guardar(["cerrada" => 1]);
+												$datos['pagos'] = [];
+
+												foreach ($cuenta->get_forma_pago() as $fpago) {
+													$tmpPago = [
+														"monto" => $fpago->monto,
+														"documento" => $fpago->documento,
+														"forma_pago" => $fpago->forma_pago, 
+														"observaciones" => $fpago->observaciones
+													];
+
+													if (!empty($fpago->tarjeta_respuesta)) {
+														$tmpPago["tarjeta_respuesta"] = json_decode($fpago->tarjeta_respuesta);
+													}
+
+													$datos['pagos'][] = $tmpPago;
+												}
 												
 												$fac = new Factura_model();
 												$fac->guardar($datosFac);
@@ -661,7 +681,21 @@ class Api extends CI_Controller {
 											
 										if ($datos['exito']) {
 											$datos['mensaje'] = "Datos Actualizados con Exito";
-											$datos['comanda'] = $comanda->getComanda();	
+											$datos['comanda'] = $comanda->getComanda();
+
+											$sed = $comanda->getSede();
+											$emp = $sed->getEmpresa();
+
+											$datos["sede"] = [
+												"nombre" => $sed->nombre,
+												"direccion" => $sed->direccion,
+												"telefono" => $sed->telefono,
+												"correo" => $sed->correo,
+												"empresa" => [
+													"nombre" => $emp->nombre_comercial,
+													"nit" => $emp->nit
+												]
+											];
 										} 
 									} else {
 										$datos['mensaje'] = "No existe ningun turno abierto";
