@@ -24,7 +24,7 @@ export class FormImpresoraComponent implements OnInit {
   }
 
   resetImpresora = () => this.impresora = {
-    impresora: null, nombre: null, direccion_ip: null, ubicacion: null, bluetooth: 0, sede: null, bluetooth_mac_address: null
+    impresora: null, nombre: null, direccion_ip: null, ubicacion: null, bluetooth: 0, sede: null, bluetooth_mac_address: null, modelo: null
   }
 
   onSubmit = () => {

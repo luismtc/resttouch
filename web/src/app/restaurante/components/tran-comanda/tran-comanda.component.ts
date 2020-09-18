@@ -62,6 +62,7 @@ export class TranComandaComponent implements OnInit {
   public detalleComanda: DetalleComanda;
   public categorias: ArbolArticulos[] = [];
   public bloqueoBotones = false;
+  public rolesUsuario: string[] = [];
 
   constructor(
     private router: Router,
@@ -297,6 +298,7 @@ export class TranComandaComponent implements OnInit {
                     Total: null
                   })}`);
                   this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
+                  this.bloqueoBotones = false;
                 }
 
                 if (AImpresoraBT.length > 0) {
@@ -319,6 +321,8 @@ export class TranComandaComponent implements OnInit {
               this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
               if (+this.mesaEnUso.mesa.esmostrador === 0) {
                 this.closeSideNavEv.emit();
+              } else {
+                this.cobrarCuenta();
               }
               // Fin de impresión de comanda
             });
@@ -338,6 +342,7 @@ export class TranComandaComponent implements OnInit {
     const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
     const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
     setTimeout(() => wref.close(), 1000);
+    this.bloqueoBotones = false;
   }
 
   printComandaPDF = () => {
@@ -449,7 +454,7 @@ export class TranComandaComponent implements OnInit {
     this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada;
   }
 
-  esCajero = (roles: string[] = []) => roles.find(r => r.trim().toLocaleLowerCase() === 'cajero') === undefined;
+  esCajero = () => (this.rolesUsuario || []).find(r => r.trim().toLocaleLowerCase() === 'cajero') === undefined;
 
   trasladoMesa = () => {
     const trasladoRef = this.dialog.open(TrasladoMesaComponent, {

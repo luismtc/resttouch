@@ -152,6 +152,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         this.setEstatusMesa(m, +res.comanda.mesa.estatus);
         this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
         this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
+        this.snTrancomanda.rolesUsuario = this.mesaSeleccionada.turno_rol;
         this.toggleRightSidenav();
       } else {
         this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
@@ -265,6 +266,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       if (res.exito) {
         if (!Array.isArray(res)) {
           this.mesaSeleccionada = res;
+          this.snTrancomanda.rolesUsuario = this.mesaSeleccionada.turno_rol;
         } else {
           if (res.length === 0) {
             this.mesaSeleccionada = {

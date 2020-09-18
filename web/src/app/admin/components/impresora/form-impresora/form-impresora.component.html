@@ -20,6 +20,9 @@
             <mat-form-field class="fullWidth" *ngIf="+impresora.bluetooth === 1">
                 <input matInput type="text" placeholder="Bluetooth MAC Address" name="bluetooth_mac_address" [(ngModel)]="impresora.bluetooth_mac_address" [required]="+impresora.bluetooth === 1">
             </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="+impresora.bluetooth === 1">
+                <input matInput type="text" placeholder="Modelo" name="modelo" [(ngModel)]="impresora.modelo" [required]="+impresora.bluetooth === 1">
+            </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"
                     [disabled]="!frmImpresora.form.valid">
