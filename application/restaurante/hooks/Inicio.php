@@ -10,7 +10,8 @@ class Inicio
 			'/usuario/login.json', 
 			'/api/set_comanda',
 			'/api/guardar_comanda',
-			'/api/set_producto'
+			'/api/set_producto',
+			'/api/comanda'
 		];
 		
 	}
