@@ -726,6 +726,307 @@ class Api extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function comanda()
+	{
+		ini_set('display_errors', 1);
+		ini_set('display_startup_errors', 1);
+		error_reporting(E_ALL);
+		
+		$req = json_decode(file_get_contents('php://input'), true);
+
+		$datos = ["exito" => false, 'mensaje' => ''];
+
+		if (isset($req['key'], $req['sede'], $req['cliente'], $req['metodo_pago'], $req['detalle'])) {
+			if ($this->input->method() == 'post') {
+
+				$datosDb = $this->Catalogo_model->getCredenciales([
+					"llave" => $req['key']
+				]);
+	            $conn = [
+	                'host' => $datosDb->db_hostname,
+	                'user' => $datosDb->db_username,
+	                'password' => $datosDb->db_password,
+	                'database' => $datosDb->db_database
+	            ];
+				$db = conexion_db($conn);
+				$this->db = $this->load->database($db, true);
+
+				
+				$sede = $this->Catalogo_model->getSede([
+					"sede" => $req["sede"],
+					"_uno" => true
+				]);
+				
+
+				$moneda = $this->Catalogo_model->getMoneda([
+					'codigo' => $req['moneda'],
+					'_uno' => true
+				]);
+
+				$datosCliente = $req['cliente'];
+
+				if ($datosCliente) {
+					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['nit']);
+
+					if (empty($nit)) {
+						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['nit']));
+					}
+
+					$datosCliente['nit'] = $nit;
+
+					$cliente = $this->Cliente_model->buscar([
+						"nit" => $nit,
+						"_uno" => true
+					]);
+
+					$origen = $this->Catalogo_model->getComandaOrigen([
+						"_uno" => true,
+						"descripcion" => "API"
+					]);
+
+					if (!$cliente) {
+						$cliente = new Cliente_model();
+						$cliente->guardar([
+							"nombre" => $datosCliente['nombre'].' '.$datosCliente['apellidos'],
+							"direccion" => ($datosCliente['direccion'] ?? 'CIUDAD'),
+							"correo" => $datosCliente['correo'],
+							"telefono" => $datosCliente['telefono'],
+							"nit" => $nit
+						]);
+						$idCliente = $cliente->getPK();
+						$correoReceptor = $datosCliente['correo'];
+					} else {
+						$idCliente = $cliente->cliente;
+						$correoReceptor = $cliente->correo;
+					}
+				}
+
+				$datosCta = [
+					'nombre' => $datosCliente['nombre'], 
+					'numero' => $req['numero_orden']
+				];
+
+				$datosFac = [
+					"usuario" => 1,
+					"factura_serie" => 1,
+					"sede" => $sede->sede,
+					"certificador_fel" => 1,
+					"cliente" => $idCliente,
+					"fecha_factura" => date('Y-m-d'),
+					"moneda" => $moneda->moneda,
+					"correo_receptor" => $correoReceptor
+				];
+				$usu = $this->Usuario_model->find([
+					'usuario' => 1, 
+					"_uno" => true
+				]);
+
+				if($sede) {
+					if ($origen) {
+						if ($usu) {
+							$turno = $this->Turno_model->getTurno([
+								"sede" => $sede->sede,
+								'abierto' => true, 
+								"_uno" => true
+							]);
+
+							$comanda = new Comanda_model();
+
+							$datosComanda = [
+								'usuario' => $usu->usuario, 
+								'sede' => $sede->sede, 
+								'estatus' => 1, 
+								'domicilio' => 1,
+								'comanda_origen' => $origen->comanda_origen,
+								'comanda_origen_datos' => json_encode($req)
+							];
+
+							$propina = false;
+							$insert = false;
+							$propinaMonto = 0;
+							$menu = $this->Catalogo_model->getModulo([
+								"modulo" => 4, 
+								"_uno" => true
+							]);
+							
+							$existencia = true;
+							foreach ($req['detalle'] as $row) {
+								
+								$art = $this->Articulo_model->buscarArticulo([
+									'codigo' => $row['codigo'],
+									'sede' => $sede->sede,
+									'_uno' => true
+								]);	
+
+								if ($art) {
+									$insert = true;
+									$articulo = new Articulo_model($art->articulo);
+									$articulo->actualizarExistencia();
+									if (!empty($menu)) {
+										if ($existencia) {
+											$existencia = $articulo->existencias >= $row['cantidad'];
+										}
+									}
+								}
+																
+							}
+							if ($insert) {
+								if ($existencia) {
+									if ($turno) {
+										$datosComanda['turno'] = $turno->turno;
+										$datos['exito'] = $comanda->guardar($datosComanda);
+										if (isset($req['mesa'])) {
+											$mesa = new Mesa_model($req['mesa']);
+											$comanda->setMesa($req['mesa']);
+											$mesa->guardar(["estatus" => 2]);
+										}
+										$cuenta = new Cuenta_model();
+										if ($cuenta->cerrada == 0) {
+											$datosCta['comanda'] = $comanda->comanda;
+											$cuenta->guardar($datosCta);	
+										}
+										
+										$total = 0;		
+										$exito = true;
+										foreach ($req['detalle'] as $row) {
+											$art = $this->Articulo_model->buscarArticulo([
+												'codigo' => $row['codigo'],
+												'sede' => $sede->sede,
+												'_uno' => true
+											]);
+											
+											if ($art) {
+												$datosDcomanda = [
+													'articulo' => $art->articulo
+													,'cantidad' => $row['cantidad']
+													,'precio' => $row['precio']
+													,'impreso' => 0
+													,'total' => $row['total']
+													,'notas' => ($row['nota'] ?? '')
+												];
+												
+												$total += $row['total'];
+												
+												$det = $comanda->guardarDetalle($datosDcomanda);
+												$id = '';
+												if ($det) {
+													$cuenta->guardarDetalle([
+														'detalle_comanda' => $det->detalle_comanda
+													]);	
+												} else {
+													$exito = false;
+													$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
+												}
+											} else {
+												$exito = false;
+												$datos['mensaje'] .= "\nArtículo no entrado.";	
+											}
+										}
+
+										$datos['exito'] = $exito;
+										if ($datos['exito']) {
+											$pagos = [];
+											$descuento = 0;
+											if (isset($req['descuento']) && is_array($req['descuento'])) {
+
+												foreach ($req['descuento'] as $desc) {
+													$descuento += ($total * $desc['valor'] /100);
+													
+												}
+												$pagos[] = [
+													"forma_pago" => 3, 
+													"monto" => $descuento
+												];	
+											}
+											$tmpCobro = [];
+											foreach ($req['metodo_pago'] as $mpago) {
+												$tmpCobro[] = (object) [
+													"forma_pago" => $mpago['codigo'],
+													"monto" => $mpago['monto']
+												];
+											}
+											
+											$pagos = array_merge($pagos, $tmpCobro);
+
+											$pagosContador = 0;
+											
+											foreach ($pagos as $pago) {
+												if ($cuenta->cobrar((object) $pago)) {
+													$pagosContador++;
+												} else {
+													break;
+												}
+											}
+											
+											$datos['exito'] = count($pagos) == $pagosContador;
+
+											if ($datos['exito']) {
+												$cuenta->guardar(["cerrada" => 1]);
+												
+												$fac = new Factura_model();
+												$fac->guardar($datosFac);
+												$fac->cargarEmpresa();
+												$pimpuesto = $fac->empresa->porcentaje_iva +1;
+												$detalle = $cuenta->getDetalle([
+													"descuento" => 1
+												]);
+
+												foreach ($cuenta->getDetalle() as $det) {
+													$det->bien_servicio = $det->articulo->bien_servicio;
+													$det->articulo = $det->articulo->articulo;
+													$det->precio_unitario = $det->precio;
+													if ($det->descuento == 1) {
+														$det->descuento = 0; // $det->total * $pdescuento/100;	
+													} else {
+														$det->descuento = 0;
+													}
+													$total = $det->total-$det->descuento;
+													if ($fac->exenta) {
+														$det->monto_base = $total;
+													} else {
+														$det->monto_base = $total / $pimpuesto;
+													}
+													$det->monto_iva = $total - $det->monto_base;	
+													$fac->setDetalle((array) $det);
+												}
+											} else {
+												$datos['mensaje'] = implode("\n", $cuenta->getMensaje());
+											}
+										} 							
+											
+										if ($datos['exito']) {
+											$datos['mensaje'] = "Datos Actualizados con Exito";
+											$datos['comanda'] = $comanda->getComanda();
+										} 
+									} else {
+										$datos['mensaje'] = "No existe ningun turno abierto";
+									}	
+								}else {
+									$datos['mensaje'] = "No hay existencia suficiente";
+								}
+							} else {
+								$datos['mensaje'] = "No existen productos";	
+							}
+						} else {
+							$datos['mensaje'] = "Mesero Invalido";
+						}
+					} else {
+						$datos['mensaje'] = "Origen desconocido";
+					}
+				} else {
+					$datos['mensaje'] = "Llave invalida";
+				}
+			} else {
+				$datos['mensaje'] = "Parametros Invalidos";
+			}
+		} else {
+			$datos['mensaje'] = "Hacen falta datos obligatorios para continuar";
+		}	
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
 	public function set_producto()
 	{
 		$this->load->model(['Categoria_model', 'Cgrupo_model']);
