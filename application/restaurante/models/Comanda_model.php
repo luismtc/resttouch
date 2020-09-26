@@ -191,6 +191,9 @@ class Comanda_model extends General_Model
 		}
 
 		$tmp->total = suma_field($det, 'total');
+		if ($this->comanda_origen == 1) {
+			$args['_totalCero'] = true;
+		}
 		$tmp->cuentas = $this->getCuentas($args);
 		$tmp->factura = $this->getFactura();
 		$tmp->origen_datos = $this->getOrigenDatos();
