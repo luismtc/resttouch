@@ -437,7 +437,9 @@ export class TranComandaComponent implements OnInit {
               idcuenta: this.cuentaActiva.cuenta,
               productosACobrar,
               porcentajePropina: 0.00,
-              impresora: +this.mesaEnUso.mesa.esmostrador === 0 ? null : this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora
+              impresora: +this.mesaEnUso.mesa.esmostrador === 0 ?
+                null :
+                (this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora)
             }
           });
 

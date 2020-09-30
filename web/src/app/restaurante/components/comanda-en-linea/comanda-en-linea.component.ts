@@ -48,7 +48,7 @@ interface productoSelected {
 export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   public dataSource: any[] = [];
-  public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'pdf', 'imprimir', 'facturar'];
+  public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'imprimir', 'facturar'];
   public expandedElement: any | null;
 
   public comandasEnLinea: any[] = [];
