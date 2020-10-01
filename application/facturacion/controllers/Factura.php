@@ -78,7 +78,7 @@ class Factura extends CI_Controller {
 				if ($fac->exenta) {
 					$req['monto_base'] = $req['total'];
 				} else {
-					$req['monto_base'] = number_format($req['total'] / $pimpuesto, 2);
+					$req['monto_base'] = $req['total'] / $pimpuesto;
 				}
 				
 				$req['monto_iva'] = $req['total'] - $req['monto_base'];	
