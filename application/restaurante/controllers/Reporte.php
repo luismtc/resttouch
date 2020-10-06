@@ -3,6 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
+ini_set('memory_limit', -1);
+set_time_limit(0);
+
 class Reporte extends CI_Controller {
 
 	public function __construct()
