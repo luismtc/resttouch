@@ -65,7 +65,7 @@
 									<?php echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA') ?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo (empty($row->fel_uuid_anulacion) ? number_format($row->total, 2) : 0) ?>
+									<?php echo (empty($row->fel_uuid_anulacion) && is_numeric($row->total) ? number_format($row->total, 2) : 0) ?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php 

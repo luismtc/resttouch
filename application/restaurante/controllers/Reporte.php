@@ -31,6 +31,7 @@ class Reporte extends CI_Controller {
 
 	public function caja()
 	{
+		ini_set("pcre.backtrack_limit", "15000000");
 		$_GET['sede'] = $this->data->sede;
 		$_GET["_facturadas"] = true;
 
@@ -68,6 +69,7 @@ class Reporte extends CI_Controller {
 
 	public function factura()
 	{
+		ini_set("pcre.backtrack_limit", "15000000");
 		$_GET['sede'] = $this->data->sede;
 		$_GET["_facturadas"] = true;
 
