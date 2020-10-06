@@ -65,13 +65,14 @@
 									<?php echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA') ?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo (empty($row->fel_uuid_anulacion) && is_numeric($row->total) ? number_format($row->total, 2) : 0) ?>
+									<?php echo (empty($row->fel_uuid_anulacion) ? number_format(suma_field($detalle, "total"), 2) : 0) ?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php 
 										if (empty($row->fel_uuid_anulacion)) {
 											echo number_format($row->propina, 2);
-											$totalFactura += $row->total;
+											
+											
 											$totalPropina += $row->propina;
 										} else {
 											echo 0;
@@ -84,6 +85,8 @@
 											$desc = suma_field($detalle, "descuento");
 											echo number_format($desc, 2);
 											$totalDescuento += $desc;
+											$total = suma_field($detalle, "total");
+											$totalFactura += ($total - $desc);
 										} else {
 											echo "0.00";
 										}
