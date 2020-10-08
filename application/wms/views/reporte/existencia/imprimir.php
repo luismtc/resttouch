@@ -43,26 +43,33 @@
 			?>
 				<tr>
 					<td><?php echo (!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo)?></td>
-					<td><?php echo $row->articulo->descripcion?></td>
-					<td class="text-right"><?php echo number_format($row->ingresos,2)?></td>
-					<td class="text-right"><?php echo number_format($row->egresos,2)?></td>
-					<td class="text-right"><?php echo number_format($row->comandas,3)?></td>
-					<td class="text-right"><?php echo number_format($row->facturas,3)?></td>
-					<td class="text-right"><?php echo number_format($row->total_egresos,3)?></td>
-					<td class="text-right"><?php echo number_format($row->existencia,2)?></td>
+					<td>
+						<?php echo "{$row->articulo->articulo} ". $row->articulo->descripcion . " ({$row->presentacion->descripcion}) " ?></td>
+					<td class="text-right">
+						<?php echo number_format($row->ingresos / $row->presentacion->cantidad,2)?>
+					</td>
+					<td class="text-right">
+						<?php echo number_format($row->egresos / $row->presentacion->cantidad,2)?>
+					</td>
+					<td class="text-right">
+						<?php echo number_format($row->comandas / $row->presentacion->cantidad,3)?>
+						
+					</td>
+					<td class="text-right">
+						<?php echo number_format($row->facturas / $row->presentacion->cantidad,3)?>
+							
+					</td>
+					<td class="text-right">
+						<?php echo number_format($row->total_egresos / $row->presentacion->cantidad,3)?>
+					</td>
+					<td class="text-right">
+						<?php echo number_format($row->existencia / $row->presentacion->cantidad,2)?>
+							
+					</td>
 				</tr>
 			<?php endforeach ?>
 		<?php endif ?>
-		<tr>
-			<td colspan="2">Total</td>
-			<td class="totales"><?php echo number_format($ingresos, 2)?></td>
-			<td class="totales"><?php echo number_format($egresos, 2)?></td>
-			<td class="totales"><?php echo number_format($comandas, 2)?></td>
-			<td class="totales"><?php echo number_format($facturas, 3)?></td>
-			<td class="totales"><?php echo number_format($total_egreso, 3)?></td>
-			<td class="totales"><?php echo number_format($existencia, 3)?></td>
-			
-		</tr>
+		
 	</table>
 	<table class="tabla-firma">
 		<tr>

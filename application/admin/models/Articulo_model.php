@@ -13,6 +13,8 @@ class Articulo_model extends General_model {
 	public $shopify_id;
 	public $codigo = '';
 	public $produccion = 0;
+	public $presentacion_reporte;
+	public $mostrar_pos = 1;
 
 	public function __construct($id = "")
 	{
@@ -36,6 +38,14 @@ class Articulo_model extends General_model {
 	{
 		return $this->db
 					->where("presentacion", $this->presentacion)
+					->get("presentacion")
+					->row();
+	}
+
+	public function getPresentacionReporte()
+	{
+		return $this->db
+					->where("presentacion", $this->presentacion_reporte)
 					->get("presentacion")
 					->row();
 	}
@@ -94,23 +104,25 @@ class Articulo_model extends General_model {
 		}
 
 		$comandas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0)) as total")
+						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("comanda e", "e.comanda = a.comanda")
 						 ->join("turno f", "e.turno = f.turno and f.sede = d.sede")
+						 ->join("presentacion p", "a.presentacion = p.presentacion")
 						 ->where("a.articulo", $articulo)
 						 ->get("detalle_comanda a")
 						 ->row();//total ventas comanda
 
 		$facturas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0)) as total")
+						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("detalle_factura_detalle_cuenta e", "a.detalle_factura = e.detalle_factura", "left")
 						 ->join("factura f", "a.factura = f.factura and f.sede = d.sede")
+						 ->join("presentacion p", "a.presentacion = p.presentacion")
 						 ->where("a.articulo", $articulo)
 						 ->where("e.detalle_factura_detalle_cuenta is null")
 						 ->get("detalle_factura a")
@@ -167,12 +179,13 @@ class Articulo_model extends General_model {
 
 		$ingresos = $this->db
 						 ->select("
-						 	sum(ifnull(a.cantidad, 0)) as total")
+						 	sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("ingreso e", "e.ingreso = a.ingreso")
 						 ->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
+						 ->join("presentacion p", "a.presentacion = p.presentacion")
 						 ->where("a.articulo", $articulo)
 						 ->get("ingreso_detalle a")
 						 ->row(); //total ingresos
@@ -186,12 +199,13 @@ class Articulo_model extends General_model {
 		}
 
 		$egresos = $this->db
-						->select("sum(ifnull(cantidad, 0)) as total")
+						->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						->join("articulo b", "a.articulo = b.articulo")
 						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						->join("categoria d", "d.categoria = c.categoria")
 						->join("egreso e", "e.egreso = a.egreso")
 						->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
+						->join("presentacion p", "a.presentacion = p.presentacion")
 						->where("a.articulo", $articulo)
 						->get("egreso_detalle a")
 						->row();//total egresos wms
@@ -219,12 +233,13 @@ class Articulo_model extends General_model {
 		if ($args['tipo'] == 1) {
 			$ingresos = $this->db
 						 ->select("
-						 	sum(ifnull(a.cantidad, 0)) as total")
+						 	sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("ingreso e", "e.ingreso = a.ingreso")
 						 ->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
+						 ->join("presentacion p", "a.presentacion = p.presentacion")
 						 ->where("a.articulo", $articulo)
 						 ->where("date(e.fecha) <= ", $args['fecha'])
 						 ->get("ingreso_detalle a")
@@ -233,12 +248,13 @@ class Articulo_model extends General_model {
 			return $ingresos->total;
 		} else {
 			$egresos = $this->db
-						->select("sum(ifnull(cantidad, 0)) as total")
+						->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						->join("articulo b", "a.articulo = b.articulo")
 						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						->join("categoria d", "d.categoria = c.categoria")
 						->join("egreso e", "e.egreso = a.egreso")
 						->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
+						->join("presentacion p", "a.presentacion = p.presentacion")
 						->where("a.articulo", $articulo)
 						->get("egreso_detalle a")
 						->row();//total egresos wms
@@ -255,12 +271,13 @@ class Articulo_model extends General_model {
 
 		if ($args['tipo'] == 1) {
 			$comandas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0)) as total")
+						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("comanda e", "e.comanda = a.comanda")
 						 ->join("turno f", "e.turno = f.turno and f.sede = d.sede")
+						 ->join("presentacion p", "a.presentacion = p.presentacion")
 						 ->where("a.articulo", $articulo)
 						 ->get("detalle_comanda a")
 						 ->row();//total ventas comanda	
@@ -268,12 +285,13 @@ class Articulo_model extends General_model {
 			return $comandas->total;
 		} else {
 			$facturas = $this->db
-							 ->select("sum(ifnull(a.cantidad, 0)) as total")
+							 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 							 ->join("articulo b", "a.articulo = b.articulo")
 							 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 							 ->join("categoria d", "d.categoria = c.categoria")
 							 ->join("detalle_factura_detalle_cuenta e", "a.detalle_factura = e.detalle_factura", "left")
 							 ->join("factura f", "a.factura = f.factura and f.sede = d.sede")
+							 ->join("presentacion p", "a.presentacion = p.presentacion")
 							 ->where("a.articulo", $articulo)
 							 ->where("e.detalle_factura_detalle_cuenta is null")
 							 ->get("detalle_factura a")
@@ -285,6 +303,7 @@ class Articulo_model extends General_model {
 
 	public function getExistencias($args)
 	{
+		$this->load->model('Presentacion_model');
 		$receta = $this->getReceta();
 		$principal = $this->getReceta(["_principal" => true]);
 		$ingresos = 0;
@@ -329,6 +348,7 @@ class Articulo_model extends General_model {
 
 		return (object)[
 			"articulo" => $this,
+			"presentacion" => new Presentacion_model($this->presentacion_reporte),
 			"ingresos" => $ingresos,
 			"egresos" => $egresos,
 			"comandas" => $comandas,

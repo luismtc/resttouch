@@ -12,6 +12,8 @@ export interface Articulo {
     existencias?: number;
     codigo?: string;
     produccion: number;
+    presentacion_reporte: number;
+    mostrar_pos: number;
 }
 
 export interface ArticuloResponse {
@@ -22,6 +24,8 @@ export interface ArticuloResponse {
     precio: number;
     codigo?: string;
     produccion: number;
+    presentacion_reporte: any;
+    mostrar_pos: number;
 }
 
 export interface ArbolCategoriaGrupo {

@@ -12,6 +12,7 @@ class Dcomanda_model extends General_Model {
 	public $total;
 	public $notas;
 	public $cocinado = 0;
+	public $presentacion;
 
 	public function __construct($id = '')
 	{

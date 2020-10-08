@@ -82,6 +82,8 @@ class Comanda_model extends General_Model
 			}
 		}
 		$art = new Articulo_model($articulo);
+		$args['presentacion'] = $art->presentacion;
+		
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
 		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {

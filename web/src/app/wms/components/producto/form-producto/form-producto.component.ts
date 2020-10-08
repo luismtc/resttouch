@@ -59,7 +59,9 @@ export class FormProductoComponent implements OnInit {
       descripcion: null,
       precio: null,
       bien_servicio: 'B',
-      produccion: 0
+      produccion: 0,
+      mostrar_pos: 1,
+      presentacion_reporte:null
     };
     this.resetReceta();
   }

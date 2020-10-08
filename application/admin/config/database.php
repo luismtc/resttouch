@@ -33,6 +33,6 @@ if (isset($_SERVER["GAE_APPLICATION"])) {
 	/* LOCAL */
 	$db['default']['hostname'] = '127.0.0.1';
 	$db['default']['username'] = 'root';
-	$db['default']['password'] = 'xIrs4ECzrcp6wnHF';
-	$db['default']['database'] = 'administracion';
+	$db['default']['password'] = '';
+	$db['default']['database'] = 'restadmin';
 }
