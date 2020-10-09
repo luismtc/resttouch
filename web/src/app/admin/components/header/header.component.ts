@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 import { UsuarioService } from '../../services/usuario.service';
 import { AppMenuService } from '../../services/app-menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
+import { Keepalive } from '@ng-idle/keepalive';
+
+import { SolicitaPinInactividadComponent } from '../solicita-pin-inactividad/solicita-pin-inactividad.component';
 
 @Component({
   selector: 'app-header',
@@ -15,16 +20,22 @@ export class HeaderComponent implements OnInit {
 
   public usrInfo: any = {};
   public appMenu: any[];
+  public idleState = false;
+  public timedOut = false;
+  public lastPing?: Date = null;
 
   constructor(
-    private router: Router, 
+    private router: Router,
     private ls: LocalstorageService,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private usrSrvc: UsuarioService,
-    private appMenuSrvc: AppMenuService
+    private appMenuSrvc: AppMenuService,
+    private idle: Idle,
+    private keepalive: Keepalive,
+    public dialog: MatDialog
   ) {
-    // this.appMenu = this.usrSrvc.getUserAppMenu();
     this.usrInfo = this.ls.get(GLOBAL.usrTokenVar);
+    this.setIdleConfigs();
   }
 
   ngOnInit() {
@@ -35,6 +46,44 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  setIdleConfigs = () => {
+    this.idle.setIdle(GLOBAL.idleTimeInSeconds);
+    this.idle.setTimeout(GLOBAL.idleTimeInSeconds);
+    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+
+    this.idle.onIdleEnd.subscribe(() => this.idleState = false);
+
+    this.idle.onTimeout.subscribe(() => {
+      this.idleState = true;
+      this.timedOut = true;
+
+      const solicitaPinRef = this.dialog.open(SolicitaPinInactividadComponent, {
+        width: '25%',
+        hasBackdrop: true,
+        disableClose: true,
+        data: null
+      });
+
+      solicitaPinRef.afterClosed().subscribe(() => this.reset());
+    });
+
+    this.idle.onIdleStart.subscribe(() => this.idleState = true);
+
+    this.idle.onTimeoutWarning.subscribe((conteo: number) => this.idleState = true);
+
+    this.keepalive.interval(15);
+
+    this.keepalive.onPing.subscribe(() => this.lastPing = new Date());
+
+    this.reset();
+  }
+
+  reset = () => {
+    this.idle.watch();
+    this.idleState = false;
+    this.timedOut = false;
+  }
+
   handleClick = (modulo: string = '') => {
     const objModulo: any = this.appMenu.find(m => m.nombre === modulo);
     // console.log(objModulo);
@@ -42,7 +91,7 @@ export class HeaderComponent implements OnInit {
       const submodulo: any = this.usrSrvc.transformSubModule(objModulo.submodulo);
       // console.log(submodulo);
       this.appMenuSrvc.updOpciones(submodulo);
-      this._snackBar.open(`Cambio al módulo ${modulo}`, 'Módulo', { duration: 5000 });
+      this.snackBar.open(`Cambio al módulo ${modulo}`, 'Módulo', { duration: 5000 });
     }
   }
 

@@ -11,6 +11,7 @@ class Usuario_model extends General_model
     public $contrasenia;
     public $debaja = 0;
     public $esmesero = 0;
+    public $pindesbloqueo = null;
 
     public function __construct($id = '')
     {
@@ -45,10 +46,22 @@ class Usuario_model extends General_model
     function logIn($credenciales = null)
     {
         if ($credenciales) {
+
+            if (isset($credenciales['usr'])) {
+                $this->db->where('usrname', $credenciales['usr']);
+            } elseif (isset($credenciales['pindesbloqueo'])) {
+                $this->db->where('pindesbloqueo', $credenciales['pindesbloqueo']);
+            }
+
+            if (isset($credenciales['sede'])) {
+                $this->db->where('a.sede', $credenciales['sede']);
+            }
+
             $dbusr = $this->db
                 ->select("
                     a.usuario, 
                     a.contrasenia, 
+                    a.pindesbloqueo,
                     a.usrname, 
                     a.nombres, 
                     a.apellidos, 
@@ -63,18 +76,27 @@ class Usuario_model extends General_model
                 ->from("{$this->tabla} a")
                 ->join("sede b", "b.sede = a.sede")
                 ->join("empresa c", "c.empresa = b.empresa")
-                ->join("corporacion d", "d.corporacion = c.corporacion")
-                ->where('usrname', $credenciales['usr'])
+                ->join("corporacion d", "d.corporacion = c.corporacion")                
+                // ->where('usrname', $credenciales['usr'])
                 ->where('debaja', 0)
                 ->get()
                 ->row();
 
             if (isset($dbusr)) {
-                if (password_verify($credenciales['pwd'], $dbusr->contrasenia)) {
+                $validado = false;
+
+                if (isset($credenciales['pwd'])) {
+                    $validado = password_verify($credenciales['pwd'], $dbusr->contrasenia);
+                } elseif (isset($credenciales['pindesbloqueo'])) {
+                    $validado = $credenciales['pindesbloqueo'] == $dbusr->pindesbloqueo;
+                }
+
+                if ($validado) {
                     $tokenData = array(
                         'idusuario' => $dbusr->usuario,
                         'sede' => $dbusr->sede,
-                        'usuario' => $credenciales['usr'],
+                        //'usuario' => $credenciales['usr'],
+                        'usuario' => $dbusr->usrname,
                         'inicia' => date('Y-m-d H:i:s'),
                         'hasta' => date('Y-m-d H:i:s', strtotime('+12 hours')),
                         'dominio' => $credenciales['dominio']
@@ -100,13 +122,13 @@ class Usuario_model extends General_model
                     );
                 } else {
                     return array(
-                        'mensaje' => 'El usuario ' . $credenciales['usr'] . ' o la contraseña son inválidos. Intente de nuevo, por favor.',
+                        'mensaje' => 'El usuario o la contraseña son inválidos. Intente de nuevo, por favor.',
                         'token' => null
                     );
                 }
             } else {
                 return array(
-                    'mensaje' => 'El usuario ' . $credenciales['usr'] . ' es inválido. Intente de nuevo, por favor.',
+                    'mensaje' => 'El usuario es inválido. Intente de nuevo, por favor.',
                     'token' => null
                 );
             }

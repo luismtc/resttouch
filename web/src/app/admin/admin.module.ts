@@ -33,6 +33,8 @@ import {
   ChartModule, LineSeriesService, CategoryService, LegendService, DataLabelService, TooltipService
 } from '@syncfusion/ej2-angular-charts';
 
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+
 import { AdminRoutingModule } from './admin-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -69,6 +71,7 @@ import { ProveedorComponent } from './components/proveedor/proveedor/proveedor.c
 import { ListaProveedorComponent } from './components/proveedor/lista-proveedor/lista-proveedor.component';
 import { FormProveedorComponent } from './components/proveedor/form-proveedor/form-proveedor.component';
 import { VentasComponent } from './components/tablero/graficas/ventas/ventas.component';
+import { SolicitaPinInactividadComponent } from './components/solicita-pin-inactividad/solicita-pin-inactividad.component';
 
 
 @NgModule({
@@ -80,16 +83,16 @@ import { VentasComponent } from './components/tablero/graficas/ventas/ventas.com
     FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,
     TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent,
     FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent,
-    ListaProveedorComponent, FormProveedorComponent, VentasComponent
+    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent
   ],
   entryComponents: [
-    FormClienteComponent, FormClienteDialogComponent
+    FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatCardModule, MatDividerModule, MatTabsModule, MatTableModule, MatSelectModule, MatCheckboxModule, MatButtonModule,
     MatSnackBarModule, MatToolbarModule, MatMenuModule, MatGridListModule, MatPaginatorModule, MatTreeModule, MatDialogModule,
-    MatProgressBarModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule
+    MatProgressBarModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule, NgIdleKeepaliveModule.forRoot()
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent

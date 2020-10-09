@@ -1,0 +1,44 @@
+<div fxLayout="row" fxLayout.xs="column">
+    <div fxFlex="50%" fxFelx.xs="100%" fxLayoutAlign="start start">
+        <span class="bld" style="font-size: 16pt; margin-left: 10px;">
+            {{mesaEnUso.mesa.area.nombre}} - Mesa{{mesaEnUso.mesa.numero}} - Comanda {{mesaEnUso.comanda}}
+        </span>
+    </div>
+    <div fxFlex="50%" fxFelx.xs="100%" fxLayoutAlign="end start">
+        <button mat-raised-button type="button" color="accent" style="margin-left: 8px;" (click)="cerrar()">
+            Cerrar
+        </button>
+    </div>
+</div>
+
+<div mat-dialog-content class="contenido bordeTest">
+    <!-- Div de cuentas-->
+    <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center center">
+        <button mat-raised-button type="button" color="accent" class="btnAccion" *ngFor="let cta of mesaEnUso.cuentas"
+            [disabled]="+cta.cerrada == 1" (click)="setSelectedCuenta(cta.numero)">
+            {{cta.nombre}}
+        </button>
+    </div>
+    <!-- Fin de div de cuentas-->
+    <!-- Inicia Categorias -->
+    <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center">
+        <a *ngFor="let cat of categorias" class="lnkCategorias" (click)="loadSubcategorias(cat)">{{cat.descripcion}}</a>
+    </div>
+    <!-- Fin de Categorias -->
+    <!-- Inicia Sub Categorias -->
+    <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center"
+        *ngFor="let lstSubCat of listaSubCategorias">
+        <a *ngFor="let subcat of lstSubCat" class="lnkCategorias"
+            (click)="loadSubcategorias({ categoria: subcat.categoria }, subcat)">{{subcat.descripcion}}</a>
+    </div>
+    <!-- Fin de Sub Categorias -->
+
+
+</div>
+<!--
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cerrar()" color="accent" class="btnAccion">
+        Cerrar
+    </button>
+</div>
+-->

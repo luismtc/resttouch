@@ -15,6 +15,8 @@ export const GLOBAL = {
     urlWms: `${urlBase}/wms.php`,
     urlFacturacion: `${urlBase}/facturacion.php`,
     usrTokenVar: 'rttoken',
+    idleTimeInSeconds: 300,
+    usrUnlockVar: 'rtunlock',
     reintentos: 0,
     infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='
 };

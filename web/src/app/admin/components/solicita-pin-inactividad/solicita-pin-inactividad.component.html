@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Pin de desbloqueo</h1>
+<div mat-dialog-content>
+    <form #frmDesbloqueo="ngForm" (ngSubmit)="frmDesbloqueo.form.valid && verificaPin()" novalidate>
+        <mat-form-field class="fullWidth">
+            <input matInput type="password" placeholder="Pin de desbloqueo" name="pinDesbloqueo"
+                [(ngModel)]="pinDesbloqueo" required>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button type="submit" color="accent" (click)="verificaPin()"
+        [disabled]="!frmDesbloqueo.form.valid">
+        <span>Validar</span>
+    </button>
+</div>

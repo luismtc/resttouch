@@ -84,6 +84,10 @@ class Articulo extends CI_Controller
 			$datos = $tmp;
 		}
 
+		usort($datos, function ($a, $b) {
+			return strcmp($a->descripcion, $b->descripcion);
+		});
+
 		$this->output
 			->set_content_type("application/json")
 			->set_output(json_encode($datos));

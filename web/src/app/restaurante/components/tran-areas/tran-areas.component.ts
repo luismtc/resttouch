@@ -9,6 +9,7 @@ import { Socket } from 'ngx-socket-io';
 
 import { AbrirMesaComponent } from '../abrir-mesa/abrir-mesa.component';
 import { TranComandaComponent } from '../tran-comanda/tran-comanda.component';
+import { TranComandaAltComponent } from '../tran-comanda-alt/tran-comanda-alt.component';
 import { Area } from '../../interfaces/area';
 import { AreaService } from '../../services/area.service';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
@@ -259,6 +260,19 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     });
   }
 
+  openTranComandaAlt = () => {
+    const tranComandaRef = this.dialog.open(TranComandaAltComponent, {
+      width: '97%',
+      height: '95%',
+      disableClose: true,
+      data: { mesa: this.mesaSeleccionada }
+    });
+
+    tranComandaRef.afterClosed().subscribe((res: any) => {
+      console.log(res);
+    });
+  }
+
   loadComandaMesa = (obj: any, shouldToggle = true) => {
     // console.log('OBJETO = ', obj);
     this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
@@ -283,7 +297,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         if (shouldToggle) {
           // const cuentas = this.mesaSeleccionada.cuentas;
           this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
-          this.toggleRightSidenav();
+          this.openTranComandaAlt();
+          // this.toggleRightSidenav();
         } else {
           // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
           this.checkEstatusMesa();

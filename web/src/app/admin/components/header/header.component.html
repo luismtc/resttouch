@@ -2,7 +2,7 @@
     <mat-toolbar-row>
         <img src="/assets/img/minilogo.svg" width="30" height="30" alt="Rest-Touch Pro">
         <span class="spacer"></span>
-        <app-clock></app-clock>
+        <app-clock [idleStatus]="idleState"></app-clock>
         <span class="spacer"></span>
         <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
             {{usrInfo.usuario}}&nbsp;<mat-icon>apps</mat-icon>
