@@ -43,6 +43,10 @@ class Categoria extends CI_Controller {
 		$_GET['sede'] = $this->data->sede;
 		$datos = $this->Categoria_model->buscar($_GET);
 
+		usort($datos, function ($a, $b) {
+			return strcmp($a->descripcion, $b->descripcion);
+		});
+
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));

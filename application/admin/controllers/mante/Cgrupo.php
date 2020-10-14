@@ -11,7 +11,7 @@ class Cgrupo extends CI_Controller {
 public function __construct()
 	{
         parent::__construct();
-        $this->load->model(['Cgrupo_model', 'Catalogo_model', 'Categoria_model']);
+		$this->load->model(['Cgrupo_model', 'Catalogo_model', 'Categoria_model', 'Impresora_model']);
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -67,6 +67,25 @@ public function __construct()
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));
+	}
+
+	public function get_categoria_grupo()
+	{
+		if (!isset($_GET['categoria_grupo_grupo'])) {
+			$_GET['categoria_grupo_grupo'] = null;
+		}
+
+		$datos = $this->Cgrupo_model->buscar($_GET);
+
+		usort($datos, function ($a, $b) {
+			return strcmp($a->descripcion, $b->descripcion);
+		});
+
+		foreach ($datos as $cg) {
+			$cg->impresora = new Impresora_model($cg->impresora);
+		}
+
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
 
 }

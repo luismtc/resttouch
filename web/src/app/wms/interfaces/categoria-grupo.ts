@@ -1,3 +1,4 @@
+import { Impresora } from '../../admin/interfaces/impresora';
 import { Categoria } from './categoria';
 import { Articulo } from './articulo';
 
@@ -21,4 +22,14 @@ export interface CategoriaGrupoResponse {
     impresora: number;
     descuento: number;
     articulo: Articulo[];
+}
+
+export interface CategoriaGrupoImpresora {
+    categoria_grupo: number;
+    categoria: number;
+    categoria_grupo_grupo?: number;
+    descripcion: string;
+    receta: number;
+    impresora?: Impresora;
+    descuento: number;
 }

@@ -44,7 +44,7 @@ const APPMENU: IBtnModulo[] = [
 export class UsuarioService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl: string = 'usuario';
+  private moduleUrl = 'usuario';
   private usrToken: string = null;
 
   constructor(
@@ -71,7 +71,25 @@ export class UsuarioService {
       })
     };
 
-    return this.http.post<usrLogInResponse>(`${GLOBAL.url}/${this.moduleUrl}/login`, JSON.stringify(obj), httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<usrLogInResponse>(
+      `${GLOBAL.url}/${this.moduleUrl}/login`,
+      JSON.stringify(obj),
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  desbloquear = (pindesbloqueo: number) => {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+
+    return this.http.post<any>(
+      `${GLOBAL.url}/${this.moduleUrl}/desbloqueo_usuario`,
+      { pindesbloqueo },
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getAll(debaja: number = 0): Observable<Usuario[]> {
@@ -80,8 +98,10 @@ export class UsuarioService {
         'Authorization': this.usrToken
       })
     };
-    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?debaja=${debaja}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-    return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Usuario[]>(
+      `${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   async checkUserToken() {
@@ -108,8 +128,11 @@ export class UsuarioService {
         'Authorization': this.usrToken
       })
     };
-    // return this.http.get<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios?${qs.stringify(filtros)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-    return this.http.post<Usuario[]>(`${GLOBAL.url}/${this.moduleUrl}/usuarios_post`, filtros, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<Usuario[]>(
+      `${GLOBAL.url}/${this.moduleUrl}/usuarios_post`,
+      filtros,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getMeserosTurno(): Observable<Usuario[]> {
@@ -117,8 +140,11 @@ export class UsuarioService {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };    
-    return this.http.get<Usuario[]>(`${GLOBAL.urlCatalogos}/get_mesero`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    };
+    return this.http.get<Usuario[]>(
+      `${GLOBAL.urlCatalogos}/get_mesero`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Usuario): Observable<Usuario> {
@@ -129,12 +155,20 @@ export class UsuarioService {
     };
 
     if (entidad.usuario) {
-      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+      return this.http.post<Usuario>(
+        `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`,
+        entidad,
+        httpOptions
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     } else {
       if (!entidad.contrasenia) {
         delete entidad.contrasenia;
       }
-      return this.http.post<Usuario>(`${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+      return this.http.post<Usuario>(
+        `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`,
+        entidad,
+        httpOptions
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     }
 
   }
@@ -144,7 +178,7 @@ export class UsuarioService {
   getAppMenu = (): AccesoUsuario[] => this.ls.get(GLOBAL.usrTokenVar).acceso || [];
 
   transformSubModule = (subModulos: SubModulo[]): NodoAppMenu[] => {
-    let objMenu: NodoAppMenu[] = [];
+    const objMenu: NodoAppMenu[] = [];
     subModulos.forEach(sm => objMenu.push({ nombre: sm.nombre, link: null, hijos: sm.opciones }));
     return objMenu;
   }
