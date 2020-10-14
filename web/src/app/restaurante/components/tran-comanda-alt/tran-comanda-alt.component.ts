@@ -52,15 +52,23 @@ export class TranComandaAltComponent implements OnInit {
 
   cerrar = () => this.dialogRef.close();
 
+  resetArticulos = () => this.articulos = [];
+  resetListaSubCategorias = () => this.listaSubCategorias = [];
+
   loadCategorias = () => this.articuloSrvc.getCategorias().subscribe((res: Categoria[]) => this.categorias = res);
 
-  loadSubcategorias = (cat: Categoria, subcat: CategoriaGrupoImpresora = null) => {
+  loadSubcategorias = (cat: Categoria, subcat: CategoriaGrupoImpresora = null, idx: number = 0) => {
+    this.resetArticulos();
     const fltr: any = { categoria: cat.categoria };
 
     if (!!subcat) {
       fltr.categoria_grupo_grupo = subcat.categoria_grupo;
     } else {
-      this.listaSubCategorias = [];
+      this.resetListaSubCategorias();
+    }
+
+    if (this.listaSubCategorias.length > 0) {
+      this.listaSubCategorias.splice((idx + 1));
     }
 
     this.articuloSrvc.getCategoriaGrupoImpresora(fltr).subscribe((res: CategoriaGrupoImpresora[]) => {

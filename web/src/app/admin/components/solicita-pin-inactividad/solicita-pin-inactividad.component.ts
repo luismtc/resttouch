@@ -13,7 +13,7 @@ import { GLOBAL } from '../../../shared/global';
 })
 export class SolicitaPinInactividadComponent implements OnInit {
 
-  public pinDesbloqueo: number = undefined;
+  public pinDesbloqueo: string = undefined;
 
   constructor(
     public dialogRef: MatDialogRef<SolicitaPinInactividadComponent>,
@@ -28,7 +28,8 @@ export class SolicitaPinInactividadComponent implements OnInit {
   }
 
   verificaPin = () => {
-    this.usuarioSrvc.desbloquear(this.pinDesbloqueo).subscribe(res => {
+    const tmpPinDesbloqueo = +this.pinDesbloqueo.replace(/[^0-9]/gi, '').substr(0, 36).trim();
+    this.usuarioSrvc.desbloquear(tmpPinDesbloqueo).subscribe(res => {
       if (res.exito && res.token) {
         this.ls.set(GLOBAL.usrUnlockVar, {
           token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
@@ -36,6 +37,7 @@ export class SolicitaPinInactividadComponent implements OnInit {
         });
         this.dialogRef.close();
       } else {
+        this.pinDesbloqueo = undefined;
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Desbloqueo', { duration: 7000 });
       }
     });

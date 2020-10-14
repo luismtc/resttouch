@@ -267,7 +267,8 @@ class Api extends CI_Controller {
 										$pdescuento = 0;
 										if (isset($req['discount_applications']) && is_array($req['discount_applications'])) {
 											foreach ($req['discount_applications'] as $desc) {
-												if (strtolower($desc['value_type']) == 'percentage') {
+												$targetType = isset($desc['target_type']) ? strtolower($desc['target_type']) : '';
+												if (strtolower($desc['value_type']) == 'percentage' && $targetType !== 'shipping_line') {
 													$descuento += ($total * $desc['value'] /100);
 													$pdescuento += $desc['value'];
 												}
@@ -276,7 +277,8 @@ class Api extends CI_Controller {
 											//Inicia fix para los descuentos que son por monto fijo. JA 20/08/2020.
 											if(isset($req['discount_codes']) && is_array($req['discount_codes'])) {
 												foreach($req['discount_codes'] as $desc) {
-													if (strtolower($desc['type']) == 'fixed_amount') {
+													$tipos = ['fixed_amount', 'shipping'];
+													if (in_array(strtolower($desc['type']), $tipos)) {
 														$descuento += ($total * $desc['amount'] /100);
 														$pdescuento += $desc['amount'];
 													}													

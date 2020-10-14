@@ -262,8 +262,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   openTranComandaAlt = () => {
     const tranComandaRef = this.dialog.open(TranComandaAltComponent, {
-      width: '97%',
-      height: '95%',
+      maxWidth: '100vw', maxHeight: '100vh', width: '99vw', height: '99vh',
       disableClose: true,
       data: { mesa: this.mesaSeleccionada }
     });

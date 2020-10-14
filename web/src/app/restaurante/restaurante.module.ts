@@ -29,6 +29,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatBadgeModule } from '@angular/material/badge';
 
 // import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
@@ -120,6 +121,7 @@ import { TranComandaAltComponent } from './components/tran-comanda-alt/tran-coma
     MatNativeDateModule,
     EcoFabSpeedDialModule,
     DragDropModule,
+    MatBadgeModule
   ],
   providers: [
     MatNativeDateModule

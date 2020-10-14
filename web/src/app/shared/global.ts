@@ -1,6 +1,6 @@
-// const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo local
+const urlBase = 'http://localhost/resttouch'; // Desarrollo local
 // const urlBase = `${location.origin}/api`; // Desarrollo
-const urlBase = location.origin; // Producción
+// const urlBase = location.origin; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -15,7 +15,7 @@ export const GLOBAL = {
     urlWms: `${urlBase}/wms.php`,
     urlFacturacion: `${urlBase}/facturacion.php`,
     usrTokenVar: 'rttoken',
-    idleTimeInSeconds: 300,
+    idleTimeInSeconds: 3600,
     usrUnlockVar: 'rtunlock',
     reintentos: 0,
     infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='

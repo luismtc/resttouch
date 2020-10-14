@@ -61,6 +61,7 @@ export class HeaderComponent implements OnInit {
         width: '25%',
         hasBackdrop: true,
         disableClose: true,
+        autoFocus: true,
         data: null
       });
 
@@ -96,6 +97,8 @@ export class HeaderComponent implements OnInit {
   }
 
   LogOut() {
+    this.ls.clear('ng2Idle.main.expiry');
+    this.ls.clear('ng2Idle.main.idling');
     this.ls.clear(GLOBAL.usrTokenVar);
     this.router.navigate(['/admin/login']);
   }
