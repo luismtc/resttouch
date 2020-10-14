@@ -167,8 +167,10 @@ class Catalogo_model extends CI_Model {
 	{
 		$raiz = isset($args['raiz']);
 		$sede = isset($args['sede']) ? $args['sede'] : false;
+		$todo = isset($args['_todo']);
 		unset($args['raiz']);
 		unset($args['sede']);
+		unset($args['_todo']);
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if ($key != '_uno') {
@@ -178,6 +180,11 @@ class Catalogo_model extends CI_Model {
 		}
 		if ($sede) {
 			$this->db->where('b.sede', $sede);
+		}
+
+		$buscarArt = [];
+		if (!$todo) {
+			$buscarArt["mostrar_pos"] = "1";
 		}
 		
 		$qry = $this->db
@@ -193,19 +200,28 @@ class Catalogo_model extends CI_Model {
 		if (is_array($grupo)) {
 			foreach ($grupo as $row) {
 				if ($raiz) {
-					$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
+					$data = [
 						"categoria_grupo" => $row->categoria_grupo_grupo,
 						"raiz" => true
-					]);
+					];
+
+					if ($todo) {
+						$data['_todo'] = true;
+					}
+					$row->categoria_grupo_grupo = $this->getCategoriaGrupo($data);
 				} else {
-					$row->categoria_grupo_grupo = $this->getCategoriaGrupo([
+					$data = [
 						"categoria_grupo_grupo" => $row->categoria_grupo
-					]);
+					];
+
+					if ($todo) {
+						$data['_todo'] = true;
+					}
+					$row->categoria_grupo_grupo = $this->getCategoriaGrupo($data);
 				}				
-				
-				$row->articulo = $this->Catalogo_model->getArticulo([
-					'categoria_grupo' => $row->categoria_grupo
-				]);
+				$buscarArt['categoria_grupo'] = $row->categoria_grupo;
+
+				$row->articulo = $this->Catalogo_model->getArticulo($buscarArt);
 				$row->categoria = $this->Categoria_model->buscar([
 					"categoria" => $row->categoria,
 					"_uno" => true
@@ -213,16 +229,22 @@ class Catalogo_model extends CI_Model {
 				$datos[] = $row;
 			}
 		} else if(is_object($grupo)) {
-			if ($raiz) {
-				$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo([
-					"categoria_grupo" => $grupo->categoria_grupo_grupo,
-					"raiz" => true
-				]);
-			} else {
-				$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo([
-					"categoria_grupo_grupo" => $grupo->categoria_grupo
-				]);
+			$data = [];
+			if ($todo) {
+				$data['_todo'] = true;
 			}
+			if ($raiz) {
+				$data['categoria_grupo'] = $grupo->categoria_grupo_grupo;
+				$data['raiz'] = true;
+
+				$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo($data);
+			} else {
+				$data['categoria_grupo_grupo'] = $grupo->categoria_grupo;
+
+				$grupo->categoria_grupo_grupo = $this->getCategoriaGrupo($data);
+			}
+
+			$buscarArt["categoria_grupo"] = $grupo->categoria_grupo;
 				
 			$grupo->articulo = $this->Catalogo_model->getArticulo([
 				'categoria_grupo' => $grupo->categoria_grupo

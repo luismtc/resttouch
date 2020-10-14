@@ -89,10 +89,15 @@ class Catalogo extends CI_Controller {
 		$cat = $this->Categoria_model->buscar($_GET);		
 		$datos = [];
 		foreach ($cat as $row) {
-			$grupo = $this->Catalogo_model->getCategoriaGrupo([
+			$data = [
 				"categoria" => $row->categoria,
-				"categoria_grupo_grupo" => null			
-			]);
+				"categoria_grupo_grupo" => null	
+			];
+			if (isset($_GET["_todo"])) {
+				$data['_todo'] = true;
+			}
+
+			$grupo = $this->Catalogo_model->getCategoriaGrupo($data);
 			$row->categoria_grupo = $grupo;
 
 			$datos[] = $row;

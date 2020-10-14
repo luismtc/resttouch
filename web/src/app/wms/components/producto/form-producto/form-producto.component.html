@@ -36,8 +36,16 @@
             </mat-form-field>
             -->
             <mat-form-field class="fullWidth">
-                <mat-label>Presentación</mat-label>
+                <mat-label>Presentación Venta</mat-label>
                 <mat-select name="presentacion" [(ngModel)]="articulo.presentacion">
+                    <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
+                        {{p.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Presentación Reportes</mat-label>
+                <mat-select name="presentacion_reporte" [(ngModel)]="articulo.presentacion_reporte">
                     <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
                         {{p.descripcion}}
                     </mat-option>
@@ -53,7 +61,14 @@
                     [(ngModel)]="articulo.codigo" required>
             </mat-form-field>
             -->
-            <mat-checkbox name="produccion" class="fullWidth" [(ngModel)]="+articulo.produccion">¿Es produccion?</mat-checkbox>
+            <div class="row">
+                <div class="col m6 s6">
+                    <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion">¿Es produccion?</mat-checkbox>
+                </div>
+                <div class="col m6 s6">
+                    <mat-checkbox name="mostrar" class="example-margin" [(ngModel)]="+articulo.mostrar_pos">Mostrar en POS</mat-checkbox>
+                </div>
+            </div>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmArticulo.form.valid || !articulo.categoria_grupo">
                     Guardar

@@ -41,7 +41,7 @@ export class ListaProductoComponent implements OnInit {
   }
 
   loadArbolArticulos() {
-    this.articuloSrvc.getArbolArticulos((this.ls.get(GLOBAL.usrTokenVar).sede || 0)).subscribe(res => {
+    this.articuloSrvc.getArbolArticulosMante((this.ls.get(GLOBAL.usrTokenVar).sede || 0)).subscribe(res => {
       // console.log(res);
       if (res) {
         this.arbol = this.articuloSrvc.convertToArbolNodoProducto(res);

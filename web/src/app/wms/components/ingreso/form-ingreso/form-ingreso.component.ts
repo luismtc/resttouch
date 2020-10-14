@@ -108,8 +108,11 @@ export class FormIngresoComponent implements OnInit {
   onSubmit = () => {
     this.ingresoSrvc.save(this.ingreso).subscribe(res => {
       //console.log(res);
-      this.ingresoSavedEv.emit();
       this.resetIngreso();
+      if (res.exito) {
+        this.ingreso = res.ingreso
+      }
+      this.ingresoSavedEv.emit();
     });
   }
 

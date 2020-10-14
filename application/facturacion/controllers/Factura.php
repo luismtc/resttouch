@@ -81,6 +81,7 @@ class Factura extends CI_Controller {
 					$req['monto_base'] = $req['total'] / $pimpuesto;
 				}
 				
+				$req['presentacion'] = $art->presentacion;
 				$req['monto_iva'] = $req['total'] - $req['monto_base'];	
 				$req['bien_servicio'] = $art->bien_servicio;
 				$det = $fac->setDetalle($req, $id);
