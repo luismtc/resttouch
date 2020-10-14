@@ -59,6 +59,7 @@ class Usuario_model extends General_model
                     b.correo as sede_correo,
                     c.nombre as empresa_nombre,
                     c.nit as empresa_nit,
+                    c.visa_merchant_id,
                     CONCAT(d.admin_llave, '-', c.empresa, '-', b.sede) AS sede_uuid")
                 ->from("{$this->tabla} a")
                 ->join("sede b", "b.sede = a.sede")
@@ -94,6 +95,7 @@ class Usuario_model extends General_model
                             "correo" => $dbusr->sede_correo
                         ],
                         'empresa' => [
+                            "visa_merchant_id" => $dbusr->visa_merchant_id,
                             "nombre" => $dbusr->empresa_nombre,
                             "nit" => $dbusr->empresa_nit
                         ]

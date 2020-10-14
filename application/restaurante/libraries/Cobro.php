@@ -11,6 +11,7 @@ class Cobro extends SoapClient
     private $total = 0;
     private $tarjeta = null;
 	private $cliente = null;
+	private $fingerprint;
 
     public function __construct($empresa = null, $options = [])
     {
@@ -42,15 +43,42 @@ class Cobro extends SoapClient
     	return $this;
     }
 
-    private function procesar()
+    public function setFingerprint($valor)
+    {
+    	$this->fingerprint = $valor;
+    	return $this;
+    }
+
+    public function getItem()
+    {
+    	$item = new stdClass();
+		$item->unitPrice = $this->total;
+		$item->quantity = 1;
+		$item->id = 1;
+
+		return $item;
+    }
+
+    public function getRequest()
     {
     	$request = new stdClass();
     	$request->merchantID = $this->empresa->visa_merchant_id;
 		$request->merchantReferenceCode = $this->referencia;
 
+		return $request;
+    }
+
+    private function procesar()
+    {
+    	$request = $this->getRequest();
+
 		$request->clientLibrary = "PHP";
 		$request->clientLibraryVersion = phpversion();
 		$request->clientEnvironment = php_uname();
+
+		$deviceInformation = new stdClass();
+		$deviceInformation->deviceFingerprintId = $this->fingerprint;
+		$request->deviceInformation = $deviceInformation;
 
 		$ccAuthService = new stdClass();
 		$ccAuthService->run = "true";
@@ -69,18 +97,14 @@ class Cobro extends SoapClient
 		$card->accountNumber = $this->tarjeta["numero"];
 		$card->expirationMonth = $this->tarjeta["mes"];
 		$card->expirationYear = $this->tarjeta["anio"];
+		$card->cvNumber = $this->tarjeta["codigo_seguridad"];
 		$request->card = $card;
 
 		$purchaseTotals = new stdClass();
 		$purchaseTotals->currency = "GTQ";
 		$request->purchaseTotals = $purchaseTotals;
-		$request->item = array();
+		$request->item = array($this->getItem());
 
-		$item = new stdClass();
-		$item->unitPrice = $this->total;
-		$item->quantity = 1;
-		$item->id = 1;
-		$request->item[] = $item;
 
 		$this->request = $request;
     }
@@ -125,6 +149,30 @@ class Cobro extends SoapClient
     public function cobrar()
     {
     	$this->procesar();
-    	return $this->runTransaction($this->request);
+    	$reply = $this->runTransaction($this->request);
+
+    	if ($reply->decision != 'ACCEPT') {
+    		return $reply;
+    	} else {
+    		$ccCaptureService = new stdClass();
+    		$ccCaptureService->run = 'true';
+    		$ccCaptureService->authRequestID = $reply->requestID;
+
+    		$captureRequest = $this->getRequest();
+    		$captureRequest->ccCaptureService = $ccCaptureService;
+    		$captureRequest->item = array($this->getItem());
+
+    		$purchaseTotals = new stdClass();
+    		$purchaseTotals->currency = "GTQ";
+
+    		$captureRequest->purchaseTotals = $purchaseTotals;
+
+    		$capture = $this->runTransaction($captureRequest);
+
+    		$capture->ccAuthReply = $reply->ccAuthReply;
+    		$capture->receiptNumber = $reply->receiptNumber;
+
+    		return $capture;
+    	}
     }
 }

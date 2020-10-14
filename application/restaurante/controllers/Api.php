@@ -614,6 +614,11 @@ class Api extends CI_Controller {
 												$cobro = new Cobro($cuenta->getEmpresa());
 												$cobro->setTarjeta($tmpTarjeta);
 												$cobro->setCliente($datosCliente);
+
+												if (isset($req["fingerprint"])) {
+													$cobro->setFingerprint($req["fingerprint"]);
+												}
+
 												$cuenta->setCobro($cobro);
 											}
 

@@ -166,11 +166,16 @@ class Cuenta_model extends General_Model {
 					$this->cobro->setTotal($pago->monto);
 					$tmp = $this->cobro->cobrar();
 
-					if ($tmp->reasonCode != 100) {
-						$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
+					if (empty($tmp)) {
+						$this->setMensaje("Error al realizar cobro, por favor intente nuevamente.");
 						return false;
 					} else {
-						$this->db->set("tarjeta_respuesta", json_encode($tmp));
+						if ($tmp->decision == 'ACCEPT') {
+							$this->db->set("tarjeta_respuesta", json_encode($tmp));
+						} else {
+							$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
+							return false;
+						}
 					}
 				}
 			}
