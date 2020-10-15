@@ -17,7 +17,10 @@ class Configuracion extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-
+			if (isset($req["campo"])) {
+				$req['campo'] = strtoupper($req['campo']);
+			}
+			
 			$datos['exito'] = $config->guardar($req);
 
 			if($datos['exito']) {
