@@ -47,6 +47,7 @@ class Egreso_model extends General_Model {
 
 	public function setDetalle(Array $args, $id = "")
 	{
+		$this->load->model('Presentacion_model');
 		$det = new EDetalle_Model($id);
 		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
 		$validar = true;
@@ -68,9 +69,14 @@ class Egreso_model extends General_Model {
 			}
 		}
 		$art = new Articulo_model($articulo);
+		$pres = $this->Presentacion_model->buscar([
+			"presentacion" => $args['presentacion'],
+			"_uno" => true
+		]);
+
 		$art->actualizarExistencia();
 		$oldart = new Articulo_model($det->articulo);
-		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
+		if (empty($menu) || (!$validar || $art->existencias >= $cantidad * $pres->cantidad)) {
 			$args['egreso'] = $this->egreso;
 			$result = $det->guardar($args);
 

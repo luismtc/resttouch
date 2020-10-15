@@ -113,6 +113,10 @@ class Catalogo_model extends CI_Model {
 			$this->db->where('c.sede', $sede);
 		}
 
+		if (isset($args['ingreso'])) {
+			$this->db->where("(a.produccion = 0 or a.mostrar_pos=0)");
+		}
+
 		$qry = $this->db
 		->select("a.*")
 		->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")

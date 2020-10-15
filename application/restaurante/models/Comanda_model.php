@@ -82,11 +82,12 @@ class Comanda_model extends General_Model
 			}
 		}
 		$art = new Articulo_model($articulo);
+		$pres = $art->getPresentacion();
 		$args['presentacion'] = $art->presentacion;
 		
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
-		if (empty($menu) || (!$validar || $art->existencias >= $cantidad)) {
+		if (empty($menu) || (!$validar || $art->existencias >= ($cantidad * $pres->cantidad))) {
 			$result = $det->guardar($args);
 			$receta = $art->getReceta();
 

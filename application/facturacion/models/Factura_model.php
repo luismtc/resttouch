@@ -56,9 +56,10 @@ class Factura_model extends General_model {
 			}
 		}
 		$art = new Articulo_model($articulo);
+		$pres = $art->getPresentacion();
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
-		if (isset($args['detalle_cuenta']) ||empty($menu) || !$validar || $art->existencias >= $cantidad) {
+		if (isset($args['detalle_cuenta']) ||empty($menu) || !$validar || $art->existencias >= $cantidad * $pres->cantidad) {
 			$result = $det->guardar($args);
 
 			if($result) {
