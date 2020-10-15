@@ -28,7 +28,7 @@ export class ImpresoraService {
   get(fltr: any = {}): Observable<Impresora[]> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
     return this.http.get<Impresora[]>(
@@ -40,7 +40,7 @@ export class ImpresoraService {
   save(entidad: Impresora): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
     return this.http.post<any>(

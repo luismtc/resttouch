@@ -5,6 +5,7 @@ import { LocalstorageService } from '../../services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
 import { UsuarioService } from '../../services/usuario.service';
 import { AppMenuService } from '../../services/app-menu.service';
+import { ConfiguracionService } from '../../services/configuracion.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
@@ -32,6 +33,7 @@ export class HeaderComponent implements OnInit {
     private appMenuSrvc: AppMenuService,
     private idle: Idle,
     private keepalive: Keepalive,
+    private configSrvc: ConfiguracionService,
     public dialog: MatDialog
   ) {
     this.usrInfo = this.ls.get(GLOBAL.usrTokenVar);
@@ -44,39 +46,43 @@ export class HeaderComponent implements OnInit {
         this.appMenu = res;
       }
     });
+    this.configSrvc.load();
   }
 
   setIdleConfigs = () => {
-    this.idle.setIdle(GLOBAL.idleTimeInSeconds);
-    this.idle.setTimeout(GLOBAL.idleTimeInSeconds);
-    this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+    if (this.configSrvc.getConfig('RT_HABILITA_BLOQUEO_INACTIVIDAD')) {
+      const tiempo = this.configSrvc.getConfig('RT_SEGUNDOS_INACTIVIDAD');
+      this.idle.setIdle(tiempo);
+      this.idle.setTimeout(tiempo);
+      this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-    this.idle.onIdleEnd.subscribe(() => this.idleState = false);
+      this.idle.onIdleEnd.subscribe(() => this.idleState = false);
 
-    this.idle.onTimeout.subscribe(() => {
-      this.idleState = true;
-      this.timedOut = true;
+      this.idle.onTimeout.subscribe(() => {
+        this.idleState = true;
+        this.timedOut = true;
 
-      const solicitaPinRef = this.dialog.open(SolicitaPinInactividadComponent, {
-        width: '25%',
-        hasBackdrop: true,
-        disableClose: true,
-        autoFocus: true,
-        data: null
+        const solicitaPinRef = this.dialog.open(SolicitaPinInactividadComponent, {
+          width: '25%',
+          hasBackdrop: true,
+          disableClose: true,
+          autoFocus: true,
+          data: null
+        });
+
+        solicitaPinRef.afterClosed().subscribe(() => this.reset());
       });
 
-      solicitaPinRef.afterClosed().subscribe(() => this.reset());
-    });
+      this.idle.onIdleStart.subscribe(() => this.idleState = true);
 
-    this.idle.onIdleStart.subscribe(() => this.idleState = true);
+      this.idle.onTimeoutWarning.subscribe((conteo: number) => this.idleState = true);
 
-    this.idle.onTimeoutWarning.subscribe((conteo: number) => this.idleState = true);
+      this.keepalive.interval(15);
 
-    this.keepalive.interval(15);
+      this.keepalive.onPing.subscribe(() => this.lastPing = new Date());
 
-    this.keepalive.onPing.subscribe(() => this.lastPing = new Date());
-
-    this.reset();
+      this.reset();
+    }
   }
 
   reset = () => {
@@ -100,6 +106,7 @@ export class HeaderComponent implements OnInit {
     this.ls.clear('ng2Idle.main.expiry');
     this.ls.clear('ng2Idle.main.idling');
     this.ls.clear(GLOBAL.usrTokenVar);
+    this.ls.clear(GLOBAL.usrUnlockVar);
     this.router.navigate(['/admin/login']);
   }
 

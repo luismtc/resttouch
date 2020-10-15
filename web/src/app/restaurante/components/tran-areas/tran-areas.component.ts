@@ -14,6 +14,7 @@ import { Area } from '../../interfaces/area';
 import { AreaService } from '../../services/area.service';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { ComandaService } from '../../services/comanda.service';
+import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 // import * as moment from 'moment';
 
 @Component({
@@ -35,6 +36,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   public lstTabsAreasForUpdate: Area[] = [];
   public mesaSeleccionada: any;
   public mesaSeleccionadaToOpen: any;
+  public configTipoPantalla = 1;
 
   constructor(
     public dialog: MatDialog,
@@ -42,6 +44,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     private ls: LocalstorageService,
     public areaSrvc: AreaService,
     public comandaSrvc: ComandaService,
+    private configSrvc: ConfiguracionService,
     private socket: Socket
   ) { }
 
@@ -55,6 +58,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         this.loadAreas(true, obj);
       });
     }
+    this.configTipoPantalla = this.configSrvc.getConfig('RT_PANTALLA_TOMA_COMANDA');
   }
 
   ngAfterViewInit() {
@@ -296,8 +300,11 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         if (shouldToggle) {
           // const cuentas = this.mesaSeleccionada.cuentas;
           this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
-          this.openTranComandaAlt();
-          // this.toggleRightSidenav();
+          switch (this.configTipoPantalla) {
+            case 1: this.toggleRightSidenav(); break;
+            case 2: this.openTranComandaAlt(); break;
+            default: this.toggleRightSidenav();
+          }
         } else {
           // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
           this.checkEstatusMesa();

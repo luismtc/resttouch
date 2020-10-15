@@ -57,7 +57,7 @@ export class TranComandaAltComponent implements OnInit {
 
   loadCategorias = () => this.articuloSrvc.getCategorias().subscribe((res: Categoria[]) => this.categorias = res);
 
-  loadSubcategorias = (cat: Categoria, subcat: CategoriaGrupoImpresora = null, idx: number = 0) => {
+  loadSubcategorias = (cat: any, subcat: CategoriaGrupoImpresora = null, idx: number = 0) => {
     this.resetArticulos();
     const fltr: any = { categoria: cat.categoria };
 
@@ -86,5 +86,7 @@ export class TranComandaAltComponent implements OnInit {
       this.articulos = res;
     });
   }
+
+  setSelectedCuenta = (cta: number) => { };
 
 }

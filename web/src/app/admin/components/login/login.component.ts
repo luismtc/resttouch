@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { usrLogin, Usuario } from '../../models/usuario';
+import { usrLogin, Usuario, usrLogInResponse } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { LocalstorageService } from '../../services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
@@ -50,12 +50,12 @@ export class LoginComponent implements OnInit {
   }
 
   doLogin() {
-    this.usrSrvc.login(this.usr).subscribe(res => {
+    this.usrSrvc.login(this.usr).subscribe((res: usrLogInResponse) => {
       if (res.token) {
         this.ls.set(GLOBAL.usrTokenVar, {
           token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
           idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso, sede_uuid: res.sede_uuid,
-          empresa: res.empresa, restaurante: res.restaurante
+          empresa: res.empresa, restaurante: res.restaurante, configuracion: []
         });
         this.router.navigate(['/admin/dashboard']);
       } else {
@@ -65,5 +65,4 @@ export class LoginComponent implements OnInit {
       console.log(error);
     });
   }
-
 }
