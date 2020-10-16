@@ -17,7 +17,8 @@ class Factura extends CI_Controller {
 			'Factura_model',
 			'Articulo_model',
 			'Cliente_model',
-			'Receta_model'
+			'Receta_model',
+			'Configuracion_model'
 		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -34,7 +35,12 @@ class Factura extends CI_Controller {
 			if (isset($req['cliente']) && isset($req['moneda']) && isset($req['factura_serie'])) {
 				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
 				$clt = new Cliente_model($req['cliente']);
+				$config = $this->Configuracion_model->buscar([
+					"campo" => "RT_FACTURA_PROPINA",
+					"_uno" => true
+				]);
 
+				
 				$req['usuario'] = $data->idusuario;
 				$req['sede'] = $data->sede;
 				$req['certificador_fel'] = $sede->certificador_fel;
@@ -65,6 +71,48 @@ class Factura extends CI_Controller {
 							}
 							$det->monto_iva = $total - $det->monto_base;	
 							$fac->setDetalle((array) $det);
+						}
+					}
+					if ($config && $config->valor == 1) {
+						#Facturar Propina;
+						$art = $this->Articulo_model->buscar([
+							"descripcion" => "Propina",
+							"_uno" => true
+						]);
+
+						$prop = $fac->getPropina();
+
+						if (!$art) {
+							$art = new Articulo_model();
+							$art->guardar([
+								"categoria_grupo" => 1,
+								"presentacion" => 1,
+								"descripcion" => "Propina",
+								"mostrar_pos" => 0,
+								"bien_servicio" => "B",
+								"precio" => 0,
+								"existencias" => 0
+							]);
+						}
+
+						$total = suma_field($prop, "propina_monto");
+						if ($total > 0) {
+							if ($fac->exenta) {
+								$monto_base = $total;
+							} else {
+								$monto_base = $total / $pimpuesto;
+							}
+
+							$fac->setDetalle([
+								"articulo" => $art->articulo,
+								"cantidad" => 1,
+								"precio_unitario" => $total,
+								"total" => $total,
+								"monto_base" => $monto_base,
+								"monto_iva" => $total - $monto_base,
+								"bien_servicio" => $art->bien_servicio,
+								"presentacion" => $art->presentacion
+							]);
 						}
 					}
 					$fac->cargarFacturaSerie();
