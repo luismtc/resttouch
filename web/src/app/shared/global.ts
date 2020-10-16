@@ -1,5 +1,5 @@
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo local
-const urlBase = `${location.origin}/api`; // Desarrollo
+const urlBase = 'http://localhost/resttouch'; // Desarrollo local
+// const urlBase = `${location.origin}/api`; // Desarrollo
 // const urlBase = location.origin; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
@@ -17,7 +17,13 @@ export const GLOBAL = {
     usrTokenVar: 'rttoken',
     usrUnlockVar: 'rtunlock',
     reintentos: 0,
-    infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid='
+    infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=',
+    CONSTANTES: {
+        RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',
+        RT_PANTALLA_TOMA_COMANDA: 'RT_PANTALLA_TOMA_COMANDA',
+        RT_HABILITA_BLOQUEO_INACTIVIDAD: 'RT_HABILITA_BLOQUEO_INACTIVIDAD',
+        RT_SEGUNDOS_INACTIVIDAD: 'RT_SEGUNDOS_INACTIVIDAD'
+    }
 };
 
 export const PaginarArray = (array: any[], pageSize: number, pageNumber: number) =>

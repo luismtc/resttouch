@@ -14,8 +14,10 @@
                 <input matInput placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="password" placeholder="Contraseña" name="contrasenia"
-                    [(ngModel)]="usuario.contrasenia">
+                <input matInput type="password" placeholder="Contraseña" name="contrasenia" [(ngModel)]="usuario.contrasenia">
+            </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <input matInput type="password" placeholder="Pin desbloqueo" name="pindesbloqueo" [(ngModel)]="usuario.pindesbloqueo" min="4" max="32" [required]="habilitaBloqueo">
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Sede</mat-label>

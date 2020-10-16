@@ -30,6 +30,7 @@ export class Usuario {
         public contrasenia: string,
         public sede: number,
         public esmesero: number,
+        public pindesbloqueo: number,
         public debaja: number
     ) { }
 }

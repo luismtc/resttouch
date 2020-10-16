@@ -58,7 +58,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         this.loadAreas(true, obj);
       });
     }
-    this.configTipoPantalla = this.configSrvc.getConfig('RT_PANTALLA_TOMA_COMANDA');
+    this.configTipoPantalla = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_PANTALLA_TOMA_COMANDA);
   }
 
   ngAfterViewInit() {

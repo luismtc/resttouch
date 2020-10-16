@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../services/localstorage.service';
@@ -17,7 +17,7 @@ import { SolicitaPinInactividadComponent } from '../solicita-pin-inactividad/sol
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterViewInit {
 
   public usrInfo: any = {};
   public appMenu: any[];
@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.usrInfo = this.ls.get(GLOBAL.usrTokenVar);
-    this.setIdleConfigs();
+    this.configSrvc.load();
   }
 
   ngOnInit() {
@@ -46,12 +46,14 @@ export class HeaderComponent implements OnInit {
         this.appMenu = res;
       }
     });
-    this.configSrvc.load();
+    this.setIdleConfigs();
   }
 
+  ngAfterViewInit = () => { };
+
   setIdleConfigs = () => {
-    if (this.configSrvc.getConfig('RT_HABILITA_BLOQUEO_INACTIVIDAD')) {
-      const tiempo = this.configSrvc.getConfig('RT_SEGUNDOS_INACTIVIDAD');
+    if (this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_HABILITA_BLOQUEO_INACTIVIDAD)) {
+      const tiempo = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_SEGUNDOS_INACTIVIDAD);
       this.idle.setIdle(tiempo);
       this.idle.setTimeout(tiempo);
       this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);

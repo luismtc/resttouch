@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.usr = new usrLogin(null, null);
-    this.usuario = new Usuario(null, null, null, null, null, null, 0, 0);
+    this.usuario = new Usuario(null, null, null, null, null, null, 0, null, 0);
   }
 
   ngOnInit() {

@@ -230,7 +230,7 @@ class Usuario_model extends General_model
         }
 
         return $this->db
-            ->select('usuario, nombres, apellidos, usrname, debaja')
+            ->select('usuario, nombres, apellidos, usrname, debaja, esmesero, pindesbloqueo')
             ->from($this->tabla)
             ->where("sede", $data->sede)
             ->get()
@@ -248,7 +248,7 @@ class Usuario_model extends General_model
         }
 
         $tmp = $this->db
-            ->select('usuario, nombres, apellidos, usrname, debaja, sede, esmesero')
+            ->select('usuario, sede, nombres, apellidos, usrname, debaja, esmesero, pindesbloqueo')
             ->from($this->tabla)
             ->get();
 
