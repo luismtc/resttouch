@@ -32,14 +32,18 @@ export class ConfiguracionService {
       })
     };
 
-    this.http.get<Configuracion[]>(
-      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler)).subscribe((cnf: Configuracion[]) => {
-      const tmp = this.ls.get(GLOBAL.usrTokenVar);
-      tmp.configuracion = cnf;
-      this.ls.set(GLOBAL.usrTokenVar, tmp);
+    const promise = new Promise((resolve, reject) => {
+      this.http.get<Configuracion[]>(
+        `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar`,
+        httpOptions
+      ).toPromise().then((cnf: Configuracion[]) => {
+        const tmp = this.ls.get(GLOBAL.usrTokenVar);
+        tmp.configuracion = cnf;
+        this.ls.set(GLOBAL.usrTokenVar, tmp);
+        resolve();
+      }, err => reject(err));
     });
+    return promise;
   }
 
   getConfig = (configName: string): any => {

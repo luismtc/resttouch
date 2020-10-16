@@ -1,5 +1,5 @@
-const urlBase = 'http://localhost/resttouch'; // Desarrollo local
-// const urlBase = `${location.origin}/api`; // Desarrollo
+// const urlBase = 'http://localhost/resttouch'; // Desarrollo local
+const urlBase = `${location.origin}/api`; // Desarrollo
 // const urlBase = location.origin; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
