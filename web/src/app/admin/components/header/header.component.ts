@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../services/localstorage.service';
@@ -17,7 +17,7 @@ import { SolicitaPinInactividadComponent } from '../solicita-pin-inactividad/sol
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, AfterViewInit {
+export class HeaderComponent implements OnInit {
 
   public usrInfo: any = {};
   public appMenu: any[];
@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog
   ) {
     this.usrInfo = this.ls.get(GLOBAL.usrTokenVar);
-    this.configSrvc.load();
+    this.configSrvc.load().then(() => this.setIdleConfigs());
   }
 
   ngOnInit() {
@@ -46,10 +46,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.appMenu = res;
       }
     });
-    this.setIdleConfigs();
   }
-
-  ngAfterViewInit = () => { };
 
   setIdleConfigs = () => {
     if (this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_HABILITA_BLOQUEO_INACTIVIDAD)) {
@@ -109,6 +106,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.ls.clear('ng2Idle.main.idling');
     this.ls.clear(GLOBAL.usrTokenVar);
     this.ls.clear(GLOBAL.usrUnlockVar);
+    this.idle.stop();
     this.router.navigate(['/admin/login']);
   }
 

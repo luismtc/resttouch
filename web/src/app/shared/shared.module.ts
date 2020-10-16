@@ -33,8 +33,8 @@ import { RptBotonesComponent } from './components/rpt-botones/rpt-botones.compon
 import { CargandoComponent } from './components/cargando/cargando.component';
 import { CheckPasswordComponent } from './components/check-password/check-password.component';
 
-const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
-// const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
+// const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
+const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
 
 @NgModule({
   declarations: [
