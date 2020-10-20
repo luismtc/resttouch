@@ -72,12 +72,14 @@ class Cobro extends SoapClient
     {
     	$request = $this->getRequest();
 
+    	$request->deviceFingerprintID = $this->fingerprint;
+
 		$request->clientLibrary = "PHP";
 		$request->clientLibraryVersion = phpversion();
 		$request->clientEnvironment = php_uname();
 
 		$deviceInformation = new stdClass();
-		$deviceInformation->deviceFingerprintId = $this->fingerprint;
+		$deviceInformation->deviceFingerprintID = $this->fingerprint;
 		$request->deviceInformation = $deviceInformation;
 
 		$ccAuthService = new stdClass();
