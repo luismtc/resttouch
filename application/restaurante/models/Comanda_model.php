@@ -63,7 +63,7 @@ class Comanda_model extends General_Model
 		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
 		$validar = true;
 		$cantidad = 0;
-		$articulo = null;
+		$articulo = $det->articulo;
 		if (empty($id)) {
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
@@ -84,10 +84,10 @@ class Comanda_model extends General_Model
 		$art = new Articulo_model($articulo);
 		$pres = $art->getPresentacion();
 		$args['presentacion'] = $art->presentacion;
-		
+		$cantPres = ($pres) ? $pres->cantidad : 0;
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
-		if (empty($menu) || (!$validar || $art->existencias >= ($cantidad * $pres->cantidad))) {
+		if (empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
 			$result = $det->guardar($args);
 			$receta = $art->getReceta();
 
@@ -138,7 +138,11 @@ class Comanda_model extends General_Model
 
 		foreach ($tmp as $row) {
 			$cta = new Cuenta_model($row->cuenta);
-			$row->productos = $cta->getDetalle($args);
+			$buscar = $args;
+			if (isset($args["_numero"])) {
+				$buscar['numero'] = $args['_numero'];
+			}
+			$row->productos = $cta->getDetalle($buscar);
 			$cuentas[] = $row;
 		}
 
@@ -173,8 +177,13 @@ class Comanda_model extends General_Model
 			$mesa->impresora = $this->Impresora_model->buscar(['impresora' => $mesa->impresora, "_uno" => true]);
 			$tmp->mesa = $mesa;
 		}
-
-		$det = $this->getDetalle($args);
+		$buscar = $args;
+		if (isset($args["_numero"])) {
+			$buscar['numero'] = $args['_numero'];
+			$tmp->numero = $args['_numero'];
+		}
+		$det = $this->getDetalle($buscar);
+		
 		$turno = new Turno_model($tmp->turno);
 
 		$tmpMesero = new Usuario_model($this->mesero);
@@ -234,7 +243,11 @@ class Comanda_model extends General_Model
 				}
 
 				if(isset($args['cocinado'])) {
-					$this->db->where('b.cocinado', $args['cocinado']);
+					$this->db
+						 ->select("b.numero")
+						 ->where('b.cocinado', $args['cocinado'])
+						 ->where("b.numero is not null")
+						 ->group_by("b.numero");
 				}
 		}
 
@@ -242,6 +255,10 @@ class Comanda_model extends General_Model
 
 		foreach ($this->db->get()->result() as $row) {
 			$com = new Comanda_model($row->comanda);
+			if (isset($row->numero)) {
+				$com->numero = $row->numero;
+			}
+
 			$com->origen_datos = $com->getOrigenDatos();
 
 			$lista[] = $com;

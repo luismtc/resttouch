@@ -41,15 +41,33 @@ class Cuenta_model extends General_Model {
 		->row();
 	}
 
+	public function getNumeroDetalle($comanda)
+	{
+		$tmp = $this->db
+					->select("(ifnull(max(numero), 0) +1) as correlativo")
+					->where("comanda", $comanda)
+					->get('detalle_comanda')
+					->row();
+
+		return $tmp->correlativo;
+	}
+
 	public function imprimirDetalle()
 	{
 		$com = new Comanda_model($this->comanda);
-		foreach ($this->getDetalle() as $row) {
-
-			$com->guardarDetalle([
+		$det = $this->getDetalle();
+		$numero = $this->getNumeroDetalle($com->getPK());
+		foreach ($det as $row) {
+			$args = [
 				'detalle_comanda' => $row->detalle_comanda,
 				'impreso' => 1
-			]);
+			];
+
+			if ($row->impreso == 0) {
+				$args['numero'] = $numero;
+			}
+
+			$com->guardarDetalle($args);
 		}
 	}
 
@@ -131,6 +149,10 @@ class Cuenta_model extends General_Model {
 
 		if (!isset($args['_totalCero'])) {
 			$this->db->where("b.total >", 0);
+		}
+
+		if (isset($args['numero'])) {
+			$this->db->where("b.numero", $args['numero']);
 		}
 
 		$tmp = $this->db

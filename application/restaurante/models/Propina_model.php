@@ -6,6 +6,8 @@ class Propina_model extends General_model {
 	public $usuario_tipo;
 	public $porcentaje;
 	public $anulado = 0;
+	public $sede;
+	public $grupal = 0;
 
 	public function __construct($id = null)
 	{

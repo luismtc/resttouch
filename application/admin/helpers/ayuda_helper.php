@@ -15,6 +15,25 @@ if( ! function_exists('suma_field')){
 	}
 }
 
+if ( ! function_exists("array_result")) {
+	function array_result($result, $campo)
+	{
+		$datos = array();
+
+		foreach ($result as $row) {
+			if(is_array($row)){
+				if(isset($row[$campo])){
+					$datos[] = $row[$campo];
+				}
+			}else{
+				$datos[] = $row->$campo;
+			}
+		}
+
+		return $datos;
+	}
+}
+
 if( ! function_exists('insertar_articulo')){
 	function buscar_articulo($datos, $articulos, $descripcion='', $result=[]) {
 		$cat = [];

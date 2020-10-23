@@ -100,6 +100,8 @@ class Catalogo_model extends CI_Model {
 	public function getArticulo($args = [])
 	{
 		$sede = isset($args['sede']) ? $args['sede'] : false;
+		$ingreso = isset($args['ingreso']) ? $args['ingreso'] : false;
+		unset($args['ingreso']);
 		unset($args['sede']);
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {
@@ -113,7 +115,7 @@ class Catalogo_model extends CI_Model {
 			$this->db->where('c.sede', $sede);
 		}
 
-		if (isset($args['ingreso'])) {
+		if ($ingreso) {
 			$this->db->where("(a.produccion = 0 or a.mostrar_pos=0)");
 		}
 

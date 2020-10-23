@@ -76,7 +76,7 @@ class Comanda extends CI_Controller {
 								foreach ($req['cuentas'] as $row) {
 									$cuenta = new Cuenta_model();
 
-									if (isset($row['cuenta']) && !empty($row['cuenta'])) {
+									if (isset($row['cuenta']) && !empty($row['cuenta']) && $row['cuenta'] > 0) {
 										$cuenta->cargar($row['cuenta']);
 									} else {
 										$tmpCuenta = $this->Cuenta_model->buscar([
@@ -103,6 +103,9 @@ class Comanda extends CI_Controller {
 
 									if ($cuenta->cerrada == 0) {
 										$row['comanda'] = $comanda->comanda;
+										if (isset($row['cuenta'])) {
+											unset($row['cuenta']);
+										}
 										$cuenta->guardarCuenta($row);	
 									}							
 								}
@@ -361,22 +364,33 @@ class Comanda extends CI_Controller {
 
 		foreach ($tmp as $row) {
 			$comanda = new Comanda_model($row->comanda);
-			$datos['pendientes'][] = $comanda->getComanda(["_usuario" => $data->idusuario, 'cocinado' => 0]);
+			$datos['pendientes'][] = $comanda->getComanda([
+				"_usuario" => $data->idusuario, 
+				'cocinado' => 0,
+				'_numero' => $row->numero
+			]);
 		}
 
 		foreach ($enProceso as $row) {
 			$comanda = new Comanda_model($row->comanda);
-			$datos['enproceso'][] = $comanda->getComanda(["_usuario" => $data->idusuario, 'cocinado' => 1]);
+			$datos['enproceso'][] = $comanda->getComanda([
+				"_usuario" => $data->idusuario, 
+				'cocinado' => 1,
+				'_numero' => $row->numero
+			]);
 		}
 
 		$this->output->set_output(json_encode($datos));
 	}
 
-	public function set_cocinado($idcomanda, $cocinado = 2) {
+	public function set_cocinado($idcomanda, $numero, $cocinado = 2) {
 		$datos = ['exito' => true];
 		$errores = '';
 		$com = new Comanda_model($idcomanda);
-		$detalle = $com->getDetalle(['cocinado' => ((int)$cocinado === 1 ? 0 : 1)]);		
+		$detalle = $com->getDetalle([
+			'cocinado' => ((int)$cocinado === 1 ? 0 : 1),
+			"numero" => $numero
+		]);		
 
 		foreach($detalle as $det) {
 			$ld = new Dcomanda_model($det->detalle_comanda);

@@ -68,7 +68,7 @@ export class TranCocinaComponent implements OnInit {
 
     confirmRef.afterClosed().subscribe((conf: boolean) => {
       if (conf) {
-        this.comandaSrvc.setComandaCocinada(+cmd.comanda, estatus).subscribe((res: any) => {
+        this.comandaSrvc.setComandaCocinada(+cmd.comanda, +cmd.numero, estatus).subscribe((res: any) => {
           if (res.exito) {
             this.snackBar.open(res.mensaje, 'Cocina', { duration: 3000 });
           } else {

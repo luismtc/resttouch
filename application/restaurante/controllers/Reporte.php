@@ -170,6 +170,113 @@ class Reporte extends CI_Controller {
 		#$obwrite->save("php://output");
 	}
 
+	public function distribucion_propina()
+	{
+		$this->load->model(['Propina_model', 'Tipo_usuario_model']);
+		$_GET['sede'] = $this->data->sede;
+		$_GET['_vivas'] = true;
+		$facts = $this->Factura_model->get_facturas($_GET);
+		$distProp = $this->Propina_model->buscar([
+			"sede" => $this->data->sede,
+			"grupal" => 1
+		]);
+		$grupos = array_result($distProp, "usuario_tipo");
+		$datos = $_GET;
+		
+		$datos['datos'] = [];
+
+		foreach ($facts as $row) {
+			$fac = new Factura_model($row->factura);
+			$propina = suma_field($fac->getPropina(), "propina_monto");
+			$comanda = $fac->getComanda();// obtener usuarios del turno
+			$tmp = $comanda->getTurno();
+			$turno = new Turno_model($tmp->turno);
+			$usuarios = $turno->getUsuarios();
+			$row->propina = $propina;
+			if ($comanda->getPK()) {
+				foreach ($distProp as $prop) {
+					$tusuario = $this->Tipo_usuario_model->buscar([
+						"usuario_tipo" => $prop->usuario_tipo,
+						"_uno" => true
+					]);
+
+					if (isset($datos['datos'][$tusuario->usuario_tipo])) {
+						$datos['datos'][$tusuario->usuario_tipo]['facturas'][] = $row;
+						$datos['datos'][$tusuario->usuario_tipo]['propina'] += $propina * $prop->porcentaje / 100;
+					} else {
+						$datos['datos'][$tusuario->usuario_tipo] = [
+							"descripcion" => $tusuario->descripcion,
+							"facturas" => [$row],
+							"porcentaje" => $prop->porcentaje,
+							"propina" => $propina * $prop->porcentaje / 100
+						];
+					}
+				}
+				
+				foreach ($usuarios as $usu) {
+					$dist = $this->Propina_model->buscar([
+						"sede" => $this->data->sede,
+						"usuario_tipo" => $usu->usuario_tipo->usuario_tipo,
+						"_uno" => true
+					]);
+
+					if ($dist) {
+						if (strtolower(trim($usu->usuario_tipo->descripcion)) == 'mesero') {
+							if ($comanda->mesero == $usu->usuario->usuario) {
+								if (!isset($datos['datos'][$usu->usuario_tipo->usuario_tipo])) {
+									$datos['datos'][$usu->usuario_tipo->usuario_tipo] = [
+										"descripcion" => $usu->usuario_tipo->descripcion,
+										"porcentaje" => $dist->porcentaje,
+										"usuario" => []
+									];
+								}
+								if (isset($datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario])) {
+									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $row;
+									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += $propina*$dist->porcentaje / 100;
+								} else {
+									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario] = [
+										"nombre" => $usu->usuario->nombres." ".$usu->usuario->apellidos,
+										"facturas" => [$row],
+										"propina" => $propina * $dist->porcentaje / 100
+									];
+								}
+							}
+						} else {
+							if (!isset($datos['datos'][$usu->usuario_tipo->usuario_tipo])) {
+								$datos['datos'][$usu->usuario_tipo->usuario_tipo] = [
+									"descripcion" => $usu->usuario_tipo->descripcion,
+									"porcentaje" => $dist->porcentaje,
+									"usuario" => []
+								];
+							}
+
+							if (isset($datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario])) {
+								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $row;
+								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += $propina*$dist->porcentaje / 100;
+							} else {
+								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario] = [
+									"nombre" => $usu->usuario->nombres." ".$usu->usuario->apellidos,
+									"facturas" => [$row],
+									"propina" => $propina * $dist->porcentaje / 100
+								];
+							}
+						}
+					}
+					
+				}
+
+			}
+		}
+
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => sys_get_temp_dir(),
+			'format' => 'Legal'
+		]);
+		
+		$mpdf->WriteHTML($this->load->view('propina', $datos, true));
+		$mpdf->Output("Distribucion de Propina.pdf", "D");
+	}
+
 }
 
 /* End of file Reporte.php */

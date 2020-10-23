@@ -9,6 +9,13 @@ class Propina extends CI_Controller {
 		$this->load->model("Propina_model");
         $this->output
 		->set_content_type("application/json", "UTF-8");
+
+		$this->load->helper(['jwt', 'authorization']);
+
+		$headers = $this->input->request_headers();
+		if (isset($headers['Authorization'])) {
+			$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
+		}
 	}
 
 	public function guardar($id = null)
@@ -17,6 +24,7 @@ class Propina extends CI_Controller {
 		$req = json_decode(file_get_contents("php://input"), true);
 		$datos = ["exito" => false];
 		if ($this->input->method() == "post") {
+			$req['sede'] = $this->data->sede;
 			$req["anulado"] = empty($req["anulado"]) ? 0 : $req["anulado"];
 			$datos["exito"] = $prop->guardar($req);
 

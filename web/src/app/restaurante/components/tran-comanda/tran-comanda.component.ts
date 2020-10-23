@@ -63,6 +63,7 @@ export class TranComandaComponent implements OnInit {
   public categorias: ArbolArticulos[] = [];
   public bloqueoBotones = false;
   public rolesUsuario: string[] = [];
+  public impreso = 0;
 
   constructor(
     private router: Router,
@@ -79,6 +80,7 @@ export class TranComandaComponent implements OnInit {
     this.resetLstProductosSeleccionados();
     this.resetLstProductosDeCuenta();
     this.resetCuentaActiva();
+    this.impreso = 0;
     this.noComanda = this.mesaEnUso.comanda || 0;
     this.llenaProductosSeleccionados();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
@@ -256,96 +258,119 @@ export class TranComandaComponent implements OnInit {
 
   printComanda(toPdf = false) {
     this.bloqueoBotones = true;
-    this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
-    // console.log('Productos a imprimir = ', this.lstProductosAImprimir);
-    if (this.lstProductosAImprimir.length > 0) {
-      this.lstProductosDeCuenta.map(p => p.impreso = 1);
-      this.noComanda = this.mesaEnUso.comanda;
-      this.cuentaActiva.productos = this.prepProductosComanda(this.lstProductosDeCuenta);
-      const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +this.cuentaActiva.cuenta);
-      if (idxCta > -1) {
-        this.mesaEnUso.cuentas[idxCta] = this.cuentaActiva;
-        const objCmd: Comanda = {
-          area: this.mesaEnUso.mesa.area.area,
-          mesa: this.mesaEnUso.mesa.mesa,
-          mesero: this.mesaEnUso.usuario,
-          comanda: this.mesaEnUso.comanda,
-          cuentas: this.mesaEnUso.cuentas
-        };
-        // console.log('Comanda a guardar = ', objCmd);
-        this.comandaSrvc.save(objCmd).subscribe((res) => {
-          // console.log('Respuesta del save = ', res);
-          if (res.exito) {
-            this.comandaSrvc.setProductoImpreso(this.cuentaActiva.cuenta).subscribe(resImp => {
-              // console.log('Respuesta de poner impreso = ', resImp);
-              this.llenaProductosSeleccionados(resImp.comanda);
-              this.setSelectedCuenta(this.cuentaActiva.numero);
-              this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
-
-              // Inicio de impresión de comanda
-              let AImpresoraNormal: productoSelected[] = [];
-              let AImpresoraBT: productoSelected[] = [];
-
-              try {
-                AImpresoraNormal = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
-                AImpresoraBT = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
-              } catch (error) {
-                console.log('PRODUCTOS A IMPRIMIR = ', this.lstProductosAImprimir);
-                console.log('NORMAL = ', AImpresoraNormal);
-                console.log('BT = ', AImpresoraBT);
-                console.log(error);
-              }
-
-              if (!toPdf) {
-                if (AImpresoraNormal.length > 0) {
-                  this.socket.emit('print:comanda', `${JSON.stringify({
-                    Tipo: 'Comanda',
-                    Nombre: this.cuentaActiva.nombre,
-                    Numero: this.noComanda,
-                    DetalleCuenta: AImpresoraNormal,
-                    Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
-                    Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-                    Total: null
-                  })}`);
-                  this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
-                  this.bloqueoBotones = false;
+    
+    
+    for (let i = 0; i < this.mesaEnUso.cuentas.length; i++) {
+      const cuenta = this.mesaEnUso.cuentas[i];
+      console.log(cuenta);
+      this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +cuenta.numero);
+      
+      this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
+      
+      this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
+      if (this.lstProductosAImprimir.length > 0) {
+        this.lstProductosDeCuenta.map(p => p.impreso = 1);
+        this.noComanda = this.mesaEnUso.comanda;
+        console.log(this.cuentaActiva.cuenta);  
+        this.cuentaActiva.productos = this.prepProductosComanda(this.lstProductosDeCuenta);
+        const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +this.cuentaActiva.cuenta);
+        console.log(this.mesaEnUso.cuentas)
+        console.log(idxCta)
+        if (idxCta > -1) {
+          //this.mesaEnUso.cuentas[idxCta] = this.cuentaActiva;
+          const objCmd: Comanda = {
+            area: this.mesaEnUso.mesa.area.area,
+            mesa: this.mesaEnUso.mesa.mesa,
+            mesero: this.mesaEnUso.usuario,
+            comanda: this.mesaEnUso.comanda,
+            cuentas: this.mesaEnUso.cuentas
+          };
+          // console.log('Comanda a guardar = ', objCmd);
+          this.comandaSrvc.save(objCmd).subscribe((res) => {
+            // console.log('Respuesta del save = ', res);
+            if (res.exito) {
+              console.log(this.cuentaActiva);
+              this.comandaSrvc.setProductoImpreso(cuenta.cuenta).subscribe(resImp => {
+                // console.log('Respuesta de poner impreso = ', resImp);
+                if(resImp.exito){
+                  this.impreso++;
                 }
-
-                if (AImpresoraBT.length > 0) {
-                  this.printToBT(
-                    JSON.stringify({
+                
+                this.llenaProductosSeleccionados(resImp.comanda);
+                this.setSelectedCuenta(this.cuentaActiva.numero);
+                this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+  
+                // Inicio de impresión de comanda
+                let AImpresoraNormal: productoSelected[] = [];
+                let AImpresoraBT: productoSelected[] = [];
+  
+                try {
+                  AImpresoraNormal = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
+                  AImpresoraBT = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+                } catch (error) {
+                  console.log('PRODUCTOS A IMPRIMIR = ', this.lstProductosAImprimir);
+                  console.log('NORMAL = ', AImpresoraNormal);
+                  console.log('BT = ', AImpresoraBT);
+                  console.log(error);
+                }
+  
+                if (!toPdf) {
+                  if (AImpresoraNormal.length > 0) {
+                    this.socket.emit('print:comanda', `${JSON.stringify({
                       Tipo: 'Comanda',
                       Nombre: this.cuentaActiva.nombre,
                       Numero: this.noComanda,
-                      DetalleCuenta: AImpresoraBT,
+                      DetalleCuenta: AImpresoraNormal,
                       Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
                       Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
                       Total: null
-                    })
-                  );
+                    })}`);
+                    this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
+                    this.bloqueoBotones = false;
+                  }
+  
+                  if (AImpresoraBT.length > 0) {
+                    this.printToBT(
+                      JSON.stringify({
+                        Tipo: 'Comanda',
+                        Nombre: this.cuentaActiva.nombre,
+                        Numero: this.noComanda,
+                        DetalleCuenta: AImpresoraBT,
+                        Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
+                        Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
+                        Total: null
+                      })
+                    );
+                  }
+                } else {
+                  this.printComandaPDF();
                 }
-              } else {
-                this.printComandaPDF();
-              }
-              this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
-              this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
-              if (+this.mesaEnUso.mesa.esmostrador === 0) {
-                this.closeSideNavEv.emit();
-              } else {
-                this.cobrarCuenta();
-              }
-              // Fin de impresión de comanda
-            });
-          } else {
-            this.snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
-          }
-          this.bloqueoBotones = false;
-        });
+                if (this.impreso == this.mesaEnUso.cuentas.length) {
+                  this.impreso=0;
+                  this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+                  this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
+                  if (+this.mesaEnUso.mesa.esmostrador === 0) {
+                    this.closeSideNavEv.emit();
+                  } else {
+                    this.cobrarCuenta();
+                  }
+                }
+                // Fin de impresión de comanda
+              });
+            } else {
+              this.snackBar.open(`ERROR: ${res.mensaje}`, `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+            }
+            this.bloqueoBotones = false;
+          });
+        }
+      } else {
+        this.impreso++;
+        //this.snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+        this.bloqueoBotones = false;
       }
-    } else {
-      this.snackBar.open('Nada para enviar...', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
-      this.bloqueoBotones = false;
     }
+    // console.log('Productos a imprimir = ', this.lstProductosAImprimir);
+    
   }
 
   printToBT = (msgToPrint: string = '') => {

@@ -67,7 +67,7 @@ export class ReportePdfService {
     this.httpOptions['params'] = params;
 
     return this.http.get<string>(
-      `${GLOBAL.urlFacturacion}/reporte/venta/propina`,
+      `${GLOBAL.urlAppRestaurante}/reporte/distribucion_propina`,
       this.httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }

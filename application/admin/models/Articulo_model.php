@@ -130,6 +130,21 @@ class Articulo_model extends General_model {
 		return $comandas->total + $facturas->total;
 	}
 
+	function getVentaRecetas($art, $args = [])
+	{
+		$rec = new Articulo_model($art);
+		$principal = $rec->getReceta(["_principal" => true]);
+		$exist = 0;
+
+		foreach ($principal as $row) {
+			if ($row->receta != $this->getPK()) {
+				$exist += $rec->getVentaReceta($row->receta) * $row->cantidad;
+			}
+		}
+
+		return $exist;
+	}
+
 	function actualizarExistencia($args = [])
 	{
 		if ($this->getPK()) {
@@ -139,7 +154,7 @@ class Articulo_model extends General_model {
 				$grupos = [];
 				$venta = $this->getVentaReceta();
 				foreach ($receta as $row) {				
-					$ventaR = $this->getVentaReceta($row->articulo->articulo, $args);
+					$ventaR = $this->getVentaRecetas($row->articulo->articulo, $args);
 					$existR = $this->obtenerExistencia($args, $row->articulo->articulo, true);
 					$existR = $existR - ($venta * $row->cantidad) - $ventaR;
 					$art = new Articulo_model($row->articulo->articulo);
@@ -326,7 +341,7 @@ class Articulo_model extends General_model {
 					$grupos[] = (int)($ingr / $row->cantidad);
 				}
 
-				$ingresos = min($grupos);
+				$ingresos = 0;
 		} else if (count($principal) > 0 && $this->produccion == 0) {
 			$grupos = [];
 			$args['tipo'] = 1;
@@ -336,7 +351,13 @@ class Articulo_model extends General_model {
 			$egresos = $this->getIngresoEgreso($this->getPK(), $args);
 			$facturas = $this->getComandaFactura($this->getPK(), $args);
 
-			
+			foreach ($principal as $row) {
+				$args['tipo'] = 1;
+				$comandas += $this->getComandaFactura($row->receta, $args) * $row->cantidad;
+				
+				$args['tipo'] = 2;
+				$facturas += $this->getComandaFactura($row->receta, $args)* $row->cantidad;
+			}
 		} else {
 			$args['tipo'] = 1;
 			$ingresos = $this->getIngresoEgreso($this->getPK(), $args);

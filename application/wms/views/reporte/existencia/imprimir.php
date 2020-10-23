@@ -33,7 +33,8 @@
 		?>
 			<?php 
 				foreach ($reg as $key => $row): 
-
+				$art = new Articulo_model($row->articulo->articulo);
+				$rec = $art->getReceta();
 				$ingresos += $row->ingresos;
 				$egresos += $row->egresos;
 				$existencia    += $row->existencia;
@@ -63,7 +64,13 @@
 						<?php echo number_format($row->total_egresos / $row->presentacion->cantidad,3)?>
 					</td>
 					<td class="text-right">
-						<?php echo number_format($row->existencia / $row->presentacion->cantidad,2)?>
+					<?php 
+						if (count($rec) > 0 && $art->produccion == 0) {
+							echo 0;
+						} else {
+							echo number_format($row->existencia / $row->presentacion->cantidad,2);
+						}
+					?>
 							
 					</td>
 				</tr>
