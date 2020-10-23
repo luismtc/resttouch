@@ -136,5 +136,7 @@ $autoload['model'] = array(
 	'General_model', 
 	'Turno_model',
 	'Empresa_model', 
-	'Sede_model'
+	'Sede_model',
+	'Configuracion_model',
+	'Webhook_model'
 );

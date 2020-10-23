@@ -77,6 +77,66 @@ if( ! function_exists('insertar_articulo')){
 	}
 }
 
+if (! function_exists("arrayToXml")) {
+	function arrayToXml($array, $rootElement = null, $xml = null) { 
+	    $_xml = $xml; 
+	      
+	    // If there is no Root Element then insert root 
+	    if ($_xml === null) { 
+	        $_xml = new SimpleXMLElement($rootElement !== null ? $rootElement : '<root/>'); 
+	    } 
+	      
+	    // Visit all key value pair 
+	    foreach ($array as $k => $v) { 
+	          
+	        // If there is nested array then 
+	        if (is_array($v)) {  
+	            if (is_numeric($k)) {
+	            	$k = "cuenta";
+	            }
+	            // Call function for nested array 
+	            arrayToXml($v, $k, $_xml->addChild($k)); 
+	            } 
+	              
+	        else { 
+	            // Simply add child element. 
+	            if (is_numeric($k)) {
+	             	$k = "cuenta";
+	             } 
+	            $_xml->addChild($k, $v); 
+	        } 
+	    } 
+	      
+	    return $_xml->asXML(); 
+	} 
+}
+
+if (! function_exists('get_configuracion')) {
+	function get_configuracion($config, $campo, $tipo=0)
+	{
+		if (is_array($config)) {
+			foreach ($config as $row) {
+				if (strtolower(trim($row->campo)) == strtolower(trim($campo))) {
+					return $row->valor;
+				}		
+			}	
+		}
+
+		switch ($tipo) {
+			case 1:
+				return 0;
+				break;
+			case 2:
+				return "";
+			case 3:
+				return false;
+			default:
+				return false;
+				break;
+		}
+	}
+}
+
 if ( ! function_exists('formatoFecha')) {
 	function formatoFecha($fecha = '', $tipo = '') {
 

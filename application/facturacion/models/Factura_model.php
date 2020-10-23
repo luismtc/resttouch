@@ -257,6 +257,90 @@ class Factura_model extends General_model {
 							 ->row();
 	}
 
+	public function getXmlWebhook()
+	{
+		$doc = new stdClass();
+		$config = $this->Configuracion_model->buscar();
+		$dfac = $this->getDetalle();
+		$sumIva = suma_field($dfac, "monto_iva");
+		$sumTotal = suma_field($dfac, "total");
+		$conceptoMayor = get_configuracion($config, "RT_CONCEPTO_MAYOR_VENTA", 2);
+		/*Datos encabezado*/
+		$enca = new stdClass();
+		$enca->idempresa = $this->empresa->codigo;
+		$enca->idtipofactura = 1;
+		$enca->idproyecto = $this->sedeFactura->codigo;
+		$enca->idcontrato = 0;
+		$enca->idcliente = 0;
+		$enca->nit = $this->receptor->nit;
+		$enca->nombre = $this->receptor->nombre;
+		$enca->serie = $this->serie_factura;
+		$enca->numero = $this->numero_factura;
+		$enca->fechaingreso = $this->fecha_factura;
+		$enca->mesiva = formatoFecha($this->fecha_factura, 4);
+		$enca->fecha = $this->fecha_factura;
+		$enca->idtipoventa = 1;
+		$enca->conceptomayor = $conceptoMayor;
+		$enca->iva = $sumIva;
+		$enca->subtotal = $sumTotal;
+		$enca->total = $sumTotal;
+		$enca->idmoneda = 1;
+		$enca->tipocambio = 1;
+		$enca->pagada = 1;
+		$enca->fechapago = $this->fecha_factura;
+		$enca->esinsertada = 1;
+		$enca->anulada = empty($this->fel_uuid_anulacion) ? 0 : 1;
+		$enca->idrazonanulafactura = 0;
+		$enca->idfox = $this->getPK();
+		/**************************************************************/
+		/*Datos detalle*/
+		$det = new stdClass();
+
+		$cliente = new stdClass();
+		$cliente->codigo = $this->sedeFactura->cuenta_contable;
+		$cliente->conceptomayor = $conceptoMayor;
+		$cliente->haber = 0;
+		$cliente->debe = $sumTotal;
+
+		$iva = new stdClass();
+		$iva->codigo = get_configuracion($config, "RT_CUENTA_CONTABLE_IVA_VENTA", 2);
+		$iva->conceptomayor = $conceptoMayor;
+		$iva->haber = $sumIva;
+		$iva->debe = 0;
+		$det->cuenta = [];
+		array_push($det->cuenta, (array) $cliente);
+		$tmpTotal = [];
+		foreach ($dfac as $row) {
+			$cgrupo = $this->db
+			->where("categoria_grupo", $row->articulo->categoria_grupo)
+			->get("categoria_grupo")
+			->row();
+			if (isset($tmpTotal[$cgrupo->cuenta_contable])) {
+				$tmpTotal[$cgrupo->cuenta_contable] += $row->monto_base;
+			} else {
+				$tmpTotal[$cgrupo->cuenta_contable] = $row->monto_base;
+			}
+		}
+
+		foreach ($tmpTotal as $key => $row) {
+			$cuenta = new stdClass();
+			$cuenta->codigo = $key;
+			$cuenta->conceptomayor = $conceptoMayor;
+			$cuenta->haber = $row;
+			$cuenta->debe = 0;
+			array_push($det->cuenta, (array)$cuenta);
+		}
+
+		array_push($det->cuenta, (array) $iva);
+		$doc->encabezado =(array) $enca;
+		$doc->detalle = (array) $det->cuenta;
+
+		$requestDOM = new DOMDocument('1.0');
+		$requestDOM->loadXML(arrayToXml((array)$doc, "<documento/>"));
+
+		return $requestDOM->saveXML();
+	}
+
 	public function set_datos_generales($args=array())
 	{
 		$datosGenerales = $this->xml->getElementsByTagName('DatosGenerales')->item(0);

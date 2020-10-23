@@ -126,6 +126,11 @@ class Factura extends CI_Controller {
 					$resp = $fac->$funcion();
 					$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
 					if (!empty($fac->numero_factura)) {
+						$webhook = $this->Webhook_model->buscar([
+							"evento" => "RTEV_FIRMA_FACTURA",
+							"_uno" => true
+						]);
+
 						$fact = new Factura_model($fac->factura);
 						$fac->cargarSede();
 						$fac->detalle = $fac->getDetalle();
@@ -134,6 +139,21 @@ class Factura extends CI_Controller {
 							"serie_factura" => $fac->serie_factura,
 							"fel_uuid" => $fac->fel_uuid
 						]);
+						if ($webhook) {
+							$this->load->library('Webhook');
+							if (strtolower(trim($webhook->tipo_llamada)) == "soap") {
+								$req = $fac->getXmlWebhook();
+
+							} else if(strtolower(trim($webhook->tipo_llamada)) == "json") {
+								$req = "";
+							}
+
+							$web = new Webhook($webhook);
+							$web->setRequest($req);
+							$web->setEvento();
+						}
+
+
 						$datos['exito'] = true;
 						$datos['mensaje'] = "Datos actualizados con exito";	
 					} else {						
@@ -156,19 +176,34 @@ class Factura extends CI_Controller {
 		->set_output(json_encode($datos));	
 	}
 
-	/*public function test($fact)
+	public function test($fact)
 	{
+		$webhook = $this->Webhook_model->buscar([
+			"evento" => "RTEV_FIRMA_FACTURA",
+			"_uno" => true
+		]);
+		$this->load->library('Webhook');
 		$fac = new Factura_model($fact);
 		$fac->cargarFacturaSerie();
 		$fac->cargarEmpresa();
 		$fac->cargarMoneda();
 		$fac->cargarReceptor();
-		$fac->procesar_factura();
-		$resp = $fac->enviarDigiFact();
+		$fac->cargarSede();
+		//$fac->procesar_factura();
+		//$resp = $fac->enviarDigiFact();
 
-		
+		$req = $fac->getXmlWebhook();
+		$client = new SoapClient("http://153fd0b3d162.ngrok.io/jk/php/ws/organization.wsdl");	
 
-	}*/
+		//$res = $client->setVenta($req);
+		$web = new Webhook($webhook);
+		$web->setRequest($req);
+		$res = $web->setEvento();
+		echo "<pre>";
+		print_r ($res);
+		echo "</pre>";
+
+	}
 }
 
 /* End of file Factura.php */
