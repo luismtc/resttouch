@@ -13,7 +13,7 @@ export class PropinaComponent implements OnInit {
   @ViewChild('lstPropina', { static: false }) lstPropinaComponent: ListaPropinaComponent;
   constructor() {
     this.propina = {
-      propina_distribucion: null, usuario_tipo: null, porcentaje: null, anulado: null
+      propina_distribucion: null, usuario_tipo: null, porcentaje: null, anulado: null, sede: null, grupal: null
     };
   }
 
@@ -24,7 +24,9 @@ export class PropinaComponent implements OnInit {
     propina_distribucion: pres.propina_distribucion,
     usuario_tipo: pres.usuario_tipo.usuario_tipo,
     porcentaje: pres.porcentaje,
-    anulado: pres.anulado
+    anulado: pres.anulado,
+    sede: pres.sede,
+    grupal: pres.grupal
   }
 
   refreshPropinaList = () => this.lstPropinaComponent.loadPropinas();

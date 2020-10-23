@@ -3,4 +3,6 @@ export interface Propina {
     usuario_tipo: number;
     porcentaje: number;
     anulado: number;
+    sede: number;
+    grupal: number;
 }

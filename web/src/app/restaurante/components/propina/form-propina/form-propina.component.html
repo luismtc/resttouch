@@ -15,7 +15,15 @@
             <mat-form-field class="fullWidth">
                 <input matInput type="number" step="0.01" placeholder="Porcentaje" name="porcentaje" [(ngModel)]="propina.porcentaje" required>
             </mat-form-field>
-            <mat-checkbox name="anulado" class="fullWidth" [(ngModel)]="+propina.anulado">Anulado</mat-checkbox>
+            <div class="row">
+                <div class="col m6 s6">
+                    <mat-checkbox name="grupal" class="fullWidth" [(ngModel)]="+propina.grupal">Propina Grupal</mat-checkbox>
+                </div>
+                <div class="col m6 s6">
+                    <mat-checkbox name="anulado" class="fullWidth" [(ngModel)]="+propina.anulado">Anulado</mat-checkbox>
+                </div>
+            </div>
+            
             <div align="end">
                 <button mat-icon-button type="submit" color="accent" [disabled]="!frmPropina.form.valid">
                     <mat-icon>save</mat-icon>

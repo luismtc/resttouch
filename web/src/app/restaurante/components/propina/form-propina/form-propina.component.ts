@@ -36,7 +36,7 @@ export class FormPropinaComponent implements OnInit {
   }
 
   resetPropina = () => this.propina = { 
-    propina_distribucion: null, usuario_tipo: null, porcentaje:null, anulado:null
+    propina_distribucion: null, usuario_tipo: null, porcentaje:null, anulado:null, sede:null, grupal:null
   };
 
   onSubmit = () => {
