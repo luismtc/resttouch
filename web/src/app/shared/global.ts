@@ -1,6 +1,6 @@
 // const urlBase = 'http://localhost/resttouch'; // Desarrollo local
-const urlBase = `${location.origin}/api`; // Desarrollo
-// const urlBase = location.origin; // Producción
+// const urlBase = `${location.origin}/api`; // Desarrollo
+const urlBase = location.origin; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -22,7 +22,10 @@ export const GLOBAL = {
         RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',
         RT_PANTALLA_TOMA_COMANDA: 'RT_PANTALLA_TOMA_COMANDA',
         RT_HABILITA_BLOQUEO_INACTIVIDAD: 'RT_HABILITA_BLOQUEO_INACTIVIDAD',
-        RT_SEGUNDOS_INACTIVIDAD: 'RT_SEGUNDOS_INACTIVIDAD'
+        RT_SEGUNDOS_INACTIVIDAD: 'RT_SEGUNDOS_INACTIVIDAD',
+        RT_FACTURA_PROPINA: 'RT_FACTURA_PROPINA',
+        RT_CONCEPTO_MAYOR_VENTA: 'RT_CONCEPTO_MAYOR_VENTA',
+        RT_CUENTA_CONTABLE_IVA_VENTA: 'RT_CUENTA_CONTABLE_IVA_VENTA'
     }
 };
 
