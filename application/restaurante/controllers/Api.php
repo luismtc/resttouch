@@ -116,7 +116,7 @@ class Api extends CI_Controller {
 								"usuario" => 1,
 								"factura_serie" => 1,
 								"sede" => $sede->sede,
-								"certificador_fel" => 1,
+								"certificador_fel" => $sede->certificador_fel,
 								"cliente" => $idCliente,
 								"fecha_factura" => date('Y-m-d'),
 								"moneda" => 1,
