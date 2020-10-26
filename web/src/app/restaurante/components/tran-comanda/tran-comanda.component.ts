@@ -262,20 +262,20 @@ export class TranComandaComponent implements OnInit {
     
     for (let i = 0; i < this.mesaEnUso.cuentas.length; i++) {
       const cuenta = this.mesaEnUso.cuentas[i];
-      console.log(cuenta);
+      //console.log(cuenta);
       this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +cuenta.numero);
       
-      this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
+      let lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
       
-      this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
-      if (this.lstProductosAImprimir.length > 0) {
-        this.lstProductosDeCuenta.map(p => p.impreso = 1);
+      let lstProductosAImprimir = lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
+      if (lstProductosAImprimir.length > 0) {
+        lstProductosDeCuenta.map(p => p.impreso = 1);
         this.noComanda = this.mesaEnUso.comanda;
-        console.log(this.cuentaActiva.cuenta);  
-        this.cuentaActiva.productos = this.prepProductosComanda(this.lstProductosDeCuenta);
+        //console.log(this.cuentaActiva.cuenta);  
+        this.cuentaActiva.productos = this.prepProductosComanda(lstProductosDeCuenta);
         const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +this.cuentaActiva.cuenta);
-        console.log(this.mesaEnUso.cuentas)
-        console.log(idxCta)
+        //console.log(this.mesaEnUso.cuentas)
+        //console.log(idxCta)
         if (idxCta > -1) {
           //this.mesaEnUso.cuentas[idxCta] = this.cuentaActiva;
           const objCmd: Comanda = {
@@ -289,7 +289,7 @@ export class TranComandaComponent implements OnInit {
           this.comandaSrvc.save(objCmd).subscribe((res) => {
             // console.log('Respuesta del save = ', res);
             if (res.exito) {
-              console.log(this.cuentaActiva);
+              //console.log(this.cuentaActiva);
               this.comandaSrvc.setProductoImpreso(cuenta.cuenta).subscribe(resImp => {
                 // console.log('Respuesta de poner impreso = ', resImp);
                 if(resImp.exito){
@@ -297,18 +297,19 @@ export class TranComandaComponent implements OnInit {
                 }
                 
                 this.llenaProductosSeleccionados(resImp.comanda);
-                this.setSelectedCuenta(this.cuentaActiva.numero);
-                this.snackBar.open('Cuenta actualizada', `Cuenta #${this.cuentaActiva.numero}`, { duration: 3000 });
+                this.setSelectedCuenta(cuenta.numero);
+                this.snackBar.open('Cuenta actualizada', `Cuenta #${cuenta.numero}`, { duration: 3000 });
   
                 // Inicio de impresión de comanda
                 let AImpresoraNormal: productoSelected[] = [];
                 let AImpresoraBT: productoSelected[] = [];
   
                 try {
-                  AImpresoraNormal = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
-                  AImpresoraBT = this.lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+                  AImpresoraNormal = lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
+                  AImpresoraBT = lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 1);
+                  //console.log('PRODUCTOS A IMPRIMIR = ', lstProductosAImprimir);
                 } catch (error) {
-                  console.log('PRODUCTOS A IMPRIMIR = ', this.lstProductosAImprimir);
+                  console.log('PRODUCTOS A IMPRIMIR = ', lstProductosAImprimir);
                   console.log('NORMAL = ', AImpresoraNormal);
                   console.log('BT = ', AImpresoraBT);
                   console.log(error);
@@ -327,6 +328,7 @@ export class TranComandaComponent implements OnInit {
                     })}`);
                     this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
                     this.bloqueoBotones = false;
+                    //console.log("imprimiendo")
                   }
   
                   if (AImpresoraBT.length > 0) {
