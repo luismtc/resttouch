@@ -3,6 +3,7 @@
         <mat-form-field class="fullWidth" *ngIf="esMovil">
             <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
         </mat-form-field>
+        <mat-checkbox name="pedirdocumento" class="btnAccion" [(ngModel)]="verTodas" [ngModelOptions]="{standalone: true}" (change)="cargarFacturas($event)">Todas</mat-checkbox>
         <!--
         <mat-form-field class="fullWidth" *ngIf="!esMovil">
             <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Buscar..." (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">

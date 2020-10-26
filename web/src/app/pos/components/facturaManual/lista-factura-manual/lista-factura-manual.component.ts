@@ -25,6 +25,7 @@ export class ListaFacturaManualComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public verTodas = false;
 
   constructor(
     private facturaSrvc: FacturaService,
@@ -48,7 +49,11 @@ export class ListaFacturaManualComponent implements OnInit {
   }
 
   loadFacturas = () => {
-    this.facturaSrvc.get().subscribe(lst => {
+    const fltr: any = {};
+    if (this.verTodas) {
+      fltr._todas = true;
+    }
+    this.facturaSrvc.get(fltr).subscribe(lst => {
       // console.log(lst);
       if (lst) {
         if (lst.length > 0) {
@@ -58,6 +63,8 @@ export class ListaFacturaManualComponent implements OnInit {
       }
     });
   }
+
+  cargarFacturas = (obj: any) => this.loadFacturas();
 
   getFactura = (obj: Factura) => {
     this.getFacturaEv.emit(obj);

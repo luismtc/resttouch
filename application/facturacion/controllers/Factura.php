@@ -110,7 +110,8 @@ class Factura extends CI_Controller {
         $data = AUTHORIZATION::validateToken($headers['Authorization']); 
         $_GET['sede'] = $data->sede;
 
-		$facturas = $this->Factura_model->buscar($_GET);
+		// $facturas = $this->Factura_model->buscar($_GET);
+		$facturas = $this->Factura_model->filtrar_facturas($_GET);
 		$datos = [];
 		if(is_array($facturas)) {
 			foreach ($facturas as $row) {

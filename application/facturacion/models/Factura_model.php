@@ -821,6 +821,30 @@ class Factura_model extends General_model {
 		$com->guardar();
 	}
 
+	public function filtrar_facturas($args = [])
+	{
+		if (!isset($args['_todas'])) {
+			$this->db->where('fel_uuid IS NULL AND fel_uuid_anulacion IS NULL');
+		}
+
+		if (count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if (substr($key, 0, 1) != "_") {
+					$this->db->where($key, $row);
+				}
+			}	
+		}
+
+		$this->db->order_by('fecha_factura DESC');
+
+		$tmp = $this->db->get('factura');
+
+		if(isset($args['_uno'])) {
+			return $tmp->row();
+		}
+
+		return $tmp->result();
+	}
 }
 
 /* End of file Factura_model.php */
