@@ -35,35 +35,46 @@ class Reporte extends CI_Controller {
 	public function caja()
 	{
 		ini_set("pcre.backtrack_limit", "15000000");
-		$_GET['sede'] = $this->data->sede;
-		$_GET["_facturadas"] = true;
 
-		$data = $_GET;
+		$data = json_decode(file_get_contents('php://input'), true);;
+		$data['sede'] = $this->data->sede;
+		$data["_facturadas"] = true;
 		
-		$_GET["descuento"] = 0;
-		$data['ingresos'] = $this->Reporte_model->get_ingresos($_GET);
+		$data["descuento"] = 0;
+		$data['ingresos'] = $this->Reporte_model->get_ingresos($data);
 		
-		$_GET["descuento"] = 1;
-		$data['descuentos'] = $this->Reporte_model->get_ingresos($_GET);
+		$data["descuento"] = 1;
+		$data['descuentos'] = $this->Reporte_model->get_ingresos($data);
 
-		$data['comanda'] = $this->Reporte_model->getRangoComandas($_GET);
+		$data['comanda'] = $this->Reporte_model->getRangoComandas($data);
 		
-		if (isset($_GET['_detalle']) && $_GET['_detalle'] !== "false") {
-			$_GET['detalle'] = 1;
-			unset($_GET['descuento']);
-			$det = $this->Reporte_model->get_ingresos($_GET);
+		if (isset($data['_detalle']) && $data['_detalle'] !== "false") {
+			$data['detalle'] = 1;
+			unset($data['descuento']);
+			$det = $this->Reporte_model->get_ingresos($data);
 			$data['detalle'] = [];
 			foreach ($det as $row) {
 				$data['detalle'][$row->descripcion][] = $row;
 			}
 		}
+
+		if (isset($data['_validar']) && $data['_validar'] !== "false") {
+			$data['pagos'] = [];
+			foreach ($data['_pagos'] as $row) {
+				if (isset($row['monto'])) {
+					$data['pagos'][$row['forma_pago']] = $row['monto'];
+				}
+			}
+		} else {
+			$data['_validar'] = false;
+		}
 		
 		if ($this->input->get('turno_tipo')) {
-			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
+			$data["turno"] = new TurnoTipo_model($data["turno_tipo"]);
 		}
 
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			//'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));
@@ -180,8 +191,11 @@ class Reporte extends CI_Controller {
 			"sede" => $this->data->sede,
 			"grupal" => 1
 		]);
+
 		$grupos = array_result($distProp, "usuario_tipo");
 		$datos = $_GET;
+		
+		$datos['detalle'] = (isset($_GET['_detalle']) && $_GET['_detalle'] !="false");
 		
 		$datos['datos'] = [];
 
@@ -192,8 +206,8 @@ class Reporte extends CI_Controller {
 			$tmp = $comanda->getTurno();
 			$turno = new Turno_model($tmp->turno);
 			$usuarios = $turno->getUsuarios();
-			$row->propina = $propina;
-			if ($comanda->getPK()) {
+			$fac->propina = $propina;
+			if ($comanda->getPK() && $fac->propina > 0) {
 				foreach ($distProp as $prop) {
 					$tusuario = $this->Tipo_usuario_model->buscar([
 						"usuario_tipo" => $prop->usuario_tipo,
@@ -201,12 +215,12 @@ class Reporte extends CI_Controller {
 					]);
 
 					if (isset($datos['datos'][$tusuario->usuario_tipo])) {
-						$datos['datos'][$tusuario->usuario_tipo]['facturas'][] = $row;
+						$datos['datos'][$tusuario->usuario_tipo]['facturas'][] = $fac;
 						$datos['datos'][$tusuario->usuario_tipo]['propina'] += $propina * $prop->porcentaje / 100;
 					} else {
 						$datos['datos'][$tusuario->usuario_tipo] = [
 							"descripcion" => $tusuario->descripcion,
-							"facturas" => [$row],
+							"facturas" => [$fac],
 							"porcentaje" => $prop->porcentaje,
 							"propina" => $propina * $prop->porcentaje / 100
 						];
@@ -231,12 +245,12 @@ class Reporte extends CI_Controller {
 									];
 								}
 								if (isset($datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario])) {
-									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $row;
+									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $fac;
 									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += $propina*$dist->porcentaje / 100;
 								} else {
 									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario] = [
 										"nombre" => $usu->usuario->nombres." ".$usu->usuario->apellidos,
-										"facturas" => [$row],
+										"facturas" => [$fac],
 										"propina" => $propina * $dist->porcentaje / 100
 									];
 								}
@@ -251,12 +265,12 @@ class Reporte extends CI_Controller {
 							}
 
 							if (isset($datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario])) {
-								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $row;
+								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $fac;
 								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += $propina*$dist->porcentaje / 100;
 							} else {
 								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario] = [
 									"nombre" => $usu->usuario->nombres." ".$usu->usuario->apellidos,
-									"facturas" => [$row],
+									"facturas" => [$fac],
 									"propina" => $propina * $dist->porcentaje / 100
 								];
 							}

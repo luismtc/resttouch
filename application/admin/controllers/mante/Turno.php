@@ -7,7 +7,13 @@ class Turno extends CI_Controller {
 	{
         parent::__construct();
         $this->load->add_package_path('application/restaurante');
-        $this->load->model(['Turno_model', 'TurnoTipo_model', 'Comanda_model']);
+        $this->load->add_package_path('application/facturacion');
+        $this->load->model([
+        	'Turno_model', 
+        	'TurnoTipo_model', 
+        	'Comanda_model',
+        	'Factura_model'
+        ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -20,7 +26,7 @@ class Turno extends CI_Controller {
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$turno = new Turno_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
-		$datos = ['exito' => false];
+		$datos = ['exito' => false, 'pendientes' => false];
 		if ($this->input->method() == 'post') {
 			$continuar = true;
 			if (empty($id)) {
@@ -35,13 +41,39 @@ class Turno extends CI_Controller {
 				}
 			} else {
 				if (!empty($req['fin'])) {
+					$comandas = [];
 					$com = $this->Comanda_model->getComandasAbiertas([
 						"turno" => $turno->getPK()
 					]);
 
-					if ($com) {
+					$fac = $this->Factura_model->filtrar_facturas(["sede" => $data->sede]);
+
+					if (count($com) > 0) {
 						$continuar = false;
-						$datos['mensaje'] = "Existen comandas pendientes de facturar";
+						foreach ($com as $row) {
+							$comanda = new Comanda_model($row->comanda);
+							$texto = "Comanda #{$comanda->comanda}";
+							$mesa = $comanda->getMesas();
+							if ($mesa) {
+								$texto.=" Mesa#{$mesa->numero}";
+							}
+							$comandas[] = $texto;
+						}
+						$datos['comandas'] = $comandas;
+					}
+
+					if (count($fac) > 0) {
+						$continuar = false;
+						$facturas = [];
+						foreach ($fac as $row) {
+							$facturas[] = "Factura #{$row->factura}";
+						}
+						$datos['facturas'] = $facturas;
+					}
+
+					if (!$continuar) {
+						$datos['mensaje'] = "Posee documentos pendientes";
+						$datos['pendientes'] = true;
 					}
 				}
 			}
@@ -53,7 +85,7 @@ class Turno extends CI_Controller {
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['turno'] = $turno;
 				} else {
-					$datos['mensaje'] = $turno->getMensaje();
+					$datos['mensaje'] = implode("<br>", $turno->getMensaje());
 				}
 			}
 		} else {

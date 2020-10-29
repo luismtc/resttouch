@@ -20,7 +20,22 @@
           <mat-form-field class="fullWidth">            
             <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
-          <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
+          <div class="row">
+            <div class="col">
+              <mat-checkbox name="mostrar_detalle" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
+            </div>
+            <div class="col">
+              <mat-checkbox name="validar" class="fullWidth" [(ngModel)]="+params._validar">Validar Montos</mat-checkbox>
+            </div>
+          </div>
+          <hr *ngIf="params._validar">
+          <form *ngIf="params._validar">
+            <div *ngFor="let fp of fpagos">
+              <mat-form-field class="fullWidth">
+                <input matInput type="number" step="0.01" placeholder="{{fp.descripcion}}" [(ngModel)]="fp.monto" [ngModelOptions]="{standalone: true}">
+              </mat-form-field>
+            </div>
+          </form>
           <app-rpt-botones [configuracion]="configBotones" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>
         </form>
         <app-cargando *ngIf="cargando"></app-cargando>

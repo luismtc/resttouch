@@ -33,6 +33,9 @@ export class TurnoComponent implements OnInit {
     //console.log(trn); 
     this.turno = trn;
     this.frmTurno.loadDetalleTurno(+this.turno.turno);
+    this.frmTurno.pendientes = false;
+    this.frmTurno.comandas = []
+    this.frmTurno.facturas = []
   }
 
   refreshTurnoList = () => this.lstTurnoComponent.loadTurnos();

@@ -5,6 +5,8 @@ import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
 import { saveAs } from 'file-saver';
 import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
+import { FpagoService } from '../../../../admin/services/fpago.service';
+import { FormaPago } from '../../../../admin/interfaces/forma-pago';
 
 
 @Component({
@@ -13,10 +15,12 @@ import { ConfiguracionBotones } from '../../../../shared/interfaces/config-repor
   styleUrls: ['./caja.component.css']
 })
 export class CajaComponent implements OnInit {
-  public params: any = {};
+  public params: any = {_validar: false};
   public titulo = 'Resumen de caja';
   public tiposTurno: TipoTurno[] = [];
   public cargando = false;
+  public fpagos: FormaPago[] = [];
+
   public configBotones: ConfiguracionBotones = {
     showPdf: true, showHtml: false, showExcel: false
   };
@@ -25,10 +29,20 @@ export class CajaComponent implements OnInit {
     private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
     private tipoTurnoSrvc: TipoTurnoService,
+    private fpagoSrvc: FpagoService
   ) { }
 
   ngOnInit() {
     this.loadTiposTurno();
+    this.loadFormaPago();
+  }
+
+  loadFormaPago = () => {
+    this.fpagoSrvc.get().subscribe(res => {
+      if (res) {
+        this.fpagos = res;
+      }
+    })
   }
 
   loadTiposTurno = () => {
@@ -46,6 +60,8 @@ export class CajaComponent implements OnInit {
 
   onSubmit() {
     this.cargando = true;
+    this.params._pagos = this.fpagos;
+    
     this.pdfServicio.getReporteCaja(this.params).subscribe(res => {
       this.cargando = false;
       if (res) {
