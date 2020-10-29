@@ -66,9 +66,10 @@ export class FormFacturaManualComponent implements OnInit {
     this.loadClientes();
     this.loadMonedas();
     this.loadArticulos();
-    //this.signalRSrvc.startConnection(`restaurante_01`);
+    // this.signalRSrvc.startConnection(`restaurante_01`);
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+      this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
   }
 

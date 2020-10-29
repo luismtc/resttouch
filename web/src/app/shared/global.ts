@@ -1,4 +1,5 @@
 // const urlBase = 'http://localhost/resttouch'; // Desarrollo local
+// const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo local 2
 // const urlBase = `${location.origin}/api`; // Desarrollo
 const urlBase = location.origin; // Producción
 export const GLOBAL = {

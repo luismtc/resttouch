@@ -1,4 +1,17 @@
 <div class="row">
+    <div class="col m12 s12" align="center">
+        <mat-form-field class="btnAccion">
+            <input type="number" matInput placeholder="De" name="de" [(ngModel)]="params.de" required>
+        </mat-form-field>
+        <mat-form-field class="btnAccion">
+            <input type="number" matInput placeholder="A" name="a" [(ngModel)]="params.a" required>
+        </mat-form-field>
+        <button mat-flat-button type="button" color="accent" (click)="imprimirLote()">
+            Imprimir
+        </button>
+    </div>
+</div>
+<div class="row">
     <div class="col m12 s12">
         <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
             <ng-container matColumnDef="comanda">

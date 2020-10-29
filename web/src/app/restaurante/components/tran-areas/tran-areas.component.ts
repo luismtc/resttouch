@@ -53,6 +53,9 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     this.resetMesaSeleccionada();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+
+      this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
+
       this.socket.on('refrescar:mesa', (obj: any) => {
         // console.log(obj);
         this.loadAreas(true, obj);

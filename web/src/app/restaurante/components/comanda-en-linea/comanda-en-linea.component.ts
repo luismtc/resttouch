@@ -50,9 +50,9 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
   public dataSource: any[] = [];
   public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'imprimir', 'facturar'];
   public expandedElement: any | null;
-
   public comandasEnLinea: any[] = [];
   // public intervalId: any;
+  public params: any = { de: 0, a: 99 };
 
   constructor(
     public dialog: MatDialog,
@@ -74,6 +74,21 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         this.notificarUsuario();
       });
 
+      this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
+
+      this.socket.on('connect_timeout', () => {
+        const msg = 'DESCONECTADO DEL SERVIDOR (TIMEOUT)';
+        this.snackBar.open(msg, 'ERROR', { duration: 5000 });
+        this.avisoSocketIOEvent(msg);
+      });
+
+      // this.socket.on('pong', (ms: number) => this.snackBar.open(`PONG: ${ms}ms`, 'Pong', { duration: 5000 }));
+
+      this.socket.on(
+        'reconnect_attempt',
+        (attempt: number) => this.snackBar.open(`INTENTO DE RECONEXIÓN #${attempt}`, 'ERROR', { duration: 10000 })
+      );
+
       this.socket.on('shopify:error', (mensaje: string) => {
         this.loadComandasEnLinea();
         this.snackBar.open(`ERROR: ${mensaje}`, 'Firmar', { duration: 10000 });
@@ -81,6 +96,15 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     }
 
     this.loadComandasEnLinea();
+  }
+
+  avisoSocketIOEvent = (aviso: string = '') => {
+    const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel('Socket.IO', aviso, 'Aceptar', 'Cancelar')
+    });
+
+    confirmRef.afterClosed().subscribe((confirma: boolean) => { });
   }
 
   notificarUsuario = () => {
@@ -139,7 +163,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     });
   }
 
-  imprimir = (obj: any) => {
+  imprimir = (obj: any, idx: number = 0) => {
     // console.log(obj); // return;
     const listaProductos = this.setToPrint(obj.cuentas[0].productos);
     const AImpresoraNormal: productoSelected[] = listaProductos.filter(p => +p.impresora.bluetooth === 0);
@@ -150,6 +174,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     if (AImpresoraNormal.length > 0) {
       // console.log(AImpresoraNormal);
       objToPrint = {
+        Indice: (idx + 1),
         Tipo: 'Comanda',
         Nombre: obj.cuentas[0].nombre,
         Numero: obj.comanda,
@@ -241,31 +266,9 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     this.socket.emit('print:factura', JSON.stringify(dataToPrint));
   }
 
-  /*
-  facturar = (obj: any) => {
-    // console.log(obj);
-    const productosACobrar = obj.cuentas[0].productos;
-    if (productosACobrar.length > 0) {
-      const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
-        width: '95%',
-        data: {
-          cuenta: obj.cuentas[0].nombre,
-          idcuenta: obj.cuentas[0].cuenta,
-          productosACobrar: productosACobrar,
-          porcentajePropina: 10
-        }
-      });
-
-      cobrarCtaRef.afterClosed().subscribe(res => {
-        if (res) {
-          // console.log(res);
-          obj.cuentas[0].cerrada = +res.cerrada;
-        }
-        this.loadComandasEnLinea();
-      });
-    } else {
-      this.snackBar.open('Cobro', 'Sin productos a cobrar.', { duration: 3000 });
+  imprimirLote = () => {
+    for (let i = this.params.de; i <= this.params.a; i++) {
+      this.imprimir(this.comandasEnLinea[i], i);
     }
   }
-  */
 }

@@ -85,6 +85,7 @@ export class TranComandaComponent implements OnInit {
     this.llenaProductosSeleccionados();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+      this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
     // console.log('MESA EN USO = ', this.mesaEnUso);
   }
