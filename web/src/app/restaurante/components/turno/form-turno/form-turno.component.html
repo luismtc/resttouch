@@ -74,6 +74,26 @@
                     Nuevo
                 </button>
             </div>
+            <div *ngIf="pendientes">
+                
+                    <h6>Documentos Pendientes</h6>
+                
+                    <div class="row">
+                        <div class="col">
+                            <label><b>Comandas sin facturar</b></label>
+                            <ul>
+                                <li *ngFor="let com of comandas" >{{com}}</li>
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <label><b>Facturas sin firmar</b></label>
+                            <ul>
+                                <li *ngFor="let fac of facturas" >{{fac}}</li>
+                            </ul>
+                        </div>
+                    </div>
+                
+            </div>
         </form>
     </mat-card-content>
 </mat-card>

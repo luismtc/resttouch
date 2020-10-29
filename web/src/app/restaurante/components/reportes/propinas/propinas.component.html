@@ -12,6 +12,7 @@
           <mat-form-field class="fullWidth">
             <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
+          <mat-checkbox name="mostrar_detalle" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
           <app-rpt-botones [configuracion]="configBotones" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>
         </form>
         <app-cargando *ngIf="cargando"></app-cargando>

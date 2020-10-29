@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import {CommonModule} from '@angular/common'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
@@ -16,6 +17,7 @@ import { UsuarioTipo } from '../../../../admin/interfaces/usuario-tipo';
 import { UsuarioTipoService } from '../../../../admin/services/usuario-tipo.service';
 import { Usuario } from '../../../../admin/models/usuario';
 import { UsuarioService } from '../../../../admin/services/usuario.service';
+import {NewLineString} from '../../../../shared/global'
 
 @Component({
   selector: 'app-form-turno',
@@ -38,6 +40,9 @@ export class FormTurnoComponent implements OnInit {
   public tiposUsuario: UsuarioTipo[] = [];
   public usuarios: Usuario[] = [];
   public esMovil: boolean = false;
+  public comandas: any[] = [];
+  public facturas: any[] = [];
+  public pendientes: boolean = false;
 
   constructor(
     private _snackBar: MatSnackBar,
@@ -82,6 +87,10 @@ export class FormTurnoComponent implements OnInit {
   }
 
   resetTurno = () => {
+    this.pendientes = false;
+    this.comandas = [];
+    this.facturas = []
+    
     this.turno = {
       turno: null, turno_tipo: null, inicio: moment().format(GLOBAL.dbDateTimeFormat), fin: null
     };
@@ -89,6 +98,7 @@ export class FormTurnoComponent implements OnInit {
   }
 
   saveInfoTurno = () => {
+    this.pendientes = false;
     this.turnoSrvc.save(this.turno).subscribe(res => {
       if (res.exito) {
         this.turnoSavedEv.emit();
@@ -96,11 +106,20 @@ export class FormTurnoComponent implements OnInit {
         this.turno = res.turno;
         this._snackBar.open('Turno modificado con éxito...', 'Turno', { duration: 3000 });
       } else {
+        console.log(res.mensaje)
+        if (res.pendientes) {
+          this._snackBar.open(`ERROR: Error al cerrar el turno`, 'Turno', { duration: 3000 });
+          this.pendientes = true;
+          this.comandas = res.comandas;
+          this.facturas = res.facturas;
+        } 
+
         this._snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
+        
       }
     });
   }
-
+  
   onSubmit = () => {
     if (moment(this.turno.fin).isValid()) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {

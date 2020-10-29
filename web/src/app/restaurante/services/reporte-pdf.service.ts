@@ -28,12 +28,11 @@ export class ReportePdfService {
   }
 
   getReporteCaja(params: Object) {
-    this.httpOptions['params'] = params;
-
-    return this.http.get<string>(
-        `${GLOBAL.urlAppRestaurante}/reporte/caja`,
-        this.httpOptions
-        ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/reporte/caja`,
+      params,
+      this.httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getReporteExistencia(params: Object) {

@@ -6,80 +6,150 @@
 	<title>Document</title>
 </head>
 <body>
+	<?php $totalprop = 0; ?>
 	<table class="tabla-contenido">
 		<tr>
-			<td colspan="4" class="text-center"><h1>Distribucion de propinas</h1></td>
-			<td colspan="1" class="text-center">
+			<td colspan="6" class="text-center"><h1>Distribucion de propinas</h1></td>
+		</tr>
+		<tr>
+			<td colspan="6" class="text-center">
 				<h3>
 				Del: <?php echo formatoFecha($fdel,2) ?> al: <?php echo formatoFecha($fal,2) ?>
 				</h3>
+			
 			</td>
 		</tr>
-		<?php foreach ($datos as $row): ?>
+		<?php if ($detalle): ?>
 			<tr>
-				<td class="text-center" colspan="5">
-					<h2><?php echo $row['descripcion'] ?></h2>
-				</td>
+				<th colspan="2"></th>
+				<th class="text-center">Fecha</th>
+				<th class="text-center">Comanda</th>
+				<th class="text-center">Facturas</th>
+				<th class="text-center">Propina</th>
 			</tr>
-			<tr>
-				<th class="text-center">Empleado</th>
-				<th class="text-center">Porcentaje Propina</th>
-				<th class="text-center" colspan="2">Facturas</th>
-				<th class="text-center">Total de Propina</th>
-			</tr>
-			<?php if (isset($row['usuario'])): ?>
-				<?php foreach ($row['usuario'] as $key => $usu): ?>
-					<?php $rows = count($usu['facturas'])+1 ?>
-					<tr>
-						<td rowspan="<?php echo $rows ?>"><?php echo $usu['nombre'] ?></td>
-						<td rowspan="<?php echo $rows ?>">
-							<?php echo "{$row['porcentaje']}%" ?>
-						</td>
-						<td><b>Número</b></td>
-						<td><b>Propina</b></td>
-						<td rowspan="<?php echo $rows ?>" class="text-right">
-							<?php echo number_format($usu['propina'],2) ?>
-						</td>
-					</tr>
-					<?php foreach ($usu['facturas'] as $fac): ?>
+			
+			<?php foreach ($datos as $row): ?>				
+				<tr>
+					<th class="text-left" colspan="6">
+						<?php echo $row['descripcion'] ?>
+					</th>
+				</tr>
+
+				<?php if (isset($row['usuario'])): ?>
+					<?php foreach ($row['usuario'] as $key => $usu): ?>
+						<?php $rows = count($usu['facturas'])+1 ?>
 						<tr>
+							<td colspan="6">
+								<?php echo $usu['nombre'] ?>
+							</td>
+						</tr>
+						<?php foreach ($usu['facturas'] as $fac): ?>
+							<tr>
+								<td colspan="2"></td>
+								<td><?php echo $fac->fecha_factura ?></td>
+								<td><?php echo $fac->getComanda()->comanda ?></td>
+								<td><?php echo $fac->numero_factura ?></td>
+								<td class="text-right">
+									<?php 
+										echo number_format($fac->propina * $row['porcentaje']/100,2) ?>
+								</td>
+							</tr>
+						<?php endforeach ?>
+						<tr>
+							<th colspan="5" class="text-right">Total Empleado</th>
+							<td class="text-right">
+								<?php $totalprop+=$usu['propina'] ?>
+								<?php echo number_format($usu['propina'],2) ?> 
+							</td>
+						</tr>
+						
+					<?php endforeach ?>
+				<?php else: ?>
+					
+					<tr>
+						<td colspan="6">N/A</td>
+					</tr>
+
+					<?php foreach ($row['facturas'] as $fac): ?>
+						<tr>
+							<td colspan="2"></td>
+							<td><?php echo $fac->fecha_factura ?></td>
+							<td><?php echo $fac->getComanda()->comanda ?></td>
 							<td><?php echo $fac->numero_factura ?></td>
-							<td class="text-right"><?php echo $fac->propina ?></td>
+							<td class="text-right">
+								<?php echo number_format($fac->propina * $row['porcentaje']/100,2) ?>
+							</td>
 						</tr>
 					<?php endforeach ?>
-					
-				<?php endforeach ?>
-			<?php else: ?>
-				<?php $rows = count($row['facturas'])+1 ?>
+					<tr>
+						<th colspan="5" class="text-right">Total Empleado</th>
+						<td class="text-right">
+							<?php $totalprop+=$row['propina'] ?>
+							<?php echo number_format($row['propina'],2) ?> 
+						</td>
+					</tr>
+				<?php endif ?>
+			<?php endforeach ?>
+		<?php else: ?>
+			<tr>
+				<td colspan="3" class="text-center">Empleado</td>
+				<td colspan="3" class="text-center">Propina</td>
+			</tr>
+
+			<?php foreach ($datos as $row): ?>
+				<?php $totalTipo = 0; ?>
 				<tr>
-					<td rowspan="<?php echo $rows ?>">N/A</td>
-					<td rowspan="<?php echo $rows ?>">
-						<?php echo "{$row['porcentaje']}%" ?>
+					<th class="text-left" colspan="6">
+						<?php echo $row['descripcion'] ?>
+					</th>
+				</tr>
+				<?php if (isset($row['usuario'])): ?>
+					<?php foreach ($row['usuario'] as $key => $usu): ?>
+						<?php $totalTipo+= $usu['propina'] ?>
+						<tr>
+							<td colspan="3"><?php echo $usu['nombre'] ?></td>
+							<td colspan="3" class="text-right">
+								<?php $totalprop+=$usu['propina'] ?>
+								<?php echo number_format($usu['propina'],2) ?> 
+							</td>
+						</tr>
 						
-					</td>
-					<td><b>Número</b></td>
-					<td><b>Propina</b></td>
-					<td rowspan="<?php echo $rows ?>" class="text-right">
-						<?php echo number_format($row['propina'],2) ?>
+					<?php endforeach ?>
+				<?php else: ?>
+					<?php $totalTipo+= $row['propina'] ?>
+					<tr>
+						<td colspan="3" >N/A</td>
+						<td colspan="3" class="text-right">
+							<?php $totalprop+=$row['propina'] ?>
+							<?php echo number_format($row['propina'],2) ?> 
+						</td>
+					</tr>
+				<?php endif ?>
+				<tr>
+					<th colspan="5" class="text-right">Total por tipo</th>
+					<td class="text-right">
+						<?php echo number_format($totalTipo,2) ?> 
 					</td>
 				</tr>
-				<?php foreach ($row['facturas'] as $fac): ?>
-					<tr>
-						<td><?php echo $fac->numero_factura ?></td>
-						<td class="text-right"><?php echo $fac->propina ?></td>
-					</tr>
-				<?php endforeach ?>
-			<?php endif ?>
-		<?php endforeach ?>
+			<?php endforeach ?>
+		<?php endif ?>
+		<tr>
+			<td colspan="6"></td>
+		</tr>
+		<tr>
+			<th rowspan="2" colspan="5" class="text-right">Total General</th>
+			<td class="text-right"><?php echo number_format($totalprop, 2) ?></td>
+		</tr>
 	</table>
 </body>
 </html>
 <style type="text/css">
 	body {font-family: sans-serif;}
-	table {width: 100%; border-collapse: collapse; border: 1px solid black;}
-	td {width: auto; border-collapse: collapse; border: 1px solid black;}
+	table {width: 100%; }
+	td {width: auto; }
 
 	.text-right {text-align: right;}
+	.text-left {text-align: left;}
 	.text-center {text-align: center;}
 	.tabla-contenido {font-size: 0.65em;}
 	.tabla-firma {font-size: 0.90em;}

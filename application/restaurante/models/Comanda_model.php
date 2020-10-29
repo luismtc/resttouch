@@ -347,14 +347,15 @@ class Comanda_model extends General_Model
 			->join("detalle_comanda b", "a.comanda = b.comanda")
 			->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
 			->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
-			->join("detalle_factura e", "e.detalle_factura = d.detalle_factura")
+			->join("detalle_factura e", "e.detalle_factura = d.detalle_factura", "left")
 			->join("factura f", "f.factura = e.factura", "left")
 			->where("a.turno", $args['turno'])
-			->where("f.fel_uuid is null")
+			->where("f.factura is null")
 			->group_by("a.comanda")
-			->get();
+			->get()
+			->result();
 
-		return $tmp->num_rows() > 0;
+		return $tmp;
 	}
 
 	public function envioMail()
