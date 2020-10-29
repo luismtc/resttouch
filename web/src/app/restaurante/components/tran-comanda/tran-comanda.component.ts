@@ -363,7 +363,8 @@ export class TranComandaComponent implements OnInit {
                       DetalleCuenta: AImpresoraNormal,
                       Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
                       Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-                      Total: null
+                      Total: null,
+                      NumeroPedido: this.mesaEnUso.numero_pedido
                     })}`);
                     this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
                     this.bloqueoBotones = false;
@@ -379,7 +380,8 @@ export class TranComandaComponent implements OnInit {
                         DetalleCuenta: AImpresoraBT,
                         Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
                         Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-                        Total: null
+                        Total: null,
+                        NumeroPedido: this.mesaEnUso.numero_pedido
                       })
                     );
                   }
