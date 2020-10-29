@@ -15,6 +15,7 @@ class Comanda_model extends General_Model
 	public $mesero;
 	public $comandaenuso = 0;
 	public $fhcreacion;
+	public $numero_pedido;
 
 	public function __construct($id = '')
 	{
@@ -67,7 +68,9 @@ class Comanda_model extends General_Model
 		if (empty($id)) {
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
+			$args['fecha'] = Hoy();
 		} else {
+			$args['fecha'] = $det->fecha;
 			if (isset($args['articulo'])) {
 				if ($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']) {
 					$articulo = $det->articulo;
@@ -210,7 +213,7 @@ class Comanda_model extends General_Model
 		$tmp->factura = $this->getFactura();
 		$tmp->origen_datos = $this->getOrigenDatos();
 		$tmp->fhcreacion = empty($tmp->origen_datos['fhcreacion']) ?  $this->fhcreacion : $tmp->origen_datos['fhcreacion'];
-
+		$tmp->numero_pedido = $this->numero_pedido;
 		return $tmp;
 	}
 

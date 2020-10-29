@@ -10,6 +10,7 @@ export interface Comanda {
     dividirCuentasPorSillas?: number;
     comanda?: number;
     cuentas: Cuenta[];
+    numero_pedido?: string;
 }
 
 export interface ComandaGetResponse {
@@ -39,4 +40,5 @@ export interface ComandaGetResponse {
     turno_rol?: string[];
     mesero?: any;
     mensaje?: string;
+    numero_pedido?: string;
 }

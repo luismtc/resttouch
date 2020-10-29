@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>
+    {{title}}
+  </h1>
+  <div mat-dialog-content>
+    <p>{{message}}</p>
+  </div>
+  <form>
+      <mat-form-field class="fullWidth">
+          <input type="time" matInput placeholder="Tiempo" [(ngModel)] ="datos.tiempo" [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+  </form>
+  <div mat-dialog-actions align="center">
+    <button mat-raised-button class="btnConfig" (click)="onDismiss()">{{lblBtnDeny}}</button>
+    <button mat-raised-button class="btnConfig" color="accent" (click)="onConfirm(datos)">{{lblBtnConfirm}}</button>
+  </div>

@@ -203,11 +203,12 @@ class Reporte extends CI_Controller {
 			$fac = new Factura_model($row->factura);
 			$propina = suma_field($fac->getPropina(), "propina_monto");
 			$comanda = $fac->getComanda();// obtener usuarios del turno
-			$tmp = $comanda->getTurno();
-			$turno = new Turno_model($tmp->turno);
-			$usuarios = $turno->getUsuarios();
-			$fac->propina = $propina;
+			
 			if ($comanda->getPK() && $fac->propina > 0) {
+				$tmp = $comanda->getTurno();
+				$turno = new Turno_model($tmp->turno);
+				$usuarios = $turno->getUsuarios();
+				$fac->propina = $propina;
 				foreach ($distProp as $prop) {
 					$tusuario = $this->Tipo_usuario_model->buscar([
 						"usuario_tipo" => $prop->usuario_tipo,

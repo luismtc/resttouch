@@ -11,6 +11,7 @@ import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { TrasladoMesaComponent } from '../traslado-mesa/traslado-mesa.component';
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 import { ListaProductoAltComponent } from '../../../wms/components/producto/lista-producto-alt/lista-producto-alt.component';
+import { ConfirmDialogModel,  DialogPedidoComponent} from '../../../shared/components/dialog-pedido/dialog-pedido.component';
 
 import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
@@ -20,6 +21,7 @@ import { ArbolArticulos } from '../../../wms/interfaces/articulo';
 
 import { ComandaService } from '../../services/comanda.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
+import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 
 // tslint:disable-next-line: class-name
 interface productoSelected {
@@ -73,6 +75,7 @@ export class TranComandaComponent implements OnInit {
     private socket: Socket,
     private ls: LocalstorageService,
     private pdfServicio: ReportePdfService,
+    private configSrvc: ConfiguracionService
   ) { }
 
   ngOnInit() {
@@ -98,6 +101,7 @@ export class TranComandaComponent implements OnInit {
       area: { area: null, sede: null, area_padre: null, nombre: null },
       numero: null, posx: null, posy: null, tamanio: null, estatus: null
     },
+    numero_pedido: null,
     cuentas: []
   }
   resetLstProductosSeleccionados = () => this.lstProductosSeleccionados = [];
@@ -257,9 +261,43 @@ export class TranComandaComponent implements OnInit {
     return tmp;
   }
 
-  printComanda(toPdf = false) {
-    this.bloqueoBotones = true;
+  validarImpresion(toPdf = false) {
+    let ingresarPedido = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_INGRESO_NUMERO_PEDIDO)
+    this.mesaEnUso.mesa.esmostrador;
+    console.log(this.mesaEnUso);
+    if (+this.mesaEnUso.mesa.esmostrador==1 && ingresarPedido && !this.mesaEnUso.numero_pedido) {
+      let pedidos = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_TOTAL_NUMEROS_PEDIDO)
+      if (!pedidos || pedidos <= 0) {
+        pedidos = 30;
+      }
+      const confirmRef = this.dialog.open(DialogPedidoComponent, {
+        maxWidth: '50%',
+        data: new ConfirmDialogModel(
+          'Numero de Pedido',
+          pedidos,
+          'Sí', 'No'
+        )
+      });
 
+      confirmRef.afterClosed().subscribe((conf: any) => {
+        console.log(conf)
+        if (conf && conf.respuesta && conf.pedido) {
+          this.mesaEnUso.numero_pedido = conf.pedido;
+          this.printComanda(toPdf);
+        } else {
+          this.snackBar.open('Error, Debe seleccionar un numero de pedido', 'Comanda', { duration: 7000 });
+        }
+      });
+    } else {
+      this.printComanda(toPdf);
+    }
+  }
+
+  printComanda(toPdf = false) {
+    // solicitar numero de pedido
+    
+    this.bloqueoBotones = true;
+    this.impreso = 0;
     for (let i = 0; i < this.mesaEnUso.cuentas.length; i++) {
       const cuenta = this.mesaEnUso.cuentas[i];
       // console.log(cuenta);
@@ -283,12 +321,14 @@ export class TranComandaComponent implements OnInit {
             mesa: this.mesaEnUso.mesa.mesa,
             mesero: this.mesaEnUso.usuario,
             comanda: this.mesaEnUso.comanda,
-            cuentas: this.mesaEnUso.cuentas
+            cuentas: this.mesaEnUso.cuentas,
+            numero_pedido: this.mesaEnUso.numero_pedido
           };
           // console.log('Comanda a guardar = ', objCmd);
           this.comandaSrvc.save(objCmd).subscribe((res) => {
             // console.log('Respuesta del save = ', res);
             if (res.exito) {
+              this.mesaEnUso.numero_pedido = res.comanda.numero_pedido;
               // console.log(this.cuentaActiva);
               this.comandaSrvc.setProductoImpreso(cuenta.cuenta).subscribe(resImp => {
                 // console.log('Respuesta de poner impreso = ', resImp);
@@ -324,7 +364,8 @@ export class TranComandaComponent implements OnInit {
                       DetalleCuenta: AImpresoraNormal,
                       Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
                       Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-                      Total: null
+                      Total: null,
+                      NumeroPedido: this.mesaEnUso.numero_pedido
                     })}`);
                     this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
                     this.bloqueoBotones = false;
@@ -340,7 +381,8 @@ export class TranComandaComponent implements OnInit {
                         DetalleCuenta: AImpresoraBT,
                         Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
                         Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
-                        Total: null
+                        Total: null,
+                        NumeroPedido: this.mesaEnUso.numero_pedido
                       })
                     );
                   }
