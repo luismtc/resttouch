@@ -32,6 +32,8 @@ import { RptFechasComponent } from './components/rpt-fechas/rpt-fechas.component
 import { RptBotonesComponent } from './components/rpt-botones/rpt-botones.component';
 import { CargandoComponent } from './components/cargando/cargando.component';
 import { CheckPasswordComponent } from './components/check-password/check-password.component';
+import { DialogCocinaComponent } from './components/dialog-cocina/dialog-cocina.component';
+import { DialogPedidoComponent } from './components/dialog-pedido/dialog-pedido.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
 const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
@@ -44,10 +46,12 @@ const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options:
     RptFechasComponent,
     RptBotonesComponent,
     CargandoComponent,
-    CheckPasswordComponent
+    CheckPasswordComponent,
+    DialogCocinaComponent,
+    DialogPedidoComponent
   ],
   entryComponents: [
-    ConfirmDialogComponent, CheckPasswordComponent
+    ConfirmDialogComponent, CheckPasswordComponent, DialogCocinaComponent, DialogPedidoComponent
   ],
   imports: [
     CommonModule,
@@ -82,7 +86,9 @@ const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options:
     RptFechasComponent,
     RptBotonesComponent,
     CargandoComponent,
-    CheckPasswordComponent
+    CheckPasswordComponent,
+    DialogCocinaComponent,
+    DialogPedidoComponent
   ]
 })
 export class SharedModule { }

@@ -59,7 +59,7 @@
     <div class="row">
         <div class="col m12 s12" align="center">
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
-                (click)="printComanda()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
+                (click)="validarImpresion()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
                 Comanda
             </button>
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"

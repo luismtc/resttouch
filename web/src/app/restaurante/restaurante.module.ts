@@ -74,6 +74,7 @@ import { TrasladoMesaComponent } from './components/traslado-mesa/traslado-mesa.
 import { ConfiguraMesaComponent } from './components/area/configura-mesa/configura-mesa.component';
 import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.component';
 import { TranComandaAltComponent } from './components/tran-comanda-alt/tran-comanda-alt.component';
+ 
 
 @NgModule({
   declarations: [

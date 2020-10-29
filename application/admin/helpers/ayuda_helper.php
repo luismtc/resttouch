@@ -241,3 +241,20 @@ if ( ! function_exists('enviarCorreo')) {
 		return $obj->exito;
 	}
 }
+
+if ( ! function_exists('Hoy')) {
+	function Hoy($tipo = '') {
+		switch ($tipo) {
+			case 1:
+				return date('d/m/Y');
+			case 2:
+				return date('d/m/Y H:i');
+			case 3:
+				return date('Y-m-d H:i:s');
+			case 4:
+				return date('H:i:s');
+			default:
+				return date('Y-m-d');
+		}
+	}
+}

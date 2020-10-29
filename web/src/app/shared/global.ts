@@ -1,6 +1,6 @@
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo local
+ const urlBase = 'http://localhost/resttouch'; // Desarrollo local
 // const urlBase = `${location.origin}/api`; // Desarrollo
-const urlBase = location.origin; // Producción
+//const urlBase = location.origin; // Producción
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -25,7 +25,9 @@ export const GLOBAL = {
         RT_SEGUNDOS_INACTIVIDAD: 'RT_SEGUNDOS_INACTIVIDAD',
         RT_FACTURA_PROPINA: 'RT_FACTURA_PROPINA',
         RT_CONCEPTO_MAYOR_VENTA: 'RT_CONCEPTO_MAYOR_VENTA',
-        RT_CUENTA_CONTABLE_IVA_VENTA: 'RT_CUENTA_CONTABLE_IVA_VENTA'
+        RT_CUENTA_CONTABLE_IVA_VENTA: 'RT_CUENTA_CONTABLE_IVA_VENTA',
+        RT_INGRESO_NUMERO_PEDIDO: 'RT_INGRESO_NUMERO_PEDIDO',
+        RT_TOTAL_NUMEROS_PEDIDO: 'RT_TOTAL_NUMEROS_PEDIDO'
     }
 };
 

@@ -14,6 +14,7 @@ class Dcomanda_model extends General_Model {
 	public $cocinado = 0;
 	public $presentacion;
 	public $numero;
+	public $fecha;
 
 	public function __construct($id = '')
 	{

@@ -11,3 +11,8 @@ export interface ConfiguracionBotones {
     showPdf?: boolean;
     showExcel?: boolean;
 }
+
+export interface DialogCocina {
+    respuesta: boolean,
+    tiempo: string
+}
