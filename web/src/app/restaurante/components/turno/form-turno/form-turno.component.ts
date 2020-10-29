@@ -17,7 +17,6 @@ import { UsuarioTipo } from '../../../../admin/interfaces/usuario-tipo';
 import { UsuarioTipoService } from '../../../../admin/services/usuario-tipo.service';
 import { Usuario } from '../../../../admin/models/usuario';
 import { UsuarioService } from '../../../../admin/services/usuario.service';
-import {NewLineString} from '../../../../shared/global'
 
 @Component({
   selector: 'app-form-turno',
