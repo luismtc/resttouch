@@ -11,7 +11,11 @@
 	<div class="row">
 		<div class="col-sm-12 text-center">
 			<h2>Reporte de Caja</h2>
-			<h3>--Resumen--</h3>
+			<?php if (isset($detalle)): ?>
+				<h3>--Detalle--</h3>
+			<?php else: ?>
+				<h3>--Resumen--</h3>
+			<?php endif ?>
 			<?php if (isset($turno)): ?>
 				<h4>Turno: <?php echo $turno->descripcion ?> </h4>
 			<?php endif ?>

@@ -48,7 +48,7 @@ class Reporte extends CI_Controller {
 
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($data);
 		
-		if (isset($data['_detalle']) && $data['_detalle'] !== "false") {
+		if (isset($data['_detalle']) && filter_var($data['_detalle'], FILTER_VALIDATE_BOOLEAN)) {
 			$data['detalle'] = 1;
 			unset($data['descuento']);
 			$det = $this->Reporte_model->get_ingresos($data);

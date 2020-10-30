@@ -66,7 +66,9 @@ class Turno extends CI_Controller {
 						$continuar = false;
 						$facturas = [];
 						foreach ($fac as $row) {
-							$facturas[] = "Factura #{$row->factura}";
+							$tmp = new Factura_model($row->factura);
+							$tmp->cargarReceptor();
+							$facturas[] = "Factura cliente: {$tmp->receptor->nombre}";
 						}
 						$datos['facturas'] = $facturas;
 					}
