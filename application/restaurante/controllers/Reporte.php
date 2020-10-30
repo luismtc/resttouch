@@ -35,17 +35,36 @@ class Reporte extends CI_Controller {
 	public function caja()
 	{
 		ini_set("pcre.backtrack_limit", "15000000");
-
+		$ingresos = $this->Catalogo_model->getFormaPago([
+			"descuento" => 0
+		]);
+		$descuentos = $this->Catalogo_model->getFormaPago([
+			"descuento" => 1
+		]);
 		$data = json_decode(file_get_contents('php://input'), true);;
 		$data['sede'] = $this->data->sede;
 		$data["_facturadas"] = true;
 		
 		$data["descuento"] = 0;
 		$data['ingresos'] = $this->Reporte_model->get_ingresos($data);
-		
+		$ingr = array_result($data['ingresos'], "forma_pago");
+		$data['ingreso_sin_fact'] = [];
+		foreach ($ingresos as $row) {
+			if (!in_array($row->forma_pago, $ingr)) {
+				$data['ingreso_sin_fact'][] = $row;
+			}
+		}
+
+		//$data['ingreso_sin_fact'] = $this->Reporte_model->get_ingresos_sin_fac($data);
 		$data["descuento"] = 1;
 		$data['descuentos'] = $this->Reporte_model->get_ingresos($data);
-
+		$desc = array_result($data['ingresos'], "forma_pago");
+		$data['descuento_sin_fact'] = [];
+		foreach ($descuentos as $row) {
+			if (!in_array($row->forma_pago, $desc)) {
+				$data['descuento_sin_fact'][] = $row;
+			}
+		}
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($data);
 		
 		if (isset($data['_detalle']) && filter_var($data['_detalle'], FILTER_VALIDATE_BOOLEAN)) {

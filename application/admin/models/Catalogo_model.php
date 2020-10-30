@@ -20,6 +20,10 @@ class Catalogo_model extends CI_Model {
 			$this->db->where("activo", 1);
 		}
 
+		if (isset($args['descuento'])) {
+			$this->db->where('descuento', $args['descuento']);
+		}
+
 		$qry = $this->db
 		->order_by("descripcion")
 		->get("forma_pago");
