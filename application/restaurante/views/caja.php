@@ -90,6 +90,41 @@
 								<?php endif ?>
 							</tr>
 						<?php endforeach ?>
+						<?php if ($_validar): ?>
+							<?php foreach ($ingreso_sin_fact as $row): ?>
+								<tr>
+									<td style="padding: 5px;"><?php echo $row->descripcion ?></td>
+									<td style="padding: 5px;" class="text-right">
+										<?php echo number_format(0.00, 2) ?>
+									</td>
+									<td style="padding: 5px;" class="text-right">
+										<?php echo number_format(0.00, 2) ?>
+									</td>
+									<?php if ($_validar): ?>
+										<td style="padding: 5px;" class="text-right">
+											<?php 
+												$rec = isset($pagos[$row->forma_pago]) ? $pagos[$row->forma_pago] :0;
+												$recIng += $rec;
+												echo number_format($rec,2) 
+											?>
+										</td>
+										<?php 
+											$clase = "";
+											$ing = 0;
+											$dif = abs($ing -$rec);
+											if ($dif > 0) {
+												$clase = "color:#bd2130";
+											}
+										?>
+										<td style='<?php echo "padding: 5px; {$clase}" ?>' class="text-right">
+											<?php 
+												echo number_format($dif, 2);
+											 ?>
+										</td>
+									<?php endif ?>
+								</tr>
+							<?php endforeach ?>
+						<?php endif ?>
 						<tr>
 							<td style="padding: 5px;" class="text-right">
 								<b>Total Ingresos:</b>
@@ -156,6 +191,38 @@
 								<?php endif ?>
 							</tr>
 						<?php endforeach ?>
+						<?php if ($_validar): ?>
+							<?php foreach ($descuento_sin_fact as $row): ?>
+								<tr>
+									<td style="padding: 5px;"><?php echo $row->descripcion ?></td>
+									<td style="padding: 5px;" class="text-right">
+										<?php echo number_format(0.00,2) ?>
+									</td>
+									<td></td>
+									<?php if ($_validar): ?>
+										<td style="padding: 5px;" class="text-right">
+											<?php 
+												$rec = isset($pagos[$row->forma_pago]) ? $pagos[$row->forma_pago] :0;
+												$recDesc += $rec;
+												echo number_format($rec,2) 
+											?>
+										</td>
+										<?php 
+											$clase = "";
+											$dif = abs(0 - $rec);
+											if ($dif > 0) {
+												$clase = "color:#bd2130";
+											}
+										?>
+										<td style='<?php echo "padding: 5px; {$clase}" ?>' class="text-right">
+											<?php 
+												echo number_format($dif, 2);
+											 ?>
+										</td>
+									<?php endif ?>
+								</tr>
+							<?php endforeach ?>
+						<?php endif ?>
 						<tr>
 							<td style="padding: 5px;" class="text-right"><b>Total Descuentos:</b></td>
 							<td style="padding: 5px;" class="text-right">
