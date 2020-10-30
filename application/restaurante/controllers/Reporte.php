@@ -191,6 +191,9 @@ class Reporte extends CI_Controller {
 			"sede" => $this->data->sede,
 			"grupal" => 1
 		]);
+		echo "<pre>";
+		print_r ($distProp);
+		echo "</pre>";
 
 		$grupos = array_result($distProp, "usuario_tipo");
 		$datos = $_GET;
@@ -202,13 +205,13 @@ class Reporte extends CI_Controller {
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);
 			$propina = suma_field($fac->getPropina(), "propina_monto");
-			$comanda = $fac->getComanda();// obtener usuarios del turno
+			$comanda = $fac->getComanda();
+			$fac->propina = $propina;
 			
 			if ($comanda->getPK() && $fac->propina > 0) {
 				$tmp = $comanda->getTurno();
 				$turno = new Turno_model($tmp->turno);
-				$usuarios = $turno->getUsuarios();
-				$fac->propina = $propina;
+				$usuarios = $turno->getUsuarios();// obtener usuarios del turno
 				foreach ($distProp as $prop) {
 					$tusuario = $this->Tipo_usuario_model->buscar([
 						"usuario_tipo" => $prop->usuario_tipo,
@@ -219,6 +222,9 @@ class Reporte extends CI_Controller {
 						$datos['datos'][$tusuario->usuario_tipo]['facturas'][] = $fac;
 						$datos['datos'][$tusuario->usuario_tipo]['propina'] += $propina * $prop->porcentaje / 100;
 					} else {
+						echo "<pre>";
+						print_r ("hola");
+						echo "</pre>";
 						$datos['datos'][$tusuario->usuario_tipo] = [
 							"descripcion" => $tusuario->descripcion,
 							"facturas" => [$fac],
