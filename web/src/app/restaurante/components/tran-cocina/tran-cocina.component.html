@@ -35,6 +35,11 @@
                         <mat-card-subtitle>Area {{cmdEnProceso.mesa.area.nombre}} - Mesa #{{cmdEnProceso.mesa.numero}}</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
+                        <div class="row">
+                            <div class="col text-center">
+                                <h6 [ngClass]="{'text-danger': comparaFecha(cmdEnProceso)}">{{cmdEnProceso.tiempo_transcurrido | date: 'HH:mm:ss'}}</h6>
+                            </div>
+                        </div>
                         <ng-container *ngFor="let cta of cmdEnProceso.cuentas">
                             <mat-list role="list" *ngIf="cta.productos.length > 0">
                                 <mat-list-item role="listitem" *ngFor="let prod of cta.productos">

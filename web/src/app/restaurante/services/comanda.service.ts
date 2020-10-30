@@ -367,16 +367,18 @@ export class ComandaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  setComandaCocinada(idcomanda: number, numero: number, estatus = 2): Observable<any> {
+  setComandaCocinada(idcomanda: number, datos: any): Observable<any> {
+    
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
-    return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/set_cocinado/${idcomanda}/${numero}/${estatus}`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    };    
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/set_cocinado/${idcomanda}`, 
+      datos, 
+      httpOptions)
+      .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 }
