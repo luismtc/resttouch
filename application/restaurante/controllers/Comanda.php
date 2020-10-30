@@ -383,18 +383,28 @@ class Comanda extends CI_Controller {
 		$this->output->set_output(json_encode($datos));
 	}
 
-	public function set_cocinado($idcomanda, $numero, $cocinado = 2) {
+	public function set_cocinado($idcomanda) {
 		$datos = ['exito' => true];
 		$errores = '';
+		$data = json_decode(file_get_contents('php://input'), true);
+
 		$com = new Comanda_model($idcomanda);
 		$detalle = $com->getDetalle([
-			'cocinado' => ((int)$cocinado === 1 ? 0 : 1),
-			"numero" => $numero
+			'cocinado' => ((int)$data['estatus'] === 1 ? 0 : 1),
+			"numero" => $data['numero']
 		]);		
 
 		foreach($detalle as $det) {
 			$ld = new Dcomanda_model($det->detalle_comanda);
-			$exito = $ld->guardar(['cocinado' => $cocinado]);
+			$args = [
+				"cocinado" => $data['estatus']
+			];
+
+			if (isset($data['tiempo'])) {
+				$args["tiempo_preparacion"] = $data['tiempo'];
+				$args['fecha'] = Hoy(3);
+			}
+			$exito = $ld->guardar($args);
 			if (!$exito) {
 				$datos['exito'] = false;				
 				if ($errores !== '') {

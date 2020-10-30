@@ -68,7 +68,7 @@ class Comanda_model extends General_Model
 		if (empty($id)) {
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
-			$args['fecha'] = Hoy();
+			$args['fecha'] = Hoy(3);
 		} else {
 			$args['fecha'] = $det->fecha;
 			if (isset($args['articulo'])) {
@@ -186,7 +186,15 @@ class Comanda_model extends General_Model
 			$tmp->numero = $args['_numero'];
 		}
 		$det = $this->getDetalle($buscar);
-		
+
+		if (count($det) > 0) {
+			$tmp->tiempo_preparacion = $det[0]->tiempo_preparacion;
+			$tmp->fecha_proceso = $det[0]->fecha;
+		} else {
+			$tmp->tiempo_preparacion = "00:00:00";
+			$tmp->fecha_proceso = "00:00:00";
+		}
+
 		$turno = new Turno_model($tmp->turno);
 
 		$tmpMesero = new Usuario_model($this->mesero);

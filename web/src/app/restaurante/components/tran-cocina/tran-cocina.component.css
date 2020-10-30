@@ -9,3 +9,7 @@
 .bordeLft {
     border-left: solid 1.5px black;    
 }
+
+.text-danger {
+    color: crimson;
+}

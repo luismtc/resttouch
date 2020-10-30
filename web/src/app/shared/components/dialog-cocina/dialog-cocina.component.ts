@@ -35,7 +35,7 @@ export class DialogCocinaComponent implements OnInit {
     this.lblBtnDeny = data.lblBtnDeny;
     this.datos = {
       respuesta: false,
-      tiempo: ""
+      tiempo: "00:00"
     }
   }
 
