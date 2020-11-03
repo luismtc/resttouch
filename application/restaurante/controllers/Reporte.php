@@ -93,7 +93,7 @@ class Reporte extends CI_Controller {
 		}
 
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(),
+			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));
