@@ -20,34 +20,35 @@ export class FormPropinaComponent implements OnInit {
   public usuarios: UsuarioTipo[] = [];
 
   constructor(
-  	private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private propinaSrvc: PropinaService,
     private usuarioSrvc: UsuarioTipoService
   ) { }
 
   ngOnInit() {
+    this.resetPropina();
     this.loadUsuario();
   }
 
   loadUsuario = () => {
     this.usuarioSrvc.get().subscribe(res => {
-      this.usuarios=res;
+      this.usuarios = res;
     });
   }
 
-  resetPropina = () => this.propina = { 
-    propina_distribucion: null, usuario_tipo: null, porcentaje:null, anulado:null, sede:null, grupal:null
-  };
+  resetPropina = () => this.propina = {
+    propina_distribucion: null, usuario_tipo: null, porcentaje: null, anulado: 0, sede: null, grupal: 0
+  }
 
   onSubmit = () => {
     this.propinaSrvc.save(this.propina).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res.exito) {
         this.propinaSavedEv.emit();
         this.resetPropina();
-        this._snackBar.open('Propina agregada...', 'Distribucion de propinas', { duration: 3000 });
+        this.snackBar.open('Propina agregada...', 'Distribucion de propinas', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Distribucion de propinas', { duration: 3000 });        
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Distribucion de propinas', { duration: 3000 });
       }
     });
   }

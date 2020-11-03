@@ -21,7 +21,7 @@ export class ListaPropinaComponent implements OnInit {
   constructor(private propinaSrvc: PropinaService) { }
 
   ngOnInit() {
-  	this.loadPropinas();
+    this.loadPropinas();
   }
 
   applyFilter(filterValue: string) {
