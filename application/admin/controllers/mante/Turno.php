@@ -48,8 +48,7 @@ class Turno extends CI_Controller {
 
 					$fac = $this->Factura_model->filtrar_facturas([
 						"sede" => $data->sede,
-						"_turno" => $turno->getPK(),
-						"_todas" => true
+						"_turno" => $turno->getPK()
 					]);
 
 					if (count($com) > 0) {
