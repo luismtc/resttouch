@@ -279,11 +279,12 @@ class Api extends CI_Controller {
 												foreach($req['discount_codes'] as $desc) {
 													$tipos = ['fixed_amount', 'shipping'];
 													if (in_array(strtolower($desc['type']), $tipos)) {
-														$descuento += ($total * $desc['amount'] /100);
-														$pdescuento += $desc['amount'];
+														$descuento += $desc['amount'];
+														//$pdescuento += $desc['amount'];
 													}													
 												}
 											}
+											$pdescuento = $descuento / $total;
 											//Fin del fix para los descuentos que son por monto fijo. JA 20/08/2020.
 
 											$pagos[] = [

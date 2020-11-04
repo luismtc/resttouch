@@ -254,7 +254,9 @@
 							<td style="padding: 5px;" class="text-right">
 								<?php echo number_format(($desc+$ing),2) ?>
 							</td>
-							<td><?php echo number_format($prop, 2) ?></td>
+							<td style="padding: 5px;" class="text-right">
+								<?php echo number_format($prop, 2) ?>
+							</td>
 							<?php if ($_validar): ?>
 								<td style="padding: 5px;" class="text-right">
 									<?php 

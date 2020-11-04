@@ -58,6 +58,8 @@ class Comanda_model extends General_Model
 
 	public function guardarDetalle(array $args)
 	{
+		//$config = $this->Configuracion_model->buscar();
+		//$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
 		$id = isset($args['detalle_comanda']) ? $args['detalle_comanda'] : '';
 		$det = new Dcomanda_model($id);
 		$args['comanda'] = $this->comanda;
@@ -362,6 +364,7 @@ class Comanda_model extends General_Model
 			->join("factura f", "f.factura = e.factura", "left")
 			->where("a.turno", $args['turno'])
 			->where("f.factura is null")
+			->where("b.cantidad > 0")
 			->group_by("a.comanda")
 			->get()
 			->result();
