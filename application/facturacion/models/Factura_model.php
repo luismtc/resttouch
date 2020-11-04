@@ -34,6 +34,8 @@ class Factura_model extends General_model {
 
 	public function setDetalle($args, $id="")
 	{
+		//$config = $this->Configuracion_model->buscar();
+		//$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
 		$det = new Dfactura_model($id);
 		$args['factura'] = $this->factura;
 		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
@@ -824,20 +826,31 @@ class Factura_model extends General_model {
 	public function filtrar_facturas($args = [])
 	{
 		if (!isset($args['_todas'])) {
-			$this->db->where('fel_uuid IS NULL AND fel_uuid_anulacion IS NULL');
+			$this->db->where('a.fel_uuid IS NULL AND fel_uuid_anulacion IS NULL');
 		}
 
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if (substr($key, 0, 1) != "_") {
-					$this->db->where($key, $row);
+					$this->db->where("a.{$key}", $row);
 				}
 			}	
 		}
 
-		$this->db->order_by('fecha_factura DESC');
+		if (isset($args['_turno'])) {
+			$this->db
+				 ->join("detalle_factura b", "b.factura = a.factura")
+				 ->join("detalle_factura_detalle_cuenta c", "b.detalle_factura = c.detalle_factura")
+				 ->join("detalle_cuenta d", "d.detalle_cuenta = c.detalle_cuenta")
+				 ->join("detalle_comanda e", "d.detalle_comanda = e.detalle_comanda")
+				 ->join("comanda f", "e.comanda = f.comanda")
+				 ->where("f.turno", $args['_turno'])
+				 ->group_by("a.factura");
+		}
 
-		$tmp = $this->db->get('factura');
+		$this->db->order_by('a.fecha_factura DESC');
+
+		$tmp = $this->db->get('factura a');
 
 		if(isset($args['_uno'])) {
 			return $tmp->row();

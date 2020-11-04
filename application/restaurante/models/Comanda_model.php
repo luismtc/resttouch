@@ -365,6 +365,8 @@ class Comanda_model extends General_Model
 			->where("a.turno", $args['turno'])
 			->where("f.factura is null")
 			->where("b.cantidad > 0")
+			->where("b.total > 0")
+			->where("b.precio > 0")
 			->group_by("a.comanda")
 			->get()
 			->result();
