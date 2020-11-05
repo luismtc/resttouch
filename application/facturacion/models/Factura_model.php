@@ -34,8 +34,8 @@ class Factura_model extends General_model {
 
 	public function setDetalle($args, $id="")
 	{
-		//$config = $this->Configuracion_model->buscar();
-		//$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
+		$config = $this->Configuracion_model->buscar();
+		$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
 		$det = new Dfactura_model($id);
 		$args['factura'] = $this->factura;
 		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
@@ -61,7 +61,7 @@ class Factura_model extends General_model {
 		$pres = $art->getPresentacion();
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
-		if (isset($args['detalle_cuenta']) ||empty($menu) || !$validar || $art->existencias >= $cantidad * $pres->cantidad || $art->mostrar_pos == 0) {
+		if ($vnegativo || isset($args['detalle_cuenta']) ||empty($menu) || !$validar || $art->existencias >= $cantidad * $pres->cantidad || $art->mostrar_pos == 0) {
 			$result = $det->guardar($args);
 
 			if($result) {

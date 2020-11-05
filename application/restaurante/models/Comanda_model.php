@@ -58,8 +58,8 @@ class Comanda_model extends General_Model
 
 	public function guardarDetalle(array $args)
 	{
-		//$config = $this->Configuracion_model->buscar();
-		//$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
+		$config = $this->Configuracion_model->buscar();
+		$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
 		$id = isset($args['detalle_comanda']) ? $args['detalle_comanda'] : '';
 		$det = new Dcomanda_model($id);
 		$args['comanda'] = $this->comanda;
@@ -92,7 +92,7 @@ class Comanda_model extends General_Model
 		$cantPres = ($pres) ? $pres->cantidad : 0;
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
-		if (empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
+		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
 			$result = $det->guardar($args);
 			$receta = $art->getReceta();
 

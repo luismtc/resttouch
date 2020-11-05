@@ -45,11 +45,81 @@ class Egreso_model extends General_Model {
 					->row();
 	}
 
+	public function getDetalleDatos($item)
+	{
+		$datos = [
+			"cantidad" => $item->cantidad,
+			"articulo" => "",
+			"precio_unitario" => $item->precio_unitario,
+			"precio_total" => $item->cantidad * $item->precio_unitario,
+			"presentacion" => "" 
+		];
+
+		$art = $this->Articulo_model->buscar([
+			"codigo" => $item->articulo,
+			"_uno" => true
+		]);
+
+		if ($art) {
+
+			$datos['articulo'] = $art->articulo;
+		}
+
+		return $datos;
+	}
+
+	public function guardarDetalleApi($item)
+	{
+		$art = new Articulo_model();
+		$tmpArt = $art->buscar([
+			"codigo" => $item->articulo,
+			"_uno" => true
+		]);
+
+		$particion = (isset($item->particion)) ? $item->particion : 1;
+
+
+		if ($tmpArt) {
+			$art = new Articulo_model($tmpArt->articulo);
+			$receta = $art->getReceta();
+			if (count($receta) > 0) {
+				foreach ($receta as $rec) {
+					$tmp = new Presentacion_model();
+					$pres = $tmp->buscar([
+						"medida" => $rec->medida,
+						"cantidad" => 1,
+						"_uno" => true
+					]);
+					$datos = [
+						"cantidad" => $rec->cantidad/$particion,
+						"articulo" => $rec->articulo->articulo,
+						"precio_unitario" => $rec->precio_unitario*1,
+						"precio_total" => $rec->cantidad * $rec->precio_unitario/$particion,
+						"presentacion" => $pres->presentacion
+					];
+					$this->setDetalle($datos);
+				}
+			} else {
+				$datos = [
+					"cantidad" => $item->cantidad/$particion,
+					"articulo" => $art->getPK(),
+					"precio_unitario" => $item->precio_unitario*1,
+					"precio_total" => $item->cantidad * $item->precio_unitario/$particion,
+					"presentacion" => $art->presentacion
+				];
+				$this->setDetalle($datos);
+			}
+		}
+	}
+
 	public function setDetalle(Array $args, $id = "")
 	{
-		$this->load->model('Presentacion_model');
+		$tmp = new Configuracion_model();
+		$config = $tmp->buscar();
+		$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
 		$det = new EDetalle_Model($id);
-		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+		$tmp = new Catalogo_model();
+		$menu = $tmp->getModulo(["modulo" => 4, "_uno" => true]);
 		$validar = true;
 		$cantidad = 0;
 		$articulo = null;
@@ -69,14 +139,15 @@ class Egreso_model extends General_Model {
 			}
 		}
 		$art = new Articulo_model($articulo);
-		$pres = $this->Presentacion_model->buscar([
+		$tmp = new Presentacion_model();
+		$pres = $tmp->buscar([
 			"presentacion" => $args['presentacion'],
 			"_uno" => true
 		]);
 
 		$art->actualizarExistencia();
 		$oldart = new Articulo_model($det->articulo);
-		if (empty($menu) || (!$validar || $art->existencias >= $cantidad * $pres->cantidad)) {
+		if (empty($menu) || (!$validar || $art->existencias >= $cantidad * $pres->cantidad) ||$vnegativo) {
 			$args['egreso'] = $this->egreso;
 			$result = $det->guardar($args);
 

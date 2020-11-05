@@ -15,6 +15,16 @@ if( ! function_exists('suma_field')){
 	}
 }
 
+if( ! function_exists('url_base')){
+	function url_base($url) {
+		if (in_array($_SERVER["HTTP_HOST"], ["localhost", "127.0.0.1"])) {
+			return base_url("resttouch/{$url}");
+		}
+		
+		return base_url($url);
+	}
+}
+
 if ( ! function_exists("array_result")) {
 	function array_result($result, $campo)
 	{

@@ -73,7 +73,8 @@ class Articulo_model extends General_model {
 			$args['receta'] = $this->articulo;
 		}
 		$args['anulado'] = 0;
-		$det = $this->Receta_model->buscar($args);
+		$rec = new Receta_model();
+		$det = $rec->buscar($args);
 		$datos = [] ;
 		if(is_array($det)) {
 			foreach ($det as $row) {

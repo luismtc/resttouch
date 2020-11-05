@@ -4,13 +4,33 @@ if (!defined( 'BASEPATH')) exit('No direct script access allowed');
 
 class Inicio
 {
+	private $libres;
+
+	public function __construct()
+	{
+		$this->libres = [
+			'/api/set_egreso',
+			'/api/',
+			'/api/index',
+			'/api'
+		];
+		
+	}
+
     public function verificarSesion()
     {
     	$this->ci =& get_instance();
     	$this->ci->load->helper(['jwt', 'authorization']);
+    	$continuar = true;
+
+    	foreach ($this->libres as $row) {
+    		if (strpos($_SERVER['PATH_INFO'], $row) !== false) {
+    			$continuar = false;
+    			break;
+    		}
+    	}
     	$this->ci->load->model('Catalogo_model');
-    	$this->libres = ['/resttouch/index.php/usuario/login.json'];
-        if(!in_array($_SERVER['REQUEST_URI'], $this->libres)) {
+        if($continuar) {
         	$headers = $this->ci->input->request_headers();
         	$response = ['mensaje' => '¡Acceso no autorizado!', 'valido' => false];
         	$continuar = true;

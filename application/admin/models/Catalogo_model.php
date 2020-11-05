@@ -52,6 +52,10 @@ class Catalogo_model extends CI_Model {
 			$this->db->where("tipo_movimiento", $args["tipo_movimiento"]);
 		}
 
+		if (isset($args['egreso'])) {
+			$this->db->where('egreso', $args['egreso']);
+		}
+
 		$qry = $this->db
 		->order_by("descripcion")
 		->get("tipo_movimiento");
@@ -433,7 +437,7 @@ class Catalogo_model extends CI_Model {
 						db_database")
 					->from('cliente_corporacion')
 					->get();
-
+//return $this->getCatalogo($tmp, $args);
 		if($tmp && $tmp->num_rows() > 0) {
 			return $tmp->row();
 		} 
