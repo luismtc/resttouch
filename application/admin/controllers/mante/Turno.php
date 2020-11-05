@@ -58,7 +58,7 @@ class Turno extends CI_Controller {
 							$texto = "Comanda #{$comanda->comanda}";
 							$mesa = $comanda->getMesas();
 							if ($mesa) {
-								$texto.=" Mesa#{$mesa->numero}";
+								$texto.=" Mesa#{$mesa->numero}, Area {$mesa->narea}";
 							}
 							$comandas[] = $texto;
 						}

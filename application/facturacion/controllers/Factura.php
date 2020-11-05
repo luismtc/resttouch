@@ -186,7 +186,7 @@ class Factura extends CI_Controller {
 
 					$comanda = $fac->getComanda();
 					$fac->origen_datos = ($comanda) ? $comanda->getOrigenDatos() : null;
-
+					$fac->empresa->direccion = !empty($fac->sedeFactura->direccion) ? $fac->sedeFactura->direccion : $fac->empresa->direccion;
 					$datos['exito'] = true;
 					$datos['factura'] = $fac;
 					$datos['mensaje'] = "Datos actualizados con exito";	
@@ -307,7 +307,8 @@ class Factura extends CI_Controller {
 		$comanda = $fac->getComanda();
 
 		$fac->origen_datos = ($comanda) ? $comanda->getOrigenDatos() : null;
-
+		$fac->empresa->direccion = !empty($fac->sedeFactura->direccion) ? $fac->sedeFactura->direccion : $fac->empresa->direccion;
+		
 		$datos['factura'] = $fac;
 		$this->output
 		->set_content_type("application/json")

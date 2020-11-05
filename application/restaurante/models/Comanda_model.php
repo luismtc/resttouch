@@ -39,8 +39,11 @@ class Comanda_model extends General_Model
 			b.posx,
 			b.posy,
 			b.tamanio,
-			b.estatus, b.esmostrador, b.impresora")
+			b.estatus, b.esmostrador, 
+			b.impresora,
+			c.nombre as narea")
 			->join("mesa b", "a.mesa = b.mesa")
+			->join("area c", "b.area = c.area")
 			->where("a.comanda", $this->comanda)
 			->get("comanda_has_mesa a")
 			->row();
