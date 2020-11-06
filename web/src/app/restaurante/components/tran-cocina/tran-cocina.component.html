@@ -11,10 +11,21 @@
                     <mat-card-content>
                         <ng-container *ngFor="let cta of cmd.cuentas">
                             <mat-list role="list" *ngIf="cta.productos.length > 0">
-                                <mat-list-item role="listitem" *ngFor="let prod of cta.productos">
-                                    {{prod.cantidad}} {{prod.articulo.descripcion}}
-                                    <mat-divider [inset]="true"></mat-divider>
-                                </mat-list-item>                        
+                                <div *ngFor="let prod of cta.productos">
+                                    <mat-list-item role="listitem" >
+                                        <div style="word-wrap: break-word;" mat-line>
+                                            <p style="white-space: break-spaces;">
+                                                {{prod.cantidad}} {{prod.articulo.descripcion}}
+                                            </p>
+                                        </div>
+                                        
+                                    </mat-list-item>  
+                                    <div mat-subheader>
+                                        Notas: <br>
+                                        {{prod.notas}}
+                                    </div>                      
+                                    <mat-divider></mat-divider>
+                                </div>
                             </mat-list>
                         </ng-container>
                     </mat-card-content>
@@ -42,10 +53,21 @@
                         </div>
                         <ng-container *ngFor="let cta of cmdEnProceso.cuentas">
                             <mat-list role="list" *ngIf="cta.productos.length > 0">
-                                <mat-list-item role="listitem" *ngFor="let prod of cta.productos">
-                                    {{prod.cantidad}} {{prod.articulo.descripcion}}
-                                    <mat-divider [inset]="true"></mat-divider>
-                                </mat-list-item>                        
+                                <div *ngFor="let prod of cta.productos">
+                                    <mat-list-item role="listitem" >
+                                        <div style="word-wrap: break-word;" mat-line>
+                                            <p style="white-space: break-spaces;">
+                                                {{prod.cantidad}} {{prod.articulo.descripcion}}
+                                            </p>
+                                        </div>
+                                        
+                                    </mat-list-item>  
+                                    <div mat-subheader>
+                                        Notas: <br>
+                                        {{prod.notas}}
+                                    </div>                      
+                                    <mat-divider></mat-divider>
+                                </div>                        
                             </mat-list>
                         </ng-container>
                     </mat-card-content>
