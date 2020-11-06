@@ -59,71 +59,70 @@ export class TranCocinaComponent implements OnInit {
   loadComandasCocina = () => this.comandaSrvc.getComandasCocina().subscribe(res => {
     this.lstComandasCocina = res.pendientes;
     this.lstComandasCocinaEnProceso = res.enproceso;
-    this.setTiempo()
+    this.setTiempo();
   })
 
   setTiempo = () => {
-    if(this.lstComandasCocinaEnProceso){
+    if (this.lstComandasCocinaEnProceso) {
       for (let i = 0; i < this.lstComandasCocinaEnProceso.length; i++) {
         const comanda = this.lstComandasCocinaEnProceso[i];
-        var msecPerMinute = 1000 * 60;
-        var msecPerHour = msecPerMinute * 60;
-        var msecPerDay = msecPerHour * 24;
-  
+        const msecPerMinute = 1000 * 60;
+        const msecPerHour = msecPerMinute * 60;
+        const msecPerDay = msecPerHour * 24;
+
         // asignar la fecha en milisegundos
-        var date = new Date(comanda.fecha_proceso);
+        let date = new Date(comanda.fecha_proceso);
         this.lstComandasCocinaEnProceso[i].inicio_proceso = date;
         comanda.inicio = date;
-        var dateMsec = date.getTime();
-  
+        const dateMsec = date.getTime();
+
         // asignar la fecha el 1 de enero del a la media noche
         date = new Date();
-  
+
         // Obtener la diferencia en milisegundos
-        var interval = date.getTime()-dateMsec;
-  
+        let interval = date.getTime() - dateMsec;
+
         // Calcular cuentos días contiene el intervalo. Substraer cuantos días
-        //tiene el intervalo para determinar el sobrante
-        var days = Math.floor(interval / msecPerDay );
-        interval = interval - (days * msecPerDay );
-  
+        // tiene el intervalo para determinar el sobrante
+        const days = Math.floor(interval / msecPerDay);
+        interval = interval - (days * msecPerDay);
+
         // Calcular las horas , minutos y segundos
-        var hours = Math.floor(interval / msecPerHour );
-        interval = interval - (hours * msecPerHour );
-  
-        var minutes = Math.floor(interval / msecPerMinute );
-        interval = interval - (minutes * msecPerMinute );
-  
-        var seconds = Math.floor(interval / 1000 );
-        var tiempo = new Date();
-        
-        tiempo.setHours(hours)
-        tiempo.setMinutes(minutes)
-        tiempo.setSeconds(seconds)
-  
-        this.lstComandasCocinaEnProceso[i].tiempo_transcurrido = tiempo
+        const hours = Math.floor(interval / msecPerHour);
+        interval = interval - (hours * msecPerHour);
+
+        const minutes = Math.floor(interval / msecPerMinute);
+        interval = interval - (minutes * msecPerMinute);
+
+        const seconds = Math.floor(interval / 1000);
+        const tiempo = new Date();
+
+        tiempo.setHours(hours);
+        tiempo.setMinutes(minutes);
+        tiempo.setSeconds(seconds);
+
+        this.lstComandasCocinaEnProceso[i].tiempo_transcurrido = tiempo;
         if (comanda.tiempo_preparacion) {
-          var tiempo_preparacion = comanda.tiempo_preparacion.split(":")
-          comanda.inicio.setHours(comanda.inicio.getHours()+ (+tiempo_preparacion[0])) 
-          comanda.inicio.setMinutes(comanda.inicio.getMinutes()+(+tiempo_preparacion[1]))
-          this.lstComandasCocinaEnProceso[i].fin_proceso = comanda.inicio
+          // tslint:disable-next-line: variable-name
+          const tiempo_preparacion = comanda.tiempo_preparacion.split(':');
+          comanda.inicio.setHours(comanda.inicio.getHours() + (+tiempo_preparacion[0]));
+          comanda.inicio.setMinutes(comanda.inicio.getMinutes() + (+tiempo_preparacion[1]));
+          this.lstComandasCocinaEnProceso[i].fin_proceso = comanda.inicio;
         } else {
-          this.lstComandasCocinaEnProceso[i].fin_proceso = date
-        }     
+          this.lstComandasCocinaEnProceso[i].fin_proceso = date;
+        }
       }
     }
-    
+
   }
 
-  comparaFecha = (cmd:any) => {
-    var date = new Date()
-    //console.log(date)
-    //console.log(cmd.fin_proceso)
+  comparaFecha = (cmd: any) => {
+    const date = new Date();
     return date > cmd.fin_proceso;
   }
 
   setCocinado = (cmd: any, estatus = 2) => {
-    let res: DialogCocina = {respuesta: false, tiempo: ""};
+    const res: DialogCocina = { respuesta: false, tiempo: '' };
     const confirmRef = this.dialog.open(DialogCocinaComponent, {
       maxWidth: '400px',
       data: new ConfirmDialogModel(
@@ -135,19 +134,20 @@ export class TranCocinaComponent implements OnInit {
     });
 
     confirmRef.afterClosed().subscribe((conf: DialogCocina) => {
-      
+
       if (conf && conf.respuesta && conf.tiempo) {
-        console.log(conf)
-        let datos: any = {
+        // console.log(conf);
+        const datos: any = {
           numero: +cmd.numero,
           estatus: estatus,
           tiempo: conf.tiempo
-        }
-        this.comandaSrvc.setComandaCocinada(+cmd.comanda, datos).subscribe((res: any) => {
-          if (res.exito) {
-            this.snackBar.open(res.mensaje, 'Cocina', { duration: 3000 });
+        };
+
+        this.comandaSrvc.setComandaCocinada(+cmd.comanda, datos).subscribe((respuesta: any) => {
+          if (respuesta.exito) {
+            this.snackBar.open(respuesta.mensaje, 'Cocina', { duration: 3000 });
           } else {
-            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cocina', { duration: 7000 });
+            this.snackBar.open(`ERROR: ${respuesta.mensaje}`, 'Cocina', { duration: 7000 });
           }
           this.loadComandasCocina();
         });
