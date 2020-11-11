@@ -86,7 +86,7 @@ class Egreso_model extends General_Model {
 				foreach ($receta as $rec) {
 					$tmp = new Presentacion_model();
 					$pres = $tmp->buscar([
-						"medida" => $rec->medida,
+						"medida" => $rec->medida->medida,
 						"cantidad" => 1,
 						"_uno" => true
 					]);
