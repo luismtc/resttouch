@@ -65,8 +65,6 @@ class Registro
 			"llave" => $llave
 		]);
 
-		return $datosDb;
-
 		if ($datosDb && count($datoEmpresa) > 1) {
 			$conn = [
 	            'host' => $datosDb->db_hostname,

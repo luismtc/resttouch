@@ -434,15 +434,15 @@ class Catalogo_model extends CI_Model {
 						db_hostname,
 						db_username,
 						db_password,
-						db_database");
-					//->from('cliente_corporacion')
-					//->get();
+						db_database")
+					->from('cliente_corporacion')
+					->get();
 //return $this->getCatalogo($tmp, $args);
-		/*if($tmp && $tmp->num_rows() > 0) {
+		if($tmp && $tmp->num_rows() > 0) {
 			return $tmp->row();
-		} */
+		} 
 
-		return $this->db->get_compiled_select("cliente_corporacion");
+		return false;
 	}
 
 	public function getJerarquia($args=[])
