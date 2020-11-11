@@ -17,10 +17,9 @@
                                             <p style="white-space: break-spaces;">
                                                 {{prod.cantidad}} {{prod.articulo.descripcion}}
                                             </p>
-                                        </div>
-                                        
+                                        </div>                                        
                                     </mat-list-item>  
-                                    <div mat-subheader>
+                                    <div mat-subheader *ngIf="!!prod.notas && prod.notas.length > 0">
                                         Notas: <br>
                                         {{prod.notas}}
                                     </div>                      
@@ -59,10 +58,9 @@
                                             <p style="white-space: break-spaces;">
                                                 {{prod.cantidad}} {{prod.articulo.descripcion}}
                                             </p>
-                                        </div>
-                                        
+                                        </div>                                        
                                     </mat-list-item>  
-                                    <div mat-subheader>
+                                    <div mat-subheader *ngIf="!!prod.notas && prod.notas.length > 0">
                                         Notas: <br>
                                         {{prod.notas}}
                                     </div>                      
