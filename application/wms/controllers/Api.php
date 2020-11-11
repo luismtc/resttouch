@@ -43,14 +43,14 @@ class Api extends CI_Controller {
 	public function set_egreso($egreso, $key = "")
 	{	
 		$ci =& get_instance();
-		$res = ["exito" => 0, "mensaje" => "Error"];
+		$res = ["exito" => 0, "mensaje" => $key];
 		$req = simplexml_load_string($egreso);
 		if (!empty($key)) {
 			$ci->load->library('Registro');
 			$registro = new Registro($egreso);
 			$registro->setCatalogo(new Catalogo_model());
-
-			if ($registro->setDB($key)) {
+			$res['mensaje'] = $registro->setDB($key);
+			/*if ($registro->setDB($key)) {
 				$egr = new Egreso_model();
 				if (empty($id) || $egr->estatus_movimiento == 1) {
 					
@@ -78,7 +78,7 @@ class Api extends CI_Controller {
 				}
 			} else {
 				$res['mensaje'] = "Llave invalida";
-			}
+			}*/
 		} else {
 			$res['mensaje'] = "Hacen falta datos obligatorios para poder continuar, apikey";
 		}

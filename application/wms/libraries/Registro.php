@@ -65,8 +65,6 @@ class Registro
 			"llave" => $llave
 		]);
 
-
-
 		if ($datosDb && count($datoEmpresa) > 1) {
 			$conn = [
 	            'host' => $datosDb->db_hostname,
@@ -84,10 +82,14 @@ class Registro
 
 			if ($this->sede) {
 				return true;
+			} else {
+				return "sin sede";
 			}
+		} else {
+			return "sin base";
 		}
 
-		return false;
+		return (array) $datosDb;
         
     }
 }
