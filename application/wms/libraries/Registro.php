@@ -57,12 +57,17 @@ class Registro
     public function setDB($key)
     {
     	$ci =& get_instance();
-    	
+    	$tmp = explode("-", $key);
+    	$llave = substr($key, 0, 36);
+    	$datoEmpresa = explode("-", substr($key, 38));
+
 		$datosDb = $this->cat->getCredenciales([
-			"llave" => $key
+			"llave" => $llave
 		]);
 
-		if ($datosDb) {
+
+
+		if ($datosDb && count($datoEmpresa) > 1) {
 			$conn = [
 	            'host' => $datosDb->db_hostname,
 	            'user' => $datosDb->db_username,
@@ -73,7 +78,7 @@ class Registro
 			$ci->db = $ci->load->database($db, true);
 
 			$this->sede = $this->cat->getSede([
-				"admin_llave" => $key,
+				"sede" => $datoEmpresa[1],
 				"_uno" => true
 			]);	
 
