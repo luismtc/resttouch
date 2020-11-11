@@ -65,7 +65,6 @@ class Registro
 			"llave" => $llave
 		]);
 
-		return implode("-", $datoEmpresa);
 
 		if ($datosDb && count($datoEmpresa) > 1) {
 			$conn = [
@@ -84,14 +83,10 @@ class Registro
 
 			if ($this->sede) {
 				return true;
-			} else {
-				return "sin sede";
 			}
-		} else {
-			return "sin base";
 		}
 
-		return (array) $datosDb;
+		return false;
         
     }
 }
