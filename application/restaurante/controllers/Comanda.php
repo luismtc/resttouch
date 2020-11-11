@@ -106,7 +106,18 @@ class Comanda extends CI_Controller {
 										if (isset($row['cuenta'])) {
 											unset($row['cuenta']);
 										}
-										$cuenta->guardarCuenta($row);	
+										$cuenta->guardarCuenta($row);
+										if (isset($row['productos'])) {
+											foreach ($row['productos'] as $prod) {
+												if (isset($prod['detalle_comanda']) && !empty($prod['detalle_comanda'])) {
+													$det = new Dcomanda_model($prod['detalle_comanda']);
+													$det->guardar([
+														"notas" => $prod['notas']
+													]);
+												}
+												
+											}
+										}
 									}							
 								}
 								$datos['exito'] = true;
