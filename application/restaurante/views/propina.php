@@ -7,6 +7,18 @@
 </head>
 <body>
 	<?php $totalprop = 0; ?>
+	<div class="row">
+		<div class="col-sm-12">
+			<table style="width: 100%">
+				<tr>
+					<td><?php echo $empresa->nombre ?></td>
+				</tr>
+				<tr>
+					<td><?php echo $sede->nombre ?></td>
+				</tr>
+			</table>
+		</div>
+	</div>
 	<table class="tabla-contenido">
 		<tr>
 			<td colspan="6" class="text-center"><h1>Distribucion de propinas</h1></td>

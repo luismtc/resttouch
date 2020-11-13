@@ -21,7 +21,8 @@ class Reporte extends CI_Controller {
 			'Dcomanda_model',
 			'Cuenta_model',
 			'Usuario_model',
-			'TurnoTipo_model'
+			'TurnoTipo_model',
+			'Catalogo_model'
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -92,6 +93,22 @@ class Reporte extends CI_Controller {
 			$data["turno"] = new TurnoTipo_model($data["turno_tipo"]);
 		}
 
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $this->data->sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$data['empresa'] = $emp;
+				$data['sede'] = $sede;
+			}
+		}
+
 		$mpdf = new \Mpdf\Mpdf([
 			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
@@ -125,6 +142,22 @@ class Reporte extends CI_Controller {
 			$data['facturas'][] = $fac;
 		}
 
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $this->data->sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$data['empresa'] = $emp;
+				$data['sede'] = $sede;
+			}
+		}
+
 		//$mpdf->AddPage();
 		$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
 		$mpdf->Output("Detalle de Facturas.pdf", "D");	
@@ -147,6 +180,23 @@ class Reporte extends CI_Controller {
 		}
 
 		$data['comanda'] = $datos;
+
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $this->data->sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$data['empresa'] = $emp;
+				$data['sede'] = $sede;
+			}
+		}
+
 			
 		$mpdf->WriteHTML($this->load->view('comanda', $data, true));
 		$mpdf->Output("Detalle de Comandas.pdf", "D");	
@@ -210,9 +260,6 @@ class Reporte extends CI_Controller {
 			"sede" => $this->data->sede,
 			"grupal" => 1
 		]);
-		echo "<pre>";
-		print_r ($distProp);
-		echo "</pre>";
 
 		$grupos = array_result($distProp, "usuario_tipo");
 		$datos = $_GET;
@@ -302,9 +349,23 @@ class Reporte extends CI_Controller {
 							}
 						}
 					}
-					
 				}
+			}
+		}
 
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $this->data->sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$datos['empresa'] = $emp;
+				$datos['sede'] = $sede;
 			}
 		}
 

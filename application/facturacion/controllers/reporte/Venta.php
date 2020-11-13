@@ -85,7 +85,7 @@ class Venta extends CI_Controller {
 		$req['sede'] = $this->data->sede;
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
-
+		
 		$datos = [];
 		$detalle = [];
 		foreach ($facts as $row) {
@@ -127,7 +127,25 @@ class Venta extends CI_Controller {
 			$datos[] = $row;
 		}
 		
-		$data = ["detalle" => $datos];
+		$data = [
+			"detalle" => $datos
+		];
+
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $this->data->sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$data['empresa'] = $emp;
+				$data['nsede'] = $sede;
+			}
+		}
 
 		if ($this->input->get('turno_tipo')) {
 			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
@@ -220,6 +238,22 @@ class Venta extends CI_Controller {
 		
 		$data = ["detalle" => $datos];
 
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $this->data->sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$data['empresa'] = $emp;
+				$data['nsede'] = $sede;
+			}
+		}
+
 		if ($this->input->get('turno_tipo')) {
 			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
 		}
@@ -258,6 +292,22 @@ class Venta extends CI_Controller {
 					]
 				];
 				$datos['propina'][] = $dato;
+			}
+		}
+
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $this->data->sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$datos['empresa'] = $emp;
+				$datos['sede'] = $sede;
 			}
 		}
 		

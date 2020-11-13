@@ -9,6 +9,18 @@
 
 <body lang="es-GT" dir="ltr">
 	<div class="row">
+		<div class="col-sm-12">
+			<table style="width: 100%;">
+				<tr>
+					<td><?php echo $empresa->nombre ?></td>
+				</tr>
+				<tr>
+					<td><?php echo $sede->nombre ?></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-sm-12 text-center">
 			<h3>Reporte de propinas</h3>
 		</div>
