@@ -79,13 +79,14 @@ class Turno extends CI_Controller {
 					if (!$continuar) {
 						$datos['mensaje'] = "Posee documentos pendientes";
 						$datos['pendientes'] = true;
+						$continuar = true;
 					}
 				}
 			}
 
 			if($continuar) {
 				$req['sede'] = $data->sede;
-				$datos['exito'] = $turno->guardar($req);		
+				$turno->guardar($req);		
 				if($datos['exito']) {
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['turno'] = $turno;
