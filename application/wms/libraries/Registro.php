@@ -59,7 +59,7 @@ class Registro
     	$ci =& get_instance();
     	$tmp = explode("-", $key);
     	$llave = substr($key, 0, 36);
-    	$datoEmpresa = explode("-", substr($key, 38));
+    	$datoEmpresa = explode("-", substr($key, 37));
 
 		$datosDb = $this->cat->getCredenciales([
 			"llave" => $llave

@@ -4,7 +4,7 @@
   <div mat-dialog-content>
     <p>{{message}}</p>
   </div>
-  <form>
+  <form *ngIf="data.showTimer">
       <mat-form-field class="fullWidth">
           <input type="time" matInput placeholder="Tiempo (HH:mm)" [(ngModel)] ="datos.tiempo" [ngModelOptions]="{standalone: true}">
       </mat-form-field>

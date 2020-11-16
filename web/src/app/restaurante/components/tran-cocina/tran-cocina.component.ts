@@ -129,7 +129,8 @@ export class TranCocinaComponent implements OnInit {
         'Cocina',
         `¿Seguro de marcar como '${+estatus === 1 ? 'vista' : 'cocinada'}' la comanda #${cmd.comanda}?`,
         'Sí', 'No',
-        res
+        res,
+        +estatus === 1 ? true : false
       )
     });
 

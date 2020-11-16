@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import {DialogCocina} from '../../interfaces/config-reportes'
+import { DialogCocina } from '../../interfaces/config-reportes';
 
 export class ConfirmDialogModel {
   constructor(
@@ -8,7 +8,8 @@ export class ConfirmDialogModel {
     public message: string,
     public lblBtnConfirm: string,
     public lblBtnDeny: string,
-    public datos: DialogCocina
+    public datos: DialogCocina,
+    public showTimer?: boolean
   ) { }
 }
 
@@ -35,8 +36,8 @@ export class DialogCocinaComponent implements OnInit {
     this.lblBtnDeny = data.lblBtnDeny;
     this.datos = {
       respuesta: false,
-      tiempo: "00:00"
-    }
+      tiempo: '00:00'
+    };
   }
 
   ngOnInit() {
