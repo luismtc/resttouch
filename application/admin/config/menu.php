@@ -60,6 +60,14 @@ $config['menu'] = [
 					1 => [
 						'nombre' => 'Tablero',
 						'link' => '/admin/tablero'
+					],
+					2 => [
+						'nombre' => 'Ventas por categoría',
+						'link' => '/restaurante/rptvtascat'
+					],
+					3 => [
+						'nombre' => 'Caja',
+						'link' => '/restaurante/rptcaja'
 					]
 				]
 			]
