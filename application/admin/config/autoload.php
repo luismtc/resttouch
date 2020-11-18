@@ -132,4 +132,10 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('General_model', 'Empresa_model', 'Sede_model', 'Webhook_model');
+$autoload['model'] = array(
+	'General_model', 
+	'Empresa_model', 
+	'Sede_model', 
+	'Webhook_model',
+	'Configuracion_model'
+);
