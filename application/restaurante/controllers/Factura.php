@@ -18,7 +18,8 @@ class Factura extends CI_Controller {
 			'Articulo_model',
 			'Cliente_model',
 			'Receta_model',
-			'Configuracion_model'
+			'Configuracion_model',
+			'Webhook_model'
 		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
