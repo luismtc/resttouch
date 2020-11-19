@@ -4,9 +4,9 @@
             <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
         </mat-form-field>
         <mat-nav-list>
-            <mat-list-item *ngFor="let element of listaFpagoPaged" (click)="getFpago(element)">
-                <mat-icon mat-list-icon>line_weight</mat-icon>
-                <h5 mat-line>{{element.descripcion}}</h5>
+            <mat-list-item *ngFor="let element of lstImpuestosEspecialesPaged" (click)="getImpuestoEspecial(element)">
+                <mat-icon mat-list-icon>request_quote</mat-icon>
+                <h5 mat-line>{{element.descripcion}} ({{element.porcentaje | number:'1.2-2'}}%)</h5>
             </mat-list-item>
         </mat-nav-list>
         <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageChange($event)" showFirstLastButtons>

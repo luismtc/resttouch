@@ -50,6 +50,7 @@ export class ListaPagoComponent implements OnInit {
             fp.pedirdocumento = +fp.pedirdocumento;
             fp.adjuntararchivo = +fp.adjuntararchivo;
             fp.pedirautorizacion = +fp.pedirautorizacion;
+            fp.sinfactura = +fp.sinfactura;
             fp.activo = +fp.activo;
             return fp;
           });

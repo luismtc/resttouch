@@ -1,7 +1,7 @@
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo local
+const urlBase = 'http://localhost/resttouch'; // Desarrollo local
 // const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo local 2
 // const urlBase = `${location.origin}/api`; // Desarrollo - Producción C807
-const urlBase = location.origin; // Producción GCP
+// const urlBase = location.origin; // Producción GCP
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -30,7 +30,8 @@ export const GLOBAL = {
         RT_INGRESO_NUMERO_PEDIDO: 'RT_INGRESO_NUMERO_PEDIDO',
         RT_TOTAL_NUMEROS_PEDIDO: 'RT_TOTAL_NUMEROS_PEDIDO',
         RT_VENDE_NEGATIVO: 'RT_VENDE_NEGATIVO',
-        RT_MODO_COMANDA: 'RT_MODO_COMANDA'
+        RT_MODO_COMANDA: 'RT_MODO_COMANDA',
+        RT_COMANDA_SIN_FACTURA: 'RT_COMANDA_SIN_FACTURA'
     }
 };
 

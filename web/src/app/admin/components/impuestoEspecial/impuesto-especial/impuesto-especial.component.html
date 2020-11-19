@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-impuesto-especial #lstImpuestoEspecial (getImpuestoEspecialEv)="setImpuestoEspecial($event)"></app-lista-impuesto-especial>
+    </div>
+    <div class="col m7 s12">
+        <app-form-impuesto-especial #frmImpuestoEspecial [impuestoEspecial]="impuestoEspecial" (impuestoEspecialSavedEv)="refreshImpuestoEspecialList()"></app-form-impuesto-especial>
+    </div>
+</div>

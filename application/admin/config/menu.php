@@ -51,6 +51,10 @@ $config['menu'] = [
 					11  => [
 						'nombre' => 'Proveedores',
 						'link' => '/admin/proveedor'
+					],
+					12  => [
+						'nombre' => 'Impuesto Especial',
+						'link' => '/admin/impuesto_especial'
 					]
 				]
 			],

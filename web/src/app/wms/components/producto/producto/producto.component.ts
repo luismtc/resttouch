@@ -14,11 +14,14 @@ export class ProductoComponent implements OnInit {
   public articulo: Articulo;
   @ViewChild('lstProducto', { static: false }) lstProductoComponent: ListaProductoComponent;
   @ViewChild('frmProducto', { static: false }) frmProductoComponent: FormProductoComponent;
-  
+
   constructor(
     private articuloSrvc: ArticuloService
   ) {
-    this.articulo = { articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null, bien_servicio: 'B', produccion:0, presentacion_reporte: null, mostrar_pos:0  };
+    this.articulo = {
+      articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null, bien_servicio: 'B',
+      produccion: 0, presentacion_reporte: null, mostrar_pos: 0, impuesto_especial: null
+    };
   }
 
   ngOnInit() {
@@ -27,7 +30,7 @@ export class ProductoComponent implements OnInit {
   setArticulo = (art: any) => {
     this.articuloSrvc.getArticulo({ articulo: art.id }).subscribe(res => {
       if (!!res && res.length > 0) {
-        let obj: ArticuloResponse = res[0];
+        const obj: ArticuloResponse = res[0];
         this.articulo = {
           articulo: +obj.articulo,
           categoria_grupo: +obj.categoria_grupo.categoria_grupo,
@@ -37,7 +40,9 @@ export class ProductoComponent implements OnInit {
           codigo: obj.codigo,
           produccion: obj.produccion,
           presentacion_reporte: obj.presentacion_reporte.presentacion,
-          mostrar_pos: obj.mostrar_pos
+          mostrar_pos: obj.mostrar_pos,
+          impuesto_especial: obj.impuesto_especial,
+          shopify_id: obj.shopify_id
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();

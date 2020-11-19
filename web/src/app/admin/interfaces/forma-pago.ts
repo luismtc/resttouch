@@ -8,4 +8,5 @@ export interface FormaPago {
     pedirdocumento?: number;
     adjuntararchivo?: number;
     pedirautorizacion?: number;
+    sinfactura?: number;
 }

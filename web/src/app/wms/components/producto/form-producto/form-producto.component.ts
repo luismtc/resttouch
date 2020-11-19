@@ -12,6 +12,8 @@ import { Medida } from '../../../../admin/interfaces/medida';
 import { MedidaService } from '../../../../admin/services/medida.service';
 import { Presentacion } from '../../../../admin/interfaces/presentacion';
 import { PresentacionService } from '../../../../admin/services/presentacion.service';
+import { ImpuestoEspecial } from '../../../../admin/interfaces/impuesto-especial';
+import { ImpuestoEspecialService } from '../../../../admin/services/impuesto-especial.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -29,6 +31,7 @@ export class FormProductoComponent implements OnInit {
   public articulos: Articulo[] = [];
   public recetas: ArticuloDetalle[] = [];
   public receta: ArticuloDetalle;
+  public impuestosEspeciales: ImpuestoEspecial[] = [];
   public showDetalleForm = true;
   public displayedColumns: string[] = ['articulo', 'cantidad', 'medida', 'editItem'];
   public dataSource: MatTableDataSource<ArticuloDetalle>;
@@ -40,7 +43,8 @@ export class FormProductoComponent implements OnInit {
     private ls: LocalstorageService,
     private articuloSrvc: ArticuloService,
     private medidaSrvc: MedidaService,
-    private presentacionSrvc: PresentacionService
+    private presentacionSrvc: PresentacionService,
+    private impuestoEspecialSrvc: ImpuestoEspecialService
   ) { }
 
   ngOnInit() {
@@ -49,6 +53,7 @@ export class FormProductoComponent implements OnInit {
     this.loadMedidas();
     this.loadArticulos();
     this.loadPresentaciones();
+    this.loadImpuestosEspeciales();
   }
 
   resetArticulo = () => {
@@ -61,7 +66,9 @@ export class FormProductoComponent implements OnInit {
       bien_servicio: 'B',
       produccion: 0,
       mostrar_pos: 1,
-      presentacion_reporte:null
+      presentacion_reporte: null,
+      impuesto_especial: null,
+      shopify_id: null
     };
     this.resetReceta();
   }
@@ -104,6 +111,14 @@ export class FormProductoComponent implements OnInit {
     this.articuloSrvc.getArticulos().subscribe(res => {
       if (res) {
         this.articulos = res;
+      }
+    });
+  }
+
+  loadImpuestosEspeciales = () => {
+    this.impuestoEspecialSrvc.get().subscribe(res => {
+      if (res) {
+        this.impuestosEspeciales = res;
       }
     });
   }

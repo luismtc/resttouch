@@ -9,14 +9,14 @@ import { Impresora } from '../../../interfaces/impresora';
   styleUrls: ['./impresora.component.css']
 })
 export class ImpresoraComponent implements OnInit {
-  
+
   public impresora: Impresora;
   @ViewChild('lstImpresora', { static: false }) lstImpresoraComponent: ListaImpresoraComponent;
 
   constructor() {
-  	this.impresora = {
-  		impresora:null, nombre:null, direccion_ip: null, ubicacion:null, bluetooth:0, sede:null
-  	};
+    this.impresora = {
+      impresora: null, nombre: null, direccion_ip: null, ubicacion: null, bluetooth: 0, sede: null
+    };
   }
 
   ngOnInit() {

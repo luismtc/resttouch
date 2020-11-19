@@ -72,6 +72,9 @@ import { ListaProveedorComponent } from './components/proveedor/lista-proveedor/
 import { FormProveedorComponent } from './components/proveedor/form-proveedor/form-proveedor.component';
 import { VentasComponent } from './components/tablero/graficas/ventas/ventas.component';
 import { SolicitaPinInactividadComponent } from './components/solicita-pin-inactividad/solicita-pin-inactividad.component';
+import { ImpuestoEspecialComponent } from './components/impuestoEspecial/impuesto-especial/impuesto-especial.component';
+import { FormImpuestoEspecialComponent } from './components/impuestoEspecial/form-impuesto-especial/form-impuesto-especial.component';
+import { ListaImpuestoEspecialComponent } from './components/impuestoEspecial/lista-impuesto-especial/lista-impuesto-especial.component';
 
 
 @NgModule({
@@ -83,7 +86,7 @@ import { SolicitaPinInactividadComponent } from './components/solicita-pin-inact
     FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,
     TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent,
     FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent,
-    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent
+    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent, ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent

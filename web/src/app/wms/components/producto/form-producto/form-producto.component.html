@@ -37,7 +37,7 @@
             -->
             <mat-form-field class="fullWidth">
                 <mat-label>Presentación Venta</mat-label>
-                <mat-select name="presentacion" [(ngModel)]="articulo.presentacion">
+                <mat-select name="presentacion" [(ngModel)]="articulo.presentacion" required>
                     <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
                         {{p.descripcion}}
                     </mat-option>
@@ -45,7 +45,7 @@
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Presentación Reportes</mat-label>
-                <mat-select name="presentacion_reporte" [(ngModel)]="articulo.presentacion_reporte">
+                <mat-select name="presentacion_reporte" [(ngModel)]="articulo.presentacion_reporte" required>
                     <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
                         {{p.descripcion}}
                     </mat-option>
@@ -54,6 +54,9 @@
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Código" name="codigo" [(ngModel)]="articulo.codigo" required>
             </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput type="text" placeholder="Shopify ID" name="shopify_id" [(ngModel)]="articulo.shopify_id">
+            </mat-form-field>
             <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
                 <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
@@ -61,6 +64,14 @@
                     [(ngModel)]="articulo.codigo" required>
             </mat-form-field>
             -->
+            <mat-form-field class="fullWidth">
+                <mat-label>Impuesto Especial</mat-label>
+                <mat-select name="impuesto_especial" [(ngModel)]="articulo.impuesto_especial">
+                    <mat-option *ngFor="let impesp of impuestosEspeciales" [value]="impesp.impuesto_especial">
+                        {{impesp.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <div class="row">
                 <div class="col m6 s6">
                     <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion">¿Es produccion?</mat-checkbox>

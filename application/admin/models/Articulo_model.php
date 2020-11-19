@@ -15,6 +15,7 @@ class Articulo_model extends General_model {
 	public $produccion = 0;
 	public $presentacion_reporte;
 	public $mostrar_pos = 1;
+	public $impuesto_especial;	
 
 	public function __construct($id = "")
 	{
