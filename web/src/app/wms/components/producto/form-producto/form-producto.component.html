@@ -68,7 +68,7 @@
                 <mat-label>Impuesto Especial</mat-label>
                 <mat-select name="impuesto_especial" [(ngModel)]="articulo.impuesto_especial">
                     <mat-option *ngFor="let impesp of impuestosEspeciales" [value]="impesp.impuesto_especial">
-                        {{impesp.descripcion}}
+                        {{impesp.descripcion}} ({{impesp.porcentaje | number:'1.2-2'}}%)
                     </mat-option>
                 </mat-select>
             </mat-form-field>

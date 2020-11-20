@@ -71,6 +71,7 @@
                             <caption>
                                 <h5>Detalle del pedido #{{element.comanda}}</h5>
                                 <h6 *ngIf="element.origen_datos.numero_orden">Orden #{{element.origen_datos.numero_orden}}</h6>
+                                <h6 *ngIf="element.notas_generales">{{element.notas_generales}}</h6>
                             </caption>
                             <thead>
                                 <th>Producto</th>

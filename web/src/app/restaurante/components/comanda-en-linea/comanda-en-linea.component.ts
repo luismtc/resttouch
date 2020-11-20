@@ -181,7 +181,8 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         NoOrdenEnLinea: obj.origen_datos.numero_orden,
         DireccionEntrega: obj.origen_datos.direccion_entrega,
         DetalleCuenta: AImpresoraNormal,
-        Total: 0.00
+        Total: 0.00,
+        NotasGenerales: obj.notas_generales || ''
       };
       // console.log('STRING (IN) = ', JSON.stringify(objToPrint));
       // console.log('OBJETO (IN) = ', objToPrint);

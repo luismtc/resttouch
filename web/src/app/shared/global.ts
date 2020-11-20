@@ -1,7 +1,7 @@
-const urlBase = 'http://localhost/resttouch'; // Desarrollo local
+// const urlBase = 'http://localhost/resttouch'; // Desarrollo local
 // const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo local 2
 // const urlBase = `${location.origin}/api`; // Desarrollo - Producción C807
-// const urlBase = location.origin; // Producción GCP
+const urlBase = location.origin; // Producción GCP
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',

@@ -405,6 +405,15 @@ class Articulo_model extends General_model {
 		return false;
 	}
 
+	public function getImpuestoEspecial() {
+		$impesp = null;
+		if ((int)$this->impuesto_especial > 0) {
+			$this->load->model('ImpuestoEspecial_model');
+			$impesp = $this->ImpuestoEspecial_model->buscar(['impuesto_especial' => $this->impuesto_especial, '_uno' => true]);
+		}
+		return $impesp;
+	}
+
 }
 
 /* End of file Articulo_model.php */

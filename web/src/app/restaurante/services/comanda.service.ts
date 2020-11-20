@@ -29,37 +29,46 @@ export class ComandaService {
   get(fltr: any = {}): Observable<Comanda[]> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
-    return this.http.get<Comanda[]>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<Comanda[]>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getComandaDeMesa(idmesa: number): Observable<ComandaGetResponse> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
-    return this.http.get<ComandaGetResponse>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda/${idmesa}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<ComandaGetResponse>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda/${idmesa}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Comanda) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar${entidad.comanda ? ('/' + entidad.comanda) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar${entidad.comanda ? ('/' + entidad.comanda) : ''}`,
+      entidad,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveDetalle(idcomanda: number, idcuenta: number, detalle: DetalleComanda) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
-    // const urlComplement = detalle.detalle_comanda && detalle.detalle_cuenta  ? `/${detalle.detalle_cuenta}` : '';
     return this.http
       .post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_detalle/${idcomanda}/${idcuenta}`, detalle, httpOptions)
       .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
@@ -68,13 +77,125 @@ export class ComandaService {
   setProductoImpreso(idcuenta: number = 0) {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
     return this.http.get<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/imprimir/${idcuenta}`,
       httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  cerrarMesa(idMesa: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_mesa/${idMesa}`,
+      null,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getComandasOnLIne(): Observable<ComandaGetResponse[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<ComandaGetResponse[]>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  validaPwdGerenteTurno(pwd: string): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/validapwdgerenteturno`,
+      { pwd },
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  cerrarEstacion(idcomanda: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<ComandaGetResponse[]>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_estacion/${idcomanda}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getCuenta(idcuenta: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/cuenta/get_cuenta/${idcuenta}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  unificarCuentas(deCuenta: number, aCuenta: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/unir_cuentas/${deCuenta}/${aCuenta}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  trasladarMesa(idComanda: number, idMesaOrigen: number, idMesaDestino: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/trasladar_mesa/${idComanda}/${idMesaOrigen}/${idMesaDestino}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getComandasCocina(): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda_cocina`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  setComandaCocinada(idcomanda: number, datos: any): Observable<any> {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/set_cocinado/${idcomanda}`,
+      datos,
+      httpOptions)
+      .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getComandasOnLine_Test(): any[] {
@@ -267,118 +388,6 @@ export class ComandaService {
       }
     ];
     return comandasOnLine;
-  }
-
-  cerrarMesa(idMesa: number): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.post<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_mesa/${idMesa}`,
-      null,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  getComandasOnLIne(): Observable<ComandaGetResponse[]> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.get<ComandaGetResponse[]>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  validaPwdGerenteTurno(pwd: string): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.post<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/validapwdgerenteturno`,
-      { pwd },
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  cerrarEstacion(idcomanda: number): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.get<ComandaGetResponse[]>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/cerrar_estacion/${idcomanda}`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  getCuenta(idcuenta: number): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/cuenta/get_cuenta/${idcuenta}`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  unificarCuentas(deCuenta: number, aCuenta: number): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/unir_cuentas/${deCuenta}/${aCuenta}`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  trasladarMesa(idComanda: number, idMesaOrigen: number, idMesaDestino: number): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/trasladar_mesa/${idComanda}/${idMesaOrigen}/${idMesaDestino}`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  getComandasCocina(): Observable<any> {
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };
-    return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda_cocina`,
-      httpOptions
-    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
-  }
-
-  setComandaCocinada(idcomanda: number, datos: any): Observable<any> {
-    
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    };    
-    return this.http.post<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/set_cocinado/${idcomanda}`, 
-      datos, 
-      httpOptions)
-      .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
 }

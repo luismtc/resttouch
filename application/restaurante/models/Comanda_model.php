@@ -16,6 +16,7 @@ class Comanda_model extends General_Model
 	public $comandaenuso = 0;
 	public $fhcreacion;
 	public $numero_pedido;
+	public $notas_generales;
 
 	public function __construct($id = '')
 	{
@@ -227,6 +228,7 @@ class Comanda_model extends General_Model
 		$tmp->origen_datos = $this->getOrigenDatos();
 		$tmp->fhcreacion = empty($tmp->origen_datos['fhcreacion']) ?  $this->fhcreacion : $tmp->origen_datos['fhcreacion'];
 		$tmp->numero_pedido = $this->numero_pedido;
+		$tmp->notas_generales = $this->notas_generales;
 		return $tmp;
 	}
 

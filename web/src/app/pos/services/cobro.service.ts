@@ -28,7 +28,7 @@ export class CobroService {
   save(entidad: Cobro): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
     return this.http.post<any>(

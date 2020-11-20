@@ -846,7 +846,8 @@ class Api extends CI_Controller {
 								'estatus' => 1, 
 								'domicilio' => 1,
 								'comanda_origen' => $origen->comanda_origen,
-								'comanda_origen_datos' => json_encode($req)
+								'comanda_origen_datos' => json_encode($req),
+								'notas_generales' => isset($req['notas_generales']) ? $req['notas_generales'] : null
 							];
 
 							$propina = false;
