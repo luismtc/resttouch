@@ -96,6 +96,9 @@ class Conversor extends CI_Controller {
 
 	function producir()
 	{
+		$tmp = new Configuracion_model();
+		$config = $tmp->buscar();
+		$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$req['estatus_movimiento'] = 2;
 		$datos = ['exito' => false];
@@ -106,7 +109,7 @@ class Conversor extends CI_Controller {
 			foreach ($art->getReceta() as $row) {
 				$rec = new Articulo_model($row->articulo->articulo);
 				$rec->actualizarExistencia();
-				if($rec->existencias < $row->cantidad){
+				if(($rec->existencias < $row->cantidad * $det['cantidad']) && !$vnegativo){
 					$continuar = false;
 				}
 			}
