@@ -40,18 +40,24 @@ class Turno extends CI_Controller {
 					$datos['mensaje'] = "Ya existe un turno abierto";
 				}
 			} else {
+				// print "En el else..."; die();
 				if (!empty($req['fin'])) {
+					// var_dump($req); die();
 					$comandas = [];
 					$com = $this->Comanda_model->getComandasAbiertas([
 						"turno" => $turno->getPK()
 					]);
+
+					// var_dump($com);
 
 					$fac = $this->Factura_model->filtrar_facturas([
 						"sede" => $data->sede,
 						"_turno" => $turno->getPK()
 					]);
 
-					if (count($com) > 0) {
+					// var_dump($fac); die();
+
+					if (count($com) > 0) {						
 						$continuar = false;
 						foreach ($com as $row) {
 							$comanda = new Comanda_model($row->comanda);
@@ -76,6 +82,8 @@ class Turno extends CI_Controller {
 						$datos['facturas'] = $facturas;
 					}
 
+					// var_dump($continuar); die();
+
 					if (!$continuar) {
 						$datos['mensaje'] = "Posee documentos pendientes";
 						$datos['pendientes'] = true;
@@ -86,7 +94,7 @@ class Turno extends CI_Controller {
 
 			if($continuar) {
 				$req['sede'] = $data->sede;
-				$turno->guardar($req);		
+				$datos['exito'] = $turno->guardar($req);
 				if($datos['exito']) {
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['turno'] = $turno;
@@ -210,6 +218,7 @@ class Turno extends CI_Controller {
 				$row->turno_tipo = $turno->getTurnoTipo();			
 				$datos[] = $row;
 			}
+			usort($datos, function ($a, $b) { return ((int)$a->turno < (int)$b->turno) ? 1 : -1; });
 		} else if(is_object($tmp)) {
 			$turno = new Turno_model($tmp->turno);
 			$tmp->turno_tipo = $turno->getTurnoTipo();
