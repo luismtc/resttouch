@@ -325,10 +325,25 @@ export class FormFacturaManualComponent implements OnInit {
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesFactura);
 
   representacionGrafica = () => {
-    window.open(
-      `${GLOBAL.infilePdfUrl}${this.factura.fel_uuid}`,
-      'winFactPdf',
-      'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no'
-    );
+
+    this.facturaSrvc.getGrafo(this.factura.factura).subscribe(res => {
+      if (res.exito) {
+        switch (res.tipo) {
+          case 'link': this.openLinkWindow(res.documento); break;
+          case 'pdf': this.openPdfDocument(res.documento); break;
+        }
+      }
+    });
+  }
+
+  openLinkWindow = (url: string) =>
+    window.open(url, 'winFactPdf', 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no')
+
+  openPdfDocument = (pdf: string) => {
+    const pdfWindow = window.open('', 'winFactPdf', 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+    pdfWindow.document.write(
+      '<iframe width="100%" style="margin: -8px;border: none;" height="100%" src="data:application/pdf;base64, ' +
+      encodeURI(pdf) +
+      '"></iframe>');
   }
 }

@@ -19,6 +19,23 @@ if ( ! function_exists('post_request'))
 	}
 }
 
+if ( ! function_exists('get_request'))
+{
+	function get_request($url, $header=[])
+	{
+		$header[] = 'Content-Type:application/json';
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, $header);		
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+		$res = curl_exec($ch);
+		curl_close($ch);
+		return $res;
+	}
+}
+
 if (! function_exists('facturar')) {
 	function facturar($fac)
 	{

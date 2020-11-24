@@ -136,4 +136,16 @@ export class FacturaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  getGrafo(idfactura: number): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<DetalleFactura[]>(
+      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/get_grafo_factura/${idfactura}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }

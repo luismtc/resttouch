@@ -1,15 +1,16 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Factura extends CI_Controller {
+class Factura extends CI_Controller
+{
 
 	public function __construct()
 	{
-        parent::__construct();
-        $this->load->add_package_path('application/admin');
+		parent::__construct();
+		$this->load->add_package_path('application/admin');
 		$this->load->add_package_path('application/restaurante');
 		$this->load->helper('api');
-        $this->load->model([
+		$this->load->model([
 			'Dfactura_model',
 			'Usuario_model',
 			'Catalogo_model',
@@ -23,31 +24,31 @@ class Factura extends CI_Controller {
 			'Receta_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
-        $this->output
-		->set_content_type("application/json", "UTF-8");
+		$this->output
+			->set_content_type("application/json", "UTF-8");
 	}
 
 	public function guardar($id = '')
 	{
-		
+
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$fac = new Factura_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			if (empty($id) || empty($fac->numero_factura)) {				
+			if (empty($id) || empty($fac->numero_factura)) {
 				$sede = $this->Catalogo_model->getSede(['sede' => $data->sede, '_uno' => true]);
 				$clt = new Cliente_model($req['cliente']);
 
 				$req['usuario'] = $data->idusuario;
-				$req['certificador_fel'] = $sede->certificador_fel;	
+				$req['certificador_fel'] = $sede->certificador_fel;
 				$req['sede'] = $data->sede;
 				$req["correo_receptor"] = $clt->correo;
-				
+
 				$datos['exito'] = $fac->guardar($req);
 
-				if($datos['exito']) {
+				if ($datos['exito']) {
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['factura'] = $fac;
 				} else {
@@ -56,64 +57,64 @@ class Factura extends CI_Controller {
 			} else {
 				$datos['mensaje'] = "La factura ya fue firmada por la SAT, no se puede modificar";
 			}
-
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
-		
+
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
-	public function guardar_detalle($factura, $id = '') {
+	public function guardar_detalle($factura, $id = '')
+	{
 		$fac = new Factura_model($factura);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 			if (empty($fac->numero_factura)) {
 				$fac->cargarEmpresa();
-				$pimpuesto = $fac->empresa->porcentaje_iva +1;
+				$pimpuesto = $fac->empresa->porcentaje_iva + 1;
 				$art = new Articulo_model($req['articulo']);
 				if ($fac->exenta) {
 					$req['monto_base'] = $req['total'];
 				} else {
 					$req['monto_base'] = $req['total'] / $pimpuesto;
 				}
-				
+
 				$req['presentacion'] = $art->presentacion;
-				$req['monto_iva'] = $req['total'] - $req['monto_base'];	
+				$req['monto_iva'] = $req['total'] - $req['monto_base'];
 				$req['bien_servicio'] = $art->bien_servicio;
 				$det = $fac->setDetalle($req, $id);
-				
-				if($det) {
+
+				if ($det) {
 					$datos['exito'] = true;
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['detalle'] = $det;
 				} else {
 					$datos['mensaje'] = implode("<br>", $fac->getMensaje());
-				}	
+				}
 			} else {
 				$datos['mensaje'] = "La factura ya fue firmada por la SAT, no se puede modificar";
 			}
-
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
-	public function buscar_factura(){		
+	public function buscar_factura()
+	{
 		$headers = $this->input->request_headers();
-        $data = AUTHORIZATION::validateToken($headers['Authorization']); 
-        $_GET['sede'] = $data->sede;
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		$_GET['sede'] = $data->sede;
 
 		// $facturas = $this->Factura_model->buscar($_GET);
 		$facturas = $this->Factura_model->filtrar_facturas($_GET);
 		$datos = [];
-		if(is_array($facturas)) {
+		if (is_array($facturas)) {
 			foreach ($facturas as $row) {
 				$tmp = new Factura_model($row->factura);
 				$tmp->cargarReceptor();
@@ -128,7 +129,7 @@ class Factura extends CI_Controller {
 				]);
 				$datos[] = $row;
 			}
-		} else if($facturas){
+		} else if ($facturas) {
 			$tmp = new Factura_model($facturas->factura);
 			$tmp = new Factura_model($facturas->factura);
 			$tmp->cargarReceptor();
@@ -145,8 +146,8 @@ class Factura extends CI_Controller {
 		}
 
 		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));
 	}
 
 	public function buscar_detalle($factura)
@@ -154,8 +155,8 @@ class Factura extends CI_Controller {
 		$fac = new Factura_model($factura);
 
 		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($fac->getDetalle($_GET)));
+			->set_content_type("application/json")
+			->set_output(json_encode($fac->getDetalle($_GET)));
 	}
 
 	public function facturar($factura)
@@ -172,13 +173,13 @@ class Factura extends CI_Controller {
 				$fac->cargarSede();
 				$fac->cargarCertificadorFel();
 				$fac->procesar_factura();
-				
+
 				$cer = $fac->getCertificador();
 
 				$funcion = $cer->metodo_factura;
 				$resp = $fac->$funcion();
 				$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
-				
+
 				if (!empty($fac->numero_factura)) {
 					$fac->certificador_fel = $cer;
 					$fac->detalle = $fac->getDetalle();
@@ -189,7 +190,7 @@ class Factura extends CI_Controller {
 					$fac->empresa->direccion = !empty($fac->sedeFactura->direccion) ? $fac->sedeFactura->direccion : $fac->empresa->direccion;
 					$datos['exito'] = true;
 					$datos['factura'] = $fac;
-					$datos['mensaje'] = "Datos actualizados con exito";	
+					$datos['mensaje'] = "Datos actualizados con exito";
 				} else {
 					$datos['mensaje'] = implode(". ", $fac->getMensaje());
 				}
@@ -200,8 +201,31 @@ class Factura extends CI_Controller {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
 		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));	
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));
+	}
+
+	public function get_grafo_factura($factura)
+	{		
+		$datos = ['exito' => false, 'mensaje' => 'No se pudo recuperar la factura.'];
+		$fac = new Factura_model($factura);
+		//var_dump($fac);
+		if (!empty($fac->numero_factura)) {
+			$fac->cargarEmpresa();
+			$fac->cargarCertificadorFel();
+			$cer = $fac->getCertificador();
+			$funcion = $cer->metodo_grafo;			
+			$resp = $fac->$funcion();
+			if($resp['tipo'] && $resp['documento']) {
+				$datos['exito'] = true;
+				$datos['mensaje'] = 'Documento recuperado con éxito.';
+				$datos['tipo'] = $resp['tipo'];
+				$datos['documento'] = $resp['documento'];
+			}
+		} else {
+			$datos['mensaje'] = "Factura sin firmar.";
+		}
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
 
 	public function refacturar($factura)
@@ -219,7 +243,7 @@ class Factura extends CI_Controller {
 				$clt = new Cliente_model($req['cliente']);
 
 				$req['usuario'] = $data->idusuario;
-				$req['certificador_fel'] = $sede->certificador_fel;	
+				$req['certificador_fel'] = $sede->certificador_fel;
 				$req['sede'] = $data->sede;
 				$req["correo_receptor"] = $clt->correo;
 				unset($req['factura']);
@@ -237,8 +261,8 @@ class Factura extends CI_Controller {
 		}
 
 		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));	
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));
 	}
 
 	public function anular($factura)
@@ -257,7 +281,7 @@ class Factura extends CI_Controller {
 
 				$cer = $fac->getCertificador();
 				$funcion = $cer->metodo_anulacion;
-				
+
 				$resp = $fac->$funcion();
 
 				$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
@@ -266,7 +290,7 @@ class Factura extends CI_Controller {
 
 					$datos['exito'] = true;
 					$datos['factura'] = $fac;
-					$datos['mensaje'] = "Datos actualizados con exito";	
+					$datos['mensaje'] = "Datos actualizados con exito";
 				} else {
 					$datos['mensaje'] = implode(". ", $fac->getMensaje());
 				}
@@ -277,8 +301,8 @@ class Factura extends CI_Controller {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
 		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));
 	}
 
 	public function imprimir($factura)
@@ -308,17 +332,17 @@ class Factura extends CI_Controller {
 
 		$fac->origen_datos = ($comanda) ? $comanda->getOrigenDatos() : null;
 		$fac->empresa->direccion = !empty($fac->sedeFactura->direccion) ? $fac->sedeFactura->direccion : $fac->empresa->direccion;
-		
+
 		$datos['factura'] = $fac;
 		$this->output
-		->set_content_type("application/json")
-		->set_output(json_encode($datos));	
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));
 	}
-	
+
 	public function xml($factura)
 	{
 		$this->output
-		->set_content_type("application/xml", "UTF-8");
+			->set_content_type("application/xml", "UTF-8");
 
 		$fac = new Factura_model($factura);
 		$fac->cargarFacturaSerie();
