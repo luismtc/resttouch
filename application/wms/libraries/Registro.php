@@ -29,10 +29,16 @@ class Registro
 
     public function guardarEgreso()
     {
-    	$bodega = $this->cat->getBodega([
+    	/*$bodega = $this->cat->getBodega([
 			"sede" => $this->sede->sede,
 			"_uno" => true
+		]);*/
+
+		$bodega = $this->cat->getBodega([
+			"bodega" => $this->egr->bodega,
+			"_uno" => true
 		]);
+
 		$mov = $this->cat->getTipoMovimiento([
 			"egreso" => 1,
 			"_uno" => true
