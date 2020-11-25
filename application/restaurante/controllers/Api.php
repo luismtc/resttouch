@@ -92,7 +92,9 @@ class Api extends CI_Controller {
 						$clt->cargar($cliente->cliente);
 					}
 
-					$clt->guardar($guardar);
+					if (strtolower(trim($clt->nit)) != "cf") {					
+						$clt->guardar($guardar);
+					}
 					$idCliente = $clt->getPK();
 				}
 
@@ -1114,8 +1116,17 @@ class Api extends CI_Controller {
 							"existencias" => 0,
 							"shopify_id" => $row['id']
 						];
-						$art = new Articulo_model();
 
+						$tmpArt = $this->Articulo_model->buscar([
+							"shopify_id" => $row['id'],
+							"_uno" => true
+						]);
+
+						$art = new Articulo_model();
+						if ($tmpArt) {
+							$art->cargar($tmpArt->articulo);
+						}
+						
 						$datos['exito'] = $art->guardar($args);
 					}	
 				}

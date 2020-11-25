@@ -399,33 +399,45 @@ class Comanda extends CI_Controller {
 		$datos = ['exito' => true];
 		$errores = '';
 		$data = json_decode(file_get_contents('php://input'), true);
+		if (isset($data['tiempo'])) {
+			if ((int)$data['tiempo'] > 0 && (int)$data['tiempo']<60) {
+				$com = new Comanda_model($idcomanda);
+				$detalle = $com->getDetalle([
+					'cocinado' => ((int)$data['estatus'] === 1 ? 0 : 1),
+					"numero" => $data['numero']
+				]);		
 
-		$com = new Comanda_model($idcomanda);
-		$detalle = $com->getDetalle([
-			'cocinado' => ((int)$data['estatus'] === 1 ? 0 : 1),
-			"numero" => $data['numero']
-		]);		
+				foreach($detalle as $det) {
+					$ld = new Dcomanda_model($det->detalle_comanda);
+					$args = [
+						"cocinado" => $data['estatus']
+					];
 
-		foreach($detalle as $det) {
-			$ld = new Dcomanda_model($det->detalle_comanda);
-			$args = [
-				"cocinado" => $data['estatus']
-			];
-
-			if (isset($data['tiempo'])) {
-				$args["tiempo_preparacion"] = $data['tiempo'];
-				$args['fecha'] = Hoy(3);
+					if ((int)$data['tiempo'] < 10) {
+						$data['tiempo'] = "0".$data['tiempo'];
+					}
+					if (isset($data['tiempo'])) {
+						$args["tiempo_preparacion"] = "00:{$data['tiempo']}";
+						$args['fecha'] = Hoy(3);
+					}
+					$exito = $ld->guardar($args);
+					if (!$exito) {
+						$datos['exito'] = false;				
+						if ($errores !== '') {
+							$errores .= '; ';
+						}				
+						$errores .= implode('; ', $ld->getMensaje());
+					}
+				}
+				$datos['mensaje'] = $datos['exito'] ? 'Datos actualizados con éxito.' : $errores;
+			} else {
+				$datos['mensaje'] = "El tiempo debe estar entre 1 y 59 minutos";	
 			}
-			$exito = $ld->guardar($args);
-			if (!$exito) {
-				$datos['exito'] = false;				
-				if ($errores !== '') {
-					$errores .= '; ';
-				}				
-				$errores .= implode('; ', $ld->getMensaje());
-			}
+
+		} else {
+			$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
 		}
-		$datos['mensaje'] = $datos['exito'] ? 'Datos actualizados con éxito.' : $errores;
+		
 		
 		$this->output->set_output(json_encode($datos));
 	}
