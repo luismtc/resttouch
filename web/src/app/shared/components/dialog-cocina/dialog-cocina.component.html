@@ -6,7 +6,7 @@
   </div>
   <form *ngIf="data.showTimer">
       <mat-form-field class="fullWidth">
-          <input type="time" matInput placeholder="Tiempo (HH:mm)" [(ngModel)] ="datos.tiempo" [ngModelOptions]="{standalone: true}">
+          <input type="number" matInput placeholder="Minutos" min="1" max="59" step="1" [(ngModel)] ="datos.tiempo" [ngModelOptions]="{standalone: true}">
       </mat-form-field>
   </form>
   <div mat-dialog-actions align="center">
