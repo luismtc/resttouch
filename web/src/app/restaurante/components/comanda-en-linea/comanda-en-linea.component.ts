@@ -9,13 +9,12 @@ import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DesktopNotificationService } from '../../../shared/services/desktop-notification.service';
 
-import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
-
 // import { Comanda } from '../../interfaces/comanda';
 import { Impresora } from '../../../admin/interfaces/impresora';
 import { ComandaService } from '../../services/comanda.service';
 import { FacturaService } from '../../../pos/services/factura.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
+import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 
 interface productoSelected {
   id: number;
@@ -63,6 +62,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     private facturaSrvc: FacturaService,
     private dns: DesktopNotificationService,
     private pdfServicio: ReportePdfService,
+    private configSrvc: ConfiguracionService
   ) { }
 
   ngOnInit() {
@@ -225,7 +225,13 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
         confirmRef.afterClosed().subscribe((confirma: boolean) => {
           if (confirma) {
-            this.printFactura(res.factura, obj.origen_datos);
+            const modoFactura = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_MODO_FACTURA) || 1;
+            // console.log(`MODO FACTURA = ${modoFactura}`);
+            if (modoFactura === 1) {
+              this.printFactura(res.factura, obj.origen_datos);
+            } else {
+              this.representacionGrafica(+obj.factura.factura);
+            }
           }
         });
       }
@@ -265,6 +271,28 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     }
 
     this.socket.emit('print:factura', JSON.stringify(dataToPrint));
+  }
+
+  representacionGrafica = (idfactura: number) => {
+    this.facturaSrvc.getGrafo(idfactura).subscribe(res => {
+      if (res.exito) {
+        switch (res.tipo) {
+          case 'link': this.openLinkWindow(res.documento); break;
+          case 'pdf': this.openPdfDocument(res.documento); break;
+        }
+      }
+    });
+  }
+
+  openLinkWindow = (url: string) =>
+    window.open(url, 'winFactPdf', 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no')
+
+  openPdfDocument = (pdf: string) => {
+    const pdfWindow = window.open('', 'winFactPdf', 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+    pdfWindow.document.write(
+      '<iframe width="100%" style="margin: -8px;border: none;" height="100%" src="data:application/pdf;base64, ' +
+      encodeURI(pdf) +
+      '"></iframe>');
   }
 
   imprimirLote = () => {
