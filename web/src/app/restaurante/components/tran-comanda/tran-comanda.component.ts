@@ -12,6 +12,7 @@ import { TrasladoMesaComponent } from '../traslado-mesa/traslado-mesa.component'
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 import { ListaProductoAltComponent } from '../../../wms/components/producto/lista-producto-alt/lista-producto-alt.component';
 import { ConfirmDialogModel, DialogPedidoComponent } from '../../../shared/components/dialog-pedido/dialog-pedido.component';
+import { NotasGeneralesComandaComponent } from '../notas-generales-comanda/notas-generales-comanda.component';
 
 import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
@@ -560,18 +561,23 @@ export class TranComandaComponent implements OnInit {
   }
 
   getNotasGenerales = () => {
-    const notasGen = prompt('Notas generales:', (this.mesaEnUso.notas_generales || ''));
-    if (notasGen !== null) {
-      if (notasGen.trim().length > 0) {
-        this.comandaSrvc.saveNotasGenerales({ comanda: this.mesaEnUso.comanda, notas_generales: notasGen }).subscribe(res => {
-          if (res.exito) {
-            this.mesaEnUso.notas_generales = notasGen;
-            this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
-          } else {
-            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 7000 });
-          }
-        });
+    const ngenDialog = this.dialog.open(NotasGeneralesComandaComponent, {
+      width: '50%',
+      data: { notasGenerales: (this.mesaEnUso.notas_generales || '') }
+    });
+    ngenDialog.afterClosed().subscribe((notasGen: string) => {
+      if (notasGen !== null) {
+        if (notasGen.trim().length > 0) {
+          this.comandaSrvc.saveNotasGenerales({ comanda: this.mesaEnUso.comanda, notas_generales: notasGen }).subscribe(res => {
+            if (res.exito) {
+              this.mesaEnUso.notas_generales = notasGen;
+              this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
+            } else {
+              this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 7000 });
+            }
+          });
+        }
       }
-    }
+    });
   }
 }
