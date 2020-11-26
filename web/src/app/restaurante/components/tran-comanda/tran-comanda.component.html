@@ -20,7 +20,7 @@
     </div>
 </div>
 -->
-<div class="divFullSize">    
+<div class="divFullSize">
     <div class="row">
         <div class="col m12 s12" align="center" style="padding: 0 !important;">
             <button mat-raised-button type="button" color="accent" class="btnAccion"
@@ -29,7 +29,7 @@
                 {{cta.nombre}}
             </button>
         </div>
-    </div>    
+    </div>
     <div class="row">
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
             <span class="bld">Productos</span><br />
@@ -41,6 +41,48 @@
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
             <span class="bld" *ngIf="cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</span>
             <span class="bld" *ngIf="!cuentaActiva.nombre">Por favor seleccione una cuenta. Gracias.</span>
+            <div align="center">
+                <eco-fab-speed-dial direction="down">
+                    <eco-fab-speed-dial-trigger>
+                        <button mat-fab color="warn">
+                            <mat-icon style="font-size: 18pt !important;">keyboard_arrow_down</mat-icon>
+                        </button>
+                    </eco-fab-speed-dial-trigger>
+                    <eco-fab-speed-dial-actions>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="getNotasGenerales()" [disabled]="bloqueoBotones">
+                            Notas
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="validarImpresion()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
+                            Comanda
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="printCuenta()" [disabled]="!cuentaActiva.nombre || bloqueoBotones"
+                            *ngIf="+mesaEnUso.mesa.esmostrador === 0">
+                            Cuenta
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2 || bloqueoBotones"
+                            *ngIf="+mesaEnUso.mesa.esmostrador === 0">
+                            Unir cuentas
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="cobrarCuenta()" [disabled]="!cuentaActiva.nombre || esCajero() || bloqueoBotones">
+                            Cobrar cuenta
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="trasladoMesa()" [disabled]="bloqueoBotones"
+                            *ngIf="+mesaEnUso.mesa.esmostrador === 0">
+                            Trasladar
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccionComanda" (click)="cerrarMesa()"
+                            *ngIf="lstProductosSeleccionados.length <= 0">
+                            Cerrar {{+mesaEnUso.mesa.esmostrador === 0 ? 'Mesa' : 'Mostrador'}}
+                        </button>
+                    </eco-fab-speed-dial-actions>
+                </eco-fab-speed-dial>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -52,11 +94,12 @@
         </div>
         <div class="col m6 s12 mat-elevation-z3 colProductos">
             <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero"
-                [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones" [mesaEnUso]="mesaEnUso"
-                (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
+                [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones"
+                [mesaEnUso]="mesaEnUso" (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>
     </div>
-    <div class="row">
+    <!--
+    <div class="row">        
         <div class="col m12 s12" align="center">
             <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
                 (click)="validarImpresion()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
@@ -84,5 +127,7 @@
                 Cerrar {{+mesaEnUso.mesa.esmostrador === 0 ? 'Mesa' : 'Mostrador'}}
             </button>
         </div>
+        
     </div>
+    -->
 </div>

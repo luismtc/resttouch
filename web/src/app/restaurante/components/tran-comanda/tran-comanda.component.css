@@ -1,7 +1,8 @@
 .divFullSize {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
+    overflow-y: hidden;
+    /*border: 1px black dotted;*/
 }
 
 .col {
@@ -15,5 +16,23 @@
 
 .colProductos {
     overflow-y: auto;
-    height: 400px !important;
+    height: 450px !important;
+}
+
+@media (max-width: 400px) {
+    .colProductos {     
+        height: 300px !important;
+    }
+}
+
+@media (min-width: 401px) and (max-width: 1024px) {
+    .colProductos {     
+        height: 450px !important;
+    }
+}
+
+@media (min-height: 769px) {
+    .colProductos {     
+        height: 600px !important;
+    }
 }

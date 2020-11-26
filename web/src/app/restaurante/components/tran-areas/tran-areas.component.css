@@ -10,5 +10,18 @@
 }
 
 mat-sidenav {
-    width: 97vw; 
+    width: 97vw;
+    /*border: 1px black solid;*/
+    
+}
+
+::ng-deep .mat-drawer-inner-container {
+    overflow: hidden !important;
+}
+
+@media (max-width: 600px) {
+    ::ng-deep .mat-drawer-inner-container {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+    }
 }

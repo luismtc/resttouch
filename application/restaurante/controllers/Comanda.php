@@ -150,6 +150,25 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function guardar_notas_generales($comanda) {
+		$datos = ["exito" => false];
+		if ($this->input->method() == 'post') {
+			$req = json_decode(file_get_contents('php://input'), true);
+			if(isset($req['notas_generales'])) {
+				if(trim($req['notas_generales']) !== '') {
+					$com = new Comanda_model($comanda);
+					$datos['exito'] = $com->guardar($req);
+					if($datos['exito']) {
+						$datos['mensaje'] = 'Notas generales actualizadas con éxito.';
+					} else {
+						$datos['mensaje'] = implode("<br>", $com->getMensaje());;
+					}
+				}
+			}						
+		}
+		$this->output->set_output(json_encode($datos));
+	}
+
 	public function cerrar_estacion($comanda)
 	{
 		/*
