@@ -11,6 +11,7 @@ export interface Comanda {
     comanda?: number;
     cuentas: Cuenta[];
     numero_pedido?: string;
+    notas_generales?: string;
 }
 
 export interface ComandaGetResponse {
@@ -41,4 +42,5 @@ export interface ComandaGetResponse {
     mesero?: any;
     mensaje?: string;
     numero_pedido?: string;
+    notas_generales?: string;
 }

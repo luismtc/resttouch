@@ -74,7 +74,8 @@ import { TrasladoMesaComponent } from './components/traslado-mesa/traslado-mesa.
 import { ConfiguraMesaComponent } from './components/area/configura-mesa/configura-mesa.component';
 import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.component';
 import { TranComandaAltComponent } from './components/tran-comanda-alt/tran-comanda-alt.component';
- 
+import { NotasGeneralesComandaComponent } from './components/notas-generales-comanda/notas-generales-comanda.component';
+
 
 @NgModule({
   declarations: [
@@ -84,11 +85,11 @@ import { TranComandaAltComponent } from './components/tran-comanda-alt/tran-coma
     PropinasComponent, ComandaEnLineaComponent, CajaComponent, FacturaComponent, ListaTurnoTipoComponent, FormTurnoTipoComponent,
     TurnoTipoComponent, PropinaComponent, FormPropinaComponent, ListaPropinaComponent, AutoconsultaComponent,
     CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent,
-    ConfiguraMesaComponent, TranCocinaComponent, TranComandaAltComponent
+    ConfiguraMesaComponent, TranCocinaComponent, TranComandaAltComponent, NotasGeneralesComandaComponent
   ],
   entryComponents: [
     AbrirMesaComponent, UnirCuentaComponent, PideDatosCuentasComponent, AreaDesignerComponent, ValidaPwdGerenteTurnoComponent,
-    TrasladoMesaComponent, ConfiguraMesaComponent, TranComandaAltComponent
+    TrasladoMesaComponent, ConfiguraMesaComponent, TranComandaAltComponent, NotasGeneralesComandaComponent
   ],
   imports: [
     CommonModule,

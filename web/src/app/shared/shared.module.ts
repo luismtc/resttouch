@@ -38,7 +38,7 @@ import { DialogComboComponent } from './components/dialog-combo/dialog-combo.com
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
 // const config: SocketIoConfig = { url: 'http://192.168.1.11:8988', options: {} }; // Solo para desarrollo 2
-const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
+const config: SocketIoConfig = { url: 'https://resttouch.c807.com:8988', options: {} }; // Produccion C807
 
 @NgModule({
   declarations: [

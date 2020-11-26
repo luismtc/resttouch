@@ -233,6 +233,7 @@ if (! function_exists('conexion_db')) {
 
 if ( ! function_exists('enviarCorreo')) {
 	function enviarCorreo(Array $datos) {
+		/*
 		$url = "http://intranet.c807.com/grupo_c807/mtm/contactos/index.php/envio/general";
 		$postdata = http_build_query(array('datos' => $datos));
 
@@ -249,6 +250,8 @@ if ( ! function_exists('enviarCorreo')) {
 
 		$obj = (object)json_decode($resultado);
 		return $obj->exito;
+		*/
+		return true;
 	}
 }
 

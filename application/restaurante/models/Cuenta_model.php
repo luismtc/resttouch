@@ -162,7 +162,7 @@ class Cuenta_model extends General_Model {
 		->join("categoria_grupo d", "d.categoria_grupo = c.categoria_grupo")
 		->where("a.cuenta_cuenta", $this->cuenta)
 		->where("c.mostrar_pos",1)
-		->get("detalle_cuenta- a")
+		->get("detalle_cuenta a")
 		->result();
 
 		foreach ($tmp as $row) {
