@@ -121,6 +121,31 @@ export class ArticuloService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  getArticuloCombo(fltr: any = {}): Observable<any[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+
+    return this.http.get<any[]>(
+      `${GLOBAL.urlCatalogos}/get_articulo_combo?${qs.stringify(fltr)}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getArticulosIngreso(fltr: any = {}): Observable<Articulo[]> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.get<Articulo[]>(
+      `${GLOBAL.urlCatalogos}/get_articulo_ingreso?${qs.stringify(fltr)}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getArticulo(fltr: any = {}): Observable<ArticuloResponse[]> {
     const httpOptions = {
       headers: new HttpHeaders({

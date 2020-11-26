@@ -71,6 +71,13 @@ class Catalogo extends CI_Controller {
 		->set_output(json_encode($this->Catalogo_model->getArticulo($_GET)));
 	}
 
+	public function get_articulo_combo()
+	{
+		$_GET['sede'] = $this->data->sede;
+		$this->output
+		->set_output(json_encode($this->Catalogo_model->getArticuloCombo($_GET)));
+	}
+
 	public function get_usuario()
 	{
 		$_GET['sede'] = $this->data->sede;
@@ -219,6 +226,18 @@ class Catalogo extends CI_Controller {
 		->set_output(json_encode(
 			$this->Catalogo_model->getCajaCorteNominacion($_GET)
 		));
+	}
+
+	public function test()
+	{
+		$this->load->model('Receta_model');
+		$this->load->model('Articulo_model');
+
+		$art = new Articulo_model(5124);
+		$art->actualizarExistencia();
+		echo "<pre>";
+		print_r ($art);
+		echo "</pre>";
 	}
 }
 

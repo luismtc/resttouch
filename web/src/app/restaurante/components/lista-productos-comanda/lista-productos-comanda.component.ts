@@ -24,6 +24,7 @@ interface productoSelected {
   detalle_comanda?: number;
   detalle_cuenta?: number;
   impresora?: Impresora;
+  detalle?: []
 }
 
 @Component({

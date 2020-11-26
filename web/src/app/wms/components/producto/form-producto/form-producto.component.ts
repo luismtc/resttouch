@@ -68,7 +68,11 @@ export class FormProductoComponent implements OnInit {
       mostrar_pos: 1,
       presentacion_reporte: null,
       impuesto_especial: null,
-      shopify_id: null
+      shopify_id: null,
+      multiple: 0,
+      cantidad_minima: 1,
+      cantidad_maxima: 1,
+      combo: 0
     };
     this.resetReceta();
   }
@@ -125,7 +129,15 @@ export class FormProductoComponent implements OnInit {
 
   resetReceta = () => {
     this.receta = {
-      articulo_detalle: null, receta: (this.articulo.articulo || 0), racionable: 0, articulo: null, cantidad: 1.00, medida: null, anulado: 0
+      articulo_detalle: null, 
+      receta: (this.articulo.articulo || 0), 
+      racionable: 0, 
+      articulo: null, 
+      cantidad: 1.00, 
+      medida: null, 
+      anulado: 0,
+      precio_extra: 0,
+      precio: 0
     };
     this.recetas = [];
     this.updateTableDataSource();
@@ -151,7 +163,9 @@ export class FormProductoComponent implements OnInit {
           articulo: res[0].articulo.articulo,
           cantidad: +res[0].cantidad,
           medida: res[0].medida.medida,
-          anulado: res[0].anulado || 0
+          anulado: res[0].anulado || 0,
+          precio_extra: res[0].precio_extra || 0,
+          precio: +res[0].precio
         };
         this.showDetalleForm = true;
       }

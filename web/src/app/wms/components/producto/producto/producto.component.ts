@@ -42,7 +42,11 @@ export class ProductoComponent implements OnInit {
           presentacion_reporte: obj.presentacion_reporte.presentacion,
           mostrar_pos: obj.mostrar_pos,
           impuesto_especial: obj.impuesto_especial,
-          shopify_id: obj.shopify_id
+          shopify_id: obj.shopify_id,
+          multiple:obj.multiple,
+          cantidad_minima: obj.cantidad_minima,
+          cantidad_maxima: obj.cantidad_maxima,
+          combo: obj.combo
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();

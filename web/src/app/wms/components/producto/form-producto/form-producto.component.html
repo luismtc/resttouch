@@ -72,12 +72,24 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf = "+articulo.multiple == 1 || +articulo.combo">
+                <input matInput type="number" step="1" placeholder="Cantidad minima" name="minima" [(ngModel)]="articulo.cantidad_minima" required>
+            </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf = "+articulo.multiple == 1 || +articulo.combo">
+                <input matInput type="number" step="1" placeholder="Cantidad maxima" name="maxima" [(ngModel)]="articulo.cantidad_maxima" required>
+            </mat-form-field>
             <div class="row">
-                <div class="col m6 s6">
+                <div class="col m3 s3">
                     <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion">¿Es produccion?</mat-checkbox>
                 </div>
-                <div class="col m6 s6">
+                <div class="col m3 s3">
                     <mat-checkbox name="mostrar" class="example-margin" [(ngModel)]="+articulo.mostrar_pos">Mostrar en POS</mat-checkbox>
+                </div>
+                <div class="col m3 s3">
+                    <mat-checkbox name="combo" class="example-margin" [(ngModel)]="+articulo.combo">Combo</mat-checkbox>
+                </div>
+                <div class="col m3 s3">
+                    <mat-checkbox name="multiple" class="example-margin" [(ngModel)]="+articulo.multiple">Opcion multiple</mat-checkbox>
                 </div>
             </div>
             <div align="end">
@@ -126,6 +138,9 @@
                     [(ngModel)]="receta.cantidad" required>
             </mat-form-field>
             -->
+            <mat-form-field class="fullWidth" *ngIf="receta.precio_extra">
+                <input matInput placeholder="Precio" name="precio" [(ngModel)]="receta.precio" required>
+            </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Unidad de medida</mat-label>
                 <mat-select name="medida" [(ngModel)]="receta.medida" required>
@@ -134,7 +149,20 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-checkbox name="racionable" class="fullWidth" [(ngModel)]="+receta.racionable">¿Es racionable?</mat-checkbox>
+
+            <div class="row">
+                <div class="col m3 s3">
+                    <mat-checkbox name="racionable" class="fullWidth" [(ngModel)]="+receta.racionable">¿Es racionable?</mat-checkbox>
+                </div>
+                <div class="col m3 s3">
+                    <mat-checkbox 
+                        name="extra" 
+                        class="fullWidth" 
+                        [(ngModel)]="+receta.precio_extra">
+                        Precio Extra
+                    </mat-checkbox>
+                </div>
+            </div>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleArticulo.form.valid">
                     Guardar

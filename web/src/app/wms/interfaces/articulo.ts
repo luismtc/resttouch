@@ -11,11 +11,15 @@ export interface Articulo {
     impresora?: Impresora;
     existencias?: number;
     codigo?: string;
+    combo?: number;
+    multiple?: number;
     produccion?: number;
     presentacion_reporte?: number;
     mostrar_pos?: number;
     impuesto_especial?: number;
     shopify_id?: string;
+    cantidad_minima?: number;
+    cantidad_maxima?: number;
 }
 
 export interface ArticuloResponse {
@@ -25,11 +29,15 @@ export interface ArticuloResponse {
     descripcion: string;
     precio: number;
     codigo?: string;
+    multiple?: number;
+    combo?:number;
     produccion?: number;
     presentacion_reporte?: any;
     mostrar_pos?: number;
     impuesto_especial?: number;
     shopify_id?: string;
+    cantidad_minima?: number;
+    cantidad_maxima?: number;
 }
 
 export interface ArbolCategoriaGrupo {
@@ -55,5 +63,7 @@ export interface NodoProducto {
     impresora?: Impresora;
     presentacion?: number;
     codigo?: string;
+    combo?:number;
+    multiple?: number;
     hijos?: NodoProducto[];
 }

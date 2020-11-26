@@ -105,6 +105,58 @@ class Catalogo_model extends CI_Model {
 		return $this->getCatalogo($qry, $args);
 	}
 
+	public function obtenerReceta($articulo)
+	{
+		$this->load->model('Articulo_model');
+		$datos = [];
+		$tmp = $this->db
+					->where("receta", $articulo)
+					->get('articulo_detalle')
+					->result();
+
+		foreach ($tmp as $row) {
+			$art = new Articulo_model($row->articulo);
+			$art->receta = [];
+			if($art->multiple == 1) {
+				$art->receta = $this->obtenerReceta($art->getPK());
+			}
+
+			$datos[] = $art;
+		}
+
+		return $datos;
+	}
+
+	public function getArticuloCombo($args = [])
+	{
+		$uno = false;
+
+		if (isset($args['articulo'])) {
+			$this->db->where('articulo', $args['articulo']);
+			$uno = true;
+		}
+
+		$datos = [];
+
+		$tmp = $this->db
+					->get("articulo");
+
+		if ($uno) {
+			$art = $tmp->row();
+			$art->receta = $this->obtenerReceta($art->articulo);
+			$datos = $art;
+		} else {
+			$art = $tmp->result();
+			foreach ($art as $row) {
+				$row->receta = $this->obtenerReceta($row->articulo);
+				$datos[] = $row;
+			}
+		}
+
+		return $datos;
+
+	}
+
 	public function getArticulo($args = [])
 	{
 		$sede = isset($args['sede']) ? $args['sede'] : false;

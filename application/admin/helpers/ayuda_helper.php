@@ -268,3 +268,29 @@ if ( ! function_exists('Hoy')) {
 		}
 	}
 }
+
+if ( ! function_exists("validarCantidades")) {
+	function validarCantidades($args = [])
+	{
+
+		$combo = new Articulo_model($args['articulo']);
+		$dato = ["exito" => false, "mensaje" => ""];
+
+		if ($combo->combo || $combo->multiple) {
+			if (count($args['receta']) >= $combo->cantidad_minima && count($args['receta']) <= $combo->cantidad_maxima) {
+				foreach ($args['receta'] as $row) {
+					$dato = validarCantidades($row);
+					if (!$dato['exito']) {
+						break;
+					}
+				}
+			} else {
+				$dato['mensaje'] = "La cantidad del articulo {$combo->descripcion} debe estar entre {$combo->cantidad_minima} y {$combo->cantidad_maxima}";
+			}
+		} else {
+			$dato['exito'] = true;
+		}
+		
+		return $dato;	
+	}
+}

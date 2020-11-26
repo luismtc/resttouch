@@ -6,4 +6,6 @@ export interface ArticuloDetalle {
     cantidad: number;
     medida: number;
     anulado?: number;
+    precio?: number;
+    precio_extra?: number;
 }

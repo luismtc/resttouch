@@ -60,6 +60,59 @@ class Comanda_model extends General_Model
 		return $this->db->affected_rows() > 0;
 	}
 
+	public function setDetalle($articulo, $idcta, $padre = null, $precio = null)
+	{
+		$cuenta = new Cuenta_model($idcta);
+		$combo = new Articulo_model($articulo);
+		$precio = ($precio !== null) ? $precio : $combo->precio;
+
+		$args = [
+			"articulo" => $combo->getPK(),
+			"cantidad" => 1,
+			"notas" => "",
+			"precio" => $precio,
+			"total" => $precio,
+			"detalle_comanda_id" => $padre
+		];
+		$det = $this->guardarDetalle($args);
+		if ($det) {
+			$cuenta->guardarDetalle([
+				'detalle_comanda' => $det->detalle_comanda
+			]);	
+			return $det;
+		} else {
+			$datos['exito'] = false;						
+		}
+
+		return false;
+	}
+
+	public function guardarDetalleCombo($args = [], $cuenta)
+	{
+		$art = new Articulo_model($args['articulo']);
+		$combo = $this->setDetalle($args['articulo'], $cuenta);
+
+		if ($combo) {
+			foreach ($args['receta'] as $rec) {
+				$receta = $art->getReceta([
+					"articulo" => $rec['articulo'],
+					"_uno" => true
+				]);
+
+				$artMulti = new Articulo_model($rec['articulo']);
+				$multi = $this->setDetalle($rec['articulo'], $cuenta, $combo->detalle_comanda, $receta[0]->precio);
+				foreach ($rec['receta'] as $seleccion) {
+					$recetaSelec = $artMulti->getReceta([
+						"articulo" => $seleccion['articulo'],
+						"_uno" => true
+					]);
+
+					$selec = $this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $recetaSelec[0]->precio);
+				}
+			}
+		}
+	}
+
 	public function guardarDetalle(array $args)
 	{
 		$config = $this->Configuracion_model->buscar();
@@ -98,8 +151,28 @@ class Comanda_model extends General_Model
 		$art->actualizarExistencia();
 		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
 			$result = $det->guardar($args);
+			$idx = $det->getPK();
 			$receta = $art->getReceta();
 
+			if (count($receta) > 0 && $art->combo == 0 && $art->multiple == 0) {
+				foreach ($receta as $rec) {
+					$detr = new Dcomanda_model();
+					$dato = [
+						"comanda" => $this->getPK(),
+						"articulo" => $rec->articulo->articulo,
+						"cantidad" => $rec->cantidad,
+						"precio" => 0,
+						"total" => 0,
+						"impreso" => 0,
+						"presentacion" => $rec->articulo->presentacion,
+						"detalle_comanda_id" => $idx
+					];
+					$detr->guardar($dato);
+				}
+			}
+			if ($det->getPK()) {
+				$det->actualizarCantidadHijos();
+			}
 			if ($result) {
 				$art->actualizarExistencia();
 				if (isset($args['articulo'])) {

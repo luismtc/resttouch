@@ -14,6 +14,7 @@
 		<tr>
 			<td class="titulo">Codigo</td>
 			<td class="titulo">Descripción</td>
+			<td class="titulo">Unidad</td>
 			<td class="titulo">Ingresos</td>
 			<td class="titulo">Egresos</td>
 			<td class="titulo">Comandas</td>
@@ -45,7 +46,12 @@
 				<tr>
 					<td><?php echo (!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo)?></td>
 					<td>
-						<?php echo "{$row->articulo->articulo} ". $row->articulo->descripcion . " ({$row->presentacion->descripcion}) " ?></td>
+						<?php echo "{$row->articulo->articulo} ". $row->articulo->descripcion ?>
+							
+					</td>
+					<td>
+						<?php echo $row->presentacion->descripcion ?>
+					</td>
 					<td class="text-right">
 						<?php echo number_format($row->ingresos / $row->presentacion->cantidad,2)?>
 					</td>

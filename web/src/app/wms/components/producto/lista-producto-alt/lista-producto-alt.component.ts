@@ -79,7 +79,9 @@ export class ListaProductoAltComponent implements OnInit {
       precio: +art.precio,
       impresora: art.impresora,
       presentacion: art.presentacion,
-      codigo: art.codigo
+      codigo: art.codigo,
+      combo: art.combo,
+      multiple: art.multiple
     };
     // console.log(obj);
     this.productoClickedEv.emit(obj);

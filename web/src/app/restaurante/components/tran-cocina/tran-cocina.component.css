@@ -13,3 +13,10 @@
 .text-danger {
     color: crimson;
 }
+
+.item {
+    display: block;
+    height: auto;
+    white-space: nowrap;
+    word-wrap: break-word;
+}

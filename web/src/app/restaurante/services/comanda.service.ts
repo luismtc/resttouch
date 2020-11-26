@@ -63,6 +63,17 @@ export class ComandaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  saveDetalleCombo(idcomanda: number, idcuenta: number, detalle: DetalleComanda) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http
+      .post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_detalle_combo/${idcomanda}/${idcuenta}`, detalle, httpOptions)
+      .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   saveDetalle(idcomanda: number, idcuenta: number, detalle: DetalleComanda) {
     const httpOptions = {
       headers: new HttpHeaders({
