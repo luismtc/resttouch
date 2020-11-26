@@ -34,6 +34,7 @@ import { CargandoComponent } from './components/cargando/cargando.component';
 import { CheckPasswordComponent } from './components/check-password/check-password.component';
 import { DialogCocinaComponent } from './components/dialog-cocina/dialog-cocina.component';
 import { DialogPedidoComponent } from './components/dialog-pedido/dialog-pedido.component';
+import { DialogComboComponent } from './components/dialog-combo/dialog-combo.component';
 
 // const config: SocketIoConfig = { url: 'http://localhost:8988', options: {} }; // Solo para desarrollo
 // const config: SocketIoConfig = { url: 'http://192.168.1.11:8988', options: {} }; // Solo para desarrollo 2
@@ -49,10 +50,15 @@ const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options:
     CargandoComponent,
     CheckPasswordComponent,
     DialogCocinaComponent,
-    DialogPedidoComponent
+    DialogPedidoComponent,
+    DialogComboComponent
   ],
   entryComponents: [
-    ConfirmDialogComponent, CheckPasswordComponent, DialogCocinaComponent, DialogPedidoComponent
+    ConfirmDialogComponent, 
+    CheckPasswordComponent, 
+    DialogCocinaComponent, 
+    DialogPedidoComponent, 
+    DialogComboComponent
   ],
   imports: [
     CommonModule,
@@ -89,7 +95,8 @@ const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options:
     CargandoComponent,
     CheckPasswordComponent,
     DialogCocinaComponent,
-    DialogPedidoComponent
+    DialogPedidoComponent,
+    DialogComboComponent
   ]
 })
 export class SharedModule { }

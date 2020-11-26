@@ -12,6 +12,7 @@ import { TrasladoMesaComponent } from '../traslado-mesa/traslado-mesa.component'
 import { CobrarPedidoComponent } from '../../../pos/components/cobrar-pedido/cobrar-pedido.component';
 import { ListaProductoAltComponent } from '../../../wms/components/producto/lista-producto-alt/lista-producto-alt.component';
 import { ConfirmDialogModel, DialogPedidoComponent } from '../../../shared/components/dialog-pedido/dialog-pedido.component';
+import { ConfirmDialogComboModel, DialogComboComponent } from '../../../shared/components/dialog-combo/dialog-combo.component';
 import { NotasGeneralesComandaComponent } from '../notas-generales-comanda/notas-generales-comanda.component';
 
 import { Cuenta } from '../../interfaces/cuenta';
@@ -39,6 +40,7 @@ interface productoSelected {
   detalle_comanda?: number;
   detalle_cuenta?: number;
   impresora?: Impresora;
+  detalle?: []
 }
 
 @Component({
@@ -137,7 +139,8 @@ export class TranComandaComponent implements OnInit {
           itemListHeight: '70px',
           detalle_comanda: +p.detalle_comanda,
           detalle_cuenta: +p.detalle_cuenta,
-          impresora: p.articulo.impresora
+          impresora: p.articulo.impresora,
+          detalle: p.detalle
         });
       }
     }
@@ -181,6 +184,41 @@ export class TranComandaComponent implements OnInit {
   setLstProductosDeCuenta() {
     this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
     // console.log(this.lstProductosDeCuenta);
+  }
+
+  agregarProductos(producto: any) {
+    console.log(producto)
+    if (+producto.combo === 1 || +producto.multiple === 1) {
+      this.bloqueoBotones = true;
+      const confirmRef = this.dialog.open(DialogComboComponent, {
+        maxWidth: '50%',
+        data: new ConfirmDialogComboModel(
+          producto,
+          'Sí', 'No'
+        )
+      });
+
+      confirmRef.afterClosed().subscribe((res: any) => {
+        if (res && res.respuesta && res.seleccion.receta.length > 0) {
+          this.comandaSrvc.saveDetalleCombo(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, res.seleccion).subscribe(res => {
+            // console.log('NUEVO DETALLE COMANDA = ', res);
+            if (res.exito) {
+              this.mesaEnUso = res.comanda;
+              this.llenaProductosSeleccionados(this.mesaEnUso);
+              this.setSelectedCuenta(+this.cuentaActiva.numero);
+            } else {
+              this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
+            }
+            this.bloqueoBotones = false;
+          });
+        } else {
+          this.bloqueoBotones = false;
+          this.snackBar.open('Error, Debe seleccionar los productos del combo', 'Comanda', { duration: 7000 });
+        }
+      });
+    } else {
+      this.addProductoSelected(producto);
+    }
   }
 
   addProductoSelected(producto: any) {

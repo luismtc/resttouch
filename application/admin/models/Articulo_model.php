@@ -16,6 +16,10 @@ class Articulo_model extends General_model {
 	public $presentacion_reporte;
 	public $mostrar_pos = 1;
 	public $impuesto_especial;	
+	public $combo = 0;
+	public $multiple = 0;
+	public $cantidad_minima = 1;
+	public $cantidad_maxima = 1;
 
 	public function __construct($id = "")
 	{
@@ -154,26 +158,16 @@ class Articulo_model extends General_model {
 			$principal = $this->getReceta(["_principal" => true]);
 			if (count($receta) > 0 && $this->produccion == 0) {
 				$grupos = [];
-				$venta = $this->getVentaReceta();
-				foreach ($receta as $row) {				
-					$ventaR = $this->getVentaRecetas($row->articulo->articulo, $args);
-					$existR = $this->obtenerExistencia($args, $row->articulo->articulo, true);
-					$existR = $existR - ($venta * $row->cantidad) - $ventaR;
+				//$venta = $this->getVentaReceta();
+				foreach ($receta as $row) {		
 					$art = new Articulo_model($row->articulo->articulo);
-					$art->guardar(['existencias' => $existR]);
+					$art->actualizarExistencia();		
+					$existR = $art->existencias;
 
 					$grupos[] = (int)($art->existencias / $row->cantidad);
 				}
 
 				$exist = min($grupos);
-			} else if (count($principal) > 0 && $this->produccion == 0){
-				$grupos = [];
-				$exist = $this->obtenerExistencia($args, $this->articulo);
-				foreach ($principal as $row) {
-					$venta = $this->getVentaReceta($row->receta, $args);
-					$egr = $venta * $row->cantidad;
-					$exist = $exist - $egr;
-				}
 			} else {
 				$exist = $this->obtenerExistencia($args, $this->articulo);
 			}
@@ -227,11 +221,12 @@ class Articulo_model extends General_model {
 						->get("egreso_detalle a")
 						->row();//total egresos wms
 
-		if (!$receta) {
-			$venta = $this->getVentaReceta();
-		} else {
-			$venta = 0;
-		}
+		//if (!$receta) {
+		$venta = $this->getVentaReceta();
+
+		//} else {
+			//$venta = 0;
+		//}
 
 
 		return $ingresos->total - ($egresos->total + $venta);
@@ -344,22 +339,6 @@ class Articulo_model extends General_model {
 				}
 
 				$ingresos = 0;
-		} else if (count($principal) > 0 && $this->produccion == 0) {
-			$grupos = [];
-			$args['tipo'] = 1;
-			$ingresos = $this->getIngresoEgreso($this->getPK(), $args);
-			$comandas = $this->getComandaFactura($this->getPK(), $args);
-			$args['tipo'] = 2;
-			$egresos = $this->getIngresoEgreso($this->getPK(), $args);
-			$facturas = $this->getComandaFactura($this->getPK(), $args);
-
-			foreach ($principal as $row) {
-				$args['tipo'] = 1;
-				$comandas += $this->getComandaFactura($row->receta, $args) * $row->cantidad;
-				
-				$args['tipo'] = 2;
-				$facturas += $this->getComandaFactura($row->receta, $args)* $row->cantidad;
-			}
 		} else {
 			$args['tipo'] = 1;
 			$ingresos = $this->getIngresoEgreso($this->getPK(), $args);

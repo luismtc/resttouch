@@ -233,6 +233,41 @@ class Comanda extends CI_Controller {
 		$this->output->set_output(json_encode($datos));
 	}
 
+	public function guardar_detalle_combo($com, $cuenta)
+	{
+		$comanda = new Comanda_model($com);
+		$mesa = $comanda->getMesas();
+		$cuenta = new Cuenta_model($cuenta);
+		$req = json_decode(file_get_contents('php://input'), true);
+		$datos = ["exito" => false];
+
+		if ($this->input->method() == 'post') {
+			if ($mesa->estatus == 2) {
+				if ($cuenta->cerrada == 0) {
+					$val = validarCantidades($req);
+					if($val['exito']){
+						$comanda->guardarDetalleCombo($req, $cuenta->getPK());
+
+						$datos['exito'] = true;
+						$datos['comanda'] = $comanda->getComanda();	
+						
+					} else {
+						$datos['mensaje'] = $val['mensaje'];
+					}
+				} else {
+					$datos['mensaje'] = "La cuenta ya esta cerrada";
+				}
+			} else {
+				$datos['mensaje'] = "La mesa debe estar en estatus abierto";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
 	public function guardar_detalle($com, $cuenta)
 	{
 		$comanda = new Comanda_model($com);

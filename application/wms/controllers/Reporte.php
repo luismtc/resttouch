@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+ini_set('memory_limit', -1);
+set_time_limit(0);
+
 class Reporte extends CI_Controller {
 
 	public function __construct()
@@ -18,6 +21,7 @@ class Reporte extends CI_Controller {
 
 	public function existencia()
 	{
+		ini_set("pcre.backtrack_limit", "15000000");
 		$rpt = new Reporte_model();
 		$data = [];
 		if (!isset($_GET['sede'])) {			
@@ -38,6 +42,7 @@ class Reporte extends CI_Controller {
 			$args["reg"][] = $art->getExistencias($_GET);
 
 		}
+
 
 		$pdf   = new \Mpdf\Mpdf([
 			'tempDir' => sys_get_temp_dir(), //produccion

@@ -161,6 +161,7 @@ class Cuenta_model extends General_Model {
 		->join("articulo c", "b.articulo = c.articulo")
 		->join("categoria_grupo d", "d.categoria_grupo = c.categoria_grupo")
 		->where("a.cuenta_cuenta", $this->cuenta)
+		->where("c.mostrar_pos",1)
 		->get("detalle_cuenta a")
 		->result();
 
@@ -168,6 +169,8 @@ class Cuenta_model extends General_Model {
 			$row->numero_cuenta = $this->numero;
 			$det = new Dcomanda_model($row->detalle_comanda);
 			$row->articulo = $det->getArticulo();
+			$tmp = $det->getDescripcionCombo();
+			$row->detalle = explode("|", $tmp);
 			$datos[] = $row;
 		}
 		return $datos;

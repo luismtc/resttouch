@@ -10,6 +10,8 @@ class Receta_model extends General_model {
 	public $cantidad;
 	public $medida;
 	public $anulado;
+	public $precio_extra = 0;
+	public $precio = 0;
 
 	public function __construct($id = "")
 	{
