@@ -1,36 +1,36 @@
 <div fxLayout="row" fxLayout.xs="column" fxFlexFill>
     <div fxFlex="50%" fxFlex.xs="100%" class="bordeRght">
         <div class="divContenedor" fxLayout="row wrap" fxLayoutGap="10px grid" fxFlexFill fxLayoutAlign="start start">
-            <div fxFlex="100%" fxLayoutAlign="center start"><h4>Pendientes</h4></div>
+            <div fxFlex="100%" fxLayoutAlign="center start">
+                <h4>Pendientes</h4>
+            </div>
             <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" *ngFor="let cmd of lstComandasCocina">
                 <mat-card class="mat-elevation-z4">
                     <mat-card-header>
                         <mat-card-title>Comanda #{{cmd.comanda}} - {{cmd.numero}}</mat-card-title>
-                        <mat-card-subtitle>Area {{cmd.mesa.area.nombre}} - Mesa #{{cmd.mesa.numero}}</mat-card-subtitle>
+                        <mat-card-subtitle>
+                            Area {{cmd.mesa.area.nombre}} - Mesa #{{cmd.mesa.numero}}<br />
+                            Atiende: {{cmd.mesero.nombres}} {{cmd.mesero.apellidos}}
+                        </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
                         <ng-container *ngFor="let cta of cmd.cuentas">
-                            <mat-list role="list" *ngIf="cta.productos.length > 0">
-                                <div *ngFor="let prod of cta.productos">
-                                    <mat-list-item role="listitem" >
-                                        <div style="word-wrap: break-word;" mat-line>
-                                            <p style="white-space: break-spaces;">
-                                                {{prod.cantidad}} {{prod.articulo.descripcion}}
-                                            </p>
-                                        </div>                                        
-                                    </mat-list-item>  
-                                    <div mat-subheader *ngIf="!!prod.notas && prod.notas.length > 0">
-                                        Notas: <br>
-                                        {{prod.notas}}
-                                    </div>           
-                                    <br>           
-                                    <mat-divider></mat-divider>
-                                </div>
-                            </mat-list>
+                            <table *ngIf="cta.productos.length > 0">
+                                <tr *ngFor="let prod of cta.productos">
+                                    <td>
+                                        {{prod.cantidad}} {{prod.articulo.descripcion}}
+                                        <br *ngIf="!!prod.notas && prod.notas.length > 0" />
+                                        <span *ngIf="!!prod.notas && prod.notas.length > 0">
+                                            <strong>Notas:</strong> {{prod.notas}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
                         </ng-container>
                     </mat-card-content>
                     <mat-card-actions align="end">
-                        <button mat-raised-button color="accent" type="button" (click)="setCocinado(cmd, 1)">Vista</button>
+                        <button mat-raised-button color="accent" type="button"
+                            (click)="setCocinado(cmd, 1)">Vista</button>
                     </mat-card-actions>
                 </mat-card>
             </div>
@@ -38,48 +38,45 @@
     </div>
     <div fxFlex="50%" fxFlex.xs="100%" class="bordeLft">
         <div class="divContenedor" fxLayout="row wrap" fxLayoutGap="10px grid" fxFlexFill fxLayoutAlign="start start">
-            <div fxFlex="100%" fxLayoutAlign="center start"><h4>En Proceso</h4></div>
-            <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" *ngFor="let cmdEnProceso of lstComandasCocinaEnProceso">
+            <div fxFlex="100%" fxLayoutAlign="center start">
+                <h4>En Proceso</h4>
+            </div>
+            <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%"
+                *ngFor="let cmdEnProceso of lstComandasCocinaEnProceso">
                 <mat-card class="mat-elevation-z4">
                     <mat-card-header>
                         <mat-card-title>Comanda #{{cmdEnProceso.comanda}} - {{cmdEnProceso.numero}}</mat-card-title>
-                        <mat-card-subtitle>Area {{cmdEnProceso.mesa.area.nombre}} - Mesa #{{cmdEnProceso.mesa.numero}}</mat-card-subtitle>
+                        <mat-card-subtitle>
+                            Area {{cmdEnProceso.mesa.area.nombre}} - Mesa #{{cmdEnProceso.mesa.numero}}<br />
+                            Atiende: {{cmdEnProceso.mesero.nombres}} {{cmdEnProceso.mesero.apellidos}}
+                        </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
-                        <div class="row">
-                            <div class="col text-center">
-                                <h6 [ngClass]="{'text-danger': comparaFecha(cmdEnProceso)}">{{cmdEnProceso.tiempo_transcurrido | date: 'HH:mm:ss'}}</h6>
-                            </div>
+                        <div align="center">
+                            <h6 [ngClass]="{'text-danger': comparaFecha(cmdEnProceso)}">
+                                {{cmdEnProceso.tiempo_transcurrido | date: 'HH:mm:ss'}}
+                            </h6>
                         </div>
                         <ng-container *ngFor="let cta of cmdEnProceso.cuentas">
-                            <mat-list role="list" *ngIf="cta.productos.length > 0">
-                                <div *ngFor="let prod of cta.productos">
-                                    <mat-list-item role="listitem" >
-                                        <div style="word-wrap: break-word;" mat-line>
-                                            <p style="white-space: break-spaces;">
-                                                {{prod.cantidad}} {{prod.articulo.descripcion}}
-                                            </p>
-                                        </div>                                        
-                                    </mat-list-item>  
-                                    <div mat-subheader *ngIf="!!prod.notas && prod.notas.length > 0">
-                                        Notas: <br>
-                                        {{prod.notas}}
-                                    </div>              
-                                    <br>        
-                                    <mat-divider></mat-divider>
-                                </div>                        
-                            </mat-list>
+                            <table *ngIf="cta.productos.length > 0">
+                                <tr *ngFor="let prod of cta.productos">
+                                    <td>
+                                        {{prod.cantidad}} {{prod.articulo.descripcion}}
+                                        <br *ngIf="!!prod.notas && prod.notas.length > 0" />
+                                        <span *ngIf="!!prod.notas && prod.notas.length > 0">
+                                            <strong>Notas:</strong> {{prod.notas}}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
                         </ng-container>
                     </mat-card-content>
                     <mat-card-actions align="end">
-                        <button mat-raised-button color="accent" type="button" (click)="setCocinado(cmdEnProceso)">Cocinado</button>
+                        <button mat-raised-button color="accent" type="button"
+                            (click)="setCocinado(cmdEnProceso)">Cocinado</button>
                     </mat-card-actions>
                 </mat-card>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
