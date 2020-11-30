@@ -75,6 +75,9 @@ import { SolicitaPinInactividadComponent } from './components/solicita-pin-inact
 import { ImpuestoEspecialComponent } from './components/impuestoEspecial/impuesto-especial/impuesto-especial.component';
 import { FormImpuestoEspecialComponent } from './components/impuestoEspecial/form-impuesto-especial/form-impuesto-especial.component';
 import { ListaImpuestoEspecialComponent } from './components/impuestoEspecial/lista-impuesto-especial/lista-impuesto-especial.component';
+import { BodegaComponent } from './components/bodega/bodega/bodega.component';
+import { FormBodegaComponent } from './components/bodega/form-bodega/form-bodega.component';
+import { ListaBodegaComponent } from './components/bodega/lista-bodega/lista-bodega.component';
 
 
 @NgModule({
@@ -86,7 +89,7 @@ import { ListaImpuestoEspecialComponent } from './components/impuestoEspecial/li
     FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,
     TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent,
     FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent,
-    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent, ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent
+    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent, ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent, BodegaComponent, FormBodegaComponent, ListaBodegaComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent

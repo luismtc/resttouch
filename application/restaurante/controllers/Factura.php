@@ -19,7 +19,8 @@ class Factura extends CI_Controller {
 			'Cliente_model',
 			'Receta_model',
 			'Configuracion_model',
-			'Webhook_model'
+			'Webhook_model',
+			'ImpuestoEspecial_model'
 		]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -79,13 +80,13 @@ class Factura extends CI_Controller {
 									$det->monto_base = $total;
 								} else {
 									$det->monto_base = $total / $pimpuesto;
-									$art = new Articulo_model($det->articulo);
-									$impuesto_especial = $art->getImpuestoEspecial();
-									if ($impuesto_especial) {
-										$det->impuesto_especial = $impuesto_especial->impuesto_especial;
-										$det->porcentaje_impuesto_especial = $impuesto_especial->porcentaje;
-										$det->valor_impuesto_especial = $det->monto_base * ((float)$impuesto_especial->porcentaje / 100);
-									}
+								}
+								$art = new Articulo_model($det->articulo);
+								$impuesto_especial = $art->getImpuestoEspecial();
+								if ($impuesto_especial) {
+									$det->impuesto_especial = $impuesto_especial->impuesto_especial;
+									$det->porcentaje_impuesto_especial = $impuesto_especial->porcentaje;
+									$det->valor_impuesto_especial = $det->monto_base * ((float)$impuesto_especial->porcentaje / 100);
 								}
 								$det->monto_iva = $total - $det->monto_base;	
 								$fac->setDetalle((array) $det);
