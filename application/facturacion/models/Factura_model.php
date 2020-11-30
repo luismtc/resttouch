@@ -492,7 +492,7 @@ class Factura_model extends General_model
 					$valorBase = $row->monto_base;
 				}
 
-				$montoIva += $valorIva;
+				$row->total += $row->valor_impuesto_especial;
 
 				$impuesto->appendChild($this->crearElemento('dte:MontoGravable', $valorBase));
 				$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
