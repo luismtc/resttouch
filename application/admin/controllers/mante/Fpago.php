@@ -22,15 +22,27 @@ class Fpago extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
+			$config = $this->Configuracion_model->buscar();
+			$sinFactura = get_configuracion($config, 'RT_COMANDA_SIN_FACTURA', 3);
+			$continuar = true;
 
-			$datos['exito'] = $pago->guardar($req);
+			if (!$sinFactura && isset($req['sinfactura'])) {
+				if ($req['sinfactura'] == 1) {
+					$continuar = false;
+				}
+			}
 
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['forma_pago'] = $pago;
+			if ($continuar) {
+				$datos['exito'] = $pago->guardar($req);
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['forma_pago'] = $pago;
+				} else {
+					$datos['mensaje'] = $pago->getMensaje();
+				}
 			} else {
-				$datos['mensaje'] = $pago->getMensaje();
-			}	
+				$datos['mensaje'] = "No puede agregar formas de pago con la propiedad sin factura";
+			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}

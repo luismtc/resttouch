@@ -47,38 +47,63 @@ class Cuenta extends CI_Controller {
 						
 						if($total == $req->total) {
 							$exito = true;
+							$continuar = true;
+							$facturar = true;
+							$fpagos = [];
 							foreach ($req->forma_pago as $row) {
-								if(!$cta->cobrar($row)) {
-									$exito = false;
-								} 	
-							}			
-
-							if ($exito) {
-								$cta->guardar(["cerrada" => 1]);
-								$com = new Comanda_model($cta->comanda);
-								$cuentas = $com->getCuentas();
-								$cerrada = 0;
-								foreach ($cuentas as $row) {
-									if ($row->cerrada == 1) {
-										$cerrada++;
-									}
+								$fpago = $this->Catalogo_model->getFormaPago([
+									"forma_pago" => $row->forma_pago,
+									"_uno" => true
+								]);
+								if ($fpago->sinfactura == 1) {
+									$facturar = false;
 								}
-								if ($cerrada == count($cuentas)) {
-									$tmp = $com->getMesas();
-									
-									if ($tmp) {
-										$mesa = new Mesa_model($tmp->mesa);
-										$mesa->guardar(["estatus" => 1]);
-									}
+								$fpagos[] = $fpago->sinfactura;
+							}	
 
-									$com->guardar(["estatus" => 2]);
-								}
-								$datos['exito'] = true;
-								$datos['mensaje'] = "Cobro realizado exitosamente";
-								$datos['cuenta'] = $cta;							
-							} else {
-								$datos['mensaje'] = "Ocurrio un error al realizar el cobro, intentelo nuevamente";
+							$fpagos = array_unique($fpagos);
+							if (count($fpagos) > 1) {
+								$continuar = false;
 							}
+
+							if ($continuar) {
+								foreach ($req->forma_pago as $row) {
+									if(!$cta->cobrar($row)) {
+										$exito = false;
+									} 	
+								}			
+
+								if ($exito) {
+									$cta->guardar(["cerrada" => 1]);
+									$com = new Comanda_model($cta->comanda);
+									$cuentas = $com->getCuentas();
+									$cerrada = 0;
+									foreach ($cuentas as $row) {
+										if ($row->cerrada == 1) {
+											$cerrada++;
+										}
+									}
+									if ($cerrada == count($cuentas)) {
+										$tmp = $com->getMesas();
+										
+										if ($tmp) {
+											$mesa = new Mesa_model($tmp->mesa);
+											$mesa->guardar(["estatus" => 1]);
+										}
+
+										$com->guardar(["estatus" => 2]);
+									}
+									$datos['exito'] = true;
+									$datos['mensaje'] = "Cobro realizado exitosamente";
+									$datos['cuenta'] = $cta;	
+									$datos['facturar'] = $facturar;
+								} else {
+									$datos['mensaje'] = "Ocurrio un error al realizar el cobro, intentelo nuevamente";
+								}
+							} else {
+								$datos['mensaje'] = "No puede combinar pago con factura y sin factura";
+							}
+								
 						} else {
 							$datos['mensaje'] = "El monto no conincide con el total de la cuenta";
 						}	
