@@ -454,7 +454,7 @@ class Comanda extends CI_Controller {
 		$errores = '';
 		$data = json_decode(file_get_contents('php://input'), true);
 		if (isset($data['tiempo'])) {
-			if ((int)$data['tiempo'] > 0 && (int)$data['tiempo']<60) {
+			if ((int)$data['tiempo'] >= 0 && (int)$data['tiempo']<60) {
 				$com = new Comanda_model($idcomanda);
 				$detalle = $com->getDetalle([
 					'cocinado' => ((int)$data['estatus'] === 1 ? 0 : 1),
