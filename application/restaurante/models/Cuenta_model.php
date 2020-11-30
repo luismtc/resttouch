@@ -260,11 +260,17 @@ class Cuenta_model extends General_Model {
 		return 0;
 	}
 
-	public function get_forma_pago()
+	public function get_forma_pago($args = [])
 	{
+		if (isset($args["_sinFactura"])) {
+			$this->db
+				 ->join("forma_pago b", "a.forma_pago = b.forma_pago")
+				 ->where("b.sinfactura", $args['_sinFactura']);
+		}
+
 		return $this->db
-		->where("cuenta", $this->getPK())
-		->get("cuenta_forma_pago")
+		->where("a.cuenta", $this->getPK())
+		->get("cuenta_forma_pago a")
 		->result();
 	}
 }

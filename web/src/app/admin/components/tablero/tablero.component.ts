@@ -5,6 +5,9 @@ import { Button } from '@syncfusion/ej2-buttons';
 import { TableroService } from '../../services/tablero.service';
 import * as moment from 'moment';
 import { GLOBAL } from '../../../shared/global';
+import { SedeService } from '../../../admin/services/sede.service';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
+import { Sede } from '../../../admin/interfaces/sede';
 
 @Component({
     selector: 'app-tablero',
@@ -27,16 +30,20 @@ export class TableroComponent implements OnInit {
     public estTotal = '';
     public cargando = false;
     public datosGraficas: any = {};
+    public sedes: Sede[] = [];
 
     @ViewChild('pivotview', { static: false })
     public pivotGridObj: PivotViewComponent;
 
     constructor(
         private snackBar: MatSnackBar,
-        private tableroService: TableroService
+        private tableroService: TableroService,
+        private sedeSrvc: SedeService,
+        private ls: LocalstorageService,
     ) { }
 
     ngOnInit(): void {
+        this.getSede()
         this.dataSourceSettings = {
             dataSource: this.pivotData,
             expandAll: false,
@@ -65,6 +72,19 @@ export class TableroComponent implements OnInit {
         this.loadDataGraficas();
     }
 
+    getSede = (params: any = {}) => {
+    this.sedeSrvc.get(params).subscribe(res => {
+        this.sedes = res;
+        let sede: Sede = {
+            sede: 0,
+            empresa: 1,
+            nombre : "Todas"
+        }
+
+        this.sedes.push(sede)
+    });
+    }
+
     onSubmit() {
         this.cargando = true;
         this.tableroService.getTableroDatos(this.params).subscribe(res => {
@@ -91,6 +111,10 @@ export class TableroComponent implements OnInit {
 
         if (!this.params.fdel) {
             this.params.fdel = moment().subtract(1, 'week').format(GLOBAL.dbDateFormat);
+        }
+
+        if (!this.params.sede && this.params.sede !== 0) {
+            this.params.sede = this.ls.get(GLOBAL.usrTokenVar).sede;
         }
 
         if (!this.params.fal) {

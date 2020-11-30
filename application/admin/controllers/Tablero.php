@@ -22,6 +22,10 @@ class Tablero extends CI_Controller {
 
 		if ($this->input->get('fdel') && $this->input->get('fal')) {
 			
+			if (isset($_GET['sede']) && $_GET['sede'] == 0) {
+				unset($_GET['sede']);
+			}
+
 			$datos = $this->Tablero_model->getServiciosFacturados($_GET);
 			$dias = [];
 			$total = 0;
@@ -39,10 +43,10 @@ class Tablero extends CI_Controller {
 			$res["exito"] = true;
 			$res["datos"] = $datos;
 			$res["dias"] = $dias;
-			$res["min"] = number_format(min($dias), 2);
-			$res["max"] = number_format(max($dias), 2);
+			$res["min"] = (count($dias) > 0) ? number_format(min($dias), 2) : 0;
+			$res["max"] = (count($dias) > 0) ? number_format(max($dias), 2) : 0;
 			$res["cantidad"] = count($dias);
-			$res["media"] = number_format(($total/$res["cantidad"]), 2);
+			$res["media"] = (count($dias) > 0) ? number_format(($total/$res["cantidad"]), 2) : 0;
 			$res["total"] = number_format($total, 2);
 		}
 
@@ -56,6 +60,11 @@ class Tablero extends CI_Controller {
 
 		if ($this->input->get('fdel') && $this->input->get('fal'))
 		{
+
+			if (isset($_GET['sede']) && $_GET['sede'] == 0) {
+				unset($_GET['sede']);
+			}
+
 			$res['pordia'] = $this->Tablero_model->getVentasPorDia($_GET);
 			$res['porcategoria'] = $this->Tablero_model->getVentasPorCategoria($_GET);
 			$res['porturno'] = $this->Tablero_model->getVentasPorTurno($_GET);

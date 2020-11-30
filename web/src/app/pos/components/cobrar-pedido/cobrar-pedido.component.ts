@@ -171,30 +171,35 @@ export class CobrarPedidoComponent implements OnInit {
     this.cobroSrvc.save(objCobro).subscribe(res => {
       if (res.exito && !res.facturada) {
         this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
-        this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
-          // console.log('RESPUESTA DE FACTURAR = ', resFact);
-          if (resFact.exito) {
-            const confirmRef = this.dialog.open(ConfirmDialogComponent, {
-              maxWidth: '400px',
-              data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
-            });
+        if(res.facturar){
+          this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
+            // console.log('RESPUESTA DE FACTURAR = ', resFact);
+            if (resFact.exito) {
+              const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+                maxWidth: '400px',
+                data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
+              });
 
-            confirmRef.afterClosed().subscribe((confirma: boolean) => {
-              if (confirma) {
-                this.printFactura(resFact.factura);
-              }
-              this.resetFactReq();
-              this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+              confirmRef.afterClosed().subscribe((confirma: boolean) => {
+                if (confirma) {
+                  this.printFactura(resFact.factura);
+                }
+                this.resetFactReq();
+                this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+                this.facturando = false;
+                this.dialogRef.close(res.cuenta);
+                this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
+              });
+            } else {
               this.facturando = false;
+              this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
               this.dialogRef.close(res.cuenta);
-              this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
-            });
-          } else {
-            this.facturando = false;
-            this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
-            this.dialogRef.close(res.cuenta);
-          }
-        });
+            }
+          });
+        } else {
+          this.dialogRef.close(res.cuenta);
+          this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
+        }
       } else {
         this.facturando = false;
         this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });

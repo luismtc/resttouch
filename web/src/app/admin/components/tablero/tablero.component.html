@@ -13,6 +13,14 @@
 						<input matInput type="date" placeholder="Al" [(ngModel)]="params.fal"
 							[ngModelOptions]="{standalone: true}" required>
 					</mat-form-field>
+					<mat-form-field appearance="legacy" style="margin-left: 3px;">
+						<mat-label>Sede</mat-label>
+						<mat-select name="sede" [(ngModel)]="params.sede" [ngModelOptions]="{standalone: true}">
+							<mat-option *ngFor="let sede of sedes" [value]="sede.sede">
+								{{sede.nombre}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 					<button mat-button color="accent" type="submit" style="margin-left: 3px;">GENERAR</button>
 				</form>
 				<ng-template [ngIf]="cargando">

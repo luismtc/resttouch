@@ -16,6 +16,10 @@ class Tablero_model extends General_model
 			$this->db->where('b.fecha_factura <= ', $args["fal"]);
 		}
 
+		if (isset($args['sede'])) {
+			$this->db->where('b.sede', $args['sede']);
+		}
+
 		return $this->db
 			->select("
 			(a.total-a.descuento) as total, 
@@ -58,6 +62,10 @@ class Tablero_model extends General_model
 			$this->db->where('a.fecha_factura <= ', $args["fal"]);
 		}
 
+		if (isset($args['sede'])) {
+			$this->db->where('a.sede', $args['sede']);
+		}
+
 		return $this->db
 			->select('DATE_FORMAT(a.fecha_factura, "%d/%m/%Y") AS fecha, SUM(b.total - b.descuento) AS venta')
 			->from('factura a')
@@ -80,6 +88,10 @@ class Tablero_model extends General_model
 
 		if (isset($args["fal"])) {
 			$this->db->where('a.fecha_factura <= ', $args["fal"]);
+		}
+
+		if (isset($args['sede'])) {
+			$this->db->where('a.sede', $args['sede']);
 		}
 
 		return $this->db
@@ -110,6 +122,10 @@ class Tablero_model extends General_model
 			$this->db->where('f.fecha_factura <= ', $args["fal"]);
 		}
 
+		if (isset($args['sede'])) {
+			$this->db->where('g.sede', $args['sede']);
+		}
+
 		return $this->db
 			->select('h.descripcion AS turno, SUM(e.total - e.descuento) AS venta')
 			->from('comanda a')
@@ -138,6 +154,10 @@ class Tablero_model extends General_model
 
 		if (isset($args["fal"])) {
 			$this->db->where('f.fecha_factura <= ', $args["fal"]);
+		}
+
+		if (isset($args['sede'])) {
+			$this->db->where('f.sede', $args['sede']);
 		}
 
 		return $this->db
