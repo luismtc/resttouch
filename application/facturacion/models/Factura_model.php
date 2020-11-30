@@ -438,6 +438,7 @@ class Factura_model extends General_model
 
 		$montoIva = 0;
 		$montoTotal = 0;
+		$impuestosEsp = [];
 
 
 		foreach ($this->getDetalle() as $key => $row) {
@@ -473,17 +474,56 @@ class Factura_model extends General_model
 			$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorIva));
 
 			$impuestos->appendChild($impuesto);
+			if ($row->impuesto_especial) {
+				$imp = $this->ImpuestoEspecial_model->buscar([
+					"impuesto_especial" => $row->impuesto_especial,
+					"_uno" =>true
+				]);
+
+				$impuesto = $this->crearElemento('dte:Impuesto');
+				$impuesto->appendChild($this->crearElemento('dte:NombreCorto', $imp->descripcion));
+				$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : 1)));
+
+				$valorImp = $row->valor_impuesto_especial;
+
+				if ($this->exenta) {
+					$valorBase = $row->total;
+				} else {
+					$valorBase = $row->monto_base;
+				}
+
+				$montoIva += $valorIva;
+
+				$impuesto->appendChild($this->crearElemento('dte:MontoGravable', $valorBase));
+				$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
+				$impuestos->appendChild($impuesto);
+				if (isset($impuestosEsp[$row->impuesto_especial])) {
+					$impuestosEsp[$row->impuesto_especial]['monto'] += $row->valor_impuesto_especial;
+				} else {
+					$impuestosEsp[$row->impuesto_especial] = [
+						"descripcion" => $imp->descripcion,
+						"monto" => $row->valor_impuesto_especial
+					];
+				}
+			}
+
+
 			$item->appendChild($impuestos);
 
 			$item->appendChild($this->crearElemento('dte:Total', $row->total));
 			$items->appendChild($item);
 			$montoTotal += $row->total;
 		}
-
+		$totalImpuestos = $this->xml->getElementsByTagName('TotalImpuestos')->item(0);
 		$totalIva = $this->xml->getElementsByTagName('TotalImpuesto')->item(0);
 		$totalIva->setAttribute('NombreCorto', 'IVA');
 		$totalIva->setAttribute('TotalMontoImpuesto', ($this->exenta ? '0.00' : $montoIva));
-
+		foreach ($impuestosEsp as $row) {
+			$totalImp = $this->crearElemento('dte:TotalImpuesto');
+			$totalImp->setAttribute('NombreCorto', $row['descripcion']);
+			$totalImp->setAttribute('TotalMontoImpuesto', $row['monto']);
+			$totalImpuestos->appendChild($totalImp);
+		}
 		$granTotal = $this->xml->getElementsByTagName('GranTotal')->item(0);
 		$granTotal->nodeValue = $montoTotal;
 	}

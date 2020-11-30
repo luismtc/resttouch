@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-bodega #lstBodega (getFpagoEv)="setBodega($event)"></app-lista-bodega>
+    </div>
+    <div class="col m7 s12">
+        <app-form-bodega #frmBodega [bodega]="bodega" (bodegaSavedEv)="refreshBodegaList()"></app-form-bodega>
+    </div>
+</div>

@@ -15,6 +15,7 @@ export class BodegaService {
 
   private srvcErrHndl: ServiceErrorHandler;
   private usrToken: string = null;
+  private httpOptions: Object;
 
   constructor(
     private http: HttpClient,
@@ -22,14 +23,20 @@ export class BodegaService {
   ) { 
     this.srvcErrHndl = new ServiceErrorHandler();
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
-  }
-
-  get(fltr: any = {}): Observable<Bodega[]> {
-    const httpOptions = {
+    this.httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
-    return this.http.get<Bodega[]>(`${GLOBAL.urlCatalogos}/get_bodega?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    }
+  }
+
+  get(fltr: any = {}): Observable<Bodega[]> {
+    return this.http.get<Bodega[]>(`${GLOBAL.urlCatalogos}/get_bodega?${qs.stringify(fltr)}`, this.httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  save(entidad: Bodega){
+    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/bodega/guardar${entidad.bodega ? ('/' + entidad.bodega) : ''}`, 
+    entidad, this.httpOptions)
+    .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler))
   }
 }
