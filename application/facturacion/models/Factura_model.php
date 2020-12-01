@@ -33,6 +33,18 @@ class Factura_model extends General_model
 		}
 	}
 
+	public function getDetalleImpuestos()
+	{
+		return $this->db
+					->select("b.descripcion, sum(a.valor_impuesto_especial) as total")
+					->from("detalle_factura a")
+					->join("impuesto_especial b", "b.impuesto_especial = a.impuesto_especial")
+					->where("a.factura", $this->getPK())
+					->group_by("b.impuesto_especial")
+					->get()
+					->result();
+	}
+
 	public function setDetalle($args, $id = "")
 	{
 		$config = $this->Configuracion_model->buscar();
