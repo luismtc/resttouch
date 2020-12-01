@@ -320,6 +320,7 @@ class Factura extends CI_Controller
 		$fac->serie->xmldte_anulacion = '';
 		$fac->detalle = $fac->getDetalle(["_imprimir" => true]);
 		$fac->certificador_fel = $fac->getCertificador();
+		$fac->impuestos_adicionales = $fac->getDetalleImpuestos();
 
 		$resp = $fac->getFelRespuesta();
 
