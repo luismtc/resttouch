@@ -77,10 +77,18 @@ class Factura extends CI_Controller
 				$fac->cargarEmpresa();
 				$pimpuesto = $fac->empresa->porcentaje_iva + 1;
 				$art = new Articulo_model($req['articulo']);
+
 				if ($fac->exenta) {
 					$req['monto_base'] = $req['total'];
 				} else {
 					$req['monto_base'] = $req['total'] / $pimpuesto;
+				}
+
+				$impuesto_especial = $art->getImpuestoEspecial();
+				if ($impuesto_especial) {
+					$req['impuesto_especial'] = $impuesto_especial->impuesto_especial;
+					$req['porcentaje_impuesto_especial'] = $impuesto_especial->porcentaje;
+					$req['valor_impuesto_especial'] = $req['monto_base'] * ((float)$impuesto_especial->porcentaje / 100);
 				}
 
 				$req['presentacion'] = $art->presentacion;

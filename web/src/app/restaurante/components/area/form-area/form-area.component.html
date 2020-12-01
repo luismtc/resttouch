@@ -30,6 +30,14 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+            <mat-form-field class="fullWidth">
+                <mat-label>Impresora de factura</mat-label>
+                <mat-select name="impresora_factura" [(ngModel)]="entidad.impresora_factura">
+                    <mat-option *ngFor="let imp of impresoras" [value]="imp.impresora">
+                        {{imp.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
             <h5>Mesas en el área: {{entidad.mesas.length}}</h5>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"

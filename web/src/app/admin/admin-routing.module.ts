@@ -15,7 +15,7 @@ import { AccesoUsuarioComponent } from './components/acceso-usuario/acceso-usuar
 import { TableroComponent } from './components/tablero/tablero.component';
 import { ProveedorComponent } from './components/proveedor/proveedor/proveedor.component';
 import { ImpuestoEspecialComponent } from './components/impuestoEspecial/impuesto-especial/impuesto-especial.component';
-import {BodegaComponent} from './components/bodega/bodega/bodega.component'
+import { BodegaComponent } from './components/bodega/bodega/bodega.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },

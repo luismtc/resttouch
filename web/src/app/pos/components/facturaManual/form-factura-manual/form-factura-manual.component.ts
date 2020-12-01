@@ -202,10 +202,17 @@ export class FormFacturaManualComponent implements OnInit {
     return suma;
   }
 
+  getTotalImpuestosAdicionales = (impuestos: any[]) => {
+    let suma = 0.00;
+    impuestos.forEach(i => suma += +i.total);
+    return suma;
+  }
+
   imprimirFactura = () => {
     // console.log(this.factura);
     this.facturaSrvc.imprimir(+this.factura.factura).subscribe(res => {
       if (res.factura) {
+        console.log(res.factura);
         this.socket.emit(`print:factura`, `${JSON.stringify({
           NombreEmpresa: res.factura.empresa.nombre,
           NitEmpresa: res.factura.empresa.nit,
@@ -217,14 +224,15 @@ export class FormFacturaManualComponent implements OnInit {
           Direccion: res.factura.receptor.direccion,
           Serie: res.factura.serie_factura,
           Numero: res.factura.numero_factura,
-          Total: this.getTotalDetalle(res.factura.detalle),
+          Total: this.getTotalDetalle(res.factura.detalle) + this.getTotalImpuestosAdicionales((res.factura.impuestos_adicionales || [])),
           NoAutorizacion: res.factura.fel_uuid,
           NombreCertificador: res.factura.certificador_fel.nombre,
           NitCertificador: res.factura.certificador_fel.nit,
           FechaDeAutorizacion: res.factura.fecha_autorizacion,
           NoOrdenEnLinea: '',
           FormaDePago: '',
-          DetalleFactura: this.procesaDetalleFactura(res.factura.detalle)
+          DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
+          ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
         })}`);
         this._snackBar.open(
           `Imprimiendo factura ${this.factura.serie_factura}-${this.factura.numero_factura}`,

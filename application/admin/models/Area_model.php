@@ -8,6 +8,7 @@ class Area_model extends General_Model {
 	public $area_padre;
 	public $nombre;
 	public $impresora;
+	public $impresora_factura = 0;
 
 	public function __construct($id = "")
 	{

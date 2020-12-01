@@ -44,7 +44,7 @@ export class FormAreaComponent implements OnInit {
 
   loadImpresoras = () => this.impresoraSrvc.get().subscribe(res => this.impresoras = res);
 
-  resetEntidad = () => this.entidad = { area: null, sede: this.sedeUsr, nombre: null, mesas: [] };
+  resetEntidad = () => this.entidad = { area: null, sede: this.sedeUsr, nombre: null, mesas: [], impresora_factura: null, impresora: null };
 
   onSubmit = () => {
     // console.log(this.entidad); return;

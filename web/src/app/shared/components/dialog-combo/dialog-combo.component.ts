@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import {ArticuloService} from '../../../wms/services/articulo.service'
+import { ArticuloService } from '../../../wms/services/articulo.service'
 
 export class ConfirmDialogComboModel {
   constructor(
@@ -23,38 +23,37 @@ export class DialogComboComponent implements OnInit {
   public lblBtnDeny: string;
   public datos: any;
   public producto: any;
-  public combo: any[] = [];
+  public combo: any;
   public seleccion: any;
 
   constructor(
     public dialogRef: MatDialogRef<DialogComboComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogComboModel,
     private articuloSvr: ArticuloService
-  ) { 
+  ) {
     this.datos = {
       respuesta: false,
       seleccion: []
-    }
-    this.lblBtnConfirm = data.lblBtnConfirm
-    this.lblBtnDeny = data.lblBtnDeny
-    this.producto = data.producto
+    };
+    this.lblBtnConfirm = data.lblBtnConfirm;
+    this.lblBtnDeny = data.lblBtnDeny;
+    this.producto = data.producto;
     this.seleccion = {
       articulo: this.producto.id,
       descripcion: this.producto.nombre,
-      receta:[]
-    }
+      receta: []
+    };
   }
 
   ngOnInit() {
+    this.combo = [];
     this.getArticulos();
   }
 
   getArticulos = () => {
-    let fltr : any = {
-      articulo: this.producto.id
-    } 
+    const fltr: any = { articulo: this.producto.id };
     this.articuloSvr.getArticuloCombo(fltr).subscribe((res) => {
-      this.combo = res
+      this.combo = res;
       for (let i = 0; i < this.combo.length; i++) {
         const element = this.combo[i];
         this.combo[i].seleccionado = false;
@@ -65,45 +64,44 @@ export class DialogComboComponent implements OnInit {
     });
   }
 
-  addProductoMulti(receta:any, producto:any) {
-    let detalle = {
+  addProductoMulti(receta: any, producto: any) {
+    const detalle = {
       articulo: receta.articulo,
       descripcion: receta.descripcion,
       receta: []
-    }
-    const idx = this.seleccion.receta
-        .findIndex(p => +p.articulo === +receta.articulo);
-    
-    const idrec = receta.receta.findIndex(o=> +o.articulo === +producto.articulo)
+    };
 
-    if(idrec >= 0) {
-      var item = receta.receta[idrec];
+    const idx = this.seleccion.receta.findIndex(p => +p.articulo === +receta.articulo);
+
+    const idrec = receta.receta.findIndex(o => +o.articulo === +producto.articulo);
+
+    if (idrec >= 0) {
+      const item = receta.receta[idrec];
       receta.receta[idrec].seleccionado = !receta.receta[idrec].seleccionado;
-      
-      if(idx < 0){
-        detalle.receta.push(item)
+
+      if (idx < 0) {
+        detalle.receta.push(item);
         this.seleccion.receta.push(detalle);
       } else {
-        if(receta.receta[idrec].seleccionado){
-          this.seleccion.receta[idx].receta.push(item)
+        if (receta.receta[idrec].seleccionado) {
+          this.seleccion.receta[idx].receta.push(item);
         } else {
-          var id = this.seleccion.receta[idx].receta.findIndex(p=>+p.articulo===+item.articullo);
-          this.seleccion.receta[idx].receta.splice(id,1);
+          const id = this.seleccion.receta[idx].receta.findIndex(p => +p.articulo === +item.articullo);
+          this.seleccion.receta[idx].receta.splice(id, 1);
         }
-        
+
       }
     }
   }
 
   addProducto(receta: any) {
-    const idx = this.seleccion.receta
-        .findIndex(p => +p.articulo === +receta.articulo);
-    
-    if(idx < 0){
+    const idx = this.seleccion.receta.findIndex(p => +p.articulo === +receta.articulo);
+
+    if (idx < 0) {
       receta.seleccionado = true;
-      this.seleccion.receta.push(receta)
-    }    
-    
+      this.seleccion.receta.push(receta);
+    }
+
   }
 
   onConfirm(): void {

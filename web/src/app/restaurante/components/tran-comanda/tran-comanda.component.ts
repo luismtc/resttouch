@@ -187,7 +187,7 @@ export class TranComandaComponent implements OnInit {
   }
 
   agregarProductos(producto: any) {
-    console.log(producto)
+    // console.log(producto);
     if (+producto.combo === 1 || +producto.multiple === 1) {
       this.bloqueoBotones = true;
       const confirmRef = this.dialog.open(DialogComboComponent, {
@@ -406,7 +406,8 @@ export class TranComandaComponent implements OnInit {
                         Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
                         Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
                         Total: null,
-                        NumeroPedido: this.mesaEnUso.numero_pedido
+                        NumeroPedido: this.mesaEnUso.numero_pedido,
+                        NotasGenerales: (this.mesaEnUso.notas_generales || '')
                       })}`);
                       this.snackBar.open(`Imprimiendo comanda #${this.noComanda}`, 'Comanda', { duration: 7000 });
                     } else {

@@ -56,6 +56,7 @@ $config['menu'] = [
 						'nombre' => 'Impuesto Especial',
 						'link' => '/admin/impuesto_especial'
 					]
+					
 				]
 			],
 			2 => [
@@ -201,6 +202,15 @@ $config['menu'] = [
 					2 => [
 						'nombre' => 'Kardex',
 						'link' => '/wms/rptkardex'
+					]
+				]
+			],
+			3 => [
+				'nombre' => 'Mantenimientos',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Bodegas',
+						'link' => '/admin/bodega'
 					]
 				]
 			]

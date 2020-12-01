@@ -7,4 +7,5 @@ export interface Area {
     nombre: string;
     mesas?: Mesa[];
     impresora?: number;
+    impresora_factura?: number;
 }

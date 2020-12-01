@@ -171,7 +171,7 @@ export class CobrarPedidoComponent implements OnInit {
     this.cobroSrvc.save(objCobro).subscribe(res => {
       if (res.exito && !res.facturada) {
         this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
-        if(res.facturar){
+        if (res.facturar) {
           this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
             // console.log('RESPUESTA DE FACTURAR = ', resFact);
             if (resFact.exito) {
@@ -224,6 +224,12 @@ export class CobrarPedidoComponent implements OnInit {
     return suma;
   }
 
+  getTotalImpuestosAdicionales = (impuestos: any[]) => {
+    let suma = 0.00;
+    impuestos.forEach(i => suma += +i.total);
+    return suma;
+  }
+
   printFactura = (factura: any) => {
     // console.log('FACTURA = ', factura);
     this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
@@ -240,7 +246,7 @@ export class CobrarPedidoComponent implements OnInit {
           Direccion: res.factura.receptor.direccion,
           Serie: res.factura.serie_factura,
           Numero: res.factura.numero_factura,
-          Total: this.getTotalDetalle(res.factura.detalle),
+          Total: this.getTotalDetalle(res.factura.detalle) + this.getTotalImpuestosAdicionales((res.factura.impuestos_adicionales || [])),
           NoAutorizacion: res.factura.fel_uuid,
           NombreCertificador: res.factura.certificador_fel.nombre,
           NitCertificador: res.factura.certificador_fel.nit,
@@ -248,7 +254,8 @@ export class CobrarPedidoComponent implements OnInit {
           NoOrdenEnLinea: '',
           FormaDePago: '',
           DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
-          Impresora: this.data.impresora
+          Impresora: this.data.impresora,
+          ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
         };
 
         if (!!this.data.impresora) {
