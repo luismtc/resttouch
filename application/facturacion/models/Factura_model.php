@@ -408,7 +408,8 @@ class Factura_model extends General_model
 		}
 
 		$emisor->setAttribute('NITEmisor', str_replace('-', '', $this->empresa->nit));
-		$emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
+		// $emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
+		$emisor->setAttribute('NombreComercial', $this->sedeFactura->nombre);
 		$emisor->setAttribute('NombreEmisor', $this->empresa->nombre);
 
 		$direccionEmisor = $this->xml->getElementsByTagName('DireccionEmisor')->item(0);
