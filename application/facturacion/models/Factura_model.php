@@ -366,7 +366,7 @@ class Factura_model extends General_model
 
 		$datosGenerales->setAttribute('FechaHoraEmision', $fecha . date("\TH:i:s-06:00"));
 
-		$datosGenerales->setAttribute('NumeroAcceso', '100000000');
+		//$datosGenerales->setAttribute('NumeroAcceso', '100000000');		
 
 		if ($this->serie !== null) {
 			$datosGenerales->setAttribute('Tipo', $this->serie->tipo);

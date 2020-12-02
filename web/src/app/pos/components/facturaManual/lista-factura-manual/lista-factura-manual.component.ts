@@ -17,7 +17,7 @@ export class ListaFacturaManualComponent implements OnInit {
 
   public lstFacturas: Factura[];
   public lstFacturasPaged: Factura[];
-  @Output() getFacturaEv = new EventEmitter(); 
+  @Output() getFacturaEv = new EventEmitter();
 
   public length = 0;
   public pageSize = 5;
@@ -58,8 +58,10 @@ export class ListaFacturaManualComponent implements OnInit {
       if (lst) {
         if (lst.length > 0) {
           this.lstFacturas = lst;
-          this.applyFilter();
+        } else {
+          this.lstFacturas = [];
         }
+        this.applyFilter();
       }
     });
   }
