@@ -28,6 +28,7 @@ export interface ComandaGetResponse {
             area_padre?: number;
             nombre: string;
             impresora?: Impresora;
+            impresora_factura?: Impresora;
         };
         numero: number;
         posx: number;

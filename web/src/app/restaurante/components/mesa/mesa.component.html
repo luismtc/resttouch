@@ -7,5 +7,5 @@
     [style.top.%]="configuracion.posy"
     [attr.disabled]="isDisabled ? true : null"
     [style.backgroundImage]="'url('+ urlImage +')'">
-    <span>{{configuracion.numero}}</span>
+    <span>{{configuracion.etiqueta || configuracion.numero}}</span>
 </div>

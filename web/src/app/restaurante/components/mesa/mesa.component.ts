@@ -22,7 +22,8 @@ export class MesaComponent implements OnInit, AfterViewInit {
     ancho: null,
     alto: null,
     esmostrador: 0,
-    vertical: 0
+    vertical: 0,
+    etiqueta: null
   };
   @Input() dontAllowDrag = true;
   @Input() isDisabled = false;

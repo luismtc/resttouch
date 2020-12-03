@@ -30,7 +30,7 @@ export interface ArticuloResponse {
     precio: number;
     codigo?: string;
     multiple?: number;
-    combo?:number;
+    combo?: number;
     produccion?: number;
     presentacion_reporte?: any;
     mostrar_pos?: number;
@@ -47,6 +47,7 @@ export interface ArbolCategoriaGrupo {
     descripcion: string;
     receta: number;
     articulo: Articulo[];
+    mostrarEnPos?: boolean;
 }
 
 export interface ArbolArticulos {
@@ -54,6 +55,7 @@ export interface ArbolArticulos {
     sede: number;
     descripcion: string;
     categoria_grupo: ArbolCategoriaGrupo[];
+    mostrarEnPos?: boolean;
 }
 
 export interface NodoProducto {
@@ -63,7 +65,7 @@ export interface NodoProducto {
     impresora?: Impresora;
     presentacion?: number;
     codigo?: string;
-    combo?:number;
+    combo?: number;
     multiple?: number;
     hijos?: NodoProducto[];
 }

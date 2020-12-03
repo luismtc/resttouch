@@ -255,6 +255,7 @@ class Comanda_model extends General_Model
 		if ($mesa) {
 			$area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
 			$area->impresora = $this->Impresora_model->buscar(['impresora' => $area->impresora, "_uno" => true]);
+			$area->impresora_factura = $this->Impresora_model->buscar(['impresora' => $area->impresora_factura, "_uno" => true]);
 			$mesa->area = $area;
 			$mesa->impresora = $this->Impresora_model->buscar(['impresora' => $mesa->impresora, "_uno" => true]);
 			$tmp->mesa = $mesa;

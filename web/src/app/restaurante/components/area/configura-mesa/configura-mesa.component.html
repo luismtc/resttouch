@@ -2,6 +2,9 @@
 <div mat-dialog-content>
     <form #frmConfigMesa="ngForm" novalidate>
         <mat-form-field class="fullWidth">
+            <input type="text" matInput placeholder="Etiqueta" name="etiqueta" [(ngModel)]="mesa.etiqueta" maxlength="3">
+        </mat-form-field>
+        <mat-form-field class="fullWidth" *ngIf="+mesa.esmostrador === 1">
             <mat-label>Impresora</mat-label>
             <mat-select name="impresora" [(ngModel)]="mesa.impresora">
                 <mat-option *ngFor="let imp of impresoras" [value]="imp.impresora">

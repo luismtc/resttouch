@@ -40,7 +40,7 @@ interface productoSelected {
   detalle_comanda?: number;
   detalle_cuenta?: number;
   impresora?: Impresora;
-  detalle?: []
+  detalle?: [];
 }
 
 @Component({
@@ -112,7 +112,23 @@ export class TranComandaComponent implements OnInit {
   resetCuentaActiva = () => this.cuentaActiva = { cuenta: null, numero: null, nombre: null, productos: [] };
   resetListadoArticulos = () => this.appLstProdAlt.loadArbolArticulos();
 
-  setListaCategorias = (cats: ArbolArticulos[] = []) => this.categorias = cats;
+  setListaCategorias = (cats: ArbolArticulos[] = []) => this.categorias = this.setVerBotones(cats);
+
+  setVerBotones = (cats: ArbolArticulos[]) => {
+    for (const cat of cats) {
+      loopSubCategoria:
+      for (const subcat of cat.categoria_grupo) {
+        for (const art of subcat.articulo) {
+          if (+art.mostrar_pos === 1) {
+            subcat.mostrarEnPos = true;
+            cat.mostrarEnPos = true;
+            continue loopSubCategoria;
+          }
+        }
+      }
+    }
+    return cats;
+  }
 
   clickOnCategoria = (c: ArbolArticulos) => this.appLstProdAlt.fillSubCategorias(c.categoria_grupo);
 
@@ -554,7 +570,7 @@ export class TranComandaComponent implements OnInit {
               productosACobrar,
               porcentajePropina: 0.00,
               impresora: +this.mesaEnUso.mesa.esmostrador === 0 ?
-                null :
+                (this.mesaEnUso.mesa.area.impresora_factura || null) :
                 (this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora)
             }
           });

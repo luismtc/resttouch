@@ -23,7 +23,7 @@
         <ng-template matMenuContent let-item="item">
             <span mat-menu-item class="mesaTitle" disableRipple="true">Mesa #{{item.numero}} ({{item.mesa}})</span>
             <mat-divider></mat-divider>
-            <button mat-menu-item (click)="configurarMesa(item)" *ngIf="+item.esmostrador === 1 && +item.debaja === 0">
+            <button mat-menu-item (click)="configurarMesa(item)" *ngIf="+item.debaja === 0">
                 <mat-icon class="btnIconSize">settings</mat-icon>Configuracion
             </button>
             <button mat-menu-item (click)="toggleDeBaja(item)" *ngIf="+item.debaja === 0" class="customize" [disabled]="+item.estatus === 2">

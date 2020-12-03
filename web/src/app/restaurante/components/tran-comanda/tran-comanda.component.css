@@ -31,8 +31,15 @@
     }
 }
 
-@media (min-height: 769px) {
+@media (min-height: 985px) {
     .colProductos {     
         height: 600px !important;
     }
 }
+
+@media (max-height: 768px) {
+    .colProductos {     
+        height: 400px !important;
+    }
+}
+
