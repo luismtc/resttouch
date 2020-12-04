@@ -10,6 +10,7 @@ import { ExistenciasComponent } from './components/reporte/existencias/existenci
 import { KardexComponent } from './components/reporte/kardex/kardex.component';
 import { ProduccionComponent } from './components/produccion/produccion.component';
 import { ValorizadoComponent } from './components/reporte/valorizado/valorizado.component'
+import { FisicoComponent } from './components/fisico/fisico/fisico.component'
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'rptkardex', component: KardexComponent, canActivate: [AuthGuard] },
   { path: 'produccion', component: ProduccionComponent, canActivate: [AuthGuard] },
   { path: 'rptvalorizado', component: ValorizadoComponent, canActivate: [AuthGuard] },
+  { path: 'fisico', component: FisicoComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

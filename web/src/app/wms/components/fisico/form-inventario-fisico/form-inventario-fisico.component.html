@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col m12 s12">
+      <mat-card class="mat-elevation-z4 fullWidth">
+        <mat-card-title>
+          <div class="row">
+            <div class="col">
+              <h4>Ingreso Inventario Fisico</h4>
+            </div>
+            <div class="col" style="float: right;">
+              <button mat-button type="button" color="accent" (click)="showForm = !showForm;">
+                <mat-icon class="iconFontSize" *ngIf="showForm">expand_more</mat-icon>
+                <mat-icon class="iconFontSize" *ngIf="!showForm">expand_less</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-card-title>
+        <mat-card-content *ngIf="showForm">
+          <form (ngSubmit)="buscar()" novalidate>
+            <mat-form-field class="fullWidth" >
+                <input matInput type="text" placeholder="Número" name="numero" [(ngModel)]="params.numero" required>
+                <button mat-raised-button matSuffix color="accent" type="submit">Buscar</button>
+            </mat-form-field>
+          </form>  
+          <app-cargando *ngIf="cargando"></app-cargando>      
+        </mat-card-content>
+      </mat-card>
+    </div>
+</div>
+<div class="row">
+    <div class="col m12 s12">
+      <mat-card class="mat-elevation-z4 fullWidth">
+        <mat-card-title>
+        </mat-card-title>
+        <mat-card-content >
+          <form (ngSubmit)="buscar()" novalidate>
+            <mat-form-field class="fullWidth" >
+                <input matInput type="text" placeholder="Número" name="numero" [(ngModel)]="params.numero" required>
+            </mat-form-field>
+          </form>  
+          <app-cargando *ngIf="cargando"></app-cargando>      
+        </mat-card-content>
+      </mat-card>
+    </div>
+</div>

@@ -53,6 +53,14 @@ export class ReportePdfService {
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  generarInventarioFisico(params: Object) {
+    return this.http.post<string>(
+      `${GLOBAL.urlWms}/fisico/generar`,
+      params,
+      this.httpOptions
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getReporteKardex(params: Object) {
     this.httpOptions['params'] = params;
 
