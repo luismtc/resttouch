@@ -44,6 +44,15 @@ export class ReportePdfService {
         ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  getReporteValorizado(params: Object) {
+    this.httpOptions['params'] = params;
+
+    return this.http.get<string>(
+      `${GLOBAL.urlWms}/reporte/valorizado`,
+      this.httpOptions
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getReporteKardex(params: Object) {
     this.httpOptions['params'] = params;
 

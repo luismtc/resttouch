@@ -72,6 +72,9 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
+            <mat-form-field class="fullWidth" *ngIf = "+articulo.produccion == 1">
+                <input matInput type="number" step="0.05" placeholder="Rendimiento" name="rendimiento" [(ngModel)]="articulo.rendimiento" required>
+            </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf = "+articulo.multiple == 1 || +articulo.combo">
                 <input matInput type="number" step="1" placeholder="Cantidad minima" name="minima" [(ngModel)]="articulo.cantidad_minima" required>
             </mat-form-field>

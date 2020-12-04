@@ -202,6 +202,10 @@ $config['menu'] = [
 					2 => [
 						'nombre' => 'Kardex',
 						'link' => '/wms/rptkardex'
+					],
+					3 => [
+						'nombre' => 'Inventario Valorizado',
+						'link' => '/wms/rptvalorizado'
 					]
 				]
 			],

@@ -9,6 +9,7 @@ import { TransformacionComponent } from './components/transformacion/transformac
 import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
 import { KardexComponent } from './components/reporte/kardex/kardex.component';
 import { ProduccionComponent } from './components/produccion/produccion.component';
+import { ValorizadoComponent } from './components/reporte/valorizado/valorizado.component'
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'rptexistencia', component: ExistenciasComponent, canActivate: [AuthGuard] },
   { path: 'rptkardex', component: KardexComponent, canActivate: [AuthGuard] },
   { path: 'produccion', component: ProduccionComponent, canActivate: [AuthGuard] },
+  { path: 'rptvalorizado', component: ValorizadoComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

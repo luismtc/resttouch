@@ -98,6 +98,26 @@ class Ingreso_model extends General_Model {
 
 		return $datos;
 	}
+
+	public function get_ultima_compra($args = [])
+	{
+		if (isset($args['sede'])) {
+			$this->db->where('b.sede', $args['sede']);
+		}
+
+		if (isset($args['bodega'])) {
+			$this->db->where('a.bodega', $args['bodega']);
+		}
+
+		return $this->db
+					->select("max(c.ingreso_detalle), c.articulo, c.precio_unitario, a.fecha")
+					->join("bodega b", "a.bodega = b.bodega")
+					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+					->where("date(a.fecha) <= '{$args['fecha']}'")
+					->group_by("c.articulo")
+					->get("ingreso a")
+					->result();
+	}
 }
 
 /* End of file Ingreso_model.php */

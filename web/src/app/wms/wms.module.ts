@@ -45,12 +45,14 @@ import { ExistenciasComponent } from './components/reporte/existencias/existenci
 import { KardexComponent } from './components/reporte/kardex/kardex.component';
 import { ListaProductoAltComponent } from './components/producto/lista-producto-alt/lista-producto-alt.component';
 import { ProduccionComponent } from './components/produccion/produccion.component';
+import { ReporteComponent } from './components/fisico/reporte/reporte.component';
+import { ValorizadoComponent } from './components/reporte/valorizado/valorizado.component';
 
 @NgModule({
   declarations: [
     ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent,
     CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent,
-    KardexComponent, ListaProductoAltComponent, ProduccionComponent
+    KardexComponent, ListaProductoAltComponent, ProduccionComponent, ReporteComponent, ValorizadoComponent
   ],
   imports: [
     CommonModule,

@@ -134,6 +134,7 @@ class Conversor extends CI_Controller {
 							"presentacion" => 1
 						]);
 					}
+					$det['cantidad'] = $det['cantidad'] * $art->rendimiento;
 					$det["presentacion"] = 1;
 					$ingr->setDetalle($det);
 				}

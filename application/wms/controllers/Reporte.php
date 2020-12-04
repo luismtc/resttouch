@@ -9,7 +9,14 @@ class Reporte extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['Reporte_model', 'Articulo_model', 'Receta_model']);
+		$this->load->model([
+			'Reporte_model', 
+			'Articulo_model', 
+			'Receta_model',
+			'Ingreso_model',
+			'Categoria_model',
+			'Bodega_model'
+		]);
 
 		$this->load->helper(['jwt', 'authorization']);
 
@@ -125,6 +132,100 @@ class Reporte extends CI_Controller {
 		$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
 		$pdf->Output("Kardex.pdf", "D");
 
+	}
+
+	public function valorizado()
+	{
+		$req = $_GET;
+		$ingresos = $this->Ingreso_model->get_ultima_compra($req);
+		
+		$datos = [];
+		$detalle = [];
+
+		foreach ($ingresos as $row) {
+			$art = new Articulo_model($row->articulo);
+			$art->actualizarExistencia($_GET);
+			
+			$detalle[$art->getPK()] = [
+				"cantidad" => $art->existencias, 
+				"total" => $art->existencias * $row->precio_unitario,
+				"descripcion" => $art->descripcion,
+				"precio_unitario" => $row->precio_unitario,
+				"ultima_compra" => formatoFecha($row->fecha, 2)
+			];
+			
+		}
+
+		$buscar = [];
+		if (isset($_GET['sede'])) {
+			$buscar['sede'] = $this->input->get('sede');
+		}
+		$cat = $this->Categoria_model->buscar($buscar);		
+		
+		$categorias = [];
+		foreach ($cat as $row) {
+			$grupo = $this->Catalogo_model->getCategoriaGrupo([
+				"categoria" => $row->categoria,
+				"categoria_grupo_grupo" => null			
+			]);
+			$row->categoria_grupo = $grupo;
+
+			$categorias[] = $row;
+		}
+		$datos = [];
+		foreach ($categorias as $row) {
+			$row->subcategoria = buscar_articulo($row->categoria_grupo, $detalle);
+			unset($row->categoria_grupo);
+			$datos[] = $row;
+		}
+		
+		$data = [
+			"detalle" => $datos,
+			"fecha" => formatoFecha($_GET['fecha'], 2)
+		];
+
+		if ($this->input->get('sede')) {
+			$sede = $this->input->get('sede');
+		} else {
+			$sede = $this->data->sede;
+		}
+
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $sede,
+			"_uno" => true
+		]);
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$data['empresa'] = $emp;
+				$data['nsede'] = $sede;
+			}
+		}
+
+		if ($this->input->get('bodega')) {
+			$bod = $this->Bodega_model->buscar([
+				"bodega" => $_GET['bodega'],
+				"_uno" => true
+			]);
+
+			$data['nbodega'] = $bod->descripcion;
+		} else {
+			$data['nbodega'] = 'Todas';
+		}
+
+		$vista = $this->load->view('reporte/valorizado/imprimir', $data, true);
+
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => sys_get_temp_dir(), //Produccion
+			'format' => 'Legal'
+		]);
+
+		$mpdf->WriteHTML($vista);
+		$mpdf->Output("valorizado.pdf", "D");
 	}
 
 }

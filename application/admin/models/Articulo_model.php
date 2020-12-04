@@ -20,6 +20,7 @@ class Articulo_model extends General_model {
 	public $multiple = 0;
 	public $cantidad_minima = 1;
 	public $cantidad_maxima = 1;
+	public $rendimiento = 1;
 
 	public function __construct($id = "")
 	{
