@@ -1,5 +1,112 @@
 <?php 
 
+if (!function_exists('guardar_comanda')) {
+	function guardar_comanda($req=[])
+	{
+		$datos = ["exito" => false, "mensaje" => "Error"];
+		$ci =& get_instance();
+		$usu = $ci->Usuario_model->find([
+			'usuario' => $req['mesero'], 
+			"_uno" => true
+		]);
+
+		if ($usu) {
+			$turno = $ci->Turno_model->getTurno([
+				"sede" => $req['data']->sede,
+				'abierto' => true, 
+				"_uno" => true
+			]);
+			$comanda = new Comanda_model($req['comanda']);
+			$mesa = new Mesa_model($req['mesa']);
+			$req['usuario'] = $req['data']->idusuario;
+			$req['sede'] = $req['data']->sede;
+			$continuar = true;
+
+			if ($turno) {
+				$req['turno'] = $turno->turno;
+				if ($mesa->estatus == 2 && empty($req['comanda'])) {
+					$continuar = false;
+				}
+				if ($continuar) {
+					# $comanda->comandaenuso = 1;
+					$datos['exito'] = $comanda->guardar($req);
+
+					if (empty($req['comanda'])) {
+						$comanda->setMesa($req['mesa']);
+						$mesa->guardar(["estatus" => 2]);
+					}
+
+					if (count($req['cuentas']) > 0) {
+						foreach ($req['cuentas'] as $row) {
+							$cuenta = new Cuenta_model();
+
+							if (isset($row['cuenta']) && !empty($row['cuenta']) && $row['cuenta'] > 0) {
+								$cuenta->cargar($row['cuenta']);
+							} else {
+								$tmpCuenta = $ci->Cuenta_model->buscar([
+									"nombre" => trim($row["nombre"]),
+									"comanda" => $comanda->comanda,
+									"_uno" => true
+								]);
+
+								if ($tmpCuenta) {
+									$cuenta->cargar($tmpCuenta->cuenta);
+								} else if(count($comanda->getCuentas()) == 1){
+
+									$tmpCuenta = $ci->Cuenta_model->buscar([
+										"nombre" => "Unica",
+										"comanda" => $comanda->comanda,
+										"_uno" => true
+									]);
+
+									if ($tmpCuenta) {
+										$cuenta->cargar($tmpCuenta->cuenta);
+									}
+								}
+							}
+
+							if ($cuenta->cerrada == 0) {
+								$row['comanda'] = $comanda->comanda;
+								if (isset($row['cuenta'])) {
+									unset($row['cuenta']);
+								}
+								$cuenta->guardarCuenta($row);
+								if (isset($row['productos'])) {
+									foreach ($row['productos'] as $prod) {
+										if (isset($prod['detalle_comanda']) && !empty($prod['detalle_comanda'])) {
+											$det = new Dcomanda_model($prod['detalle_comanda']);
+											$det->guardar([
+												"notas" => $prod['notas']
+											]);
+										}
+										
+									}
+								}
+							}							
+						}
+						$datos['exito'] = true;
+					}	
+
+					if($datos['exito']) {
+						$datos['mensaje'] = "Datos Actualizados con Exito";
+						$datos['comanda'] = $comanda->getComanda();	
+					} else {
+						$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+					}	
+				} else {
+					$datos['mensaje'] = "La mesa ya fue abierta en otra estación, por favor actualice la pantalla.";
+				}
+			} else {
+				$datos['mensaje'] = "No existe ningun turno abierto";
+			}
+		} else {
+			$datos['mensaje'] = "Mesero Invalido";
+		}
+
+		return $datos;
+	}
+}
+
 if( ! function_exists('suma_field')){
 	function suma_field($datos, $campo, $filtro = []) {
 		$suma_campo = 0;

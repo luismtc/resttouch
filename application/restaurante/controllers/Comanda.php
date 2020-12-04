@@ -41,104 +41,8 @@ class Comanda extends CI_Controller {
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		if ($this->input->method() == 'post') {
 			if (isset($req['mesa']) && isset($req['comanda']) && isset($req['cuentas'])) {
-
-				$usu = $this->Usuario_model->find([
-					'usuario' => $req['mesero'], 
-					"_uno" => true
-				]);
-
-				if ($usu) {
-					$turno = $this->Turno_model->getTurno([
-						"sede" => $data->sede,
-						'abierto' => true, 
-						"_uno" => true
-					]);
-					$comanda = new Comanda_model($req['comanda']);
-					$mesa = new Mesa_model($req['mesa']);
-					$req['usuario'] = $data->idusuario;
-					$req['sede'] = $data->sede;
-					$continuar = true;
-
-					if ($turno) {
-						$req['turno'] = $turno->turno;
-						if ($mesa->estatus == 2 && empty($req['comanda'])) {
-							$continuar = false;
-						}
-						if ($continuar) {
-							# $comanda->comandaenuso = 1;
-							$datos['exito'] = $comanda->guardar($req);
-
-							if (empty($req['comanda'])) {
-								$comanda->setMesa($req['mesa']);
-								$mesa->guardar(["estatus" => 2]);
-							}
-
-							if (count($req['cuentas']) > 0) {
-								foreach ($req['cuentas'] as $row) {
-									$cuenta = new Cuenta_model();
-
-									if (isset($row['cuenta']) && !empty($row['cuenta']) && $row['cuenta'] > 0) {
-										$cuenta->cargar($row['cuenta']);
-									} else {
-										$tmpCuenta = $this->Cuenta_model->buscar([
-											"nombre" => trim($row["nombre"]),
-											"comanda" => $comanda->comanda,
-											"_uno" => true
-										]);
-
-										if ($tmpCuenta) {
-											$cuenta->cargar($tmpCuenta->cuenta);
-										} else if(count($comanda->getCuentas()) == 1){
-
-											$tmpCuenta = $this->Cuenta_model->buscar([
-												"nombre" => "Unica",
-												"comanda" => $comanda->comanda,
-												"_uno" => true
-											]);
-
-											if ($tmpCuenta) {
-												$cuenta->cargar($tmpCuenta->cuenta);
-											}
-										}
-									}
-
-									if ($cuenta->cerrada == 0) {
-										$row['comanda'] = $comanda->comanda;
-										if (isset($row['cuenta'])) {
-											unset($row['cuenta']);
-										}
-										$cuenta->guardarCuenta($row);
-										if (isset($row['productos'])) {
-											foreach ($row['productos'] as $prod) {
-												if (isset($prod['detalle_comanda']) && !empty($prod['detalle_comanda'])) {
-													$det = new Dcomanda_model($prod['detalle_comanda']);
-													$det->guardar([
-														"notas" => $prod['notas']
-													]);
-												}
-												
-											}
-										}
-									}							
-								}
-								$datos['exito'] = true;
-							}	
-
-							if($datos['exito']) {
-								$datos['mensaje'] = "Datos Actualizados con Exito";
-								$datos['comanda'] = $comanda->getComanda();	
-							} else {
-								$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
-							}	
-						} else {
-							$datos['mensaje'] = "La mesa ya fue abierta en otra estación, por favor actualice la pantalla.";
-						}
-					} else {
-						$datos['mensaje'] = "No existe ningun turno abierto";
-					}
-				} else {
-					$datos['mensaje'] = "Mesero Invalido";
-				}
+				$req['data'] = $data;
+				$datos = guardar_comanda($req);
 			} else {
 				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
 			}
@@ -412,6 +316,28 @@ class Comanda extends CI_Controller {
 
 				$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
 				$datos->exito = true;
+			} else if($this->input->get('qr')) {
+				$com = new Comanda_model();
+				$config = $this->Configuracion_model->buscar();
+				$mesero = get_configuracion($config, "RT_MESERO_POR_DEFECTO", 1);
+
+				$res = guardar_comanda([
+					"comanda" => "",
+					"estatus" => 1,
+					"data" => $data,
+					"mesero" => $mesero,
+					"cuentas" => [["nombre" => "Unica"]],
+					"mesa" => $mesa->getPK()
+				]);
+				if ($res['exito']) {
+					$tmp = $mesa->get_comanda(["estatus" => 1]);
+					$comanda = new Comanda_model($tmp->comanda);
+					$comanda->comandaenuso = 0;
+
+					$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
+					$datos->exito = true;
+				}
+				
 			}
 		}
 
@@ -570,24 +496,6 @@ class Comanda extends CI_Controller {
 		$this->output
 			 ->set_content_type('application/json')
 			 ->set_output(json_encode($res));
-	}
-
-	public function test_cobro()
-	{
-		$this->load->library('Cobro');
-		$empresa = $this->Catalogo_model->getEmpresa([
-			"empresa" => 1,
-			"_uno" => true
-		]);
-
-		$cobro = new Cobro($empresa);
-
-		$cobro->setTestVenta();
-		$rep = $cobro->cobrar();
-
-		echo "<pre>";
-		print_r ($rep);
-		echo "</pre>";
 	}
 
 	public function validapwdgerenteturno() {
