@@ -20,6 +20,7 @@ export interface Articulo {
     shopify_id?: string;
     cantidad_minima?: number;
     cantidad_maxima?: number;
+    rendimiento?: number;
 }
 
 export interface ArticuloResponse {

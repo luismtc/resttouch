@@ -72,7 +72,8 @@ export class FormProductoComponent implements OnInit {
       multiple: 0,
       cantidad_minima: 1,
       cantidad_maxima: 1,
-      combo: 0
+      combo: 0,
+      rendimiento: 0.00
     };
     this.resetReceta();
   }
