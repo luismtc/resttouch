@@ -189,18 +189,22 @@ class Cuenta_model extends General_Model {
 				if ($this->cobro !== null) {
 					$this->cobro->setReferencia($this->getPK());
 					$this->cobro->setTotal($pago->monto);
-					$tmp = $this->cobro->cobrar();
+					try {
+						$tmp = $this->cobro->cobrar();
 
-					if (empty($tmp)) {
-						$this->setMensaje("Error al realizar cobro, por favor intente nuevamente.");
-						return false;
-					} else {
-						if ($tmp->decision == 'ACCEPT') {
-							$this->db->set("tarjeta_respuesta", json_encode($tmp));
-						} else {
-							$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
+						if (empty($tmp)) {
+							$this->setMensaje("Error al realizar cobro, por favor intente nuevamente.");
 							return false;
+						} else {
+							if ($tmp->decision == 'ACCEPT') {
+								$this->db->set("tarjeta_respuesta", json_encode($tmp));
+							} else {
+								$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
+								return false;
+							}
 						}
+					} catch (Exception $e) {
+						
 					}
 				}
 			}
