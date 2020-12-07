@@ -330,12 +330,15 @@ class Comanda extends CI_Controller {
 					"mesa" => $mesa->getPK()
 				]);
 				if ($res['exito']) {
+					$this->load->helper('api');
 					$tmp = $mesa->get_comanda(["estatus" => 1]);
 					$comanda = new Comanda_model($tmp->comanda);
 					$comanda->comandaenuso = 0;
 
 					$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
 					$datos->exito = true;
+					$updlst = json_decode(get_request('https://restouch.c807.com:8988/api/updlstareas', []));
+					$datos->msgws = $updlst;
 				}
 				
 			}
