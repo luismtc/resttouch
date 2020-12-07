@@ -185,30 +185,31 @@ class Cuenta_model extends General_Model {
 				"_uno" => true
 			]);
 
-			if (strtolower($fpago->descripcion) == "tarjeta") {
-				if ($this->cobro !== null) {
-					$this->cobro->setReferencia($this->getPK());
-					$this->cobro->setTotal($pago->monto);
-					try {
-						$tmp = $this->cobro->cobrar();
+			//if (strtolower($fpago->descripcion) == "tarjeta") {
+			if ($this->cobro !== null) {
+				$this->cobro->setReferencia($this->getPK());
+				$this->cobro->setTotal($pago->monto);
+				
+				try {
+					$tmp = $this->cobro->cobrar();
 
-						if (empty($tmp)) {
-							$this->setMensaje("Error al realizar cobro, por favor intente nuevamente.");
-							return false;
-						} else {
-							if ($tmp->decision == 'ACCEPT') {
-								$this->db->set("tarjeta_respuesta", json_encode($tmp));
-							} else {
-								$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
-								return false;
-							}
-						}
-					} catch (Exception $e) {
-						$this->setMensaje("Error en procesar la tarjeta, ".$e->getMessege());
+					if (empty($tmp)) {
+						$this->setMensaje("Error al realizar cobro, por favor intente nuevamente.");
 						return false;
+					} else {
+						if ($tmp->decision == 'ACCEPT') {
+							$this->db->set("tarjeta_respuesta", json_encode($tmp));
+						} else {
+							$this->setMensaje("{$tmp->reasonCode} - {$tmp->decision}");
+							return false;
+						}
 					}
+				} catch (Exception $e) {
+					$this->setMensaje("Error en procesar la tarjeta, ".$e->getMessege());
+					return false;
 				}
 			}
+			//}
 
 			if (isset($pago->documento)) {
 				$this->db->set("documento", $pago->documento);
