@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material';
-// import { SignalRService } from '../../../../shared/services/signal-r.service';
 import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 
@@ -31,29 +31,31 @@ export class FormFacturaManualComponent implements OnInit {
 
   @Input() factura: Factura;
   @Output() facturaSavedEv = new EventEmitter();
+  @ViewChild('txtArticulo', { static: false }) txtArticulo: HTMLInputElement;
 
-  public showForm: boolean = true;
-  public showFormDetalle: boolean = true;
+  public showForm = true;
+  public showFormDetalle = true;
   public facturaSeries: FacturaSerie[] = [];
   public clientes: Cliente[] = [];
+  public filteredClientes: Cliente[] = [];
   public monedas: Moneda[] = [];
   public detallesFactura: DetalleFactura[] = [];
   public detalleFactura: DetalleFactura;
   public articulos: Articulo[] = [];
+  public filteredArticulos: Articulo[] = [];
   public displayedColumns: string[] = ['articulo', 'cantidad', 'precio_unitario', 'total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleFactura>;
-  public esMovil: boolean = false;
-  public refacturacion: boolean = false;
+  public esMovil = false;
+  public refacturacion = false;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     public dialog: MatDialog,
     private facturaSrvc: FacturaService,
     private facturaSerieSrvc: FacturaSerieService,
     private clienteSrvc: ClienteService,
     private monedaSrvc: MonedaService,
     private articuloSrvc: ArticuloService,
-    //private signalRSrvc: SignalRService,
     private socket: Socket,
     private ls: LocalstorageService
   ) { }
@@ -66,10 +68,19 @@ export class FormFacturaManualComponent implements OnInit {
     this.loadClientes();
     this.loadMonedas();
     this.loadArticulos();
-    // this.signalRSrvc.startConnection(`restaurante_01`);
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
+    }
+  }
+
+  filtrar = (value: string) => {
+    if (value) {
+      const filterValue = value.toLowerCase();
+      this.filteredClientes =
+        this.clientes.filter(c => c.nombre.toLowerCase().includes(filterValue) || c.nit.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredClientes = this.clientes;
     }
   }
 
@@ -85,6 +96,7 @@ export class FormFacturaManualComponent implements OnInit {
     this.clienteSrvc.get().subscribe(res => {
       if (res) {
         this.clientes = res;
+        this.filteredClientes = this.clientes;
       }
     });
   }
@@ -116,7 +128,16 @@ export class FormFacturaManualComponent implements OnInit {
     this.detallesFactura = [];
   }
 
+  displayCliente = (cli: Cliente) => {
+    if (cli) {
+      this.factura.cliente = cli.cliente;
+      return cli.nombre;
+    }
+    return undefined;
+  }
+
   onSubmit = () => {
+    // console.log(this.factura); return;
     if (this.refacturacion) {
       this.facturaSrvc.refacturar(this.factura).subscribe(res => {
         if (res.exito) {
@@ -132,8 +153,8 @@ export class FormFacturaManualComponent implements OnInit {
             exenta: +res.factura.exenta,
             notas: res.factura.notas,
             fel_uuid: res.factura.fel_uuid
-          }
-          this._snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
+          };
+          this.snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
         }
       });
     } else {
@@ -151,7 +172,7 @@ export class FormFacturaManualComponent implements OnInit {
             notas: res.factura.notas,
             fel_uuid: res.factura.fel_uuid
           }
-          this._snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
+          this.snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
         }
       });
     }
@@ -177,9 +198,9 @@ export class FormFacturaManualComponent implements OnInit {
             this.factura.certificador_fel = resFirma.factura.certificador_fel;
             this.factura.fel_uuid = resFirma.factura.fel_uuid;
             this.facturaSavedEv.emit();
-            this._snackBar.open('Factura firmada con éxito...', 'Firmar', { duration: 3000 });
+            this.snackBar.open('Factura firmada con éxito...', 'Firmar', { duration: 3000 });
           } else {
-            this._snackBar.open(`ERROR: ${resFirma.mensaje}`, 'Firmar', { duration: 3000 });
+            this.snackBar.open(`ERROR: ${resFirma.mensaje}`, 'Firmar', { duration: 3000 });
           }
         });
       }
@@ -234,12 +255,12 @@ export class FormFacturaManualComponent implements OnInit {
           DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
           ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
         })}`);
-        this._snackBar.open(
+        this.snackBar.open(
           `Imprimiendo factura ${this.factura.serie_factura}-${this.factura.numero_factura}`,
           'Impresión', { duration: 3000 }
         );
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 3000 });
       }
     });
   }
@@ -261,9 +282,9 @@ export class FormFacturaManualComponent implements OnInit {
           if (resAnula.exito) {
             this.factura.fel_uuid_anulacion = resAnula.factura.fel_uuid_anulacion;
             this.facturaSavedEv.emit();
-            this._snackBar.open('Factura anulada con éxito...', 'Firmar', { duration: 3000 });
+            this.snackBar.open('Factura anulada con éxito...', 'Firmar', { duration: 3000 });
           } else {
-            this._snackBar.open(`ERROR: ${resAnula.mensaje}`, 'Firmar', { duration: 10000 });
+            this.snackBar.open(`ERROR: ${resAnula.mensaje}`, 'Firmar', { duration: 10000 });
           }
         });
       }
@@ -274,8 +295,27 @@ export class FormFacturaManualComponent implements OnInit {
     this.articuloSrvc.getArticulos().subscribe(res => {
       if (res) {
         this.articulos = res;
+        this.filteredArticulos = this.articulos;
       }
     });
+  }
+
+  displayArticulo = (art: Articulo) => {
+    if (art) {
+      this.detalleFactura.articulo = art.articulo;
+      return art.descripcion;
+    }
+    return undefined;
+  }
+
+  filtrarArticulos = (value: string) => {
+    if (value) {
+      const filterValue = value.toLowerCase();
+      this.filteredArticulos =
+        this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredArticulos = this.articulos;
+    }
   }
 
   setPrecioUnitario = (obj: any) => {
@@ -286,8 +326,14 @@ export class FormFacturaManualComponent implements OnInit {
     }
   }
 
-  resetDetalleFactura = () => this.detalleFactura = {
-    detalle_factura: null, factura: (this.factura.factura || 0), articulo: null, cantidad: 1, precio_unitario: null, total: null
+  resetDetalleFactura = () => {
+    this.detalleFactura = {
+      detalle_factura: null, factura: (this.factura.factura || 0), articulo: null, cantidad: 1, precio_unitario: null, total: null
+    };
+    if (this.txtArticulo !== null && this.txtArticulo !== undefined) {
+      console.log('txtArticulo está definido...');
+      this.txtArticulo.innerText = null;
+    }
   }
 
   loadDetalleFactura = (idfactura: number = +this.factura.factura) => {

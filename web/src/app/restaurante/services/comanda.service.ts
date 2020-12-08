@@ -70,12 +70,13 @@ export class ComandaService {
         Authorization: this.usrToken
       })
     };
-    
+
     return this.http
-      .post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_detalle_combo/${idcomanda}/${idcuenta}`, 
-      detalle, httpOptions)
+      .post<any>(`${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_detalle_combo/${idcomanda}/${idcuenta}`,
+        detalle, httpOptions)
       .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
+
   saveNotasGenerales(entidad: any) {
 
     const httpOptions = {
@@ -86,6 +87,21 @@ export class ComandaService {
 
     return this.http.post<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_notas_generales/${entidad.comanda}`,
+      entidad,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  saveNotasProducto(entidad: any) {
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar_notas_producto/${entidad.detalle_comanda}`,
       entidad,
       httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));

@@ -24,7 +24,7 @@ interface productoSelected {
   detalle_comanda?: number;
   detalle_cuenta?: number;
   impresora?: Impresora;
-  detalle?: []
+  detalle?: [];
 }
 
 @Component({
@@ -121,12 +121,22 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   }
 
   toggleShowInputNotas(p: productoSelected) {
+    console.log('ARTICULO = ', p);
     p.showInputNotas = !p.showInputNotas;
     if (p.showInputNotas) {
       p.itemListHeight = '140px';
     } else {
       p.itemListHeight = '70px';
+      this.saveNotasProducto(p);
     }
+  }
+
+  saveNotasProducto = (p: productoSelected) => {
+    this.comandaSrvc.saveNotasProducto({ detalle_comanda: p.detalle_comanda, notas: p.notas }).subscribe(res => {
+      if (res.exito) {
+        this.snackBar.open('Notas de producto guardadas con éxito...', 'Producto', { duration: 3000 });
+      }
+    });
   }
 
   doAction(ev: string) {

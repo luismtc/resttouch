@@ -23,6 +23,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 // import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
@@ -71,6 +72,7 @@ import { FormFacturaManualComponent } from './components/facturaManual/form-fact
     MatPaginatorModule,
     MatDialogModule,
     MatSidenavModule,
+    MatAutocompleteModule,
     EcoFabSpeedDialModule,
   ],
   exports: [CobrarPedidoComponent]
