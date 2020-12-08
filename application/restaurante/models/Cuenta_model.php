@@ -185,10 +185,12 @@ class Cuenta_model extends General_Model {
 				"_uno" => true
 			]);
 
-			if (strtolower($fpago->descripcion) == "tarjeta") {
-				if ($this->cobro !== null) {
-					$this->cobro->setReferencia($this->getPK());
-					$this->cobro->setTotal($pago->monto);
+			//if (strtolower($fpago->descripcion) == "tarjeta") {
+			if ($this->cobro !== null) {
+				$this->cobro->setReferencia($this->getPK());
+				$this->cobro->setTotal($pago->monto);
+				
+				try {
 					$tmp = $this->cobro->cobrar();
 
 					if (empty($tmp)) {
@@ -202,8 +204,12 @@ class Cuenta_model extends General_Model {
 							return false;
 						}
 					}
+				} catch (Exception $e) {
+					$this->setMensaje("Error en procesar la tarjeta, ".$e->getMessege());
+					return false;
 				}
 			}
+			//}
 
 			if (isset($pago->documento)) {
 				$this->db->set("documento", $pago->documento);
