@@ -1,5 +1,8 @@
-import * as urls from '../../assets/json/cnfurls.json';
-const urlBase = urls.default.api;
+// import * as urls from '../../assets/json/cnfurls.json';
+// const urlBase = urls.default.api;
+const urlBase = 'http://localhost/resttouch'; // Desarrollo
+// const urlBase = 'https://resttouch.c807.com/api'; // C807
+
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
