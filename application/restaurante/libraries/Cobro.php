@@ -5,7 +5,7 @@
 class Cobro extends SoapClient
 {
 	private $request;
-	private $wsdl = "https://ics2wstest.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.167.wsdl";
+	private $wsdl = "https://ics2ws.ic3.com/commerce/1.x/transactionProcessor/CyberSourceTransaction_1.171.wsdl";
     private $empresa;
     private $referencia;
     private $total = 0;
@@ -107,6 +107,9 @@ class Cobro extends SoapClient
 		$request->purchaseTotals = $purchaseTotals;
 		$request->item = array($this->getItem());
 
+		$ccCaptureService = new stdClass();
+		$ccCaptureService->run = 'true';
+		$request->ccCaptureService = $ccCaptureService;
 
 		$this->request = $request;
     }
@@ -151,30 +154,7 @@ class Cobro extends SoapClient
     public function cobrar()
     {
     	$this->procesar();
-    	$reply = $this->runTransaction($this->request);
-
-    	if ($reply->decision != 'ACCEPT') {
-    		return $reply;
-    	} else {
-    		$ccCaptureService = new stdClass();
-    		$ccCaptureService->run = 'true';
-    		$ccCaptureService->authRequestID = $reply->requestID;
-
-    		$captureRequest = $this->getRequest();
-    		$captureRequest->ccCaptureService = $ccCaptureService;
-    		$captureRequest->item = array($this->getItem());
-
-    		$purchaseTotals = new stdClass();
-    		$purchaseTotals->currency = "GTQ";
-
-    		$captureRequest->purchaseTotals = $purchaseTotals;
-
-    		$capture = $this->runTransaction($captureRequest);
-
-    		$capture->ccAuthReply = $reply->ccAuthReply;
-    		$capture->receiptNumber = $reply->receiptNumber;
-
-    		return $capture;
-    	}
+    	
+    	return $this->runTransaction($this->request);
     }
 }
