@@ -46,7 +46,8 @@ export class ProductoComponent implements OnInit {
           multiple:obj.multiple,
           cantidad_minima: obj.cantidad_minima,
           cantidad_maxima: obj.cantidad_maxima,
-          combo: obj.combo
+          combo: obj.combo,
+          rendimiento: obj.rendimiento
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();

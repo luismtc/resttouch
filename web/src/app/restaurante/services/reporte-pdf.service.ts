@@ -53,10 +53,10 @@ export class ReportePdfService {
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  generarInventarioFisico(params: Object) {
-    return this.http.post<string>(
-      `${GLOBAL.urlWms}/fisico/generar`,
-      params,
+  imprimirInventarioFisico(id: number, params?:Object) {
+    this.httpOptions['params'] = params;
+    return this.http.get<string>(
+      `${GLOBAL.urlWms}/fisico/imprimir/${id}`,
       this.httpOptions
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }

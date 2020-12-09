@@ -18,14 +18,6 @@
         <mat-card-content *ngIf="showReporte">
           <form (ngSubmit)="onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <mat-label>Bodega</mat-label>
-                <mat-select name="bodega" [(ngModel)]="params.bodega">
-                    <mat-option *ngFor="let bod of bodegas" [value]="bod.bodega">
-                        {{bod.descripcion}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field class="fullWidth">
                 <mat-label>Sede</mat-label>
                 <mat-select name="sede" [(ngModel)]="params.sede">
                     <mat-option *ngFor="let sede of sedes" [value]="sede.sede">
