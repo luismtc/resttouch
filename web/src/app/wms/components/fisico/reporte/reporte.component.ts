@@ -7,6 +7,7 @@ import { BodegaService } from '../../../services/bodega.service';
 import { Categoria } from '../../../interfaces/categoria';
 import { CategoriaGrupo } from '../../../interfaces/categoria-grupo';
 import { ArticuloService } from '../../../services/articulo.service';
+import { FisicoService } from '../../../services/fisico.service';
 import { Sede } from '../../../../admin/interfaces/sede';
 import { saveAs } from 'file-saver';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
@@ -35,6 +36,7 @@ export class ReporteComponent implements OnInit {
     private sedeSrvc: SedeService,
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
+    private fisicoSrvc: FisicoService,
     private ls: LocalstorageService,
   ) { }
 
@@ -89,11 +91,14 @@ export class ReporteComponent implements OnInit {
   onSubmit() {
     this.cargando = true;
     
-    this.pdfServicio.generarInventarioFisico(this.params).subscribe(res => {
+    this.fisicoSrvc.generarInventarioFisico(this.params).subscribe(res => {
       this.cargando = false;
-      if (res) {
-        const blob = new Blob([res], { type: 'application/pdf' });
-        saveAs(blob, `${this.titulo}.pdf`);
+      console.log(res)
+      if (res.exito) {
+        this.pdfServicio.imprimirInventarioFisico(res.inventario).subscribe(resImp => {
+          const blob = new Blob([resImp], { type: 'application/pdf' });
+          saveAs(blob, `${this.titulo}.pdf`);
+        });
       } else {
         this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
       }
