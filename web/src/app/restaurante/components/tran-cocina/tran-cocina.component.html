@@ -19,7 +19,11 @@
                                 <tr *ngFor="let prod of cta.productos">
                                     <td>
                                         {{prod.cantidad}} {{prod.articulo.descripcion}}
-                                        <br *ngIf="!!prod.notas && prod.notas.length > 0" />
+                                        <br *ngIf="prod.detalle.length > 0" />
+                                        <ng-container *ngFor="let specs of prod.detalle">                                            
+                                            <span>{{specs.trim()}}</span><br/>
+                                        </ng-container>
+                                        <br *ngIf="!!prod.notas && prod.notas.length > 0 && !prod.detalle" />
                                         <span *ngIf="!!prod.notas && prod.notas.length > 0">
                                             <strong>Notas:</strong> {{prod.notas}}
                                         </span>
@@ -62,7 +66,11 @@
                                 <tr *ngFor="let prod of cta.productos">
                                     <td>
                                         {{prod.cantidad}} {{prod.articulo.descripcion}}
-                                        <br *ngIf="!!prod.notas && prod.notas.length > 0" />
+                                        <br *ngIf="prod.detalle.length > 0" />
+                                        <ng-container *ngFor="let specs of prod.detalle">                                            
+                                            <span>{{specs.trim()}}</span><br/>
+                                        </ng-container>
+                                        <br *ngIf="!!prod.notas && prod.notas.length > 0 && !prod.detalle" />
                                         <span *ngIf="!!prod.notas && prod.notas.length > 0">
                                             <strong>Notas:</strong> {{prod.notas}}
                                         </span>

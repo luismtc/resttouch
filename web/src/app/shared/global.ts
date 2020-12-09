@@ -1,7 +1,5 @@
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo local
-// const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo local 2
-const urlBase = `${location.origin}/api`; // Desarrollo - Producción C807
-// const urlBase = location.origin; // Producción GCP
+import * as urls from '../../assets/json/cnfurls.json';
+const urlBase = urls.default.api;
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
@@ -18,7 +16,6 @@ export const GLOBAL = {
     usrTokenVar: 'rttoken',
     usrUnlockVar: 'rtunlock',
     reintentos: 0,
-    // infilePdfUrl: 'https://report.feel.com.gt/ingfacereport/ingfacereport_documento?uuid=',
     CONSTANTES: {
         RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',
         RT_PANTALLA_TOMA_COMANDA: 'RT_PANTALLA_TOMA_COMANDA',
