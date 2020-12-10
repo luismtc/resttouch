@@ -111,6 +111,7 @@ class Catalogo_model extends CI_Model {
 		$datos = [];
 		$tmp = $this->db
 					->where("receta", $articulo)
+					->where("anulado", 0)
 					->get('articulo_detalle')
 					->result();
 

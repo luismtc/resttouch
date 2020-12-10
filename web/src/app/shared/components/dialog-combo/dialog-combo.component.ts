@@ -53,58 +53,51 @@ export class DialogComboComponent implements OnInit {
   getArticulos = () => {
     const fltr: any = { articulo: this.producto.id };
     this.articuloSvr.getArticuloCombo(fltr).subscribe((res) => {
+      let multiple = 0;
       this.combo = res;
-      for (let i = 0; i < this.combo.length; i++) {
-        const element = this.combo[i];
-        this.combo[i].seleccionado = false;
-        for (let j = 0; j < this.combo[i].receta.length; j++) {
-          this.combo[i].receta[j].seleccionado = false;
+      for (let i = 0; i < this.combo.receta.length; i++) {
+        
+        const element = this.combo.receta[i];
+        
+        this.combo.receta[i].seleccionado = false;
+        if(element.multiple == 1) {
+          multiple++;
+          let list = [];
+          for (let cont = 0; cont < +this.combo.receta[i].cantidad_maxima; cont++) {
+            list.push({
+              id: cont,
+              seleccion:{}
+            })
+          }
+          this.combo.receta[i].input = list;
+        } else {
+          this.seleccion.receta.push(this.combo.receta[i])
         }
+      }
+
+      if (multiple == 0) {
+        this.onConfirm();
       }
     });
   }
 
-  addProductoMulti(receta: any, producto: any) {
-    const detalle = {
-      articulo: receta.articulo,
-      descripcion: receta.descripcion,
-      receta: []
-    };
-
-    const idx = this.seleccion.receta.findIndex(p => +p.articulo === +receta.articulo);
-
-    const idrec = receta.receta.findIndex(o => +o.articulo === +producto.articulo);
-
-    if (idrec >= 0) {
-      const item = receta.receta[idrec];
-      receta.receta[idrec].seleccionado = !receta.receta[idrec].seleccionado;
-
-      if (idx < 0) {
-        detalle.receta.push(item);
-        this.seleccion.receta.push(detalle);
-      } else {
-        if (receta.receta[idrec].seleccionado) {
-          this.seleccion.receta[idx].receta.push(item);
-        } else {
-          const id = this.seleccion.receta[idx].receta.findIndex(p => +p.articulo === +item.articullo);
-          this.seleccion.receta[idx].receta.splice(id, 1);
-        }
-
+  onConfirm(): void {
+    
+    let multi = this.combo.receta.filter(p => +p.multiple == 1);
+    console.log(multi);
+    for (let i = 0; i < multi.length; i++) {
+      const element = multi[i];
+      this.seleccion.receta.push({
+        articulo: element.articulo,
+        descripcion: element.descripcion,
+        receta: []
+      })
+      const idx = this.seleccion.receta.findIndex(p => +p.articulo === +element.articulo);
+      for (let j = 0; j < element.input.length; j++) {
+        const prod = element.input[j].seleccion;
+        this.seleccion.receta[idx].receta.push(prod)
       }
     }
-  }
-
-  addProducto(receta: any) {
-    const idx = this.seleccion.receta.findIndex(p => +p.articulo === +receta.articulo);
-
-    if (idx < 0) {
-      receta.seleccionado = true;
-      this.seleccion.receta.push(receta);
-    }
-
-  }
-
-  onConfirm(): void {
     this.datos.respuesta = true;
     this.datos.seleccion = this.seleccion;
     this.dialogRef.close(this.datos);

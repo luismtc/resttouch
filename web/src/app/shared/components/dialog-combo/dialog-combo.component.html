@@ -7,18 +7,15 @@
         </div>
         <div class="row" *ngIf="rec.receta.length > 0">
             <div class="col m12 s12">
-                <ng-container *ngFor="let sc of rec.receta">
-                    <button mat-raised-button class="btnAccion" [color]="sc.seleccionado ? 'warn':'primary'" (click)="addProductoMulti(rec,sc)">
-                        {{sc.descripcion}}
-                    </button>
+                <ng-container *ngFor="let sc of rec.input">
+                    <mat-select [(ngModel)]="sc.seleccion" [ngModelOptions]="{standalone: true}">
+                        <mat-option *ngFor="let prod of rec.receta" [value]="prod">
+                            {{prod.descripcion}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-divider></mat-divider>
+                    <br>
                 </ng-container>
-            </div>
-        </div>
-        <div class="row" *ngIf="rec.receta.length <= 0">
-            <div class="col m12 s12">
-                <button mat-raised-button class="btnAccion" [color]="rec.seleccionado ? 'warn':'primary'" (click)="addProducto(rec)">
-                    {{rec.descripcion}}
-                </button>
             </div>
         </div>
     </div>
