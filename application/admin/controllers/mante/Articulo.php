@@ -109,7 +109,7 @@ class Articulo extends CI_Controller
 			if ($req['cantidad'] > 0) {
 				$rec = new Articulo_model($req['articulo']);
 				if ($art->combo == 1 && $rec->combo == 1) {
-					$datos['mensaje'] = "No es posible agregar un combo como receta";
+					$datos['mensaje'] = "No es posible agregar un combo a un combo como detalle.";
 				} else {
 					$det = $art->guardarReceta($req, $id);
 					if ($det) {
@@ -117,7 +117,7 @@ class Articulo extends CI_Controller
 						$datos['mensaje'] = "Datos Actualizados con Exito";
 						$datos['detalle'] = $det;
 					} else {
-						$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+						$datos['mensaje'] = implode("<br>", $art->getMensaje());
 					}
 				}
 				
