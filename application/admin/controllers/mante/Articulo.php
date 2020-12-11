@@ -107,14 +107,20 @@ class Articulo extends CI_Controller
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 			if ($req['cantidad'] > 0) {
-				$det = $art->guardarReceta($req, $id);
-				if ($det) {
-					$datos['exito'] = true;
-					$datos['mensaje'] = "Datos Actualizados con Exito";
-					$datos['detalle'] = $det;
+				$rec = new Articulo_model($req['articulo']);
+				if ($art->combo == 1 && $rec->combo == 1) {
+					$datos['mensaje'] = "No es posible agregar un combo como receta";
 				} else {
-					$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+					$det = $art->guardarReceta($req, $id);
+					if ($det) {
+						$datos['exito'] = true;
+						$datos['mensaje'] = "Datos Actualizados con Exito";
+						$datos['detalle'] = $det;
+					} else {
+						$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+					}
 				}
+				
 			} else {
 				$datos['mensaje'] = "La cantidad debe ser mayor a cero";
 			}
