@@ -166,7 +166,8 @@ class Reporte extends CI_Controller {
 		foreach ($cat as $row) {
 			$grupo = $this->Catalogo_model->getCategoriaGrupo([
 				"categoria" => $row->categoria,
-				"categoria_grupo_grupo" => null			
+				"categoria_grupo_grupo" => null,
+				"_todo" => true
 			]);
 			$row->categoria_grupo = $grupo;
 
@@ -220,7 +221,7 @@ class Reporte extends CI_Controller {
 		$vista = $this->load->view('reporte/valorizado/imprimir', $data, true);
 
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //Produccion
+			//'tempDir' => sys_get_temp_dir(), //Produccion
 			'format' => 'Legal'
 		]);
 
