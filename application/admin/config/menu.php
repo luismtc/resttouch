@@ -189,6 +189,10 @@ $config['menu'] = [
 					4 => [
 						'nombre' => 'Produccion',
 						'link' => '/wms/produccion'
+					],
+					5 => [
+						'nombre' => 'Inventario físico',
+						'link' => '/wms/fisico'
 					]
 				]
 			],
