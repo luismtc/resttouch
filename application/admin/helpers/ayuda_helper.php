@@ -107,6 +107,21 @@ if (!function_exists('guardar_comanda')) {
 	}
 }
 
+if ( ! function_exists('verDato') ) {
+	/* Verifica que un índice se encuentre dentro de un arreglo. o una propiedad en un objeto */
+	function verDato($arr, $dato, $return=FALSE) {
+		if (is_array($arr) && array_key_exists($dato, $arr) && !empty($arr[$dato])) {
+
+			return $arr[$dato];
+		} else if (is_object($arr) && property_exists($arr, $dato) && !empty($arr->$dato)) {
+
+			return $arr->$dato;	
+		} 
+		
+		return $return;
+	}
+}
+
 if( ! function_exists('suma_field')){
 	function suma_field($datos, $campo, $filtro = []) {
 		$suma_campo = 0;
