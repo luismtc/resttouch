@@ -25,24 +25,19 @@
                 </mat-form-field>
             </div>
             <div class="form-group">
-                <!--
                 <mat-form-field class="fullWidth">                
                     <mat-label>Cliente</mat-label>
-                    <input type="text" placeholder="Cliente" matInput [matAutocomplete]="auto" (keyup)="filtrar(txtCliente.value)" #txtCliente required>
+                    <input type="text" [(ngModel)]="clienteSelected" [ngModelOptions]="{standalone: true}" placeholder="Cliente" matInput [matAutocomplete]="auto" (keyup)="filtrar(clienteSelected)" required>
                     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCliente">
                         <mat-option *ngFor="let cli of filteredClientes" [value]="cli">
                             {{cli.nombre}} ({{cli.nit}})
                         </mat-option>
-                    </mat-autocomplete>
-                </mat-form-field>
-                -->                
-                <mat-form-field class="fullWidth">
-                    <mat-label>Cliente</mat-label>
-                    <mat-select name="cliente" [(ngModel)]="factura.cliente" required>
+                    </mat-autocomplete>                    
+                    <!--<mat-select name="cliente" [(ngModel)]="factura.cliente" required>
                         <mat-option *ngFor="let cli of clientes" [value]="cli.cliente">
                             {{cli.nombre}} ({{cli.nit}})
                         </mat-option>
-                    </mat-select>
+                    </mat-select>-->
                 </mat-form-field>                
             </div>
             <div class="form-group">
@@ -132,21 +127,13 @@
             (ngSubmit)="frmDetalleFactura.form.valid && onSubmitDetail()" novalidate>
             <div class="form-group">
                 <mat-form-field class="fullWidth">
-                    <mat-label>Artículo</mat-label>
-                    <!--                    
-                    <input type="text" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticulo.value)" #txtArticulo required>
-                    <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo">
+                    <mat-label>Artículo</mat-label>                    
+                    <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
+                    <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo" (optionSelected)="setPrecioUnitario($event)">
                         <mat-option *ngFor="let a of filteredArticulos" [value]="a">
                             {{a.descripcion}}
                         </mat-option>
                     </mat-autocomplete>
-                    -->                    
-                    <mat-select name="articulo" [(ngModel)]="detalleFactura.articulo"
-                        (selectionChange)="setPrecioUnitario($event)" required>
-                        <mat-option *ngFor="let a of articulos" [value]="a.articulo">
-                            {{a.descripcion}}
-                        </mat-option>
-                    </mat-select>                    
                 </mat-form-field>
             </div>
             <div class="form-group">

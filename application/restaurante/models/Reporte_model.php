@@ -20,7 +20,19 @@ class Reporte_model extends CI_Model {
 		}
 
 		if (isset($args['detalle'])) {
-			$group = ", a.factura";
+			$group .= ", a.factura";
+		}
+
+		if (isset($args['_grupo']) && $args['_grupo'] == 2) {
+			$this->db->group_by("e.sede");
+		}
+
+		if (isset($args['sede'])) {
+			if (is_array($args['sede'])) {
+				$this->db->where_in("e.sede", $args['sede']);
+			} else {
+				$this->db->where("e.sede", $args['sede']);
+			}
 		}
 
 		$tmp = $this->db
@@ -31,7 +43,9 @@ class Reporte_model extends CI_Model {
 			a.propina,
 			e.factura,
 			e.numero_factura,
-			e.fecha_factura")
+			e.fecha_factura,
+			e.sede,
+			j.nombre as nsede")
 		->from("cuenta_forma_pago a")
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
@@ -41,7 +55,7 @@ class Reporte_model extends CI_Model {
 		->join("cuenta g", "g.cuenta = b.cuenta_cuenta")
 		->join("comanda h", "h.comanda = g.comanda")
 		->join("turno i", "i.turno = h.turno")
-		->where("e.sede", $args['sede'])
+		->join("sede j", "j.sede = e.sede")
 		->where("e.fecha_factura >=", $args['fdel'])
 	 	->where("e.fecha_factura <=", $args['fal'])
 	 	->where("e.fel_uuid_anulacion is null")
@@ -55,7 +69,9 @@ class Reporte_model extends CI_Model {
 				sum(a.monto) as monto, 
 				sum(a.propina) as propina,
 				a.fecha_factura,
-				a.numero_factura
+				a.numero_factura,
+				a.sede,
+				nsede
 			from ( {$tmp} ) a
 			group by a.forma_pago {$group}")
 			->result();
@@ -66,6 +82,14 @@ class Reporte_model extends CI_Model {
 		if (isset($args['turno_tipo'])) {
 			$this->db->where('b.turno_tipo', $args['turno_tipo']);
 		}
+
+		if (is_array($args['sede'])) {
+			$this->db
+				 ->where_in("b.sede", $args['sede'])
+				 ->group_by("b.sede");
+		} else {
+			$this->db->where("b.sede", $args['sede']);
+		}
 		
 		return $this->db
 					->select("
@@ -74,7 +98,6 @@ class Reporte_model extends CI_Model {
 					->join("turno b", "b.turno = a.turno")
 					->where("b.inicio >=", $args['fdel'])
 				 	->where("b.fin <=", $args['fal'])
-				 	->where("b.sede", $args['sede'])
 					->get("comanda a")
 					->row();	
 	}

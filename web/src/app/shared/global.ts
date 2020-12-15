@@ -34,7 +34,17 @@ export const GLOBAL = {
         RT_COMANDA_SIN_FACTURA: 'RT_COMANDA_SIN_FACTURA',
         RT_MODO_FACTURA: 'RT_MODO_FACTURA',
         RT_MESERO_POR_DEFECTO: 'RT_MESERO_POR_DEFECTO'
-    }
+    },
+    grupos: [
+        {
+            id: 1,
+            descripcion: "General"
+        }, 
+        {
+            id: 2,
+            descripcion: "Sede"
+        }
+    ]
 };
 
 export const PaginarArray = (array: any[], pageSize: number, pageNumber: number) =>

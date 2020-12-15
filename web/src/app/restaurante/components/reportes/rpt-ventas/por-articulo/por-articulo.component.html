@@ -6,7 +6,7 @@
             Del {{params.fdel | date:'dd/MM/yyyy'}} al {{params.fal | date:'dd/MM/yyyy'}}
         </mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content *ngIf="data.grupo == 1">
         <table class="tbl">
             <thead>
                 <tr>
@@ -16,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngFor="let art of data">
+                <ng-container *ngFor="let art of data.datos">
                     <tr>
                         <td class="doubleTab brdBSingle">{{art.articulo.descripcion}}</td>
                         <td class="rtxt numWidth brdBSingle">{{art.cantidad | number:'1.2-2'}}</td>
@@ -26,6 +26,30 @@
             </tbody>
         </table>
     </mat-card-content>
+    <mat-card-content *ngIf="data.grupo == 2">
+        <table class="tbl">
+            <thead>
+                <tr>
+                    <th class="brdTSingleBSingle">Descripción</th>
+                    <th class="rtxt numWidth brdTSingleBSingle">Cantidad</th>
+                    <th class="rtxt numWidth brdTSingleBSingle">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let sede of data.datos">
+                    <tr>
+                        <th class="brdTSingleBSingle" colspan="3">{{ sede.sede }}</th>
+                    </tr>
+                    <tr *ngFor="let art of sede.articulos">
+                        <td class="doubleTab brdBSingle">{{art.articulo.descripcion}}</td>
+                        <td class="rtxt numWidth brdBSingle">{{art.cantidad | number:'1.2-2'}}</td>
+                        <td class="rtxt numWidth brdBSingle">{{art.total | number:'1.2-2'}}</td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </mat-card-content>
+
     <!--
     <mat-card-footer>
     </mat-card-footer>

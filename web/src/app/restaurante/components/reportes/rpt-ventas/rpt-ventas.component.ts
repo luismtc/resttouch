@@ -5,6 +5,8 @@ import * as moment from 'moment';
 
 import { PorCategoria, PorArticulo } from '../../../interfaces/reporte-ventas';
 import { ReporteVentasService } from '../../../services/reporte-ventas.service';
+import { UsuarioSede } from '../../../../admin/interfaces/acceso'
+import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service'
 import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
 import { saveAs } from 'file-saver';
@@ -22,8 +24,10 @@ export class RptVentasComponent implements OnInit {
   public paramsToSend: any = {};
   public msgGenerandoReporte: string = null;
   public porCategoria: PorCategoria[] = [];
-  public porArticulo: PorArticulo[] = [];
+  public porArticulo: any = { datos: [] };
   public tiposTurno: TipoTurno[] = [];
+  public sedes: UsuarioSede[] = [];
+  public grupos = GLOBAL.grupos;
   public tituloCategoria = 'Ventas por categoria';
   public tituloArticulo = 'Ventas por articulo';
   public cargando = false;
@@ -35,12 +39,22 @@ export class RptVentasComponent implements OnInit {
     private snackBar: MatSnackBar,
     private rptVentasSrvc: ReporteVentasService,
     private tipoTurnoSrvc: TipoTurnoService,
+    private sedeSrvc: AccesoUsuarioService
   ) { }
 
   ngOnInit() {
     this.resetParams();
     this.loadTiposReporte();
     this.loadTiposTurno();
+    this.loadSedes();
+  }
+
+  loadSedes = () => {
+    this.sedeSrvc.getSedes({reporte: true}).subscribe(res => {
+      if (res) {
+        this.sedes = res
+      }
+    })
   }
 
   loadTiposTurno = () => {

@@ -12,7 +12,8 @@ class Venta extends CI_Controller {
 			'Articulo_model',
 			'Categoria_model',
 			'Catalogo_model',
-			'TurnoTipo_model'
+			'TurnoTipo_model',
+			'Sede_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
@@ -25,7 +26,10 @@ class Venta extends CI_Controller {
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
-		$req['sede'] = $this->data->sede;
+		if (!$this->input->get('sede')) {
+			$req['sede'] = [$this->data->sede];
+		}
+
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 
@@ -82,7 +86,9 @@ class Venta extends CI_Controller {
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
-		$req['sede'] = $this->data->sede;
+		if (!$this->input->get('sede')) {
+			$req['sede'] = [$this->data->sede];
+		}
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 		
@@ -108,7 +114,11 @@ class Venta extends CI_Controller {
 			}
 		}
 
-		$cat = $this->Categoria_model->buscar(["sede" => $this->data->sede]);		
+		$cat = [];		
+		foreach ($_GET['sede'] as $row) {
+			$tmp = $this->Categoria_model->buscar(["sede" => $row]);
+			$cat = array_merge($cat, $tmp);
+		}
 		
 		$categorias = [];
 		foreach ($cat as $row) {
@@ -126,6 +136,25 @@ class Venta extends CI_Controller {
 			unset($row->categoria_grupo);
 			$datos[] = $row;
 		}
+
+		if (isset($_GET['_grupo']) && $_GET['_grupo'] == 2) {
+			$tmp = [];
+			foreach ($datos as $row) {
+				if (isset($tmp[$row->sede])) {
+					$tmp[$row->sede]['articulos'][] = $row;
+				} else {
+					$tmpSede = $this->Sede_model->buscar([
+						"sede" => $row->sede,
+						"_uno" => true
+					]);
+					$tmp[$row->sede] = [
+						"sede" => $tmpSede->nombre,
+						"articulos" => [$row]
+					];
+				}
+			}
+			$datos = ["grupo" => 2, "datos" => array_values($tmp)];
+		}
 		
 		$data = [
 			"detalle" => $datos
@@ -136,6 +165,16 @@ class Venta extends CI_Controller {
 			"_uno" => true
 		]);
 
+		$tmp = [];
+		foreach ($_GET['sede'] as $row) {
+			$sede = $this->Catalogo_model->getSede([
+				'sede' => $row,
+				"_uno" => true
+			]);
+			
+			$tmp[] = $sede->nombre;
+		}
+
 		if ($sede) {
 			$emp = $this->Catalogo_model->getEmpresa([
 				"empresa" => $sede->empresa,
@@ -143,7 +182,7 @@ class Venta extends CI_Controller {
 			]);
 			if ($emp) {
 				$data['empresa'] = $emp;
-				$data['nsede'] = $sede;
+				$data['nsede'] = implode(", ", $tmp);
 			}
 		}
 
@@ -154,7 +193,7 @@ class Venta extends CI_Controller {
 		$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //Produccion
+			//'tempDir' => sys_get_temp_dir(), //Produccion
 			'format' => 'Legal'
 		]);
 
@@ -165,11 +204,10 @@ class Venta extends CI_Controller {
 
 	public function articulo($pdf = 0)
 	{
-		$this->load->helper(['jwt', 'authorization']);
-		$headers = $this->input->request_headers();
-		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
-		$req['sede'] = $data->sede;
+		if (!$this->input->get('sede')) {
+			$req['sede'] = [$this->data->sede];
+		}
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 
@@ -187,15 +225,34 @@ class Venta extends CI_Controller {
 					$detalle[$key] = [
 						"cantidad" => $det->cantidad,
 						"total" => $det->total,
-						"articulo" => $det->articulo
+						"articulo" => $det->articulo,
+						"sede" => $fac->sede
 					];
 				}
 			}
 		}
-		$datos = array_values($detalle);
-		usort($datos, function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
+		$datos = ["grupo" => 1, "datos" => array_values($detalle)];
+		usort($datos["datos"], function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
 
-	
+		if (isset($_GET['_grupo']) && $_GET['_grupo'] == 2) {
+			$tmp = [];
+			foreach ($datos["datos"] as $row) {
+				if (isset($tmp[$row['sede']])) {
+					$tmp[$row['sede']]['articulos'][] = $row;
+				} else {
+					$tmpSede = $this->Sede_model->buscar([
+						"sede" => $row['sede'],
+						"_uno" => true
+					]);
+					$tmp[$row['sede']] = [
+						"sede" => $tmpSede->nombre,
+						"articulos" => [$row]
+					];
+				}
+			}
+			$datos = ["grupo" => 2, "datos" => array_values($tmp)];
+		}
+
 		$this->output
 			 ->set_content_type("application/json")
 			 ->set_output(json_encode($datos));	
@@ -204,12 +261,10 @@ class Venta extends CI_Controller {
 
 	public function articulopdf($pdf = 0)
 	{
-		$this->load->helper(['jwt', 'authorization']);
-		$headers = $this->input->request_headers();
-		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$req = $_GET;
-		$req['sede'] = $data->sede;
-
+		if (!$this->input->get('sede')) {
+			$req['sede'] = [$this->data->sede];
+		}
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
 
@@ -227,13 +282,33 @@ class Venta extends CI_Controller {
 					$detalle[$key] = [
 						"cantidad" => $det->cantidad,
 						"total" => $det->total,
-						"articulo" => $det->articulo
+						"articulo" => $det->articulo,
+						"sede" => $fac->sede
 					];
 				}
 			}
 		}
-		$datos = array_values($detalle);
-		usort($datos, function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
+		$datos = ["grupo" => 1, "datos" => array_values($detalle)];
+		usort($datos["datos"], function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
+
+		if (isset($_GET['_grupo']) && $_GET['_grupo'] == 2) {
+			$tmp = [];
+			foreach ($datos["datos"] as $row) {
+				if (isset($tmp[$row['sede']])) {
+					$tmp[$row['sede']]['articulos'][] = $row;
+				} else {
+					$tmpSede = $this->Sede_model->buscar([
+						"sede" => $row['sede'],
+						"_uno" => true
+					]);
+					$tmp[$row['sede']] = [
+						"sede" => $tmpSede->nombre,
+						"articulos" => [$row]
+					];
+				}
+			}
+			$datos = ["grupo" => 2, "datos" => array_values($tmp)];
+		}
 
 		
 		$data = ["detalle" => $datos];
@@ -242,16 +317,24 @@ class Venta extends CI_Controller {
 			'sede' => $this->data->sede,
 			"_uno" => true
 		]);
+		$emp = $this->Catalogo_model->getEmpresa([
+			"empresa" => $sede->empresa,
+			"_uno" => true
+		]);
 
-		if ($sede) {
-			$emp = $this->Catalogo_model->getEmpresa([
-				"empresa" => $sede->empresa,
+		$tmp = [];
+		foreach ($_GET['sede'] as $row) {
+			$sede = $this->Catalogo_model->getSede([
+				'sede' => $row,
 				"_uno" => true
 			]);
-			if ($emp) {
-				$data['empresa'] = $emp;
-				$data['nsede'] = $sede;
-			}
+			
+			$tmp[] = $sede->nombre;
+		}
+
+		if ($emp) {
+			$data['empresa'] = $emp;
+			$data['nsede'] = implode(",", $tmp);
 		}
 
 		if ($this->input->get('turno_tipo')) {

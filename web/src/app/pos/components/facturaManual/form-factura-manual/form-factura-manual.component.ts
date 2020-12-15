@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -31,7 +31,6 @@ export class FormFacturaManualComponent implements OnInit {
 
   @Input() factura: Factura;
   @Output() facturaSavedEv = new EventEmitter();
-  @ViewChild('txtArticulo', { static: false }) txtArticulo: HTMLInputElement;
 
   public showForm = true;
   public showFormDetalle = true;
@@ -47,6 +46,8 @@ export class FormFacturaManualComponent implements OnInit {
   public dataSource: MatTableDataSource<DetalleFactura>;
   public esMovil = false;
   public refacturacion = false;
+  public txtArticuloSelected: (Articulo | string) = undefined;
+  public clienteSelected: (Cliente | string) = undefined;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -74,8 +75,8 @@ export class FormFacturaManualComponent implements OnInit {
     }
   }
 
-  filtrar = (value: string) => {
-    if (value) {
+  filtrar = (value: (Cliente | string)) => {
+    if (value && (typeof value === 'string')) {
       const filterValue = value.toLowerCase();
       this.filteredClientes =
         this.clientes.filter(c => c.nombre.toLowerCase().includes(filterValue) || c.nit.toLowerCase().includes(filterValue));
@@ -124,6 +125,7 @@ export class FormFacturaManualComponent implements OnInit {
       fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
       fel_uuid: null, fel_uuid_anulacion: null
     };
+    this.clienteSelected = undefined;
     this.resetDetalleFactura();
     this.detallesFactura = [];
   }
@@ -308,8 +310,8 @@ export class FormFacturaManualComponent implements OnInit {
     return undefined;
   }
 
-  filtrarArticulos = (value: string) => {
-    if (value) {
+  filtrarArticulos = (value: (Articulo | string)) => {
+    if (value && (typeof value === 'string')) {
       const filterValue = value.toLowerCase();
       this.filteredArticulos =
         this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
@@ -318,22 +320,17 @@ export class FormFacturaManualComponent implements OnInit {
     }
   }
 
-  setPrecioUnitario = (obj: any) => {
-    const idxArticulo = this.articulos.findIndex(a => +a.articulo === +obj.value);
-    if (idxArticulo > -1) {
-      this.detalleFactura.precio_unitario = +this.articulos[idxArticulo].precio;
-      this.detalleFactura.total = +this.detalleFactura.precio_unitario * +this.detalleFactura.cantidad;
-    }
+  setPrecioUnitario = (ev: MatAutocompleteSelectedEvent) => {
+    const obj: Articulo = ev.option.value;
+    this.detalleFactura.precio_unitario = +obj.precio;
+    this.detalleFactura.total = +this.detalleFactura.precio_unitario * +this.detalleFactura.cantidad;
   }
 
   resetDetalleFactura = () => {
     this.detalleFactura = {
       detalle_factura: null, factura: (this.factura.factura || 0), articulo: null, cantidad: 1, precio_unitario: null, total: null
     };
-    if (this.txtArticulo !== null && this.txtArticulo !== undefined) {
-      console.log('txtArticulo está definido...');
-      this.txtArticulo.innerText = null;
-    }
+    this.txtArticuloSelected = undefined;
   }
 
   loadDetalleFactura = (idfactura: number = +this.factura.factura) => {
@@ -358,6 +355,7 @@ export class FormFacturaManualComponent implements OnInit {
           precio_unitario: +res[0].precio_unitario,
           total: +res[0].total
         };
+        this.txtArticuloSelected = res[0].articulo;
         this.showFormDetalle = true;
       }
     });

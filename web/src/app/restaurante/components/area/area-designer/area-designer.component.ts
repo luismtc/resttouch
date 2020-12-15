@@ -47,7 +47,7 @@ export class AreaDesignerComponent implements OnInit {
       (this.mesas.reduce((max, p) => +p.numero > max ? +p.numero : max, (!!this.mesas[0].numero ? +this.mesas[0].numero : 0)) + 1) :
       1
 
-  addTable = (w: number = null, h: number = null, esmostrador = 0, vertical = 0) => {
+  addTable = (w = 72, h = 72, esmostrador = 0, vertical = 0) => {
     this.mesas.push({
       mesa: null,
       area: this.data.area,

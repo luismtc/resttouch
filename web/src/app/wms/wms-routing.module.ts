@@ -9,8 +9,8 @@ import { TransformacionComponent } from './components/transformacion/transformac
 import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
 import { KardexComponent } from './components/reporte/kardex/kardex.component';
 import { ProduccionComponent } from './components/produccion/produccion.component';
-import { ValorizadoComponent } from './components/reporte/valorizado/valorizado.component'
-import { FisicoComponent } from './components/fisico/fisico/fisico.component'
+import { ValorizadoComponent } from './components/reporte/valorizado/valorizado.component';
+import { FisicoComponent } from './components/fisico/fisico/fisico.component';
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },

@@ -29,6 +29,7 @@ export class FormProductoComponent implements OnInit {
   public medidas: Medida[] = [];
   public presentaciones: Presentacion[] = [];
   public articulos: Articulo[] = [];
+  public filteredArticulos: Articulo[] = [];
   public recetas: ArticuloDetalle[] = [];
   public receta: ArticuloDetalle;
   public impuestosEspeciales: ImpuestoEspecial[] = [];
@@ -36,6 +37,7 @@ export class FormProductoComponent implements OnInit {
   public displayedColumns: string[] = ['articulo', 'cantidad', 'medida', 'editItem'];
   public dataSource: MatTableDataSource<ArticuloDetalle>;
   public esMovil = false;
+  public txtArticuloSelected: (Articulo | string) = undefined;
 
   constructor(
     public dialog: MatDialog,
@@ -75,6 +77,7 @@ export class FormProductoComponent implements OnInit {
       combo: 0,
       rendimiento: 0.00
     };
+    this.recetas = [];
     this.resetReceta();
   }
 
@@ -128,19 +131,38 @@ export class FormProductoComponent implements OnInit {
     });
   }
 
+  displayArticulo = (art: Articulo) => {
+    if (art) {
+      this.receta.articulo = art.articulo;
+      return art.descripcion;
+    }
+    return undefined;
+  }
+
+  filtrarArticulos = (value: (Articulo | string)) => {
+    if (value && (typeof value === 'string')) {
+      const filterValue = value.toLowerCase();
+      this.filteredArticulos =
+        this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredArticulos = this.articulos;
+    }
+  }
+
   resetReceta = () => {
     this.receta = {
-      articulo_detalle: null, 
-      receta: (this.articulo.articulo || 0), 
-      racionable: 0, 
-      articulo: null, 
-      cantidad: 1.00, 
-      medida: null, 
+      articulo_detalle: null,
+      receta: (this.articulo.articulo || 0),
+      racionable: 0,
+      articulo: null,
+      cantidad: 1.00,
+      medida: null,
       anulado: 0,
       precio_extra: 0,
       precio: 0
     };
-    this.recetas = [];
+    this.txtArticuloSelected = undefined;
+    // this.recetas = [];
     this.updateTableDataSource();
   }
 
@@ -168,6 +190,7 @@ export class FormProductoComponent implements OnInit {
           precio_extra: res[0].precio_extra || 0,
           precio: +res[0].precio
         };
+        this.txtArticuloSelected = res[0].articulo;
         this.showDetalleForm = true;
       }
     });

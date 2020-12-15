@@ -225,9 +225,7 @@ class Factura extends CI_Controller {
 				foreach ($req['cuentas'] as $row) {
 					$cta = new Cuenta_model($row['cuenta']);
 					$fpago = $cta->get_forma_pago(["_sinFactura" => 1]);
-					echo "<pre>";
-					print_r ($fpago);
-					echo "</pre>";
+
 					if (count($fpago) > 0) {
 						$continuar = false;
 					}

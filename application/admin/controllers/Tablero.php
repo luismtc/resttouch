@@ -57,18 +57,32 @@ class Tablero extends CI_Controller {
 	public function get_datos_graficas_ventas()
 	{
 		$res = ["exito" => false];
-
+		$datos = [];
 		if ($this->input->get('fdel') && $this->input->get('fal'))
 		{
+			$datos['pordia'] = $this->Tablero_model->getVentasPorDia($_GET);
+			$datos['porcategoria'] = $this->Tablero_model->getVentasPorCategoria($_GET);
+			$datos['porturno'] = $this->Tablero_model->getVentasPorTurno($_GET);
+			$datos['pormesero'] = $this->Tablero_model->getVentasPorMesero($_GET);
+			
+			$res['pordia'] = $this->Tablero_model->agruparDatos(
+				$datos['pordia'],
+				verDato($_GET, "_grupo", 1)
+			);
+			$res['porcategoria'] = $this->Tablero_model->agruparDatos(
+				$datos['porcategoria'],
+				verDato($_GET, "_grupo", 1)
+			);
+			$res['porturno'] = $this->Tablero_model->agruparDatos(
+				$datos['porturno'],
+				verDato($_GET, "_grupo", 1)
+			);
+			$res['pormesero'] = $this->Tablero_model->agruparDatos(
+				$datos['pormesero'],
+				verDato($_GET, "_grupo", 1)
+			);
 
-			if (isset($_GET['sede']) && $_GET['sede'] == 0) {
-				unset($_GET['sede']);
-			}
 
-			$res['pordia'] = $this->Tablero_model->getVentasPorDia($_GET);
-			$res['porcategoria'] = $this->Tablero_model->getVentasPorCategoria($_GET);
-			$res['porturno'] = $this->Tablero_model->getVentasPorTurno($_GET);
-			$res['pormesero'] = $this->Tablero_model->getVentasPorMesero($_GET);
 
 			$res["exito"] = true;
 			$res['mensaje'] = 'Datos generados con éxito.';

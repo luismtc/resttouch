@@ -56,46 +56,46 @@ export class DialogComboComponent implements OnInit {
       let multiple = 0;
       this.combo = res;
       for (let i = 0; i < this.combo.receta.length; i++) {
-        
+
         const element = this.combo.receta[i];
-        
+
         this.combo.receta[i].seleccionado = false;
-        if(element.multiple == 1) {
+        if (+element.multiple === 1) {
           multiple++;
-          let list = [];
+          const list = [];
           for (let cont = 0; cont < +this.combo.receta[i].cantidad_maxima; cont++) {
             list.push({
               id: cont,
-              seleccion:{}
-            })
+              seleccion: {}
+            });
           }
           this.combo.receta[i].input = list;
         } else {
-          this.seleccion.receta.push(this.combo.receta[i])
+          this.seleccion.receta.push(this.combo.receta[i]);
         }
       }
 
-      if (multiple == 0) {
+      if (+multiple === 0) {
         this.onConfirm();
       }
     });
   }
 
   onConfirm(): void {
-    
-    let multi = this.combo.receta.filter(p => +p.multiple == 1);
-    console.log(multi);
+
+    const multi = this.combo.receta.filter(p => +p.multiple === 1);
+    // console.log(multi);
     for (let i = 0; i < multi.length; i++) {
       const element = multi[i];
       this.seleccion.receta.push({
         articulo: element.articulo,
         descripcion: element.descripcion,
         receta: []
-      })
+      });
       const idx = this.seleccion.receta.findIndex(p => +p.articulo === +element.articulo);
       for (let j = 0; j < element.input.length; j++) {
         const prod = element.input[j].seleccion;
-        this.seleccion.receta[idx].receta.push(prod)
+        this.seleccion.receta[idx].receta.push(prod);
       }
     }
     this.datos.respuesta = true;

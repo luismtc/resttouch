@@ -17,8 +17,9 @@ export class FacturaManualComponent implements OnInit {
   @ViewChild('frmFacturaManual', { static: false }) frmFactura: FormFacturaManualComponent;
 
   constructor( ) {
-    this.factura = { 
-      factura: null, factura_serie: null, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null
+    this.factura = {
+      factura: null, factura_serie: null, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0,
+      notas: null
     };
   }
 
@@ -41,6 +42,7 @@ export class FacturaManualComponent implements OnInit {
       fel_uuid_anulacion: fact.fel_uuid_anulacion,
       certificador_fel: fact.certificador_fel
     };
+    this.frmFactura.clienteSelected = fact.cliente;
     this.frmFactura.loadDetalleFactura(+this.factura.factura);
     this.frmFactura.resetDetalleFactura();
   }

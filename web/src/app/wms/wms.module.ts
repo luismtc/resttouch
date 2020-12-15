@@ -23,6 +23,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 // import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 // import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
@@ -82,6 +83,7 @@ import { FormInventarioFisicoComponent } from './components/fisico/form-inventar
     MatDialogModule,
     MatSidenavModule,
     MatTreeModule,
+    MatAutocompleteModule
   ],
   providers: [
     TransformacionService

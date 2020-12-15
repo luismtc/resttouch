@@ -17,7 +17,11 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('b.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('b.sede', $args['sede']);
+			} else {
+				$this->db->where('b.sede', $args['sede']);
+			}
 		}
 
 		return $this->db
@@ -63,11 +67,22 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('a.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
+		}
+
+		if (verDato($args, "_grupo", 0) == 2) {
+			$this->db->group_by('a.sede');
 		}
 
 		return $this->db
-			->select('DATE_FORMAT(a.fecha_factura, "%d/%m/%Y") AS fecha, SUM(b.total - b.descuento) AS venta')
+			->select('
+				DATE_FORMAT(a.fecha_factura, "%d/%m/%Y") AS fecha, 
+				SUM(b.total - b.descuento) AS venta,
+				a.sede')
 			->from('factura a')
 			->join('detalle_factura b', 'a.factura = b.factura')
 			->where('a.fel_uuid IS NOT NULL')
@@ -91,11 +106,22 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('a.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
+		}
+
+		if (verDato($args, "_grupo", 0) == 2) {
+			$this->db->group_by('a.sede');
 		}
 
 		return $this->db
-			->select('CONCAT(f.nombre, "-", e.descripcion) AS categoria, SUM(b.total - b.descuento) AS venta')
+			->select('
+				CONCAT(f.nombre, "-", e.descripcion) AS categoria, 
+				SUM(b.total - b.descuento) AS venta,
+				a.sede')
 			->from('factura a')
 			->join('detalle_factura b', 'a.factura = b.factura')
 			->join('articulo c', 'c.articulo = b.articulo')
@@ -123,11 +149,19 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('g.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
+		}
+
+		if (verDato($args, "_grupo", 0) == 2) {
+			$this->db->group_by('a.sede');
 		}
 
 		return $this->db
-			->select('h.descripcion AS turno, SUM(e.total - e.descuento) AS venta')
+			->select('h.descripcion AS turno, SUM(e.total - e.descuento) AS venta, a.sede')
 			->from('comanda a')
 			->join('detalle_comanda b', 'a.comanda = b.comanda')
 			->join('detalle_cuenta c', 'b.detalle_comanda = c.detalle_comanda')
@@ -157,11 +191,22 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
+		}
+
+		if (verDato($args, "_grupo", 0) == 2) {
+			$this->db->group_by('a.sede');
 		}
 
 		return $this->db
-			->select('TRIM(CONCAT(IFNULL(g.nombres, ""), " ", IFNULL(g.apellidos, ""))) AS mesero, SUM(e.total - e.descuento) AS venta')
+			->select(
+				'TRIM(CONCAT(IFNULL(g.nombres, ""), " ", IFNULL(g.apellidos, ""))) AS mesero, 
+				SUM(e.total - e.descuento) AS venta,
+				a.sede')
 			->from('comanda a')
 			->join('detalle_comanda b', 'a.comanda = b.comanda')
 			->join('detalle_cuenta c', 'b.detalle_comanda = c.detalle_comanda')
@@ -172,9 +217,43 @@ class Tablero_model extends General_model
 			->where('f.fel_uuid IS NOT NULL')
 			->where('f.fel_uuid_anulacion IS NULL')
 			->group_by('1')
-			->order_by('1')
+			->order_by('venta', "desc")
 			->get()
 			->result();
+	}
+
+	public function agruparDatos($datos, $grupo=1)
+	{
+		$res = [];
+		foreach ($datos as $row) {
+			if ($grupo == 2) {
+				if (isset($res[$row->sede])) {
+					$res[$row->sede]["datos"][] = $row;
+				} else {
+					$tmp = $this->db
+						 		->where("sede", $row->sede)
+						 		->get("sede")
+						 		->row();
+
+					$res[$row->sede] = [
+						"nombre" => $tmp->nombre,
+						"datos" => [$row]
+					];
+				}
+			} else {
+				if (isset($res[1])) {
+					$res[1]["datos"][] = $row;
+				} else {
+
+					$res[1] = [
+						"nombre" => "Ventas",
+						"datos" => [$row]
+					];
+				}
+			}
+		}
+
+		return array_values($res);
 	}
 }
 

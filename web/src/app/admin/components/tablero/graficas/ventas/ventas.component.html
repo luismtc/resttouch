@@ -5,7 +5,19 @@
             <!--Inicia ventas por día-->
             <ejs-chart [primaryXAxis]="xAxisPorDia" [primaryYAxis]="yAxisPorDia" [title]="chartTitlePorDia" [legendSettings]="legendPorDia" [tooltip]="toolTipSettingsPorDia">
                 <e-series-collection>
-                    <e-series type="Line" [dataSource]="datos.porDia" xName="fecha" yName="venta" name="Ventas" [marker]="markerSettingsPorDia"></e-series>
+                    
+                    <!--<e-series type="Line" [dataSource]="datos.porDia" xName="fecha" yName="venta" name="Ventas" [marker]="markerSettingsPorDia"></e-series>-->
+
+                    <e-series 
+                        *ngFor="let porDia of datos.porDia" 
+                        type="Line" 
+                        [dataSource]="porDia.datos" 
+                        xName="fecha" 
+                        yName="venta" 
+                        [name]="porDia.nombre" 
+                        [marker]="markerSettingsPorDia">
+                    </e-series>
+                    
                 </e-series-collection>
             </ejs-chart>
             <!--Finaliza ventas por día-->
@@ -14,7 +26,15 @@
             <!--Inicia ventas por categoría-->
             <ejs-chart [primaryXAxis]="xAxisPorCategoria" [primaryYAxis]="yAxisPorCategoria" [title]="chartTitlePorCategoria" [legendSettings]="legendPorCategoria" [tooltip]="toolTipSettingsPorCategoria">
                 <e-series-collection>
-                    <e-series type="Line" [dataSource]="datos.porCategoria" xName="categoria" yName="venta" name="Ventas" [marker]="markerSettingsPorCategoria"></e-series>
+                    <e-series 
+                        *ngFor="let porCategoria of datos.porCategoria" 
+                        type="Line" 
+                        [dataSource]="porCategoria.datos" 
+                        xName="categoria" 
+                        yName="venta" 
+                        [name]="porCategoria.nombre" 
+                        [marker]="markerSettingsPorCategoria">
+                    </e-series>
                 </e-series-collection>
             </ejs-chart>
             <!--Finaliza ventas por categoría-->
@@ -27,7 +47,15 @@
             <!--Inicia ventas por turno-->
             <ejs-chart [primaryXAxis]="xAxisPorTurno" [primaryYAxis]="yAxisPorTurno" [title]="chartTitlePorTurno" [legendSettings]="legendPorTurno" [tooltip]="toolTipSettingsPorTurno">
                 <e-series-collection>
-                    <e-series type="Line" [dataSource]="datos.porTurno" xName="turno" yName="venta" name="Ventas" [marker]="markerSettingsPorTurno"></e-series>
+                    <e-series 
+                        *ngFor="let porTurno of datos.porTurno" 
+                        type="Line" 
+                        [dataSource]="porTurno.datos" 
+                        xName="turno" 
+                        yName="venta" 
+                        [name]="porTurno.nombre" 
+                        [marker]="markerSettingsPorTurno">
+                    </e-series>
                 </e-series-collection>
             </ejs-chart>
             <!--Finaliza ventas por turno-->
@@ -36,7 +64,15 @@
             <!--Inicia ventas por mesero-->
             <ejs-chart [primaryXAxis]="xAxisPorMesero" [primaryYAxis]="yAxisPorMesero" [title]="chartTitlePorMesero" [legendSettings]="legendPorMesero" [tooltip]="toolTipSettingsPorMesero">
                 <e-series-collection>
-                    <e-series type="Line" [dataSource]="datos.porMesero" xName="mesero" yName="venta" name="Ventas" [marker]="markerSettingsPorMesero"></e-series>
+                    <e-series 
+                        *ngFor="let porMesero of datos.porMesero" 
+                        type="Line" 
+                        [dataSource]="porMesero.datos" 
+                        xName="mesero" 
+                        yName="venta" 
+                        [name]="porMesero.nombre" 
+                        [marker]="markerSettingsPorMesero">
+                    </e-series>
                 </e-series-collection>
             </ejs-chart>
             <!--Finaliza ventas por mesero-->

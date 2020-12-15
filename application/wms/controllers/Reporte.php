@@ -41,15 +41,13 @@ class Reporte extends CI_Controller {
 			"cliente" => "",
 			"sub_cuenta" => "",
 			"fecha" => formatoFecha($this->input->get('fecha'), 2)
-		];
+		];		
 
 		foreach ($arts as $row) {
 			$art = new Articulo_model($row->articulo);
 			$art->actualizarExistencia($_GET);
 			$args["reg"][] = $art->getExistencias($_GET);
-
 		}
-
 
 		$pdf   = new \Mpdf\Mpdf([
 			'tempDir' => sys_get_temp_dir(), //produccion

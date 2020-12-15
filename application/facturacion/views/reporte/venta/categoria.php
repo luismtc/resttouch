@@ -15,7 +15,7 @@
 					<td><?php echo $empresa->nombre ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $nsede->nombre ?></td>
+					<td><?php echo "Sede: {$nsede}" ?></td>
 				</tr>
 			</table>
 		</div>
@@ -41,72 +41,159 @@
 	<div class="row">
 		<div class="col-sm-12">
 			<div class="table-responsive">
-				<table class="table table-bordered" style="padding: 5px">
-					<thead>
-						<tr>
-							<th style="padding: 5px;" class="text-center">Descripcion</th>
-							<th style="padding: 5px;" class="text-center">Cantidad</th>
-							<th style="padding: 5px;" class="text-center">Porcentaje</th>
-							<th style="padding: 5px;" class="text-center">Precio Unitario</th>
-							<th style="padding: 5px;" class="text-center">Total</th>
-						</tr>
-					</thead>
-
-					<?php $granTotal = 0; ?>
-
-					<tbody>
-						<?php foreach ($detalle as $det): ?>
+				<?php if (!isset($detalle['grupo'])): ?>
+					<table class="table table-bordered" style="padding: 5px">
+						<thead>
 							<tr>
-								<td style="padding: 5px;"><b><?php echo $det->descripcion ?></b></td>
-								<td style="padding: 5px;" class="text-right"></td>
-								<td style="padding: 5px;" class="text-right"></td>
-								<td style="padding: 5px;" class="text-right"></td>
-								<td style="padding: 5px;" class="text-right"></td>
+								<th style="padding: 5px;" class="text-center">Descripcion</th>
+								<th style="padding: 5px;" class="text-center">Cantidad</th>
+								<th style="padding: 5px;" class="text-center">Porcentaje</th>
+								<th style="padding: 5px;" class="text-center">Precio Unitario</th>
+								<th style="padding: 5px;" class="text-center">Total</th>
 							</tr>
-							<?php foreach ($det->subcategoria as $sub): ?>
-								<?php if (count($sub['articulos']) > 0): ?>
-									<tr>
-										<td style="padding: 5px; margin-left: 5px;"><b><?php echo $sub['descripcion'] ?></b></td>
-										<td style="padding: 5px;" class="text-right"></td>
-										<td style="padding: 5px;" class="text-right"></td>
-										<td style="padding: 5px;" class="text-right"></td>
-										<td style="padding: 5px;" class="text-right"></td>
-									</tr>
-									<?php $total = 0 ?>
-									<?php foreach ($sub['articulos'] as $row): ?>
+						</thead>
+
+						<?php $granTotal = 0; ?>
+
+						<tbody>
+							<?php foreach ($detalle as $det): ?>
+								<tr>
+									<td style="padding: 5px;"><b><?php echo $det->descripcion ?></b></td>
+									<td style="padding: 5px;" class="text-right"></td>
+									<td style="padding: 5px;" class="text-right"></td>
+									<td style="padding: 5px;" class="text-right"></td>
+									<td style="padding: 5px;" class="text-right"></td>
+								</tr>
+								<?php foreach ($det->subcategoria as $sub): ?>
+									<?php if (count($sub['articulos']) > 0): ?>
 										<tr>
-											<td style="padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
-											<td style="padding: 5px;" class="text-right"><?php echo $row->cantidad ?></td>
-											<td style="padding: 5px;" class="text-right"><?php echo $row->porcentaje ?></td>
-											<td style="padding: 5px;" class="text-right"><?php echo $row->precio_unitario ?></td>
-											<td style="padding: 5px;" class="text-right"><?php echo number_format($row->total, 2) ?></td>
-										</tr>	
-										<?php 
-											$total += $row->total;
-											$granTotal += $row->total;
-										?>	
-									<?php endforeach ?>
-									<tr>
-										<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoria</b></td>
-										<td style="padding: 5px;" class="text-right">
-											<?php echo number_format($total, 2) ?>
-										</td>
-									</tr>
-								<?php endif ?>
+											<td style="padding: 5px; margin-left: 5px;"><b><?php echo $sub['descripcion'] ?></b></td>
+											<td style="padding: 5px;" class="text-right"></td>
+											<td style="padding: 5px;" class="text-right"></td>
+											<td style="padding: 5px;" class="text-right"></td>
+											<td style="padding: 5px;" class="text-right"></td>
+										</tr>
+										<?php $total = 0 ?>
+										<?php foreach ($sub['articulos'] as $row): ?>
+											<tr>
+												<td style="padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
+												<td style="padding: 5px;" class="text-right"><?php echo $row->cantidad ?></td>
+												<td style="padding: 5px;" class="text-right"><?php echo $row->porcentaje ?></td>
+												<td style="padding: 5px;" class="text-right"><?php echo $row->precio_unitario ?></td>
+												<td style="padding: 5px;" class="text-right"><?php echo number_format($row->total, 2) ?></td>
+											</tr>	
+											<?php 
+												$total += $row->total;
+												$granTotal += $row->total;
+											?>	
+										<?php endforeach ?>
+										<tr>
+											<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoria</b></td>
+											<td style="padding: 5px;" class="text-right">
+												<?php echo number_format($total, 2) ?>
+											</td>
+										</tr>
+									<?php endif ?>
+								<?php endforeach ?>
 							<?php endforeach ?>
-						<?php endforeach ?>
-					</tbody>
-					<tfoot>
-						<tr>
-							<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
-								<h4>TOTAL</h4>
-							</td>
-							<td style="padding: 5px;" class="text-right">
-								<?php echo number_format($granTotal, 2) ?>
-							</td>
-						</tr>
-					</tfoot>
-				</table>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+									<h4>TOTAL</h4>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($granTotal, 2) ?>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				<?php else: ?>
+					<table class="table table-bordered" style="padding: 5px">
+						<thead>
+							<tr>
+								<th style="padding: 5px;" class="text-center">Descripcion</th>
+								<th style="padding: 5px;" class="text-center">Cantidad</th>
+								<th style="padding: 5px;" class="text-center">Porcentaje</th>
+								<th style="padding: 5px;" class="text-center">Precio Unitario</th>
+								<th style="padding: 5px;" class="text-center">Total</th>
+							</tr>
+						</thead>
+
+						<?php $granTotal = 0; ?>
+
+						<tbody>
+							<?php foreach ($detalle['datos'] as $sede): ?>
+								<?php $totalSede = 0 ?>
+								<tr>
+									<td style="padding: 5px; float: left;" colspan="5">
+										<b><?php echo $sede['sede'] ?></b>
+									</td>
+								</tr>
+							
+								<?php foreach ($sede['articulos'] as $det): ?>
+									<tr>
+										<td style="padding: 5px;"><b><?php echo $det->descripcion ?></b></td>
+										<td style="padding: 5px;" class="text-right"></td>
+										<td style="padding: 5px;" class="text-right"></td>
+										<td style="padding: 5px;" class="text-right"></td>
+										<td style="padding: 5px;" class="text-right"></td>
+									</tr>
+									<?php foreach ($det->subcategoria as $sub): ?>
+										<?php if (count($sub['articulos']) > 0): ?>
+											<tr>
+												<td style="padding: 5px; margin-left: 5px;"><b><?php echo $sub['descripcion'] ?></b></td>
+												<td style="padding: 5px;" class="text-right"></td>
+												<td style="padding: 5px;" class="text-right"></td>
+												<td style="padding: 5px;" class="text-right"></td>
+												<td style="padding: 5px;" class="text-right"></td>
+											</tr>
+											<?php $total = 0 ?>
+											<?php foreach ($sub['articulos'] as $row): ?>
+												<tr>
+													<td style="padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
+													<td style="padding: 5px;" class="text-right"><?php echo $row->cantidad ?></td>
+													<td style="padding: 5px;" class="text-right"><?php echo $row->porcentaje ?></td>
+													<td style="padding: 5px;" class="text-right"><?php echo $row->precio_unitario ?></td>
+													<td style="padding: 5px;" class="text-right"><?php echo number_format($row->total, 2) ?></td>
+												</tr>	
+												<?php 
+													$total += $row->total;
+												?>	
+											<?php endforeach ?>
+											<?php $totalSede += $total; ?>
+											<tr>
+												<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoria</b></td>
+												<td style="padding: 5px;" class="text-right">
+													<?php echo number_format($total, 2) ?>
+												</td>
+											</tr>
+										<?php endif ?>
+									<?php endforeach ?>
+								<?php endforeach ?>
+								<tr>
+									<td colspan="4" class="text-right">
+										Total Sede
+									</td>
+									<td style="padding: 5px;" class="text-right">
+										<?php echo number_format($totalSede, 2) ?>
+									</td>
+								</tr>
+								<?php $granTotal += $totalSede; ?>
+							<?php endforeach ?>
+						</tbody>
+						<tfoot>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+									<h4>TOTAL</h4>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($granTotal, 2) ?>
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				<?php endif ?>
 			</div>
 		</div>
 	</div>

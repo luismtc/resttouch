@@ -16,6 +16,7 @@ import { TableroComponent } from './components/tablero/tablero.component';
 import { ProveedorComponent } from './components/proveedor/proveedor/proveedor.component';
 import { ImpuestoEspecialComponent } from './components/impuestoEspecial/impuesto-especial/impuesto-especial.component';
 import { BodegaComponent } from './components/bodega/bodega/bodega.component';
+import { UsuarioSedeComponent } from './components/usuario-sede/usuario-sede/usuario-sede.component'
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
@@ -32,6 +33,7 @@ const routes: Routes = [
   {path: 'proveedor', component: ProveedorComponent, canActivate: [AuthGuard]},
   {path: 'impuesto_especial', component: ImpuestoEspecialComponent, canActivate: [AuthGuard]},
   {path: 'bodega', component: BodegaComponent, canActivate: [AuthGuard]},
+  {path: 'usuario_sede', component: UsuarioSedeComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
