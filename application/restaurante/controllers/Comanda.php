@@ -455,24 +455,44 @@ class Comanda extends CI_Controller {
 		];
 
 		if ($pdf === 0) {
-			$cta->imprimirDetalle();
+			if ($pdf != 2) {
+				$cta->imprimirDetalle();
+			}
 			$datos["comanda"] = $com->getComanda();
 		} else {
-			$datos["comanda"] = $com->getComanda(['impreso' => "0"]);
+			$datos["comanda"] = $com->getComanda([
+				'impreso' => "0",
+				"_cuenta" => $cta->getPK()
+			]);
 			$cta->imprimirDetalle();
+			$det = 0;
+			foreach ($datos['comanda']->cuentas as $cta) {
+				foreach ($cta->productos as $prod) {
+					$det+=1;
+					if (isset($prod->detalle)) {
+						$det+=count($prod->detalle);
+					}
+					if (!empty($prod->notas)) {
+						$det+=1;
+					}
+				}
+			}
 		}
 
-		if ($pdf === 0) {
-			$this->output
-			->set_output(json_encode($datos));	
-		} else {
+		if ($pdf == 1) {
+				
 			$mpdf = new \Mpdf\Mpdf([
+				'mode' => 'utf-8',
 				'tempDir' => sys_get_temp_dir(), //produccion
-				'format' => 'Legal'
+				'format' => [80,100+$det*2]
 			]);
 
 			$mpdf->WriteHTML($this->load->view('impresion/comanda', $datos, true));
 			$mpdf->Output("Detalle de Comandas.pdf", "D");
+		} else {
+			$this->output
+			->set_output(json_encode($datos));
+			
 		}
 	}
 

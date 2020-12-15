@@ -17,7 +17,11 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('b.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
 		}
 
 		return $this->db
@@ -63,7 +67,11 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('a.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
 		}
 
 		return $this->db
@@ -91,7 +99,11 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('a.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
 		}
 
 		return $this->db
@@ -123,7 +135,11 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('g.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
 		}
 
 		return $this->db
@@ -157,7 +173,11 @@ class Tablero_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
 		}
 
 		return $this->db

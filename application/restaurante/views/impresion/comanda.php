@@ -3,109 +3,85 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 	<title>Comanda</title>
 </head>
 
 <body lang="es-GT" dir="ltr">
-	<div class="row">
-		<div class="col-sm-12 text-right">
-			<?php echo formatoFecha($comanda->fecha) ?>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-12 text-center">
-			<h4>Comanda: <?php echo $comanda->comanda ?></h4>
-			<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['numero_orden'])): ?>
-				<span>Número de Orden <?php echo $comanda->origen_datos['numero_orden'] ?></span><br>
-			<?php endif ?>
-			<?php if (isset($comanda->mesa) && isset($comanda->mesa->numero)): ?>
-				<span>Mesa Número: <?php echo $comanda->mesa->numero ?></span>
-			<?php endif ?>
-		</div>
-	</div>
-	<?php foreach ($comanda->cuentas as $cuenta): ?>
-	<div class="row">
-		<div class="col-sm-12 text-center">
-			<span>Cuenta: <?php echo $cuenta->nombre ?></span><br>
-		</div>
-	</div>
-	<br>
-	<?php if (isset($comanda->origen_datos)): ?>
-	<div>
-		<span><b>Datos del Cliente</b></span>
-	</div>
-	<table class="table">
-	<?php if (isset($comanda->origen_datos) && isset($comanda->origen_datos['direccion_entrega']) && isset($comanda->origen_datos['metodo_pago'])): ?>
-	<tr>
-		<?php if (isset($comanda->origen_datos['direccion_entrega']->direccion)): ?>
-			<td><b>Dirección de Entrega:</b> <?php echo $comanda->origen_datos['direccion_entrega']->direccion ?></td>
-		<?php endif ?>
-		<?php if (isset($comanda->origen_datos['direccion_entrega']->telefono)): ?>
-			<td><b>Teléfono:</b> <?php echo $comanda->origen_datos['direccion_entrega']->telefono ?></td>	
-		<?php endif ?>
-		
-	</tr>
-	<?php endif ?>
-	<?php if (isset($comanda->origen_datos['direccion_entrega']->nombre) && isset($comanda->origen_datos['direccion_entrega']->correo) && isset($comanda->origen_datos['direccion_entrega']->apellidos)): ?>
+	<table class="tabla-contenido">
 		<tr>
-			<td><b>Nombre entrega:</b> <?php echo $comanda->origen_datos['direccion_entrega']->nombre." ".$comanda->origen_datos['direccion_entrega']->apellidos ?></td>
-			<td><b>Correo:</b> <?php echo $comanda->origen_datos['direccion_entrega']->correo ?></td>
+			<td colspan="2" class="text-center"><?php echo "{$comanda->mesa->area->nombre} - {$comanda->mesa->numero}" ?></td>
 		</tr>
-	<?php endif ?>
-	<?php if (isset($comanda->origen_datos['metodo_pago']->nombre)): ?>
 		<tr>
-			<td><b>Metodo de Pago:</b> <?php echo $comanda->origen_datos['metodo_pago']->nombre ?>
+			<td colspan="2" class="text-center">
+				Atiende <?php echo $comanda->mesero['nombres']." ".$comanda->mesero['apellidos'] ?>
 			</td>	
-	<?php if (isset($comanda->origen_datos, $comanda->origen_datos['transferencia'], $comanda->origen_datos['transferencia']->documento)): ?>
-			<td>
-				<span>Detalle de Transferencia: <?php echo $comanda->origen_datos['transferencia']->documento ?></span><br>
-				<?php if (isset($comanda->origen_datos['transferencia']->observaciones)): ?>
-					<span>
-						Observaciones: <?php echo $comanda->origen_datos['transferencia']->observaciones ?>	
-					</span>	
-				<?php endif ?>
-			</td>
-		<?php endif ?>
 		</tr>
-	<?php endif ?>
-	
+		<tr>
+			<td colspan="2" class="text-center">
+				<?php echo "Comanda #{$comanda->comanda} de {$comanda->cuentas[0]->nombre}" ?>
+			</td>
+		</tr>
+		<tr><td colspan="2" class="text-center"><?php echo str_repeat("-", 50) ?></td></tr>
+		<?php foreach ($comanda->cuentas as $cta): ?>
+			<?php foreach ($cta->productos as $prod): ?>
+				<tr>
+					<td class="text-center">
+						<?php echo $prod->cantidad ?>
+					</td>
+					<td>
+						<?php echo $prod->articulo->descripcion ?>
+					</td>
+				</tr>
+				<?php if (isset($prod->detalle)): ?>
+					<?php foreach ($prod->detalle as $det): ?>
+						<?php if (!empty($det)): ?>
+							<tr>
+								<td class="text-right">
+									&nbsp;->
+								</td>
+								<td>
+									&nbsp;<?php echo $det ?>
+								</td>
+							</tr>
+						<?php endif ?>
+					<?php endforeach ?>
+				<?php endif ?>
+				<?php if (!empty($prod->notas)): ?>
+					<tr>
+						<td class="text-right">
+							->
+						</td>
+						<td>
+							&nbsp;&nbsp;&nbsp;
+							<?php echo $prod->notas ?>
+						</td>
+					</tr>
+				<?php endif ?>
+			<?php endforeach ?>
+		<?php endforeach ?>
+		<tr><td colspan="2" class="text-center"><?php echo str_repeat("-", 50) ?></td></tr>
+		<tr>
+			<td colspan="2">&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="text-center">
+				<?php echo formatoFecha(Hoy(3)) ?>
+			</td>
+		</tr>
 	</table>
-	<?php endif ?>
-	<br>
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="table-responsive">
-				<table class="table table-bordered" style="padding: 5px">
-					<thead>
-						<tr>
-							<th style="padding: 5px;" class="text-center">Cantidad</th>
-							<th style="padding: 5px;" class="text-center">Descripcion</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php foreach ($cuenta->productos as $key => $det): ?>
-							<?php if ($det->impreso == 0): ?>
-								<tr>
-									<td style="padding: 5px;" class="text-center"><?php echo $det->cantidad ?></td>
-									<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>
-								</tr>
-								<?php if (!empty($det->notas)): ?>
-									<tr>
-										<td colspan="2" style="padding: 8px; margin: 10px;">
-											<?php echo "<b>Notas:</b> {$det->notas}" ?>
-										</td>
-									</tr>
-								<?php endif ?>
-							<?php endif ?>							
-						<?php endforeach ?>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<hr>
-	<br>
-	<?php endforeach ?>
+	
 </body>
 </html>
+<style type="text/css">
+	body {font-family: sans-serif;margin: auto;}
+	table {width: 100%; border-collapse: collapse; border: 0px solid black;}
+	td {width: auto; border-collapse: collapse; border: 0px solid black;}
+
+	.text-right {text-align: right;}
+	.text-center {text-align: center;}
+	.tabla-contenido {font-size: 0.65em;}
+	.tabla-firma {font-size: 0.90em;}
+	.tabla-firma-td {border: none; text-align:center;padding: 15px 1px 15 1px;}
+	.titulo {text-align: center; vertical-align: middle; background-color: #E5E5E5; font-weight: bold;}
+	.totales {text-align: right; background-color: #E5E5E5; }
+</style>

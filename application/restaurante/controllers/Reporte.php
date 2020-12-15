@@ -22,7 +22,7 @@ class Reporte extends CI_Controller {
 			'Cuenta_model',
 			'Usuario_model',
 			'TurnoTipo_model',
-			'Catalogo_model'
+			'Catalogo_model',
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -43,7 +43,9 @@ class Reporte extends CI_Controller {
 			"descuento" => 1
 		]);
 		$data = json_decode(file_get_contents('php://input'), true);;
-		$data['sede'] = $this->data->sede;
+		if (!isset($data['sede'])) {
+			$data['sede'] = [$this->data->sede];
+		}
 		$data["_facturadas"] = true;
 		
 		$data["descuento"] = 0;
@@ -66,6 +68,22 @@ class Reporte extends CI_Controller {
 				$data['descuento_sin_fact'][] = $row;
 			}
 		}
+
+		if (isset($data['_grupo']) && $data['_grupo'] == 2) {
+			$tmpIngreso = [];
+			foreach ($data['ingresos'] as $row) {
+				$tmpIngreso[$row->sede][] = $row;
+			}
+			$data['ingresos'] = $tmpIngreso;
+
+			$tmpDescuento = [];
+			foreach ($data['descuentos'] as $row) {
+				$tmpDescuento[$row->sede][] = $row;
+			}
+
+			$data['descuentos'] = $tmpDescuento;
+		}
+
 		$data['comanda'] = $this->Reporte_model->getRangoComandas($data);
 		
 		if (isset($data['_detalle']) && filter_var($data['_detalle'], FILTER_VALIDATE_BOOLEAN)) {
@@ -74,7 +92,11 @@ class Reporte extends CI_Controller {
 			$det = $this->Reporte_model->get_ingresos($data);
 			$data['detalle'] = [];
 			foreach ($det as $row) {
-				$data['detalle'][$row->descripcion][] = $row;
+				if (isset($_GET['_grupo']) && $_GET['_grupo'] == 2) {
+					$data['detalle'][$row->sede][$row->descripcion][] = $row;
+				} else {
+					$data['detalle'][$row->descripcion][] = $row;
+				}
 			}
 		}
 
@@ -98,6 +120,16 @@ class Reporte extends CI_Controller {
 			"_uno" => true
 		]);
 
+		$tmp = [];
+		foreach ($data['sede'] as $row) {
+			$sede = $this->Catalogo_model->getSede([
+				'sede' => $row,
+				"_uno" => true
+			]);
+			
+			$tmp[] = $sede->nombre;
+		}
+
 		if ($sede) {
 			$emp = $this->Catalogo_model->getEmpresa([
 				"empresa" => $sede->empresa,
@@ -105,12 +137,12 @@ class Reporte extends CI_Controller {
 			]);
 			if ($emp) {
 				$data['empresa'] = $emp;
-				$data['sede'] = $sede;
+				$data['nsede'] = implode(", ", $tmp);
 			}
 		}
 
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			//'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));

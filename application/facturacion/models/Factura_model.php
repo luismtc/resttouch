@@ -858,7 +858,11 @@ class Factura_model extends General_model
 		}
 
 		if (isset($args['sede'])) {
-			$this->db->where("a.sede", $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in("a.sede", $args['sede']);
+			} else {
+				$this->db->where("a.sede", $args['sede']);
+			}
 			unset($args['sede']);
 		}
 
@@ -884,7 +888,7 @@ class Factura_model extends General_model
 			->join("comanda f", "e.comanda = f.comanda", "left")
 			->join("turno g", "g.turno = f.turno", "left")
 			->group_by("a.factura")
-			->get("factura a")
+			->get("factura- a")
 			->result();
 	}
 

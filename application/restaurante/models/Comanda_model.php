@@ -212,6 +212,9 @@ class Comanda_model extends General_Model
 
 	public function getCuentas($args = [])
 	{
+		if (isset($args['_cuenta'])) {
+			$this->db->where('cuenta', $args['_cuenta']);
+		}
 		$cuentas = [];
 		$tmp = $this->db
 			->where("comanda", $this->comanda)

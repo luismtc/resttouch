@@ -20,6 +20,22 @@
           <mat-form-field class="fullWidth">            
             <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
+          <mat-form-field class="fullWidth">
+            <mat-label>Sede</mat-label>
+            <mat-select name="sede" multiple [(ngModel)]="params.sede">
+                <mat-option *ngFor="let sede of sedes" [value]="sede.sede.sede">
+                    {{sede.sede.nombre}}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="fullWidth" *ngIf="params.sede && params.sede.length > 1">
+              <mat-label>Agrupar por</mat-label>
+              <mat-select name="grupo"  [(ngModel)]="params._grupo">
+                  <mat-option *ngFor="let grp of grupos" [value]="grp.id">
+                      {{grp.descripcion}}
+                  </mat-option>
+              </mat-select>
+          </mat-form-field>
           <div class="row">
             <div class="col">
               <mat-checkbox name="mostrar_detalle" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>

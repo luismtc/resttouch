@@ -8,6 +8,9 @@ import { GLOBAL } from '../../../shared/global';
 import { SedeService } from '../../../admin/services/sede.service';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { Sede } from '../../../admin/interfaces/sede';
+import { UsuarioSede } from '../../../admin/interfaces/acceso'
+import { AccesoUsuarioService } from '../../../admin/services/acceso-usuario.service'
+import { Global } from '@syncfusion/ej2-ng-grids';
 
 @Component({
     selector: 'app-tablero',
@@ -21,7 +24,9 @@ export class TableroComponent implements OnInit {
     public dataSourceSettings: IDataOptions;
     public button: Button;
 
-    public params: any = {};
+    public params: any = {
+        sede:[]
+    };
     public titulo = 'Tablero';
     public estDias = 0;
     public estMin = '';
@@ -30,7 +35,8 @@ export class TableroComponent implements OnInit {
     public estTotal = '';
     public cargando = false;
     public datosGraficas: any = {};
-    public sedes: Sede[] = [];
+    public sedes: UsuarioSede[] = [];
+    public grupos = GLOBAL.grupos
 
     @ViewChild('pivotview', { static: false })
     public pivotGridObj: PivotViewComponent;
@@ -38,8 +44,8 @@ export class TableroComponent implements OnInit {
     constructor(
         private snackBar: MatSnackBar,
         private tableroService: TableroService,
-        private sedeSrvc: SedeService,
-        private ls: LocalstorageService,
+        private sedeSrvc: AccesoUsuarioService,
+        private ls: LocalstorageService
     ) { }
 
     ngOnInit(): void {
@@ -73,15 +79,8 @@ export class TableroComponent implements OnInit {
     }
 
     getSede = (params: any = {}) => {
-    this.sedeSrvc.get(params).subscribe(res => {
+    this.sedeSrvc.getSedes(params).subscribe(res => {
         this.sedes = res;
-        let sede: Sede = {
-            sede: 0,
-            empresa: 1,
-            nombre : "Todas"
-        }
-
-        this.sedes.push(sede)
     });
     }
 
@@ -113,8 +112,8 @@ export class TableroComponent implements OnInit {
             this.params.fdel = moment().subtract(1, 'week').format(GLOBAL.dbDateFormat);
         }
 
-        if (!this.params.sede && this.params.sede !== 0) {
-            this.params.sede = this.ls.get(GLOBAL.usrTokenVar).sede;
+        if (!this.params.sede && this.params.sede.length == 0) {
+            this.params.sede.push(this.ls.get(GLOBAL.usrTokenVar).sede);
         }
 
         if (!this.params.fal) {

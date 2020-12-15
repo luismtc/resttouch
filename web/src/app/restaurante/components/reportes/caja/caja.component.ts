@@ -3,7 +3,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReportePdfService } from '../../../services/reporte-pdf.service';
 import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
+import { UsuarioSede } from '../../../../admin/interfaces/acceso'
+import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service'
 import { saveAs } from 'file-saver';
+import { GLOBAL } from '../../../../shared/global';
 import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 import { FpagoService } from '../../../../admin/services/fpago.service';
 import { FormaPago } from '../../../../admin/interfaces/forma-pago';
@@ -15,11 +18,16 @@ import { FormaPago } from '../../../../admin/interfaces/forma-pago';
   styleUrls: ['./caja.component.css']
 })
 export class CajaComponent implements OnInit {
-  public params: any = {_validar: false};
+  public params: any = {
+    _validar: false,
+    sede: []
+  };
   public titulo = 'Resumen de caja';
   public tiposTurno: TipoTurno[] = [];
   public cargando = false;
   public fpagos: FormaPago[] = [];
+  public sedes: UsuarioSede[] = [];
+  public grupos = GLOBAL.grupos;
 
   public configBotones: ConfiguracionBotones = {
     showPdf: true, showHtml: false, showExcel: false
@@ -29,18 +37,28 @@ export class CajaComponent implements OnInit {
     private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
     private tipoTurnoSrvc: TipoTurnoService,
-    private fpagoSrvc: FpagoService
+    private fpagoSrvc: FpagoService,
+    private sedeSrvc: AccesoUsuarioService
   ) { }
 
   ngOnInit() {
     this.loadTiposTurno();
     this.loadFormaPago();
+    this.loadSedes();
   }
 
   loadFormaPago = () => {
     this.fpagoSrvc.get().subscribe(res => {
       if (res) {
         this.fpagos = res;
+      }
+    })
+  }
+
+  loadSedes = () => {
+    this.sedeSrvc.getSedes({reporte: true}).subscribe(res => {
+      if (res) {
+        this.sedes = res
       }
     })
   }

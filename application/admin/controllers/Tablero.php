@@ -60,11 +60,6 @@ class Tablero extends CI_Controller {
 
 		if ($this->input->get('fdel') && $this->input->get('fal'))
 		{
-
-			if (isset($_GET['sede']) && $_GET['sede'] == 0) {
-				unset($_GET['sede']);
-			}
-
 			$res['pordia'] = $this->Tablero_model->getVentasPorDia($_GET);
 			$res['porcategoria'] = $this->Tablero_model->getVentasPorCategoria($_GET);
 			$res['porturno'] = $this->Tablero_model->getVentasPorTurno($_GET);
