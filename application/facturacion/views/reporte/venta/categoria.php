@@ -126,8 +126,8 @@
 							<?php foreach ($detalle['datos'] as $sede): ?>
 								<?php $totalSede = 0 ?>
 								<tr>
-									<td style="padding: 5px; float: left;" colspan="5">
-										<b><?php echo $sede['sede'] ?></b>
+									<td style="padding: 5px; float: left;font-weight: bold;" colspan="5">
+										<h4><?php echo $sede['sede'] ?></h4>
 									</td>
 								</tr>
 							
@@ -184,7 +184,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+								<td style="padding: 5px; margin-left: 5px;font-weight: bold;" class="text-right" colspan="4">
 									<h4>TOTAL</h4>
 								</td>
 								<td style="padding: 5px;" class="text-right">

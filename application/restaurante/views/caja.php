@@ -293,8 +293,8 @@
 							<?php $totalPropinas = 0; ?>
 							<?php foreach ($ingresos as $value): ?>
 								<tr>
-									<td colspan="3" style="padding: 5px;">
-										<b><?php echo $value[0]->nsede ?></b>
+									<td colspan="3" style="padding: 5px; font-weight: bold;">
+										<h4><?php echo $value[0]->nsede ?></h4>
 									</td>
 								</tr>
 								<tr>
@@ -372,13 +372,13 @@
 							</tr>
 							<?php foreach ($descuentos as $value): ?>
 								<tr>
-									<td colspan="3" style="padding: 5px;">
-										<b><?php echo $value[0]->nsede ?></b>
+									<td colspan="3" style="padding: 5px; font-weight: bold;">
+										<h4><?php echo $value[0]->nsede ?></h4>
 									</td>
 								</tr>
 								<tr>
 									<td colspan="3" style="padding: 5px;">
-										<b>Descuentos!!</b>
+										<b>Descuentos</b>
 									</td>
 								</tr>
 								<?php foreach ($value as $row): ?>

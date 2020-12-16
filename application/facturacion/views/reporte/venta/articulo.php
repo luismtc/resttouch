@@ -93,7 +93,9 @@
 					<?php $total = 0 ?>
 					<?php foreach ($detalle['datos'] as $sede): ?>
 						<tr>
-							<th colspan="3"><?php echo $sede['sede'] ?></th>
+							<th colspan="3" style="font-weight: bold;">
+								<h4><?php echo $sede['sede'] ?></h4>
+							</th>
 						</tr>
 						<?php $totalSede = 0 ?>
 						<?php foreach ($sede['articulos'] as $det): ?>
@@ -121,7 +123,7 @@
 						<?php $total += $totalSede ?>
 					<?php endforeach ?>
 					<tr>
-						<td style="padding: 5px;" colspan="2" class="text-right">
+						<td style="padding: 5px;font-weight: bold;" colspan="2" class="text-right">
 							<b>Total</b>
 						</td>
 						<td style="padding: 5px;" class="text-right">
