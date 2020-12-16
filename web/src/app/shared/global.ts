@@ -38,11 +38,11 @@ export const GLOBAL = {
     grupos: [
         {
             id: 1,
-            descripcion: "General"
-        }, 
+            descripcion: 'General'
+        },
         {
             id: 2,
-            descripcion: "Sede"
+            descripcion: 'Sede'
         }
     ]
 };

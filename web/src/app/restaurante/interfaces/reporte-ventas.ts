@@ -22,7 +22,12 @@ export interface RptArticulo {
 }
 
 export interface PorArticulo {
-    articulo: Articulo;
-    cantidad: number;
-    total: number;
+    datos: [
+        {
+            articulo: Articulo;
+            cantidad: number;
+            total: number;
+        }
+    ];
+    grupo: number;
 }

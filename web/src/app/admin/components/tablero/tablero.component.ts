@@ -122,7 +122,7 @@ export class TableroComponent implements OnInit {
 
         this.tableroService.getDataGraficas(this.params).subscribe((res: any) => {
             this.cargando = false;
-            console.log(res);
+            // console.log(res);
             if (res.exito) {
                 this.datosGraficas.porDia = res.pordia;
                 this.datosGraficas.porCategoria = res.porcategoria;

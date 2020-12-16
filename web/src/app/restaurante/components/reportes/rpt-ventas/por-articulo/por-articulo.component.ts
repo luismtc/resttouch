@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { PorArticulo } from '../../../../interfaces/reporte-ventas';
+// import { PorArticulo } from '../../../../interfaces/reporte-ventas';
 
 @Component({
   selector: 'app-por-articulo',
@@ -10,7 +10,7 @@ import { PorArticulo } from '../../../../interfaces/reporte-ventas';
 export class PorArticuloComponent implements OnInit {
 
   @Input() params: any = {};
-  @Input() data: PorArticulo[] = [];
+  @Input() data: any = {};
 
   constructor() { }
 
