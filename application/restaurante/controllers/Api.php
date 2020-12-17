@@ -314,7 +314,7 @@ class Api extends CI_Controller {
 												foreach ($cuenta->getDetalle() as $det) {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
-													$det->descuento = $det->total * $pdescuento/100;
+													$det->descuento = $det->total * $pdescuento;
 													
 													$det->precio_unitario = $det->precio;
 													$total = $det->total - $det->descuento;
