@@ -233,6 +233,36 @@ class Comanda extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
+	public function distribuir_cuentas()
+	{
+		$req = json_decode(file_get_contents('php://input'), true);
+		$datos = ["exito" => false];
+
+		if ($this->input->method() == 'post') {
+			
+
+			foreach ($req as $row) {
+				$det = new Dcomanda_model($row['detalle_comanda']);
+				$datos['exito'] = $det->destribuir_cuenta($row);
+
+				if (!$datos['exito']) {
+					$datos['mensaje'] = implode("<br>", $det->getMensaje());
+					break;
+				}	
+			}				
+			
+			if ($datos['exito']) {
+				$datos['mensaje'] = "Datos Actualizados con exito";
+			}
+
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
+	}
+
 	public function guardar_notas_producto($dcomanda) {
 		$datos = ["exito" => false];
 		if ($this->input->method() == 'post') {
