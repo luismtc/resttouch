@@ -59,6 +59,14 @@ $config['menu'] = [
 					13 => [
 						'nombre' => 'Sede por Usuario',
 						'link' => '/admin/usuario_sede'
+					],
+					14 => [
+						'nombre' => 'Configuracion Certificador',
+						'link' => '/admin/certificador_admin'
+					],
+					15 => [
+						'nombre' => 'Certificador FEL',
+						'link' => '/admin/certificador_fel'
 					]
 				]
 			],

@@ -44,6 +44,26 @@ export const GLOBAL = {
             id: 2,
             descripcion: 'Sede'
         }
+    ],
+    frases_isr: [
+        {
+            id: 1,
+            descripcion: "Sujeto a pagos trimestrales ISR"
+        },
+        {
+            id: 2,
+            descripcion: "Sujeto a retención definitiva ISR"
+        },
+        {
+            id: 3,
+            descripcion: "Sujeto a pago directo ISR"
+        }
+    ],
+    frases_iva: [
+        {
+            id: 1,
+            descripcion: "Agente de Retención del IVA"
+        }
     ]
 };
 

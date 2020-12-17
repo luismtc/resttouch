@@ -83,6 +83,11 @@ import { UsuarioSedeListaComponent } from './components/usuario-sede/usuario-sed
 import { UsuarioSedeFormComponent } from './components/usuario-sede/usuario-sede-form/usuario-sede-form.component';
 import { AcercaDeComponent } from './components/acerca-de/acerca-de.component';
 
+import { ListaCertificadorConfiguracionComponent } from './components/certificador/configuracion/lista-certificador-configuracion/lista-certificador-configuracion.component';
+import { FormCertificadorConfiguracionComponent } from './components/certificador/configuracion/form-certificador-configuracion/form-certificador-configuracion.component';
+import { CertificadorConfiguracionComponent } from './components/certificador/configuracion/certificador-configuracion/certificador-configuracion.component'
+import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component'
+import { FormCertificadorFelComponent } from './components/certificador/datos/form-certificador-fel/form-certificador-fel.component'
 
 @NgModule({
   declarations: [
@@ -93,9 +98,11 @@ import { AcercaDeComponent } from './components/acerca-de/acerca-de.component';
     FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,
     TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent,
     FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent,
-    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent,
-    ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent, BodegaComponent,
-    FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent, UsuarioSedeListaComponent, UsuarioSedeFormComponent, AcercaDeComponent
+    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent, 
+    ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent, 
+    BodegaComponent, FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent, 
+    UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent, CertificadorConfiguracionComponent,
+    FormCertificadorConfiguracionComponent, CertificadorFelComponent, FormCertificadorFelComponent, AcercaDeComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent, AcercaDeComponent

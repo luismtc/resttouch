@@ -83,6 +83,46 @@ class Dcomanda_model extends General_Model {
 			$det->actualizarCantidadHijos();
 		}
 	}
+
+	public function destribuir_cuenta($args)
+	{
+		if (verDato($args, "cuenta")) {
+			$tmp = $this->db
+						->where("detalle_comanda", $this->getPK())
+						->get("detalle_cuenta")
+						->row();
+			if($tmp){
+				$dcta = new Dcuenta_model($tmp->detalle_cuenta);
+				$exito = $dcta->guardar([
+					"cuenta_cuenta" => $args['cuenta']
+				]); 
+
+				if ($exito) {
+					$tmp = $this->db
+								->select("a.detalle_comanda, b.articulo")
+								->join("articulo b", "a.articulo = b.articulo")
+								->where("a.detalle_comanda_id", $this->getPK())
+								->get("detalle_comanda a")
+								->result();
+
+					foreach ($tmp as $row) {
+						$det = new Dcomanda_model($row->detalle_comanda);
+						$exito = $det->destribuir_cuenta($args);
+						if (!$exito) {
+							$this->setMensaje(implode("", $det->getMensaje()));
+							break;
+						}
+					}
+
+					return $exito;	
+				} 
+			}
+		} else {
+			$this->setMensaje("Hacen falta datos obligatorios para poder continuar");
+		}
+
+		return false;
+	}
 }
 
 /* End of file Dcomanda_model.php */
