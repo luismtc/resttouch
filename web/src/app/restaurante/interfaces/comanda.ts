@@ -12,6 +12,7 @@ export interface Comanda {
     cuentas: Cuenta[];
     numero_pedido?: string;
     notas_generales?: string;
+    replaceUnica?: boolean;
 }
 
 export interface ComandaGetResponse {
@@ -40,7 +41,11 @@ export interface ComandaGetResponse {
     };
     cuentas: Cuenta[];
     turno_rol?: string[];
-    mesero?: any;
+    mesero?: {
+        usuario: number;
+        nombres: string;
+        apellidos: string;
+    };
     mensaje?: string;
     numero_pedido?: string;
     notas_generales?: string;

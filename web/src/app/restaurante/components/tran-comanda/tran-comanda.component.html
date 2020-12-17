@@ -28,6 +28,9 @@
                 (click)="setSelectedCuenta(cta.numero)">
                 {{cta.nombre}}
             </button>
+            <button mat-raised-button type="button" class="btnAccion" (click)="nuevaCuenta()">
+                Nueva
+            </button>
         </div>
     </div>
     <div class="row">
@@ -63,6 +66,11 @@
                             (click)="printCuenta()" [disabled]="!cuentaActiva.nombre || bloqueoBotones"
                             *ngIf="+mesaEnUso.mesa.esmostrador === 0">
                             Cuenta
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="distribuirProductos()" [disabled]="mesaEnUso.cuentas.length < 2 || bloqueoBotones"
+                            *ngIf="+mesaEnUso.mesa.esmostrador === 0">
+                            Distribuir
                         </button>
                         <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
                             (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2 || bloqueoBotones"

@@ -11,6 +11,7 @@ import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
 
 import { SolicitaPinInactividadComponent } from '../solicita-pin-inactividad/solicita-pin-inactividad.component';
+import { AcercaDeComponent } from '../acerca-de/acerca-de.component';
 
 @Component({
   selector: 'app-header',
@@ -108,6 +109,17 @@ export class HeaderComponent implements OnInit {
     this.ls.clear(GLOBAL.usrUnlockVar);
     this.idle.stop();
     this.router.navigate(['/admin/login']);
+  }
+
+  acercaDe = () => {
+    const aboutRef = this.dialog.open(AcercaDeComponent, {
+      width: '50%',
+      hasBackdrop: true,
+      autoFocus: true,
+      data: null
+    });
+
+    // aboutRef.afterClosed().subscribe(() => { });
   }
 
 }

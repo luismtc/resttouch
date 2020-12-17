@@ -81,6 +81,7 @@ import { ListaBodegaComponent } from './components/bodega/lista-bodega/lista-bod
 import { UsuarioSedeComponent } from './components/usuario-sede/usuario-sede/usuario-sede.component';
 import { UsuarioSedeListaComponent } from './components/usuario-sede/usuario-sede-lista/usuario-sede-lista.component';
 import { UsuarioSedeFormComponent } from './components/usuario-sede/usuario-sede-form/usuario-sede-form.component';
+import { AcercaDeComponent } from './components/acerca-de/acerca-de.component';
 
 
 @NgModule({
@@ -92,10 +93,12 @@ import { UsuarioSedeFormComponent } from './components/usuario-sede/usuario-sede
     FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,
     TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent,
     FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent,
-    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent, ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent, BodegaComponent, FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent, UsuarioSedeListaComponent, UsuarioSedeFormComponent
+    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent,
+    ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent, BodegaComponent,
+    FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent, UsuarioSedeListaComponent, UsuarioSedeFormComponent, AcercaDeComponent
   ],
   entryComponents: [
-    FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent
+    FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent, AcercaDeComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,

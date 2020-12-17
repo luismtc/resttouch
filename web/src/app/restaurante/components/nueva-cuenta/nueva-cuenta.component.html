@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Nueva cuenta - Comanda #{{data.mesaEnUso.comanda}}</h1>
+<div mat-dialog-content>
+    <form #frmNuevaCuenta="ngForm" novalidate>
+        <mat-form-field class="fullWidth">
+            <input type="text" matInput placeholder="Nombre" name="nombre" [(ngModel)]="nuevaCuenta.nombre" required>
+        </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cancelar()" color="warn">
+        Cancelar
+    </button>
+    <button mat-raised-button type="button" color="accent" (click)="guardar()" [disabled]="!frmNuevaCuenta.form.valid">
+        Guardar
+    </button>
+</div>

@@ -282,6 +282,7 @@ class Comanda_model extends General_Model
 
 		$tmpMesero = new Usuario_model($this->mesero);
 		$tmp->mesero = [
+			"usuario" => $tmpMesero->getPK(),
 			"nombres" => $tmpMesero->nombres,
 			"apellidos" => $tmpMesero->apellidos
 		];

@@ -37,6 +37,7 @@ if (!function_exists('guardar_comanda')) {
 					}
 
 					if (count($req['cuentas']) > 0) {
+						if (!isset($req['replaceUnica'])) { $req['replaceUnica'] = true; }
 						foreach ($req['cuentas'] as $row) {
 							$cuenta = new Cuenta_model();
 
@@ -54,7 +55,7 @@ if (!function_exists('guardar_comanda')) {
 								} else if(count($comanda->getCuentas()) == 1){
 
 									$tmpCuenta = $ci->Cuenta_model->buscar([
-										"nombre" => "Unica",
+										"nombre" => $req['replaceUnica'] ? "Unica" : trim($row["nombre"]),
 										"comanda" => $comanda->comanda,
 										"_uno" => true
 									]);

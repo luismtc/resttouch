@@ -14,6 +14,8 @@ import { ListaProductoAltComponent } from '../../../wms/components/producto/list
 import { ConfirmDialogModel, DialogPedidoComponent } from '../../../shared/components/dialog-pedido/dialog-pedido.component';
 import { ConfirmDialogComboModel, DialogComboComponent } from '../../../shared/components/dialog-combo/dialog-combo.component';
 import { NotasGeneralesComandaComponent } from '../notas-generales-comanda/notas-generales-comanda.component';
+import { NuevaCuentaComponent } from '../nueva-cuenta/nueva-cuenta.component';
+import { DistribuirProductosCuentasComponent } from '../distribuir-productos-cuentas/distribuir-productos-cuentas.component';
 
 import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
@@ -632,6 +634,32 @@ export class TranComandaComponent implements OnInit {
             }
           });
         }
+      }
+    });
+  }
+
+  nuevaCuenta = () => {
+    const nuevaCuentaRef = this.dialog.open(NuevaCuentaComponent, {
+      width: '50%',
+      data: { mesaEnUso: this.mesaEnUso }
+    });
+
+    nuevaCuentaRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.closeSideNavEv.emit();
+      }
+    });
+  }
+
+  distribuirProductos = () => {
+    const distProdCtaRef = this.dialog.open(DistribuirProductosCuentasComponent, {
+      width: '50%',
+      data: { mesaEnUso: this.mesaEnUso, lstProductos: (this.lstProductosSeleccionados || []) }
+    });
+
+    distProdCtaRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.closeSideNavEv.emit();
       }
     });
   }
