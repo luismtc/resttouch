@@ -17,6 +17,8 @@ import { ProveedorComponent } from './components/proveedor/proveedor/proveedor.c
 import { ImpuestoEspecialComponent } from './components/impuestoEspecial/impuesto-especial/impuesto-especial.component';
 import { BodegaComponent } from './components/bodega/bodega/bodega.component';
 import { UsuarioSedeComponent } from './components/usuario-sede/usuario-sede/usuario-sede.component'
+import { CertificadorConfiguracionComponent } from './components/certificador/configuracion/certificador-configuracion/certificador-configuracion.component'
+import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component'
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
@@ -34,6 +36,8 @@ const routes: Routes = [
   {path: 'impuesto_especial', component: ImpuestoEspecialComponent, canActivate: [AuthGuard]},
   {path: 'bodega', component: BodegaComponent, canActivate: [AuthGuard]},
   {path: 'usuario_sede', component: UsuarioSedeComponent, canActivate: [AuthGuard] },
+  {path: 'certificador_admin', component: CertificadorConfiguracionComponent, canActivate: [AuthGuard] },
+  {path: 'certificador_fel', component: CertificadorFelComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 

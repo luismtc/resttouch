@@ -133,7 +133,14 @@ class Factura_model extends General_model
 			$row->articulo = $det->getArticulo();
 			$row->subtotal = $row->total;
 			$row->total = ($row->total - $row->descuento);
-
+			if ($row->impuesto_especial) {
+				$imp = $this->db
+							->where("impuesto_especial", $row->impuesto_especial)
+							->get("impuesto_especial")
+							->row();
+							
+				$row->impuesto_especial = $imp;
+			}
 			$datos[] = $row;
 		}
 		return $datos;

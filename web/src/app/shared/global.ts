@@ -1,7 +1,7 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo
-const urlBase = 'https://resttouch.c807.com/api'; // C807
+ const urlBase = 'http://localhost/resttouch'; // Desarrollo
+//const urlBase = 'https://resttouch.c807.com/api'; // C807
 
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
@@ -43,6 +43,26 @@ export const GLOBAL = {
         {
             id: 2,
             descripcion: 'Sede'
+        }
+    ],
+    frases_isr: [
+        {
+            id: 1,
+            descripcion: "Sujeto a pagos trimestrales ISR"
+        },
+        {
+            id: 2,
+            descripcion: "Sujeto a retención definitiva ISR"
+        },
+        {
+            id: 3,
+            descripcion: "Sujeto a pago directo ISR"
+        }
+    ],
+    frases_iva: [
+        {
+            id: 1,
+            descripcion: "Agente de Retención del IVA"
         }
     ]
 };

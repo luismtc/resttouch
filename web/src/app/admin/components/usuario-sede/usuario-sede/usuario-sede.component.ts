@@ -1,7 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { LocalstorageService } from '../../../../admin/services/localstorage.service';
-import { GLOBAL } from '../../../../shared/global';
-import * as moment from 'moment';
 import { UsuarioSedeListaComponent } from '../usuario-sede-lista/usuario-sede-lista.component';
 import { UsuarioSedeFormComponent } from '../usuario-sede-form/usuario-sede-form.component';
 import { Usuario } from '../../../interfaces/usuario';
@@ -18,9 +15,7 @@ export class UsuarioSedeComponent implements OnInit {
 	@ViewChild('lstUsuario', { static: false }) lstUsuarioComponent: UsuarioSedeListaComponent;
 	@ViewChild('frmUsuarioSede', { static: false }) frmUsuarioSede: UsuarioSedeFormComponent;
 
-	constructor(
-		private ls: LocalstorageService
-	) {
+	constructor() {
 		this.usuario = {
 			usuario: null, nombres: null, apellidos: null 
 		};

@@ -49,6 +49,11 @@
 							<th style="padding: 5px;" class="text-center">Fecha</th>
 							<th style="padding: 5px;" class="text-center">NIT</th>
 							<th style="padding: 5px;" class="text-center">Cliente</th>
+							<?php if ($impuesto_especial): ?>
+								<th style="padding: 5px;" class="text-center">
+									Impuesto Especial
+								</th>	
+							<?php endif ?>
 							<th style="padding: 5px;" class="text-center">Total</th>
 							<th style="padding: 5px;" class="text-center">Propina</th>
 							<th style="padding: 5px;" class="text-center">Descuento</th>
@@ -61,7 +66,12 @@
 							$totalDescuento = 0;
 						?>
 						<?php foreach ($facturas as $row): ?>
-							<?php $detalle = $row->getDetalle() ?>
+							<?php 
+								$detalle = $row->getDetalle();
+								$total = suma_field($detalle, "total");
+								$imp = suma_field($detalle, "valor_impuesto_especial");
+								$total += $imp;
+							?>
 							<tr>
 								<td style="padding: 5px;">
 									<?php echo $row->numero_factura ?>
@@ -76,8 +86,15 @@
 								<td style="padding: 5px;">
 									<?php echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA') ?>
 								</td>
+								<?php if ($impuesto_especial): ?>
+									<td style="padding: 5px;" class="text-right">
+										<?php echo (empty($row->fel_uuid_anulacion) ? 
+										number_format($imp, 2) : 0) ?>
+									</td>	
+								<?php endif ?>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo (empty($row->fel_uuid_anulacion) ? number_format(suma_field($detalle, "total"), 2) : 0) ?>
+									<?php echo (empty($row->fel_uuid_anulacion) ? 
+										number_format($total, 2) : 0) ?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php 
@@ -97,7 +114,6 @@
 											$desc = suma_field($detalle, "descuento");
 											echo number_format($desc, 2);
 											$totalDescuento += $desc;
-											$total = suma_field($detalle, "total");
 											$totalFactura += ($total - $desc);
 										} else {
 											echo "0.00";
@@ -110,20 +126,40 @@
 									<td class="text-center" colspan="3"></td>
 									<td class="text-center">Articulo</td>
 									<td class="text-center">Cantidad</td>
+									<?php if ($impuesto_especial): ?>
+										<td class="text-center">
+											Impuesto Especial
+										</td>
+									<?php endif ?>
 									<td class="text-center">Total</td>
-									<td class="text-center"></td>
 									<td class="text-center">Descuento</td>
 								</tr>
 								<?php foreach ($detalle as $det): ?>
+									<?php 
+										$col = 3;
+										if ($impuesto_especial) {
+											$col = 2;
+										}
+									 ?>
 									<tr>
-										<td colspan="3"></td>
+										<td colspan="<?php echo $col ?>"></td>
 										<td style="padding: 5px;"><?php echo $det->articulo->descripcion ?></td>
 										<td style="padding: 5px;" class="text-center"><?php echo $det->cantidad ?></td>
 										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format($det->total,2) ?></td>
+										<?php if ($det->impuesto_especial): ?>
+											<td style="padding: 5px;" class="text-right">
+												<span>
+													<?php echo $det->impuesto_especial->descripcion ?>
+												</span><br>
+												<?php echo number_format($det->valor_impuesto_especial,2) ?>
+											</td>
+										<?php else: ?>
+											<?php echo number_format(0, 2) ?>
+										<?php endif ?>
 										<td style="padding: 5px;"></td>
 										<td style="padding: 5px;" class="text-right">
-											<?php echo number_format($det->descuento,2) ?>
+											<?php echo number_format($det->descuento+$det->valor_impuesto_especial,2) ?>
 										</td>
 									</tr>
 								<?php endforeach ?>

@@ -158,8 +158,9 @@ class Reporte extends CI_Controller {
 		$facts = $this->Factura_model->get_facturas($_GET);
 		
 		$data = $_GET;
+		$data['impuesto_especial'] = false;
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			//'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$data['facturas'] = [];
@@ -172,6 +173,9 @@ class Reporte extends CI_Controller {
 			$fac->total = number_format(suma_field($det, "total"),2);
 			$fac->propina = number_format(suma_field($prop, "propina_monto"),2);
 			$data['facturas'][] = $fac;
+			if (suma_field($det, "valor_impuesto_especial") > 0) {
+				$data['impuesto_especial'] = true;
+			}
 		}
 
 		$sede = $this->Catalogo_model->getSede([

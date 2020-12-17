@@ -1,0 +1,11 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-certificador-configuracion #lstCertificador (getCertificadorEv)="setCertificador($event)">
+
+        </app-lista-certificador-configuracion>
+    </div>
+    <div class="col m7 s12">
+        <app-form-certificador-configuracion #frmCertificador [certificador]="certificador"
+            (certificadorSavedEv)="refreshCertificadorList()"></app-form-certificador-configuracion>
+    </div>
+</div>
