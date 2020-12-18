@@ -1,7 +1,20 @@
 <h1 mat-dialog-title>Distribución de productos - Comanda #{{data.mesaEnUso.comanda}}</h1>
 <div mat-dialog-content>
     <table>
-        
+        <tr>
+            <th>Artículo</th>
+            <th>Cuenta</th>
+        </tr>
+        <tr *ngFor="let prod of data.lstProductos">
+            <td>{{prod.nombre}}</td>
+            <td>
+                <mat-select name="cuenta" [(ngModel)]="prod.idcuenta" required>
+                    <mat-option *ngFor="let cta of comanda.cuentas" [value]="+cta.cuenta">
+                        {{cta.nombre}}
+                    </mat-option>
+                </mat-select>
+            </td>
+        </tr>
     </table>
 </div>
 <div mat-dialog-actions align="end">

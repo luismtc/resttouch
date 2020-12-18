@@ -242,6 +242,19 @@ export class ComandaService {
       .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  distribuirCuentas(datos: any): Observable<any> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/distribuir_cuentas`,
+      datos,
+      httpOptions)
+      .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getComandasOnLine_Test(): any[] {
     const comandasOnLine: any[] = [
       {

@@ -2,30 +2,15 @@ import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angula
 import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
-import { Impresora } from '../../../admin/interfaces/impresora';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ValidaPwdGerenteTurnoComponent } from '../valida-pwd-gerente-turno/valida-pwd-gerente-turno.component';
 import { Socket } from 'ngx-socket-io';
 
+import { ProductoSelected } from '../../../wms/interfaces/articulo';
+
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { ComandaService } from '../../services/comanda.service';
-
-interface productoSelected {
-  id: number;
-  nombre: string;
-  cuenta?: number;
-  cantidad: number;
-  impreso: number;
-  precio?: number;
-  total?: number;
-  notas?: string;
-  showInputNotas: boolean;
-  itemListHeight: string;
-  detalle_comanda?: number;
-  detalle_cuenta?: number;
-  impresora?: Impresora;
-  detalle?: [];
-}
 
 @Component({
   selector: 'app-lista-productos-comanda',
@@ -34,7 +19,7 @@ interface productoSelected {
 })
 export class ListaProductosComandaComponent implements OnInit, DoCheck {
 
-  @Input() listaProductos: productoSelected[] = [];
+  @Input() listaProductos: ProductoSelected[] = [];
   @Input() noCuenta: number = null;
   @Input() listHeight = '450px';
   @Input() IdComanda = 0;
@@ -67,7 +52,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     // console.log('Desde lista productos comanda = ', this.listaProductos);
   }
 
-  removeProducto = (p: productoSelected, idx: number, estaAutorizado = false) => {
+  removeProducto = (p: ProductoSelected, idx: number, estaAutorizado = false) => {
     this.bloqueoBotones = true;
     this.detalleComanda = {
       detalle_cuenta: p.detalle_cuenta,
@@ -95,13 +80,13 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     });
   }
 
-  deleteProductoFromList = (p: productoSelected, idx: number, estaAutorizado = false) => {
+  deleteProductoFromList = (p: ProductoSelected, idx: number, estaAutorizado = false) => {
     p.cantidad = 0;
     p.notas = '';
     this.removeProducto(p, idx, estaAutorizado);
   }
 
-  deleteProductoFromListAfterPrinted = (p: productoSelected, idx: number) => {
+  deleteProductoFromListAfterPrinted = (p: ProductoSelected, idx: number) => {
     this.bloqueoBotones = true;
     const dialogoRef = this.dialog.open(ValidaPwdGerenteTurnoComponent, {
       width: '40%', disableClose: true
@@ -120,7 +105,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     });
   }
 
-  toggleShowInputNotas(p: productoSelected) {
+  toggleShowInputNotas(p: ProductoSelected) {
     console.log('ARTICULO = ', p);
     p.showInputNotas = !p.showInputNotas;
     if (p.showInputNotas) {
@@ -131,7 +116,7 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
     }
   }
 
-  saveNotasProducto = (p: productoSelected) => {
+  saveNotasProducto = (p: ProductoSelected) => {
     this.comandaSrvc.saveNotasProducto({ detalle_comanda: p.detalle_comanda, notas: p.notas }).subscribe(res => {
       if (res.exito) {
         this.snackBar.open('Notas de producto guardadas con éxito...', 'Producto', { duration: 3000 });

@@ -84,7 +84,7 @@ class Dcomanda_model extends General_Model {
 		}
 	}
 
-	public function destribuir_cuenta($args)
+	public function distribuir_cuenta($args)
 	{
 		if (verDato($args, "cuenta")) {
 			$tmp = $this->db
@@ -107,7 +107,7 @@ class Dcomanda_model extends General_Model {
 
 					foreach ($tmp as $row) {
 						$det = new Dcomanda_model($row->detalle_comanda);
-						$exito = $det->destribuir_cuenta($args);
+						$exito = $det->distribuir_cuenta($args);
 						if (!$exito) {
 							$this->setMensaje(implode("", $det->getMensaje()));
 						}

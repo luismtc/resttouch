@@ -244,7 +244,7 @@ class Comanda extends CI_Controller {
 			foreach ($req as $row) {
 				$det = new Dcomanda_model($row['detalle_comanda']);
 
-				$datos['exito'] = $det->destribuir_cuenta($row);
+				$datos['exito'] = $det->distribuir_cuenta($row);
 
 				if (!$datos['exito']) {
 					$datos['mensaje'] = implode("<br>", $det->getMensaje());

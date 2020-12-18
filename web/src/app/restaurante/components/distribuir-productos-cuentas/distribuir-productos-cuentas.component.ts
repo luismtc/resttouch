@@ -3,31 +3,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
-import { Cuenta } from '../../interfaces/cuenta';
-import { Impresora } from '../../../admin/interfaces/impresora';
+import { ProductoSelected } from '../../../wms/interfaces/articulo';
 
 import { ComandaService } from '../../services/comanda.service';
 
-interface IProductoSelected {
-  id: number;
-  nombre: string;
-  cuenta?: number;
-  cantidad: number;
-  impreso: number;
-  precio?: number;
-  total?: number;
-  notas?: string;
-  showInputNotas: boolean;
-  itemListHeight: string;
-  detalle_comanda?: number;
-  detalle_cuenta?: number;
-  impresora?: Impresora;
-  detalle?: [];
-}
-
 interface IDialogComanda {
   mesaEnUso: ComandaGetResponse;
-  lstProductos: IProductoSelected[];
+  lstProductos: ProductoSelected[];
 }
 
 @Component({
@@ -59,11 +41,27 @@ export class DistribuirProductosCuentasComponent implements OnInit {
         cuentas: meu.cuentas,
         replaceUnica: false
       };
-      console.log(this.data.lstProductos);
     }
   }
 
   cancelar = () => this.dialogRef.close(false);
 
-  guardar = () => { };
+  guardar = () => {
+    const lstObj: any = [];
+    for (const p of this.data.lstProductos) {
+      lstObj.push({
+        detalle_comanda: +p.detalle_comanda,
+        cuenta: +p.idcuenta
+      });
+    }
+    this.comandaSrvc.distribuirCuentas(lstObj).subscribe(res => {
+      if (res.exito) {
+        this.snackBar.open('Productos redistribuidos', 'Cuentas', { duration: 3000 });
+        this.dialogRef.close(true);
+      } else {
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cuentas', { duration: 7000 });
+        this.cancelar();
+      }
+    });
+  }
 }

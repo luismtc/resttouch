@@ -71,3 +71,21 @@ export interface NodoProducto {
     multiple?: number;
     hijos?: NodoProducto[];
 }
+
+export interface ProductoSelected {
+    id: number;
+    nombre: string;
+    cuenta?: number;
+    idcuenta?: number;
+    cantidad: number;
+    impreso: number;
+    precio?: number;
+    total?: number;
+    notas?: string;
+    showInputNotas: boolean;
+    itemListHeight: string;
+    detalle_comanda?: number;
+    detalle_cuenta?: number;
+    impresora?: Impresora;
+    detalle?: [];
+}

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 import { WindowConfiguration } from '../../../shared/interfaces/window-configuration';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,30 +20,11 @@ import { DistribuirProductosCuentasComponent } from '../distribuir-productos-cue
 import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
-import { Impresora } from '../../../admin/interfaces/impresora';
-import { ArbolArticulos } from '../../../wms/interfaces/articulo';
+import { ArbolArticulos, ProductoSelected } from '../../../wms/interfaces/articulo';
 
 import { ComandaService } from '../../services/comanda.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
-
-// tslint:disable-next-line: class-name
-interface productoSelected {
-  id: number;
-  nombre: string;
-  cuenta?: number;
-  cantidad: number;
-  impreso: number;
-  precio?: number;
-  total?: number;
-  notas?: string;
-  showInputNotas: boolean;
-  itemListHeight: string;
-  detalle_comanda?: number;
-  detalle_cuenta?: number;
-  impresora?: Impresora;
-  detalle?: [];
-}
 
 @Component({
   selector: 'app-tran-comanda',
@@ -57,9 +38,9 @@ export class TranComandaComponent implements OnInit {
   @ViewChild('appLstProdAlt', { static: false }) appLstProdAlt: ListaProductoAltComponent;
   @Output() mesaSavedEv: EventEmitter<any> = new EventEmitter();
 
-  public lstProductosSeleccionados: productoSelected[];
-  public lstProductosDeCuenta: productoSelected[];
-  public lstProductosAImprimir: productoSelected[];
+  public lstProductosSeleccionados: ProductoSelected[];
+  public lstProductosDeCuenta: ProductoSelected[];
+  public lstProductosAImprimir: ProductoSelected[];
   public showPortalComanda = false;
   public showPortalCuenta = false;
   public windowConfig: WindowConfiguration;
@@ -73,7 +54,7 @@ export class TranComandaComponent implements OnInit {
   public impreso = 0;
 
   constructor(
-    private router: Router,
+    // private router: Router,
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     public comandaSrvc: ComandaService,
@@ -139,15 +120,14 @@ export class TranComandaComponent implements OnInit {
       this.mesaEnUso = conQueMesa;
     }
     this.lstProductosSeleccionados = [];
-    for (let i = 0; i < conQueMesa.cuentas.length; i++) {
-      const cta = conQueMesa.cuentas[i];
-      for (let j = 0; j < cta.productos.length; j++) {
-        const p = cta.productos[j];
-        // console.log(p);
+
+    for (const ctas of conQueMesa.cuentas) {
+      for (const p of ctas.productos) {
         this.lstProductosSeleccionados.push({
           id: +p.articulo.articulo,
           nombre: p.articulo.descripcion,
           cuenta: +p.numero_cuenta || 1,
+          idcuenta: +ctas.cuenta,
           cantidad: +p.cantidad,
           impreso: +p.impreso,
           precio: parseFloat(p.precio) || 10.00,
@@ -190,7 +170,7 @@ export class TranComandaComponent implements OnInit {
     this.bloqueoBotones = false;
   }
 
-  setSumaCuenta(lista: productoSelected[]) {
+  setSumaCuenta(lista: ProductoSelected[]) {
     let suma = 0.00;
     // for (let i = 0; i < lista.length; i++) { suma += (lista[i].precio * lista[i].cantidad); }
     for (const item of lista) {
@@ -263,7 +243,7 @@ export class TranComandaComponent implements OnInit {
           this.bloqueoBotones = false;
         });
       } else {
-        const tmp: productoSelected = this.lstProductosSeleccionados[idx];
+        const tmp: ProductoSelected = this.lstProductosSeleccionados[idx];
         this.detalleComanda = {
           detalle_cuenta: tmp.detalle_cuenta, detalle_comanda: tmp.detalle_comanda, articulo: tmp.id, cantidad: (+tmp.cantidad) + 1,
           precio: +tmp.precio, total: ((+tmp.cantidad) + 1) * (+tmp.precio), notas: tmp.notas
@@ -285,8 +265,8 @@ export class TranComandaComponent implements OnInit {
   }
 
   updProductosCuenta(obj: any) {
-    const nvaLista: productoSelected[] = obj.listaProductos || [];
-    const lstTemp: productoSelected[] = this.lstProductosSeleccionados.filter(p => +p.cuenta !== +this.cuentaActiva.numero);
+    const nvaLista: ProductoSelected[] = obj.listaProductos || [];
+    const lstTemp: ProductoSelected[] = this.lstProductosSeleccionados.filter(p => +p.cuenta !== +this.cuentaActiva.numero);
     if (nvaLista.length > 0) {
       this.lstProductosSeleccionados = lstTemp.concat(nvaLista);
     } else {
@@ -299,7 +279,7 @@ export class TranComandaComponent implements OnInit {
     }
   }
 
-  prepProductosComanda(prods: productoSelected[]) {
+  prepProductosComanda(prods: ProductoSelected[]) {
     // console.log(prods);
     const tmp: any[] = [];
     for (let i = 0; i < prods.length; i++) {
@@ -399,8 +379,8 @@ export class TranComandaComponent implements OnInit {
                 this.snackBar.open('Cuenta actualizada', `Cuenta #${cuenta.numero}`, { duration: 3000 });
 
                 // Inicio de impresión de comanda
-                let AImpresoraNormal: productoSelected[] = [];
-                let AImpresoraBT: productoSelected[] = [];
+                let AImpresoraNormal: ProductoSelected[] = [];
+                let AImpresoraBT: ProductoSelected[] = [];
 
                 try {
                   AImpresoraNormal = lstProductosAImprimir.filter(p => +p.impresora.bluetooth === 0);
@@ -503,7 +483,7 @@ export class TranComandaComponent implements OnInit {
     });
   }
 
-  sumaDetalle = (detalle: productoSelected[]) => {
+  sumaDetalle = (detalle: ProductoSelected[]) => {
     let total = 0.00;
     // for (let i = 0; i < detalle.length; i++) { total += detalle[i].total || 0.00; }
     for (const item of detalle) {
