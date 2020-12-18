@@ -110,7 +110,6 @@ class Dcomanda_model extends General_Model {
 						$exito = $det->destribuir_cuenta($args);
 						if (!$exito) {
 							$this->setMensaje(implode("", $det->getMensaje()));
-							break;
 						}
 					}
 
