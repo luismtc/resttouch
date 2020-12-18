@@ -24,16 +24,28 @@ class Reporte_model extends CI_Model {
 		}
 
 		if (isset($args['_grupo']) && $args['_grupo'] == 2) {
-			$this->db->group_by("e.sede");
+			$this->db->group_by("h.sede");
 			$group .= ", a.sede";
 		}
 
 		if (isset($args['sede'])) {
 			if (is_array($args['sede'])) {
-				$this->db->where_in("e.sede", $args['sede']);
+				$this->db->where_in("h.sede", $args['sede']);
 			} else {
-				$this->db->where("e.sede", $args['sede']);
+				$this->db->where("h.sede", $args['sede']);
 			}
+		}
+
+		if (!isset($args['comandas'])) {
+			$this->db
+				 ->where("e.fecha_factura >=", $args['fdel'])
+				 ->where("e.fecha_factura <=", $args['fal'])
+				 ->where("e.fel_uuid_anulacion is null");
+		} else {
+			$this->db
+				 ->where("date(i.inicio) >=", $args['fdel'])
+				 ->where("date(i.fin) <=", $args['fal'])
+				 ->where("f.sinfactura", 1);
 		}
 
 		$tmp = $this->db
@@ -42,24 +54,21 @@ class Reporte_model extends CI_Model {
 			f.descripcion, 
 			a.monto, 
 			a.propina,
-			e.factura,
-			e.numero_factura,
-			e.fecha_factura,
-			e.sede,
+			ifnull(e.factura, concat('Comanda ', h.comanda)) as factura,
+			ifnull(e.numero_factura, concat('Comanda ', h.comanda)) as numero_factura,
+			ifnull(e.fecha_factura, i.fin) as fecha_factura,
+			h.sede,
 			j.nombre as nsede")
 		->from("cuenta_forma_pago a")
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
-		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta")
-		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura")
-		->join("factura e", "d.factura = e.factura")
+		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta", "left")
+		->join("detalle_factura d", "c.detalle_factura = d.detalle_factura", "left")
+		->join("factura e", "d.factura = e.factura", "left")
 		->join("forma_pago f", "a.forma_pago = f.forma_pago")
 		->join("cuenta g", "g.cuenta = b.cuenta_cuenta")
 		->join("comanda h", "h.comanda = g.comanda")
 		->join("turno i", "i.turno = h.turno")
-		->join("sede j", "j.sede = e.sede")
-		->where("e.fecha_factura >=", $args['fdel'])
-	 	->where("e.fecha_factura <=", $args['fal'])
-	 	->where("e.fel_uuid_anulacion is null")
+		->join("sede j", "j.sede = h.sede")		
 		->group_by("a.cuenta_forma_pago")
 		->get_compiled_select();
 

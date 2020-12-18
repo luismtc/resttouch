@@ -50,6 +50,11 @@ class Reporte extends CI_Controller {
 		
 		$data["descuento"] = 0;
 		$data['ingresos'] = $this->Reporte_model->get_ingresos($data);
+		$data['comandas'] = true;
+		$tmp = $this->Reporte_model->get_ingresos($data);
+		unset($data['comandas']);
+		$data['ingresos'] = array_merge($data['ingresos'], $tmp);
+
 		$ingr = array_result($data['ingresos'], "forma_pago");
 		$data['ingreso_sin_fact'] = [];
 		foreach ($ingresos as $row) {
@@ -61,7 +66,12 @@ class Reporte extends CI_Controller {
 		//$data['ingreso_sin_fact'] = $this->Reporte_model->get_ingresos_sin_fac($data);
 		$data["descuento"] = 1;
 		$data['descuentos'] = $this->Reporte_model->get_ingresos($data);
-		$desc = array_result($data['ingresos'], "forma_pago");
+		$data['comandas'] = true;
+		$tmp = $this->Reporte_model->get_ingresos($data);
+		unset($data['comandas']);
+		$data['descuentos'] = array_merge($data['descuentos'], $tmp);
+
+		$desc = array_result($data['descuentos'], "forma_pago");
 		$data['descuento_sin_fact'] = [];
 		foreach ($descuentos as $row) {
 			if (!in_array($row->forma_pago, $desc)) {
@@ -90,6 +100,9 @@ class Reporte extends CI_Controller {
 			$data['detalle'] = 1;
 			unset($data['descuento']);
 			$det = $this->Reporte_model->get_ingresos($data);
+			$data['comandas'] = true;
+			$tmp = $this->Reporte_model->get_ingresos($data);
+			$det = array_merge($det, $tmp);
 			$data['detalle'] = [];
 			foreach ($det as $row) {
 				if (isset($_GET['_grupo']) && $_GET['_grupo'] == 2) {
@@ -142,7 +155,7 @@ class Reporte extends CI_Controller {
 		}
 
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(),
+			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));
@@ -160,7 +173,7 @@ class Reporte extends CI_Controller {
 		$data = $_GET;
 		$data['impuesto_especial'] = false;
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(),
+			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$data['facturas'] = [];

@@ -6,7 +6,10 @@ class Venta extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->add_package_path('application/restaurante');
+
 		$this->load->model([
+			'Comanda_model',
 			'Factura_model',
 			'Dfactura_model',
 			'Articulo_model',
@@ -32,6 +35,7 @@ class Venta extends CI_Controller {
 
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
+		$comandas = $this->Comanda_model->get_sin_factura($req);
 
 		$datos = [];
 		$detalle = [];
@@ -50,6 +54,26 @@ class Venta extends CI_Controller {
 						"total" => $det->total,
 						"descripcion" => $art->descripcion,
 						"precio_unitario" => $det->precio_unitario
+					];
+				}
+			}
+		}
+
+		foreach ($comandas as $row) {
+			$com = new Comanda_model($row->comanda);
+
+			foreach ($com->getDetalle() as $det) {
+				$art = new Articulo_model($det->articulo->articulo);
+				
+				if (isset($detalle[$art->articulo])) {
+					$detalle[$art->articulo]["cantidad"] += $det->cantidad;
+					$detalle[$art->articulo]["total"] += $det->total;
+				} else {
+					$detalle[$art->articulo] = [
+						"cantidad" => $det->cantidad, 
+						"total" => $det->total,
+						"descripcion" => $art->descripcion,
+						"precio_unitario" => $det->precio
 					];
 				}
 			}
@@ -91,7 +115,8 @@ class Venta extends CI_Controller {
 		}
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
-		
+		$comandas = $this->Comanda_model->get_sin_factura($req);
+
 		$datos = [];
 		$detalle = [];
 		foreach ($facts as $row) {
@@ -109,6 +134,26 @@ class Venta extends CI_Controller {
 						"total" => $det->total,
 						"descripcion" => $art->descripcion,
 						"precio_unitario" => $det->precio_unitario
+					];
+				}
+			}
+		}
+
+		foreach ($comandas as $row) {
+			$com = new Comanda_model($row->comanda);
+
+			foreach ($com->getDetalle() as $det) {
+				$art = new Articulo_model($det->articulo->articulo);
+				
+				if (isset($detalle[$art->articulo])) {
+					$detalle[$art->articulo]["cantidad"] += $det->cantidad;
+					$detalle[$art->articulo]["total"] += $det->total;
+				} else {
+					$detalle[$art->articulo] = [
+						"cantidad" => $det->cantidad, 
+						"total" => $det->total,
+						"descripcion" => $art->descripcion,
+						"precio_unitario" => $det->precio
 					];
 				}
 			}
@@ -166,7 +211,7 @@ class Venta extends CI_Controller {
 		]);
 
 		$tmp = [];
-		foreach ($_GET['sede'] as $row) {
+		foreach ($req['sede'] as $row) {
 			$sede = $this->Catalogo_model->getSede([
 				'sede' => $row,
 				"_uno" => true
@@ -193,7 +238,7 @@ class Venta extends CI_Controller {
 		$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(), //Produccion
+			'tempDir' => sys_get_temp_dir(), //Produccion
 			'format' => 'Legal'
 		]);
 
@@ -210,6 +255,7 @@ class Venta extends CI_Controller {
 		}
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
+		$comandas = $this->Comanda_model->get_sin_factura($req);
 
 		$datos = [];
 		$detalle = [];
@@ -231,6 +277,25 @@ class Venta extends CI_Controller {
 				}
 			}
 		}
+
+		foreach ($comandas as $row) {
+			$com = new Comanda_model($row->comanda);
+			foreach ($com->getDetalle() as $det) {
+				$key = $det->articulo->articulo;	
+				if (isset($detalle[$key])) {
+					$detalle[$key]['cantidad'] += $det->cantidad;
+					$detalle[$key]['total'] += $det->total;
+				} else {
+					$detalle[$key] = [
+						"cantidad" => $det->cantidad,
+						"total" => $det->total,
+						"articulo" => $det->articulo,
+						"sede" => $fac->sede
+					];
+				}
+			}
+		}
+
 		$datos = ["grupo" => 1, "datos" => array_values($detalle)];
 		usort($datos["datos"], function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
 
@@ -267,7 +332,7 @@ class Venta extends CI_Controller {
 		}
 		$req["_vivas"] = true;
 		$facts = $this->Factura_model->get_facturas($req);
-
+		$comandas = $this->Comanda_model->get_sin_factura($req);
 		$datos = [];
 		$detalle = [];
 		foreach ($facts as $row) {
@@ -288,6 +353,25 @@ class Venta extends CI_Controller {
 				}
 			}
 		}
+
+		foreach ($comandas as $row) {
+			$com = new Comanda_model($row->comanda);
+			foreach ($com->getDetalle() as $det) {
+				$key = $det->articulo->articulo;	
+				if (isset($detalle[$key])) {
+					$detalle[$key]['cantidad'] += $det->cantidad;
+					$detalle[$key]['total'] += $det->total;
+				} else {
+					$detalle[$key] = [
+						"cantidad" => $det->cantidad,
+						"total" => $det->total,
+						"articulo" => $det->articulo,
+						"sede" => $fac->sede
+					];
+				}
+			}
+		}
+
 		$datos = ["grupo" => 1, "datos" => array_values($detalle)];
 		usort($datos["datos"], function($a, $b) {return (int)$a['cantidad'] < (int)$b['cantidad'];});
 
@@ -323,7 +407,7 @@ class Venta extends CI_Controller {
 		]);
 
 		$tmp = [];
-		foreach ($_GET['sede'] as $row) {
+		foreach ($req['sede'] as $row) {
 			$sede = $this->Catalogo_model->getSede([
 				'sede' => $row,
 				"_uno" => true
@@ -344,7 +428,7 @@ class Venta extends CI_Controller {
 		$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //Produccion
+			//'tempDir' => sys_get_temp_dir(), //Produccion
 			'format' => 'Legal'
 		]);
 

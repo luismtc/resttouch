@@ -488,6 +488,50 @@ class Comanda_model extends General_Model
 	{
 		return new Sede_model($this->sede);
 	}
+
+	public function get_sin_factura($args = [])
+	{
+		if (isset($args['fdel']) && isset($args['fal'])) {
+			$this->db
+				->where("date(c.inicio) >=", $args['fdel'])
+				->where("date(c.fin) <=", $args['fal']);
+			unset($args['fdel']);
+			unset($args['fal']);
+		}
+
+		if (isset($args['sede'])) {
+			if (is_array($args['sede'])) {
+				$this->db->where_in("a.sede", $args['sede']);
+			} else {
+				$this->db->where("a.sede", $args['sede']);
+			}
+			unset($args['sede']);
+		}
+
+		if (isset($args['turno_tipo'])) {
+			$this->db->where("g.turno_tipo", $args['turno_tipo']);
+			unset($args['turno_tipo']);
+		}
+
+		if (count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if (substr($key, 0, 1) != "_") {
+					$this->db->where("a.{$key}", $row);
+				}
+			}
+		}
+
+		return $this->db
+			->select("a.comanda")
+			->join("cuenta b", "b.comanda = a.comanda")
+			->join("turno c", "a.turno = c.turno")
+			->join("cuenta_forma_pago d", "d.cuenta = b.cuenta")
+			->join("forma_pago e", "e.forma_pago = d.forma_pago")
+			->where("e.sinfactura", 1)
+			->group_by("a.comanda")
+			->get("comanda a")
+			->result();
+	}
 }
 
 /* End of file Comanda_model.php */
