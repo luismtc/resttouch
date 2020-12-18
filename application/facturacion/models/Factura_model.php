@@ -139,7 +139,7 @@ class Factura_model extends General_model
 							->get("impuesto_especial")
 							->row();
 							
-				$row->impuesto_especial = $imp;
+				$row->impuesto = $imp;
 			}
 			$datos[] = $row;
 		}

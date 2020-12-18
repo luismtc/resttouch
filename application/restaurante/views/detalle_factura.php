@@ -150,7 +150,7 @@
 										<?php if ($det->impuesto_especial): ?>
 											<td style="padding: 5px;" class="text-right">
 												<span>
-													<?php echo $det->impuesto_especial->descripcion ?>
+													<?php echo $det->impuesto->descripcion ?>
 												</span><br>
 												<?php echo number_format($det->valor_impuesto_especial,2) ?>
 											</td>
