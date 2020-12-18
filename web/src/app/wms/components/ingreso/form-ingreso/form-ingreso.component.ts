@@ -27,25 +27,26 @@ import { PresentacionService } from '../../../../admin/services/presentacion.ser
 export class FormIngresoComponent implements OnInit {
 
   @Input() ingreso: Ingreso;
-  @Input() saveToDB: boolean = true;
+  @Input() saveToDB = true;
   @Output() ingresoSavedEv = new EventEmitter();
 
-  public showIngresoForm: boolean = true;
-  public showDetalleIngresoForm: boolean = true;
+  public showIngresoForm = true;
+  public showDetalleIngresoForm = true;
 
   public detallesIngreso: DetalleIngreso[] = [];
   public detalleIngreso: DetalleIngreso;
   public displayedColumns: string[] = ['articulo', 'presentacion', 'cantidad', 'costo_unitario', 'costo_total', 'deleteItem'];
   public dataSource: MatTableDataSource<DetalleIngreso>;
   public tiposMovimiento: TipoMovimiento[] = [];
-  public proveedores: Proveedor[] = [];  
+  public proveedores: Proveedor[] = [];
   public bodegas: Bodega[] = [];
   public articulos: Articulo[] = [];
   public presentaciones: Presentacion[] = [];
-  public esMovil: boolean = false;
+  public esMovil = false;
+  public bloqueoBotones = false;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private ingresoSrvc: IngresoService,
     private proveedorSrvc: ProveedorService,
@@ -72,7 +73,7 @@ export class FormIngresoComponent implements OnInit {
       }
     });
   }
-  
+
   loadProveedores = () => {
     this.proveedorSrvc.get().subscribe(res => {
       if (res) {
@@ -82,7 +83,7 @@ export class FormIngresoComponent implements OnInit {
   }
 
   loadBodegas = () => {
-    this.bodegaSrvc.get({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
+    this.bodegaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe(res => {
       if (res) {
         this.bodegas = res;
       }
@@ -98,21 +99,26 @@ export class FormIngresoComponent implements OnInit {
   }
 
   resetIngreso = () => {
-    this.ingreso = { 
-      ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), comentario: null, proveedor: null,
+    this.ingreso = {
+      ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null,
+      usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), comentario: null, proveedor: null,
       estatus_movimiento: 1
     };
     this.resetDetalleIngreso();
+    this.detallesIngreso = [];
+    this.updateTableDataSource();
   }
 
   onSubmit = () => {
+    this.bloqueoBotones = true;
     this.ingresoSrvc.save(this.ingreso).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       this.resetIngreso();
       if (res.exito) {
-        this.ingreso = res.ingreso
+        this.ingreso = res.ingreso;
       }
       this.ingresoSavedEv.emit();
+      this.bloqueoBotones = false;
     });
   }
 
@@ -124,24 +130,25 @@ export class FormIngresoComponent implements OnInit {
     });
   }
 
-  resetDetalleIngreso = () => this.detalleIngreso = { 
-    ingreso_detalle: null, ingreso: (!!this.ingreso.ingreso ? this.ingreso.ingreso : null), articulo: null, cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
-  };
+  resetDetalleIngreso = () => this.detalleIngreso = {
+    ingreso_detalle: null, ingreso: (!!this.ingreso.ingreso ? this.ingreso.ingreso : null), articulo: null,
+    cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
+  }
 
   loadDetalleIngreso = (idingreso: number = +this.ingreso.ingreso) => {
-    this.ingresoSrvc.getDetalle(idingreso, {ingreso: idingreso}).subscribe(res => {
-      //console.log(res);
+    this.ingresoSrvc.getDetalle(idingreso, { ingreso: idingreso }).subscribe(res => {
+      // console.log(res);
       if (res) {
         this.detallesIngreso = res;
         this.updateTableDataSource();
-      }      
+      }
     });
   }
 
   getDetalleIngreso = (idingreso: number = +this.ingreso.ingreso, iddetalle: number) => {
-    this.ingresoSrvc.getDetalle(idingreso, {ingreso_detalle: iddetalle}).subscribe((res: any[]) => {
-      //console.log(res);
-      if (res) {        
+    this.ingresoSrvc.getDetalle(idingreso, { ingreso_detalle: iddetalle }).subscribe((res: any[]) => {
+      // console.log(res);
+      if (res) {
         this.detalleIngreso = {
           ingreso_detalle: res[0].ingreso_detalle,
           ingreso: res[0].ingreso,
@@ -152,40 +159,44 @@ export class FormIngresoComponent implements OnInit {
           presentacion: res[0].presentacion.presentacion
         };
         this.showDetalleIngresoForm = true;
-      }      
+      }
     });
   }
 
   onSubmitDetail = () => {
+    this.bloqueoBotones = true;
     this.detalleIngreso.ingreso = this.ingreso.ingreso;
     this.detalleIngreso.precio_total = +this.detalleIngreso.cantidad * +this.detalleIngreso.precio_unitario;
-    //console.log(this.detalleIngreso);
+    // console.log(this.detalleIngreso);
     this.ingresoSrvc.saveDetalle(this.detalleIngreso).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res) {
         this.loadDetalleIngreso();
         this.resetDetalleIngreso();
       }
+      this.bloqueoBotones = false;
     });
   }
 
   addToDetail = () => {
     this.detallesIngreso.push(this.detalleIngreso);
     this.resetDetalleIngreso();
-    this.updateTableDataSource();    
+    this.updateTableDataSource();
   }
 
-  removeFromDetail = (idarticulo: number) => this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo), 1);
+  removeFromDetail = (idarticulo: number) =>
+    this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo), 1);
 
   getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
-  
-  getDescripcionPresentacion = (idpresentacion: number) => this.presentaciones.find(p => +p.presentacion === +idpresentacion).descripcion || '';
+
+  getDescripcionPresentacion = (idpresentacion: number) =>
+    this.presentaciones.find(p => +p.presentacion === +idpresentacion).descripcion || '';
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesIngreso);
 
   eliminarArticulo = (element: DetalleIngreso) => {
-    //const idx = this.detallesIngreso.findIndex(d => d.ingreso_detalle === element.ingreso_detalle);
-    this.detallesIngreso.splice(this.detallesIngreso.findIndex(d => d.ingreso_detalle === element.ingreso_detalle), 1);  
+    // const idx = this.detallesIngreso.findIndex(d => d.ingreso_detalle === element.ingreso_detalle);
+    this.detallesIngreso.splice(this.detallesIngreso.findIndex(d => d.ingreso_detalle === element.ingreso_detalle), 1);
     this.updateTableDataSource();
   }
 }

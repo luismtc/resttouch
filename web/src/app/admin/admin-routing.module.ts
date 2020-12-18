@@ -16,9 +16,9 @@ import { TableroComponent } from './components/tablero/tablero.component';
 import { ProveedorComponent } from './components/proveedor/proveedor/proveedor.component';
 import { ImpuestoEspecialComponent } from './components/impuestoEspecial/impuesto-especial/impuesto-especial.component';
 import { BodegaComponent } from './components/bodega/bodega/bodega.component';
-import { UsuarioSedeComponent } from './components/usuario-sede/usuario-sede/usuario-sede.component'
-import { CertificadorConfiguracionComponent } from './components/certificador/configuracion/certificador-configuracion/certificador-configuracion.component'
-import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component'
+import { UsuarioSedeComponent } from './components/usuario-sede/usuario-sede/usuario-sede.component';
+import { CertificadorConfiguracionComponent } from './components/certificador/configuracion/certificador-configuracion/certificador-configuracion.component';
+import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component';
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },

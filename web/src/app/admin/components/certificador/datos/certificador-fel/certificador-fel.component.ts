@@ -12,15 +12,15 @@ export class CertificadorFelComponent implements OnInit {
 
   public certificador: Configuracion;
 
-	@ViewChild('lstCertificador', { static: false }) lstCertificadorComponent: ListaCertificadorConfiguracionComponent;
-	@ViewChild('frmCertificador', { static: false }) frmCertificador: FormCertificadorFelComponent;
+  @ViewChild('lstCertificador', { static: false }) lstCertificadorComponent: ListaCertificadorConfiguracionComponent;
+  @ViewChild('frmCertificador', { static: false }) frmCertificador: FormCertificadorFelComponent;
 
   constructor() { }
 
   ngOnInit() {
     this.certificador = {
       certificador_configuracion: null,
-			nombre: null,
+      nombre: null,
       vinculo_factura: null,
       vinculo_firma: null,
       metodo_factura: null,
@@ -28,15 +28,15 @@ export class CertificadorFelComponent implements OnInit {
       metodo_anulacion: null,
       vinculo_grafo: null,
       metodo_grafo: null
-		};
+    };
   }
 
   setCertificador = (usr: Configuracion) => {
-		this.certificador = usr;
-		this.frmCertificador.loadCertificadores(+this.certificador.certificador_configuracion);
-		this.frmCertificador.resetCertificador();
+    this.certificador = usr;
+    this.frmCertificador.loadCertificadores(+this.certificador.certificador_configuracion);
+    this.frmCertificador.resetCertificador();
   }
-  
-	refreshUsuarioList = () => this.lstCertificadorComponent.loadCertificador();
+
+  refreshCertificadorList = () => this.lstCertificadorComponent.loadCertificador();
 
 }

@@ -62,7 +62,7 @@
             </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"
-                    [disabled]="!frmEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
+                    [disabled]="!frmEgreso.form.valid || ([2, 3].indexOf(+egreso.estatus_movimiento) >= 0) || bloqueoBotones"
                     *ngIf="saveToDB">
                     Guardar
                 </button>
@@ -141,7 +141,7 @@
             -->
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"
-                    [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
+                    [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0 || bloqueoBotones"
                     *ngIf="saveToDB">
                     Guardar
                 </button>
@@ -188,11 +188,11 @@
                 <td mat-cell *matCellDef="let element" class="text-wrap">
                     <button mat-raised-button type="button" color="accent" class="btnAccion"
                         (click)="getDetalleEgreso(element.egreso, element.egreso_detalle)"
-                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="saveToDB">
+                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0 || bloqueoBotones" *ngIf="saveToDB">
                         Editar
                     </button>
                     <button mat-raised-button type="button" color="accent" (click)="removeFromDetail(element.articulo)"
-                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
+                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0 || bloqueoBotones" *ngIf="!saveToDB">
                         Eliminar
                     </button>
                 </td>
@@ -306,11 +306,11 @@
                 <td mat-cell *matCellDef="let element" class="text-wrap">
                     <button mat-raised-button type="button" color="accent" class="btnAccion"
                         (click)="getDetalleEgreso(element.egreso, element.egreso_detalle)"
-                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="saveToDB">
+                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0 || bloqueoBotones" *ngIf="saveToDB">
                         Editar
                     </button>
                     <button mat-raised-button type="button" color="accent" (click)="removeFromDetail(element.articulo)"
-                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0" *ngIf="!saveToDB">
+                        [disabled]="[2, 3].indexOf(+egreso.estatus_movimiento) >= 0 || bloqueoBotones" *ngIf="!saveToDB">
                         Eliminar
                     </button>
                 </td>

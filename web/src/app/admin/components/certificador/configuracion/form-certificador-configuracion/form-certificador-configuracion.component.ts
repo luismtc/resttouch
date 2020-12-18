@@ -15,18 +15,18 @@ export class FormCertificadorConfiguracionComponent implements OnInit {
   @Output() certificadorSavedEv = new EventEmitter();
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private certificadorSrvc: CertificadorService
   ) { }
 
   ngOnInit() {
     this.resetCertificador();
   }
-  
+
   resetCertificador = () => {
-		this.certificador = {
+    this.certificador = {
       certificador_configuracion: null,
-			nombre: null,
+      nombre: null,
       vinculo_factura: null,
       vinculo_firma: null,
       metodo_factura: null,
@@ -34,19 +34,19 @@ export class FormCertificadorConfiguracionComponent implements OnInit {
       metodo_anulacion: null,
       vinculo_grafo: null,
       metodo_grafo: null
-		};
-	}
+    };
+  }
 
-  	onSubmit = () => {
-  		this.certificadorSrvc.saveConfig(this.certificador).subscribe(res => {
-  			if (res.exito) {
-          this.certificadorSavedEv.emit();
-  				this.resetCertificador();  				
-  				this._snackBar.open('Certificador guardado con éxito...', 'Certificador', { duration: 3000 });
-  			} else {
-  				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
-  			}
-  		})
-  	}
+  onSubmit = () => {
+    this.certificadorSrvc.saveConfig(this.certificador).subscribe(res => {
+      if (res.exito) {
+        this.certificadorSavedEv.emit();
+        this.resetCertificador();
+        this.snackBar.open('Certificador guardado con éxito...', 'Certificador', { duration: 3000 });
+      } else {
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
+      }
+    })
+  }
 
 }

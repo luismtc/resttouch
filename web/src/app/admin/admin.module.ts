@@ -98,9 +98,9 @@ import { FormCertificadorFelComponent } from './components/certificador/datos/fo
     FormImpresoraComponent, ListaImpresoraComponent, FpagoComponent, FormPagoComponent, ListaPagoComponent,
     TipoUsuarioComponent, ListaTipoUsuarioComponent, FormTipoUsuarioComponent, AccesoUsuarioComponent,
     FormAccesoUsuarioComponent, ListaAccesoUsuarioComponent, TableroComponent, ProveedorComponent,
-    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent, 
-    ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent, 
-    BodegaComponent, FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent, 
+    ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent,
+    ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent,
+    BodegaComponent, FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent,
     UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent, CertificadorConfiguracionComponent,
     FormCertificadorConfiguracionComponent, CertificadorFelComponent, FormCertificadorFelComponent, AcercaDeComponent
   ],

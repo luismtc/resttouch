@@ -15,7 +15,7 @@ export class FormProveedorComponent implements OnInit {
   @Output() proveedorSavedEv = new EventEmitter();
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private proveedorSrvc: ProveedorService
   ) { }
 
@@ -27,16 +27,16 @@ export class FormProveedorComponent implements OnInit {
     corporacion: null,
     razon_social: null,
     nit: null
-  };
+  }
 
   onSubmit = () => {
-    this.proveedorSrvc.save(this.proveedor).subscribe(res => {      
+    this.proveedorSrvc.save(this.proveedor).subscribe(res => {
       if (res.exito) {
         this.proveedorSavedEv.emit();
         this.resetProveedor();
-        this._snackBar.open('Proveedor agregade...', 'Proveedores', { duration: 3000 });
+        this.snackBar.open('Proveedor agregado...', 'Proveedores', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Proveedores', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Proveedores', { duration: 3000 });
       }
     });
   }
