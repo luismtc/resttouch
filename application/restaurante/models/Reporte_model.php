@@ -25,6 +25,7 @@ class Reporte_model extends CI_Model {
 
 		if (isset($args['_grupo']) && $args['_grupo'] == 2) {
 			$this->db->group_by("e.sede");
+			$group .= ", a.sede";
 		}
 
 		if (isset($args['sede'])) {
