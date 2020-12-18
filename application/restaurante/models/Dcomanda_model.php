@@ -114,13 +114,15 @@ class Dcomanda_model extends General_Model {
 					}
 
 					return $exito;	
-				} 
+				} else {
+					$this->setMensaje("Nada que actualizar");
+				}
 			}
 		} else {
 			$this->setMensaje("Hacen falta datos obligatorios para poder continuar");
 		}
 
-		return false;
+		return true;
 	}
 }
 

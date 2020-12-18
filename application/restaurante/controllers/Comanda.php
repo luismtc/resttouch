@@ -255,6 +255,8 @@ class Comanda extends CI_Controller {
 				$datos['mensaje'] = "Datos Actualizados con exito";
 			}
 
+			$datos['exito'] = true;
+
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
