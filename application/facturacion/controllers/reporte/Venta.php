@@ -10,6 +10,7 @@ class Venta extends CI_Controller {
 
 		$this->load->model([
 			'Comanda_model',
+			'Dcomanda_model',
 			'Factura_model',
 			'Dfactura_model',
 			'Articulo_model',
@@ -290,7 +291,7 @@ class Venta extends CI_Controller {
 						"cantidad" => $det->cantidad,
 						"total" => $det->total,
 						"articulo" => $det->articulo,
-						"sede" => $fac->sede
+						"sede" => $com->sede
 					];
 				}
 			}
@@ -366,7 +367,7 @@ class Venta extends CI_Controller {
 						"cantidad" => $det->cantidad,
 						"total" => $det->total,
 						"articulo" => $det->articulo,
-						"sede" => $fac->sede
+						"sede" => $com->sede
 					];
 				}
 			}
@@ -428,7 +429,7 @@ class Venta extends CI_Controller {
 		$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
 
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(), //Produccion
+			'tempDir' => sys_get_temp_dir(), //Produccion
 			'format' => 'Legal'
 		]);
 
