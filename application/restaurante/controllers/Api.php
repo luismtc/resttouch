@@ -9,6 +9,7 @@ class Api extends CI_Controller {
 		//$this->datos = [];
 		$this->load->add_package_path('application/facturacion');
 		$this->load->model([
+			"Configuracion_model",
 			"Comanda_model", 
 			"Dcomanda_model", 
 			"Cuenta_model", 
@@ -32,7 +33,7 @@ class Api extends CI_Controller {
 	public function set_comanda()
 	{
 		$req = json_decode(file_get_contents('php://input'), true);
-
+		$obj = json_decode(file_get_contents('php://input'));
 		$datos = ["exito" => false, 'mensaje' => ''];
 
 		if (isset($_GET['key'])) {
@@ -49,6 +50,7 @@ class Api extends CI_Controller {
 	            ];
 				$db = conexion_db($conn);
 				$this->db = $this->load->database($db, true);
+				$config = $this->Configuracion_model->buscar();
 
 				$sede = $this->Catalogo_model->getSede([
 					"admin_llave" => $_GET['key'],
@@ -57,14 +59,34 @@ class Api extends CI_Controller {
 
 				$datosCliente = false;
 				$idCliente = false;
+
+				$rutas = get_configuracion($config, "RT_CAMPO_NIT", 2);
+				if ($rutas) {
+					foreach (explode("|", $rutas) as $row) {
+						$dato = buscar_propiedad($obj, $row);
+						if ($dato) {
+							break;
+						}
+					}	
+				} 
+				
 				if (isset($req['billing_address'])) {
 					$datosCliente = $req['billing_address'];					
 				} else if ($req['source_name'] == 'pos') {
 					$datosCliente = $req['customer']['default_address'];
 				}
+
 				if ($datosCliente) {
 
-					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['zip']);
+					if ($rutas) {
+						if ($dato) {
+							$nit = $dato;	
+						} else {
+							$nit = "CF";
+						}
+					} else {
+						$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['zip']);
+					}
 
 					if (empty($nit)) {
 						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['zip']));
@@ -310,7 +332,6 @@ class Api extends CI_Controller {
 												$fac->guardar($datosFac);
 												$fac->cargarEmpresa();
 												$pimpuesto = $fac->empresa->porcentaje_iva +1;
-												
 												foreach ($cuenta->getDetalle() as $det) {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
@@ -326,6 +347,17 @@ class Api extends CI_Controller {
 													
 													$det->monto_iva = $total - $det->monto_base;
 													$fac->setDetalle((array) $det);
+												}
+												if (get_configuracion($config, "RT_FIRMA_DTE_AUTOMATICA", 3)) {
+													$fac->firmar();
+													if (!empty($fac->numero_factura)) {
+														$fact = new Factura_model($fac->factura);
+														$fact->guardar([
+															"numero_factura" => $fac->numero_factura,
+															"serie_factura" => $fac->serie_factura,
+															"fel_uuid" => $fac->fel_uuid
+														]);
+													}
 												}
 											} else {
 												$datos['exito'] = false;

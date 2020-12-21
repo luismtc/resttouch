@@ -420,3 +420,27 @@ if ( ! function_exists("validarCantidades")) {
 		return $dato;	
 	}
 }
+
+if (! function_exists("buscar_propiedad")) {
+	function buscar_propiedad($obj, $ruta)
+	{
+		$dato = null;
+		foreach (explode("->", $ruta) as $row) {
+			$dato = verDato($obj, $row);
+			if (is_object($dato)) {
+				$obj = $dato;
+				$dato = null;
+			} 
+		}
+
+		if($dato !== null) {
+			$soapClient = new SoapClient('https://www.ingface.net/ServiciosIngface/ingfaceWsServices?wsdl');
+			$resultado = $soapClient->nitContribuyentes(['usuario' => 'DEMO', 'clave' => 'C2FDC80789AFAF22C372965901B16DF533A4FCB19FD9F2FD5CBDA554032983B0', 'nit' => $dato]);
+			if (!strpos($resultado->return->nombre, 'no valido')) {
+				return $dato;
+			}
+		}
+
+		return false;
+	}
+}

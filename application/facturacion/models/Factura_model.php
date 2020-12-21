@@ -957,6 +957,20 @@ class Factura_model extends General_model
 
 		return $tmp->result();
 	}
+
+	function firmar()
+	{
+		$this->cargarFacturaSerie();
+		$this->cargarMoneda();
+		$this->cargarReceptor();
+		$this->cargarSede();
+		$this->cargarCertificadorFel();
+		$this->procesar_factura();
+		
+		$funcion = $this->getCertificador()->metodo_factura;
+		$resp = $this->$funcion();
+		$this->setBitacoraFel(['resultado' => json_encode($resp)]);
+	}
 }
 
 /* End of file Factura_model.php */
