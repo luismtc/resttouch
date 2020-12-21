@@ -493,8 +493,8 @@ class Comanda_model extends General_Model
 	{
 		if (isset($args['fdel']) && isset($args['fal'])) {
 			$this->db
-				->where("date(c.inicio) >=", $args['fdel'])
-				->where("date(c.fin) <=", $args['fal']);
+				->where("date(a.fhcreacion) >=", $args['fdel'])
+				->where("date(a.fhcreacion) <=", $args['fal']);
 			unset($args['fdel']);
 			unset($args['fal']);
 		}

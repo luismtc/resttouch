@@ -43,8 +43,8 @@ class Reporte_model extends CI_Model {
 				 ->where("e.fel_uuid_anulacion is null");
 		} else {
 			$this->db
-				 ->where("date(i.inicio) >=", $args['fdel'])
-				 ->where("date(i.fin) <=", $args['fal'])
+				 ->where("date(h.fhcreacion) >=", $args['fdel'])
+				 ->where("date(h.fhcreacion) <=", $args['fal'])
 				 ->where("f.sinfactura", 1);
 		}
 
