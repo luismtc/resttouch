@@ -52,6 +52,10 @@ class Catalogo_model extends CI_Model {
 			$this->db->where("tipo_movimiento", $args["tipo_movimiento"]);
 		}
 
+		if (isset($args['ingreso'])) {
+			$this->db->where('ingreso', $args['ingreso']);
+		}
+
 		if (isset($args['egreso'])) {
 			$this->db->where('egreso', $args['egreso']);
 		}

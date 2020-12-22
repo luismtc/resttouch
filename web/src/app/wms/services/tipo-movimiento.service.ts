@@ -18,8 +18,8 @@ export class TipoMovimientoService {
 
   constructor(
     private http: HttpClient,
-    private ls: LocalstorageService    
-  ) { 
+    private ls: LocalstorageService
+  ) {
     this.srvcErrHndl = new ServiceErrorHandler();
     this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
@@ -27,9 +27,12 @@ export class TipoMovimientoService {
   get(fltr: any = {}): Observable<TipoMovimiento[]> {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': this.usrToken
+        Authorization: this.usrToken
       })
     };
-    return this.http.get<TipoMovimiento[]>(`${GLOBAL.urlCatalogos}/get_tipo_movimiento?${qs.stringify(fltr)}`, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.get<TipoMovimiento[]>(
+      `${GLOBAL.urlCatalogos}/get_tipo_movimiento?${qs.stringify(fltr)}`,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

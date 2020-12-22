@@ -66,6 +66,11 @@ class Ingreso_model extends General_Model {
 	{
 		$det = new IDetalle_Model($id);
 		$args['ingreso'] = $this->ingreso;
+
+		if(is_object($args['presentacion'])) {
+			$args['presentacion'] = $args['presentacion']->presentacion;
+		}
+
 		$result = $det->guardar($args);
 
 		if($result) {

@@ -41,9 +41,11 @@ export class FormIngresoComponent implements OnInit {
   public proveedores: Proveedor[] = [];
   public bodegas: Bodega[] = [];
   public articulos: Articulo[] = [];
+  public filteredArticulos: Articulo[] = [];
   public presentaciones: Presentacion[] = [];
   public esMovil = false;
   public bloqueoBotones = false;
+  public txtArticuloSelected: (Articulo | string) = undefined;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -67,7 +69,7 @@ export class FormIngresoComponent implements OnInit {
   }
 
   loadTiposMovimiento = () => {
-    this.tipoMovimientoSrvc.get().subscribe(res => {
+    this.tipoMovimientoSrvc.get({ ingreso: 1 }).subscribe(res => {
       if (res) {
         this.tiposMovimiento = res;
       }
@@ -130,9 +132,12 @@ export class FormIngresoComponent implements OnInit {
     });
   }
 
-  resetDetalleIngreso = () => this.detalleIngreso = {
-    ingreso_detalle: null, ingreso: (!!this.ingreso.ingreso ? this.ingreso.ingreso : null), articulo: null,
-    cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
+  resetDetalleIngreso = () => {
+    this.detalleIngreso = {
+      ingreso_detalle: null, ingreso: (!!this.ingreso.ingreso ? this.ingreso.ingreso : null), articulo: null,
+      cantidad: null, precio_unitario: null, precio_total: null, presentacion: 0
+    };
+    this.txtArticuloSelected = undefined;
   }
 
   loadDetalleIngreso = (idingreso: number = +this.ingreso.ingreso) => {
@@ -158,6 +163,7 @@ export class FormIngresoComponent implements OnInit {
           precio_total: +res[0].precio_total,
           presentacion: res[0].presentacion.presentacion
         };
+        this.txtArticuloSelected = res[0].articulo;
         this.showDetalleIngresoForm = true;
       }
     });
@@ -198,5 +204,23 @@ export class FormIngresoComponent implements OnInit {
     // const idx = this.detallesIngreso.findIndex(d => d.ingreso_detalle === element.ingreso_detalle);
     this.detallesIngreso.splice(this.detallesIngreso.findIndex(d => d.ingreso_detalle === element.ingreso_detalle), 1);
     this.updateTableDataSource();
+  }
+
+  filtrarArticulos = (value: (Articulo | string)) => {
+    if (value && (typeof value === 'string')) {
+      const filterValue = value.toLowerCase();
+      this.filteredArticulos =
+        this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredArticulos = this.articulos;
+    }
+  }
+
+  displayArticulo = (art: Articulo) => {
+    if (art) {
+      this.detalleIngreso.articulo = art.articulo;
+      return art.descripcion;
+    }
+    return undefined;
   }
 }

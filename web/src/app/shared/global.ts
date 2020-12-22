@@ -1,7 +1,7 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
-// const urlBase = 'http://localhost/resttouch'; // Desarrollo
-const urlBase = 'https://resttouch.c807.com/api'; // C807
+const urlBase = 'http://localhost/resttouch'; // Desarrollo
+// const urlBase = 'https://resttouch.c807.com/api'; // C807
 
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
@@ -33,7 +33,9 @@ export const GLOBAL = {
         RT_MODO_COMANDA: 'RT_MODO_COMANDA',
         RT_COMANDA_SIN_FACTURA: 'RT_COMANDA_SIN_FACTURA',
         RT_MODO_FACTURA: 'RT_MODO_FACTURA',
-        RT_MESERO_POR_DEFECTO: 'RT_MESERO_POR_DEFECTO'
+        RT_MESERO_POR_DEFECTO: 'RT_MESERO_POR_DEFECTO',
+        RT_FIRMA_DTE_AUTOMATICA: 'RT_FIRMA_DTE_AUTOMATICA',
+        RT_CAMPO_NIT: 'RT_CAMPO_NIT'
     },
     grupos: [
         {

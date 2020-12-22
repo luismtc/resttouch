@@ -41,12 +41,15 @@ export class FormEgresoComponent implements OnInit {
   public displayedColumns: string[] = ['articulo', 'presentacion', 'cantidad', 'precio_unitario', 'precio_total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleEgreso>;
   public tiposMovimiento: TipoMovimiento[] = [];
+  public tiposMovimientoIngreso: TipoMovimiento[] = [];
   public bodegas: Bodega[] = [];
   public articulos: Articulo[] = [];
+  public filteredArticulos: Articulo[] = [];
   public proveedores: Proveedor[] = [];
   public presentaciones: Presentacion[] = [];
   public esMovil = false;
   public bloqueoBotones = false;
+  public txtArticuloSelected: (Articulo | string) = undefined;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -64,16 +67,22 @@ export class FormEgresoComponent implements OnInit {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.resetEgreso();
     this.loadTiposMovimiento();
+    this.loadTiposMovimiento(false);
     this.loadBodegas();
     this.loadArticulos();
     this.loadProveedores();
     this.loadPresentaciones();
   }
 
-  loadTiposMovimiento = () => {
-    this.tipoMovimientoSrvc.get().subscribe(res => {
+  loadTiposMovimiento = (paraEgreso = true) => {
+    const fltr = paraEgreso ? { egreso: 1 } : { ingreso: 1 };
+    this.tipoMovimientoSrvc.get(fltr).subscribe(res => {
       if (res) {
-        this.tiposMovimiento = res;
+        if (paraEgreso) {
+          this.tiposMovimiento = res;
+        } else {
+          this.tiposMovimientoIngreso = res;
+        }
       }
     });
   }
@@ -148,9 +157,12 @@ export class FormEgresoComponent implements OnInit {
     });
   }
 
-  resetDetalleEgreso = () => this.detalleEgreso = {
-    egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null,
-    precio_unitario: null, precio_total: null, presentacion: 0
+  resetDetalleEgreso = () => {
+    this.detalleEgreso = {
+      egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null,
+      precio_unitario: null, precio_total: null, presentacion: 0
+    };
+    this.txtArticuloSelected = undefined;
   }
 
   resetDetalleMerma = () => this.detalleMerma = {
@@ -181,6 +193,7 @@ export class FormEgresoComponent implements OnInit {
           precio_total: +res[0].precio_total,
           presentacion: res[0].presentacion.presentacion
         };
+        this.txtArticuloSelected = res[0].articulo;
         this.showDetalleEgresoForm = true;
       }
     });
@@ -225,5 +238,23 @@ export class FormEgresoComponent implements OnInit {
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesEgreso);
   updateTableDataSourceM = () => this.dataSource = new MatTableDataSource(this.detallesMerma);
+
+  filtrarArticulos = (value: (Articulo | string)) => {
+    if (value && (typeof value === 'string')) {
+      const filterValue = value.toLowerCase();
+      this.filteredArticulos =
+        this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredArticulos = this.articulos;
+    }
+  }
+
+  displayArticulo = (art: Articulo) => {
+    if (art) {
+      this.detalleEgreso.articulo = art.articulo;
+      return art.descripcion;
+    }
+    return undefined;
+  }
 
 }
