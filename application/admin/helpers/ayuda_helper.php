@@ -434,6 +434,7 @@ if (! function_exists("buscar_propiedad")) {
 		}
 
 		if($dato !== null) {
+			$dato = strtoupper(preg_replace("/[^0-9Kk?!]/",'', $dato));
 			$soapClient = new SoapClient('https://www.ingface.net/ServiciosIngface/ingfaceWsServices?wsdl');
 			$resultado = $soapClient->nitContribuyentes(['usuario' => 'DEMO', 'clave' => 'C2FDC80789AFAF22C372965901B16DF533A4FCB19FD9F2FD5CBDA554032983B0', 'nit' => $dato]);
 			if (!strpos($resultado->return->nombre, 'no valido')) {

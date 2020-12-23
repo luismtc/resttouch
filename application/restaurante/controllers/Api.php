@@ -85,12 +85,10 @@ class Api extends CI_Controller {
 							$nit = "CF";
 						}
 					} else {
-						$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['zip']);
+						$nit = $datosCliente['zip'];
 					}
 
-					if (empty($nit)) {
-						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['zip']));
-					}
+					$nit = strtoupper(preg_replace("/[^0-9Kk?!]/",'', $nit));
 
 					$cliente = $this->Cliente_model->buscar([
 						"nit" => $nit,
