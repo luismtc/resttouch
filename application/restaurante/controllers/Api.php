@@ -85,7 +85,7 @@ class Api extends CI_Controller {
 							$nit = "CF";
 						}
 					} else {
-						$nit = $datosCliente['zip'];
+						$nit = $datosCliente['zip']; //Para cambios.
 					}
 
 					$nit = strtoupper(preg_replace("/[^0-9Kk?!]/",'', $nit));
