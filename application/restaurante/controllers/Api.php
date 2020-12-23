@@ -85,10 +85,18 @@ class Api extends CI_Controller {
 							$nit = "CF";
 						}
 					} else {
-						$nit = $datosCliente['zip']; //Para cambios.
+						if (validar_nit($datosCliente['zip'])) {
+							$nit = $datosCliente['zip']; //Para cambios.	
+						} else {
+							$nit = "CF";
+						}
 					}
 
 					$nit = strtoupper(preg_replace("/[^0-9Kk?!]/",'', $nit));
+
+					if (empty($nit)) {
+						$nit = "CF"	;
+					}
 
 					$cliente = $this->Cliente_model->buscar([
 						"nit" => $nit,
@@ -1175,6 +1183,15 @@ class Api extends CI_Controller {
 
 		$this->output
 		->set_output(json_encode($datos));
+	}
+
+	public function test()
+	{
+		$nit = "CF";
+		$nit = strtoupper(preg_replace("/[CF]!|[^0-9Kk?!]/",'', $nit));
+		echo "<pre>";
+		print_r ($nit);
+		echo "</pre>";
 	}
 }
 
