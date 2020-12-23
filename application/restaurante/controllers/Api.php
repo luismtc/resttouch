@@ -120,7 +120,7 @@ class Api extends CI_Controller {
 						$clt->cargar($cliente->cliente);
 					}
 
-					if (strtolower(trim($clt->nit)) != "cf") {					
+					if (strtolower(trim($clt->nit)) != "cf" || get_configuracion($config, "RT_ACTUALIZA_CORREO_CF", 3)) {					
 						$clt->guardar($guardar);
 					}
 					$idCliente = $clt->getPK();
