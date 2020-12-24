@@ -362,8 +362,9 @@ class Factura extends CI_Controller
 		$fac->cargarEmpresa();
 		$fac->cargarMoneda();
 		$fac->cargarReceptor();
-		$fac->procesar_factura();
+		$fac->cargarSede();
 		$fac->cargarCertificadorFel();
+		$fac->procesar_factura();
 
 		echo $fac->getXml();
 	}
