@@ -205,7 +205,7 @@ class Tablero_model extends General_model
 		return $this->db
 			->select(
 				'TRIM(CONCAT(IFNULL(g.nombres, ""), " ", IFNULL(g.apellidos, ""))) AS mesero, 
-				SUM(e.total - e.descuento) AS venta,
+				SUM(e.total - e.descuento + ifnull(e.valor_impuesto_especial, 0)) AS venta,
 				a.sede')
 			->from('comanda a')
 			->join('detalle_comanda b', 'a.comanda = b.comanda')
@@ -216,7 +216,7 @@ class Tablero_model extends General_model
 			->join('usuario g', 'g.usuario = a.mesero')			
 			->where('f.fel_uuid IS NOT NULL')
 			->where('f.fel_uuid_anulacion IS NULL')
-			->group_by('1')
+			->group_by('g.usuario')
 			->order_by('venta', "desc")
 			->get()
 			->result();
