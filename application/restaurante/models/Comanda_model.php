@@ -40,7 +40,7 @@ class Comanda_model extends General_Model
 			b.posx,
 			b.posy,
 			b.tamanio,
-			b.estatus, b.esmostrador, 
+			b.estatus, b.esmostrador, b.etiqueta,
 			b.impresora,
 			c.nombre as narea")
 			->join("mesa b", "a.mesa = b.mesa")
@@ -509,7 +509,7 @@ class Comanda_model extends General_Model
 		}
 
 		if (isset($args['turno_tipo'])) {
-			$this->db->where("g.turno_tipo", $args['turno_tipo']);
+			$this->db->where("c.turno_tipo", $args['turno_tipo']);
 			unset($args['turno_tipo']);
 		}
 
@@ -519,7 +519,7 @@ class Comanda_model extends General_Model
 					$this->db->where("a.{$key}", $row);
 				}
 			}
-		}
+		}	
 
 		return $this->db
 			->select("a.comanda")
