@@ -46,10 +46,12 @@ export class FormEgresoComponent implements OnInit {
   public articulos: Articulo[] = [];
   public filteredArticulos: Articulo[] = [];
   public proveedores: Proveedor[] = [];
+  public filteredProveedores: Proveedor[] = [];
   public presentaciones: Presentacion[] = [];
   public esMovil = false;
   public bloqueoBotones = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
+  public txtProveedorSelected: (Proveedor | string) = undefined;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -257,4 +259,21 @@ export class FormEgresoComponent implements OnInit {
     return undefined;
   }
 
+  filtrarProveedores = (value: (Proveedor | string)) => {
+    if (value && (typeof value === 'string')) {
+      const filterValue = value.toLowerCase();
+      this.filteredProveedores =
+        this.proveedores.filter(a => a.razon_social.toLowerCase().includes(filterValue) || a.nit.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredProveedores = this.proveedores;
+    }
+  }
+
+  displayProveedor = (p: Proveedor) => {
+    if (p) {
+      this.egreso.proveedor = p.proveedor;
+      return `(${p.nit}) ${p.razon_social}`;
+    }
+    return undefined;
+  }
 }

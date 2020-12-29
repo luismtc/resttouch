@@ -86,11 +86,12 @@ export class ArticuloService {
   }
 
   adaptCategoriaGrupoResponse(lista: CategoriaGrupoResponse[]): CategoriaGrupo[] {
-    let lst: CategoriaGrupo[] = [];
+    const lst: CategoriaGrupo[] = [];
     lista.forEach(item => lst.push({
       categoria_grupo: +item.categoria_grupo,
       categoria: +item.categoria.categoria,
-      categoria_grupo_grupo: !!item.categoria_grupo_grupo && item.categoria_grupo_grupo.length > 0 ? +item.categoria_grupo_grupo[0].categoria_grupo : null,
+      categoria_grupo_grupo:
+        !!item.categoria_grupo_grupo && item.categoria_grupo_grupo.length > 0 ? +item.categoria_grupo_grupo[0].categoria_grupo : null,
       descripcion: item.descripcion,
       receta: +item.receta,
       impresora: item.impresora,
@@ -106,7 +107,11 @@ export class ArticuloService {
         Authorization: this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo) : ''}`, entidad, httpOptions).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+    return this.http.post<any>(
+      `${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo) : ''}`,
+      entidad,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulos(fltr: any = {}): Observable<Articulo[]> {

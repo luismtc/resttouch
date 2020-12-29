@@ -401,7 +401,8 @@ export class TranComandaComponent implements OnInit {
                         Nombre: this.cuentaActiva.nombre,
                         Numero: this.noComanda,
                         DetalleCuenta: AImpresoraNormal,
-                        Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
+                        Ubicacion:
+                          `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero}`,
                         Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
                         Total: null,
                         NumeroPedido: this.mesaEnUso.numero_pedido,
@@ -423,7 +424,8 @@ export class TranComandaComponent implements OnInit {
                           Nombre: this.cuentaActiva.nombre,
                           Numero: this.noComanda,
                           DetalleCuenta: AImpresoraBT,
-                          Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero}`,
+                          Ubicacion:
+                            `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero}`,
                           Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`,
                           Total: null,
                           NumeroPedido: this.mesaEnUso.numero_pedido
@@ -509,7 +511,9 @@ export class TranComandaComponent implements OnInit {
       Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
       PropinaSugerida: (totalCuenta * 0.10).toFixed(2),
       Impresora: printerToUse,
-      Ubicacion: `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.numero} - Comanda ${this.mesaEnUso.comanda}`,
+      Ubicacion:
+        `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero
+        } - Comanda ${this.mesaEnUso.comanda}`,
       Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
     };
 

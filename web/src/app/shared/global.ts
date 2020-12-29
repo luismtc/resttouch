@@ -1,6 +1,7 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
 const urlBase = 'http://localhost/resttouch'; // Desarrollo
+// const urlBase = 'http://192.168.1.11/resttouch'; // Desarrollo 2
 // const urlBase = 'https://resttouch.c807.com/api'; // C807
 
 export const GLOBAL = {

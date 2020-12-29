@@ -54,13 +54,13 @@ class Catalogo extends CI_Controller {
 	{
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getProveedor($_GET)));
-	}
+	}	
 
 	public function get_articulo()
 	{
 		$_GET['sede'] = $this->data->sede;
-		$this->output
-		->set_output(json_encode($this->Catalogo_model->getArticulo($_GET)));
+		$datos = ordenar_array_objetos($this->Catalogo_model->getArticulo($_GET), 'descripcion', 2);
+		$this->output->set_output(json_encode($datos));
 	}
 
 	public function get_articulo_ingreso()

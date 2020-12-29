@@ -33,7 +33,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+egreso.traslado">¿Es traslado entre sedes?
+            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+egreso.traslado">¿Es traslado entre bodegas de la misma sede?
             </mat-checkbox>
             <mat-form-field class="fullWidth" *ngIf="+egreso.traslado == 1 && ([2, 3].indexOf(+egreso.estatus_movimiento) < 0)">
                 <mat-label>Bodega destino</mat-label>
@@ -55,11 +55,17 @@
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="+egreso.traslado == 1 && ([2, 3].indexOf(+egreso.estatus_movimiento) < 0)">
                 <mat-label>Proveedor</mat-label>
-                <mat-select name="proveedor" [(ngModel)]="egreso.proveedor" [required]="+egreso.traslado == 1">
+                <!--<mat-select name="proveedor" [(ngModel)]="egreso.proveedor" [required]="+egreso.traslado == 1">
                     <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
                         ({{prov.nit}}) {{prov.razon_social}}
                     </mat-option>
-                </mat-select>
+                </mat-select>-->
+                <input type="text" [(ngModel)]="txtProveedorSelected" [ngModelOptions]="{standalone: true}" placeholder="Proveedor" matInput [matAutocomplete]="autoProveedores" (keyup)="filtrarProveedores(txtProveedorSelected)" required>
+                <mat-autocomplete #autoProveedores="matAutocomplete" [displayWith]="displayProveedor">
+                    <mat-option *ngFor="let prov of filteredProveedores" [value]="prov">
+                        ({{prov.nit}}) {{prov.razon_social}}
+                    </mat-option>
+                </mat-autocomplete>
             </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"

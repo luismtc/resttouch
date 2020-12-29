@@ -38,6 +38,7 @@ export interface ComandaGetResponse {
         estatus: number;
         esmostrador?: number;
         impresora?: Impresora;
+        etiqueta?: string;
     };
     cuentas: Cuenta[];
     turno_rol?: string[];

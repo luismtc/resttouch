@@ -39,15 +39,25 @@
                     <mat-option *ngFor="let bodeO of bodegas" [value]="bodeO.bodega">
                         {{bodeO.descripcion}}
                     </mat-option>
-                </mat-select>
+                </mat-select>                
+                <button type="button" mat-button *ngIf="ingreso.bodega_origen" matSuffix mat-icon-button aria-label="Clear" (click)="ingreso.bodega_origen = undefined">
+                    <mat-icon class="iconFontSize">close</mat-icon>
+                </button>
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Proveedor</mat-label>
-                <mat-select name="proveedor" [(ngModel)]="ingreso.proveedor" required>
+                <!--<mat-select name="proveedor" [(ngModel)]="ingreso.proveedor" required>
                     <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
                         ({{prov.nit}}) {{prov.razon_social}}
                     </mat-option>
-                </mat-select>
+                </mat-select>-->
+                <input type="text" [(ngModel)]="txtProveedorSelected" [ngModelOptions]="{standalone: true}" placeholder="Proveedor" matInput [matAutocomplete]="autoProveedores" (keyup)="filtrarProveedores(txtProveedorSelected)" required>
+                <mat-autocomplete #autoProveedores="matAutocomplete" [displayWith]="displayProveedor">
+                    <mat-option *ngFor="let prov of filteredProveedores" [value]="prov">
+                        ({{prov.nit}}) {{prov.razon_social}}
+                    </mat-option>
+                </mat-autocomplete>
+
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput placeholder="Comentarios" name="comentario" [(ngModel)]="ingreso.comentario">

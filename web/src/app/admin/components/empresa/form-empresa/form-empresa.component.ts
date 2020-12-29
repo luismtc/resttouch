@@ -9,7 +9,7 @@ import { SedeService } from '../../../services/sede.service';
   styleUrls: ['./form-empresa.component.css']
 })
 export class FormEmpresaComponent implements OnInit {
-  
+
   @Input() corporacion: Corporacion;
   @Input() empresa: Empresa;
   @Output() empresaSavedEv = new EventEmitter();
@@ -46,7 +46,7 @@ export class FormEmpresaComponent implements OnInit {
 
   onSubmit = () => {
     this.empresa.corporacion = this.corporacion.corporacion;
-    
+
     this.sedeSrvc.saveEmpresa(this.empresa).subscribe(res => {
       if (res.exito) {
         this.empresaSavedEv.emit();

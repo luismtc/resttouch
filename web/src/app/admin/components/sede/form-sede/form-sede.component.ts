@@ -11,7 +11,7 @@ import { CertificadorService } from '../../../services/certificador.service';
   styleUrls: ['./form-sede.component.css']
 })
 export class FormSedeComponent implements OnInit {
-  
+
   public sedes: Sede[] = [];
   public certificadores: Certificador[] = [];
 
@@ -43,7 +43,7 @@ export class FormSedeComponent implements OnInit {
   getCertificador = () => {
     this.certificadorSrvc.getCertificador().subscribe(res => {
       this.certificadores = res;
-    })
+    });
   }
 
   resetSede = () => this.sede = {
@@ -61,7 +61,7 @@ export class FormSedeComponent implements OnInit {
   }
 
   onSubmit = () => {
-    this.sede.empresa = this.empresa.empresa
+    this.sede.empresa = this.empresa.empresa;
 
     this.sedeSrvc.saveSede(this.sede).subscribe(res => {
       if (res.exito) {

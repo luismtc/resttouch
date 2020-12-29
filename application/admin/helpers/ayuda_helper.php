@@ -457,3 +457,29 @@ if (! function_exists("validar_nit")) {
 		return false;
 	}
 }
+
+if (! function_exists("ordenar_array_objetos")) {
+	/**
+	 * $tipo = { 1: numero, 2: string }
+	 */
+	function ordenar_array_objetos($data, $campo, $tipo = 1, $direccion = 'asc')
+	{
+		switch($tipo) {			
+			case 2: 
+				usort($data, function ($a, $b) use($campo, $direccion) {
+					$cmp = strcmp($a->{$campo}, $b->{$campo});
+					return $direccion === 'asc' ? $cmp : -$cmp;
+				});
+				break;
+			default:
+				usort($data, function ($a, $b) use($campo, $direccion) {
+					if ($a->{$campo} == $b->{$campo}) {
+						return 0;
+					}
+					$cmp = ($a->{$campo} < $b->{$campo}) ? -1 : 1;
+					return $direccion === 'asc' ? $cmp : -$cmp;
+				});
+		}
+		return $data;
+	}
+}
