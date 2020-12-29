@@ -87,7 +87,14 @@ import { ListaCertificadorConfiguracionComponent } from './components/certificad
 import { FormCertificadorConfiguracionComponent } from './components/certificador/configuracion/form-certificador-configuracion/form-certificador-configuracion.component';
 import { CertificadorConfiguracionComponent } from './components/certificador/configuracion/certificador-configuracion/certificador-configuracion.component'
 import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component'
-import { FormCertificadorFelComponent } from './components/certificador/datos/form-certificador-fel/form-certificador-fel.component'
+import { FormCertificadorFelComponent } from './components/certificador/datos/form-certificador-fel/form-certificador-fel.component';
+import { CorporacionComponent } from './components/corporacion/corporacion/corporacion.component';
+import { FormCorporacionComponent } from './components/corporacion/form-corporacion/form-corporacion.component';
+import { ListaCorporacionComponent } from './components/corporacion/lista-corporacion/lista-corporacion.component';
+import { FormSedeComponent } from './components/sede/form-sede/form-sede.component';
+import { ListaSedeComponent } from './components/sede/lista-sede/lista-sede.component';
+import { FormEmpresaComponent } from './components/empresa/form-empresa/form-empresa.component';
+import { ListaEmpresaComponent } from './components/empresa/lista-empresa/lista-empresa.component'
 
 @NgModule({
   declarations: [
@@ -101,8 +108,10 @@ import { FormCertificadorFelComponent } from './components/certificador/datos/fo
     ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent,
     ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent,
     BodegaComponent, FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent,
-    UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent, CertificadorConfiguracionComponent,
-    FormCertificadorConfiguracionComponent, CertificadorFelComponent, FormCertificadorFelComponent, AcercaDeComponent
+    UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent, 
+    CertificadorConfiguracionComponent, FormCertificadorConfiguracionComponent, CertificadorFelComponent, 
+    FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent, 
+    ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent, AcercaDeComponent

@@ -350,6 +350,10 @@ class Catalogo_model extends CI_Model {
 			$this->db->where('sede', $args['sede']);
 		}
 
+		if (isset($args['empresa'])) {
+			$this->db->where('empresa', $args['empresa']);
+		}
+
 		if(isset($args['admin_llave'])) {
 			$this->db
 				 ->join("empresa b", "a.empresa = b.empresa")

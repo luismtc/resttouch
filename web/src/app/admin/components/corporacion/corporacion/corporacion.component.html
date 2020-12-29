@@ -1,0 +1,42 @@
+<mat-tab-group mat-align-tabs="center" (selectedTabChange)="onTabChanged($event);">
+    <mat-tab label="Corporacion">
+        <div class="row">
+            <div class="col m5 s12">
+                <app-list-corporacion #lstCorporacion (getCorporacionEv)="setFormCorporacion($event)"></app-list-corporacion>
+            </div>
+            <div class="col m7 s12">
+                <app-form-corporacion #frmCorporacion [corporacion]="corporacion" (corporacionSavedEv)="refreshCorporacionList()"></app-form-corporacion>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Empresa">
+        <div class="row">
+            <div class="col m5 s12">
+                <app-lista-empresa 
+                    #lstEmpresa 
+                    [corporacion]="corporacion" 
+                    (getEmpresaEv)="setFormEmpresa($event)"
+                ></app-lista-empresa>
+            </div>
+            <div class="col m7 s12">
+                <app-form-empresa 
+                    #frmEmpresa 
+                    [corporacion]="corporacion" 
+                    [empresa]="empresa"
+                    (empresaSavedEv)="refreshEmpresaList()"
+                >
+                </app-form-empresa>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Sede">
+        <div class="row">
+            <div class="col m5 s12">
+                <app-lista-sede #lstSede [empresa]="empresa" (getSedeEv)="setFormSede($event)"></app-lista-sede>
+            </div>
+            <div class="col m7 s12">
+                <app-form-sede #frmSede [empresa]="empresa" [sede]="sede" (sedeSavedEv)="refreshSedeList()"></app-form-sede>
+            </div>
+        </div>
+    </mat-tab>
+  </mat-tab-group>

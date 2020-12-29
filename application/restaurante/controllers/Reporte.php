@@ -337,9 +337,6 @@ class Reporte extends CI_Controller {
 						$datos['datos'][$tusuario->usuario_tipo]['facturas'][] = $fac;
 						$datos['datos'][$tusuario->usuario_tipo]['propina'] += $propina * $prop->porcentaje / 100;
 					} else {
-						echo "<pre>";
-						print_r ("hola");
-						echo "</pre>";
 						$datos['datos'][$tusuario->usuario_tipo] = [
 							"descripcion" => $tusuario->descripcion,
 							"facturas" => [$fac],

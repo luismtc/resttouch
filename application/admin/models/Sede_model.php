@@ -10,6 +10,8 @@ class Sede_model extends General_model {
     public $direccion;
     public $telefono;
     public $correo;
+    public $codigo;
+    public $cuenta_contable;
 
 	public function __construct($id = "")
 	{

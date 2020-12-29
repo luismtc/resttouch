@@ -19,6 +19,7 @@ import { BodegaComponent } from './components/bodega/bodega/bodega.component';
 import { UsuarioSedeComponent } from './components/usuario-sede/usuario-sede/usuario-sede.component';
 import { CertificadorConfiguracionComponent } from './components/certificador/configuracion/certificador-configuracion/certificador-configuracion.component';
 import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component';
+import { CorporacionComponent } from './components/corporacion/corporacion/corporacion.component'
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent },
@@ -38,6 +39,7 @@ const routes: Routes = [
   {path: 'usuario_sede', component: UsuarioSedeComponent, canActivate: [AuthGuard] },
   {path: 'certificador_admin', component: CertificadorConfiguracionComponent, canActivate: [AuthGuard] },
   {path: 'certificador_fel', component: CertificadorFelComponent, canActivate: [AuthGuard] },
+  {path: 'corporacion', component: CorporacionComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
