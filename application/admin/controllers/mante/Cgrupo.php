@@ -57,6 +57,7 @@ public function __construct()
 					"_uno" => true
 				]);
 			}
+			$datos = ordenar_array_objetos($datos, 'descripcion');
 		} else if(is_object($tmp)) {
 			$datos = $this->Catalogo_model->getCategoriaGrupo([
 				"categoria_grupo" => $tmp->categoria_grupo,

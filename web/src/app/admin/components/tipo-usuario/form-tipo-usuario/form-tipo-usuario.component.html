@@ -1,29 +1,92 @@
-<mat-card class="mat-elevation-z4 fullWidth">
-    <mat-card-title>
-        Tipo de empleado
-    </mat-card-title>
-    <mat-card-content>
-        <form #frmTipoUsuario="ngForm" (ngSubmit)="frmTipoUsuario.form.valid && onSubmit()" novalidate>
-            <mat-form-field class="fullWidth">
-                <mat-label>Jerarquia</mat-label>
-                <mat-select name="jerarquia" [(ngModel)]="usuarioTipo.jerarquia" required>
-                	<mat-option></mat-option>
-                    <mat-option *ngFor="let m of jerarquias" [value]="m.jerarquia">
-                        {{m.descripcion}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" required>
-            </mat-form-field>
-            <div align="end">
-                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTipoUsuario.form.valid">
-                    Guardar
-                </button>
-                <button mat-raised-button type="button" color="accent" (click)="resetTipoUsuario()" *ngIf="usuarioTipo.usuario_tipo">
-                    Nuevo
-                </button>
-            </div>
-        </form>
-    </mat-card-content>
-</mat-card>
+<mat-tab-group>
+    <mat-tab label="Tipo de empleado">
+        <mat-card class="mat-elevation-z4 fullWidth">
+            <mat-card-title>
+                Tipo de empleado
+            </mat-card-title>
+            <mat-card-content>
+                <form #frmTipoUsuario="ngForm" (ngSubmit)="frmTipoUsuario.form.valid && onSubmit()" novalidate>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Jerarquia</mat-label>
+                        <mat-select name="jerarquia" [(ngModel)]="usuarioTipo.jerarquia" required>
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let m of jerarquias" [value]="m.jerarquia">
+                                {{m.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" required>
+                    </mat-form-field>
+                    <div align="end">
+                        <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTipoUsuario.form.valid">
+                            Guardar
+                        </button>
+                        <button mat-raised-button type="button" color="accent" (click)="resetTipoUsuario()" *ngIf="usuarioTipo.usuario_tipo">
+                            Nuevo
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>        
+    </mat-tab>
+    <mat-tab label="Categoria grupo" *ngIf="+usuarioTipo.usuario_tipo > 0">
+        <mat-card class="mat-elevation-z4 fullWidth">
+            <mat-card-title>
+                Categoria grupo
+            </mat-card-title>
+            <mat-card-content>
+                <form #frmTipoUsuarioCGrupo="ngForm" (ngSubmit)="frmTipoUsuarioCGrupo.form.valid && onSubmitUTCGrupo()" novalidate>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Categoría</mat-label>
+                        <mat-select name="categoria" [(ngModel)]="categoria" (selectionChange)="cargarSubCats($event)" required>
+                            <mat-option *ngFor="let c of categorias" [value]="c.categoria">
+                                {{c.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Sub-categoría</mat-label>
+                        <mat-select name="categoria_grupo" [(ngModel)]="utcgrupo.categoria_grupo" required>                            
+                            <mat-option *ngFor="let cg of cgrupos" [value]="cg.categoria_grupo">
+                                {{cg.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>                    
+                    <div align="end">
+                        <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTipoUsuarioCGrupo.form.valid">
+                            Guardar
+                        </button>
+                        <button mat-raised-button type="button" color="accent" (click)="resetTipoUsuarioCGrupo()" *ngIf="frmTipoUsuarioCGrupo.usuario_tipo_categoria_grupo">
+                            Nuevo
+                        </button>
+                    </div>
+                </form>
+                <hr/>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sub-categoría</th>
+                            <th>De baja</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cg of utcgrupos">
+                            <td>{{cg.categoria_grupo.descripcion}}</td>
+                            <td *ngIf="+cg.debaja === 0">
+                                <button mat-raised-button type="button" color="warn" (click)="toggleDeBaja(cg, 1)">
+                                    Dar de baja
+                                </button>                                
+                            </td>
+                            <td *ngIf="+cg.debaja === 1">
+                                <button mat-raised-button type="button" color="accent" (click)="toggleDeBaja(cg, 0)">
+                                    Dar de alta
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </mat-card-content>
+        </mat-card>        
+    </mat-tab>
+</mat-tab-group>
