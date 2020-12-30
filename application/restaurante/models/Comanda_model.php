@@ -331,7 +331,8 @@ class Comanda_model extends General_Model
 				->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
 				->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
 				->join("detalle_factura e", "e.detalle_factura = d.detalle_factura", (isset($args['cocinado']) ? "left" : ''))
-				->join("factura f", "f.factura = e.factura", "left")				
+				->join("factura f", "f.factura = e.factura", "left")	
+				->join("articulo g", "b.articulo = g.articulo")	;		
 				->where("f.fel_uuid is null");
 
 				if(isset($args["domicilio"])) {
@@ -339,6 +340,14 @@ class Comanda_model extends General_Model
 				}
 
 				if(isset($args['cocinado'])) {
+					if (isset($args['categoria_grupo'])) {
+						if (is_array($args['categoria_grupo'])) {
+							$this->db->where_in('g.categoria_grupo', $args['categoria_grupo']);
+						} else {
+							$this->db->where('g.categoria_grupo', $args['categoria_grupo']);
+						}
+					}
+
 					$this->db
 						 ->select("b.numero")
 						 ->where('b.cocinado', $args['cocinado'])
