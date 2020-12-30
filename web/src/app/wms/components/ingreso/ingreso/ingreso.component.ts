@@ -16,13 +16,13 @@ export class IngresoComponent implements OnInit {
   public ingreso: Ingreso;
   @ViewChild('lstIngreso', { static: false }) lstIngresoComponent: ListaIngresoComponent;
   @ViewChild('frmIngreso', { static: false }) frmIngreso: FormIngresoComponent;
-  public breakpoint: number = 2;
+  public breakpoint = 2;
   // public tamFila: number;
 
   constructor(
     private ls: LocalstorageService
   ) {
-    this.ingreso = { 
+    this.ingreso = {
       ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null,
       usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), comentario: null, proveedor: null
     };
@@ -42,6 +42,7 @@ export class IngresoComponent implements OnInit {
 
   setIngreso = (ing: Ingreso) => {
     this.ingreso = ing;
+    this.frmIngreso.setProveedor(+this.ingreso.proveedor);
     this.frmIngreso.loadDetalleIngreso(+this.ingreso.ingreso);
   }
 

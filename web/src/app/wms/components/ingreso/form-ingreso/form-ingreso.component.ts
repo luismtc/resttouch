@@ -111,6 +111,7 @@ export class FormIngresoComponent implements OnInit {
     this.resetDetalleIngreso();
     this.detallesIngreso = [];
     this.updateTableDataSource();
+    this.txtProveedorSelected = undefined;
   }
 
   onSubmit = () => {
@@ -243,4 +244,7 @@ export class FormIngresoComponent implements OnInit {
     }
     return undefined;
   }
+
+  setProveedor = (idProveedor: number) => this.txtProveedorSelected = this.proveedores.find(p => +p.proveedor === idProveedor);
+
 }

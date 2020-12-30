@@ -39,19 +39,21 @@
                 <form #frmTipoUsuarioCGrupo="ngForm" (ngSubmit)="frmTipoUsuarioCGrupo.form.valid && onSubmitUTCGrupo()" novalidate>
                     <mat-form-field class="fullWidth">
                         <mat-label>Categoría</mat-label>
-                        <mat-select name="categoria" [(ngModel)]="categoria" (selectionChange)="cargarSubCats($event)" required>
-                            <mat-option *ngFor="let c of categorias" [value]="c.categoria">
+                        <input type="text" [(ngModel)]="categoria" [ngModelOptions]="{standalone: true}" placeholder="Categoría" matInput [matAutocomplete]="autoCategorias" (keyup)="filtrarCategorias(categoria)">
+                        <mat-autocomplete #autoCategorias="matAutocomplete" [displayWith]="displayCategoria">
+                            <mat-option *ngFor="let c of filteredCategorias" [value]="c">
                                 {{c.descripcion}}
                             </mat-option>
-                        </mat-select>
+                        </mat-autocomplete>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
                         <mat-label>Sub-categoría</mat-label>
-                        <mat-select name="categoria_grupo" [(ngModel)]="utcgrupo.categoria_grupo" required>                            
-                            <mat-option *ngFor="let cg of cgrupos" [value]="cg.categoria_grupo">
+                        <input type="text" [(ngModel)]="txtSubCat" [ngModelOptions]="{standalone: true}" placeholder="Categoría" matInput [matAutocomplete]="autoSubCategorias" (keyup)="filtrarSubCategorias(txtSubCat)">
+                        <mat-autocomplete #autoSubCategorias="matAutocomplete" [displayWith]="displaySubCategoria">
+                            <mat-option *ngFor="let cg of filteredCgrupos" [value]="cg">
                                 {{cg.descripcion}}
                             </mat-option>
-                        </mat-select>
+                        </mat-autocomplete>
                     </mat-form-field>                    
                     <div align="end">
                         <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTipoUsuarioCGrupo.form.valid">

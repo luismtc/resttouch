@@ -53,6 +53,7 @@ class Tipo_usuario extends CI_Controller {
 				$row->jerarquia = $tuser->getJerarquia();
 				$datos[] = $row;
 			}
+			$datos = ordenar_array_objetos($datos, 'descripcion');
 		} else if(is_object($tmp)) {
 			$tuser = new Tipo_usuario_model($tmp->usuario_tipo);
 			$tmp->jerarquia = $tuser->getJerarquia();
@@ -101,7 +102,7 @@ class Tipo_usuario extends CI_Controller {
 				$row->categoria_grupo = $cg;
 
 				$datos[] = $row;
-			}
+			}			
 		} else if(is_object($tmp)) {
 			$tuser = new Tipo_usuario_model($tmp->usuario_tipo);
 			$tuser->jerarquia = $tuser->getJerarquia();

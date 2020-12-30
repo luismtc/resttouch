@@ -24,6 +24,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { SidebarDirective } from './directives/sidebar.directive';
 // import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
@@ -108,9 +109,9 @@ import { ListaEmpresaComponent } from './components/empresa/lista-empresa/lista-
     ListaProveedorComponent, FormProveedorComponent, VentasComponent, SolicitaPinInactividadComponent,
     ImpuestoEspecialComponent, FormImpuestoEspecialComponent, ListaImpuestoEspecialComponent,
     BodegaComponent, FormBodegaComponent, ListaBodegaComponent, UsuarioSedeComponent,
-    UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent, 
-    CertificadorConfiguracionComponent, FormCertificadorConfiguracionComponent, CertificadorFelComponent, 
-    FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent, 
+    UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent,
+    CertificadorConfiguracionComponent, FormCertificadorConfiguracionComponent, CertificadorFelComponent,
+    FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent,
     ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent
   ],
   entryComponents: [
@@ -120,7 +121,8 @@ import { ListaEmpresaComponent } from './components/empresa/lista-empresa/lista-
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatCardModule, MatDividerModule, MatTabsModule, MatTableModule, MatSelectModule, MatCheckboxModule, MatButtonModule,
     MatSnackBarModule, MatToolbarModule, MatMenuModule, MatGridListModule, MatPaginatorModule, MatTreeModule, MatDialogModule,
-    MatProgressBarModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule, NgIdleKeepaliveModule.forRoot()
+    MatProgressBarModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule, NgIdleKeepaliveModule.forRoot(),
+    MatAutocompleteModule
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent

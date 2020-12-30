@@ -29,6 +29,7 @@ export class TipoUsuarioComponent implements OnInit {
       jerarquia: pres.jerarquia.jerarquia
     };
     this.frmTipoUsuario.loadUTCGrupos(this.usuarioTipo.usuario_tipo);
+    this.frmTipoUsuario.resetTipoUsuarioCGrupo();
   }
 
   refreshtipoUsuarioList = () => this.lstUsuarioTipo.loadTipoUsuario();
