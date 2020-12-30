@@ -199,7 +199,14 @@ class Comanda_model extends General_Model
 			foreach ($det as $row) {
 				$detalle = new Dcomanda_model($row->detalle_comanda);
 				$row->articulo = $detalle->getArticulo();
-				$datos[] = $row;
+				if (isset($args['_categoria_grupo'])) {
+
+					if (in_array($row->articulo->categoria_grupo, $args['_categoria_grupo'])) {
+						$datos[] = $row;
+					}
+				} else {
+					$datos[] = $row;
+				}
 			}
 		} else if ($det) {
 			$detalle = new Dcomanda_model($det->detalle_comanda);
@@ -227,6 +234,11 @@ class Comanda_model extends General_Model
 			if (isset($args["_numero"])) {
 				$buscar['numero'] = $args['_numero'];
 			}
+
+			if (isset($args["_categoria_grupo"])) {
+				$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
+			}
+
 			$row->productos = $cta->getDetalle($buscar);
 			$cuentas[] = $row;
 		}
@@ -267,6 +279,10 @@ class Comanda_model extends General_Model
 		if (isset($args["_numero"])) {
 			$buscar['numero'] = $args['_numero'];
 			$tmp->numero = $args['_numero'];
+		}
+
+		if (isset($args['_categoria_grupo'])) {
+			$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
 		}
 		$det = $this->getDetalle($buscar);
 
@@ -332,8 +348,8 @@ class Comanda_model extends General_Model
 				->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
 				->join("detalle_factura e", "e.detalle_factura = d.detalle_factura", (isset($args['cocinado']) ? "left" : ''))
 				->join("factura f", "f.factura = e.factura", "left")	
-				->join("articulo g", "b.articulo = g.articulo")		
-				->where("f.fel_uuid is null");
+				->join("articulo g", "b.articulo = g.articulo")		;
+				//->where("f.fel_uuid is null");
 
 				if(isset($args["domicilio"])) {
 					$this->db->where('a.domicilio', $args['domicilio']);
@@ -342,10 +358,11 @@ class Comanda_model extends General_Model
 				if(isset($args['cocinado'])) {
 					if (isset($args['categoria_grupo'])) {
 						if (is_array($args['categoria_grupo'])) {
+							if (count($args["categoria_grupo"]) == 0) {
+								$args['categoria_grupo'][] = null;
+							}
 							$this->db->where_in('g.categoria_grupo', $args['categoria_grupo']);
-						} else {
-							$this->db->where('g.categoria_grupo', $args['categoria_grupo']);
-						}
+						} 
 					}
 
 					$this->db

@@ -405,7 +405,7 @@ class Comanda extends CI_Controller {
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$datos = [
 			"pendientes" => [],
-			"enProceso" => []
+			"enproceso" => []
 		];
 
 		$turno = $this->Turno_model->getTurno([
@@ -430,17 +430,17 @@ class Comanda extends CI_Controller {
 
 					$cgrupo = array_merge($cgrupo, $tmp);
 				}
-
+				
 				$tmp = $this->Comanda_model->getComandas([
 					'sede' => $data->sede, 
 					'cocinado' => 0,
-					'categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
+					'categoria_grupo' => $cgrupo
 				]);
 
 				$enProceso = $this->Comanda_model->getComandas([
 					'sede' => $data->sede, 
 					'cocinado' => 1,
-					'categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
+					'categoria_grupo' => $cgrupo
 				]);
 
 				foreach ($tmp as $row) {
@@ -448,7 +448,8 @@ class Comanda extends CI_Controller {
 					$datos['pendientes'][] = $comanda->getComanda([
 						"_usuario" => $data->idusuario, 
 						'cocinado' => 0,
-						'_numero' => $row->numero
+						'_numero' => $row->numero,
+						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
 					]);
 				}
 
@@ -457,7 +458,8 @@ class Comanda extends CI_Controller {
 					$datos['enproceso'][] = $comanda->getComanda([
 						"_usuario" => $data->idusuario, 
 						'cocinado' => 1,
-						'_numero' => $row->numero
+						'_numero' => $row->numero,
+						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
 					]);
 				}		
 			}

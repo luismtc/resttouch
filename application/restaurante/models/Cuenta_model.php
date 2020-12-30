@@ -171,7 +171,17 @@ class Cuenta_model extends General_Model {
 			$row->articulo = $det->getArticulo();
 			$tmp = $det->getDescripcionCombo();
 			$row->detalle = explode("|", $tmp);
-			$datos[] = $row;
+			if (isset($args['_categoria_grupo'])) {
+				if (is_array($args["_categoria_grupo"])) {
+					if (in_array($row->articulo->categoria_grupo, $args['_categoria_grupo'])) {
+						$datos[] = $row;
+					}	
+				} else if($row->articulo->categoria_grupo == $args["_categoria_grupo"]){
+					$datos[] = $row;
+				}
+			} else {
+				$datos[] = $row;
+			}
 		}
 		return $datos;
 	}
