@@ -44,6 +44,7 @@ class Presentacion extends CI_Controller {
 				$row->medida = $pres->getMedida();
 				$datos[] = $row;
 			}
+			$datos = ordenar_array_objetos($datos, 'descripcion');
 		} else if($tmp){
 			$pres = new Compra_model($tmp->presentacion);
 			$tmp->medida = $pres->getMedida();
