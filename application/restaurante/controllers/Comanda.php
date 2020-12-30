@@ -24,7 +24,8 @@ class Comanda extends CI_Controller {
 			"Receta_model",
 			"Impresora_model",
 			"Presentacion_model",
-			"Configuracion_model"
+			"Configuracion_model",
+			"Tipo_usuario_cgrupo_model"
 		]);
 
 		$this->output
@@ -402,27 +403,64 @@ class Comanda extends CI_Controller {
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
-		$datos = [];
+		$datos = [
+			"pendientes" => [],
+			"enProceso" => []
+		];
 
-		$tmp = $this->Comanda_model->getComandas(['sede' => $data->sede, 'cocinado' => 0]);
-		$enProceso = $this->Comanda_model->getComandas(['sede' => $data->sede, 'cocinado' => 1]);
+		$turno = $this->Turno_model->getTurno([
+			"sede" => $data->sede,
+			'abierto' => true, 
+			"_uno" => true
+		]);
 
-		foreach ($tmp as $row) {
-			$comanda = new Comanda_model($row->comanda);
-			$datos['pendientes'][] = $comanda->getComanda([
-				"_usuario" => $data->idusuario, 
-				'cocinado' => 0,
-				'_numero' => $row->numero
-			]);
-		}
+		if ($turno) {
 
-		foreach ($enProceso as $row) {
-			$comanda = new Comanda_model($row->comanda);
-			$datos['enproceso'][] = $comanda->getComanda([
-				"_usuario" => $data->idusuario, 
-				'cocinado' => 1,
-				'_numero' => $row->numero
-			]);
+			$tur = new Turno_model($turno->turno);
+			$usu = $tur->getUsuarios(["usuario" => $data->idusuario]);
+			if ($usu) {
+				$cgrupo = [];
+				foreach ($usu as $row) {
+					$grupos = $this->Tipo_usuario_cgrupo_model->buscar([
+						"usuario_tipo" => $row->usuario_tipo->usuario_tipo,
+						"debaja" => 0
+					]);	
+
+					$tmp = array_result($grupos, "categoria_grupo");
+
+					$cgrupo = array_merge($cgrupo, $tmp);
+				}
+
+				$tmp = $this->Comanda_model->getComandas([
+					'sede' => $data->sede, 
+					'cocinado' => 0,
+					'categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
+				]);
+
+				$enProceso = $this->Comanda_model->getComandas([
+					'sede' => $data->sede, 
+					'cocinado' => 1,
+					'categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
+				]);
+
+				foreach ($tmp as $row) {
+					$comanda = new Comanda_model($row->comanda);
+					$datos['pendientes'][] = $comanda->getComanda([
+						"_usuario" => $data->idusuario, 
+						'cocinado' => 0,
+						'_numero' => $row->numero
+					]);
+				}
+
+				foreach ($enProceso as $row) {
+					$comanda = new Comanda_model($row->comanda);
+					$datos['enproceso'][] = $comanda->getComanda([
+						"_usuario" => $data->idusuario, 
+						'cocinado' => 1,
+						'_numero' => $row->numero
+					]);
+				}		
+			}
 		}
 
 		$this->output->set_output(json_encode($datos));
