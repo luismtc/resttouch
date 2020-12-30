@@ -348,8 +348,8 @@ class Comanda_model extends General_Model
 				->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
 				->join("detalle_factura e", "e.detalle_factura = d.detalle_factura", (isset($args['cocinado']) ? "left" : ''))
 				->join("factura f", "f.factura = e.factura", "left")	
-				->join("articulo g", "b.articulo = g.articulo")		;
-				//->where("f.fel_uuid is null");
+				->join("articulo g", "b.articulo = g.articulo")
+				->where("f.fel_uuid is null");
 
 				if(isset($args["domicilio"])) {
 					$this->db->where('a.domicilio', $args['domicilio']);
