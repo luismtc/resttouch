@@ -59,7 +59,7 @@
                         <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTipoUsuarioCGrupo.form.valid">
                             Guardar
                         </button>
-                        <button mat-raised-button type="button" color="accent" (click)="resetTipoUsuarioCGrupo()" *ngIf="frmTipoUsuarioCGrupo.usuario_tipo_categoria_grupo">
+                        <button mat-raised-button type="button" color="accent" (click)="resetTipoUsuarioCGrupo()" *ngIf="utcgrupo.usuario_tipo_categoria_grupo">
                             Nuevo
                         </button>
                     </div>
