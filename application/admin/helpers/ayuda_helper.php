@@ -462,12 +462,12 @@ if (! function_exists("ordenar_array_objetos")) {
 	/**
 	 * $tipo = { 1: numero, 2: string }
 	 */
-	function ordenar_array_objetos($data, $campo, $tipo = 1, $direccion = 'asc')
+	function ordenar_array_objetos($data, $campo, $tipo = 2, $direccion = 'asc')
 	{
 		switch($tipo) {			
 			case 2: 
 				usort($data, function ($a, $b) use($campo, $direccion) {
-					$cmp = strcmp($a->{$campo}, $b->{$campo});
+					$cmp = strcmp(strtoupper($a->{$campo}), strtoupper($b->{$campo}));
 					return $direccion === 'asc' ? $cmp : -$cmp;
 				});
 				break;
