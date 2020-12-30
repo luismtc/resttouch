@@ -19,27 +19,27 @@ import { BodegaComponent } from './components/bodega/bodega/bodega.component';
 import { UsuarioSedeComponent } from './components/usuario-sede/usuario-sede/usuario-sede.component';
 import { CertificadorConfiguracionComponent } from './components/certificador/configuracion/certificador-configuracion/certificador-configuracion.component';
 import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component';
-import { CorporacionComponent } from './components/corporacion/corporacion/corporacion.component'
+import { CorporacionComponent } from './components/corporacion/corporacion/corporacion.component';
 
 const routes: Routes = [
-  {path: 'login', component: LoginComponent },
-  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
-  {path: 'usuario', component: UsuarioComponent, canActivate: [AuthGuard]},
-  {path: 'cliente', component: ClienteComponent, canActivate: [AuthGuard]},
-  {path: 'medida', component: MedidaComponent, canActivate: [AuthGuard]},
-  {path: 'presentacion', component: PresentacionComponent, canActivate: [AuthGuard]},
-  {path: 'impresora', component: ImpresoraComponent, canActivate: [AuthGuard]},
-  {path: 'formapago', component: FpagoComponent, canActivate: [AuthGuard]},
-  {path: 'tipo_usuario', component: TipoUsuarioComponent, canActivate: [AuthGuard]},
-  {path: 'acceso', component: AccesoUsuarioComponent, canActivate: [AuthGuard]},
-  {path: 'tablero', component: TableroComponent, canActivate: [AuthGuard]},
-  {path: 'proveedor', component: ProveedorComponent, canActivate: [AuthGuard]},
-  {path: 'impuesto_especial', component: ImpuestoEspecialComponent, canActivate: [AuthGuard]},
-  {path: 'bodega', component: BodegaComponent, canActivate: [AuthGuard]},
-  {path: 'usuario_sede', component: UsuarioSedeComponent, canActivate: [AuthGuard] },
-  {path: 'certificador_admin', component: CertificadorConfiguracionComponent, canActivate: [AuthGuard] },
-  {path: 'certificador_fel', component: CertificadorFelComponent, canActivate: [AuthGuard] },
-  {path: 'corporacion', component: CorporacionComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+  { path: 'usuario', component: UsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'cliente', component: ClienteComponent, canActivate: [AuthGuard] },
+  { path: 'medida', component: MedidaComponent, canActivate: [AuthGuard] },
+  { path: 'presentacion', component: PresentacionComponent, canActivate: [AuthGuard] },
+  { path: 'impresora', component: ImpresoraComponent, canActivate: [AuthGuard] },
+  { path: 'formapago', component: FpagoComponent, canActivate: [AuthGuard] },
+  { path: 'tipo_usuario', component: TipoUsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'acceso', component: AccesoUsuarioComponent, canActivate: [AuthGuard] },
+  { path: 'tablero', component: TableroComponent, canActivate: [AuthGuard] },
+  { path: 'proveedor', component: ProveedorComponent, canActivate: [AuthGuard] },
+  { path: 'impuesto_especial', component: ImpuestoEspecialComponent, canActivate: [AuthGuard] },
+  { path: 'bodega', component: BodegaComponent, canActivate: [AuthGuard] },
+  { path: 'usuario_sede', component: UsuarioSedeComponent, canActivate: [AuthGuard] },
+  { path: 'certificador_admin', component: CertificadorConfiguracionComponent, canActivate: [AuthGuard] },
+  { path: 'certificador_fel', component: CertificadorFelComponent, canActivate: [AuthGuard] },
+  { path: 'corporacion', component: CorporacionComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 

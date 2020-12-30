@@ -23,9 +23,7 @@ export class CorporacionComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.corporacion = {
-      corporacion: null, admin_llave: null, nombre: null
-    }
+    this.corporacion = { corporacion: null, admin_llave: null, nombre: null };
     this.resetEmpresa();
     this.resetSede();
   }
@@ -67,10 +65,10 @@ export class CorporacionComponent implements OnInit {
   }
 
   onTabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
-    if (tabChangeEvent.index == 1) {
+    if (tabChangeEvent.index === 1) {
       this.lstEmpresaComponent.getEmpresas();
 
-    } else if( tabChangeEvent.index == 2) {
+    } else if( tabChangeEvent.index === 2) {
       this.lstSedeComponent.getSedes();
     }
   }
@@ -80,12 +78,12 @@ export class CorporacionComponent implements OnInit {
   }
 
   setFormEmpresa = (cli: Empresa) => {
-    this.empresa = cli
-  };
+    this.empresa = cli;
+  }
 
   refreshEmpresaList = () => {
     this.lstEmpresaComponent.getEmpresas();
-    this.resetEmpresa;
+    this.resetEmpresa();
   }
 
   refreshCorporacionList = () => {

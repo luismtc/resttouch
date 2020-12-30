@@ -67,6 +67,10 @@ $config['menu'] = [
 					15 => [
 						'nombre' => 'Certificador FEL',
 						'link' => '/admin/certificador_fel'
+					],
+					16 => [
+						'nombre' => 'Corporación',
+						'link' => '/admin/corporacion'
 					]
 				]
 			],

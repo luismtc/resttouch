@@ -8,7 +8,9 @@ class Tipo_usuario extends CI_Controller {
 
 		parent::__construct();
 		$this->load->model([
-			"Tipo_usuario_model"
+			"Tipo_usuario_model",
+			"Tipo_usuario_cgrupo_model",
+			"Cgrupo_model"
 		]);
 		$this->output
 		->set_content_type("application/json", "UTF-8");
@@ -54,6 +56,60 @@ class Tipo_usuario extends CI_Controller {
 		} else if(is_object($tmp)) {
 			$tuser = new Tipo_usuario_model($tmp->usuario_tipo);
 			$tmp->jerarquia = $tuser->getJerarquia();
+			$datos = $tmp;
+		}
+
+		$this->output
+		->set_content_type("application/json")
+		->set_output(json_encode($datos));
+	}
+
+	public function guardar_cgrupo($id="")
+	{
+		$datos = ["exito" => false];
+
+		if ($this->input->method() == "post") {
+			$datos = json_decode(file_get_contents("php://input"), true);
+			$tucg = new Tipo_usuario_cgrupo_model($id);
+			$datos["exito"] = $tucg->guardar($datos);;
+
+			if($datos["exito"]) {
+				$datos["mensaje"]   = "Datos Actualizados con Exito";
+				$datos["tipo_usuario_cgrupo"] = $tucg;
+			} else {
+				$datos["mensaje"] = $tucg->getMensaje();
+			}	
+		} else {
+			$datos["mensaje"] = "Parametros Invalidos";
+		}
+		$this->output->set_output(json_encode($datos));
+	}
+
+	public function buscar_cgrupo()
+	{
+		//$datos = $this->Tipo_usuario_model->buscar($_GET);
+		$datos = [];
+		$tmp = $this->Tipo_usuario_cgrupo_model->buscar($_GET);
+
+		if(is_array($tmp)) {
+			foreach ($tmp as $row) {
+				$tuser = new Tipo_usuario_model($row->usuario_tipo);
+				$tuser->jerarquia = $tuser->getJerarquia();
+				$row->usuario_tipo = $tuser;
+
+				$cg = new Cgrupo_model($row->categoria_grupo);
+				$row->categoria_grupo = $cg;
+
+				$datos[] = $row;
+			}
+		} else if(is_object($tmp)) {
+			$tuser = new Tipo_usuario_model($tmp->usuario_tipo);
+			$tuser->jerarquia = $tuser->getJerarquia();
+			$tmp->usuario_tipo = $tuser;
+
+			$cg = new Cgrupo_model($tmp->categoria_grupo);
+			$tmp->categoria_grupo = $cg;
+
 			$datos = $tmp;
 		}
 

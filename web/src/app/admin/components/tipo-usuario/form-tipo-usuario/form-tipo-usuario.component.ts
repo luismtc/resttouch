@@ -9,9 +9,9 @@ import { Jerarquia } from '../../../interfaces/jerarquia';
 import { JerarquiaService } from '../../../services/jerarquia.service';
 
 @Component({
-  selector: 'app-form-tipo-usuario',
-  templateUrl: './form-tipo-usuario.component.html',
-  styleUrls: ['./form-tipo-usuario.component.css']
+	selector: 'app-form-tipo-usuario',
+	templateUrl: './form-tipo-usuario.component.html',
+	styleUrls: ['./form-tipo-usuario.component.css']
 })
 export class FormTipoUsuarioComponent implements OnInit {
 
@@ -20,9 +20,9 @@ export class FormTipoUsuarioComponent implements OnInit {
 	public jerarquias: Jerarquia[] = [];
 
 	constructor(
-		private _snackBar: MatSnackBar,
-    	private tipoUsuarioSrvc: TipoUsuarioService,
-    	private jerarquiaSrvc: JerarquiaService
+		private snackBar: MatSnackBar,
+		private tipoUsuarioSrvc: TipoUsuarioService,
+		private jerarquiaSrvc: JerarquiaService
 	) { }
 
 	ngOnInit() {
@@ -44,9 +44,9 @@ export class FormTipoUsuarioComponent implements OnInit {
 			if (res.exito) {
 				this.usuarioTipoSavedEv.emit();
 				this.resetTipoUsuario();
-				this._snackBar.open('Tipo agregado...', 'Tipo Usuario', { duration: 3000 });
+				this.snackBar.open('Tipo agregado...', 'Tipo Usuario', { duration: 3000 });
 			} else {
-				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Tipo Usuario', { duration: 3000 });
+				this.snackBar.open(`ERROR: ${res.mensaje}`, 'Tipo Usuario', { duration: 3000 });
 			}
 		});
 	}
