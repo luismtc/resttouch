@@ -61,6 +61,13 @@ export class ReportePdfService {
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  imprimirReceta(id: number) {
+    return this.http.get<string>(
+      `${GLOBAL.urlMantenimientos}/articulo/imprimir_receta/${id}`,
+      this.httpOptions
+      ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getReporteKardex(params: Object) {
     this.httpOptions['params'] = params;
 

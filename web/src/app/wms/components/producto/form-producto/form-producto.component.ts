@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
+import { saveAs } from 'file-saver';
 
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloDetalle } from '../../../interfaces/articulo-detalle';
@@ -14,6 +15,7 @@ import { Presentacion } from '../../../../admin/interfaces/presentacion';
 import { PresentacionService } from '../../../../admin/services/presentacion.service';
 import { ImpuestoEspecial } from '../../../../admin/interfaces/impuesto-especial';
 import { ImpuestoEspecialService } from '../../../../admin/services/impuesto-especial.service';
+import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -25,6 +27,7 @@ export class FormProductoComponent implements OnInit {
 
   @Input() articulo: Articulo;
   @Output() articuloSvd = new EventEmitter();
+  private titulo: string = "Receta";
   public showArticuloForm = true;
   public medidas: Medida[] = [];
   public presentaciones: Presentacion[] = [];
@@ -46,7 +49,8 @@ export class FormProductoComponent implements OnInit {
     private articuloSrvc: ArticuloService,
     private medidaSrvc: MedidaService,
     private presentacionSrvc: PresentacionService,
-    private impuestoEspecialSrvc: ImpuestoEspecialService
+    private impuestoEspecialSrvc: ImpuestoEspecialService,
+    private rptSrvc: ReportePdfService
   ) { }
 
   ngOnInit() {
@@ -235,6 +239,17 @@ export class FormProductoComponent implements OnInit {
         }
       }
     });
+  }
+
+  imprimirReceta = () => {
+    this.rptSrvc.imprimirReceta(this.articulo.articulo).subscribe(res => {
+  		if (res) {
+	        const blob = new Blob([res], { type: 'application/pdf' });
+	        saveAs(blob, `${this.titulo}_${this.articulo.descripcion}.pdf`);
+	      } else {
+	        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+	      }
+  	});
   }
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.recetas);

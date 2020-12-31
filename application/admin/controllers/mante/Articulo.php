@@ -135,6 +135,47 @@ class Articulo extends CI_Controller
 			->set_output(json_encode($datos));
 	}
 
+	public function imprimir_receta($articulo)
+	{
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+		$art = new Articulo_model($articulo);
+		$datos = [];
+
+		$sede = $this->Catalogo_model->getSede([
+			'sede' => $data->sede,
+			"_uno" => true
+		]);
+
+		$datos["articulo"] = $art;
+		$datos["costo"] = $art->getCostoReceta();
+		foreach ($art->getReceta() as $row) {
+			$rec = new Articulo_model($row->articulo->articulo);
+			$row->costo = $rec->getCostoReceta();
+			$datos["receta"][] = $row;
+		}
+
+		if ($sede) {
+			$emp = $this->Catalogo_model->getEmpresa([
+				"empresa" => $sede->empresa,
+				"_uno" => true
+			]);
+			if ($emp) {
+				$datos['empresa'] = $emp;
+				$datos['nsede'] = $sede->nombre;
+			}
+		}
+
+		$mpdf = new \Mpdf\Mpdf([
+			'tempDir' => sys_get_temp_dir(),
+			'format' => 'Legal'
+		]);
+		
+		$mpdf->WriteHTML($this->load->view('reporte/receta', $datos, true));
+		$mpdf->Output("Receta.pdf", "D");
+	}
+
 	public function buscar_receta($id)
 	{
 		$art = new Articulo_model($id);
