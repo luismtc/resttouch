@@ -394,6 +394,43 @@ class Articulo_model extends General_model {
 		return $impesp;
 	}
 
+	public function getCosto()
+	{
+		$tmp = $this->db
+					->select("max(c.ingreso_detalle), c.articulo, c.precio_unitario, a.fecha")
+					->join("bodega b", "a.bodega = b.bodega")
+					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+					->where("c.articulo", $this->getPK())
+					->group_by("c.articulo")
+					->get("ingreso a")
+					->row();
+
+		if ($tmp) {
+			return $tmp->precio_unitario;
+		}
+
+		return 0;
+	}
+
+	public function getCostoReceta()
+	{
+		$this->actualizarExistencia();
+		$receta = $this->getReceta();
+		$costo = 0;
+		if (count($receta) > 0) {
+
+			foreach ($receta as $row) {				
+				$art = new Articulo_model($row->articulo->articulo);				
+				$costo += $art->getCostoReceta();
+			}
+
+		} else {
+			$costo = $this->getCosto();
+		}
+
+		return $costo;
+	}
+
 }
 
 /* End of file Articulo_model.php */
