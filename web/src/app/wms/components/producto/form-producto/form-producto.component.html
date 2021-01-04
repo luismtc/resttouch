@@ -152,7 +152,7 @@
                     [(ngModel)]="receta.cantidad" required>
             </mat-form-field>
             -->
-            <mat-form-field class="fullWidth" *ngIf="receta.precio_extra">
+            <mat-form-field class="fullWidth" *ngIf="receta.precio_extra && receta.precio_extra > 0">
                 <input matInput placeholder="Precio" name="precio" [(ngModel)]="receta.precio" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">

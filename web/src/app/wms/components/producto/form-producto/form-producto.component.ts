@@ -215,6 +215,7 @@ export class FormProductoComponent implements OnInit {
     confirmRef.afterClosed().subscribe((conf: boolean) => {
       if (conf) {
         item.anulado = 1;
+        item.articulo = item.articulo.articulo;
         this.articuloSrvc.saveArticuloDetalle(item).subscribe(res => {
           // console.log(res);
           this.loadRecetas();
