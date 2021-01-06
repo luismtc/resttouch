@@ -34,6 +34,10 @@ class Mesa_model extends General_Model {
 			$this->db->where("b.estatus", 1);
 		}
 
+		if(isset($args['sede'])) {
+			$this->db->where("b.sede", $args['sede']);
+		}
+
 		return $this->db
 		->select("
 			b.comanda,

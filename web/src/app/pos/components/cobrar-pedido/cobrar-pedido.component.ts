@@ -54,6 +54,7 @@ export class CobrarPedidoComponent implements OnInit {
     this.resetFactReq();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
+      this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
   }
 
@@ -193,16 +194,18 @@ export class CobrarPedidoComponent implements OnInit {
             } else {
               this.facturando = false;
               this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
+              this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
               this.dialogRef.close(res.cuenta);
             }
           });
         } else {
-          this.dialogRef.close(res.cuenta);
           this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
+          this.dialogRef.close(res.cuenta);
         }
       } else {
         this.facturando = false;
         this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
+        this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
         this.dialogRef.close('closePanel');
       }
     });

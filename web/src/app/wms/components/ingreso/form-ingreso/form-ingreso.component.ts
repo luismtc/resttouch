@@ -121,6 +121,7 @@ export class FormIngresoComponent implements OnInit {
       this.resetIngreso();
       if (res.exito) {
         this.ingreso = res.ingreso;
+        this.setProveedor(+this.ingreso.proveedor);
       }
       this.ingresoSavedEv.emit();
       this.bloqueoBotones = false;

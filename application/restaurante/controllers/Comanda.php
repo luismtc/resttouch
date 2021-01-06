@@ -359,7 +359,7 @@ class Comanda extends CI_Controller {
 			}
 		} else {
 			$mesa = new Mesa_model($mesa);
-			$tmp = $mesa->get_comanda(["estatus" => 1]);
+			$tmp = $mesa->get_comanda(["estatus" => 1, 'sede' => $data->sede]);
 
 			if ($tmp) {
 				$comanda = new Comanda_model($tmp->comanda);
@@ -382,7 +382,7 @@ class Comanda extends CI_Controller {
 				]);
 				if ($res['exito']) {
 					$this->load->helper('api');
-					$tmp = $mesa->get_comanda(["estatus" => 1]);
+					$tmp = $mesa->get_comanda(["estatus" => 1, 'sede' => $data->sede]);
 					$comanda = new Comanda_model($tmp->comanda);
 					$comanda->comandaenuso = 0;
 
@@ -572,10 +572,13 @@ class Comanda extends CI_Controller {
 	{
 		$res = ["exito" => false];
 		if ($this->input->method() == 'post') {
+			$this->load->helper(['jwt', 'authorization']);
+			$headers = $this->input->request_headers();
+			$data = AUTHORIZATION::validateToken($headers['Authorization']);
 			if ($mesa !== null) {
 				$_mesa = new Mesa_model($mesa);
 				if ($_mesa->estatus == 2) {
-					$comanda = $_mesa->get_comanda(["estatus" => 1]);
+					$comanda = $_mesa->get_comanda(["estatus" => 1, 'sede' => $data->sede]);
 					if ($comanda) {
 						$com = new Comanda_model($comanda->comanda);
 						$det = $com->getDetalle();
