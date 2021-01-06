@@ -3,7 +3,7 @@
 </h1>
 <div mat-dialog-content>
   <p>{{message}}</p>
-  <div *ngIf="config.input">
+  <div *ngIf="config && config.input">
     <p *ngFor="let input of config.input">
       <mat-form-field class="fullWidth" *ngIf="input.select">
         <mat-label>{{ input.label }}</mat-label>
