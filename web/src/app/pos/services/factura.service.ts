@@ -101,13 +101,13 @@ export class FacturaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  anular(identidad: number): Observable<any> {
+  anular(identidad: number, params: any = {}): Observable<any> {
     const httpOptions = {
       headers: new HttpHeaders({
         Authorization: this.usrToken
       })
     };
-    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/anular/${identidad}`, {}, httpOptions)
+    return this.http.post<any>(`${GLOBAL.urlFacturacion}/${this.moduleUrl}/anular/${identidad}`, params, httpOptions)
       .pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 

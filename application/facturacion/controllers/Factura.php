@@ -25,7 +25,8 @@ class Factura extends CI_Controller
 			'Comanda_model',
 			'Cliente_model',
 			'Receta_model',
-			'ImpuestoEspecial_model'
+			'ImpuestoEspecial_model',
+			"Razon_anulacion_model"
 		]);
 		$this->load->helper(['jwt', 'authorization']);
 		$this->output
@@ -34,7 +35,6 @@ class Factura extends CI_Controller
 
 	public function guardar($id = '')
 	{
-
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 		$fac = new Factura_model($id);
@@ -280,31 +280,56 @@ class Factura extends CI_Controller
 	public function anular($factura)
 	{
 		$datos = ['exito' => false];
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+
 		if ($this->input->method() == 'post') {
 			$fac = new Factura_model($factura);
-
+			$req = json_decode(file_get_contents('php://input'), true);
+			
+			$usu = new Usuario_model($data->idusuario);
 			if (empty($fac->fel_uuid_anulacion)) {
-				$fac->cargarFacturaSerie();
-				$fac->cargarEmpresa();
-				$fac->cargarMoneda();
-				$fac->cargarReceptor();
-				$fac->cargarCertificadorFel();
-				$fac->procesarAnulacion($_POST);
+				if (verDato($req, "razon_anulacion")) {
+					$motivo = new Razon_anulacion_model($req['razon_anulacion']);
+					$fac->cargarFacturaSerie();
+					$fac->cargarEmpresa();
+					$fac->cargarMoneda();
+					$fac->cargarReceptor();
+					$fac->cargarCertificadorFel();
+					$fac->procesarAnulacion($_POST);
 
-				$cer = $fac->getCertificador();
-				$funcion = $cer->metodo_anulacion;
+					$cer = $fac->getCertificador();
+					$funcion = $cer->metodo_anulacion;
 
-				$resp = $fac->$funcion();
+					$resp = $fac->$funcion();
 
-				$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
-				if (!empty($fac->fel_uuid_anulacion)) {
-					//$fac->anularComandas();
+					$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+					if (!empty($fac->fel_uuid_anulacion)) {
 
-					$datos['exito'] = true;
-					$datos['factura'] = $fac;
-					$datos['mensaje'] = "Datos actualizados con exito";
+						$fac->guardar($req);
+						$bit = new Bitacora_model();
+						$acc = $this->Accion_model->buscar([
+							"descripcion" => "Modificacion",
+							"_uno" => true
+						]);
+						
+						$comentario = "El usuario {$usu->nombres} {$usu->apellidos} anuló la factura {$fac->numero_factura} Serie {$fac->serie_factura} Motivo: {$motivo->descripcion}";
+
+						$bit->guardar([
+							"accion" => $acc->accion,
+							"usuario" => $data->idusuario,
+							"tabla" => "factura",
+							"registro" => $fac->getPK(),
+							"comentario" => $comentario
+						]);
+						$datos['exito'] = true;
+						$datos['factura'] = $fac;
+						$datos['mensaje'] = "Datos actualizados con exito";
+					} else {
+						$datos['mensaje'] = implode(". ", $fac->getMensaje());
+					}
 				} else {
-					$datos['mensaje'] = implode(". ", $fac->getMensaje());
+					$datos["mensaje"] = "Debe seleccionar un motivo de anulación";
 				}
 			} else {
 				$datos["mensaje"] = "Documento ya se encuentra anulado.";

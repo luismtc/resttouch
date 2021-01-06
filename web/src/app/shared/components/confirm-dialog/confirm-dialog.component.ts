@@ -6,7 +6,8 @@ export class ConfirmDialogModel {
     public title: string,
     public message: string,
     public lblBtnConfirm: string,
-    public lblBtnDeny: string
+    public lblBtnDeny: string,
+    public config: any = null
   ) { }
 }
 
@@ -21,6 +22,7 @@ export class ConfirmDialogComponent implements OnInit {
   public message: string;
   public lblBtnConfirm: string;
   public lblBtnDeny: string;
+  public config: any;
 
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
@@ -30,16 +32,26 @@ export class ConfirmDialogComponent implements OnInit {
     this.message = data.message;
     this.lblBtnConfirm = data.lblBtnConfirm;
     this.lblBtnDeny = data.lblBtnDeny;
+    this.config = data.config;
+    console.log(this.config)
   }
 
   ngOnInit() {
   }
 
   onConfirm(): void {
-    this.dialogRef.close(true);
+    if (this.config !== null){
+      this.dialogRef.close({resultado: true, config: this.config});
+    } else {
+      this.dialogRef.close(true);
+    }    
   }
 
   onDismiss(): void {
-    this.dialogRef.close(false);
+    if (this.config !== null){
+      this.dialogRef.close({resultado: false, config: this.config});
+    } else {
+      this.dialogRef.close(false);
+    }
   }
 }

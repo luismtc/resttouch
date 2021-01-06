@@ -12,6 +12,8 @@ import { LocalstorageService } from '../../../../admin/services/localstorage.ser
 import { Factura } from '../../../interfaces/factura';
 import { DetalleFactura } from '../../../interfaces/detalle-factura';
 import { FacturaService } from '../../../services/factura.service';
+import { RazonAnulacion } from '../../../../admin/interfaces/razon-anulacion';
+import { AnulacionService } from '../../../../admin/services/anulacion.service';
 
 import { FacturaSerie } from '../../../interfaces/factura-serie';
 import { FacturaSerieService } from '../../../services/factura-serie.service';
@@ -48,6 +50,7 @@ export class FormFacturaManualComponent implements OnInit {
   public refacturacion = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
   public clienteSelected: (Cliente | string) = undefined;
+  public razonAnulacion: RazonAnulacion[] = [];
 
   constructor(
     private snackBar: MatSnackBar,
@@ -57,6 +60,7 @@ export class FormFacturaManualComponent implements OnInit {
     private clienteSrvc: ClienteService,
     private monedaSrvc: MonedaService,
     private articuloSrvc: ArticuloService,
+    private anulacionSrvc: AnulacionService,
     private socket: Socket,
     private ls: LocalstorageService
   ) { }
@@ -69,10 +73,17 @@ export class FormFacturaManualComponent implements OnInit {
     this.loadClientes();
     this.loadMonedas();
     this.loadArticulos();
+    this.getRazonAnulacion();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
+  }
+
+  getRazonAnulacion = () => {
+    this.anulacionSrvc.get().subscribe(res => {
+      this.razonAnulacion = res;
+    })
   }
 
   filtrar = (value: (Cliente | string)) => {
@@ -274,13 +285,37 @@ export class FormFacturaManualComponent implements OnInit {
         'Anular factura',
         'Luego de anular la factura no podrá hacer ninguna modificación. ¿Desea continuar?',
         'Sí',
-        'No'
+        'No',
+        {
+          input: [
+            {
+              select: true,
+              label:"Motivo",
+              datos: this.razonAnulacion,
+              valor: null,
+              id: "razon_anulacion",
+              descripcion: "descripcion"
+            },
+            {
+              select: false,
+              label:"Comentario",
+              valor: null, 
+              id: "comentario_anulacion"
+            }
+          ]
+        }
       )
     });
 
     dialogRef.afterClosed().subscribe(res => {
-      if (res) {
-        this.facturaSrvc.anular(+this.factura.factura).subscribe(resAnula => {
+      if (res.resultado) {
+        var params = {}
+        for (let i = 0; i < res.config.input.length; i++) {
+          const input = res.config.input[i];
+          params[input.id] = input.valor;
+        }
+        
+        this.facturaSrvc.anular(+this.factura.factura, params).subscribe(resAnula => {
           if (resAnula.exito) {
             this.factura.fel_uuid_anulacion = resAnula.factura.fel_uuid_anulacion;
             this.facturaSavedEv.emit();

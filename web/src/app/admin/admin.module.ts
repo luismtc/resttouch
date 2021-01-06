@@ -95,7 +95,10 @@ import { ListaCorporacionComponent } from './components/corporacion/lista-corpor
 import { FormSedeComponent } from './components/sede/form-sede/form-sede.component';
 import { ListaSedeComponent } from './components/sede/lista-sede/lista-sede.component';
 import { FormEmpresaComponent } from './components/empresa/form-empresa/form-empresa.component';
-import { ListaEmpresaComponent } from './components/empresa/lista-empresa/lista-empresa.component'
+import { ListaEmpresaComponent } from './components/empresa/lista-empresa/lista-empresa.component';
+import { RazonAnulacionComponent } from './components/razon-anulacion/razon-anulacion/razon-anulacion.component';
+import { FormRazonAnulacionComponent } from './components/razon-anulacion/form-razon-anulacion/form-razon-anulacion.component';
+import { ListaRazonAnulacionComponent } from './components/razon-anulacion/lista-razon-anulacion/lista-razon-anulacion.component'
 
 @NgModule({
   declarations: [
@@ -112,7 +115,7 @@ import { ListaEmpresaComponent } from './components/empresa/lista-empresa/lista-
     UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent,
     CertificadorConfiguracionComponent, FormCertificadorConfiguracionComponent, CertificadorFelComponent,
     FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent,
-    ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent
+    ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent, RazonAnulacionComponent, FormRazonAnulacionComponent, ListaRazonAnulacionComponent
   ],
   entryComponents: [
     FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent, AcercaDeComponent

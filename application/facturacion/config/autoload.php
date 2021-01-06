@@ -134,5 +134,7 @@ $autoload['language'] = array();
 */
 $autoload['model'] = array(
 	'General_model',
-	'Configuracion_model'
+	'Configuracion_model', 
+	'Bitacora_model',
+	'Accion_model'
 );

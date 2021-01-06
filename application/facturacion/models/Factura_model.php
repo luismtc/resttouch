@@ -22,6 +22,8 @@ class Factura_model extends General_model
 	private $namespaceURI = "http://www.sat.gob.gt/dte/fel/0.2.0";
 	private $esAnulacion;
 	private $certificador;
+	public $razon_anulacion;
+	public $comentario_anulacion;
 
 	public function __construct($id = '')
 	{

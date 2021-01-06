@@ -1,0 +1,9 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-razon-anulacion #lstRazon (getRazonAnulacionEv)="setRazonAnulacion($event)"></app-lista-razon-anulacion>
+    </div>
+    <div class="col m7 s12">
+        <app-form-razon-anulacion #frmRazon [razon]="razon" (razonAnulacionSavedEv)="refreshRazonList()"></app-form-razon-anulacion>
+    </div>
+</div>
+
