@@ -84,7 +84,10 @@ class Egreso extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
-	public function buscar_egreso(){		
+	public function buscar_egreso(){	
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$dataToken = AUTHORIZATION::validateToken($headers['Authorization']);	
 		$egresos = $this->Egreso_model->buscar($_GET);
 		$datos = [];
 		if(is_array($egresos)) {
@@ -93,13 +96,17 @@ class Egreso extends CI_Controller {
 				$row->tipo_movimiento = $tmp->getTipoMovimiento();
 				$row->bodega = $tmp->getBodega();
 				$row->usuario = $tmp->getUsuario();
-				$datos[] = $row;
+				if((int)$row->bodega->sede === (int)$dataToken->sede) {
+					$datos[] = $row;
+				}				
 			}
 		} else if($egresos){
 			$tmp = new Egreso_model($egresos->egreso);
 			$egresos->tipo_movimiento = $tmp->getTipoMovimiento();
 			$egresos->bodega = $tmp->getBodega();
-			$datos[] = $egresos;
+			if((int)$egresos->bodega->sede === (int)$dataToken->sede) {				
+				$datos[] = $egresos;
+			}
 		}
 
 		$this->output

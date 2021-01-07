@@ -69,7 +69,10 @@ class Ingreso extends CI_Controller {
 		->set_output(json_encode($datos));
 	}
 
-	public function buscar_ingreso(){		
+	public function buscar_ingreso(){
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$dataToken = AUTHORIZATION::validateToken($headers['Authorization']);
 		$ingresos = $this->Ingreso_model->buscar($_GET);
 		$datos = [];
 		if(is_array($ingresos)) {
@@ -80,14 +83,18 @@ class Ingreso extends CI_Controller {
 				$row->bodega = $tmp->getBodega();
 				$row->bodega_origen = $tmp->getBodegaOrigen();
 				$row->usuario = $tmp->getUsuario();
-				$datos[] = $row;
+				if((int)$row->bodega->sede === (int)$dataToken->sede) {
+					$datos[] = $row;
+				}				
 			}
-		} else if($ingreso){
+		} else if($ingresos){
 			$tmp = new Ingreso_model($ingresos->ingreso);
 			$ingresos->tipo_movimiento = $tmp->getTipoMovimiento();
 			$ingresos->proveedor = $tmp->getProveedor();
 			$ingresos->bodega = $tmp->getBodega();
-			$datos[] = $ingresos;
+			if((int)$ingresos->bodega->sede === (int)$dataToken->sede) {				
+				$datos[] = $ingresos;
+			}			
 		}
 
 		$this->output
