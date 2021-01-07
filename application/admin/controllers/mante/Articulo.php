@@ -184,6 +184,61 @@ class Articulo extends CI_Controller
 			->set_content_type("application/json")
 			->set_output(json_encode($art->getReceta($_GET)));
 	}
+
+	public function copiar()
+	{
+		ini_set('memory_limit', -1);
+		set_time_limit(0);
+		$this->load->model(["Categoria_model", "Cgrupo_model"]);
+		$datos = ["exito" => false, "mensaje" => "Error"];
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+
+		if ($this->input->method() == 'post') {
+			$req = json_decode(file_get_contents('php://input'), true);
+
+			if (verDato($req, "sedes")) {
+				if (verDato($req, "articulo")) {
+					$tmp = $this->Articulo_model->buscar([
+						"articulo" => $req['articulo'],
+						"_uno" => true
+					]);
+					$articulos[] = $tmp;
+					
+				} else {
+					$articulos = $this->Catalogo_model->getArticulo(["sede" => $data->sede]);
+				}
+
+				foreach ($req["sedes"] as $sede) {
+					foreach ($articulos as $row) {
+						$art = new Articulo_model($row->articulo);
+						if (!empty($art->codigo)) {
+							$art->copiar($sede['sede']);
+						}
+					}
+
+					foreach ($articulos as $row) {
+						$art = new Articulo_model($row->articulo);
+						if (!empty($art->codigo)) {
+							$art->copiarDetalle($sede['sede']);
+						}
+					}
+				}
+
+				$datos["exito"] = true;
+				$datos['mensaje'] = "Datos actualizados con exito";
+			} else {
+				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
+			}
+
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+			->set_output(json_encode($datos));
+
+	}
 }
 
 /* End of file Articulo.php */

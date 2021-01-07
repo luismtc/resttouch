@@ -35,8 +35,10 @@ class Articulo_model extends General_model {
 	public function getCategoriaGrupo()
 	{
 		return $this->db
+					->select("a.*, b.descripcion as ncategoria")
 					->where("categoria_grupo", $this->categoria_grupo)
-					->get("categoria_grupo")
+					->join("categoria b", "a.categoria = b.categoria")
+					->get("categoria_grupo a")
 					->row();
 	}
 
@@ -429,6 +431,122 @@ class Articulo_model extends General_model {
 		}
 
 		return $costo;
+	}
+
+	public function copiar($sede)
+	{
+		$art = new Articulo_model();
+		$tmp = $this->buscarArticulo([
+			"sede" => $sede,
+			"codigo" => $this->codigo
+		]);
+		if ($tmp) {
+			$art->cargar($tmp->articulo);
+		}
+
+		$grupo = $this->getCategoriaGrupo();
+
+		$cgrupo = $this->db
+					   ->select("a.*")
+					   ->join("categoria b", "a.categoria = b.categoria")
+					   ->where("a.descripcion", $grupo->descripcion)
+					   ->where("b.sede", $sede)
+					   ->get("categoria_grupo a");
+		if ($cgrupo->num_rows() > 0) {
+			$cgrupo = $cgrupo->row();
+			$categoria_grupo = $cgrupo->categoria_grupo;
+
+		} else {
+			$cat = $this->db
+							  ->where("descripcion", $grupo->ncategoria)
+							  ->where("sede", $sede)
+							  ->get("categoria");
+			if ($cat->num_rows() > 0) {
+				$cat = $cat->row();
+				$categoria = $cat->categoria;
+			} else {
+				$cat = new Categoria_model();
+				$cat->guardar([
+					"descripcion" => $grupo->ncategoria,
+					"sede" => $sede
+				]);
+				$categoria = $cat->getPK();
+			}
+
+			$cgrupo = new Cgrupo_model();
+			$cgrupo->guardar([
+				"descripcion" => $grupo->descripcion,
+				"categoria" => $categoria,
+				"categoria_grupo_grupo" => $grupo->categoria_grupo_grupo,
+				"receta" => $grupo->receta,
+				"impresora" => $grupo->impresora,
+				"descuento" => $grupo->descuento
+			]);
+
+			$categoria_grupo = $cgrupo->getPK();
+		}
+
+
+		$datos = [
+			"categoria_grupo" => $categoria_grupo,
+			"presentacion" => $this->presentacion,
+			"descripcion" => $this->descripcion,
+			"precio" => $this->precio,
+			"bien_servicio" => $this->bien_servicio,
+			"existencias" => $this->existencias,
+			"shopify_id" => $this->shopify_id,
+			"codigo" => $this->codigo,
+			"produccion" => $this->produccion,
+			"presentacion_reporte" => $this->presentacion_reporte,
+			"mostrar_pos" => $this->mostrar_pos,
+			"impuesto_especial" => $this->impuesto_especial,
+			"combo" => $this->combo,
+			"multiple" => $this->multiple,
+			"cantidad_minima" => $this->cantidad_minima,
+			"cantidad_maxima" => $this->cantidad_maxima,
+			"rendimiento" => $this->rendimiento
+		];
+
+		$art->guardar($datos);
+	}
+
+	public function copiarDetalle($sede)
+	{
+		$receta = $this->getReceta();
+		$articulo = $this->buscarArticulo([
+			"sede" => $sede,
+			"codigo" => $this->codigo
+		]);
+
+		if ($articulo) {
+			$art = new Articulo_model($articulo->articulo);
+			$art->eliminarDetalle();
+
+			foreach ($receta as $row) {
+				$detalle = $this->buscarArticulo([
+					"sede" => $sede,
+					"codigo" => $row->articulo->codigo
+				]);
+				if ($detalle) {
+					$art->guardarReceta([
+						"racionable" => $row->racionable,
+						"articulo" => $detalle->articulo,
+						"cantidad" => $row->cantidad,
+						"medida" => $row->medida,
+						"anulado" => $row->anulado,
+						"precio_extra" => $row->precio_extra,
+						"precio" => $row->precio,
+					]);
+				}
+			}
+		}
+	}
+
+	public function eliminarDetalle()
+	{
+		$this->db
+			 ->where("receta", $this->getPK())
+			 ->delete("articulo_detalle");
 	}
 
 }
