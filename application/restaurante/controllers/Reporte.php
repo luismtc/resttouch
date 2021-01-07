@@ -173,7 +173,7 @@ class Reporte extends CI_Controller {
 		$data = $_GET;
 		$data['impuesto_especial'] = false;
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			//'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$data['facturas'] = [];
@@ -186,6 +186,20 @@ class Reporte extends CI_Controller {
 			$fac->total = number_format(suma_field($det, "total"),2);
 			$fac->propina = number_format(suma_field($prop, "propina_monto"),2);
 			$data['facturas'][] = $fac;
+			if (isset($_GET['_anuladas']) && filter_var($_GET['_anuladas'], FILTER_VALIDATE_BOOLEAN)) {
+				$bit = $this->Bitacora_model->buscarBitacora([
+					"comentario" => "Anulación", 
+					"_uno" => true, 
+					"tabla" => "factura",
+					"registro" => $fac->getPK()
+				]);
+				$bit->usuario = $this->Usuario_model->buscar([
+					"usuario" => $bit->usuario,
+					"_uno" => true
+				]);
+				$fac->bitacora = $bit;
+				$fac->razon_anulacion = $fac->getRazonAnulacion();
+			}
 			if (suma_field($det, "valor_impuesto_especial") > 0) {
 				$data['impuesto_especial'] = true;
 			}

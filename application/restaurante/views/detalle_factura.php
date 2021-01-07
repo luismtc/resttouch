@@ -54,6 +54,11 @@
 									Impuesto Especial
 								</th>	
 							<?php endif ?>
+							<?php if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)): ?>
+								<th style="padding: 5px;" class="text-center">Fecha Anulacion</th>
+								<th style="padding: 5px;" class="text-center">Usuario Anulacion</th>
+								<th style="padding: 5px;" class="text-center">Motivo</th>
+							<?php endif ?>
 							<th style="padding: 5px;" class="text-center">Total</th>
 							<th style="padding: 5px;" class="text-center">Propina</th>
 							<th style="padding: 5px;" class="text-center">Descuento</th>
@@ -92,6 +97,17 @@
 										number_format($imp, 2) : 0) ?>
 									</td>	
 								<?php endif ?>
+								<?php if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)): ?>
+									<td style="padding: 5px;" class="text-center">
+										<?php echo formatoFecha($row->bitacora->fecha) ?>
+									</td>
+									<td style="padding: 5px;" class="text-center">
+										<?php echo "{$row->bitacora->usuario->nombres} {$row->bitacora->usuario->apellidos}" ?>
+									</td>
+									<td style="padding: 5px;" class="text-center">
+										<?php echo $row->razon_anulacion->descripcion ?>
+									</td>
+								<?php endif ?>
 								<td style="padding: 5px;" class="text-right">
 									<?php echo (empty($row->fel_uuid_anulacion) ? 
 										number_format($total, 2) : 0) ?>
@@ -100,8 +116,6 @@
 									<?php 
 										if (empty($row->fel_uuid_anulacion)) {
 											echo number_format($row->propina, 2);
-											
-											
 											$totalPropina += $row->propina;
 										} else {
 											echo 0;
@@ -120,6 +134,7 @@
 										}
 									 ?>
 								</td>
+								
 							</tr>
 							<?php if (isset($_detalle) && $_detalle !== "false"): ?>
 								<tr>
@@ -167,8 +182,18 @@
 						<?php endforeach ?>
 					</tbody>
 					<tfoot>
+						<?php 
+							$col = 5;
+							if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)) {
+								$col += 3;
+							}
+
+							if ($impuesto_especial) {
+								$col += 1;
+							}
+						 ?>
 						<tr>
-							<td colspan="5" style="padding: 5px;" class="text-right">Total:</td>
+							<td colspan="<?php echo $col ?>" style="padding: 5px;" class="text-right">Total:</td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalPropina,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalDescuento, 2) ?></td>

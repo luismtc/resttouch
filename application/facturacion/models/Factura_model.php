@@ -806,6 +806,14 @@ class Factura_model extends General_model
 		return ['documento' => null, 'tipo' => null];
 	}
 
+	public function getRazonAnulacion()
+	{
+		return $this->db
+					->where("razon_anulacion", $this->razon_anulacion)
+					->get("razon_anulacion")
+					->row();
+	}
+
 	public function setBitacoraFel($args = [])
 	{
 		$this->db->set('factura', $this->factura)
@@ -850,6 +858,12 @@ class Factura_model extends General_model
 	{
 		if (isset($args["_facturadas"])) {
 			$this->db->where("a.numero_factura is not null");
+		}
+
+		if (verDato($args, '_anuladas') && filter_var($args['_anuladas'], FILTER_VALIDATE_BOOLEAN)) {
+			$this->db
+				->where("a.numero_factura is not null")
+				->where("a.fel_uuid_anulacion is not null");
 		}
 
 		if (isset($args["_vivas"])) {

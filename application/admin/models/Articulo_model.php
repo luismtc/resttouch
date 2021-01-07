@@ -527,17 +527,24 @@ class Articulo_model extends General_model {
 					"sede" => $sede,
 					"codigo" => $row->articulo->codigo
 				]);
-				if ($detalle) {
-					$art->guardarReceta([
-						"racionable" => $row->racionable,
-						"articulo" => $detalle->articulo,
-						"cantidad" => $row->cantidad,
-						"medida" => $row->medida->medida,
-						"anulado" => $row->anulado,
-						"precio_extra" => $row->precio_extra,
-						"precio" => $row->precio,
+				if (!$detalle) {
+					$rec = new Articulo_model($row->articulo->articulo);
+					$rec->copiar($sede);
+					$detalle = $this->buscarArticulo([
+						"sede" => $sede,
+						"codigo" => $rec->codigo
 					]);
 				}
+
+				$art->guardarReceta([
+					"racionable" => $row->racionable,
+					"articulo" => $detalle->articulo,
+					"cantidad" => $row->cantidad,
+					"medida" => $row->medida->medida,
+					"anulado" => $row->anulado,
+					"precio_extra" => $row->precio_extra,
+					"precio" => $row->precio,
+				]);
 			}
 		}
 	}

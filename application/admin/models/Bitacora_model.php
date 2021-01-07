@@ -20,6 +20,16 @@ class Bitacora_model extends General_model {
 		}
 	}
 
+	public function buscarBitacora($args = [])
+	{
+		if (isset($args['comentario'])) {
+			$this->db->like("comentario", $args['comentario']);
+			unset($args['comentario']);
+		}
+
+		return $this->buscar($args);
+	}
+
 }
 
 /* End of file Bitacora_model.php */
