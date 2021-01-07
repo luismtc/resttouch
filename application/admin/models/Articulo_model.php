@@ -532,7 +532,7 @@ class Articulo_model extends General_model {
 						"racionable" => $row->racionable,
 						"articulo" => $detalle->articulo,
 						"cantidad" => $row->cantidad,
-						"medida" => $row->medida,
+						"medida" => $row->medida->medida,
 						"anulado" => $row->anulado,
 						"precio_extra" => $row->precio_extra,
 						"precio" => $row->precio,
