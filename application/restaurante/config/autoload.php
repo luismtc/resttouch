@@ -138,5 +138,6 @@ $autoload['model'] = array(
 	'Empresa_model', 
 	'Sede_model',
 	'Configuracion_model',
-	'Webhook_model'
+	'Webhook_model',
+	'Bitacora_model'
 );

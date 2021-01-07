@@ -12,7 +12,14 @@
           <mat-form-field class="fullWidth">            
             <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
-          <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
+          <div class="row">
+            <div class="col">
+              <mat-checkbox name="detalle" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
+            </div>
+            <div class="col">
+              <mat-checkbox name="anuladas" class="fullWidth" [(ngModel)]="+params._anuladas">Mostrar Unicamente Anuladas</mat-checkbox>
+            </div>
+          </div>          
           <app-rpt-botones [configuracion]="configBotones" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>
         </form>
         <app-cargando *ngIf="cargando"></app-cargando>

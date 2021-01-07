@@ -313,7 +313,7 @@ class Factura extends CI_Controller
 							"_uno" => true
 						]);
 						
-						$comentario = "El usuario {$usu->nombres} {$usu->apellidos} anuló la factura {$fac->numero_factura} Serie {$fac->serie_factura} Motivo: {$motivo->descripcion}";
+						$comentario = "Anulación: El usuario {$usu->nombres} {$usu->apellidos} anuló la factura {$fac->numero_factura} Serie {$fac->serie_factura} Motivo: {$motivo->descripcion}";
 
 						$bit->guardar([
 							"accion" => $acc->accion,
