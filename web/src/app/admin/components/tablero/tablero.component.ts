@@ -25,7 +25,7 @@ export class TableroComponent implements OnInit {
     public button: Button;
 
     public params: any = {
-        sede:[]
+        sede: []
     };
     public titulo = 'Tablero';
     public estDias = 0;
@@ -36,7 +36,7 @@ export class TableroComponent implements OnInit {
     public cargando = false;
     public datosGraficas: any = {};
     public sedes: UsuarioSede[] = [];
-    public grupos = GLOBAL.grupos
+    public grupos = GLOBAL.grupos;
 
     @ViewChild('pivotview', { static: false })
     public pivotGridObj: PivotViewComponent;
@@ -49,7 +49,7 @@ export class TableroComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.getSede()
+        this.getSede();
         this.dataSourceSettings = {
             dataSource: this.pivotData,
             expandAll: false,
@@ -79,9 +79,9 @@ export class TableroComponent implements OnInit {
     }
 
     getSede = (params: any = {}) => {
-    this.sedeSrvc.getSedes(params).subscribe(res => {
-        this.sedes = res;
-    });
+        this.sedeSrvc.getSedes(params).subscribe(res => {
+            this.sedes = res;
+        });
     }
 
     onSubmit() {

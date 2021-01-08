@@ -65,6 +65,7 @@ class Cuenta_model extends General_Model {
 
 			if ($row->impreso == 0) {
 				$args['numero'] = $numero;
+				$args["fecha_impresion"] = Hoy(3);
 			}
 
 			$com->guardarDetalle($args);

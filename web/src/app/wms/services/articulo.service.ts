@@ -280,4 +280,17 @@ export class ArticuloService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  replicaArticulosEnSedes(entidad: any) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: this.usrToken
+      })
+    };
+    return this.http.post<any>(
+      `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/copiar`,
+      entidad,
+      httpOptions
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }

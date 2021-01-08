@@ -288,7 +288,7 @@ class Comanda_model extends General_Model
 
 		if (count($det) > 0) {
 			$tmp->tiempo_preparacion = $det[0]->tiempo_preparacion;
-			$tmp->fecha_proceso = $det[0]->fecha;
+			$tmp->fecha_proceso = $det[0]->fecha_proceso;
 		} else {
 			$tmp->tiempo_preparacion = "00:00:00";
 			$tmp->fecha_proceso = "00:00:00";
@@ -363,6 +363,10 @@ class Comanda_model extends General_Model
 							}
 							$this->db->where_in('g.categoria_grupo', $args['categoria_grupo']);
 						} 
+					}
+
+					if (verDato($args, "order_by")) {
+						$this->db->order_by($args['order_by'], );
 					}
 
 					$this->db

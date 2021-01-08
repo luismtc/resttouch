@@ -434,13 +434,15 @@ class Comanda extends CI_Controller {
 				$tmp = $this->Comanda_model->getComandas([
 					'sede' => $data->sede, 
 					'cocinado' => 0,
-					'categoria_grupo' => $cgrupo
+					'categoria_grupo' => $cgrupo,
+					'order_by' => "fecha_impresion"
 				]);
 
 				$enProceso = $this->Comanda_model->getComandas([
 					'sede' => $data->sede, 
 					'cocinado' => 1,
-					'categoria_grupo' => $cgrupo
+					'categoria_grupo' => $cgrupo,
+					'order_by' => "fecha_proceso"
 				]);
 
 				foreach ($tmp as $row) {
@@ -486,13 +488,18 @@ class Comanda extends CI_Controller {
 						"cocinado" => $data['estatus']
 					];
 
-					if ((int)$data['tiempo'] < 10) {
-						$data['tiempo'] = "0".$data['tiempo'];
-					}
-					if (isset($data['tiempo'])) {
-						$args["tiempo_preparacion"] = "00:{$data['tiempo']}";
-						$args['fecha'] = Hoy(3);
-					}
+					if ($data['estatus'] == 1) {
+						if ((int)$data['tiempo'] < 10) {
+							$data['tiempo'] = "0".$data['tiempo'];
+						}
+
+						if (isset($data['tiempo'])) {
+							$args["tiempo_preparacion"] = "00:{$data['tiempo']}";
+						}
+
+						$args['fecha_proceso'] = Hoy(3);
+					} 
+
 					$exito = $ld->guardar($args);
 					if (!$exito) {
 						$datos['exito'] = false;				

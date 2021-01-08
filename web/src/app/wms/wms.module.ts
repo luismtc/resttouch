@@ -50,13 +50,18 @@ import { ReporteComponent } from './components/fisico/reporte/reporte.component'
 import { ValorizadoComponent } from './components/reporte/valorizado/valorizado.component';
 import { FisicoComponent } from './components/fisico/fisico/fisico.component';
 import { FormInventarioFisicoComponent } from './components/fisico/form-inventario-fisico/form-inventario-fisico.component';
+import { ReplicarASedesComponent } from './components/producto/replicar-a-sedes/replicar-a-sedes.component';
+import { ReplicarASedesDialogComponent } from './components/producto/replicar-a-sedes-dialog/replicar-a-sedes-dialog.component';
 
 @NgModule({
   declarations: [
     ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent,
     CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent,
     KardexComponent, ListaProductoAltComponent, ProduccionComponent, ReporteComponent, ValorizadoComponent, FisicoComponent,
-    FormInventarioFisicoComponent
+    FormInventarioFisicoComponent, ReplicarASedesComponent, ReplicarASedesDialogComponent
+  ],
+  entryComponents: [
+    ReplicarASedesDialogComponent
   ],
   imports: [
     CommonModule,
