@@ -81,18 +81,23 @@ class Cliente extends CI_Controller
 		$nit = strtoupper(trim($nit));
 		$datos = ['exito' => false];
 		if ($nit !== 'CF') {
-			$soapClient = new SoapClient('https://www.ingface.net/ServiciosIngface/ingfaceWsServices?wsdl');
-			$resultado = $soapClient->nitContribuyentes(['usuario' => 'DEMO', 'clave' => 'C2FDC80789AFAF22C372965901B16DF533A4FCB19FD9F2FD5CBDA554032983B0', 'nit' => $nit]);
-			if (!strpos($resultado->return->nombre, 'no valido')) {
-				$datos['contribuyente'] = [
-					'nombre' => $this->prettyNombreContribuyente($resultado->return->nombre),
-					// 'direccion' => trim($resultado->return->direccion_completa)
-					'direccion' => 'Ciudad'
-				];
-				$datos['exito'] = true;
-				$datos['mensaje'] = 'Contribuyente encontrado.';
-			} else {
-				$datos['mensaje'] = $resultado->return->nombre;
+			try {
+				$soapClient = new SoapClient('https://www.ingface.net/ServiciosIngface/ingfaceWsServices?wsdl');
+				$resultado = $soapClient->nitContribuyentes(['usuario' => 'DEMO', 'clave' => 'C2FDC80789AFAF22C372965901B16DF533A4FCB19FD9F2FD5CBDA554032983B0', 'nit' => $nit]);
+				if (!strpos($resultado->return->nombre, 'no valido')) {
+					$datos['contribuyente'] = [
+						'nombre' => $this->prettyNombreContribuyente($resultado->return->nombre),
+						// 'direccion' => trim($resultado->return->direccion_completa)
+						'direccion' => 'Ciudad'
+					];
+					$datos['exito'] = true;
+					$datos['mensaje'] = 'Contribuyente encontrado.';
+				} else {
+					$datos['mensaje'] = $resultado->return->nombre;
+				}
+			} catch(Exception $e) {
+				$datos['exito'] = false;
+				$datos['mensaje'] = 'El servicio ha sido deshabilitado por INFILE. ('.$e->getMessage().')';
 			}
 		}
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
