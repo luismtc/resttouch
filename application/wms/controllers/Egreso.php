@@ -61,7 +61,8 @@ class Egreso extends CI_Controller {
 		$datos = ['exito' => false];		
 		if ($this->input->method() == 'post') {
 			if ($egr->estatus_movimiento == 1) {
-				$art = new Articulo_model($req['articulo']);				
+				$art = new Articulo_model($req['articulo']);
+				$req['precio_unitario']	= $art->costo;
 				$det = $egr->setDetalle($req, $id);;
 
 				if($det) {

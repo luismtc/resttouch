@@ -92,14 +92,20 @@ class Ingreso_model extends General_Model {
 				$detalle = new IDetalle_Model($row->ingreso_detalle);
 				$row->articulo = $detalle->getArticulo();
 				$row->presentacion = $detalle->getPresentacion();
+				$row->fecha = formatoFecha("13.01.2020",8);
 				$datos[] = $row;
 			}
 		} else if($det) {
 			$detalle = new IDetalle_Model($det->ingreso_detalle);
 			$det->articulo = $detalle->getArticulo();
 			$det->presentacion = $detalle->getPresentacion();
+
 			$datos[] = $det;
 		}
+
+		usort($datos, function ($a, $b) {
+			return strcmp(trim(strtoupper($a->articulo->descripcion)), trim(strtoupper($b->articulo->descripcion)));
+		});
 
 		return $datos;
 	}

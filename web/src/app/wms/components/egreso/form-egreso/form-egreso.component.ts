@@ -152,11 +152,19 @@ export class FormEgresoComponent implements OnInit {
   }
 
   loadArticulos = () => {
-    this.articuloSrvc.getArticulos().subscribe(res => {
-      if (res) {
-        this.articulos = res;
-      }
-    });
+    if (this.saveToDB) {
+      this.articuloSrvc.getArticulosIngreso().subscribe(res => {
+        if (res) {
+          this.articulos = res;
+        }
+      });
+    } else {
+      this.articuloSrvc.getArticulos().subscribe(res => {
+        if (res) {
+          this.articulos = res;
+        }
+      });
+    }
   }
 
   resetDetalleEgreso = () => {

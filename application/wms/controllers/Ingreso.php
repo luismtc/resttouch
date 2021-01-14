@@ -51,6 +51,8 @@ class Ingreso extends CI_Controller {
 
 				if($det) {
 					$art->actualizarExistencia();
+					$costo = $art->getCosto();
+					$art->guardar(["costo" => $costo]);
 					$datos['exito'] = true;
 					$datos['mensaje'] = "Datos Actualizados con Exito";
 					$datos['detalle'] = $det;

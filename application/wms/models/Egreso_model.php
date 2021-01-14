@@ -188,6 +188,10 @@ class Egreso_model extends General_Model {
 			$datos[] = $det;
 		}
 
+		usort($datos, function ($a, $b) {
+			return strcmp(trim(strtoupper($a->articulo->descripcion)), trim(strtoupper($b->articulo->descripcion)));
+		});
+		
 		return $datos;
 	}
 
