@@ -33,23 +33,23 @@ export class ConfirmDialogComponent implements OnInit {
     this.lblBtnConfirm = data.lblBtnConfirm;
     this.lblBtnDeny = data.lblBtnDeny;
     this.config = data.config;
-    console.log(this.config)
+    // console.log(this.config);
   }
 
   ngOnInit() {
   }
 
   onConfirm(): void {
-    if (this.config !== null){
-      this.dialogRef.close({resultado: true, config: this.config});
+    if (this.config !== null) {
+      this.dialogRef.close({ resultado: true, config: this.config });
     } else {
       this.dialogRef.close(true);
-    }    
+    }
   }
 
   onDismiss(): void {
-    if (this.config !== null){
-      this.dialogRef.close({resultado: false, config: this.config});
+    if (this.config !== null) {
+      this.dialogRef.close({ resultado: false, config: this.config });
     } else {
       this.dialogRef.close(false);
     }

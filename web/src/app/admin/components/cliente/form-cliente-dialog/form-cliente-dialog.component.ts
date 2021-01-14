@@ -16,7 +16,7 @@ export class FormClienteDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<FormClienteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.cliente = { 
+    this.cliente = {
       cliente: null, nombre: null, direccion: null, nit: null, telefono: null, correo: null,
       codigo_postal: null, municipio: null, departamento: null, pais_iso_dos: null
     };

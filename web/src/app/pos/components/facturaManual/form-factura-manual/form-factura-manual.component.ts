@@ -290,17 +290,19 @@ export class FormFacturaManualComponent implements OnInit {
           input: [
             {
               select: true,
-              label:"Motivo",
+              label: 'Motivo',
               datos: this.razonAnulacion,
               valor: null,
-              id: "razon_anulacion",
-              descripcion: "descripcion"
+              id: 'razon_anulacion',
+              descripcion: 'descripcion',
+              requerido: true
             },
             {
               select: false,
-              label:"Comentario",
-              valor: null, 
-              id: "comentario_anulacion"
+              label: 'Comentario',
+              valor: null,
+              id: 'comentario_anulacion',
+              requerido: false
             }
           ]
         }
@@ -309,12 +311,12 @@ export class FormFacturaManualComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       if (res.resultado) {
-        var params = {}
+        const params = { };
         for (let i = 0; i < res.config.input.length; i++) {
           const input = res.config.input[i];
           params[input.id] = input.valor;
         }
-        
+
         this.facturaSrvc.anular(+this.factura.factura, params).subscribe(resAnula => {
           if (resAnula.exito) {
             this.factura.fel_uuid_anulacion = resAnula.factura.fel_uuid_anulacion;

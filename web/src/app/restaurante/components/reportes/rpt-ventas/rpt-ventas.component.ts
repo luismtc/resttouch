@@ -5,8 +5,8 @@ import * as moment from 'moment';
 
 import { PorCategoria, PorArticulo } from '../../../interfaces/reporte-ventas';
 import { ReporteVentasService } from '../../../services/reporte-ventas.service';
-import { UsuarioSede } from '../../../../admin/interfaces/acceso'
-import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service'
+import { UsuarioSede } from '../../../../admin/interfaces/acceso';
+import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service';
 import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
 import { saveAs } from 'file-saver';

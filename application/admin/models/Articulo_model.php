@@ -480,7 +480,7 @@ class Articulo_model extends General_model {
 				"categoria" => $categoria,
 				"categoria_grupo_grupo" => $grupo->categoria_grupo_grupo,
 				"receta" => $grupo->receta,
-				"impresora" => $grupo->impresora,
+				"impresora" => null,
 				"descuento" => $grupo->descuento
 			]);
 
@@ -494,7 +494,7 @@ class Articulo_model extends General_model {
 			"descripcion" => $this->descripcion,
 			"precio" => $this->precio,
 			"bien_servicio" => $this->bien_servicio,
-			"existencias" => $this->existencias,
+			"existencias" => 0.00,
 			"shopify_id" => $this->shopify_id,
 			"codigo" => $this->codigo,
 			"produccion" => $this->produccion,

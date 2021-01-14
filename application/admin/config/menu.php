@@ -71,6 +71,10 @@ $config['menu'] = [
 					16 => [
 						'nombre' => 'Corporación',
 						'link' => '/admin/corporacion'
+					],
+					17 => [
+						'nombre' => 'Razones de anulacion',
+						'link' => '/admin/razon_anulacion'
 					]
 				]
 			],
@@ -88,6 +92,15 @@ $config['menu'] = [
 					3 => [
 						'nombre' => 'Caja',
 						'link' => '/restaurante/rptcaja'
+					]
+				]
+			],
+			3 => [
+				'nombre' => 'Transacciones',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Replicar artículos a sedes',
+						'link' => '/wms/replicar_articulos_sedes'
 					]
 				]
 			]

@@ -17,6 +17,7 @@ import { ImpuestoEspecial } from '../../../../admin/interfaces/impuesto-especial
 import { ImpuestoEspecialService } from '../../../../admin/services/impuesto-especial.service';
 import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { ReplicarASedesDialogComponent } from '../replicar-a-sedes-dialog/replicar-a-sedes-dialog.component';
 
 @Component({
   selector: 'app-form-producto',
@@ -244,14 +245,26 @@ export class FormProductoComponent implements OnInit {
 
   imprimirReceta = () => {
     this.rptSrvc.imprimirReceta(this.articulo.articulo).subscribe(res => {
-  		if (res) {
-	        const blob = new Blob([res], { type: 'application/pdf' });
-	        saveAs(blob, `${this.titulo}_${this.articulo.descripcion}.pdf`);
-	      } else {
-	        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
-	      }
-  	});
+      if (res) {
+        const blob = new Blob([res], { type: 'application/pdf' });
+        saveAs(blob, `${this.titulo}_${this.articulo.descripcion}.pdf`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+      }
+    });
   }
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.recetas);
+
+  replicarASedes = () => {
+    const replicarASedesRef = this.dialog.open(ReplicarASedesDialogComponent, {
+      width: '50%',
+      data: { articulo: this.articulo }
+    });
+
+    replicarASedesRef.afterClosed().subscribe((conf: boolean) => {
+      if (conf) {
+      }
+    });
+  }
 }

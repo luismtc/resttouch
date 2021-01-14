@@ -99,6 +99,9 @@
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmArticulo.form.valid || !articulo.categoria_grupo">
                     Guardar
                 </button>
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="replicarASedes()" *ngIf="articulo.articulo">
+                    Replicar a sedes
+                </button>
                 <button mat-raised-button type="button" color="accent" (click)="resetArticulo()" *ngIf="articulo.articulo">
                     Nuevo
                 </button>

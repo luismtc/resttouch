@@ -7,14 +7,14 @@
     <p *ngFor="let input of config.input">
       <mat-form-field class="fullWidth" *ngIf="input.select">
         <mat-label>{{ input.label }}</mat-label>
-        <mat-select name="input.label" [(ngModel)]="input.valor" [ngModelOptions]="{standalone: true}">
+        <mat-select name="input.label" [(ngModel)]="input.valor" [ngModelOptions]="{standalone: true}" [required]="input.requerido">
             <mat-option *ngFor="let dato of input.datos" [value]="dato[input.id]">
                 {{ dato[input.descripcion] }}
             </mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field class="fullWidth" *ngIf="!input.select">
-        <input matInput type="text" [placeholder]="input.label" [name]="input.label" [(ngModel)]="input.valor">
+        <input matInput type="text" [placeholder]="input.label" [name]="input.label" [(ngModel)]="input.valor" [required]="input.requerido">
       </mat-form-field>
     </p>
   </div>
