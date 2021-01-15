@@ -13,7 +13,16 @@ export class FormEmpresaComponent implements OnInit {
   @Input() corporacion: Corporacion;
   @Input() empresa: Empresa;
   @Output() empresaSavedEv = new EventEmitter();
-
+  public metodoCosteo: any[] = [
+    {
+      "id": 1,
+      "descripcion": "Ultima compra"
+    },
+    {
+      "id": 2,
+      "descripcion": "Promedio"
+    }
+  ];
   constructor(
     private snackBar: MatSnackBar,
     private sedeSrvc: SedeService,
@@ -42,6 +51,7 @@ export class FormEmpresaComponent implements OnInit {
     visa_merchant_id: null,
     visa_transaction_key: null,
     codigo: null,
+    metodo_costeo: null
   }
 
   onSubmit = () => {

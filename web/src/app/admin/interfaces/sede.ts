@@ -38,4 +38,5 @@ export interface Empresa {
     visa_merchant_id?: string;
     visa_transaction_key?: string;
     codigo: number;
+    metodo_costeo: number;
 }

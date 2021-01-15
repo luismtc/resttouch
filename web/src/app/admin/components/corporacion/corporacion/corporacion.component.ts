@@ -48,6 +48,7 @@ export class CorporacionComponent implements OnInit {
     visa_merchant_id: null,
     visa_transaction_key: null,
     codigo: null,
+    metodo_costeo: null
   }
 
   resetSede = () => this.sede = {
