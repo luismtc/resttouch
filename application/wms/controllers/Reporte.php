@@ -10,6 +10,8 @@ class Reporte extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model([
+			'Sede_model',
+			'Empresa_model',
 			'Reporte_model', 
 			'Articulo_model', 
 			'Receta_model',
@@ -34,6 +36,7 @@ class Reporte extends CI_Controller {
 		if (!isset($_GET['sede'])) {			
 			$_GET['sede'] = $this->data->sede;
 			$data['sede'] = $this->data->sede;
+			$data['mostrar_inventario'] = 1;
 		}
 
 		$arts = $this->Catalogo_model->getArticulo($data);
@@ -135,7 +138,16 @@ class Reporte extends CI_Controller {
 	public function valorizado()
 	{
 		$req = $_GET;
-		$ingresos = $this->Ingreso_model->get_ultima_compra($req);
+		$sede = new Sede_model($this->data->sede);
+		$emp = $sede->getEmpresa();
+		if ($emp->metodo_costeo == 1) {
+			$ingresos = $this->Ingreso_model->get_ultima_compra($req);
+			
+		} else if ($emp->metodo_costeo == 2) {
+			$ingresos = $this->Ingreso_model->get_costo_promedio($req);
+		} else {
+			$ingresos = [];
+		}
 		
 		$datos = [];
 		$detalle = [];

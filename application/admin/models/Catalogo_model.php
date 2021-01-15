@@ -181,7 +181,7 @@ class Catalogo_model extends CI_Model {
 		}
 
 		if ($ingreso) {
-			$this->db->where("(a.produccion = 0 or a.mostrar_pos=0)");
+			$this->db->where("mostrar_inventario", 1);
 		}
 
 		$qry = $this->db

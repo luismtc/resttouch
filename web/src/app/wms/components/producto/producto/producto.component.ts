@@ -20,10 +20,9 @@ export class ProductoComponent implements OnInit {
   ) {
     this.articulo = {
       articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null, bien_servicio: 'B',
-      produccion: 0, presentacion_reporte: null, mostrar_pos: 0, impuesto_especial: null
+      produccion: 0, presentacion_reporte: null, mostrar_pos: 0, impuesto_especial: null,rendimiento:1 , mostrar_inventario:0
     };
   }
-
   ngOnInit() {
   }
 
@@ -47,7 +46,8 @@ export class ProductoComponent implements OnInit {
           cantidad_minima: obj.cantidad_minima,
           cantidad_maxima: obj.cantidad_maxima,
           combo: obj.combo,
-          rendimiento: obj.rendimiento
+          rendimiento: obj.rendimiento,
+          mostrar_inventario: obj.mostrar_inventario
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();

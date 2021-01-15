@@ -19,6 +19,7 @@ class Empresa_model extends General_model {
     public $porcentaje_iva;
     public $visa_merchant_id;
     public $visa_transaction_key;
+    public $metodo_costeo;
 
 	public function __construct($id = "")
 	{

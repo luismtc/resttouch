@@ -22,6 +22,7 @@ class Articulo_model extends General_model {
 	public $cantidad_maxima = 1;
 	public $rendimiento = 1;
 	public $costo = 0;
+	public $mostrar_inventario = 0;
 
 	public function __construct($id = "")
 	{
@@ -399,14 +400,45 @@ class Articulo_model extends General_model {
 
 	public function getCosto()
 	{
-		$tmp = $this->db
-					->select("max(c.ingreso_detalle), c.articulo, c.precio_unitario, a.fecha")
-					->join("bodega b", "a.bodega = b.bodega")
-					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
-					->where("c.articulo", $this->getPK())
-					->group_by("c.articulo")
-					->get("ingreso a")
-					->row();
+		$sede = $this->db
+					 ->select("c.sede")
+					 ->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
+					 ->join("categoria c", "c.categoria = b.categoria")
+					 ->where("a.articulo", $this->getPK())
+					 ->get("articulo a")
+					 ->row();
+
+		$sede = new Sede_model($sede->sede);
+		$emp = $sede->getEmpresa();
+
+		if ($emp->metodo_costeo == 1) {
+			$tmp = $this->db
+						->select("max(c.ingreso_detalle), c.articulo, c.precio_unitario, a.fecha")
+						->join("bodega b", "a.bodega = b.bodega")
+						->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+						->where("c.articulo", $this->getPK())
+						->where("b.sede", $sede->getPK())
+						->group_by("c.articulo")
+						->get("ingreso a")
+						->row();
+
+		} else if ($emp->metodo_costeo == 2) {
+			$tmp = $this->db
+						->select("
+							sum(c.precio_total/d.cantidad)/sum(c.cantidad/d.cantidad) as precio_unitario,
+							c.articulo, 
+							a.fecha")
+						->join("bodega b", "a.bodega = b.bodega")
+						->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+						->join("presentacion d", "c.presentacion = d.presentacion")
+						->where("c.articulo", $this->getPK())						
+						->group_by("c.articulo")
+						->get("ingreso a")
+						->row();
+
+		} else {
+			$tmp = false;
+		}
 
 		if ($tmp) {
 			return $tmp->precio_unitario;

@@ -37,23 +37,31 @@ class Fisico extends CI_Controller {
 
 		if (isset($req['categoria_grupo_grupo'])) {
 			$arts = $this->Articulo_model->buscar([
-				"categoria_grupo" => $req['categoria_grupo_grupo']
+				"categoria_grupo" => $req['categoria_grupo_grupo'],
+				"mostrar_inventario" => 1
 			]);
 
 			$req['categoria_grupo'] = $req['categoria_grupo_grupo'];
 
 		} else {
-			$arts = $this->Catalogo_model->getArticulo(["sede" => $req['sede']]);
+			$arts = $this->Catalogo_model->getArticulo([
+				"sede" => $req['sede'],
+				"mostrar_inventario" => 1
+			]);
 		}
 
 		if (count($arts) > 0) {
 			if ($fisico->guardar($req)) {
 				foreach ($arts as $row) {
-					$fisico->setDetalle([
-						"articulo" => $row->articulo,
-						"precio" => $row->precio,
-						"existencia_sistema" => $row->existencias
-					]);
+					$art = new Articulo_model($row->articulo);
+					if ($art->mostrar_inventario == 1) {
+						$art->actualizarExistencia();
+						$fisico->setDetalle([
+							"articulo" => $row->articulo,
+							"precio" => $row->precio,
+							"existencia_sistema" => $row->existencias
+						]);
+					}
 				}
 				$datos['exito'] = true;
 				$datos['inventario'] = $fisico->getPK();

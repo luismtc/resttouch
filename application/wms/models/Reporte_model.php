@@ -25,7 +25,7 @@ class Reporte_model extends CI_Model {
 
 	function consultaIngresos($args = [])
 	{
-		$where = 'where ';
+		$where = 'where b.mostrar_inventario = 1';
 		$group = " group by ";
 		$select = "";
 
@@ -73,7 +73,7 @@ EOT;
 
 	function consultaEgresos($args = [])
 	{
-		$where = 'where ';
+		$where = 'where b.mostrar_inventario = 1';
 		$group = 'group by ';
 		$select = "";
 
@@ -123,7 +123,7 @@ EOT;
 
 	function consultaComandas($args = [])
 	{
-		$where = 'where ';
+		$where = 'where b.mostrar_inventario = 1';
 		$group = 'group by ';
 		$select = "";
 
@@ -209,7 +209,7 @@ join categoria_grupo c on c.categoria_grupo = b.categoria_grupo
 join categoria d on d.categoria = c.categoria
 join factura f on a.factura = f.factura and f.sede = d.sede
 left join detalle_factura_detalle_cuenta e on a.detalle_factura = e.detalle_factura
-where e.detalle_factura_detalle_cuenta is null 
+where e.detalle_factura_detalle_cuenta is null and b.mostrar_inventario = 1 
 {$where} {$group}
 EOT;
 	}
@@ -277,6 +277,7 @@ EOT;
 					->from("articulo art")
 					->join("categoria_grupo b", "art.categoria_grupo = b.categoria_grupo")
 					->join("categoria d", "d.categoria = b.categoria")
+					->where("art.mostrar_inventario", 1)
 					->order_by("art.articulo")
 					->get();
 

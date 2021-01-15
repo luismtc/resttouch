@@ -80,7 +80,8 @@ export class FormProductoComponent implements OnInit {
       cantidad_minima: 1,
       cantidad_maxima: 1,
       combo: 0,
-      rendimiento: 0.00
+      rendimiento: 0.00,
+      mostrar_inventario: 0
     };
     this.recetas = [];
     this.resetReceta();

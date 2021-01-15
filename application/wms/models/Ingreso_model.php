@@ -124,7 +124,35 @@ class Ingreso_model extends General_Model {
 					->select("max(c.ingreso_detalle), c.articulo, c.precio_unitario, a.fecha")
 					->join("bodega b", "a.bodega = b.bodega")
 					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+					->join("articulo d", "c.articulo = d.articulo")
 					->where("date(a.fecha) <= '{$args['fecha']}'")
+					->where("d.mostrar_inventario", 1)
+					->group_by("c.articulo")
+					->get("ingreso a")
+					->result();
+	}
+
+	public function get_costo_promedio($args = [])
+	{
+		if (isset($args['sede'])) {
+			$this->db->where('b.sede', $args['sede']);
+		}
+
+		if (isset($args['bodega'])) {
+			$this->db->where('a.bodega', $args['bodega']);
+		}
+
+		return $this->db
+					->select("
+						sum(c.precio_total/e.cantidad)/sum(c.cantidad/e.cantidad) as precio_unitario, 
+						c.articulo, 
+						a.fecha")
+					->join("bodega b", "a.bodega = b.bodega")
+					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+					->join("articulo d", "c.articulo = d.articulo")
+					->join("presentacion e", "c.presentacion = e.presentacion")
+					->where("date(a.fecha) <= '{$args['fecha']}'")
+					->where("d.mostrar_inventario", 1)
 					->group_by("c.articulo")
 					->get("ingreso a")
 					->result();

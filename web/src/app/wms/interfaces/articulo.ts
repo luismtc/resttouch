@@ -21,6 +21,8 @@ export interface Articulo {
     cantidad_minima?: number;
     cantidad_maxima?: number;
     rendimiento?: number;
+    costo?: number;
+    mostrar_inventario?: number;
 }
 
 export interface ArticuloResponse {
@@ -40,6 +42,7 @@ export interface ArticuloResponse {
     cantidad_minima?: number;
     cantidad_maxima?: number;
     rendimiento?: number;
+    mostrar_inventario?: number;
 }
 
 export interface ArbolCategoriaGrupo {

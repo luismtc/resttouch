@@ -19,6 +19,8 @@ import { ArticuloService } from '../../../services/articulo.service';
 import { TransformacionService } from '../../../services/transformacion.service';
 import { Presentacion } from '../../../../admin/interfaces/presentacion';
 import { PresentacionService } from '../../../../admin/services/presentacion.service';
+import { PageEvent } from '@angular/material/paginator';
+import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 @Component({
   selector: 'app-form-egreso',
@@ -35,6 +37,7 @@ export class FormEgresoComponent implements OnInit {
   public showDetalleEgresoForm = true;
 
   public detallesEgreso: DetalleEgreso[] = [];
+  public detallesEgresoPaged: DetalleEgreso[];
   public detalleEgreso: DetalleEgreso;
   public detallesMerma: DetalleEgreso[] = [];
   public detalleMerma: DetalleEgreso;
@@ -152,19 +155,11 @@ export class FormEgresoComponent implements OnInit {
   }
 
   loadArticulos = () => {
-    if (this.saveToDB) {
-      this.articuloSrvc.getArticulosIngreso().subscribe(res => {
-        if (res) {
-          this.articulos = res;
-        }
-      });
-    } else {
-      this.articuloSrvc.getArticulos().subscribe(res => {
-        if (res) {
-          this.articulos = res;
-        }
-      });
-    }
+    this.articuloSrvc.getArticulosIngreso().subscribe(res => {
+      if (res) {
+        this.articulos = res;
+      }
+    });
   }
 
   resetDetalleEgreso = () => {
@@ -246,7 +241,12 @@ export class FormEgresoComponent implements OnInit {
   getDescripcionPresentacion = (idpresentacion: number) =>
     (this.presentaciones.find(p => +p.presentacion === +idpresentacion).descripcion || '')
 
-  updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesEgreso);
+  updateTableDataSource = () => {
+    this.dataSource = new MatTableDataSource(this.detallesEgreso);
+    this.dataSource.filterPredicate = (data: DetalleEgreso, filter: string) => {
+      return data.articulo.descripcion.toLowerCase().includes(filter);
+    };
+  }
   updateTableDataSourceM = () => this.dataSource = new MatTableDataSource(this.detallesMerma);
 
   filtrarArticulos = (value: (Articulo | string)) => {
@@ -283,5 +283,9 @@ export class FormEgresoComponent implements OnInit {
       return `(${p.nit}) ${p.razon_social}`;
     }
     return undefined;
+  }
+
+  applyFilter = (filter: string) => {
+    this.dataSource.filter = filter;
   }
 }

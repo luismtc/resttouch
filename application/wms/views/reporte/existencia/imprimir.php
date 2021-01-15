@@ -76,8 +76,7 @@
 						} else {
 							echo number_format($row->existencia / $row->presentacion->cantidad,2);
 						}
-					?>
-							
+					?>	
 					</td>
 				</tr>
 			<?php endforeach ?>

@@ -237,7 +237,23 @@ class Articulo extends CI_Controller
 
 		$this->output
 			->set_output(json_encode($datos));
+	}
 
+	public function actualizar_costos()
+	{
+		$arts = $this->Articulo_model->buscar();
+		$datos = [];
+		$datos['exito'] = true;
+		$datos['mensaje'] = "Datos Actualizados con Exito";
+		foreach ($arts as $row) {
+			$art = new Articulo_model($row->articulo);
+			$costo = $art->getCosto();
+			$art->guardar(["costo" => $costo]);
+		}
+
+		$this->output
+			->set_content_type("application/json")
+			->set_output(json_encode($datos));
 	}
 }
 

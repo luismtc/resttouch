@@ -129,19 +129,11 @@ export class FormIngresoComponent implements OnInit {
   }
 
   loadArticulos = () => {
-    if(this.saveToDB) {
-      this.articuloSrvc.getArticulosIngreso().subscribe(res => {
-        if (res) {
-          this.articulos = res;
-        }
-      });
-    } else {
-      this.articuloSrvc.getArticulos().subscribe(res => {
-        if (res) {
-          this.articulos = res;
-        }
-      });
-    }
+    this.articuloSrvc.getArticulosIngreso().subscribe(res => {
+      if (res) {
+        this.articulos = res;
+      }
+    });
   }
 
   resetDetalleIngreso = () => {
@@ -210,7 +202,12 @@ export class FormIngresoComponent implements OnInit {
   getDescripcionPresentacion = (idpresentacion: number) =>
     this.presentaciones.find(p => +p.presentacion === +idpresentacion).descripcion || '';
 
-  updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesIngreso);
+  updateTableDataSource = () => {
+    this.dataSource = new MatTableDataSource(this.detallesIngreso);
+    this.dataSource.filterPredicate = (data: DetalleIngreso, filter: string) => {
+      return data.articulo.descripcion.toLowerCase().includes(filter);
+    };
+  }
 
   eliminarArticulo = (element: DetalleIngreso) => {
     // const idx = this.detallesIngreso.findIndex(d => d.ingreso_detalle === element.ingreso_detalle);
@@ -256,4 +253,7 @@ export class FormIngresoComponent implements OnInit {
 
   setProveedor = (idProveedor: number) => this.txtProveedorSelected = this.proveedores.find(p => +p.proveedor === idProveedor);
 
+  applyFilter = (filter: string) => {
+    this.dataSource.filter = filter.toLocaleLowerCase();
+  }
 }
