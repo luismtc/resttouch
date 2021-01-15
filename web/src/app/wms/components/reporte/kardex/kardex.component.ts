@@ -43,7 +43,7 @@ export class KardexComponent implements OnInit {
   }
 
   getArticulo = (params: any= {}) => {
-    this.articuloSrvc.getArticulos(params).subscribe(res => {
+    this.articuloSrvc.getArticulosIngreso(params).subscribe(res => {
       this.articulos = res;
     });
   }
