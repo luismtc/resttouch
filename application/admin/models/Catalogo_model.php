@@ -214,7 +214,7 @@ class Catalogo_model extends CI_Model {
 				->row();
 		}
 
-		return $tmp;
+		return ordenar_array_objetos($tmp, "descripcion");
 	}
 
 	public function getUsuario($args = [])
