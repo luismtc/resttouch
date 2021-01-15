@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Cliente } from '../interfaces/cliente';
-import { LocalstorageService } from '../../admin/services/localstorage.service';
+// import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -15,50 +15,50 @@ export class ClienteService {
 
   private srvcErrHndl: ServiceErrorHandler;
   private moduleUrl = 'cliente';
-  private usrToken: string = null;
+  // private usrToken: string = null;
 
   constructor(
     private http: HttpClient,
-    private ls: LocalstorageService
+    // private ls: LocalstorageService
   ) {
     this.srvcErrHndl = new ServiceErrorHandler();
-    this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
+    // this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
 
   get(fltr: any = {}): Observable<Cliente[]> {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
+    }; */
     return this.http.get<Cliente[]>(
-      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`,
-      httpOptions
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`
+      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Cliente): Observable<any> {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
+    }; */
     return this.http.post<any>(
       `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${!!entidad.cliente ? ('/' + entidad.cliente) : ''}`,
-      entidad,
-      httpOptions
+      entidad
+      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getInfoContribuyente(nit: string): Observable<any> {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
+    }; */
     return this.http.get<any>(
-      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/get_info_contribuyente/${nit}`,
-      httpOptions
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/get_info_contribuyente/${nit}`
+      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

@@ -7,7 +7,7 @@ import { AccesoUsuario, SubModulo, NodoAppMenu } from '../interfaces/acceso-usua
 import { LocalstorageService } from '../services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import * as qs from 'qs';
+// import * as qs from 'qs';
 
 export interface IAppMenu {
   modulo: number;
@@ -65,7 +65,7 @@ export class UsuarioService {
       pwd: usr.contrasenia
     };
 
-    let httpOptions = {
+    const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json'
       })
@@ -79,40 +79,40 @@ export class UsuarioService {
   }
 
   desbloquear = (pindesbloqueo: number) => {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         Authorization: this.usrToken
       })
-    };
+    }; */
 
     return this.http.post<any>(
       `${GLOBAL.url}/${this.moduleUrl}/desbloqueo_usuario`,
-      { pindesbloqueo },
-      httpOptions
+      { pindesbloqueo }
+      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getAll(debaja: number = 0): Observable<Usuario[]> {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
+    }; */
     return this.http.get<Usuario[]>(
-      `${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`,
-      httpOptions
+      `${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`
+      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   async checkUserToken() {
     this.setToken();
     if (this.usrToken) {
-      const httpOptions = {
+      /* const httpOptions = {
         headers: new HttpHeaders({
           'Authorization': this.usrToken
         })
-      };
-      const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken_get`, httpOptions).toPromise();
+      }; */
+      const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken_get`).toPromise();
       if (resp.valido) {
         return resp.valido;
       } else {
@@ -123,42 +123,42 @@ export class UsuarioService {
   }
 
   get(filtros: any): Observable<Usuario[]> {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
+    }; */
     return this.http.post<Usuario[]>(
       `${GLOBAL.url}/${this.moduleUrl}/usuarios_post`,
-      filtros,
-      httpOptions
+      filtros
+      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getMeserosTurno(): Observable<Usuario[]> {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
+    }; */
     return this.http.get<Usuario[]>(
-      `${GLOBAL.urlCatalogos}/get_mesero`,
-      httpOptions
+      `${GLOBAL.urlCatalogos}/get_mesero`
+      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Usuario): Observable<Usuario> {
-    const httpOptions = {
+    /* const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': this.usrToken
       })
-    };
+    }; */
 
     if (entidad.usuario) {
       return this.http.post<Usuario>(
         `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`,
-        entidad,
-        httpOptions
+        entidad
+        // , httpOptions
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     } else {
       if (!entidad.contrasenia) {
@@ -166,8 +166,8 @@ export class UsuarioService {
       }
       return this.http.post<Usuario>(
         `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`,
-        entidad,
-        httpOptions
+        entidad
+        // , httpOptions
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     }
 
