@@ -117,6 +117,7 @@
 										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format(0.00, 2) ?>
 										</td>
+										<td></td>
 										<?php if ($_validar): ?>
 											<td style="padding: 5px;" class="text-right">
 												<?php 
@@ -190,6 +191,9 @@
 										<?php echo $row->monto ?>
 									</td>
 									<td></td>
+									<td style="padding: 5px;" class="text-right">
+										<?php echo number_format($row->monto,2) ?>
+									</td>
 									<?php if ($_validar): ?>
 										<td style="padding: 5px;" class="text-right">
 											<?php 
@@ -220,6 +224,7 @@
 										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format(0.00,2) ?>
 										</td>
+										<td></td>
 										<td></td>
 										<?php if ($_validar): ?>
 											<td style="padding: 5px;" class="text-right">
@@ -254,6 +259,11 @@
 									?>
 								</td>
 								<td></td>
+								<td style="padding: 5px;" class="text-right">
+									<?php 
+										echo number_format($desc,2);
+									?>
+								</td>
 								<?php if ($_validar): ?>
 									<td style="padding: 5px;" class="text-right">
 										<?php 
@@ -278,6 +288,9 @@
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php echo number_format($prop, 2) ?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format(($desc+$ing+$prop),2) ?>
 								</td>
 								<?php if ($_validar): ?>
 									<td style="padding: 5px;" class="text-right">
