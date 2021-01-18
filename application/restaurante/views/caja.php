@@ -59,6 +59,7 @@
 							<th style="padding: 5px;" class="text-center">Descripcion</th>
 							<th style="padding: 5px;" class="text-center">Monto</th>
 							<th style="padding: 5px;" class="text-center">Propina</th>
+							<th style="padding: 5px;" class="text-center">Total</th>
 							<?php if ($_validar): ?>
 								<th style="padding: 5px;" class="text-center">Monto Recibido</th>
 								<th style="padding: 5px;" class="text-center">Diferencia</th>
@@ -78,6 +79,9 @@
 									</td>
 									<td style="padding: 5px;" class="text-right">
 										<?php echo number_format($row->propina, 2) ?>
+									</td>
+									<td style="padding: 5px;" class="text-right">
+										<?php echo number_format($row->propina + $row->monto, 2) ?>
 									</td>
 									<?php if ($_validar): ?>
 										<td style="padding: 5px;" class="text-right">
@@ -152,6 +156,11 @@
 									<?php 
 										$prop = suma_field($ingresos,"propina");
 										echo number_format($prop,2);
+									?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php 
+										echo number_format($prop+$ing,2);
 									?>
 								</td>
 								<?php if ($_validar): ?>
