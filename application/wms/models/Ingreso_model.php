@@ -92,7 +92,11 @@ class Ingreso_model extends General_Model {
 				$detalle = new IDetalle_Model($row->ingreso_detalle);
 				$row->articulo = $detalle->getArticulo();
 				$row->presentacion = $detalle->getPresentacion();
-				$row->fecha = formatoFecha("13.01.2020",8);
+				
+				if (verDato($args, "_costo")) {
+					$row->precio_total = $row->precio_total + $row->precio_costo_iva;
+					$row->precio_unitario = $row->precio_total/$row->cantidad;
+				}
 				$datos[] = $row;
 			}
 		} else if($det) {

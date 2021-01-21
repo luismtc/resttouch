@@ -255,7 +255,12 @@ export class FormProductoComponent implements OnInit {
     });
   }
 
-  updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.recetas);
+  updateTableDataSource = () => {
+    this.dataSource = new MatTableDataSource(this.recetas);
+    this.dataSource.filterPredicate = (data: ArticuloDetalle, filter: string) => {
+      return data.articulo.descripcion.toLowerCase().includes(filter);
+    };
+  }
 
   replicarASedes = () => {
     const replicarASedesRef = this.dialog.open(ReplicarASedesDialogComponent, {
@@ -268,4 +273,9 @@ export class FormProductoComponent implements OnInit {
       }
     });
   }
+
+  applyFilter = (filter: string) => {
+    this.dataSource.filter = filter.toLocaleLowerCase();
+  }
+  
 }

@@ -198,6 +198,9 @@
             </div>
         </form>
         <hr *ngIf="recetas.length > 0" />
+        <mat-form-field class="fullWidth">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+        </mat-form-field>
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z4 full-width" *ngIf="recetas.length > 0">
             <ng-container matColumnDef="articulo">
                 <th mat-header-cell *matHeaderCellDef>Artículo</th>

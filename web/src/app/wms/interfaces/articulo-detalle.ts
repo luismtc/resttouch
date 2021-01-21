@@ -2,7 +2,7 @@ export interface ArticuloDetalle {
     articulo_detalle: number;
     receta: number;
     racionable: number;
-    articulo: number;
+    articulo: any;
     cantidad: number;
     medida: number;
     anulado?: number;

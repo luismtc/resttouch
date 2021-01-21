@@ -63,15 +63,22 @@ class Egreso extends CI_Controller {
 			if ($egr->estatus_movimiento == 1) {
 				$art = new Articulo_model($req['articulo']);
 				$req['precio_unitario']	= $art->costo;
-				$det = $egr->setDetalle($req, $id);;
+				$pres = new Presentacion_model($req['presentacion']);
+				$presArt = $art->getPresentacionReporte();
 
-				if($det) {
-					$art->actualizarExistencia();
-					$datos['exito'] = true;
-					$datos['mensaje'] = "Datos Actualizados con Exito";
-					$datos['detalle'] = $det;
+				if ($pres->medida == $presArt->medida) {
+					$det = $egr->setDetalle($req, $id);;
+
+					if($det) {
+						$art->actualizarExistencia();
+						$datos['exito'] = true;
+						$datos['mensaje'] = "Datos Actualizados con Exito";
+						$datos['detalle'] = $det;
+					} else {
+						$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+					}
 				} else {
-					$datos['mensaje'] = implode("<br>", $egr->getMensaje());
+					$datos['mensaje'] = "Las unidades de medida no coinciden";		
 				}
 					
 			} else {
