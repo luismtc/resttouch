@@ -28,6 +28,10 @@ class Comanda extends CI_Controller {
 			"Tipo_usuario_cgrupo_model"
 		]);
 
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
+
 		$this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -630,6 +634,70 @@ class Comanda extends CI_Controller {
 			$res['mensaje'] = 'Datos validados con éxito.';
 		}
 		$this->output->set_content_type('application/json')->set_output(json_encode($res));
+	}
+
+	public function anular_pedido($comanda = null)
+	{
+		$datos = ["exito" => false];
+		
+		if ($this->input->method() == 'post') {
+			if ($comanda !== null) {
+				$com = new Comanda_model($comanda);
+				$bitComanda = new Bitacora_model();
+				$usu = new Usuario_model($this->data->idusuario);
+				if ($com->getPK()) {
+					$req = json_decode(file_get_contents('php://input'), true);
+					$com->guardar(["estatus" => 2]);
+					$fac = $com->getFactura();
+					$acc = $this->Accion_model->buscar([
+						"descripcion" => "Modificacion",
+						"_uno" => true
+					]);
+					
+					$comentario = "Anulación: El usuario {$usu->nombres} {$usu->apellidos} anuló la comanda {$comanda} Motivo: {$req['comentario']}";
+
+					$bitComanda->guardar([
+						"accion" => $acc->accion,
+						"usuario" => $this->data->idusuario,
+						"tabla" => "comanda",
+						"registro" => $com->getPK(),
+						"comentario" => $comentario
+					]);
+					if ($fac) {
+						unset($fac->total);
+						$bitFac = new Bitacora_model();
+						$fac->guardar([
+							"serie_factura" => "***PEDIDO CANCELADO***",
+							"numero_factura" => $fac->getPK(),
+							"fel_uuid" => "***PEDIDO CANCELADO***",
+							"fel_uuid_anulacion" => "***PEDIDO CANCELADO***"
+						]);
+						
+						$comentario = "Anulación: El usuario {$usu->nombres} {$usu->apellidos} anuló la factura {$fac->numero_factura} Serie {$fac->serie_factura} Motivo: {$req['comentario']}";
+
+						$bitFac->guardar([
+							"accion" => $acc->accion,
+							"usuario" => $this->data->idusuario,
+							"tabla" => "factura",
+							"registro" => $fac->getPK(),
+							"comentario" => $comentario
+						]);
+
+						$datos['exito'] = true;
+						$datos['mensaje'] = "Datos actualizados con exito";
+					}
+				} else {
+					$datos['mensaje'] = "No existe ninguna comanda con este numero {$comanda}";	
+				}
+			} else {
+				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros Invalidos";
+		}
+
+		$this->output
+		->set_output(json_encode($datos));
 	}
 }
 
