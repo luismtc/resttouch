@@ -1,6 +1,6 @@
 export interface Presentacion {
     presentacion: number;
-    medida: number;
+    medida: any;
     descripcion: string;
     cantidad: number;
 }

@@ -4,7 +4,7 @@ import { Impresora } from '../../admin/interfaces/impresora';
 export interface Articulo {
     articulo: number;
     categoria_grupo: number;
-    presentacion: number;
+    presentacion: any;
     descripcion: string;
     precio: number;
     bien_servicio?: string;
@@ -14,7 +14,7 @@ export interface Articulo {
     combo?: number;
     multiple?: number;
     produccion?: number;
-    presentacion_reporte?: number;
+    presentacion_reporte?: any;
     mostrar_pos?: number;
     impuesto_especial?: number;
     shopify_id?: string;

@@ -116,7 +116,7 @@
             <mat-form-field class="fullWidth">
                 <mat-label>Artículo</mat-label>                    
                 <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
-                <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo">
+                <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo" (optionSelected)="setPresentaciones()">
                     <mat-option *ngFor="let a of filteredArticulos" [value]="a">
                         {{a.descripcion}}
                     </mat-option>
@@ -126,7 +126,7 @@
             <mat-form-field class="fullWidth">
                 <mat-label>Presentación</mat-label>
                 <mat-select name="presentacion" [(ngModel)]="detalleEgreso.presentacion" required>
-                    <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
+                    <mat-option *ngFor="let p of fltrPresentaciones" [value]="p.presentacion">
                         {{p.descripcion}}
                     </mat-option>
                 </mat-select>
@@ -243,17 +243,18 @@
         <form #frmMerma="ngForm" *ngIf="showDetalleEgresoForm" (ngSubmit)="frmMerma.form.valid && onSubmitDetail()"
             novalidate>
             <mat-form-field class="fullWidth">
-                <mat-label>Artículo</mat-label>
-                <mat-select name="articulo" [(ngModel)]="detalleMerma.articulo" required>
-                    <mat-option *ngFor="let a of articulos" [value]="a.articulo">
+                <mat-label>Artículo</mat-label>                    
+                <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
+                <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticuloMerma" (optionSelected)="setPresentaciones()">
+                    <mat-option *ngFor="let a of filteredArticulos" [value]="a">
                         {{a.descripcion}}
                     </mat-option>
-                </mat-select>
+                </mat-autocomplete>
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Presentación</mat-label>
                 <mat-select name="presentacion" [(ngModel)]="detalleMerma.presentacion" required>
-                    <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
+                    <mat-option *ngFor="let p of fltrPresentacionesMerma" [value]="p.presentacion">
                         {{p.descripcion}}
                     </mat-option>
                 </mat-select>

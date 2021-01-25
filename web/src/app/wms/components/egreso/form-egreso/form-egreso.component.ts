@@ -51,6 +51,8 @@ export class FormEgresoComponent implements OnInit {
   public proveedores: Proveedor[] = [];
   public filteredProveedores: Proveedor[] = [];
   public presentaciones: Presentacion[] = [];
+  public fltrPresentaciones: Presentacion[] = [];
+  public fltrPresentacionesMerma: Presentacion[] = [];
   public esMovil = false;
   public bloqueoBotones = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
@@ -259,9 +261,31 @@ export class FormEgresoComponent implements OnInit {
     }
   }
 
+  setPresentaciones = (pre: any) => {
+    this.fltrPresentaciones = [];
+    var idx = this.articulos.findIndex(p => +p.articulo === +this.detalleEgreso.articulo);
+    var articulo = this.articulos[idx];
+    this.fltrPresentaciones = this.presentaciones.filter(p => +p.medida.medida === +articulo.presentacion.medida);
+  }
+
+  setPresentacionesMerma = (pre: any) => {
+    this.fltrPresentacionesMerma = [];
+    var idx = this.articulos.findIndex(p => +p.articulo === +this.detalleMerma.articulo);
+    var articulo = this.articulos[idx];
+    this.fltrPresentacionesMerma = this.presentaciones.filter(p => +p.medida.medida === +articulo.presentacion.medida);
+  }
+
   displayArticulo = (art: Articulo) => {
     if (art) {
       this.detalleEgreso.articulo = art.articulo;
+      return art.descripcion;
+    }
+    return undefined;
+  }
+
+  displayArticuloMerma = (art: Articulo) => {
+    if (art) {
+      this.detalleMerma.articulo = art.articulo;
       return art.descripcion;
     }
     return undefined;

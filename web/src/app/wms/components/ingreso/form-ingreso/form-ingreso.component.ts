@@ -44,6 +44,7 @@ export class FormIngresoComponent implements OnInit {
   public articulos: Articulo[] = [];
   public filteredArticulos: Articulo[] = [];
   public presentaciones: Presentacion[] = [];
+  public fltrPresentaciones: Presentacion[] = [];
   public esMovil = false;
   public bloqueoBotones = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
@@ -249,6 +250,13 @@ export class FormIngresoComponent implements OnInit {
       return `(${p.nit}) ${p.razon_social}`;
     }
     return undefined;
+  }
+
+  setPresentaciones = (pre: any) => {
+    this.fltrPresentaciones = [];
+    var idx = this.articulos.findIndex(p => +p.articulo === +this.detalleIngreso.articulo);
+    var articulo = this.articulos[idx];
+    this.fltrPresentaciones = this.presentaciones.filter(p => +p.medida.medida === +articulo.presentacion.medida);
   }
 
   setProveedor = (idProveedor: number) => this.txtProveedorSelected = this.proveedores.find(p => +p.proveedor === idProveedor);
