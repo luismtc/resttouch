@@ -202,6 +202,7 @@ export class FormEgresoComponent implements OnInit {
         };
         this.txtArticuloSelected = res[0].articulo;
         this.showDetalleEgresoForm = true;
+        this.setPresentaciones();
       }
     });
   }
