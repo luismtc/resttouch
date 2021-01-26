@@ -252,10 +252,10 @@ export class FormIngresoComponent implements OnInit {
     return undefined;
   }
 
-  setPresentaciones = (pre: any) => {
+  setPresentaciones = () => {
     this.fltrPresentaciones = [];
-    var idx = this.articulos.findIndex(p => +p.articulo === +this.detalleIngreso.articulo);
-    var articulo = this.articulos[idx];
+    const idx = this.articulos.findIndex(p => +p.articulo === +this.detalleIngreso.articulo);
+    const articulo = this.articulos[idx];
     this.fltrPresentaciones = this.presentaciones.filter(p => +p.medida.medida === +articulo.presentacion.medida);
   }
 

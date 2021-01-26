@@ -391,7 +391,7 @@ class Factura extends CI_Controller {
 		//$resp = $fac->enviarDigiFact();
 
 		$req = $fac->getXmlWebhook();
-		$client = new SoapClient("http://153fd0b3d162.ngrok.io/jk/php/ws/organization.wsdl");	
+		$client = new SoapClient("http://52.35.3.1/jk/php/ws/organization.wsdl");
 
 		//$res = $client->setVenta($req);
 		$web = new Webhook($webhook);

@@ -25,7 +25,8 @@ class Comanda extends CI_Controller {
 			"Impresora_model",
 			"Presentacion_model",
 			"Configuracion_model",
-			"Tipo_usuario_cgrupo_model"
+			"Tipo_usuario_cgrupo_model",
+			"Accion_model"
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);

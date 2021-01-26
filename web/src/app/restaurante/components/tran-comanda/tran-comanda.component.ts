@@ -197,15 +197,17 @@ export class TranComandaComponent implements OnInit {
       });
 
       confirmRef.afterClosed().subscribe((res: any) => {
+        console.log(res);
         if (res && res.respuesta && res.seleccion.receta.length > 0) {
-          this.comandaSrvc.saveDetalleCombo(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, res.seleccion).subscribe(res => {
+          console.log(res.seleccion); this.bloqueoBotones = false; return;
+          this.comandaSrvc.saveDetalleCombo(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, res.seleccion).subscribe(resSaveDetCmb => {
             // console.log('NUEVO DETALLE COMANDA = ', res);
-            if (res.exito) {
-              this.mesaEnUso = res.comanda;
+            if (resSaveDetCmb.exito) {
+              this.mesaEnUso = resSaveDetCmb.comanda;
               this.llenaProductosSeleccionados(this.mesaEnUso);
               this.setSelectedCuenta(+this.cuentaActiva.numero);
             } else {
-              this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
+              this.snackBar.open(`ERROR:${resSaveDetCmb.mensaje}`, 'Comanda', { duration: 3000 });
             }
             this.bloqueoBotones = false;
           });

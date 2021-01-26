@@ -194,8 +194,8 @@ class Factura extends CI_Controller
 
 				if (!empty($fac->numero_factura)) {
 					$fac->certificador_fel = $cer;
-					$fac->detalle = $fac->getDetalle();
-					$fac->fecha_autorizacion = $resp->fecha;
+					$fac->detalle = $fac->getDetalle();					
+					$fac->fecha_autorizacion = isset($resp->fecha) ? $resp->fecha : $resp->Fecha_DTE;
 
 					$comanda = $fac->getComanda();
 					$fac->origen_datos = ($comanda) ? $comanda->getOrigenDatos() : null;

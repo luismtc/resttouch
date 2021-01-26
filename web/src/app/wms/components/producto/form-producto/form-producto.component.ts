@@ -28,7 +28,7 @@ export class FormProductoComponent implements OnInit {
 
   @Input() articulo: Articulo;
   @Output() articuloSvd = new EventEmitter();
-  private titulo: string = "Receta";
+  private titulo = 'Receta';
   public showArticuloForm = true;
   public medidas: Medida[] = [];
   public presentaciones: Presentacion[] = [];

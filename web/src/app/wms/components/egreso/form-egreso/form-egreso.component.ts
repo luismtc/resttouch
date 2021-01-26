@@ -261,17 +261,17 @@ export class FormEgresoComponent implements OnInit {
     }
   }
 
-  setPresentaciones = (pre: any) => {
+  setPresentaciones = () => {
     this.fltrPresentaciones = [];
-    var idx = this.articulos.findIndex(p => +p.articulo === +this.detalleEgreso.articulo);
-    var articulo = this.articulos[idx];
+    const idx = this.articulos.findIndex(p => +p.articulo === +this.detalleEgreso.articulo);
+    const articulo = this.articulos[idx];
     this.fltrPresentaciones = this.presentaciones.filter(p => +p.medida.medida === +articulo.presentacion.medida);
   }
 
-  setPresentacionesMerma = (pre: any) => {
+  setPresentacionesMerma = () => {
     this.fltrPresentacionesMerma = [];
-    var idx = this.articulos.findIndex(p => +p.articulo === +this.detalleMerma.articulo);
-    var articulo = this.articulos[idx];
+    const idx = this.articulos.findIndex(p => +p.articulo === +this.detalleMerma.articulo);
+    const articulo = this.articulos[idx];
     this.fltrPresentacionesMerma = this.presentaciones.filter(p => +p.medida.medida === +articulo.presentacion.medida);
   }
 

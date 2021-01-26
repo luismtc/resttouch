@@ -81,8 +81,8 @@ export class MesaComponent implements OnInit, AfterViewInit {
       mesa: this.configuracion.mesa,
       area: this.configuracion.area,
       numero: this.configuracion.numero,
-      posx: (item.offsetLeft + distancia.x) * 100 / parentSize.x,
-      posy: (item.offsetTop + distancia.y) * 100 / parentSize.y,
+      posx: Math.abs((item.offsetLeft + distancia.x) * 100 / parentSize.x),
+      posy: Math.abs((item.offsetTop + distancia.y) * 100 / parentSize.y),
       tamanio: this.configuracion.tamanio,
       estatus: this.configuracion.estatus
     };
@@ -100,5 +100,9 @@ export class MesaComponent implements OnInit, AfterViewInit {
         this.snackBar.open(`ERROR:${res.mensaje}.`, 'Diseño de área', { duration: 3000 });
       }
     });
+  }
+
+  moviendo = (obj: any) => {
+    // console.log(obj);
   }
 }

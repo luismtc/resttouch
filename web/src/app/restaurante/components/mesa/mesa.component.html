@@ -1,4 +1,4 @@
-<div #divMesa cdkDrag (cdkDragEnded)="dragEnded($event)" cdkDragBoundary=".areaPosicionamiento" [cdkDragDisabled]="dontAllowDrag" class="divMesa mat-elevation-z6" 
+<div #divMesa cdkDrag (cdkDragEnded)="dragEnded($event)" (cdkDragMoved)="moviendo($event)" cdkDragBoundary=".areaPosicionamiento" [cdkDragDisabled]="dontAllowDrag" class="divMesa mat-elevation-z6" 
     [ngClass]="{'disponible': +configuracion.estatus == 1 && +configuracion.debaja === 0, 'ocupada': +configuracion.estatus == 2 && +configuracion.debaja === 0, 'debaja': +configuracion.debaja === 1}"
     (click)="clickMesa()"
     [style.width.px]="getAncho()" 

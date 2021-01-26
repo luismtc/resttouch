@@ -60,7 +60,7 @@ class Comanda_model extends General_Model
 		return $this->db->affected_rows() > 0;
 	}
 
-	public function setDetalle($articulo, $idcta, $padre = null, $precio = null)
+	public function setDetalle($articulo, $idcta, $padre = null, $precio = null, $cantidad = 1)
 	{
 		$cuenta = new Cuenta_model($idcta);
 		$combo = new Articulo_model($articulo);
@@ -68,7 +68,7 @@ class Comanda_model extends General_Model
 
 		$args = [
 			"articulo" => $combo->getPK(),
-			"cantidad" => 1,
+			"cantidad" => $cantidad,
 			"notas" => "",
 			"precio" => $precio,
 			"total" => $precio,
@@ -90,7 +90,8 @@ class Comanda_model extends General_Model
 	public function guardarDetalleCombo($args = [], $cuenta)
 	{
 		$art = new Articulo_model($args['articulo']);
-		$combo = $this->setDetalle($args['articulo'], $cuenta);
+		if(!isset($args['cantidad'])) { $args['cantidad'] = 1; }
+		$combo = $this->setDetalle($args['articulo'], $cuenta, null, null, (int)$args['cantidad']);
 
 		if ($combo) {
 			foreach ($args['receta'] as $rec) {

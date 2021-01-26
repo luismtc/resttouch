@@ -9,28 +9,11 @@ import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DesktopNotificationService } from '../../../shared/services/desktop-notification.service';
 
-// import { Comanda } from '../../interfaces/comanda';
-import { Impresora } from '../../../admin/interfaces/impresora';
+import { ProductoSelected } from '../../../wms/interfaces/articulo';
 import { ComandaService } from '../../services/comanda.service';
 import { FacturaService } from '../../../pos/services/factura.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
-
-interface productoSelected {
-  id: number;
-  nombre: string;
-  cuenta?: number;
-  cantidad: number;
-  impreso: number;
-  precio?: number;
-  total?: number;
-  notas?: string;
-  showInputNotas: boolean;
-  itemListHeight: string;
-  detalle_comanda?: number;
-  detalle_cuenta?: number;
-  impresora?: Impresora;
-}
 
 @Component({
   selector: 'app-comanda-en-linea',
@@ -47,7 +30,7 @@ interface productoSelected {
 export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   public dataSource: any[] = [];
-  public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'imprimir', 'facturar'];
+  public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'imprimir', 'cancelar', 'facturar'];
   public expandedElement: any | null;
   public comandasEnLinea: any[] = [];
   // public intervalId: any;
@@ -166,8 +149,8 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
   imprimir = (obj: any, idx: number = 0) => {
     // console.log(obj); // return;
     const listaProductos = this.setToPrint(obj.cuentas[0].productos);
-    const AImpresoraNormal: productoSelected[] = listaProductos.filter(p => +p.impresora.bluetooth === 0);
-    const AImpresoraBT: productoSelected[] = listaProductos.filter(p => +p.impresora.bluetooth === 1);
+    const AImpresoraNormal: ProductoSelected[] = listaProductos.filter(p => +p.impresora.bluetooth === 0);
+    const AImpresoraBT: ProductoSelected[] = listaProductos.filter(p => +p.impresora.bluetooth === 1);
 
     let objToPrint = {};
 
@@ -300,4 +283,50 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       this.imprimir(this.comandasEnLinea[i], i);
     }
   }
+
+  cancelarPedido = (obj: any) => {
+    // console.log(obj);
+
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel(
+        'Cancelar pedido',
+        'Si cancela el pedido, será necesario volver a ingresarlo. ¿Desea continuar?',
+        'Sí',
+        'No',
+        {
+          input: [
+            {
+              select: false,
+              label: 'Comentario',
+              valor: null,
+              id: 'comentario',
+              requerido: false
+            }
+          ]
+        }
+      )
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res.resultado) {
+        const params = {};
+
+        for (const input of res.config.input) {
+          params[input.id] = input.valor;
+        }
+
+        this.comandaSrvc.cancelarPedido(obj.comanda, params).subscribe(resAnula => {
+          if (resAnula.exito) {
+            this.snackBar.open('Pedido cancelado con éxito...', 'Pedido', { duration: 3000 });
+          } else {
+            this.snackBar.open(`ERROR: ${resAnula.mensaje}`, 'Pedido', { duration: 7000 });
+          }
+          this.loadComandasEnLinea();
+        });
+      }
+    });
+
+  }
+
 }

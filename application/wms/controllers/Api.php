@@ -53,7 +53,7 @@ class Api extends CI_Controller {
 			if ($registro->setDB($key)) {
 				$egr = new Egreso_model();
 
-				$egr->bodega = isset($req->bodega) ? isset($req->bodega) : 1;
+				$egr->bodega = isset($req->encabezado->bodega) ? $req->encabezado->bodega : 1;
 				
 				if (empty($id) || $egr->estatus_movimiento == 1) {
 					
