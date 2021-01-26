@@ -171,6 +171,7 @@ export class FormIngresoComponent implements OnInit {
         this.setPresentaciones();
         this.txtArticuloSelected = res[0].articulo;
         this.showDetalleIngresoForm = true;
+        this.setPresentaciones();
       }
     });
   }
