@@ -202,6 +202,12 @@ class Catalogo_model extends CI_Model {
 					->where("a.categoria_grupo", $row->categoria_grupo)
 					->get("categoria_grupo a")
 					->row();
+
+				$row->presentacion = $this->db
+					->where("presentacion", $row->presentacion)
+					->get("presentacion")
+					->row();
+					
 				$datos[] = $row;
 			}
 			$tmp = $datos;

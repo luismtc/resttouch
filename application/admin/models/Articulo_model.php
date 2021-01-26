@@ -425,7 +425,7 @@ class Articulo_model extends General_model {
 		} else if ($emp->metodo_costeo == 2) {
 			$tmp = $this->db
 						->select("
-							sum(c.precio_total/d.cantidad)/sum(c.cantidad/d.cantidad) as precio_unitario,
+							sum(c.precio_total*d.cantidad)/sum(c.cantidad*d.cantidad) as precio_unitario,
 							c.articulo, 
 							a.fecha")
 						->join("bodega b", "a.bodega = b.bodega")

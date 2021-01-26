@@ -148,7 +148,7 @@ class Ingreso_model extends General_Model {
 
 		return $this->db
 					->select("
-						sum(c.precio_total/e.cantidad)/sum(c.cantidad/e.cantidad) as precio_unitario, 
+						sum(c.precio_total*e.cantidad)/sum(c.cantidad*e.cantidad) as precio_unitario, 
 						c.articulo, 
 						a.fecha")
 					->join("bodega b", "a.bodega = b.bodega")
