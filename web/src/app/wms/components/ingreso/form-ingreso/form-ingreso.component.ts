@@ -168,6 +168,7 @@ export class FormIngresoComponent implements OnInit {
           precio_total: +res[0].precio_total,
           presentacion: res[0].presentacion.presentacion
         };
+        this.setPresentaciones();
         this.txtArticuloSelected = res[0].articulo;
         this.showDetalleIngresoForm = true;
       }

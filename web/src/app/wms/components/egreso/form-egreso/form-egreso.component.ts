@@ -200,6 +200,8 @@ export class FormEgresoComponent implements OnInit {
           precio_total: +res[0].precio_total,
           presentacion: res[0].presentacion.presentacion
         };
+        this.setPresentaciones();
+        this.setPresentacionesMerma();
         this.txtArticuloSelected = res[0].articulo;
         this.showDetalleEgresoForm = true;
       }
