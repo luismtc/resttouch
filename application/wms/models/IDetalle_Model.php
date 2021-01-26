@@ -10,7 +10,7 @@ class IDetalle_Model extends General_model {
 	public $precio_unitario;
 	public $precio_total;
 	public $presentacion;
-	public $precio_costo_iva;
+	public $precio_costo_iva=0;
 
 	public function __construct($id = "")
 	{
