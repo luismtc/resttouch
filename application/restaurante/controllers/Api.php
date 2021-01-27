@@ -952,19 +952,23 @@ class Api extends CI_Controller {
 													,'impreso' => 0
 													,'total' => $row['total']
 													,'notas' => ($row['nota'] ?? '')
+													,'receta' => verDato($row, "receta")
 												];
 												
 												$total += $row['total'];
-												
-												$det = $comanda->guardarDetalle($datosDcomanda);
-												$id = '';
-												if ($det) {
-													$cuenta->guardarDetalle([
-														'detalle_comanda' => $det->detalle_comanda
-													]);	
+												if (verDato($row, "combo")) {
+													$det = $comanda->guardarDetalleCombo($datosDcomanda, $cuenta->getPK());
 												} else {
-													$exito = false;
-													$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
+													$det = $comanda->guardarDetalle($datosDcomanda);
+													$id = '';
+													if ($det) {
+														$cuenta->guardarDetalle([
+															'detalle_comanda' => $det->detalle_comanda
+														]);	
+													} else {
+														$exito = false;
+														$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
+													}
 												}
 											} else {
 												$exito = false;
