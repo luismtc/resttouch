@@ -296,31 +296,33 @@ class Api extends CI_Controller {
 										$descuento = 0;
 										$pdescuento = 0;
 										if (isset($req['discount_applications']) && is_array($req['discount_applications'])) {
-											foreach ($req['discount_applications'] as $desc) {
-												$targetType = isset($desc['target_type']) ? strtolower($desc['target_type']) : '';
-												if (strtolower($desc['value_type']) == 'percentage' && $targetType !== 'shipping_line') {
-													$descuento += ($total * $desc['value'] /100);
-													$pdescuento += $desc['value'];
+											if(count($req['discount_applications']) > 0) {
+												foreach ($req['discount_applications'] as $desc) {
+													$targetType = isset($desc['target_type']) ? strtolower($desc['target_type']) : '';
+													if (strtolower($desc['value_type']) == 'percentage' && $targetType !== 'shipping_line') {
+														$descuento += ($total * $desc['value'] /100);
+														$pdescuento += $desc['value'];
+													}
 												}
-											}
-
-											//Inicia fix para los descuentos que son por monto fijo. JA 20/08/2020.
-											if(isset($req['discount_codes']) && is_array($req['discount_codes'])) {
-												foreach($req['discount_codes'] as $desc) {
-													$tipos = ['fixed_amount', 'shipping'];
-													if (in_array(strtolower($desc['type']), $tipos)) {
-														$descuento += $desc['amount'];
-														//$pdescuento += $desc['amount'];
-													}													
+	
+												//Inicia fix para los descuentos que son por monto fijo. JA 20/08/2020.
+												if(isset($req['discount_codes']) && is_array($req['discount_codes'])) {
+													foreach($req['discount_codes'] as $desc) {
+														$tipos = ['fixed_amount', 'shipping'];
+														if (in_array(strtolower($desc['type']), $tipos)) {
+															$descuento += $desc['amount'];
+															//$pdescuento += $desc['amount'];
+														}													
+													}
 												}
+												$pdescuento = $descuento / $total;
+												//Fin del fix para los descuentos que son por monto fijo. JA 20/08/2020.
+	
+												$pagos[] = [
+													"forma_pago" => 3, 
+													"monto" => $descuento
+												];
 											}
-											$pdescuento = $descuento / $total;
-											//Fin del fix para los descuentos que son por monto fijo. JA 20/08/2020.
-
-											$pagos[] = [
-												"forma_pago" => 3, 
-												"monto" => $descuento
-											];
 										}
 										array_push($pagos, [
 											"forma_pago" => 1, 
