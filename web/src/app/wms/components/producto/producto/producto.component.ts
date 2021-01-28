@@ -20,7 +20,7 @@ export class ProductoComponent implements OnInit {
   ) {
     this.articulo = {
       articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null, bien_servicio: 'B',
-      produccion: 0, presentacion_reporte: null, mostrar_pos: 0, impuesto_especial: null,rendimiento:1 , mostrar_inventario:0
+      produccion: 0, presentacion_reporte: null, mostrar_pos: 0, impuesto_especial: null, rendimiento: 1, mostrar_inventario: 0
     };
   }
   ngOnInit() {
@@ -42,7 +42,7 @@ export class ProductoComponent implements OnInit {
           mostrar_pos: obj.mostrar_pos,
           impuesto_especial: obj.impuesto_especial,
           shopify_id: obj.shopify_id,
-          multiple:obj.multiple,
+          multiple: obj.multiple,
           cantidad_minima: obj.cantidad_minima,
           cantidad_maxima: obj.cantidad_maxima,
           combo: obj.combo,

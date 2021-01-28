@@ -172,7 +172,16 @@ class Api extends CI_Controller {
 							$insert = false;
 							$propinaMonto = 0;
 
-							foreach ($req['line_items'] as $row) {
+							$lineItems = $req['line_items'];
+							if(get_configuracion($config, 'RT_ORDER_ITEMS_FULLFILLED', 3)) {
+								if (is_array($req['fulfillments'])) {
+									if(count($req['fulfillments']) > 0) {
+										$lineItems = $req['fulfillments'][0]['line_items'];
+									}
+								}								
+							}
+
+							foreach ($lineItems as $row) {
 								if (strtolower($row['title']) != 'tip') {
 									$art = $this->Articulo_model->buscar([
 										'shopify_id' => $row['variant_id'],
@@ -197,7 +206,7 @@ class Api extends CI_Controller {
 									}		
 									$total = 0;		
 									$exito = true;			
-									foreach ($req['line_items'] as $row) {
+									foreach ($lineItems as $row) {
 										$art = $this->Articulo_model->buscar([
 											'shopify_id' => $row['variant_id'],
 											'_uno' => true
@@ -315,7 +324,7 @@ class Api extends CI_Controller {
 														}													
 													}
 												}
-												$pdescuento = $descuento / $total;
+												$pdescuento = (float)$total !== 0 ? ($descuento / $total) : 0.00;
 												//Fin del fix para los descuentos que son por monto fijo. JA 20/08/2020.
 	
 												$pagos[] = [

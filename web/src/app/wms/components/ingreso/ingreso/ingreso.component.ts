@@ -44,6 +44,7 @@ export class IngresoComponent implements OnInit {
     this.ingreso = ing;
     this.frmIngreso.setProveedor(+this.ingreso.proveedor);
     this.frmIngreso.loadDetalleIngreso(+this.ingreso.ingreso);
+    this.frmIngreso.resetDetalleIngreso();
   }
 
   refreshIngresoList = () => {

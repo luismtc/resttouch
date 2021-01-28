@@ -15,7 +15,8 @@ class Egreso extends CI_Controller {
         	'Articulo_model',
         	'Catalogo_model',
 			'Configuracion_model',
-			'Presentacion_model'
+			'Presentacion_model',
+			'BodegaArticuloCosto_Model'
         ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -62,12 +63,14 @@ class Egreso extends CI_Controller {
 		if ($this->input->method() == 'post') {
 			if ($egr->estatus_movimiento == 1) {
 				$art = new Articulo_model($req['articulo']);
-				$req['precio_unitario']	= $art->costo;
+				$bac = new BodegaArticuloCosto_Model();
+				// $req['precio_unitario']	= $art->costo;
+				$req['precio_unitario']	= $bac->get_costo($egr->bodega, $art->articulo);
 				$pres = new Presentacion_model($req['presentacion']);
 				$presArt = $art->getPresentacionReporte();
 
 				if ($pres->medida == $presArt->medida) {
-					$det = $egr->setDetalle($req, $id);;
+					$det = $egr->setDetalle($req, $id);
 
 					if($det) {
 						$art->actualizarExistencia();

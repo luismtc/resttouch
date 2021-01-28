@@ -204,7 +204,6 @@ export class FormEgresoComponent implements OnInit {
         this.setPresentacionesMerma();
         this.txtArticuloSelected = res[0].articulo;
         this.showDetalleEgresoForm = true;
-        this.setPresentaciones();
       }
     });
   }

@@ -20,16 +20,18 @@ export class EgresoComponent implements OnInit {
   constructor(
     private ls: LocalstorageService
   ) {
-    this.egreso = { 
-      egreso: null, tipo_movimiento: null, bodega: null, fecha: moment().format(GLOBAL.dbDateFormat), usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), estatus_movimiento: 1, traslado: 0
+    this.egreso = {
+      egreso: null, tipo_movimiento: null, bodega: null, fecha: moment().format(GLOBAL.dbDateFormat),
+      usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), estatus_movimiento: 1, traslado: 0
     };
   }
 
   ngOnInit() {
   }
 
-  setEgreso = (egr: Egreso) => { 
+  setEgreso = (egr: Egreso) => {
     this.egreso = egr;
+    this.frmEgreso.resetDetalleEgreso();
     this.frmEgreso.loadDetalleEgreso(+this.egreso.egreso);
   }
 

@@ -138,12 +138,16 @@ class Egreso_model extends General_Model {
 				$validar = false;
 			}
 		}
+
+		
 		$art = new Articulo_model($articulo);
 		$tmp = new Presentacion_model();
 		$pres = $tmp->buscar([
 			"presentacion" => $args['presentacion'],
 			"_uno" => true
-		]);
+			]);
+			
+		$args['precio_total'] = ((float)$args['precio_unitario'] * (float)$args['cantidad'] * (float)$pres->cantidad);
 
 		$art->actualizarExistencia();
 		$oldart = new Articulo_model($det->articulo);

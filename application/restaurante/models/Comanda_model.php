@@ -491,16 +491,18 @@ class Comanda_model extends General_Model
 	public function envioMail()
 	{
 		$datos = $this->getComanda();
-		$fac   = new Factura_model($datos->factura->factura);
+		if(isset($datos->factura->factura)) {
+			$fac   = new Factura_model($datos->factura->factura);
 
-		$fac->cargarEmpresa();
-
-		enviarCorreo([
-			"de"     => ["noreply@c807.com", "noreply"],
-			"para"   => [$fac->empresa->correo_emisor],
-			"asunto" => "Notificación de Restouch",
-			"texto"  => $this->load->view("correo_comanda", ["datos" => $datos], true)
-		]);
+			$fac->cargarEmpresa();
+	
+			enviarCorreo([
+				"de"     => ["noreply@c807.com", "noreply"],
+				"para"   => [$fac->empresa->correo_emisor],
+				"asunto" => "Notificación de Restouch",
+				"texto"  => $this->load->view("correo_comanda", ["datos" => $datos], true)
+			]);
+		}
 	}
 
 	public function cierra_estacion($comanda)

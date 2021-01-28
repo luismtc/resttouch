@@ -11,7 +11,8 @@ class Ingreso extends CI_Controller {
         	'IDetalle_Model', 
         	'Articulo_model',
         	'Receta_model', 
-        	'Presentacion_model'
+			'Presentacion_model',
+			'BodegaArticuloCosto_Model'
         ]);
         $this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
@@ -53,6 +54,7 @@ class Ingreso extends CI_Controller {
 
 	public function guardar_detalle($ingreso, $id = '') {
 		$ing = new Ingreso_model($ingreso);
+		$bac = new BodegaArticuloCosto_Model();
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 
@@ -76,6 +78,7 @@ class Ingreso extends CI_Controller {
 						$art->actualizarExistencia();
 						$costo = $art->getCosto();
 						$art->guardar(["costo" => $costo]);
+						$bac->guardar_costos($ing->bodega, $art->articulo);
 						$datos['exito'] = true;
 						$datos['mensaje'] = "Datos Actualizados con Exito";
 						$datos['detalle'] = $det;
@@ -171,6 +174,23 @@ class Ingreso extends CI_Controller {
 		$this->output
 			->set_content_type("application/json")
 			->set_output(json_encode($datos));
+	}
+
+	public function actualiza_costo_bodega_articulo() {
+		$ingresos = $this->Ingreso_model->buscar();
+		$bac = new BodegaArticuloCosto_Model();
+		$datos = [];
+		$datos['exito'] = true;
+		$datos['mensaje'] = "Datos Actualizados con Exito";
+		foreach ($ingresos as $row) {
+			$ing = new Ingreso_model($row->ingreso);
+			foreach ($ing->getDetalle() as $val) {
+				$det = new IDetalle_Model($val->ingreso_detalle);
+				$bac->guardar_costos($ing->bodega, $det->articulo);
+			}
+		}
+
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
 }
 

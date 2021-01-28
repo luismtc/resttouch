@@ -398,7 +398,7 @@ class Articulo_model extends General_model {
 		return $impesp;
 	}
 
-	public function getCosto()
+	public function getCosto($args = [])
 	{
 		$sede = $this->db
 					 ->select("c.sede")
@@ -410,6 +410,14 @@ class Articulo_model extends General_model {
 
 		$sede = new Sede_model($sede->sede);
 		$emp = $sede->getEmpresa();
+
+		if (isset($args['bodega'])) {
+			$this->db->where('b.bodega', $args['bodega']);
+		}
+
+		if(isset($args['metodo_costeo'])) {
+			$emp->metodo_costeo = $args['metodo_costeo'];
+		}
 
 		if ($emp->metodo_costeo == 1) {
 			$tmp = $this->db

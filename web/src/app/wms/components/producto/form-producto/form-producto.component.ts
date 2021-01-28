@@ -97,6 +97,7 @@ export class FormProductoComponent implements OnInit {
         this.articuloSvd.emit();
         this.resetArticulo();
         this.articulo = res.articulo;
+        this.loadRecetas(this.articulo.articulo);
         this.loadArticulos();
         this.snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
       } else {
