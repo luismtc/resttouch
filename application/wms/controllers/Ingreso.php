@@ -12,7 +12,7 @@ class Ingreso extends CI_Controller {
         	'Articulo_model',
         	'Receta_model', 
 			'Presentacion_model',
-			'BodegaArticuloCosto_Model'
+			'BodegaArticuloCosto_model'
         ]);
         $this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
@@ -54,7 +54,7 @@ class Ingreso extends CI_Controller {
 
 	public function guardar_detalle($ingreso, $id = '') {
 		$ing = new Ingreso_model($ingreso);
-		$bac = new BodegaArticuloCosto_Model();
+		$bac = new BodegaArticuloCosto_model();
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 
@@ -178,7 +178,7 @@ class Ingreso extends CI_Controller {
 
 	public function actualiza_costo_bodega_articulo() {
 		$ingresos = $this->Ingreso_model->buscar();
-		$bac = new BodegaArticuloCosto_Model();
+		$bac = new BodegaArticuloCosto_model();
 		$datos = [];
 		$datos['exito'] = true;
 		$datos['mensaje'] = "Datos Actualizados con Exito";

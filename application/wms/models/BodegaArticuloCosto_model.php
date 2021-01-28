@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class BodegaArticuloCosto_Model extends General_model {
+class BodegaArticuloCosto_model extends General_model {
 
 	public $bodega_articulo_costo;
 	public $bodega;
@@ -27,7 +27,7 @@ class BodegaArticuloCosto_Model extends General_model {
     public function guardar_costos($idBodega, $idArticulo)
     {
         $obj = $this->buscar(['bodega' => $idBodega, 'articulo' => $idArticulo, '_uno' => true]);
-        $bac = new BodegaArticuloCosto_Model($obj ? $obj->bodega_articulo_costo : '');
+        $bac = new BodegaArticuloCosto_model($obj ? $obj->bodega_articulo_costo : '');
         $art = new Articulo_model($idArticulo);
 
         if (!$bac->bodega_articulo_costo) {
@@ -35,8 +35,11 @@ class BodegaArticuloCosto_Model extends General_model {
             $bac->articulo = $idArticulo;
         }
 
-        $bac->costo_ultima_compra = $art->getCosto(['bodega' => $idBodega, 'metodo_costeo' => 1]);
-        $bac->costo_promedio = $art->getCosto(['bodega' => $idBodega, 'metodo_costeo' => 2]);
+        $costoUltimaCompra = $art->getCosto(['bodega' => $idBodega, 'metodo_costeo' => 1]);
+        $costoPromedio = $art->getCosto(['bodega' => $idBodega, 'metodo_costeo' => 2]);
+
+        $bac->costo_ultima_compra = $costoUltimaCompra ? $costoUltimaCompra : 0.00;
+        $bac->costo_promedio = $costoPromedio ? $costoPromedio : 0.00;
 
         return $bac->guardar();
     }
