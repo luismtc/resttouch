@@ -14,7 +14,7 @@
         <tbody>
           <tr *ngFor="let p of inputData.productosACobrar; let i = index;">
             <td>{{p.cantidad}}&nbsp;{{p.nombre || p.articulo.descripcion}}</td>
-            <td class="text-right">{{(p.cantidad * p.precio) | number: '1.2-2'}}</td>
+            <td class="text-right">{{((p.cantidad * p.precio) + (p.cantidad * p.monto_extra)) | number: '1.2-2'}}</td>
           </tr>
         </tbody>
       </table>

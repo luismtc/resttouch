@@ -126,6 +126,9 @@ class Catalogo_model extends CI_Model {
 				$art->receta = $this->obtenerReceta($art->getPK());
 			}
 
+			$art->con_precio_extra = $row->precio_extra;
+			$art->monto_extra = $row->precio;
+
 			$datos[] = $art;
 		}
 

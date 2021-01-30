@@ -162,7 +162,7 @@ class Cuenta_model extends General_Model {
 		->join("articulo c", "b.articulo = c.articulo")
 		->join("categoria_grupo d", "d.categoria_grupo = c.categoria_grupo")
 		->where("a.cuenta_cuenta", $this->cuenta)
-		->where("c.mostrar_pos",1)
+		->where("c.mostrar_pos", 1)
 		->get("detalle_cuenta a")
 		->result();
 
@@ -172,6 +172,7 @@ class Cuenta_model extends General_Model {
 			$row->articulo = $det->getArticulo();
 			$tmp = $det->getDescripcionCombo();
 			$row->detalle = explode("|", $tmp);
+			$row->monto_extra = $det->getPrecioExtraCombo();
 			if (isset($args['_categoria_grupo'])) {
 				if (is_array($args["_categoria_grupo"])) {
 					if (in_array($row->articulo->categoria_grupo, $args['_categoria_grupo'])) {

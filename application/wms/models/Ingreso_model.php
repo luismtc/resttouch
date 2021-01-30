@@ -95,7 +95,7 @@ class Ingreso_model extends General_Model {
 				
 				if (verDato($args, "_costo")) {
 					$row->precio_total = $row->precio_total + $row->precio_costo_iva;
-					$row->precio_unitario = $row->precio_total/$row->cantidad;
+					$row->precio_unitario = (int)$row->cantidad !== 0 ? ($row->precio_total / $row->cantidad) : 0.00;
 				}
 				$datos[] = $row;
 			}
@@ -148,7 +148,7 @@ class Ingreso_model extends General_Model {
 
 		return $this->db
 					->select("
-						sum(c.precio_total*e.cantidad)/sum(c.cantidad*e.cantidad) as precio_unitario, 
+						sum(c.precio_total)/sum(c.cantidad*e.cantidad) as precio_unitario, 
 						c.articulo, 
 						a.fecha")
 					->join("bodega b", "a.bodega = b.bodega")

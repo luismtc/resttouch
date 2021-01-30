@@ -7,7 +7,6 @@ import { Impresora } from '../interfaces/impresora';
 import { CategoriaGrupo, CategoriaGrupoResponse, CategoriaGrupoImpresora } from '../interfaces/categoria-grupo';
 import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo, ArticuloResponse } from '../interfaces/articulo';
 import { ArticuloDetalle } from '../interfaces/articulo-detalle';
-// import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -21,74 +20,42 @@ export class ArticuloService {
   private articuloUrl = 'articulo';
   private categoriaUrl = 'categoria';
   private categoriaGrupoUrl = 'cgrupo';
-  // private usrToken: string = null;
 
   constructor(
-    private http: HttpClient,
-    // private ls: LocalstorageService
+    private http: HttpClient
   ) {
     this.srvcErrHndl = new ServiceErrorHandler();
-    // this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
+
   }
 
   getCategorias(fltr: any = {}): Observable<Categoria[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<Categoria[]>(
       `${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/buscar?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getImpresoras(fltr: any = {}): Observable<Impresora[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<Impresora[]>(
       `${GLOBAL.urlMantenimientos}/impresora/buscar?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveCategoria(entidad: Categoria) {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.post<any>(
       `${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/guardar${+entidad.categoria > 0 ? ('/' + entidad.categoria) : ''}`,
       entidad
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getCategoriasGrupos(fltr: any = {}): Observable<CategoriaGrupoResponse[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<CategoriaGrupoResponse[]>(
       `${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/buscar?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getCategoriaGrupoImpresora(fltr: any = {}): Observable<CategoriaGrupoImpresora[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<CategoriaGrupoImpresora[]>(
       `${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/get_categoria_grupo?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
@@ -109,88 +76,45 @@ export class ArticuloService {
   }
 
   saveCategoriaGrupo(entidad: CategoriaGrupo) {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.post<any>(
       `${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/guardar${entidad.categoria_grupo ? ('/' + entidad.categoria_grupo) : ''}`,
       entidad
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulos(fltr: any = {}): Observable<Articulo[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<Articulo[]>(
       `${GLOBAL.urlCatalogos}/get_articulo?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticuloCombo(fltr: any = {}): Observable<any[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
-
     return this.http.get<any[]>(
       `${GLOBAL.urlCatalogos}/get_articulo_combo?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulosIngreso(fltr: any = {}): Observable<Articulo[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<Articulo[]>(
       `${GLOBAL.urlCatalogos}/get_articulo_ingreso?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticulo(fltr: any = {}): Observable<ArticuloResponse[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<ArticuloResponse[]>(
       `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArbolArticulosMante(idsede: number): Observable<ArbolArticulos[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
     return this.http.get<ArbolArticulos[]>(
       `${GLOBAL.urlCatalogos}/get_lista_articulo/${idsede}?_todo=true`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArbolArticulos(idsede: number): Observable<ArbolArticulos[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<ArbolArticulos[]>(
       `${GLOBAL.urlCatalogos}/get_lista_articulo/${idsede}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
@@ -253,54 +177,29 @@ export class ArticuloService {
   }
 
   saveArticulo(entidad: Articulo) {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.post<any>(
       `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar${entidad.articulo ? ('/' + entidad.articulo) : ''}`,
       entidad
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getArticuloDetalle(idarticulo: number, fltr: any = {}): Observable<ArticuloDetalle[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.get<ArticuloDetalle[]>(
       `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar_receta/${idarticulo}?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveArticuloDetalle(entidad: ArticuloDetalle) {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.post<any>(
       `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/guardar_receta/${entidad.receta}${entidad.articulo_detalle ? ('/' + entidad.articulo_detalle) : ''}`,
       entidad
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   replicaArticulosEnSedes(entidad: any) {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
     return this.http.post<any>(
       `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/copiar`,
       entidad
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
-
 }

@@ -40,10 +40,14 @@ class Cuenta extends CI_Controller {
 
 					if ($cta->cerrada == 0) {
 						foreach ($det as $row) {
-							$total+= ($row->cantidad * $row->precio);
+							$total += (((float)$row->cantidad * (float)$row->precio) + ((float)$row->cantidad * (float)$row->monto_extra));
 						}
 
 						$total += $req->propina_monto;
+
+						if (isset($req->comision_monto)) {
+							$total += $req->comision_monto;
+						}
 						
 						if($total == $req->total) {
 							$exito = true;

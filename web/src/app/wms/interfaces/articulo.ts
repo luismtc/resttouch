@@ -91,4 +91,5 @@ export interface ProductoSelected {
     detalle_cuenta?: number;
     impresora?: Impresora;
     detalle?: [];
+    monto_extra?: number;
 }

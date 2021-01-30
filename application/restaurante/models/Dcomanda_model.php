@@ -65,6 +65,25 @@ class Dcomanda_model extends General_Model {
 		return $descripcion;
 	}
 
+	public function getPrecioExtraCombo()
+	{
+		$montoExtra = 0.00;
+		$tmp = $this->db
+					->select("a.detalle_comanda, a.precio")
+					->join("articulo b", "a.articulo = b.articulo")
+					->where("a.detalle_comanda_id", $this->getPK())
+					->get("detalle_comanda a")
+					->result();
+
+		foreach ($tmp as $row) {
+			$det = new Dcomanda_model($row->detalle_comanda);
+			$montoExtra += $row->precio ? (float)$row->precio : 0.00;
+			$montoExtra += $det->getPrecioExtraCombo();
+		}
+
+		return $montoExtra;
+	}
+
 	public function actualizarCantidadHijos()
 	{
 		$tmp = $this->db

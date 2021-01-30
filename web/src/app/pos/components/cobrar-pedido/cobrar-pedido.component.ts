@@ -71,7 +71,7 @@ export class CobrarPedidoComponent implements OnInit {
 
     this.inputData.totalDeCuenta = 0.00;
     this.inputData.productosACobrar.forEach((item: any) => {
-      this.inputData.totalDeCuenta += (item.precio * item.cantidad);
+      this.inputData.totalDeCuenta += (item.precio * item.cantidad) + (item.cantidad * item.monto_extra);
     });
 
     this.calculaPropina();
@@ -123,7 +123,8 @@ export class CobrarPedidoComponent implements OnInit {
       forma_pago: fp,
       monto: parseFloat(this.formaPago.monto).toFixed(2),
       propina: (this.formaPago.propina || 0.00),
-      documento: (this.formaPago.documento || null)
+      documento: (this.formaPago.documento || null),
+      comision_monto: +this.formaPago.monto * +fp.comision_porcentaje / 100
     });
     this.actualizaSaldo();
     this.pideDocumento = false;
@@ -156,17 +157,24 @@ export class CobrarPedidoComponent implements OnInit {
       forma_pago: [],
       total: this.inputData.totalDeCuenta + this.inputData.montoPropina,
       propina_monto: this.inputData.montoPropina,
-      propina_porcentaje: this.inputData.porcentajePropina
+      propina_porcentaje: this.inputData.porcentajePropina,
+      comision_monto: 0.00
     };
 
+    let sumaMontoComision = 0.00;
+
     for (const fp of this.formasPagoDeCuenta) {
+      sumaMontoComision += (fp.comision_monto || 0);
       objCobro.forma_pago.push({
         forma_pago: +fp.forma_pago.forma_pago,
-        monto: fp.monto,
+        monto: +fp.monto + +fp.comision_monto,
         propina: (fp.propina || 0.00),
-        documento: fp.documento
+        documento: fp.documento,
+        comision_monto: fp.comision_monto
       });
     }
+    objCobro.comision_monto = sumaMontoComision;
+    objCobro.total += sumaMontoComision;
 
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
     this.cobroSrvc.save(objCobro).subscribe(res => {

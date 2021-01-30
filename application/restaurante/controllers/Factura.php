@@ -69,12 +69,14 @@ class Factura extends CI_Controller {
 
 							foreach ($cta->getDetalle(["impreso" => 1]) as $det) {
 								$det->bien_servicio = $det->articulo->bien_servicio;
-								$det->articulo = $det->articulo->articulo;
+								$det->articulo = $det->articulo->articulo;								
 								
+								$det->precio_unitario = (float)$det->precio + (float)$det->monto_extra;
+								$det->total = $det->precio_unitario * $det->cantidad;
+
 								$det->descuento = $pdesc > 0 ? ($det->total * $pdesc) : 0;
 								
-								$det->precio_unitario = $det->precio;
-								$total = $det->total - $det->descuento;
+								$total = $det->total - (float)$det->descuento;
 
 								if ($fac->exenta) {
 									$det->monto_base = $total;

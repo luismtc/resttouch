@@ -201,7 +201,9 @@ export class FormEgresoComponent implements OnInit {
           presentacion: res[0].presentacion.presentacion
         };
         this.setPresentaciones();
-        this.setPresentacionesMerma();
+        if (!this.saveToDB) {
+          this.setPresentacionesMerma();
+        }
         this.txtArticuloSelected = res[0].articulo;
         this.showDetalleEgresoForm = true;
       }

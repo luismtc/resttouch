@@ -173,7 +173,7 @@ class Reporte extends CI_Controller {
 		$data = $_GET;
 		$data['impuesto_especial'] = false;
 		$mpdf = new \Mpdf\Mpdf([
-			//'tempDir' => sys_get_temp_dir(),
+			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$data['facturas'] = [];
