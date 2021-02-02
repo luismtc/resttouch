@@ -5,6 +5,7 @@ import { SedeService } from '../../../../admin/services/sede.service';
 import { Bodega } from '../../../interfaces/bodega';
 import { BodegaService } from '../../../services/bodega.service';
 import { Sede } from '../../../../admin/interfaces/sede';
+import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -19,6 +20,10 @@ export class ExistenciasComponent implements OnInit {
   public sedes: Sede[] = [];
   public params: any = {};
   public titulo: string = "Existencias";
+  public cargando = false;
+  public configBotones: ConfiguracionBotones = {
+    showPdf: true, showHtml: false, showExcel: true
+  };
 
   constructor(
   	private snackBar: MatSnackBar,
@@ -45,7 +50,9 @@ export class ExistenciasComponent implements OnInit {
   }
 
   onSubmit() {
+    this.cargando = true;
   	this.pdfServicio.getReporteExistencia(this.params).subscribe(res => {
+      this.cargando = false;
   		if (res) {
 	        const blob = new Blob([res], { type: 'application/pdf' });
 	        saveAs(blob, `${this.titulo}.pdf`);
@@ -53,6 +60,20 @@ export class ExistenciasComponent implements OnInit {
 	        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
 	      }
   	});
+  }
+
+  excelClick = () => {
+    this.params._excel = 1;
+    this.cargando = true;
+    this.pdfServicio.getReporteExistencia(this.params).subscribe(res => {
+      this.cargando = false;
+      if (res) {
+        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+        saveAs(blob, `${this.titulo}.xls`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+      }
+    });
   }
 
 }

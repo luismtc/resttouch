@@ -772,6 +772,77 @@ class Factura_model extends General_model
 		return $jsonToken;
 	}
 
+	public function enviarCofidi($args = [])
+	{
+		$link = $this->certificador->vinculo_factura;
+		$nit = str_repeat("0", 12 - strlen($this->empresa->nit)) . $this->empresa->nit;
+		$datos = array(
+			"Requestor" => $this->certificador->llave,
+			"Transaction" => $this->certificador->firma_codigo,
+			"Country" => $this->empresa->pais_iso_dos,
+			"Entity" => $nit,
+			"User" => $this->certificador->llave,
+			"UserName" => $this->certificador->usuario,
+			"Data1" => $this->esAnulacion == "S" ? $this->certificador->vinculo_anulacion : $this->certificador->vinculo_firma,
+			"Data2" => base64_encode(html_entity_decode($this->xml->saveXML())),
+			"Data3" => $this->getPK()
+		);
+
+		$client = new SoapClient($link);
+		
+		$res = $client->RequestTransaction($datos);
+		$res = $res->RequestTransactionResult;
+
+		if (isset($res->Response->Result) || $res->Response->Code == 9) {
+			if ($res->Response->Code == 9) {
+
+				$client = new SoapClient($link);
+
+				$datos = array(
+					"Requestor" => $this->certificador->llave,
+					"Transaction" => $this->certificador->firma_alias,
+					"Country" => $this->empresa->pais_iso_dos,
+					"Entity" => $nit,
+					"User" => $this->certificador->llave,
+					"UserName" => $this->certificador->usuario,
+					"Data1" => $this->getPK(),
+					"Data2" => "",
+					"Data3" => ""
+				);
+
+				$res = $client->RequestTransaction($datos);
+				$res = $res->RequestTransactionResult;
+
+				if ($res->Response->Result == 1 && $this->esAnulacion === 'N') {
+					$data = simplexml_load_string(base64_decode($res->ResponseData->ResponseData2));
+					$data = json_decode(json_encode($data->doc));
+
+					$this->numero_factura = $data->serial;
+					$this->serie_factura = $data->batch;
+					$this->fel_uuid = $data->uuid;
+				} 
+			} else if ($res->Response->Result == 1) {
+				if ($this->esAnulacion === 'N') {
+					$this->numero_factura = $res->Response->Identifier->Batch;
+					$this->serie_factura = $res->Response->Identifier->Serial;
+					$this->fel_uuid = $res->Response->Identifier->DocumentGUID;	
+				} else {
+					$this->fel_uuid_anulacion = $this->fel_uuid;
+				}
+
+				$res->resultado = true;
+				$res->xml_certificado = $res->ResponseData->ResponseData1;
+				$res->fecha = $res->Response->TimeStamp;
+			}
+
+			$this->guardar();
+
+			return $res;
+		}
+
+		return $res->RequestTransactionResult->Response;
+	}
+
 	public function pdfInfile()
 	{
 		return [
