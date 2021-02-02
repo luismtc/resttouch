@@ -11,7 +11,7 @@ import { RazonAnulacion } from '../../../interfaces/razon-anulacion';
 export class RazonAnulacionComponent implements OnInit {
 
   public razon: RazonAnulacion;
-  @ViewChild('lstRazon', { static: false }) lstRazonComponent: ListaRazonAnulacionComponent;
+  @ViewChild('lstRazon') lstRazonComponent: ListaRazonAnulacionComponent;
 
   constructor() { 
     this.razon = {

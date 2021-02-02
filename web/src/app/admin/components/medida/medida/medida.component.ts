@@ -11,7 +11,7 @@ import { Medida } from '../../../interfaces/medida';
 export class MedidaComponent implements OnInit {
 
   public medida: Medida;
-  @ViewChild('lstMedida', { static: false }) lstMedidaComponent: ListaMedidaComponent;
+  @ViewChild('lstMedida') lstMedidaComponent: ListaMedidaComponent;
 
   constructor() {
     this.medida = { 

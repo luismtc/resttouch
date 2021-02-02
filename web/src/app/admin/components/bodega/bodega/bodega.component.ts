@@ -12,7 +12,7 @@ import {Bodega} from '../../../../wms/interfaces/bodega'
 export class BodegaComponent implements OnInit {
 
   public bodega: Bodega;
-  @ViewChild('lstBodega', { static: false }) lstBodegaComponent: ListaBodegaComponent;
+  @ViewChild('lstBodega') lstBodegaComponent: ListaBodegaComponent;
 
   constructor() {
     this.bodega = {

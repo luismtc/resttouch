@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ListaCorporacionComponent } from '../lista-corporacion/lista-corporacion.component';
 import { ListaEmpresaComponent } from '../../empresa/lista-empresa/lista-empresa.component';
 import { ListaSedeComponent } from '../../sede/lista-sede/lista-sede.component';
@@ -16,9 +16,9 @@ export class CorporacionComponent implements OnInit {
   public empresa: Empresa;
   public sede: Sede;
 
-  @ViewChild('lstCorporacion', { static: false }) lstCorporacionComponent: ListaCorporacionComponent;
-  @ViewChild('lstEmpresa', { static: false }) lstEmpresaComponent: ListaEmpresaComponent;
-  @ViewChild('lstSede', { static: false }) lstSedeComponent: ListaSedeComponent;
+  @ViewChild('lstCorporacion') lstCorporacionComponent: ListaCorporacionComponent;
+  @ViewChild('lstEmpresa') lstEmpresaComponent: ListaEmpresaComponent;
+  @ViewChild('lstSede') lstSedeComponent: ListaSedeComponent;
 
   constructor() { }
 

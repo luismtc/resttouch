@@ -4,30 +4,26 @@
         <div fxFlex="50%" fxFlex.xs="100%">
             <!--Inicia ventas por día-->
             <ejs-chart [primaryXAxis]="xAxisPorDia" [primaryYAxis]="yAxisPorDia" [title]="chartTitlePorDia" [legendSettings]="legendPorDia" [tooltip]="toolTipSettingsPorDia">
-                <e-series-collection>
-                    
+                <e-series-collection>                    
                     <!--<e-series type="Line" [dataSource]="datos.porDia" xName="fecha" yName="venta" name="Ventas" [marker]="markerSettingsPorDia"></e-series>-->
-
                     <e-series 
-                        *ngFor="let porDia of datos.porDia" 
+                        *ngFor="let pd of datos.porDia; index as i" 
                         type="Line" 
-                        [dataSource]="porDia.datos" 
+                        [dataSource]="pd.datos" 
                         xName="fecha" 
-                        yName="venta" 
-                        [name]="porDia.nombre" 
+                        yName="venta"                         
                         [marker]="markerSettingsPorDia">
-                    </e-series>
-                    
+                    </e-series>                    
                 </e-series-collection>
             </ejs-chart>
             <!--Finaliza ventas por día-->
         </div>
         <div fxFlex="50%" fxFlex.xs="100%">
             <!--Inicia ventas por categoría-->
-            <ejs-chart [primaryXAxis]="xAxisPorCategoria" [primaryYAxis]="yAxisPorCategoria" [title]="chartTitlePorCategoria" [legendSettings]="legendPorCategoria" [tooltip]="toolTipSettingsPorCategoria">
+            <!--<ejs-chart [primaryXAxis]="xAxisPorCategoria" [primaryYAxis]="yAxisPorCategoria" [title]="chartTitlePorCategoria" [legendSettings]="legendPorCategoria" [tooltip]="toolTipSettingsPorCategoria">
                 <e-series-collection>
                     <e-series 
-                        *ngFor="let porCategoria of datos.porCategoria" 
+                        *ngFor="let porCategoria of datos.porCategoria; index as i" 
                         type="Line" 
                         [dataSource]="porCategoria.datos" 
                         xName="categoria" 
@@ -36,7 +32,7 @@
                         [marker]="markerSettingsPorCategoria">
                     </e-series>
                 </e-series-collection>
-            </ejs-chart>
+            </ejs-chart>-->
             <!--Finaliza ventas por categoría-->
         </div>
     </div>
@@ -45,10 +41,10 @@
     <div fxLayout="row" fxLayout.xs="column" fxFlexFill>
         <div fxFlex="50%" fxFlex.xs="100%">
             <!--Inicia ventas por turno-->
-            <ejs-chart [primaryXAxis]="xAxisPorTurno" [primaryYAxis]="yAxisPorTurno" [title]="chartTitlePorTurno" [legendSettings]="legendPorTurno" [tooltip]="toolTipSettingsPorTurno">
+            <!--<ejs-chart [primaryXAxis]="xAxisPorTurno" [primaryYAxis]="yAxisPorTurno" [title]="chartTitlePorTurno" [legendSettings]="legendPorTurno" [tooltip]="toolTipSettingsPorTurno">
                 <e-series-collection>
                     <e-series 
-                        *ngFor="let porTurno of datos.porTurno" 
+                        *ngFor="let porTurno of datos.porTurno; index as i" 
                         type="Line" 
                         [dataSource]="porTurno.datos" 
                         xName="turno" 
@@ -57,15 +53,15 @@
                         [marker]="markerSettingsPorTurno">
                     </e-series>
                 </e-series-collection>
-            </ejs-chart>
+            </ejs-chart>-->
             <!--Finaliza ventas por turno-->
         </div>
         <div fxFlex="50%" fxFlex.xs="100%">
             <!--Inicia ventas por mesero-->
-            <ejs-chart [primaryXAxis]="xAxisPorMesero" [primaryYAxis]="yAxisPorMesero" [title]="chartTitlePorMesero" [legendSettings]="legendPorMesero" [tooltip]="toolTipSettingsPorMesero">
+            <!--<ejs-chart [primaryXAxis]="xAxisPorMesero" [primaryYAxis]="yAxisPorMesero" [title]="chartTitlePorMesero" [legendSettings]="legendPorMesero" [tooltip]="toolTipSettingsPorMesero">
                 <e-series-collection>
                     <e-series 
-                        *ngFor="let porMesero of datos.porMesero" 
+                        *ngFor="let porMesero of datos.porMesero; index as i" 
                         type="Line" 
                         [dataSource]="porMesero.datos" 
                         xName="mesero" 
@@ -74,7 +70,7 @@
                         [marker]="markerSettingsPorMesero">
                     </e-series>
                 </e-series-collection>
-            </ejs-chart>
+            </ejs-chart>-->
             <!--Finaliza ventas por mesero-->
         </div>
     </div>

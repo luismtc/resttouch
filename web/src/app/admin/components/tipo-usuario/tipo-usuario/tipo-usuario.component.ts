@@ -11,8 +11,8 @@ import { UsuarioTipo } from '../../../interfaces/usuario-tipo';
 })
 export class TipoUsuarioComponent implements OnInit {
   public usuarioTipo: UsuarioTipo;
-  @ViewChild('lstTipoUsuario', { static: false }) lstUsuarioTipo: ListaTipoUsuarioComponent;
-  @ViewChild('frmTipoUsuario', { static: false }) frmTipoUsuario: FormTipoUsuarioComponent;
+  @ViewChild('lstTipoUsuario') lstUsuarioTipo: ListaTipoUsuarioComponent;
+  @ViewChild('frmTipoUsuario') frmTipoUsuario: FormTipoUsuarioComponent;
   constructor() {
     this.usuarioTipo = {
       usuario_tipo: null, descripcion: null, jerarquia: null

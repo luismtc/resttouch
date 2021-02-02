@@ -29,7 +29,7 @@ export class MesaComponent implements OnInit, AfterViewInit {
   @Input() isDisabled = false;
   // tslint:disable-next-line: no-output-on-prefix
   @Output() onClickMesa = new EventEmitter();
-  @ViewChild('divMesa', { static: false }) divMesa: ElementRef;
+  @ViewChild('divMesa') divMesa: ElementRef;
 
   public objMesa: HTMLElement;
   public urlImage = '/assets/img/mesas/';

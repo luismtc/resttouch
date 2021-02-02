@@ -60,9 +60,6 @@ import { ReplicarASedesDialogComponent } from './components/producto/replicar-a-
     KardexComponent, ListaProductoAltComponent, ProduccionComponent, ReporteComponent, ValorizadoComponent, FisicoComponent,
     FormInventarioFisicoComponent, ReplicarASedesComponent, ReplicarASedesDialogComponent
   ],
-  entryComponents: [
-    ReplicarASedesDialogComponent
-  ],
   imports: [
     CommonModule,
     WmsRoutingModule,

@@ -12,8 +12,8 @@ export class UsuarioSedeComponent implements OnInit {
 
   public usuario: Usuario;
 
-	@ViewChild('lstUsuario', { static: false }) lstUsuarioComponent: UsuarioSedeListaComponent;
-	@ViewChild('frmUsuarioSede', { static: false }) frmUsuarioSede: UsuarioSedeFormComponent;
+	@ViewChild('lstUsuario') lstUsuarioComponent: UsuarioSedeListaComponent;
+	@ViewChild('frmUsuarioSede') frmUsuarioSede: UsuarioSedeFormComponent;
 
 	constructor() {
 		this.usuario = {

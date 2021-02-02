@@ -12,8 +12,8 @@ import { Configuracion } from '../../../../interfaces/certificador';
 export class CertificadorConfiguracionComponent implements OnInit {
 
   public certificador: Configuracion;
-  @ViewChild('lstCertificador', { static: false }) lstCertificadorComponent: ListaCertificadorConfiguracionComponent;
-	@ViewChild('frmCertificador', { static: false }) frmCertificador: FormCertificadorConfiguracionComponent;
+  @ViewChild('lstCertificador') lstCertificadorComponent: ListaCertificadorConfiguracionComponent;
+	@ViewChild('frmCertificador') frmCertificador: FormCertificadorConfiguracionComponent;
 
 	constructor() {
 		this.certificador = {

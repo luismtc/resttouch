@@ -3,17 +3,17 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
-  { path: 'admin', loadChildren:'./admin/admin.module#AdminModule' },
-  { path: 'restaurante', loadChildren:'./restaurante/restaurante.module#RestauranteModule' },
-  { path: 'wms', loadChildren:'./wms/wms.module#WmsModule' },
-  { path: 'ordcomp', loadChildren:'./orden-compra/orden-compra.module#OrdenCompraModule' },
-  { path: 'pos', loadChildren:'./pos/pos.module#PosModule' },
+  { path: 'admin', loadChildren:() => import('./admin/admin.module').then(m => m.AdminModule) },
+  { path: 'restaurante', loadChildren:() => import('./restaurante/restaurante.module').then(m => m.RestauranteModule) },
+  { path: 'wms', loadChildren:() => import('./wms/wms.module').then(m => m.WmsModule) },
+  { path: 'ordcomp', loadChildren:() => import('./orden-compra/orden-compra.module').then(m => m.OrdenCompraModule) },
+  { path: 'pos', loadChildren:() => import('./pos/pos.module').then(m => m.PosModule) },
   { path: '', redirectTo: 'admin/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

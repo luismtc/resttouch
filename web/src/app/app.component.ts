@@ -13,7 +13,7 @@ import { AppMenuService } from './admin/services/app-menu.service';
 })
 export class AppComponent implements OnInit{
 
-  @ViewChild('sidenav', { static: false }) sidenav: any;
+  @ViewChild('sidenav') sidenav: any;
 
   title = 'Rest-Touch';
   isLogged: boolean = false;

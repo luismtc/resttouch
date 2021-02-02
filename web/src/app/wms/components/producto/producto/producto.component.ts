@@ -12,8 +12,8 @@ import { ArticuloService } from '../../../services/articulo.service';
 export class ProductoComponent implements OnInit {
 
   public articulo: Articulo;
-  @ViewChild('lstProducto', { static: false }) lstProductoComponent: ListaProductoComponent;
-  @ViewChild('frmProducto', { static: false }) frmProductoComponent: FormProductoComponent;
+  @ViewChild('lstProducto') lstProductoComponent: ListaProductoComponent;
+  @ViewChild('frmProducto') frmProductoComponent: FormProductoComponent;
 
   constructor(
     private articuloSrvc: ArticuloService

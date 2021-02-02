@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { GLOBAL } from '../../../../shared/global';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Sede } from '../../../../admin/interfaces/sede';

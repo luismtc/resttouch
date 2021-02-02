@@ -35,7 +35,7 @@ export class TranComandaComponent implements OnInit {
 
   @Input() mesaEnUso: ComandaGetResponse;
   @Output() closeSideNavEv = new EventEmitter();
-  @ViewChild('appLstProdAlt', { static: false }) appLstProdAlt: ListaProductoAltComponent;
+  @ViewChild('appLstProdAlt') appLstProdAlt: ListaProductoAltComponent;
   @Output() mesaSavedEv: EventEmitter<any> = new EventEmitter();
 
   public lstProductosSeleccionados: ProductoSelected[];

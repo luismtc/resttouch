@@ -20,8 +20,8 @@ import { Egreso } from '../../interfaces/egreso';
 })
 export class TransformacionComponent implements OnInit {
 
-  @ViewChild('frmEgreso', { static: false }) frmEgreso: FormEgresoComponent;
-  @ViewChild('frmIngreso', { static: false }) frmIngreso: FormIngresoComponent;
+  @ViewChild('frmEgreso') frmEgreso: FormEgresoComponent;
+  @ViewChild('frmIngreso') frmIngreso: FormIngresoComponent;
 
   public transformacion: Transformacion;
   public mermaDetalle: TransformacionDetalleMovimiento[] = [];

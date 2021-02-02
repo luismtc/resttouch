@@ -11,7 +11,7 @@ import { Area } from '../../../interfaces/area';
 export class AreaComponent implements OnInit {
 
   public area: Area;
-  @ViewChild('listaAreas', { static: false }) lstAreasComponent: ListaAreaComponent;
+  @ViewChild('listaAreas') lstAreasComponent: ListaAreaComponent;
 
   constructor() {
     this.area = {area: null, sede: null, nombre: null, impresora: null, impresora_factura: null };

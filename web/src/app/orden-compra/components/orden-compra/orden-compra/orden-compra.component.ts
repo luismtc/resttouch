@@ -13,8 +13,8 @@ import { OrdenCompra } from '../../../interfaces/orden-compra';
 export class OrdenCompraComponent implements OnInit {
 
   public ordenCompra: OrdenCompra;
-  @ViewChild('lstOrdenCompra', { static: false }) lstOrdenCompraComponent: ListaOrdenCompraComponent;
-  @ViewChild('frmOrdenCompra', { static: false }) frmOrdenCompra: FormOrdenCompraComponent;
+  @ViewChild('lstOrdenCompra') lstOrdenCompraComponent: ListaOrdenCompraComponent;
+  @ViewChild('frmOrdenCompra') frmOrdenCompra: FormOrdenCompraComponent;
 
   constructor(
     private ls: LocalstorageService

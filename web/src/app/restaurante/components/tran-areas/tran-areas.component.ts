@@ -28,10 +28,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   public openedRightPanel: boolean;
   public cargando = false;
 
-  @ViewChild('matTabArea', { static: false }) pestania: ElementRef;
-  @ViewChild('rightSidenav', { static: false }) rightSidenav: MatSidenav;
-  @ViewChild('tabArea', { static: false }) tabArea: MatTab;
-  @ViewChild('snTranComanda', { static: false }) snTrancomanda: TranComandaComponent;
+  @ViewChild('matTabArea') pestania: ElementRef;
+  @ViewChild('rightSidenav') rightSidenav: MatSidenav;
+  @ViewChild('tabArea') tabArea: MatTab;
+  @ViewChild('snTranComanda') snTrancomanda: TranComandaComponent;
   public lstTabsAreas: Area[] = [];
   public lstTabsAreasForUpdate: Area[] = [];
   public mesaSeleccionada: any;

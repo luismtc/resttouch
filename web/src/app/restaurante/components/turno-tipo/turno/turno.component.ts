@@ -11,7 +11,7 @@ import { TipoTurno } from '../../../interfaces/tipo-turno';
 export class TurnoTipoComponent implements OnInit {
 
   public turno: TipoTurno;
-  @ViewChild('lstTurno', { static: false }) lstTurnoComponent: ListaTurnoTipoComponent;
+  @ViewChild('lstTurno') lstTurnoComponent: ListaTurnoTipoComponent;
 
   constructor() {
     this.turno = { 

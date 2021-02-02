@@ -15,8 +15,8 @@ import { Turno } from '../../../interfaces/turno';
 export class TurnoComponent implements OnInit {
 
   public turno: Turno;
-  @ViewChild('lstTurno', { static: false }) lstTurnoComponent: ListaTurnoComponent;
-  @ViewChild('frmTurno', { static: false }) frmTurno: FormTurnoComponent;
+  @ViewChild('lstTurno') lstTurnoComponent: ListaTurnoComponent;
+  @ViewChild('frmTurno') frmTurno: FormTurnoComponent;
 
   constructor(
     //private ls: LocalstorageService

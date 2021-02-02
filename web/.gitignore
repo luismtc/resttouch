@@ -46,3 +46,4 @@ testem.log
 .DS_Store
 Thumbs.db
 debug.log
+/v8.2.11

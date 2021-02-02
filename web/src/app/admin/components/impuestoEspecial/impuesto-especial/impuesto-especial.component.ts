@@ -12,7 +12,7 @@ import { ImpuestoEspecial } from '../../../interfaces/impuesto-especial';
 export class ImpuestoEspecialComponent implements OnInit {
 
   public impuestoEspecial: ImpuestoEspecial;
-  @ViewChild('lstImpuestoEspecial', { static: false }) lstImpuestoEspecial: ListaImpuestoEspecialComponent;
+  @ViewChild('lstImpuestoEspecial') lstImpuestoEspecial: ListaImpuestoEspecialComponent;
 
   constructor() {
     this.impuestoEspecial = { impuesto_especial: null, descripcion: null, porcentaje: null };

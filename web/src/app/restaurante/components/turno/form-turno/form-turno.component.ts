@@ -5,7 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 
 import { TipoTurno } from '../../../interfaces/tipo-turno';

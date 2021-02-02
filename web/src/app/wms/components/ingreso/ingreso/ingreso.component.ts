@@ -14,8 +14,8 @@ import { Ingreso } from '../../../interfaces/ingreso';
 export class IngresoComponent implements OnInit {
 
   public ingreso: Ingreso;
-  @ViewChild('lstIngreso', { static: false }) lstIngresoComponent: ListaIngresoComponent;
-  @ViewChild('frmIngreso', { static: false }) frmIngreso: FormIngresoComponent;
+  @ViewChild('lstIngreso') lstIngresoComponent: ListaIngresoComponent;
+  @ViewChild('frmIngreso') frmIngreso: FormIngresoComponent;
   public breakpoint = 2;
   // public tamFila: number;
 

@@ -18,7 +18,7 @@ import { Ingreso } from '../../interfaces/ingreso';
 })
 export class ProduccionComponent implements OnInit {
 
-  @ViewChild('frmIngreso', { static: false }) frmIngreso: FormIngresoComponent;
+  @ViewChild('frmIngreso') frmIngreso: FormIngresoComponent;
   public ingreso: Ingreso;
   public produccion: TransformacionIngreso;
 

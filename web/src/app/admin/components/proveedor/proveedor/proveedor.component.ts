@@ -11,7 +11,7 @@ import { Proveedor } from '../../../../wms/interfaces/proveedor';
 export class ProveedorComponent implements OnInit {
 
   public proveedor: Proveedor;
-  @ViewChild('lstProveedor', { static: false }) lstProveedorComponent: ListaProveedorComponent;
+  @ViewChild('lstProveedor') lstProveedorComponent: ListaProveedorComponent;
 
   constructor() {
     this.proveedor = {

@@ -15,8 +15,8 @@ export class AccesoUsuarioComponent implements OnInit {
 
 	public usuario: Usuario;
 
-	@ViewChild('lstUsuario', { static: false }) lstUsuarioComponent: ListaAccesoUsuarioComponent;
-	@ViewChild('frmAccesoUsuario', { static: false }) frmAccesoUsuario: FormAccesoUsuarioComponent;
+	@ViewChild('lstUsuario') lstUsuarioComponent: ListaAccesoUsuarioComponent;
+	@ViewChild('frmAccesoUsuario') frmAccesoUsuario: FormAccesoUsuarioComponent;
 
 	constructor(
 		private ls: LocalstorageService

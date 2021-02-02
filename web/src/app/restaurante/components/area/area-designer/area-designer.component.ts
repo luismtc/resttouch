@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { ConfiguraMesaComponent } from '../configura-mesa/configura-mesa.component';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
@@ -18,7 +18,7 @@ import { MesaService } from '../../../services/mesa.service';
 })
 export class AreaDesignerComponent implements OnInit {
 
-  @ViewChild(MatMenuTrigger, { static: false }) contextMenu: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
 
   public mesas: Mesa[] = [];
   public contextMenuPosition = { x: '0px', y: '0px' };

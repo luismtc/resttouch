@@ -12,8 +12,8 @@ export class CertificadorFelComponent implements OnInit {
 
   public certificador: Configuracion;
 
-  @ViewChild('lstCertificador', { static: false }) lstCertificadorComponent: ListaCertificadorConfiguracionComponent;
-  @ViewChild('frmCertificador', { static: false }) frmCertificador: FormCertificadorFelComponent;
+  @ViewChild('lstCertificador') lstCertificadorComponent: ListaCertificadorConfiguracionComponent;
+  @ViewChild('frmCertificador') frmCertificador: FormCertificadorFelComponent;
 
   constructor() { }
 

@@ -10,7 +10,7 @@ import { ccGeneral } from '../../../interfaces/cajacorte';
 })
 export class CajacorteComponent implements OnInit {
   public ccorte: ccGeneral;
-  @ViewChild('lstCortecaja', { static: false }) lstCajacorteComponent: CajacorteListaComponent;
+  @ViewChild('lstCortecaja') lstCajacorteComponent: CajacorteListaComponent;
 
   constructor() {
     this.ccorte = {

@@ -13,8 +13,8 @@ import { Factura } from '../../../interfaces/factura';
 export class FacturaManualComponent implements OnInit {
 
   public factura: Factura;
-  @ViewChild('lstFacturaManual', { static: false }) lstFacturaComponent: ListaFacturaManualComponent;
-  @ViewChild('frmFacturaManual', { static: false }) frmFactura: FormFacturaManualComponent;
+  @ViewChild('lstFacturaManual') lstFacturaComponent: ListaFacturaManualComponent;
+  @ViewChild('frmFacturaManual') frmFactura: FormFacturaManualComponent;
 
   constructor( ) {
     this.factura = {

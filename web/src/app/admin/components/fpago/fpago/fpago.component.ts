@@ -10,12 +10,19 @@ import { FormaPago } from '../../../interfaces/forma-pago';
 export class FpagoComponent implements OnInit {
 
   public fpago: FormaPago;
-  @ViewChild('lstFPago', { static: false }) lstFpagoComponent: ListaPagoComponent;
+  @ViewChild('lstFPago') lstFpagoComponent: ListaPagoComponent;
 
    constructor() {
     this.fpago = {
       forma_pago: null,
       descripcion: null,
+      descuento: 0,
+      comision_porcentaje: 0.00,
+      retencion_porcentaje: 0.00,
+      pedirdocumento: 0,
+      pedirautorizacion: 0,
+      adjuntararchivo: 0,
+      sinfactura: 0,
       activo: 1
     };
   }

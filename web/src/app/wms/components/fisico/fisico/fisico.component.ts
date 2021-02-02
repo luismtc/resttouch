@@ -11,8 +11,8 @@ import { ArticuloService } from '../../../services/articulo.service';
 })
 export class FisicoComponent implements OnInit {
 
-  @ViewChild('rptInventario', { static: false }) rptInventarioComponent: ReporteComponent;
-  @ViewChild('frmInventario', { static: false }) frmInventarioComponent: FormInventarioFisicoComponent;
+  @ViewChild('rptInventario') rptInventarioComponent: ReporteComponent;
+  @ViewChild('frmInventario') frmInventarioComponent: FormInventarioFisicoComponent;
 
   constructor() { }
 

@@ -11,7 +11,7 @@ import { Cliente } from '../../../interfaces/cliente';
 export class ClienteComponent implements OnInit {
 
   public cliente: Cliente;
-  @ViewChild('lstCliente', { static: false }) lstClienteComponent: ListaClienteComponent;
+  @ViewChild('lstCliente') lstClienteComponent: ListaClienteComponent;
 
   constructor() {
     this.cliente = { 

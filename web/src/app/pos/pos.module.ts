@@ -44,9 +44,6 @@ import { FormFacturaManualComponent } from './components/facturaManual/form-fact
     CobrarPedidoComponent, FormaPagoComponent, ListaFormaPagoComponent, FormFormaPagoComponent, FacturaManualComponent,
     ListaFacturaManualComponent, FormFacturaManualComponent
   ],
-  entryComponents: [
-    CobrarPedidoComponent
-  ],
   imports: [
     CommonModule,
     PosRoutingModule,

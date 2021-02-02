@@ -14,8 +14,8 @@ import { Egreso } from '../../../interfaces/egreso';
 export class EgresoComponent implements OnInit {
 
   public egreso: Egreso;
-  @ViewChild('lstEgreso', { static: false }) lstEgresoComponent: ListaEgresoComponent;
-  @ViewChild('frmEgreso', { static: false }) frmEgreso: FormEgresoComponent;
+  @ViewChild('lstEgreso') lstEgresoComponent: ListaEgresoComponent;
+  @ViewChild('frmEgreso') frmEgreso: FormEgresoComponent;
 
   constructor(
     private ls: LocalstorageService

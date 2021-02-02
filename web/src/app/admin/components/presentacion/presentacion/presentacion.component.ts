@@ -11,7 +11,7 @@ import { Presentacion } from '../../../interfaces/presentacion';
 export class PresentacionComponent implements OnInit {
 
   public presentacion: Presentacion;
-  @ViewChild('lstPresentacion', { static: false }) lstMedidaComponent: ListaPresentacionComponent;
+  @ViewChild('lstPresentacion') lstMedidaComponent: ListaPresentacionComponent;
 
   constructor() {
     this.presentacion = {

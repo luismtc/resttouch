@@ -11,7 +11,7 @@ import { FormaPago } from '../../../interfaces/forma-pago';
 export class FormaPagoComponent implements OnInit {
 
   public formaPago: FormaPago;
-  @ViewChild('lstFormaPago', { static: false }) lstFormaPagoComponent: ListaFormaPagoComponent;
+  @ViewChild('lstFormaPago') lstFormaPagoComponent: ListaFormaPagoComponent;
 
   constructor() {
     this.formaPago = { forma_pago: null, descripcion: null, activo: 1 };

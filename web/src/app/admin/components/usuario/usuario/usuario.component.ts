@@ -10,7 +10,7 @@ import { Usuario } from '../../../models/usuario';
 export class UsuarioComponent implements OnInit {
 
   public usuario: Usuario;
-  @ViewChild('lstUsuarioComponent', { static: false }) lstUsuarioComponent: ListaUsuarioComponent;
+  @ViewChild('lstUsuarioComponent') lstUsuarioComponent: ListaUsuarioComponent;
 
   constructor() {
     this.usuario = new Usuario(null, null, null, null, null, null, 0, null, 0);

@@ -11,7 +11,7 @@ import { Impresora } from '../../../interfaces/impresora';
 export class ImpresoraComponent implements OnInit {
 
   public impresora: Impresora;
-  @ViewChild('lstImpresora', { static: false }) lstImpresoraComponent: ListaImpresoraComponent;
+  @ViewChild('lstImpresora') lstImpresoraComponent: ListaImpresoraComponent;
 
   constructor() {
     this.impresora = {

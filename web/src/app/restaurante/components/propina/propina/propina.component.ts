@@ -10,7 +10,7 @@ import { Propina } from '../../../interfaces/propina';
 })
 export class PropinaComponent implements OnInit {
   public propina: Propina;
-  @ViewChild('lstPropina', { static: false }) lstPropinaComponent: ListaPropinaComponent;
+  @ViewChild('lstPropina') lstPropinaComponent: ListaPropinaComponent;
   constructor() {
     this.propina = {
       propina_distribucion: null, usuario_tipo: null, porcentaje: null, anulado: null, sede: null, grupal: null

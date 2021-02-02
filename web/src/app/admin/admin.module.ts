@@ -117,9 +117,6 @@ import { ListaRazonAnulacionComponent } from './components/razon-anulacion/lista
     FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent,
     ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent, RazonAnulacionComponent, FormRazonAnulacionComponent, ListaRazonAnulacionComponent
   ],
-  entryComponents: [
-    FormClienteComponent, FormClienteDialogComponent, SolicitaPinInactividadComponent, AcercaDeComponent
-  ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatCardModule, MatDividerModule, MatTabsModule, MatTableModule, MatSelectModule, MatCheckboxModule, MatButtonModule,
