@@ -114,10 +114,46 @@ class Dcomanda_model extends General_Model {
 						->row();
 			if($tmp){
 				$dcta = new Dcuenta_model($tmp->detalle_cuenta);
-				$exito = $dcta->guardar([
-					"cuenta_cuenta" => $args['cuenta']
-				]); 
 
+				if ($args['cantidad'] == $this->cantidad) {
+					$exito = $dcta->guardar([
+						"cuenta_cuenta" => $args['cuenta']
+					]); 	
+				} else {
+					$det = new Dcomanda_model();
+					$cta = new Dcuenta_model();
+
+					$det->guardar([
+						"comanda" => $this->comanda,
+						"articulo" => $this->articulo,
+						"cantidad" => $args['cantidad'],
+						"precio" => $this->precio,
+						"impreso" => $this->impreso,
+						"total" => $this->total,
+						"notas" => $this->notas,
+						"cocinado" => $this->cocinado,
+						"presentacion" => $this->presentacion,
+						"numero" => $this->numero,
+						"fecha" => $this->fecha,
+						"tiempo_preparacion" => $this->tiempo_preparacion,
+						"fecha_impresion" => $this->fecha_impresion,
+						"fecha_proceso" => $this->fecha_proceso,
+						"detalle_comanda_id" => verDato($args, "detalle_comanda_id", null)
+					]);
+
+					$args['detalle_comanda_id'] = $det->getPK();
+
+					$cta->guardar([
+						"cuenta_cuenta" => $dcta->cuenta_cuenta,
+						"detalle_comanda" => $det->getPK()
+					]);
+
+					$exito = $this->guardar([
+						"cantidad" => ($this->cantidad - $args['cantidad'])
+					]);
+
+				}
+				
 				if ($exito) {
 					$tmp = $this->db
 								->select("a.detalle_comanda, b.articulo")
@@ -127,8 +163,17 @@ class Dcomanda_model extends General_Model {
 								->result();
 
 					foreach ($tmp as $row) {
+						$param = $args;
+						$art = new Articulo_model($row->articulo);
+						$rec = $art->getReceta([
+							"_principal" => true,
+							"receta" => $this->articulo
+						]);
+						if (count($rec) > 0) {
+							$param['cantidad'] = $args['cantidad'] * $rec[0]->cantidad;
+						}
 						$det = new Dcomanda_model($row->detalle_comanda);
-						$exito = $det->distribuir_cuenta($args);
+						$exito = $det->distribuir_cuenta($param);
 						if (!$exito) {
 							$this->setMensaje(implode("", $det->getMensaje()));
 						}
