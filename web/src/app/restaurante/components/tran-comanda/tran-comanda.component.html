@@ -38,7 +38,7 @@
             <span class="bld">Productos</span><br />
             <ng-container *ngFor="let c of categorias">
                 <button mat-raised-button class="btnAccion" color="accent" (click)="clickOnCategoria(c)"
-                    [disabled]="bloqueoBotones" *ngIf="c.mostrarEnPos">
+                    [disabled]="bloqueoBotones || !cuentaActiva.cuenta" *ngIf="c.mostrarEnPos">
                     {{c.descripcion}}
                 </button>
             </ng-container>
@@ -107,37 +107,5 @@
                 [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones"
                 [mesaEnUso]="mesaEnUso" (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>
         </div>
-    </div>
-    <!--
-    <div class="row">        
-        <div class="col m12 s12" align="center">
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
-                (click)="validarImpresion()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
-                Comanda
-            </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
-                (click)="printCuenta()" [disabled]="!cuentaActiva.nombre || bloqueoBotones" *ngIf="+mesaEnUso.mesa.esmostrador === 0">
-                Cuenta
-            </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
-                (click)="unirCuentas()" [disabled]="mesaEnUso.cuentas.length < 2 || bloqueoBotones" *ngIf="+mesaEnUso.mesa.esmostrador === 0">
-                Unir cuentas
-            </button>            
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
-                (click)="cobrarCuenta()"
-                [disabled]="!cuentaActiva.nombre || esCajero() || bloqueoBotones">
-                Cobrar cuenta
-            </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccion btnAccionComanda"
-                (click)="trasladoMesa()" [disabled]="bloqueoBotones" *ngIf="+mesaEnUso.mesa.esmostrador === 0">
-                Trasladar
-            </button>
-            <button mat-raised-button type="button" color="accent" class="btnAccionComanda" (click)="cerrarMesa()"
-                *ngIf="lstProductosSeleccionados.length <= 0">
-                Cerrar {{+mesaEnUso.mesa.esmostrador === 0 ? 'Mesa' : 'Mostrador'}}
-            </button>
-        </div>
-        
-    </div>
-    -->
+    </div>    
 </div>
