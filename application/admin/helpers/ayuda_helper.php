@@ -187,7 +187,10 @@ if( ! function_exists('insertar_articulo')){
 				}
 				$tmp = [];
 				foreach ($art as $value) {
-					$value->porcentaje = number_format($value->cantidad*100/$cantidad, 2);
+					$value->porcentaje = 0;
+					if ($cantidad > 0) {
+						$value->porcentaje = number_format($value->cantidad*100/$cantidad, 2);
+					}
 					$tmp[] = $value;
 				}
 				usort($tmp, function($a, $b) {return (int)$a->cantidad < (int)$b->cantidad;});
