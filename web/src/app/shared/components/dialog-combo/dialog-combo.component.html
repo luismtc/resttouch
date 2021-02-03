@@ -7,6 +7,9 @@
         </div>
         <div class="row" *ngIf="rec.receta.length > 0">
             <div class="col m12 s12">
+                <mat-form-field class="fullWidth">
+                    <input type="number" matInput placeholder="Cantidad" min="1" step="1" [(ngModel)] ="seleccion.cantidad" [ngModelOptions]="{standalone: true}">
+                </mat-form-field>
                 <ng-container *ngFor="let sc of rec.input">
                     <mat-select [(ngModel)]="sc.seleccion" [ngModelOptions]="{standalone: true}">
                         <mat-option *ngFor="let prod of rec.receta" [value]="prod">

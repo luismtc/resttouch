@@ -39,6 +39,7 @@ export class DialogComboComponent implements OnInit {
     this.lblBtnDeny = data.lblBtnDeny;
     this.producto = data.producto;
     this.seleccion = {
+      cantidad: 1,
       articulo: this.producto.id,
       descripcion: this.producto.nombre,
       receta: []

@@ -40,7 +40,7 @@ export class VentasComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('DATOS = ', this.datos);
+    // console.log('DATOS = ', this.datos);
     this.setGraficaPorDia();
     this.setGraficaPorCategoria();
     this.setGraficaPorTurno();
