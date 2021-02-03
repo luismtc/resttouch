@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, DoCheck } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
@@ -17,7 +17,7 @@ import { ComandaService } from '../../services/comanda.service';
   templateUrl: './lista-productos-comanda.component.html',
   styleUrls: ['./lista-productos-comanda.component.css']
 })
-export class ListaProductosComandaComponent implements OnInit, DoCheck {
+export class ListaProductosComandaComponent implements OnInit {
 
   @Input() listaProductos: ProductoSelected[] = [];
   @Input() noCuenta: number = null;
@@ -29,7 +29,6 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
   @Output() productoRemovedEv = new EventEmitter();
   public esMovil = false;
   public detalleComanda: DetalleComanda;
-  // public autorizar = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -41,15 +40,6 @@ export class ListaProductosComandaComponent implements OnInit, DoCheck {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
-    /*
-    if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
-      this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
-    }
-    */
-  }
-
-  ngDoCheck() {
-    // console.log('Desde lista productos comanda = ', this.listaProductos);
   }
 
   removeProducto = (p: ProductoSelected, idx: number, estaAutorizado = false) => {

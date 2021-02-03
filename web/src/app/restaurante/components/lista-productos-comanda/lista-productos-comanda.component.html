@@ -4,14 +4,12 @@
             <div class="row">
                 <div class="col m6 s12">
                     <span matLine>{{p.cantidad}}&nbsp;{{p.nombre}}</span>
-                    <div matLine *ngFor="let det of p.detalle">
-                        
-                        {{det}}
-                        
+                    <div matLine *ngFor="let det of p.detalle">                        
+                        {{det}}                        
                     </div>
                 </div>
                 <div class="col m6 s12" align="end">
-                    <!--<span class="spacer"></span>-->
+                    <!--<span>{{p.detalle | json}}</span>-->
                     <span>{{((p.cantidad * p.precio) + (p.cantidad * p.monto_extra)) | number: '1.2-2'}}</span>&nbsp;
                     <eco-fab-speed-dial direction="left" *ngIf="+p.impreso === 0">
                         <eco-fab-speed-dial-trigger>
@@ -23,7 +21,7 @@
                             <button mat-mini-fab (click)="deleteProductoFromList(p, i)" color="warn" [disabled]="bloqueoBotones">
                                 <mat-icon style="font-size: 16pt !important;">delete_forever</mat-icon>
                             </button>
-                            <button mat-mini-fab (click)="removeProducto(p, i)" color="warn" [disabled]="bloqueoBotones">
+                            <button mat-mini-fab (click)="removeProducto(p, i)" color="warn" [disabled]="bloqueoBotones" *ngIf="p.detalle.length <= 1">
                                 <mat-icon style="font-size: 16pt !important;">remove_circle</mat-icon>
                             </button>
                             <button mat-mini-fab (click)="toggleShowInputNotas(p)" color="accent" [disabled]="bloqueoBotones">
