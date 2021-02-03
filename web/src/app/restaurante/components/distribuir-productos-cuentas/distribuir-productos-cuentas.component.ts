@@ -20,6 +20,7 @@ interface IDialogComanda {
 export class DistribuirProductosCuentasComponent implements OnInit {
 
   public comanda: Comanda;
+  public cantidadProducto: number[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<DistribuirProductosCuentasComponent>,
@@ -42,6 +43,10 @@ export class DistribuirProductosCuentasComponent implements OnInit {
         replaceUnica: false
       };
     }
+
+    if (this.data.lstProductos.length > 0) {
+      this.data.lstProductos.forEach(item => this.cantidadProducto.push(+item.cantidad));
+    }
   }
 
   cancelar = () => this.dialogRef.close(false);
@@ -51,7 +56,8 @@ export class DistribuirProductosCuentasComponent implements OnInit {
     for (const p of this.data.lstProductos) {
       lstObj.push({
         detalle_comanda: +p.detalle_comanda,
-        cuenta: +p.idcuenta
+        cuenta: +p.idcuenta,
+        cantidad: +p.cantidad
       });
     }
     this.comandaSrvc.distribuirCuentas(lstObj).subscribe(res => {

@@ -3,10 +3,16 @@
     <table>
         <tr>
             <th>Artículo</th>
+            <th class="rtxt size-cantidad">Cantidad</th>
             <th>Cuenta</th>
         </tr>
-        <tr *ngFor="let prod of data.lstProductos">
+        <tr *ngFor="let prod of data.lstProductos; index as i">
             <td>{{prod.nombre}}</td>
+            <td class="rtxt">
+                <mat-form-field class="size-cantidad">
+                    <input type="number" matInput name="cantidad" min="1" [max]="cantidadProducto[i]" [(ngModel)]="prod.cantidad" required>
+                </mat-form-field>                
+            </td>
             <td>
                 <mat-select name="cuenta" [(ngModel)]="prod.idcuenta" required>
                     <mat-option *ngFor="let cta of comanda.cuentas" [value]="+cta.cuenta">
