@@ -75,4 +75,9 @@ export class ValorizadoComponent implements OnInit {
     });
   }
 
+  resetParams = () => {
+    this.params = {};
+    this.cargando = false;
+  }
+  
 }

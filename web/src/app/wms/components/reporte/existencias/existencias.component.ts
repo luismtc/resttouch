@@ -76,4 +76,9 @@ export class ExistenciasComponent implements OnInit {
     });
   }
 
+  resetParams = () => {
+    this.params = {};
+    this.cargando = false;
+  }
+
 }
