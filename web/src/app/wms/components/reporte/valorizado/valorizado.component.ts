@@ -5,6 +5,7 @@ import { SedeService } from '../../../../admin/services/sede.service';
 import { Bodega } from '../../../interfaces/bodega';
 import { BodegaService } from '../../../services/bodega.service';
 import { Sede } from '../../../../admin/interfaces/sede';
+import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -18,6 +19,10 @@ export class ValorizadoComponent implements OnInit {
   public sedes: Sede[] = [];
   public params: any = {};
   public titulo: string = "Valorizado";
+  public cargando = false;
+  public configBotones: ConfiguracionBotones = {
+    showPdf: true, showHtml: false, showExcel: true
+  };
 
   constructor(
     private snackBar: MatSnackBar,
@@ -44,7 +49,9 @@ export class ValorizadoComponent implements OnInit {
   }
 
   onSubmit() {
+    this.cargando = true;
   	this.pdfServicio.getReporteValorizado(this.params).subscribe(res => {
+      this.cargando = false;
   		if (res) {
 	        const blob = new Blob([res], { type: 'application/pdf' });
 	        saveAs(blob, `${this.titulo}.pdf`);
@@ -54,4 +61,23 @@ export class ValorizadoComponent implements OnInit {
   	});
   }
 
+  excelClick = () => {
+    this.params._excel = 1;
+    this.cargando = true;
+    this.pdfServicio.getReporteValorizado(this.params).subscribe(res => {
+      this.cargando = false;
+      if (res) {
+        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+        saveAs(blob, `${this.titulo}.xls`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+      }
+    });
+  }
+
+  resetParams = () => {
+    this.params = {};
+    this.cargando = false;
+  }
+  
 }

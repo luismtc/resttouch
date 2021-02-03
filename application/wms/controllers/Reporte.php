@@ -52,17 +52,94 @@ class Reporte extends CI_Controller {
 			$args["reg"][] = $art->getExistencias($_GET);
 		}
 
-		$pdf   = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //produccion
-			"format" => "letter", 
-			"lands"
-		]);
-		$vista = $this->load->view('reporte/existencia/imprimir', $args, true);
-		$rand  = rand();
-		$pdf->AddPage("L");
-		$pdf->WriteHTML($vista);
-		$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
-		$pdf->Output("Existencias_{$rand}.pdf", "D");
+		if (verDato($_GET, "_excel")) {
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Existencias")
+				  ->setSubject("Office 2007 xlsx Existencias")
+				  ->setKeywords("office 2007 openxml php");
+
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+			$nombres = [
+				"Codigo",
+				"Descripcion",
+				"Unidad",
+				"Ingresos",
+				"Egresos",
+				"Comandas",
+				"Factura Directa",
+				"Total Egresos",
+				"Existencia"
+			];
+
+			/*Encabezado*/
+			$hoja->setCellValue("A1", "Reporte de Existencias");
+			$hoja->setCellValue("G1", "Fecha: {$args['fecha']}");
+
+			$hoja->fromArray($nombres, null, "A3");
+			$fila = 4;
+			foreach ($args["reg"] as $row) {
+				$art = new Articulo_model($row->articulo->articulo);
+				$rec = $art->getReceta();
+
+				$reg = [
+					(!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo),
+					"{$row->articulo->articulo} ". $row->articulo->descripcion,
+					$row->presentacion->descripcion,
+					number_format($row->ingresos / $row->presentacion->cantidad,2),
+					number_format($row->egresos / $row->presentacion->cantidad,2),
+					number_format($row->comandas / $row->presentacion->cantidad,2),
+					number_format($row->facturas / $row->presentacion->cantidad,2),
+					number_format($row->total_egresos / $row->presentacion->cantidad,2),
+					(count($rec) > 0 && $art->produccion == 0) ? 0 : number_format($row->existencia / $row->presentacion->cantidad,2)
+				];
+
+				$hoja->fromArray($reg, null, "A{$fila}");
+				$fila++;
+			}
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+
+			$fila++;
+			$hoja->setCellValue("A{$fila}", "Supervisor:");
+			$hoja->setCellValue("D{$fila}", "Jefe de Almacenaje:");
+			$hoja->setCellValue("F{$fila}", "Fecha:");
+			$hoja->setCellValue("H{$fila}", "Hora:");
+			$hoja->setTitle("Existencias");
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Existencias.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+
+		} else {
+
+			$pdf = new \Mpdf\Mpdf([
+				//'tempDir' => sys_get_temp_dir(), //produccion
+				"format" => "letter", 
+				"lands"
+			]);
+
+
+			$vista = $this->load->view('reporte/existencia/imprimir', $args, true);
+			$rand  = rand();
+			$pdf->AddPage("L");
+			$pdf->WriteHTML($vista);
+			$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
+			$pdf->Output("Existencias_{$rand}.pdf", "D");
+		}
+
+		
 	}
 
 	public function kardex()
@@ -228,15 +305,102 @@ class Reporte extends CI_Controller {
 			$data['nbodega'] = 'Todas';
 		}
 
-		$vista = $this->load->view('reporte/valorizado/imprimir', $data, true);
+		if (verDato($_GET, "_excel")) {
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Valorizado")
+				  ->setSubject("Office 2007 xlsx Valorizado")
+				  ->setKeywords("office 2007 openxml php");
 
-		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //Produccion
-			'format' => 'Legal'
-		]);
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+			$nombres = [
+				"Descripcion",
+				"Existencia",
+				"Fecha Ultima Compra",
+				"Costo",
+				"Valor"
+			];
 
-		$mpdf->WriteHTML($vista);
-		$mpdf->Output("valorizado.pdf", "D");
+			/*Encabezado*/
+			$hoja->setCellValue("A1", $data["empresa"]->nombre);
+			$hoja->setCellValue("A2", $data["nsede"]->nombre);
+			$hoja->setCellValue("A4", "Reporte de Inventario Valorizado");
+			$hoja->setCellValue("E4", "Fecha: {$data['fecha']}");
+			$hoja->setCellValue("A5", "Bodega: {$data['nbodega']}");
+
+			$hoja->fromArray($nombres, null, "A7");
+			$fila = 8;
+			$granTotal = 0;
+			foreach ($data["detalle"] as $det) {
+				if (count($det->subcategoria) > 0) {
+					$hoja->fromArray([$det->descripcion], null, "A{$fila}");
+					$fila++;
+					foreach ($det->subcategoria as $sub) {
+						if (count($sub['articulos']) > 0) {
+							$hoja->fromArray([$sub['descripcion']], null, "A{$fila}");
+							$fila++;
+
+							$total = 0;
+							foreach ($sub['articulos'] as $row) {
+								$reg = [
+									$row->descripcion,
+									$row->cantidad,
+									$row->ultima_compra,
+									number_format($row->precio_unitario, 2),
+									number_format($row->total, 2)
+								];
+
+								$hoja->fromArray($reg, null, "A{$fila}");
+								$fila++;
+
+								$total += $row->total;
+								$granTotal += $row->total;
+							}
+							
+							$hoja->setCellValue("D{$fila}", "Total subcategoria");
+							$hoja->setCellValue("E{$fila}", $total);
+							$fila++;
+						}
+					}
+				} 
+			}
+			
+			$fila++;
+			$hoja->setCellValue("D{$fila}", "TOTAL");
+			$hoja->setCellValue("E{$fila}", number_format($granTotal, 2));
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+			
+			$hoja->setTitle("Inventario Valorizado");
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Valorizado.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+
+		} else {
+			$vista = $this->load->view('reporte/valorizado/imprimir', $data, true);
+
+			$mpdf = new \Mpdf\Mpdf([
+				//'tempDir' => sys_get_temp_dir(), //Produccion
+				'format' => 'Legal'
+			]);
+
+			$mpdf->WriteHTML($vista);
+			$mpdf->Output("valorizado.pdf", "D");
+		}
+
+		
 	}
 
 }
