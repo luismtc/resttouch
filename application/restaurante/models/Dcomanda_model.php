@@ -144,7 +144,7 @@ class Dcomanda_model extends General_Model {
 					$args['detalle_comanda_id'] = $det->getPK();
 
 					$cta->guardar([
-						"cuenta_cuenta" => $dcta->cuenta_cuenta,
+						"cuenta_cuenta" => $args['cuenta'],
 						"detalle_comanda" => $det->getPK()
 					]);
 
