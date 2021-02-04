@@ -334,8 +334,9 @@ class Reporte extends CI_Controller {
 			$hoja->setCellValue("A5", "Bodega: {$data['nbodega']}");
 
 			$hoja->fromArray($nombres, null, "A7");
-			$hoja->getStyle("A4:A5")->getFont()->setBold(true);
+			$hoja->getStyle("A1:A5")->getFont()->setBold(true);
 			$hoja->getStyle("A7:F7")->getFont()->setBold(true);
+			$hoja->getStyle("E4")->getFont()->setBold(true);
 			$fila = 8;
 			$granTotal = 0;
 			foreach ($data["detalle"] as $det) {
@@ -347,6 +348,7 @@ class Reporte extends CI_Controller {
 					foreach ($det->subcategoria as $sub) {
 						if (count($sub['articulos']) > 0) {
 							$hoja->fromArray([$sub['descripcion']], null, "A{$fila}");
+							$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
 							$fila++;
 
 							$total = 0;
@@ -372,14 +374,14 @@ class Reporte extends CI_Controller {
 							
 							$hoja->setCellValue("D{$fila}", "Total subcategoria");
 							$hoja->setCellValue("E{$fila}", $total);
-							$hoja->getStyle("D{$fila}")->getFont()->setBold(true);
+							$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 							$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
 							$fila++;
 						}
 					}
 					$hoja->setCellValue("D{$fila}", "Total Categoria");
 					$hoja->setCellValue("E{$fila}", $totalCat);
-					$hoja->getStyle("D{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
 					$fila++;
 				} 
@@ -387,7 +389,7 @@ class Reporte extends CI_Controller {
 			
 			$fila++;
 			$hoja->setCellValue("D{$fila}", "TOTAL");
-			$hoja->getStyle("D{$fila}")->getFont()->setBold(true);
+			$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 			$hoja->setCellValue("E{$fila}", round($granTotal, 2));
 
 			for ($i=0; $i <= count($nombres) ; $i++) { 
