@@ -50,6 +50,7 @@ export class ExistenciasComponent implements OnInit {
   }
 
   onSubmit() {
+    this.params._excel = 0;
     this.cargando = true;
   	this.pdfServicio.getReporteExistencia(this.params).subscribe(res => {
       this.cargando = false;
