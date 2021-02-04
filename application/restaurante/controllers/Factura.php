@@ -376,33 +376,47 @@ class Factura extends CI_Controller {
 		->set_output(json_encode($datos));	
 	}
 
-	public function test($fact)
+	public function test($fact = null)
 	{
-		$webhook = $this->Webhook_model->buscar([
-			"evento" => "RTEV_FIRMA_FACTURA",
-			"_uno" => true
-		]);
-		$this->load->library('Webhook');
-		$fac = new Factura_model($fact);
-		$fac->cargarFacturaSerie();
-		$fac->cargarEmpresa();
-		$fac->cargarMoneda();
-		$fac->cargarReceptor();
-		$fac->cargarSede();
-		//$fac->procesar_factura();
-		//$resp = $fac->enviarDigiFact();
+		set_time_limit(0);
+		$laFactura = $fact;
+		$listaFacturas = [];
 
-		$req = $fac->getXmlWebhook();
-		$client = new SoapClient("http://52.35.3.1/jk/php/ws/organization.wsdl");
+		if(!isset($laFactura)) {
+			$body = json_decode(file_get_contents('php://input'));
+			if(isset($body->facturas)) {
+				$listaFacturas = explode(',', $body->facturas);
+			}
+		} else {
+			$listaFacturas[] = [$laFactura];
+		}
 
-		//$res = $client->setVenta($req);
-		$web = new Webhook($webhook);
-		$web->setRequest($req);
-		$res = $web->setEvento();
-		echo "<pre>";
-		print_r ($res);
-		echo "</pre>";
-
+		foreach ($listaFacturas as $qFact) {
+			$webhook = $this->Webhook_model->buscar([
+				"evento" => "RTEV_FIRMA_FACTURA",
+				"_uno" => true
+			]);
+			$this->load->library('Webhook');
+			$fac = new Factura_model($qFact);
+			$fac->cargarFacturaSerie();
+			$fac->cargarEmpresa();
+			$fac->cargarMoneda();
+			$fac->cargarReceptor();
+			$fac->cargarSede();
+			//$fac->procesar_factura();
+			//$resp = $fac->enviarDigiFact();
+	
+			$req = $fac->getXmlWebhook();
+			$client = new SoapClient("http://52.35.3.1/jk/php/ws/organization.wsdl");
+	
+			//$res = $client->setVenta($req);
+			$web = new Webhook($webhook);
+			$web->setRequest($req);
+			$res = $web->setEvento();
+			echo "<pre>";
+			print_r ($res);
+			echo "</pre>";
+		}
 	}
 }
 
