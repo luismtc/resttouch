@@ -232,8 +232,9 @@ class Reporte extends CI_Controller {
 		foreach ($ingresos as $row) {
 			$art = new Articulo_model($row->articulo);
 			$art->actualizarExistencia($_GET);
-			
+			$pres = $art->getPresentacionReporte();
 			$detalle[$art->getPK()] = [
+				"presentacion" => $pres->descripcion,
 				"cantidad" => $art->existencias, 
 				"total" => $art->existencias * $row->precio_unitario,
 				"descripcion" => $art->descripcion,
@@ -246,6 +247,8 @@ class Reporte extends CI_Controller {
 		$buscar = [];
 		if (isset($_GET['sede'])) {
 			$buscar['sede'] = $this->input->get('sede');
+		} else {
+			$buscar['sede'] = $this->data->sede;
 		}
 		$cat = $this->Categoria_model->buscar($buscar);		
 		
@@ -317,6 +320,7 @@ class Reporte extends CI_Controller {
 			$hoja = $excel->getActiveSheet();
 			$nombres = [
 				"Descripcion",
+				"Presentacion",
 				"Existencia",
 				"Fecha Ultima Compra",
 				"Costo",
@@ -334,6 +338,7 @@ class Reporte extends CI_Controller {
 			$fila = 8;
 			$granTotal = 0;
 			foreach ($data["detalle"] as $det) {
+				$totalCat = 0;
 				if (count($det->subcategoria) > 0) {
 					$hoja->fromArray([$det->descripcion], null, "A{$fila}");
 					$fila++;
@@ -346,6 +351,7 @@ class Reporte extends CI_Controller {
 							foreach ($sub['articulos'] as $row) {
 								$reg = [
 									$row->descripcion,
+									$row->presentacion,
 									$row->cantidad,
 									$row->ultima_compra,
 									number_format($row->precio_unitario, 2),
@@ -353,17 +359,25 @@ class Reporte extends CI_Controller {
 								];
 
 								$hoja->fromArray($reg, null, "A{$fila}");
+								$hoja->getStyle("D{$fila}")->getNumberFormat()->setFormatCode('0.00');
+								$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
 								$fila++;
 
 								$total += $row->total;
 								$granTotal += $row->total;
+								$totalCat += $row->total;
 							}
 							
 							$hoja->setCellValue("D{$fila}", "Total subcategoria");
 							$hoja->setCellValue("E{$fila}", $total);
+							$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
 							$fila++;
 						}
 					}
+					$hoja->setCellValue("D{$fila}", "Total Categoria");
+					$hoja->setCellValue("E{$fila}", $totalCat);
+					$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					$fila++;
 				} 
 			}
 			
