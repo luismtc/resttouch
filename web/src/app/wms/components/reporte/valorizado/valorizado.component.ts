@@ -49,6 +49,7 @@ export class ValorizadoComponent implements OnInit {
   }
 
   onSubmit() {
+    this.params._excel = 0;
     this.cargando = true;
   	this.pdfServicio.getReporteValorizado(this.params).subscribe(res => {
       this.cargando = false;

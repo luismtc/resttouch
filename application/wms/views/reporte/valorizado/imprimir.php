@@ -34,6 +34,7 @@
 		<thead>
 			<tr>
 				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Descripcion</th>
+				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Presentacion</th>
 				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Existencia</th>
 				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Fecha Ultima Compra</th>
 				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Costo</th>
@@ -45,9 +46,11 @@
 
 		<tbody>
 			<?php foreach ($detalle as $det): ?>
+				<?php $totalCat = 0; ?>
 				<?php if (count($det->subcategoria) > 0): ?>
 				<tr>
 					<td style="border: 1px solid black;padding: 5px;"><b><?php echo $det->descripcion ?></b></td>
+					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
 					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
 					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
 					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
@@ -61,11 +64,13 @@
 							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
 							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
 							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
 						</tr>
 						<?php $total = 0 ?>
 						<?php foreach ($sub['articulos'] as $row): ?>
 							<tr>
 								<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
+								<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->presentacion ?></td>
 								<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo $row->cantidad ?></td>
 								<td style="border: 1px solid black;padding: 5px;" class="text-right">
 									<?php echo $row->ultima_compra ?></td>
@@ -76,22 +81,29 @@
 							<?php 
 								$total += $row->total;
 								$granTotal += $row->total;
+								$totalCat += $row->total;
 							?>	
 						<?php endforeach ?>
 						<tr>
-							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoria</b></td>
+							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoria</b></td>
 							<td style="border: 1px solid black;padding: 5px;" class="text-right">
 								<?php echo number_format($total, 2) ?>
 							</td>
 						</tr>
 					<?php endif ?>
 				<?php endforeach ?>
+				<tr>
+					<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoria</b></td>
+					<td style="border: 1px solid black;padding: 5px;" class="text-right">
+						<?php echo number_format($totalCat, 2) ?>
+					</td>
+				</tr>
 				<?php endif ?>
 			<?php endforeach ?>
 		</tbody>
 		<tfoot>
 			<tr>
-				<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+				<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5">
 					<h4>TOTAL</h4>
 				</td>
 				<td style="border: 1px solid black;padding: 5px;" class="text-right">

@@ -138,8 +138,6 @@ class Reporte extends CI_Controller {
 			$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
 			$pdf->Output("Existencias_{$rand}.pdf", "D");
 		}
-
-		
 	}
 
 	public function kardex()
@@ -354,8 +352,8 @@ class Reporte extends CI_Controller {
 									$row->presentacion,
 									$row->cantidad,
 									$row->ultima_compra,
-									number_format($row->precio_unitario, 2),
-									number_format($row->total, 2)
+									round($row->precio_unitario, 2),
+									round($row->total, 2)
 								];
 
 								$hoja->fromArray($reg, null, "A{$fila}");
@@ -383,7 +381,7 @@ class Reporte extends CI_Controller {
 			
 			$fila++;
 			$hoja->setCellValue("D{$fila}", "TOTAL");
-			$hoja->setCellValue("E{$fila}", number_format($granTotal, 2));
+			$hoja->setCellValue("E{$fila}", round($granTotal, 2));
 
 			for ($i=0; $i <= count($nombres) ; $i++) { 
 				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
