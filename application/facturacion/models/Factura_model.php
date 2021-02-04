@@ -283,6 +283,7 @@ class Factura_model extends General_model
 
 	public function getXmlWebhook()
 	{
+
 		$doc = new stdClass();
 		$config = $this->Configuracion_model->buscar();
 		$dfac = $this->getDetalle();
@@ -320,6 +321,7 @@ class Factura_model extends General_model
 		/*Datos detalle*/
 		$det = new stdClass();
 
+
 		$cliente = new stdClass();
 		$cliente->codigo = $this->sedeFactura->cuenta_contable;
 		$cliente->conceptomayor = $conceptoMayor;
@@ -334,17 +336,38 @@ class Factura_model extends General_model
 		$det->cuenta = [];
 		array_push($det->cuenta, (array) $cliente);
 		$tmpTotal = [];
+
+		/*Propina*/
+		$propIva = new stdClass();
+		$propBase = new stdClass();
+		$propIva->haber = 0;
+		$propIva->codigo = get_configuracion($config, "RT_CUENTA_CONTABLE_IVA_PROPINA", 2);
+		$propIva->conceptomayor = $conceptoMayor;
+		$propIva->debe = 0;
+
+		$propBase->haber = 0;
+		$propBase->codigo = get_configuracion($config, "RT_CUENTA_CONTABLE_PROPINA", 2);
+		$propBase->conceptomayor = $conceptoMayor;
+		$propBase->debe = 0;
+
 		foreach ($dfac as $row) {
 			$cgrupo = $this->db
 				->where("categoria_grupo", $row->articulo->categoria_grupo)
 				->get("categoria_grupo")
 				->row();
-			if (isset($tmpTotal[$cgrupo->cuenta_contable])) {
-				$tmpTotal[$cgrupo->cuenta_contable] += $row->monto_base;
+			if (strpos(strtolower($row->articulo->descripcion), "propina") === false) {
+				if (isset($tmpTotal[$cgrupo->cuenta_contable])) {
+					$tmpTotal[$cgrupo->cuenta_contable] += $row->monto_base;
+				} else {
+					$tmpTotal[$cgrupo->cuenta_contable] = $row->monto_base;
+				}
 			} else {
-				$tmpTotal[$cgrupo->cuenta_contable] = $row->monto_base;
+				$propIva->haber += $row->monto_iva;
+				$propBase->haber += $row->monto_base;
 			}
 		}
+
+		$iva->haber = $iva->haber - $propIva->haber;
 
 		foreach ($tmpTotal as $key => $row) {
 			$cuenta = new stdClass();
@@ -356,6 +379,15 @@ class Factura_model extends General_model
 		}
 
 		array_push($det->cuenta, (array) $iva);
+
+		if ($propBase->haber > 0) {
+			array_push($det->cuenta, (array) $propBase);
+		}
+
+		if ($propIva->haber > 0) {
+			array_push($det->cuenta, (array) $propIva);
+		}
+
 		$doc->encabezado = (array) $enca;
 		$doc->detalle = (array) $det->cuenta;
 
