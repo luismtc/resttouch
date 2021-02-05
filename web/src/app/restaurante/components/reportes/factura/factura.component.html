@@ -20,7 +20,7 @@
               <mat-checkbox name="anuladas" class="fullWidth" [(ngModel)]="+params._anuladas">Mostrar Unicamente Anuladas</mat-checkbox>
             </div>
           </div>          
-          <app-rpt-botones [configuracion]="configBotones" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>
+          <app-rpt-botones [configuracion]="configBotones" (excelClick) = "excelClick()" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>
         </form>
         <app-cargando *ngIf="cargando"></app-cargando>
       </mat-card-content>

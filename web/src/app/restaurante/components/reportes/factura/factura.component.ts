@@ -14,7 +14,7 @@ export class FacturaComponent implements OnInit {
   public titulo = 'Facturas';
   public cargando = false;
   public configBotones: ConfiguracionBotones = {
-    showPdf: true, showHtml: false, showExcel: false
+    showPdf: true, showHtml: false, showExcel: true
   };
 
   constructor(
@@ -31,11 +31,26 @@ export class FacturaComponent implements OnInit {
 
   onSubmit() {
     this.cargando = true;
+    this.params._excel = 0;
     this.pdfServicio.getReporteFactura(this.params).subscribe(res => {
       this.cargando = false;
       if (res) {
         const blob = new Blob([res], { type: 'application/pdf' });
         saveAs(blob, `${this.titulo}.pdf`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+      }
+    });
+  }
+
+  excelClick() {
+    this.cargando = true;
+    this.params._excel = 1;
+    this.pdfServicio.getReporteFactura(this.params).subscribe(res => {
+      this.cargando = false;
+      if (res) {
+        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+        saveAs(blob, `${this.titulo}.xls`);
       } else {
         this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
       }

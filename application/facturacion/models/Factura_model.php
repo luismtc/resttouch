@@ -909,6 +909,36 @@ class Factura_model extends General_model
 		return ['documento' => null, 'tipo' => null];
 	}
 
+	public function pdfCofidi()
+	{
+		$link = $this->certificador->vinculo_factura;
+		$nit = str_repeat("0", 12 - strlen($this->empresa->nit)) . $this->empresa->nit;
+		$datos = array(
+			"Requestor" => $this->certificador->llave,
+			"Transaction" => $this->certificador->vinculo_grafo,
+			"Country" => $this->empresa->pais_iso_dos,
+			"Entity" => $nit,
+			"User" => $this->certificador->llave,
+			"UserName" => $this->certificador->usuario,
+			"Data1" => $this->fel_uuid,
+			"Data2" => "",
+			"Data3" => "PDF"
+		);
+
+		$client = new SoapClient($link);
+		
+		$res = $client->RequestTransaction($datos);
+		$res = $res->RequestTransactionResult;
+		if ($res->Response->Result == 1) {
+			
+			return [
+				'documento' => $res->ResponseData->ResponseData3,
+				'tipo' => 'pdf'
+			];
+			
+		}
+	}
+
 	public function getRazonAnulacion()
 	{
 		return $this->db

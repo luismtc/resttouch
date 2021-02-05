@@ -172,10 +172,7 @@ class Reporte extends CI_Controller {
 		
 		$data = $_GET;
 		$data['impuesto_especial'] = false;
-		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
-			'format' => 'Legal'
-		]);
+		
 		$data['facturas'] = [];
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);
@@ -221,9 +218,177 @@ class Reporte extends CI_Controller {
 			}
 		}
 
+		if (verDato($_GET, "_excel")) {
+			$fdel = formatoFecha($_GET['fdel'],2);
+			$fal = formatoFecha($_GET['fal'],2);
+			$anuladas = isset($data['_anuladas']) && filter_var($data['_anuladas'], FILTER_VALIDATE_BOOLEAN);
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Articulo")
+				  ->setSubject("Office 2007 xlsx Articulo")
+				  ->setKeywords("office 2007 openxml php");
+
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+			$nombres = [
+				"Factura",
+				"Mesa",
+				"Fecha",
+				"NIT",
+				"Cliente"
+			];
+
+			if ($data['impuesto_especial']) {
+				$nombres[] = "Impuesto Especial";
+			}
+
+			if ($anuladas) {
+				array_push($nombres, "Fecha Anulacion");
+				array_push($nombres, "Usuario Anulacion");
+				array_push($nombres, "Motivo");
+			}
+
+			array_push($nombres, "Total");
+			array_push($nombres, "Propina");
+			array_push($nombres, "Descuento");
+
+			/*Encabezado*/
+			$hoja->setCellValue("A1", $data["empresa"]->nombre);
+			$hoja->setCellValue("A2", $data["sede"]->nombre);
+			$hoja->setCellValue("A4", "Detalle de Facturas");
+			$hoja->setCellValue("A5", "Del: {$fdel} al: {$fal}");
+
+			$hoja->fromArray($nombres, null, "A9");
+			$hoja->getStyle("A1:A5")->getFont()->setBold(true);
+			$hoja->getStyle("A9:L9")->getFont()->setBold(true);
+			$hoja->setCellValue("A7", "Facturas");
+			$hoja->setCellValue("A8", "FEL");
+
+			$fila = 11;
+			$totalFactura = 0;
+			$totalPropina = 0;
+			$totalDescuento = 0;
+
+			foreach ($data['facturas'] as $row) {
+				$detalle = $row->getDetalle();
+				$desc = suma_field($detalle, "descuento");
+				$total = suma_field($detalle, "total");
+				$imp = suma_field($detalle, "valor_impuesto_especial");
+				$total += $imp;
+				$totalPropina += $row->propina;
+				$totalDescuento += $desc;
+				$totalFactura += ($total - $desc);
+
+				$reg = [
+					$row->numero_factura,
+					isset($row->mesa->mesa) ? $row->mesa->mesa : '',
+					formatoFecha($row->fecha_factura,2),
+					(empty($row->fel_uuid_anulacion) ? $row->receptor->nit : ''),
+					(empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA')
+				];
+
+				if ($data['impuesto_especial']) {
+					$reg[] = (empty($row->fel_uuid_anulacion) ? round($imp, 2) : 0);
+				}
+
+				if ($anuladas) {
+					array_push($reg, formatoFecha($row->bitacora->fecha));
+					array_push($reg, "{$row->bitacora->usuario->nombres} {$row->bitacora->usuario->apellidos}");
+					array_push($reg, $row->razon_anulacion->descripcion);
+				}
+
+				array_push($reg, (empty($row->fel_uuid_anulacion) ? round($total, 2) : 0));
+				array_push($reg, (empty($row->fel_uuid_anulacion) ? round($row->propina, 2) : 0));
+				array_push($reg, (empty($row->fel_uuid_anulacion) ? round($desc, 2) : 0));
+
+				$hoja->fromArray($reg, null, "A{$fila}");
+				$fila++;
+
+				if (isset($data['_detalle']) && $data['_detalle'] !== "false") {
+					$tituloDet = [
+						"",
+						"",
+						"",
+						"Articulo",
+						"Cantidad"
+					];
+
+					if ($data['impuesto_especial']) {
+						$tituloDet[] = "Impuesto Especial";
+					}
+
+					array_push($tituloDet, "Total");
+					array_push($tituloDet, "Descuento");
+					$hoja->fromArray($tituloDet, null, "A{$fila}");
+					$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
+					$fila++;
+
+					foreach ($detalle as $det) {
+						$reg = [
+							"",
+							"",
+							"",
+							$det->articulo->descripcion,
+							$det->cantidad,
+							round($det->total,2)
+						];
+						$hoja->fromArray($reg, null, "A{$fila}");
+						$fila++;
+					}
+				}
+			}
+
+			$col = 5;
+
+			if ($anuladas) {
+				$col += 3;
+			}
+
+			if ($data['impuesto_especial']) {
+				$col += 1;
+			}
+
+			$total = [];
+			for ($i = 0; $i < $col-1; $i++) {
+				$total[$i] = "";
+			}
+
+			array_push($total, "Total");
+			array_push($total, round($totalFactura,2));
+			array_push($total, round($totalPropina,2));
+			array_push($total, round($totalDescuento, 2));
+
+			$fila++;
+			$hoja->fromArray($total, null, "A{$fila}");
+			$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+			
+			$hoja->setTitle("Ventas por Articulo");
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Ventas.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+		} else {
+
+			$mpdf = new \Mpdf\Mpdf([
+				'tempDir' => sys_get_temp_dir(),
+				'format' => 'Legal'
+			]);
+			$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
+			$mpdf->Output("Detalle de Facturas.pdf", "D");	
+		}
 		//$mpdf->AddPage();
-		$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
-		$mpdf->Output("Detalle de Facturas.pdf", "D");	
 	}
 
 	public function comanda()
