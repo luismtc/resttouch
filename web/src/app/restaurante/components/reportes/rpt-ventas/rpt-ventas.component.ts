@@ -32,7 +32,7 @@ export class RptVentasComponent implements OnInit {
   public tituloArticulo = 'Ventas por articulo';
   public cargando = false;
   public configBotones: ConfiguracionBotones = {
-    showPdf: true, showHtml: true, showExcel: false
+    showPdf: true, showHtml: true, showExcel: true
   };
 
   constructor(
@@ -90,7 +90,7 @@ export class RptVentasComponent implements OnInit {
     switch (tipo) {
       case 1 : this.getEnPantalla(); break;
       case 2 : this.getPdf(); break;
-      case 3 : this.msgGenerandoReporte += 'EXCEL.'; break;
+      case 3 : this.getExcel(); break;
     }
   }
 
@@ -101,7 +101,30 @@ export class RptVentasComponent implements OnInit {
     }
   }
 
+  getExcel = () => {
+    switch (this.params.tipo_reporte) {
+      case 1: this.getPorCategoriaExcel(); break;
+      case 2: this.getPorArticuloExcel(); break;
+    }
+  }
+
+  getPorCategoriaExcel = () => {
+    this.paramsToSend._excel = 1;
+    this.cargando = true;
+    this.cleanParams();
+    this.rptVentasSrvc.porCategoriaPdf(this.paramsToSend).subscribe(res => {
+      this.cargando = false;
+      if (res) {
+        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+        saveAs(blob, `${this.tituloCategoria}.xls`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.tituloCategoria, { duration: 3000 });
+      }
+    });
+  }
+
   getPorCategoriaPdf = () => {
+    this.paramsToSend._excel = 0;
     this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porCategoriaPdf(this.paramsToSend).subscribe(res => {
@@ -116,6 +139,7 @@ export class RptVentasComponent implements OnInit {
   }
 
   getPorArticuloPdf = () => {
+    this.paramsToSend._excel = 0;
     this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porArticuloPdf(this.paramsToSend).subscribe(res => {
@@ -123,6 +147,21 @@ export class RptVentasComponent implements OnInit {
       if (res) {
         const blob = new Blob([res], { type: 'application/pdf' });
         saveAs(blob, `${this.tituloArticulo}.pdf`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.tituloArticulo, { duration: 3000 });
+      }
+    });
+  }
+
+  getPorArticuloExcel = () => {
+    this.paramsToSend._excel = 1;
+    this.cargando = true;
+    this.cleanParams();
+    this.rptVentasSrvc.porArticuloPdf(this.paramsToSend).subscribe(res => {
+      this.cargando = false;
+      if (res) {
+        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+        saveAs(blob, `${this.tituloArticulo}.xls`);
       } else {
         this.snackBar.open('No se pudo generar el reporte...', this.tituloArticulo, { duration: 3000 });
       }

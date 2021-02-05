@@ -27,7 +27,7 @@ class Venta extends CI_Controller {
 		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
 	}
 
-	public function categoria($pdf = 0)
+	public function categoria()
 	{
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
@@ -105,7 +105,7 @@ class Venta extends CI_Controller {
 		$this->output
 			->set_content_type("application/json")
 			->set_output(json_encode($datos));	
-	 
+		
 	}
 
 	public function categoriapdf($pdf = 0)
@@ -239,16 +239,163 @@ class Venta extends CI_Controller {
 			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
 		}
 
-		$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
+		if (verDato($req, "_excel")) {
+			$fdel = formatoFecha($_GET['fdel'],2);
+			$fal = formatoFecha($_GET['fal'],2);
 
-		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //Produccion
-			'format' => 'Legal'
-		]);
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Ventas por Categoria")
+				  ->setSubject("Office 2007 xlsx Ventas por Categoria")
+				  ->setKeywords("office 2007 openxml php");
 
-		$mpdf->WriteHTML($vista);
-		$mpdf->Output("Ventas_categoria.pdf", "D");
-		
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+			$nombres = [
+				"Descripcion",
+				"Cantidad",
+				"Porcentaje",
+				"Precio Unitario",
+				"Total"
+			];
+			/*Encabezado*/
+			$hoja->setCellValue("A1", $data["empresa"]->nombre);
+			$hoja->setCellValue("A2", $data["nsede"]);
+			$hoja->setCellValue("A4", "Reporte de Ventas");
+			$hoja->setCellValue("A5", "Por Categoria");
+			$hoja->setCellValue("A6", "Del: {$fdel} al: {$fal}");
+
+			$hoja->fromArray($nombres, null, "A8");
+			$hoja->getStyle("A1:A6")->getFont()->setBold(true);
+			$hoja->getStyle("A8:E8")->getFont()->setBold(true);
+
+			$fila = 9;
+			$granTotal = 0;
+
+			if (!isset($data['detalle']['grupo'])) {
+				foreach ($data['detalle'] as $det) {
+					$hoja->fromArray([$det->descripcion], null, "A{$fila}");
+					$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+					$fila++;
+
+					foreach ($det->subcategoria as $sub) {
+						if (count($sub['articulos']) > 0) {
+							$hoja->fromArray([$sub['descripcion']], null, "A{$fila}");
+							$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+							$fila++;
+							$total = 0;
+							foreach ($sub['articulos'] as $row) {
+								$reg = [
+									$row->descripcion,
+									$row->cantidad,
+									$row->porcentaje,
+									$row->precio_unitario,
+									round($row->total, 2)
+								];
+								$hoja->fromArray($reg, null, "A{$fila}");
+								$total += $row->total;
+								$granTotal += $row->total;
+								$fila++;
+							}
+
+							$hoja->setCellValue("D{$fila}", "Total Subcategoria");
+							$hoja->setCellValue("E{$fila}", $total);
+							$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+							$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$fila++;
+						}
+					}
+				}
+				
+				$fila++;
+				$hoja->setCellValue("D{$fila}", "TOTAL");
+				$hoja->setCellValue("E{$fila}", $granTotal);
+				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+			} else {
+				foreach ($data['detalle']['datos'] as $sede) {
+					$totalSede = 0;
+					$hoja->fromArray([$sede['sede']], null, "A{$fila}");
+					$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+					$fila++;
+					foreach ($sede['articulos'] as $det) {
+						//
+						$hoja->fromArray([$det->descripcion], null, "A{$fila}");
+						$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+						$fila++;
+
+						foreach ($det->subcategoria as $sub) {
+							if (count($sub['articulos']) > 0) {
+								$hoja->fromArray([$sub['descripcion']], null, "A{$fila}");
+								$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+								$fila++;
+								$total = 0;
+								foreach ($sub['articulos'] as $row) {
+									$reg = [
+										$row->descripcion,
+										$row->cantidad,
+										$row->porcentaje,
+										$row->precio_unitario,
+										round($row->total, 2)
+									];
+									$hoja->fromArray($reg, null, "A{$fila}");
+									$total += $row->total;
+									$totalSede += $row->total;
+									$granTotal += $row->total;
+									$fila++;
+								}
+
+								$hoja->setCellValue("D{$fila}", "Total Subcategoria");
+								$hoja->setCellValue("E{$fila}", $total);
+								$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+								$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+								$fila++;
+							}
+						}
+					}
+					$hoja->setCellValue("D{$fila}", "Total Sede");
+					$hoja->setCellValue("E{$fila}", $totalSede);
+					$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					$fila++;
+				}
+
+				$fila++;
+				$hoja->setCellValue("D{$fila}", "TOTAL");
+				$hoja->setCellValue("E{$fila}", $granTotal);
+				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+			}
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+
+			$fila++;
+			$hoja->setTitle("Ventas por Categoria");
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Ventas.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+		} else {
+			$vista = $this->load->view('reporte/venta/categoria', array_merge($data,$req), true);
+
+			$mpdf = new \Mpdf\Mpdf([
+				//'tempDir' => sys_get_temp_dir(), //Produccion
+				'format' => 'Legal'
+			]);
+
+			$mpdf->WriteHTML($vista);
+			$mpdf->Output("Ventas_categoria.pdf", "D");
+		}		
 	}
 
 	public function articulo($pdf = 0)
@@ -325,7 +472,6 @@ class Venta extends CI_Controller {
 		$this->output
 			 ->set_content_type("application/json")
 			 ->set_output(json_encode($datos));	
-		
 	}
 
 	public function articulopdf($pdf = 0)
@@ -429,15 +575,114 @@ class Venta extends CI_Controller {
 			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
 		}
 		
-		$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
 
-		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //Produccion
-			'format' => 'Legal'
-		]);
+		if (verDato($_GET, "_excel")) {
+			$fdel = formatoFecha($_GET['fdel'],2);
+			$fal = formatoFecha($_GET['fal'],2);
 
-		$mpdf->WriteHTML($vista);
-		$mpdf->Output("Ventas_articulo.pdf", "D");
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Articulo")
+				  ->setSubject("Office 2007 xlsx Articulo")
+				  ->setKeywords("office 2007 openxml php");
+
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+			$nombres = [
+				"Descripcion",
+				"Cantidad",
+				"Total"
+			];
+
+			/*Encabezado*/
+			$hoja->setCellValue("A1", $data["empresa"]->nombre);
+			$hoja->setCellValue("A2", $data["nsede"]);
+			$hoja->setCellValue("A4", "Reporte de Ventas");
+			$hoja->setCellValue("A5", "Por Articulo");
+			$hoja->setCellValue("A6", "Del: {$fdel} al: {$fal}");
+
+			$hoja->fromArray($nombres, null, "A8");
+			$hoja->getStyle("A1:A6")->getFont()->setBold(true);
+			$hoja->getStyle("A8:C8")->getFont()->setBold(true);
+
+			$fila = 9;
+			$total = 0;
+
+			if ($data['detalle']['grupo'] == 1) {
+				foreach ($data['detalle']['datos'] as $det) {
+					$total+=$det['total'];
+					$reg = [
+						$det['articulo']->descripcion,
+						$det['cantidad'],
+						round($det['total'], 2)
+					];
+					$hoja->fromArray($reg, null, "A{$fila}");
+					$fila++;
+				}
+
+				$fila++;
+				$hoja->setCellValue("B{$fila}", "TOTAL");
+				$hoja->getStyle("B{$fila}:C{$fila}")->getFont()->setBold(true);
+				$hoja->setCellValue("C{$fila}", round($total, 2));
+			} else {
+				foreach ($data['detalle']['datos'] as $sede) {
+					$totalSede = 0;
+					$hoja->fromArray([$sede['sede']], null, "A{$fila}");
+					$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+					$fila++;
+					foreach ($sede['articulos'] as $det) {
+						$total+=$det['total'];
+						$totalSede+=$det['total'];
+
+						$reg = [
+							$det['articulo']->descripcion,
+							$det['cantidad'],
+							round($det['total'], 2)
+						];
+						$hoja->fromArray($reg, null, "A{$fila}");
+						$fila++;	
+					}
+					$hoja->setCellValue("B{$fila}", "Total Sede");
+					$hoja->getStyle("B{$fila}:C{$fila}")->getFont()->setBold(true);
+					$hoja->setCellValue("C{$fila}", round($totalSede, 2));
+					$fila++;
+				}
+
+				$fila++;
+				$hoja->setCellValue("B{$fila}", "TOTAL");
+				$hoja->getStyle("B{$fila}:C{$fila}")->getFont()->setBold(true);
+				$hoja->setCellValue("C{$fila}", round($total, 2));
+			}
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+			
+			$hoja->setTitle("Ventas por Articulo");
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Ventas.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+
+		} else {
+			$vista = $this->load->view('reporte/venta/articulo', array_merge($data,$req), true);
+
+			$mpdf = new \Mpdf\Mpdf([
+				'tempDir' => sys_get_temp_dir(), //Produccion
+				'format' => 'Legal'
+			]);
+
+			$mpdf->WriteHTML($vista);
+			$mpdf->Output("Ventas_articulo.pdf", "D");
+		}
 	
 	}
 

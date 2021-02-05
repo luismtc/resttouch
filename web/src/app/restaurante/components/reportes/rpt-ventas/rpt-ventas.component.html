@@ -44,7 +44,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <app-rpt-botones [configuracion]="configBotones" (htmlClick)="getReporte(1)" (pdfClick)="getReporte(2)" (resetParamsClick)="resetParams()"></app-rpt-botones>
+                    <app-rpt-botones [configuracion]="configBotones" (excelClick) = "getReporte(3)" (htmlClick)="getReporte(1)" (pdfClick)="getReporte(2)" (resetParamsClick)="resetParams()"></app-rpt-botones>
                 </form>
                 <app-cargando *ngIf="cargando"></app-cargando>
             </mat-card-content>
