@@ -35,8 +35,17 @@ class Callcenter extends CI_Controller {
 			$headers = $this->input->request_headers();
 			if ($com->getPK()) {
 				if (verDato($req, "cobro") && verDato($req, "factura") && verDato($req, "pedido")) {
+					$origen = $this->Catalogo_model->getComandaOrigen([
+						"_uno" => true,
+						"descripcion" => "API"
+					]);
 
-					$com->guardar(["sede" => $req->pedido->sede]);
+					$com->guardar([
+						"sede" => $req->pedido->sede,
+						'comanda_origen' => $origen->comanda_origen,
+						'comanda_origen_datos' => json_encode($req->pedido)
+					]);
+					
 					$exito = $com->enviarDetalleSede();
 
 					$opciones = array(
