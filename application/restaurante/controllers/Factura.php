@@ -136,52 +136,58 @@ class Factura extends CI_Controller {
 								]);
 							}
 						}
-						$fac->cargarFacturaSerie();
-						$fac->cargarMoneda();
-						$fac->cargarReceptor();
-						$fac->cargarSede();
-						$fac->cargarCertificadorFel();
-						$fac->procesar_factura();
-						
-						$funcion = $fac->getCertificador()->metodo_factura;
-						$resp = $fac->$funcion();
-						$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
-						if (!empty($fac->numero_factura)) {
-							$webhook = $this->Webhook_model->buscar([
-								"evento" => "RTEV_FIRMA_FACTURA",
-								"_uno" => true
-							]);
 
-							$fact = new Factura_model($fac->factura);
+						if (!isset($req['sinfirma'])) {
+							$fac->cargarFacturaSerie();
+							$fac->cargarMoneda();
+							$fac->cargarReceptor();
 							$fac->cargarSede();
-							$fac->detalle = $fac->getDetalle();
-							$fact->guardar([
-								"numero_factura" => $fac->numero_factura,
-								"serie_factura" => $fac->serie_factura,
-								"fel_uuid" => $fac->fel_uuid
-							]);
-							if ($webhook) {
-								$this->load->library('Webhook');
-								if (strtolower(trim($webhook->tipo_llamada)) == "soap") {
-									$req = $fac->getXmlWebhook();
+							$fac->cargarCertificadorFel();
+							$fac->procesar_factura();
+							
+							$funcion = $fac->getCertificador()->metodo_factura;
+							$resp = $fac->$funcion();
+							$fac->setBitacoraFel(['resultado' => json_encode($resp)]);
+							if (!empty($fac->numero_factura)) {
+								$webhook = $this->Webhook_model->buscar([
+									"evento" => "RTEV_FIRMA_FACTURA",
+									"_uno" => true
+								]);
 
-								} else if(strtolower(trim($webhook->tipo_llamada)) == "json") {
-									$req = "";
+								$fact = new Factura_model($fac->factura);
+								$fac->cargarSede();
+								$fac->detalle = $fac->getDetalle();
+								$fact->guardar([
+									"numero_factura" => $fac->numero_factura,
+									"serie_factura" => $fac->serie_factura,
+									"fel_uuid" => $fac->fel_uuid
+								]);
+								if ($webhook) {
+									$this->load->library('Webhook');
+									if (strtolower(trim($webhook->tipo_llamada)) == "soap") {
+										$req = $fac->getXmlWebhook();
+
+									} else if(strtolower(trim($webhook->tipo_llamada)) == "json") {
+										$req = "";
+									}
+
+									$web = new Webhook($webhook);
+									$web->setRequest($req);
+									$web->setEvento();
 								}
 
-								$web = new Webhook($webhook);
-								$web->setRequest($req);
-								$web->setEvento();
+
+								$datos['exito'] = true;
+								$datos['mensaje'] = "Datos actualizados con exito";	
+							} else {						
+								$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";			
 							}
-
-
+							$fac->empresa->direccion = !empty($fac->sedeFactura->direccion) ? $fac->sedeFactura->direccion : $fac->empresa->direccion;
+							$datos['factura'] = $fac;
+						} else {
 							$datos['exito'] = true;
-							$datos['mensaje'] = "Datos actualizados con exito";	
-						} else {						
-							$datos['mensaje'] = "Ocurrio un error al enviar la factura, intente nuevamente";			
+							$datos['mensaje'] = "Datos actualizados con exito";
 						}
-						$fac->empresa->direccion = !empty($fac->sedeFactura->direccion) ? $fac->sedeFactura->direccion : $fac->empresa->direccion;
-						$datos['factura'] = $fac;
 					} else {
 						$datos['mensaje'] = "Ocurrio un error al guardar la factura, intente nuevamente";	
 					}

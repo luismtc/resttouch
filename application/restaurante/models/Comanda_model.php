@@ -522,6 +522,26 @@ class Comanda_model extends General_Model
 		return new Sede_model($this->sede);
 	}
 
+	public function enviarDetalleSede()
+	{
+		$exito = true;
+		foreach ($this->getDetalle() as $row) {
+			$art = $this->Articulo_model->buscarArticulo([
+				"codigo" => $row->articulo->codigo,
+				"sede" => $this->sede
+			]);
+
+			if ($art) {
+				$det = new Dcomanda_model($row->detalle_comanda);
+				$det->guardar(["articulo" => $art->articulo]);
+			} else {
+				$exito = false;
+			}
+		}
+
+		return $exito;
+	}
+
 	public function get_sin_factura($args = [])
 	{
 		if (isset($args['fdel']) && isset($args['fal'])) {

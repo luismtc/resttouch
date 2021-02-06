@@ -48,7 +48,7 @@ class Cuenta extends CI_Controller {
 						if (isset($req->comision_monto)) {
 							$total += $req->comision_monto;
 						}
-						
+
 						if($total == $req->total) {
 							$exito = true;
 							$continuar = true;
