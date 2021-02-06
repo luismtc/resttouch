@@ -67,6 +67,7 @@ class Callcenter extends CI_Controller {
 							if ($facturar->exito) {
 								$datos['exito'] = true;
 								$datos['mensaje'] = "Datos actualizados con exito";
+								$datos['pedido'] = $com->getPK();
 							} else {
 								$datos['mensaje'] = $facturar->mensaje;
 							}
