@@ -36,6 +36,8 @@ import {
 
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 
+import { ChartsModule } from 'ng2-charts';
+
 import { AdminRoutingModule } from './admin-routing.module';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -98,7 +100,8 @@ import { FormEmpresaComponent } from './components/empresa/form-empresa/form-emp
 import { ListaEmpresaComponent } from './components/empresa/lista-empresa/lista-empresa.component';
 import { RazonAnulacionComponent } from './components/razon-anulacion/razon-anulacion/razon-anulacion.component';
 import { FormRazonAnulacionComponent } from './components/razon-anulacion/form-razon-anulacion/form-razon-anulacion.component';
-import { ListaRazonAnulacionComponent } from './components/razon-anulacion/lista-razon-anulacion/lista-razon-anulacion.component'
+import { ListaRazonAnulacionComponent } from './components/razon-anulacion/lista-razon-anulacion/lista-razon-anulacion.component';
+import { GraficaLineaComponent } from './components/tablero/graficas/grafica-linea/grafica-linea.component';
 
 @NgModule({
   declarations: [
@@ -115,14 +118,15 @@ import { ListaRazonAnulacionComponent } from './components/razon-anulacion/lista
     UsuarioSedeListaComponent, UsuarioSedeFormComponent, ListaCertificadorConfiguracionComponent,
     CertificadorConfiguracionComponent, FormCertificadorConfiguracionComponent, CertificadorFelComponent,
     FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent,
-    ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent, RazonAnulacionComponent, FormRazonAnulacionComponent, ListaRazonAnulacionComponent
+    ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent, RazonAnulacionComponent,
+    FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
     MatInputModule, MatCardModule, MatDividerModule, MatTabsModule, MatTableModule, MatSelectModule, MatCheckboxModule, MatButtonModule,
     MatSnackBarModule, MatToolbarModule, MatMenuModule, MatGridListModule, MatPaginatorModule, MatTreeModule, MatDialogModule,
     MatProgressBarModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule, NgIdleKeepaliveModule.forRoot(),
-    MatAutocompleteModule
+    MatAutocompleteModule, ChartsModule
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent
