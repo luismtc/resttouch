@@ -40,54 +40,65 @@ class Callcenter extends CI_Controller {
 						"descripcion" => "API"
 					]);
 
-					$com->guardar([
+					$turno = $ci->Turno_model->getTurno([
 						"sede" => $req->pedido->sede,
-						'comanda_origen' => $origen->comanda_origen,
-						'comanda_origen_datos' => json_encode($req->pedido)
+						'abierto' => true, 
+						"_uno" => true
 					]);
-					
-					$exito = $com->enviarDetalleSede();
 
-					$opciones = array(
-                            'http' => array(
-                                'method'=>"POST",
-                                'header'=> "Authorization: {$headers["Authorization"]}\r\nContent-Type: application/json",
-                                'content' => json_encode($req->cobro)
-                            )
-                    );
+					if ($turno) {
+						$com->guardar([
+							"sede" => $req->pedido->sede,
+							"turno" => $turno->turno,
+							'comanda_origen' => $origen->comanda_origen,
+							'comanda_origen_datos' => json_encode($req->pedido)
+						]);
+						
+						$exito = $com->enviarDetalleSede();
 
-					if ($exito) {
-	                    $contexto = stream_context_create($opciones);
+						$opciones = array(
+	                            'http' => array(
+	                                'method'=>"POST",
+	                                'header'=> "Authorization: {$headers["Authorization"]}\r\nContent-Type: application/json",
+	                                'content' => json_encode($req->cobro)
+	                            )
+	                    );
 
-	                    $cobro = json_decode(file_get_contents(url_base("restaurante.php/cuenta/cobrar/{$req->cobro->cuenta}"), false, $contexto));
+						if ($exito) {
+		                    $contexto = stream_context_create($opciones);
 
-						if ($cobro->exito) {
-							$req->factura->sinfirma = true;
-							$opciones['http']['content'] = json_encode($req->factura);
-							$contexto = stream_context_create($opciones);
-							$facturar = json_decode(
-								file_get_contents(
-									url_base("restaurante.php/factura/guardar/{$req->cobro->cuenta}"),
-									false, 
-									$contexto
-								)
-							);
+		                    $cobro = json_decode(file_get_contents(url_base("restaurante.php/cuenta/cobrar/{$req->cobro->cuenta}"), false, $contexto));
 
-							if ($facturar->exito) {
-								$datos['exito'] = true;
-								$datos['mensaje'] = "Datos actualizados con exito";
-								$datos['pedido'] = $com->getPK();
-								$updlst = json_decode(get_request('http://localhost:8988/api/updlstpedidos', []));
-								// $updlst = json_decode(get_request('https://restouch.c807.com:8988/api/updlstpedidos', []));
-								$datos['msgws'] = $updlst;
+							if ($cobro->exito) {
+								$req->factura->sinfirma = true;
+								$opciones['http']['content'] = json_encode($req->factura);
+								$contexto = stream_context_create($opciones);
+								$facturar = json_decode(
+									file_get_contents(
+										url_base("restaurante.php/factura/guardar/{$req->cobro->cuenta}"),
+										false, 
+										$contexto
+									)
+								);
+
+								if ($facturar->exito) {
+									$datos['exito'] = true;
+									$datos['mensaje'] = "Datos actualizados con exito";
+									$datos['pedido'] = $com->getPK();
+									$updlst = json_decode(get_request('http://localhost:8988/api/updlstpedidos', []));
+									// $updlst = json_decode(get_request('https://restouch.c807.com:8988/api/updlstpedidos', []));
+									$datos['msgws'] = $updlst;
+								} else {
+									$datos['mensaje'] = $facturar->mensaje;
+								}
 							} else {
-								$datos['mensaje'] = $facturar->mensaje;
+								$datos['mensaje'] = $cobro->mensaje;	
 							}
 						} else {
-							$datos['mensaje'] = $cobro->mensaje;	
-						}
+							$datos['mensaje'] = "No fue posible enviar el pedido al restaurante seleccionado";	
+						}	
 					} else {
-						$datos['mensaje'] = "No fue posible enviar el pedido al restaurante seleccionado";	
+						$datos['mensaje'] = "No existe ningun turno abierto en el restaurante seleccionado";
 					}
 				}
 			} else {
