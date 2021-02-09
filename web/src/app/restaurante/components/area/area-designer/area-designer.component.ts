@@ -47,7 +47,7 @@ export class AreaDesignerComponent implements OnInit {
       (this.mesas.reduce((max, p) => +p.numero > max ? +p.numero : max, (!!this.mesas[0].numero ? +this.mesas[0].numero : 0)) + 1) :
       1
 
-  addTable = (w = 72, h = 72, esmostrador = 0, vertical = 0) => {
+  addTable = (w = 72, h = 72, esmostrador = 0, vertical = 0, escallcenter = 0) => {
     this.mesas.push({
       mesa: null,
       area: this.data.area,
@@ -59,12 +59,15 @@ export class AreaDesignerComponent implements OnInit {
       ancho: w,
       alto: h,
       esmostrador,
-      vertical
+      vertical,
+      escallcenter
     });
     this.saveNewMesa(this.mesas[this.mesas.length - 1], this.mesas.length - 1);
   }
 
   addMostrador = (esVertical = false) => this.addTable((esVertical ? 72 : 144), (esVertical ? 144 : 72), 1, (esVertical ? 1 : 0));
+
+  addCallCenter = () => this.addTable(72, 72, 1, 0, 1);
 
   saveNewMesa = (mesa: Mesa, pos: number) => {
     this.mesaSrvc.save(mesa).subscribe(res => {

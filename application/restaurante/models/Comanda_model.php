@@ -40,7 +40,7 @@ class Comanda_model extends General_Model
 			b.posx,
 			b.posy,
 			b.tamanio,
-			b.estatus, b.esmostrador, b.etiqueta,
+			b.estatus, b.esmostrador, b.etiqueta, b.escallcenter,
 			b.impresora,
 			c.nombre as narea")
 			->join("mesa b", "a.mesa = b.mesa")

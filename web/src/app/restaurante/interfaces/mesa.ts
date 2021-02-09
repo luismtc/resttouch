@@ -15,6 +15,7 @@ export interface Mesa {
     impresora?: Impresora;
     debaja?: number;
     etiqueta?: string;
+    escallcenter?: number;
 }
 
 export interface MesaDisponible {
@@ -38,4 +39,5 @@ export interface MesaDisponible {
     impresora?: Impresora;
     debaja?: number;
     etiqueta?: string;
+    escallcenter?: number;
 }

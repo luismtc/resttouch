@@ -23,7 +23,8 @@ export class MesaComponent implements OnInit, AfterViewInit {
     alto: null,
     esmostrador: 0,
     vertical: 0,
-    etiqueta: null
+    etiqueta: null,
+    escallcenter: 0
   };
   @Input() dontAllowDrag = true;
   @Input() isDisabled = false;
@@ -43,12 +44,17 @@ export class MesaComponent implements OnInit, AfterViewInit {
     if (+this.configuracion.esmostrador === 0) {
       this.urlImage += 'table_03.svg';
     } else {
-      if (+this.configuracion.vertical === 0) {
-        this.urlImage += 'mostrador_horizontal.svg';
+      if (+this.configuracion.escallcenter === 0) {
+        if (+this.configuracion.vertical === 0) {
+          this.urlImage += 'mostrador_horizontal.svg';
+        } else {
+          this.urlImage += 'mostrador_vertical.svg';
+        }
       } else {
-        this.urlImage += 'mostrador_vertical.svg';
+        this.urlImage += 'callcenter.svg';
       }
     }
+    // console.log(this.configuracion, this.urlImage);
   }
 
   ngAfterViewInit = () => this.objMesa = this.divMesa.nativeElement;

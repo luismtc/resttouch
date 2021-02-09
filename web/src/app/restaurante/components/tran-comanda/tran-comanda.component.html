@@ -28,7 +28,7 @@
                 (click)="setSelectedCuenta(cta.numero)">
                 {{cta.nombre}}
             </button>
-            <button mat-raised-button type="button" class="btnAccion" (click)="nuevaCuenta()">
+            <button mat-raised-button type="button" class="btnAccion" (click)="nuevaCuenta()" *ngIf="+mesaEnUso.mesa.escallcenter === 0">
                 Nueva
             </button>
         </div>
@@ -59,7 +59,7 @@
                             Notas
                         </button>
                         <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
-                            (click)="validarImpresion()" [disabled]="!cuentaActiva.nombre || bloqueoBotones">
+                            (click)="validarImpresion()" [disabled]="!cuentaActiva.nombre || bloqueoBotones" *ngIf="+mesaEnUso.mesa.escallcenter === 0">
                             Comanda
                         </button>
                         <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
@@ -88,7 +88,7 @@
                         </button>
                         <button mat-mini-fab type="button" color="warn" class="btnAccionComanda" (click)="cerrarMesa()"
                             *ngIf="lstProductosSeleccionados.length <= 0">
-                            Cerrar {{+mesaEnUso.mesa.esmostrador === 0 ? 'Mesa' : 'Mostrador'}}
+                            Cerrar {{+mesaEnUso.mesa.esmostrador === 0 ? 'Mesa' : (+mesaEnUso.mesa.escallcenter === 0 ? 'Mostrador' : 'Pedido')}}
                         </button>
                     </eco-fab-speed-dial-actions>
                 </eco-fab-speed-dial>

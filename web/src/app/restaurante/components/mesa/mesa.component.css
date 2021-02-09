@@ -4,6 +4,7 @@
     position: absolute;
     text-align: right;
     padding-top: 0;
+    background-size: contain, cover
 }
 
 span {

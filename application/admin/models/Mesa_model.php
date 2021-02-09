@@ -17,6 +17,7 @@ class Mesa_model extends General_Model {
 	public $impresora = 0;
 	public $debaja = 0;
 	public $etiqueta = null;
+	public $escallcenter = 0;
 
 	public function __construct($id = "")
 	{
