@@ -18,7 +18,8 @@ class Callcenter extends CI_Controller {
 			"Area_model",
 			"Articulo_model",
 			"Factura_model",
-			"Configuracion_model"
+			"Configuracion_model",
+			"Turno_model"
 		]);
 
 		$this->output
@@ -40,7 +41,7 @@ class Callcenter extends CI_Controller {
 						"descripcion" => "API"
 					]);
 
-					$turno = $ci->Turno_model->getTurno([
+					$turno = $this->Turno_model->getTurno([
 						"sede" => $req->pedido->sede,
 						'abierto' => true, 
 						"_uno" => true
