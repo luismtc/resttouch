@@ -448,8 +448,8 @@ class Comanda_model extends General_Model
 				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
 				$datos['fhcreacion'] = isset($json->created_at) ? $json->created_at : '';
 			} else if ($nombre == 'api') {
-				$datos["numero_orden"] = $json->numero_orden;
-				$datos["metodo_pago"] = $json->metodo_pago;
+				$datos["numero_orden"] = isset($json->numero_orden) ? $json->numero_orden : '';
+				$datos["metodo_pago"] = isset($json->metodo_pago) ? $json->metodo_pago : '';
 				if (isset($json->transferencia)) {
 					$datos['transferencia'] = $json->transferencia;
 				}

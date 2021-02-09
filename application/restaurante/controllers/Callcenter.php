@@ -49,6 +49,7 @@ class Callcenter extends CI_Controller {
 
 					if ($turno) {
 						$com->guardar([
+							"domicilio" => 1,
 							"sede" => $req->pedido->sede,
 							"turno" => $turno->turno,
 							'comanda_origen' => $origen->comanda_origen,
