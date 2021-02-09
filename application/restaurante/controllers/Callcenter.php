@@ -77,6 +77,9 @@ class Callcenter extends CI_Controller {
 								$datos['exito'] = true;
 								$datos['mensaje'] = "Datos actualizados con exito";
 								$datos['pedido'] = $com->getPK();
+								$updlst = json_decode(get_request('http://localhost:8988/api/updlstpedidos', []));
+								// $updlst = json_decode(get_request('https://restouch.c807.com:8988/api/updlstpedidos', []));
+								$datos['msgws'] = $updlst;
 							} else {
 								$datos['mensaje'] = $facturar->mensaje;
 							}
