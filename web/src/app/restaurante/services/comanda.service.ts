@@ -41,6 +41,12 @@ export class ComandaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  enviarPedido(idcomanda: number, pedido: any) {
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/callcenter/guardar_pedido/${idcomanda}`,
+      pedido
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
 
   saveDetalleCombo(idcomanda: number, idcuenta: number, detalle: DetalleComanda) {
     return this.http.post<any>(

@@ -39,4 +39,5 @@ export interface Empresa {
     visa_transaction_key?: string;
     codigo: number;
     metodo_costeo: number;
+    leyenda_isr?: string;
 }

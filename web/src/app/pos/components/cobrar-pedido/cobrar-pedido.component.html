@@ -90,7 +90,48 @@
     </div>
   </div>
   <div class="row">
-    <div class="col m12 s12 overflow-auto d-flex justify-content-end">
+    <div class="col m8 s8">
+      <table class="table table-sm table-borderless" *ngIf="+data.mesaenuso.mesa.escallcenter === 1">
+        <caption>
+          <strong>Datos de envío</strong>
+        </caption>
+        <tbody>
+          <tr>
+            <!--<td class="text-right font-weight-bold">Atiende:</td>-->
+            <td>
+              <mat-form-field class="fullWidth">
+                <mat-select name="sede" [(ngModel)]="datosPedido.sede" required>
+                  <mat-option *ngFor="let s of sedes" [value]="s.sede">
+                    {{s.nombre}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>              
+            </td>
+            <!--<td class="text-right font-weight-bold">Entrega:</td>-->
+            <td>
+              <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Dirección de entrega" name="direccion_entrega" [(ngModel)]="datosPedido.direccion_entrega" required>
+              </mat-form-field>
+            </td>
+          </tr>
+          <tr>
+            <!--<td class="text-right font-weight-bold">Nombre:</td>-->
+            <td>
+              <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="datosPedido.nombre">
+              </mat-form-field>
+            </td>
+            <!--<td class="text-right font-weight-bold">Teléfono:</td>-->
+            <td>
+              <mat-form-field class="fullWidth">
+                <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="datosPedido.telefono">
+              </mat-form-field>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>    
+    <div class="col m4 s4">
       <table class="table table-sm table-borderless">
         <tbody>
           <tr>

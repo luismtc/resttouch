@@ -78,8 +78,12 @@
                             Unir cuentas
                         </button>
                         <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
-                            (click)="cobrarCuenta()" [disabled]="!cuentaActiva.nombre || esCajero() || bloqueoBotones">
+                            (click)="cobrarCuenta()" [disabled]="!cuentaActiva.nombre || esCajero() || bloqueoBotones" *ngIf="+mesaEnUso.mesa.escallcenter === 0">
                             Cobrar cuenta
+                        </button>
+                        <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
+                            (click)="enviarPedido()" [disabled]="!cuentaActiva.nombre || esCajero() || bloqueoBotones" *ngIf="+mesaEnUso.mesa.escallcenter === 1">
+                            Enviar pedido
                         </button>
                         <button mat-mini-fab type="button" color="warn" class="btnAccion btnAccionComanda"
                             (click)="trasladoMesa()" [disabled]="bloqueoBotones"

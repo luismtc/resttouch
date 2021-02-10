@@ -16,6 +16,17 @@ import { CobroService } from '../../services/cobro.service';
 import { Cliente } from '../../../admin/interfaces/cliente';
 import { FacturaRequest } from '../../interfaces/factura';
 import { FacturaService } from '../../services/factura.service';
+import { Sede } from '../../../admin/interfaces/sede';
+import { SedeService } from '../../../admin/services/sede.service';
+import { ComandaService } from '../../../restaurante/services/comanda.service';
+
+interface DatosPedido {
+  sede: number;
+  direccion_entrega: string;
+  telefono: string;
+  nombre: string;
+  cliente?: any;
+}
 
 @Component({
   selector: 'app-cobrar-pedido',
@@ -34,6 +45,9 @@ export class CobrarPedidoComponent implements OnInit {
   public facturando = false;
   public cargandoConf: any = { w: 75, h: 75 };
   public pideDocumento = false;
+  public sedes: Sede[] = [];
+  public sede: Sede;
+  public datosPedido: DatosPedido = { sede: null, direccion_entrega: null, telefono: null, nombre: null, cliente: null };
 
   constructor(
     public dialog: MatDialog,
@@ -45,6 +59,8 @@ export class CobrarPedidoComponent implements OnInit {
     public facturaSrvc: FacturaService,
     private ls: LocalstorageService,
     private socket: Socket,
+    private sedeSrvc: SedeService,
+    private comandaSrvc: ComandaService
   ) { }
 
   ngOnInit() {
@@ -56,6 +72,7 @@ export class CobrarPedidoComponent implements OnInit {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
+    this.loadSedes();
   }
 
   resetFactReq = () => {
@@ -69,6 +86,8 @@ export class CobrarPedidoComponent implements OnInit {
       this.data = this.inputData;
     }
 
+    // console.log('MESA = ', this.data.mesaenuso);
+
     this.inputData.totalDeCuenta = 0.00;
     this.inputData.productosACobrar.forEach((item: any) => {
       this.inputData.totalDeCuenta += (item.precio * item.cantidad) + (item.cantidad * item.monto_extra);
@@ -77,6 +96,15 @@ export class CobrarPedidoComponent implements OnInit {
     this.calculaPropina();
     this.actualizaSaldo();
     this.formaPago.monto = parseFloat(this.inputData.saldo).toFixed(2);
+    this.datosPedido.sede = this.ls.get(GLOBAL.usrTokenVar).sede.toString() || null;
+  }
+
+  loadSedes = () => {
+    this.sedeSrvc.get().subscribe(res => {
+      if (res) {
+        this.sedes = res;
+      }
+    });
   }
 
   calculaPropina = () => {
@@ -148,6 +176,11 @@ export class CobrarPedidoComponent implements OnInit {
   setClienteFacturar = (obj: Cliente) => {
     this.clienteSelected = obj;
     this.factReq.cliente = +obj.cliente;
+    if (+this.data.mesaenuso.mesa.escallcenter === 1) {
+      this.datosPedido.nombre = obj.nombre;
+      this.datosPedido.direccion_entrega = obj.direccion;
+      this.datosPedido.telefono = obj.telefono;
+    }
   }
 
   cobrar = () => {
@@ -175,6 +208,11 @@ export class CobrarPedidoComponent implements OnInit {
     }
     objCobro.comision_monto = sumaMontoComision;
     objCobro.total += sumaMontoComision;
+
+    if (+this.data.mesaenuso.mesa.escallcenter === 1) {
+      this.enviarPedido(objCobro);
+      return;
+    }
 
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
     this.cobroSrvc.save(objCobro).subscribe(res => {
@@ -216,6 +254,46 @@ export class CobrarPedidoComponent implements OnInit {
         this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
         this.dialogRef.close('closePanel');
       }
+    });
+  }
+
+  enviarPedido = (cobro: Cobro) => {
+
+    this.datosPedido.cliente = {
+      nombre: this.clienteSelected.nombre,
+      apellidos: '',
+      correo: this.clienteSelected.correo,
+      telefono: this.datosPedido.telefono,
+      nit: this.clienteSelected.nit,
+      direccion: this.datosPedido.direccion_entrega
+    };
+
+    const obj = {
+      cobro,
+      pedido: this.datosPedido,
+      factura: {
+        cuentas: [
+          {
+            cuenta: cobro.cuenta
+          }
+        ],
+        factura_serie: 1,
+        cliente: this.clienteSelected.cliente,
+        fecha_factura: moment().format(GLOBAL.dbDateFormat),
+        moneda: 1
+      }
+    };
+
+    // console.log('PEDIDO = ', obj);
+    this.comandaSrvc.enviarPedido(+this.data.mesaenuso.comanda, obj).subscribe(res => {
+      if (res.exito) {
+        this.snackBar.open('Pedido', `#${res.pedido}. ${res.mensaje}`, { duration: 3000 });
+        this.dialogRef.close('closePanel');
+      } else {
+        this.snackBar.open('Pedido', `ERROR: ${res.mensaje}`, { duration: 7000 });
+      }
+      this.facturando = false;
+      this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
     });
   }
 

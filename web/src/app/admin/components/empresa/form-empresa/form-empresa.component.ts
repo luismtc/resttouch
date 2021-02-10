@@ -51,7 +51,8 @@ export class FormEmpresaComponent implements OnInit {
     visa_merchant_id: null,
     visa_transaction_key: null,
     codigo: null,
-    metodo_costeo: null
+    metodo_costeo: null,
+    leyenda_isr: null
   }
 
   onSubmit = () => {

@@ -20,6 +20,7 @@ class Empresa_model extends General_model {
     public $visa_merchant_id;
     public $visa_transaction_key;
     public $metodo_costeo;
+    public $leyenda_isr;
 
 	public function __construct($id = "")
 	{

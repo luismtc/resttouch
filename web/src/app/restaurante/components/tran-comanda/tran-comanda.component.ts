@@ -565,6 +565,7 @@ export class TranComandaComponent implements OnInit {
           });
 
           cobrarCtaRef.afterClosed().subscribe(resAC => {
+            // console.log(resAC);
             if (resAC && resAC !== 'closePanel') {
               // console.log(res);
               this.cambiarEstatusCuenta(resAC);
@@ -580,6 +581,37 @@ export class TranComandaComponent implements OnInit {
         }
       }
     });
+  }
+
+  enviarPedido = () => {
+    const cuenta = this.mesaEnUso.cuentas[0];
+    this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +cuenta.numero);
+    const lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
+    lstProductosDeCuenta.map(p => p.impreso = 1);
+    this.noComanda = this.mesaEnUso.comanda;
+    this.cuentaActiva.productos = this.prepProductosComanda(lstProductosDeCuenta);
+    const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +this.cuentaActiva.cuenta);
+    if (idxCta > -1) {
+      const objCmd: Comanda = {
+        area: this.mesaEnUso.mesa.area.area,
+        mesa: this.mesaEnUso.mesa.mesa,
+        mesero: this.mesaEnUso.usuario,
+        comanda: this.mesaEnUso.comanda,
+        cuentas: this.mesaEnUso.cuentas,
+        numero_pedido: this.mesaEnUso.numero_pedido
+      };
+
+      this.comandaSrvc.save(objCmd).subscribe((res) => {
+        if (res.exito) {
+          this.mesaEnUso.numero_pedido = res.comanda.numero_pedido;
+          this.comandaSrvc.setProductoImpreso(cuenta.cuenta).subscribe(resImp => {
+            this.llenaProductosSeleccionados(resImp.comanda);
+            this.setSelectedCuenta(cuenta.numero);
+            this.cobrarCuenta();
+          });
+        }
+      });
+    }
   }
 
   cambiarEstatusCuenta = (obj: any) => {
