@@ -4,8 +4,8 @@
             <div class="row">
                 <div class="col m6 s12">
                     <span matLine>{{p.cantidad}}&nbsp;{{p.nombre}}</span>
-                    <div matLine *ngFor="let det of p.detalle">                        
-                        {{det}}                        
+                    <div matLine *ngFor="let det of p.detalle">
+                        <span class="tabulador">{{det}}</span>
                     </div>
                 </div>
                 <div class="col m6 s12" align="end">

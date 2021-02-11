@@ -79,9 +79,8 @@ class Area extends CI_Controller
 
 	public function get_mesas_disponibles()
 	{
-		$this->load->model('Mesa_model');
-		$mesas = $this->Mesa_model->buscar(['estatus' => 1]);
-		usort($mesas, function($a, $b) { return (((int)$a->area > (int)$b->area) && ((int)$a->numero > (int)$b->numero)); });
+		$this->load->model('Mesa_model');		
+		$mesas = $this->Mesa_model->getDisponibles($this->data->sede);
 		foreach($mesas as $mesa) {
 			$mesa->area = new Area_model($mesa->area);
 		}

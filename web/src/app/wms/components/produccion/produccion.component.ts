@@ -4,7 +4,7 @@ import { LocalstorageService } from '../../../admin/services/localstorage.servic
 import { GLOBAL } from '../../../shared/global';
 import * as moment from 'moment';
 
-import { FormEgresoComponent } from '../egreso/form-egreso/form-egreso.component';
+// import { FormEgresoComponent } from '../egreso/form-egreso/form-egreso.component';
 import { FormIngresoComponent } from '../ingreso/form-ingreso/form-ingreso.component';
 
 import { TransformacionIngreso } from '../../interfaces/transformacion';
@@ -23,14 +23,15 @@ export class ProduccionComponent implements OnInit {
   public produccion: TransformacionIngreso;
 
   constructor(
-  	private ls: LocalstorageService,
-    private _snackBar: MatSnackBar,
+    private ls: LocalstorageService,
+    private snackBar: MatSnackBar,
     private transformacionSrvc: TransformacionService
   ) { }
 
   ngOnInit() {
-  	this.ingreso = {
-      ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), comentario: null, proveedor: null
+    this.ingreso = {
+      ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null,
+      usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), comentario: null, proveedor: null
     };
   }
 
@@ -38,15 +39,15 @@ export class ProduccionComponent implements OnInit {
     this.ingreso = this.frmIngreso.ingreso;
 
     this.produccion = {
-        tipo_movimiento: this.ingreso.tipo_movimiento,
-        fecha: this.ingreso.fecha,
-        proveedor: this.ingreso.proveedor,
-        bodega: this.ingreso.bodega,
-        usuario: this.ingreso.usuario,
-        bodega_origen: this.ingreso.bodega_origen,
-        comentario: this.ingreso.comentario,
-        detalle: []
-    }
+      tipo_movimiento: this.ingreso.tipo_movimiento,
+      fecha: this.ingreso.fecha,
+      proveedor: this.ingreso.proveedor,
+      bodega: this.ingreso.bodega,
+      usuario: this.ingreso.usuario,
+      bodega_origen: this.ingreso.bodega_origen,
+      comentario: this.ingreso.comentario,
+      detalle: []
+    };
 
     this.frmIngreso.detallesIngreso.forEach(di => this.produccion.detalle.push({
       articulo: di.articulo,
@@ -63,13 +64,13 @@ export class ProduccionComponent implements OnInit {
         if (res.exito) {
           this.frmIngreso.resetIngreso();
           this.frmIngreso.detallesIngreso = [];
-          this._snackBar.open('Producto generado con éxito...', 'Producción', { duration: 5000 });
+          this.snackBar.open('Producto generado con éxito...', 'Producción', { duration: 5000 });
         } else {
-          this._snackBar.open(`ERROR: ${res.mensaje}`, 'Producción', { duration: 3000 });
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Producción', { duration: 3000 });
         }
       });
     } else {
-      this._snackBar.open(`Faltan datos necesario. Favor complete los datos e intente de nuevo.`, 'Transformación', { duration: 3000 });      
+      this.snackBar.open(`Faltan datos necesario. Favor complete los datos e intente de nuevo.`, 'Transformación', { duration: 3000 });
     }
   }
 

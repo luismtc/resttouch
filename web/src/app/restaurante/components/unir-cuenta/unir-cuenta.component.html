@@ -4,7 +4,7 @@
         <mat-form-field>
             <mat-label>Unir cuenta de</mat-label>
             <mat-select name="cuentaDe" [(ngModel)]="cuentaDe" required>
-                <mat-option *ngFor="let ctaDe of data.mesaEnUso.cuentas" [value]="ctaDe">
+                <mat-option *ngFor="let ctaDe of data.mesaEnUso.cuentas" [value]="ctaDe" [disabled]="+ctaDe.cerrada === 1">
                     {{ctaDe.nombre}}
                 </mat-option>
             </mat-select>
@@ -12,7 +12,7 @@
         <mat-form-field>
             <mat-label>con la cuenta de</mat-label>
             <mat-select name="cuentaA" [(ngModel)]="cuentaA" required>
-                <mat-option *ngFor="let ctaA of data.mesaEnUso.cuentas" [value]="ctaA">
+                <mat-option *ngFor="let ctaA of data.mesaEnUso.cuentas" [value]="ctaA" [disabled]="+ctaA.cerrada === 1">
                     {{ctaA.nombre}}
                 </mat-option>
             </mat-select>

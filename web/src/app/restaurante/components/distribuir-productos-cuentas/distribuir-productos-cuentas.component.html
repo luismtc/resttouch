@@ -6,7 +6,7 @@
             <th class="rtxt size-cantidad">Cantidad</th>
             <th>Cuenta</th>
         </tr>
-        <tr *ngFor="let prod of data.lstProductos; index as i">
+        <tr *ngFor="let prod of cpLstProductos; index as i">
             <td>{{prod.nombre}}</td>
             <td class="rtxt">
                 <mat-form-field class="size-cantidad">
@@ -15,7 +15,7 @@
             </td>
             <td>
                 <mat-select name="cuenta" [(ngModel)]="prod.idcuenta" required>
-                    <mat-option *ngFor="let cta of comanda.cuentas" [value]="+cta.cuenta">
+                    <mat-option *ngFor="let cta of comanda.cuentas" [value]="+cta.cuenta" [disabled]="+cta.cerrada === 1">
                         {{cta.nombre}}
                     </mat-option>
                 </mat-select>

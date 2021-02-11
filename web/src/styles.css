@@ -120,3 +120,7 @@ button .mat-icon {
 .bordeTest {
     border: 1px solid black;
 }
+
+.tabulador {
+    padding-left: 0.6em;
+}
