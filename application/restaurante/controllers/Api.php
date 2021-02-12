@@ -205,7 +205,8 @@ class Api extends CI_Controller {
 										$cuenta->guardar($datosCta);	
 									}		
 									$total = 0;		
-									$exito = true;			
+									$exito = true;		
+									$descuentoArticulo = []	;
 									foreach ($lineItems as $row) {
 										$art = $this->Articulo_model->buscar([
 											'shopify_id' => $row['variant_id'],
@@ -213,6 +214,7 @@ class Api extends CI_Controller {
 										]);
 										if (strtolower($row['title']) != 'tip') {
 											if ($art) {
+												$shop_money = $row['total_discount_set']['shop_money'];
 												$datosDcomanda = [
 													'articulo' => $art->articulo
 													,'cantidad' => $row['quantity']
@@ -225,6 +227,12 @@ class Api extends CI_Controller {
 												$det = $comanda->guardarDetalle($datosDcomanda);
 												$id = '';
 												if ($det) {
+													if ((float)$shop_money['amount'] > 0) {
+														$descuentoArticulo[] = [
+															"detalle" => $det->detalle_comanda,
+															"descuento" => (float)$shop_money['amount']
+														];
+													}
 													$cuenta->guardarDetalle([
 														'detalle_comanda' => $det->detalle_comanda
 													]);	
@@ -299,40 +307,53 @@ class Api extends CI_Controller {
 											$datos['exito'] = false;						
 										}
 									}
+
 									$datos['exito'] = $exito;
 									if ($datos['exito']) {
 										$pagos = [];						
 										$descuento = 0;
 										$pdescuento = 0;
-										if (isset($req['discount_applications']) && is_array($req['discount_applications'])) {
-											if(count($req['discount_applications']) > 0) {
-												foreach ($req['discount_applications'] as $desc) {
-													$targetType = isset($desc['target_type']) ? strtolower($desc['target_type']) : '';
-													if (strtolower($desc['value_type']) == 'percentage' && $targetType !== 'shipping_line') {
-														$descuento += ($total * $desc['value'] /100);
-														$pdescuento += $desc['value'];
-													}
-												}
 	
-												//Inicia fix para los descuentos que son por monto fijo. JA 20/08/2020.
-												if(isset($req['discount_codes']) && is_array($req['discount_codes'])) {
-													foreach($req['discount_codes'] as $desc) {
-														$tipos = ['fixed_amount', 'shipping'];
-														if (in_array(strtolower($desc['type']), $tipos)) {
-															$descuento += $desc['amount'];
-															//$pdescuento += $desc['amount'];
-														}													
+										if (count($descuentoArticulo) == 0) {
+											if (isset($req['discount_applications']) && is_array($req['discount_applications'])) {
+												$totalProd = $total-$propinaMonto;
+												if(count($req['discount_applications']) > 0) {
+													foreach ($req['discount_applications'] as $desc) {
+														$targetType = isset($desc['target_type']) ? strtolower($desc['target_type']) : '';
+														if (strtolower($desc['value_type']) == 'percentage' && $targetType !== 'shipping_line') {
+															$descuento += ($totalProd * $desc['value'] /100);
+															$pdescuento += $desc['value'];
+														}
 													}
+		
+													//Inicia fix para los descuentos que son por monto fijo. JA 20/08/2020.
+													if(isset($req['discount_codes']) && is_array($req['discount_codes'])) {
+														foreach($req['discount_codes'] as $desc) {
+															$tipos = ['fixed_amount', 'shipping'];
+															if (in_array(strtolower($desc['type']), $tipos)) {
+																$descuento += $desc['amount'];
+																//$pdescuento += $desc['amount'];
+															}													
+														}
+													}
+
+													$pdescuento = (float)$totalProd !== 0 ? ($descuento / $totalProd) : 0.00;
+													//Fin del fix para los descuentos que son por monto fijo. JA 20/08/2020.
 												}
-												$pdescuento = (float)$total !== 0 ? ($descuento / $total) : 0.00;
-												//Fin del fix para los descuentos que son por monto fijo. JA 20/08/2020.
-	
-												$pagos[] = [
-													"forma_pago" => 3, 
-													"monto" => $descuento
-												];
 											}
+										} else {
+											$shop_money = $req['total_discounts_set']['shop_money'];
+											$descuento = (float) $shop_money['amount'];
 										}
+
+										if ((float) $descuento > 0) {
+											$pagos[] = [
+												"forma_pago" => 3, 
+												"monto" => $descuento
+											];
+										}
+										
+											
 										array_push($pagos, [
 											"forma_pago" => 1, 
 											"monto" => $total - $descuento
@@ -352,7 +373,18 @@ class Api extends CI_Controller {
 												foreach ($cuenta->getDetalle() as $det) {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
-													$det->descuento = $det->total * $pdescuento;
+
+													if (count($descuentoArticulo) == 0) {
+														$det->descuento = $det->total * $pdescuento;
+													} else {
+														$det->descuento = 0;
+														foreach ($descuentoArticulo as $desc) {
+															if ($det->detalle_comanda == $desc["detalle"]) 
+															{
+																$det->descuento += $desc["descuento"];
+															}
+														}
+													}
 													
 													$det->precio_unitario = $det->precio;
 													$total = $det->total - $det->descuento;
