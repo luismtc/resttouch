@@ -14,7 +14,8 @@ class Api extends CI_Controller {
         	'Receta_model',
         	'Articulo_model',
         	'Presentacion_model',
-        	'Configuracion_model'
+        	'Configuracion_model',
+        	'BodegaArticuloCosto_model'
         ]);
 	}
 

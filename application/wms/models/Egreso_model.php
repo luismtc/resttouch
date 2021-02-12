@@ -84,17 +84,20 @@ class Egreso_model extends General_Model {
 			$receta = $art->getReceta();
 			if (count($receta) > 0) {
 				foreach ($receta as $rec) {
+					$bac = new BodegaArticuloCosto_model();
 					$tmp = new Presentacion_model();
+					$precio_unitario = $bac->get_costo($this->bodega, $rec->articulo->articulo);
 					$pres = $tmp->buscar([
 						"medida" => $rec->medida->medida,
 						"cantidad" => 1,
 						"_uno" => true
 					]);
+
 					$datos = [
 						"cantidad" => $rec->cantidad/$particion,
 						"articulo" => $rec->articulo->articulo,
-						"precio_unitario" => $rec->precio_unitario*1,
-						"precio_total" => $rec->cantidad * $rec->precio_unitario/$particion,
+						"precio_unitario" => $precio_unitario*1,
+						"precio_total" => $rec->cantidad * $precio_unitario/$particion,
 						"presentacion" => $pres->presentacion
 					];
 					$this->setDetalle($datos);
