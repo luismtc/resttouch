@@ -76,9 +76,7 @@ export class DialogComboComponent implements OnInit {
         }
       }
 
-      if (+multiple === 0) {
-        this.onConfirm();
-      }
+      // if (+multiple === 0) { this.onConfirm(); } // Se quitó esta validación para poder modificar la cantidad de los combos fijos.
     });
   }
 

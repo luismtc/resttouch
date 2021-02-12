@@ -50,6 +50,19 @@ class Mesa_model extends General_Model {
 		->get("comanda_has_mesa a")
 		->row();
 	}
+
+	public function getDisponibles($sede) {
+		return $this->db
+		->select("a.*")
+		->join("area b", "b.area = a.area")
+		->where("a.estatus", 1)
+		->where("a.esmostrador", 0)
+		->where("a.escallcenter", 0)
+		->where("b.sede", $sede)
+		->order_by("b.nombre, a.numero")
+		->get("mesa a")
+		->result();
+	}
 }
 
 /* End of file Mesa_model.php */

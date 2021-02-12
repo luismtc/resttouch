@@ -41,7 +41,7 @@ import { ListaEgresoComponent } from './components/egreso/lista-egreso/lista-egr
 import { FormEgresoComponent } from './components/egreso/form-egreso/form-egreso.component';
 import { TransformacionComponent } from './components/transformacion/transformacion.component';
 
-import { TransformacionService } from './services/transformacion.service';
+// import { TransformacionService } from './services/transformacion.service';
 import { ExistenciasComponent } from './components/reporte/existencias/existencias.component';
 import { KardexComponent } from './components/reporte/kardex/kardex.component';
 import { ListaProductoAltComponent } from './components/producto/lista-producto-alt/lista-producto-alt.component';
@@ -87,9 +87,7 @@ import { ReplicarASedesDialogComponent } from './components/producto/replicar-a-
     MatTreeModule,
     MatAutocompleteModule
   ],
-  providers: [
-    TransformacionService
-  ],
+  providers: [ ],
   exports: [
     ListaProductoComponent, ListaProductoAltComponent
   ]

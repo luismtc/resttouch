@@ -4,12 +4,13 @@
     position: absolute;
     text-align: right;
     padding-top: 0;
-    background-size: contain, cover
+    background-size: 90% 90%
 }
 
 span {
     font-size: 12pt;
     font-weight: bold;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .disponible {
@@ -22,4 +23,14 @@ span {
 
 .debaja {
     background-color: black;
+}
+
+.call-center-ocupado {
+    background-color: #da332d;
+    background-image: url('/assets/img/mesas/callcenter_alt.svg');
+}
+
+.call-center-disponible {
+    background-color: lightgreen;
+    background-image: url('/assets/img/mesas/callcenter.svg');
 }

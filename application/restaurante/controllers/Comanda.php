@@ -132,7 +132,7 @@ class Comanda extends CI_Controller {
 		$this->output->set_output(json_encode($datos));
 	}
 
-	public function trasladar_mesa($comanda, $origen, $destino) {		
+	public function trasladar_mesa($comanda, $origen, $destino) {
 		$cmd = new Comanda_model($comanda);
 		$mesaOrigen = new Mesa_model($origen);
 		$mesaDestino = new Mesa_model($destino);

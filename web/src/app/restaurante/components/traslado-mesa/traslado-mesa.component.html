@@ -5,7 +5,7 @@
             <mat-label>Trasladar a mesa:</mat-label>
             <mat-select name="destino" [(ngModel)]="destino" required>
                 <mat-option *ngFor="let mDispon of mesasDisponibles" [value]="mDispon">
-                    {{mDispon.area.nombre}} - {{mDispon.numero}}
+                    {{mDispon.area.nombre}} - {{mDispon.etiqueta || mDispon.numero}}
                 </mat-option>
             </mat-select>
         </mat-form-field>

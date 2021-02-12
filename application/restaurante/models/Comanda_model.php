@@ -101,14 +101,14 @@ class Comanda_model extends General_Model
 				]);
 
 				$artMulti = new Articulo_model($rec['articulo']);
-				$multi = $this->setDetalle($rec['articulo'], $cuenta, $combo->detalle_comanda, $receta[0]->precio, (int)$args['cantidad']);
+				$multi = $this->setDetalle($rec['articulo'], $cuenta, $combo->detalle_comanda, $receta[0]->precio, (int)$args['cantidad'] * (float)$receta[0]->cantidad);
 				foreach ($rec['receta'] as $seleccion) {
 					$recetaSelec = $artMulti->getReceta([
 						"articulo" => $seleccion['articulo'],
 						"_uno" => true
 					]);
 
-					$selec = $this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $recetaSelec[0]->precio, (int)$args['cantidad']);
+					$selec = $this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $recetaSelec[0]->precio, (int)$args['cantidad'] * (float)$recetaSelec[0]->cantidad);
 				}
 			}
 		}

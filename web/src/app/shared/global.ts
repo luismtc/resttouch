@@ -100,3 +100,6 @@ export const MultiFiltro = (array: any[], filtro: any) => {
     }
     return array;
 };
+
+export const OrdenarArrayObjetos = (objs: any[], campo: string) =>
+objs.sort((a, b) => (a[campo] > b[campo]) ? 1 : ((b[campo] > a[campo]) ? -1 : 0));

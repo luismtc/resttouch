@@ -21,6 +21,7 @@ export class DistribuirProductosCuentasComponent implements OnInit {
 
   public comanda: Comanda;
   public cantidadProducto: number[] = [];
+  public cpLstProductos: ProductoSelected[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<DistribuirProductosCuentasComponent>,
@@ -44,8 +45,13 @@ export class DistribuirProductosCuentasComponent implements OnInit {
       };
     }
 
+    this.cpLstProductos = [];
+
     if (this.data.lstProductos.length > 0) {
-      this.data.lstProductos.forEach(item => this.cantidadProducto.push(+item.cantidad));
+      this.cpLstProductos = JSON.parse(JSON.stringify(this.data.lstProductos));
+      this.data.lstProductos.forEach(item => {
+        this.cantidadProducto.push(+item.cantidad);
+      });
     }
   }
 
@@ -53,7 +59,7 @@ export class DistribuirProductosCuentasComponent implements OnInit {
 
   guardar = () => {
     const lstObj: any = [];
-    for (const p of this.data.lstProductos) {
+    for (const p of this.cpLstProductos) {
       lstObj.push({
         detalle_comanda: +p.detalle_comanda,
         cuenta: +p.idcuenta,

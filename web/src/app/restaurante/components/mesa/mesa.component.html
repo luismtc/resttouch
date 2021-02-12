@@ -1,5 +1,5 @@
 <div #divMesa cdkDrag (cdkDragEnded)="dragEnded($event)" (cdkDragMoved)="moviendo($event)" cdkDragBoundary=".areaPosicionamiento" [cdkDragDisabled]="dontAllowDrag" class="divMesa mat-elevation-z6" 
-    [ngClass]="{'disponible': +configuracion.estatus == 1 && +configuracion.debaja === 0, 'ocupada': +configuracion.estatus == 2 && +configuracion.debaja === 0, 'debaja': +configuracion.debaja === 1}"
+    [ngClass]="{'disponible': +configuracion.estatus == 1 && +configuracion.debaja === 0, 'ocupada': +configuracion.estatus == 2 && +configuracion.debaja === 0, 'debaja': +configuracion.debaja === 1, 'call-center-ocupado': +configuracion.estatus === 2 && +configuracion.escallcenter === 1, 'call-center-disponible': +configuracion.estatus === 1 && +configuracion.escallcenter === 1}"
     (click)="clickMesa()"
     [style.width.px]="getAncho()" 
     [style.height.px]="getAlto()" 
