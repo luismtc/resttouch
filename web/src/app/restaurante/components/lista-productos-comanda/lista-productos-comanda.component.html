@@ -3,7 +3,12 @@
         <div matLine class="fullWidth" *ngIf="+p.cantidad > 0">
             <div class="row">
                 <div class="col m6 s12">
-                    <span matLine>{{p.cantidad}}&nbsp;{{p.nombre}}</span>
+                    <span matLine>
+                        <ng-container *ngIf="+p.multiple === 0">
+                            {{p.cantidad}}
+                        </ng-container>
+                        {{p.nombre}}
+                    </span>
                     <div matLine *ngFor="let det of p.detalle">
                         <span class="tabulador">{{det}}</span>
                     </div>

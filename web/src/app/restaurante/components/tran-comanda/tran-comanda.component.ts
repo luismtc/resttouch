@@ -139,7 +139,9 @@ export class TranComandaComponent implements OnInit {
           detalle_cuenta: +p.detalle_cuenta,
           impresora: p.articulo.impresora,
           detalle: p.detalle,
-          monto_extra: +p.monto_extra || 0.00
+          monto_extra: +p.monto_extra || 0.00,
+          multiple: +p.articulo.multiple,
+          combo: +p.articulo.combo
         });
       }
     }

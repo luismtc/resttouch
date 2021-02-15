@@ -92,7 +92,8 @@ class Comanda_model extends General_Model
 		$art = new Articulo_model($args['articulo']);
 		if(!isset($args['cantidad'])) { $args['cantidad'] = 1; }
 		$combo = $this->setDetalle($args['articulo'], $cuenta, null, null, (int)$args['cantidad']);
-
+		$args['cantidad'] = 1;
+		
 		if ($combo) {
 			foreach ($args['receta'] as $rec) {
 				$receta = $art->getReceta([

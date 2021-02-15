@@ -80,6 +80,29 @@ export class DialogComboComponent implements OnInit {
     });
   }
 
+  setCantidad = () => {
+    let cantidad = 0;
+    if (this.seleccion.cantidad) {
+      cantidad = this.seleccion.cantidad;
+    }
+    
+    for (let i = 0; i < this.combo.receta.length; i++) {
+
+      const element = this.combo.receta[i];
+
+      if (+element.multiple === 1) {
+        const list = [];
+        for (let cont = 0; cont < +this.combo.receta[i].cantidad_maxima * this.seleccion.cantidad; cont++) {
+          list.push({
+            id: cont,
+            seleccion: {}
+          });
+        }
+        this.combo.receta[i].input = list;
+      } 
+    }
+  }
+
   onConfirm(): void {
 
     const multi = this.combo.receta.filter(p => +p.multiple === 1);

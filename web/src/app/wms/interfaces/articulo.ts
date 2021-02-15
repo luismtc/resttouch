@@ -92,4 +92,6 @@ export interface ProductoSelected {
     impresora?: Impresora;
     detalle?: [];
     monto_extra?: number;
+    multiple?: number;
+    combo?:number;
 }
