@@ -498,3 +498,22 @@ if (! function_exists("ordenar_array_objetos")) {
 		return $data;
 	}
 }
+
+if (! function_exists("get_unicos")) {
+	function get_unicos($args)
+	{
+		$reg = [];
+		$arts = array_result($args, "articulo");
+
+		$val = array_count_values($arts);
+
+		foreach ($args as $row) {
+			if (!array_key_exists($row['articulo'], $reg)) {
+				$row['cantidad'] = $val[$row['articulo']];
+		        $reg[$row['articulo']] = $row;
+		    }
+		}
+
+		return $reg;
+	}
+}

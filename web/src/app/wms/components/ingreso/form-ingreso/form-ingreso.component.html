@@ -14,7 +14,7 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmIngreso="ngForm" *ngIf="showIngresoForm" (ngSubmit)="frmIngreso.form.valid && onSubmit()" novalidate>
-            <mat-form-field class="fullWidth">
+            <mat-form-field class="fullWidth" *ngIf="saveToDB">
                 <mat-label>Tipo de movimiento</mat-label>
                 <mat-select name="tipo_movimiento" [(ngModel)]="ingreso.tipo_movimiento" required>
                     <mat-option *ngFor="let tm of tiposMovimiento" [value]="tm.tipo_movimiento">
@@ -33,7 +33,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="fullWidth">
+            <mat-form-field class="fullWidth" *ngIf="saveToDB">
                 <mat-label>Bodega de origen</mat-label>
                 <mat-select name="bodega_origen" [(ngModel)]="ingreso.bodega_origen">
                     <mat-option *ngFor="let bodeO of bodegas" [value]="bodeO.bodega">
@@ -44,7 +44,7 @@
                     <mat-icon class="iconFontSize">close</mat-icon>
                 </button>
             </mat-form-field>
-            <mat-form-field class="fullWidth">
+            <mat-form-field class="fullWidth" *ngIf="saveToDB">
                 <mat-label>Proveedor</mat-label>
                 <!--<mat-select name="proveedor" [(ngModel)]="ingreso.proveedor" required>
                     <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
@@ -137,7 +137,7 @@
                     required>
             </mat-form-field>
             -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth" *ngIf="esMovil && saveToDB" >
                 <input matInput placeholder="Costo unitario Con IVA" name="precio_unitario"
                     [(ngModel)]="detalleIngreso.precio_unitario"
                     (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"

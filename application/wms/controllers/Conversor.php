@@ -14,7 +14,9 @@ class Conversor extends CI_Controller {
         	'Catalogo_model',
         	'Articulo_model',
         	'Receta_model',
-        	'Presentacion_model'
+        	'Presentacion_model',
+        	'Proveedor_model',
+        	'Tipo_movimiento_model'
         ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -25,10 +27,50 @@ class Conversor extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$egr = new Egreso_model();
 		$datos = ['exito' => false];
+		$idProv = null;
+		$tipoMov = null;
 		if ($this->input->method() == 'post') {
 			if (isset($req['egreso']) && isset($req['ingreso'])) {
+				$prov = $this->Proveedor_model->buscar([
+					"razon_social" => "Interno",
+					"_uno" => true
+				]);
+
+				$mov = $this->Tipo_movimiento_model->buscar([
+					"descripcion" => "Transformacion",					
+					"_uno" => true
+				]);
+
+				if (!$prov) {
+					$obj = new Proveedor_model();
+					$obj->guardar([
+						"razon_social" => "Interno",
+						"nit" => "cf",
+						"corporacion" => 1
+					]);
+					$idProv = $obj->getPK();
+				} else {
+					$idProv = $prov->proveedor;
+				}
+
+				if (!$mov) {
+					$obj = new Tipo_movimiento_model();
+					$obj->guardar([
+						"descripcion" => "Transformacion",
+						"ingreso" => 1,
+						"egreso" => 1
+					]);
+					$tipoMov = $obj->getPK();
+				} else {
+					$tipoMov = $mov->tipo_movimiento;
+				}
+
+				$req['ingreso']['proveedor'] = $idProv;
 				$req['egreso']['estatus_movimiento'] = 2;
 				$req['ingreso']['estatus_movimiento'] = 2;
+				$req['ingreso']['tipo_movimiento'] = $tipoMov;
+				$req['egreso']['tipo_movimiento'] = $tipoMov;
+
 				$continuar = true;
 				if (isset($req['merma']) && is_array($req['merma'])) {
 					$bod = $this->Catalogo_model->getBodega(['merma' => 1, "_uno" => true]);
@@ -57,7 +99,9 @@ class Conversor extends CI_Controller {
 							$datos['exito'] = $ing->guardar($req['ingreso']);
 
 							if (isset($req['ingreso']['detalle'])) {					
-								foreach ($req['ingreso']['detalle'] as $det) {							
+								foreach ($req['ingreso']['detalle'] as $det) {	
+									$art = new Articulo_model($det['articulo']);
+									$det['precio_unitario'] = $art->getCostoReceta();						
 									$ing->setDetalle($det, $ing->ingreso);
 								}
 							}
@@ -104,6 +148,9 @@ class Conversor extends CI_Controller {
 		$datos = ['exito' => false];
 		$ingr = new Ingreso_model();
 		$continuar = true;
+		$idProv = null;
+		$tipoMov = null;
+
 		foreach ($req['detalle'] as $det) {
 			$art = new Articulo_model($det['articulo']);
 			foreach ($art->getReceta() as $row) {
@@ -116,6 +163,43 @@ class Conversor extends CI_Controller {
 		}
 
 		if ($continuar) {
+			$mov = $this->Tipo_movimiento_model->buscar([
+				"descripcion" => "Produccion",					
+				"_uno" => true
+			]);
+
+			$prov = $this->Proveedor_model->buscar([
+				"razon_social" => "Interno",
+				"_uno" => true
+			]);
+
+			if (!$prov) {
+				$obj = new Proveedor_model();
+				$obj->guardar([
+					"razon_social" => "Interno",
+					"nit" => "cf",
+					"corporacion" => 1
+				]);
+				$idProv = $obj->getPK();
+			} else {
+				$idProv = $prov->proveedor;
+			}
+
+			if (!$mov) {
+				$obj = new Tipo_movimiento_model();
+				$obj->guardar([
+					"descripcion" => "Produccion",
+					"ingreso" => 1,
+					"egreso" => 1
+				]);
+				$tipoMov = $obj->getPK();
+			} else {
+				$tipoMov = $mov->tipo_movimiento;
+			}
+
+			$req['proveedor'] = $idProv;
+			$req['tipo_movimiento'] = $tipoMov;
+
 			if($ingr->guardar($req)){
 				$egr = new Egreso_model();
 				$egr->guardar($req);
@@ -135,6 +219,7 @@ class Conversor extends CI_Controller {
 						]);
 					}
 					$det['cantidad'] = $det['cantidad'] * $art->rendimiento;
+					$det['precio_unitario'] = $art->getCostoReceta();
 					$det["presentacion"] = 1;
 					$ingr->setDetalle($det);
 				}

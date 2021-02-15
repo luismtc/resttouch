@@ -14,7 +14,7 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmEgreso="ngForm" *ngIf="showEgresoForm" (ngSubmit)="frmEgreso.form.valid && onSubmit()" novalidate>
-            <mat-form-field class="fullWidth">
+            <mat-form-field class="fullWidth" *ngIf = "saveToDB">
                 <mat-label>Tipo de movimiento</mat-label>
                 <mat-select name="tipo_movimiento" [(ngModel)]="egreso.tipo_movimiento" required>
                     <mat-option *ngFor="let tm of tiposMovimiento" [value]="tm.tipo_movimiento">
@@ -33,7 +33,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+egreso.traslado">¿Es traslado entre bodegas de la misma sede?
+            <mat-checkbox name="traslado" class="fullWidth" *ngIf="saveToDB" [(ngModel)]="+egreso.traslado">¿Es traslado entre bodegas de la misma sede?
             </mat-checkbox>
             <mat-form-field class="fullWidth" *ngIf="+egreso.traslado == 1 && ([2, 3].indexOf(+egreso.estatus_movimiento) < 0)">
                 <mat-label>Bodega destino</mat-label>
