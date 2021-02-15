@@ -404,10 +404,19 @@ if ( ! function_exists("validarCantidades")) {
 
 		$combo = new Articulo_model($args['articulo']);
 		$dato = ["exito" => false, "mensaje" => ""];
+		$cant = verDato($args, "cantidad", 1);
 
 		if ($combo->combo || $combo->multiple) {
-			if (count($args['receta']) >= $combo->cantidad_minima && count($args['receta']) <= $combo->cantidad_maxima) {
+			if ($combo->combo) {
+				$cant = 1;
+			}
+
+			$combo->cantidad_minima = $combo->cantidad_minima * $cant;
+			$combo->cantidad_maxima = $combo->cantidad_maxima * $cant;
+
+			if (count($args['receta']) >= $combo->cantidad_minima  && count($args['receta']) <= $combo->cantidad_maxima) {
 				foreach ($args['receta'] as $row) {
+					$row['cantidad'] = verDato($args, "cantidad", 1);
 					$dato = validarCantidades($row);
 					if (!$dato['exito']) {
 						break;

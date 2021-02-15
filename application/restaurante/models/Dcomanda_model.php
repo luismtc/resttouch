@@ -50,7 +50,7 @@ class Dcomanda_model extends General_Model {
 	{
 		$descripcion = "";
 		$tmp = $this->db
-					->select("a.detalle_comanda, b.descripcion, a.cantidad")
+					->select("a.detalle_comanda, b.descripcion, a.cantidad, b.multiple")
 					->join("articulo b", "a.articulo = b.articulo")
 					->where("a.detalle_comanda_id", $this->getPK())
 					->get("detalle_comanda a")
@@ -58,7 +58,10 @@ class Dcomanda_model extends General_Model {
 
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
-			$descripcion .= " {$row->cantidad} {$row->descripcion} |";
+			if ($row->multiple == 0) {
+				$descripcion .= " {$row->cantidad}";
+			}
+			$descripcion .= " {$row->descripcion} |";
 			$descripcion.=$det->getDescripcionCombo();
 		}
 

@@ -32,7 +32,7 @@ class Cuenta_model extends General_Model {
 	public function getEmpresa()
 	{
 		return $this->db
-		->select("c.*")
+		->select("c.*, a.sede")
 		->from("comanda a")
 		->join("sede b", "a.sede = b.sede")
 		->join("empresa c", "b.empresa = c.empresa")
@@ -163,6 +163,8 @@ class Cuenta_model extends General_Model {
 		->join("categoria_grupo d", "d.categoria_grupo = c.categoria_grupo")
 		->where("a.cuenta_cuenta", $this->cuenta)
 		->where("c.mostrar_pos", 1)
+		->where("b.cantidad >", 0)
+		->where("b.detalle_comanda_id is null")
 		->get("detalle_cuenta a")
 		->result();
 
