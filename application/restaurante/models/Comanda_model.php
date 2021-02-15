@@ -176,7 +176,7 @@ class Comanda_model extends General_Model
 					$detr->guardar($dato);
 				}
 			}
-			if ($det->getPK()) {
+			if ($det->getPK() && $art->combo == 0 && $art->multiple == 0) {
 				$det->actualizarCantidadHijos();
 			}
 			if ($result) {
