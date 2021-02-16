@@ -17,10 +17,11 @@ class Cliente extends CI_Controller
 		$clt = new Cliente_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
-		if ($this->input->method() == 'post') {
-			$req['nit'] = str_replace("-", "", $req['nit']);
+		if ($this->input->method() == 'post') {			
+			// $req['nit'] = str_replace("-", "", $req['nit']);
+			$req['nit'] = strtoupper(preg_replace("/[^0-9KkcCfF?!]/", '', $req['nit']));
 			$continuar = true;
-			if (empty($id)) {
+			if (empty($id) && $req['nit'] !== 'CF') {
 				$tmpClt = $this->Cliente_model->buscar([
 					"nit" => $req['nit'],
 					"_uno" => true

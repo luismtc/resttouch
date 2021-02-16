@@ -459,7 +459,7 @@ if (! function_exists("buscar_propiedad")) {
 if (! function_exists("validar_nit")) {
 	function validar_nit($nit)
 	{
-		$nit = strtoupper(preg_replace("/[^0-9Kk?!]/",'', $nit));
+		$nit = strtoupper(preg_replace("/[^0-9KkcCfF?!]/",'', $nit));
 		try {
 			$soapClient = new SoapClient('https://www.ingface.net/ServiciosIngface/ingfaceWsServices?wsdl');
 			$resultado = $soapClient->nitContribuyentes(['usuario' => 'DEMO', 'clave' => 'C2FDC80789AFAF22C372965901B16DF533A4FCB19FD9F2FD5CBDA554032983B0', 'nit' => $nit]);
