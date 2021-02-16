@@ -34,4 +34,6 @@ export class FormClienteDialogComponent implements OnInit {
     this.dialogRef.close(obj);
   }
 
+  cancelar = () => this.dialogRef.close();
+
 }

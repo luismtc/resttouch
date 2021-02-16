@@ -16,6 +16,7 @@ import { AreaService } from '../../services/area.service';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { ComandaService } from '../../services/comanda.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
+import { Cliente } from '../../../admin/interfaces/cliente';
 // import * as moment from 'moment';
 
 @Component({
@@ -140,8 +141,9 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         data: { mesa: m.mesaSelected }
       });
 
-      pideTelefonoRef.afterClosed().subscribe((result: any) => {
-        if (result) {
+      pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
+        if (cli) {
+          m.mesaSelected.clientePedido = cli;
           this.aperturaCargaMesa(m);
         }
       });
@@ -188,6 +190,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   openAbrirMesaDialog(m: any) {
+    console.log(m);
     this.mesaSeleccionadaToOpen = {
       nombreArea: this.tabArea.textLabel,
       area: +m.area,
@@ -199,10 +202,11 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       esEvento: false,
       dividirCuentasPorSillas: false,
       estatus: 1,
+      clientePedido: m.clientePedido || null,
       cuentas: [
         {
           numero: 1,
-          nombre: 'Única',
+          nombre: m.clientePedido?.nombre || 'Única',
           productos: []
         }
       ]

@@ -15,6 +15,7 @@ export class FormClienteComponent implements OnInit {
 
   @Input() cliente: Cliente;
   @Input() inicializoCliente = true;
+  @Input() verTodos = true;
   @Output() clienteSavedEv = new EventEmitter();
   public esDialogo = false;
   public esMovil = false;

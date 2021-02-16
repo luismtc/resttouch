@@ -52,18 +52,21 @@ export class PideTelefonoDialogComponent implements OnInit {
             data: { cliente }
           });
 
-          nvoClienteRef.afterClosed().subscribe((result: any) => {
-            if (result) {
-
+          nvoClienteRef.afterClosed().subscribe((cli: Cliente) => {
+            if (cli?.cliente) {
+              this.dialogRef.close(cli);
             }
           });
-
         }
       });
-      // this.dialogRef.close();
     } else {
       this.snackBar.open('Favor ingresar un número de teléfono válido.', 'Pedido', { duration: 5000 });
     }
+  }
+
+  seleccionarCliente = (cli: Cliente) => {
+    // console.log(cli);
+    this.dialogRef.close(cli);
   }
 
 }

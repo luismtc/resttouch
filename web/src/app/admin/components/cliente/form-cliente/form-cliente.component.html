@@ -46,7 +46,7 @@
                     [(ngModel)]="cliente.telefono">
             </mat-form-field>
             -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
                 <input matInput type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo">
             </mat-form-field>
             <!--
@@ -56,7 +56,7 @@
                     [(ngModel)]="cliente.correo">
             </mat-form-field>
             -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
                 <input matInput type="text" placeholder="Código postal" name="codigo_postal"
                     [(ngModel)]="cliente.codigo_postal">
             </mat-form-field>            
@@ -67,7 +67,7 @@
                     name="codigo_postal" [(ngModel)]="cliente.codigo_postal">
             </mat-form-field>
             -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
                 <input matInput type="text" placeholder="Municipio" name="municipio" [(ngModel)]="cliente.municipio">
             </mat-form-field>
             <!--
@@ -77,7 +77,7 @@
                     [(ngModel)]="cliente.municipio">
             </mat-form-field>
             -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
                 <input matInput type="text" placeholder="Departamento" name="departamento"
                     [(ngModel)]="cliente.departamento">
             </mat-form-field>            
@@ -88,7 +88,7 @@
                     name="departamento" [(ngModel)]="cliente.departamento">
             </mat-form-field>
             -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
                 <input matInput type="text" maxlength="2" placeholder="Pais ISO" name="pais_iso_dos"
                     [(ngModel)]="cliente.pais_iso_dos">
             </mat-form-field>
