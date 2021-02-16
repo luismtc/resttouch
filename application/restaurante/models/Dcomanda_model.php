@@ -72,7 +72,7 @@ class Dcomanda_model extends General_Model {
 	{
 		$montoExtra = 0.00;
 		$tmp = $this->db
-					->select("a.detalle_comanda, a.precio")
+					->select("a.detalle_comanda, a.precio, a.cantidad")
 					->join("articulo b", "a.articulo = b.articulo")
 					->where("a.detalle_comanda_id", $this->getPK())
 					->get("detalle_comanda a")
@@ -80,7 +80,7 @@ class Dcomanda_model extends General_Model {
 
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
-			$montoExtra += $row->precio ? (float)$row->precio : 0.00;
+			$montoExtra += $row->precio ? (float)$row->precio * $row->cantidad : 0.00;
 			$montoExtra += $det->getPrecioExtraCombo();
 		}
 
