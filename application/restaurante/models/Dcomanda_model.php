@@ -132,7 +132,7 @@ class Dcomanda_model extends General_Model {
 						"cantidad" => $args['cantidad'],
 						"precio" => $this->precio,
 						"impreso" => $this->impreso,
-						"total" => $this->total,
+						"total" => $this->precio * $args['cantidad'],
 						"notas" => $this->notas,
 						"cocinado" => $this->cocinado,
 						"presentacion" => $this->presentacion,
