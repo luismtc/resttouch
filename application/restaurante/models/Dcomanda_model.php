@@ -152,7 +152,8 @@ class Dcomanda_model extends General_Model {
 					]);
 
 					$exito = $this->guardar([
-						"cantidad" => ($this->cantidad - $args['cantidad'])
+						"cantidad" => ($this->cantidad - $args['cantidad']),
+						"total" => $this->precio * $args['cantidad']
 					]);
 				}
 				
