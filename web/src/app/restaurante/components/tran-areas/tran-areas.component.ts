@@ -6,6 +6,7 @@ import { MatSidenav, MatDrawerToggleResult } from '@angular/material/sidenav';
 import { GLOBAL } from '../../../shared/global';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { Socket } from 'ngx-socket-io';
+import { PideTelefonoDialogComponent } from '../../../callcenter/components/pide-telefono-dialog/pide-telefono-dialog.component';
 
 import { AbrirMesaComponent } from '../abrir-mesa/abrir-mesa.component';
 import { TranComandaComponent } from '../tran-comanda/tran-comanda.component';
@@ -130,6 +131,24 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   onClickMesa(m: any) {
     // console.log(m.mesaSelected); return;
+    if (+m.mesaSelected.escallcenter === 0) {
+      this.aperturaCargaMesa(m);
+    } else {
+      const pideTelefonoRef = this.dialog.open(PideTelefonoDialogComponent, {
+        width: '50%',
+        disableClose: true,
+        data: { mesa: m.mesaSelected }
+      });
+
+      pideTelefonoRef.afterClosed().subscribe((result: any) => {
+        if (result) {
+          this.aperturaCargaMesa(m);
+        }
+      });
+    }
+  }
+
+  aperturaCargaMesa = (m: any) => {
     switch (+m.mesaSelected.estatus) {
       case 1: this.openAbrirMesaDialog(m.mesaSelected); break;
       case 2: this.loadComandaMesa(m.mesaSelected); break;

@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>AGREGAR CLIENTE</h1>
 <div mat-dialog-content>
-    <app-form-cliente #frmCliente [cliente]="cliente" (clienteSavedEv)="clienteAgregado($event)"></app-form-cliente>
+    <app-form-cliente #frmCliente [cliente]="cliente" [inicializoCliente]="false" (clienteSavedEv)="clienteAgregado($event)"></app-form-cliente>
 </div>
-<div mat-dialog-actions class="d-flex justify-content-end"></div>
+<div mat-dialog-actions align="end"></div>

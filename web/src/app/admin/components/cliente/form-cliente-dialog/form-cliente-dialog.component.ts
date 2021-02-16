@@ -15,14 +15,19 @@ export class FormClienteDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<FormClienteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-    this.cliente = {
-      cliente: null, nombre: null, direccion: null, nit: null, telefono: null, correo: null,
-      codigo_postal: null, municipio: null, departamento: null, pais_iso_dos: null
-    };
-  }
+  ) { }
 
   ngOnInit() {
+    if (this.data.cliente) {
+      // console.log(this.data.cliente);
+      this.cliente = this.data.cliente;
+      // console.log(this.cliente);
+    } else {
+      this.cliente = {
+        cliente: null, nombre: null, direccion: null, nit: null, telefono: null, correo: null,
+        codigo_postal: null, municipio: null, departamento: null, pais_iso_dos: null
+      };
+    }
   }
 
   clienteAgregado = (obj: Cliente) => {

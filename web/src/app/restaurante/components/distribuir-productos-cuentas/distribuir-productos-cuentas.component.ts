@@ -49,6 +49,7 @@ export class DistribuirProductosCuentasComponent implements OnInit {
 
     if (this.data.lstProductos.length > 0) {
       this.cpLstProductos = JSON.parse(JSON.stringify(this.data.lstProductos));
+      // console.log(this.cpLstProductos);
       this.data.lstProductos.forEach(item => {
         this.cantidadProducto.push(+item.cantidad);
       });

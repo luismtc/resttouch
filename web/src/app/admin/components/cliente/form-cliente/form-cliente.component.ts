@@ -14,6 +14,7 @@ import { ClienteService } from '../../../services/cliente.service';
 export class FormClienteComponent implements OnInit {
 
   @Input() cliente: Cliente;
+  @Input() inicializoCliente = true;
   @Output() clienteSavedEv = new EventEmitter();
   public esDialogo = false;
   public esMovil = false;
@@ -26,7 +27,9 @@ export class FormClienteComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
-    this.resetCliente();
+    if (this.inicializoCliente) {
+      this.resetCliente();
+    }
   }
 
   resetCliente = () => this.cliente = {

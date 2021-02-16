@@ -10,7 +10,7 @@
             <td>{{prod.nombre}}</td>
             <td class="rtxt">
                 <mat-form-field class="size-cantidad">
-                    <input type="number" matInput name="cantidad" min="1" [max]="cantidadProducto[i]" [(ngModel)]="prod.cantidad" required>
+                    <input type="number" matInput name="cantidad" min="1" [max]="cantidadProducto[i]" [(ngModel)]="prod.cantidad" required [disabled]="+prod.combo === 1">
                 </mat-form-field>                
             </td>
             <td>

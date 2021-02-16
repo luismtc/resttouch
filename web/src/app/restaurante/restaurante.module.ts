@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { WmsModule } from '../wms/wms.module';
 import { PosModule } from '../pos/pos.module';
-// import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+import { CallcenterModule } from '../callcenter/callcenter.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { MatListModule } from '@angular/material/list';
@@ -98,8 +98,8 @@ import { DistribuirProductosCuentasComponent } from './components/distribuir-pro
     SharedModule,
     WmsModule,
     PosModule,
+    CallcenterModule,
     FlexLayoutModule,
-    // SocketIoModule.forRoot(config),
     MatListModule,
     MatIconModule,
     MatFormFieldModule,
