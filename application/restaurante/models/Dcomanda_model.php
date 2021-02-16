@@ -154,12 +154,11 @@ class Dcomanda_model extends General_Model {
 					$exito = $this->guardar([
 						"cantidad" => ($this->cantidad - $args['cantidad'])
 					]);
-
 				}
 				
 				if ($exito) {
 					$tmp = $this->db
-								->select("a.detalle_comanda, b.articulo")
+								->select("a.detalle_comanda, b.articulo, a.cantidad")
 								->join("articulo b", "a.articulo = b.articulo")
 								->where("a.detalle_comanda_id", $this->getPK())
 								->get("detalle_comanda a")
@@ -172,9 +171,14 @@ class Dcomanda_model extends General_Model {
 							"_principal" => true,
 							"receta" => $this->articulo
 						]);
-						if (count($rec) > 0) {
-							$param['cantidad'] = $args['cantidad'] * $rec[0]->cantidad;
+						if ($args['cantidad'] == $this->cantidad) {
+							$param['cantidad'] = $row->cantidad;
+						} else {
+							if (count($rec) > 0) {
+								$param['cantidad'] = $args['cantidad'] * $rec[0]->cantidad;
+							}
 						}
+						
 						$det = new Dcomanda_model($row->detalle_comanda);
 						$exito = $det->distribuir_cuenta($param);
 						if (!$exito) {
