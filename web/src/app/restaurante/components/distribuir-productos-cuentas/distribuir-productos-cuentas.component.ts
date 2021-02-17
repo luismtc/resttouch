@@ -22,6 +22,7 @@ export class DistribuirProductosCuentasComponent implements OnInit {
   public comanda: Comanda;
   public cantidadProducto: number[] = [];
   public cpLstProductos: ProductoSelected[] = [];
+  public compLstProductos: ProductoSelected[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<DistribuirProductosCuentasComponent>,
@@ -48,33 +49,48 @@ export class DistribuirProductosCuentasComponent implements OnInit {
     this.cpLstProductos = [];
 
     if (this.data.lstProductos.length > 0) {
-      this.cpLstProductos = JSON.parse(JSON.stringify(this.data.lstProductos));
-      // console.log(this.cpLstProductos);
+      // console.log(this.data.lstProductos);
+      // console.log(this.data.mesaEnUso.cuentas);
       this.data.lstProductos.forEach(item => {
-        this.cantidadProducto.push(+item.cantidad);
+        const laCta = this.data.mesaEnUso.cuentas.find(c => +c.cuenta === +item.idcuenta);
+        if (+laCta.cerrada === 0) {
+          this.cpLstProductos.push(item);
+          this.cantidadProducto.push(+item.cantidad);
+        }
       });
+      this.cpLstProductos = JSON.parse(JSON.stringify(this.cpLstProductos));
+      this.compLstProductos = JSON.parse(JSON.stringify(this.cpLstProductos));
     }
   }
 
   cancelar = () => this.dialogRef.close(false);
 
   guardar = () => {
-    const lstObj: any = [];
+    const lstObj: any[] = [];
+    let idx = 0;
     for (const p of this.cpLstProductos) {
-      lstObj.push({
-        detalle_comanda: +p.detalle_comanda,
-        cuenta: +p.idcuenta,
-        cantidad: +p.cantidad
-      });
-    }
-    this.comandaSrvc.distribuirCuentas(lstObj).subscribe(res => {
-      if (res.exito) {
-        this.snackBar.open('Productos redistribuidos', 'Cuentas', { duration: 3000 });
-        this.dialogRef.close(true);
-      } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cuentas', { duration: 7000 });
-        this.cancelar();
+      if (+p.idcuenta !== +this.compLstProductos[idx].idcuenta) {
+        lstObj.push({
+          detalle_comanda: +p.detalle_comanda,
+          cuenta: +p.idcuenta,
+          cantidad: +p.cantidad
+        });
       }
-    });
+      idx++;
+    }
+    if (lstObj.length > 0) {
+      this.comandaSrvc.distribuirCuentas(lstObj).subscribe(res => {
+        if (res.exito) {
+          this.snackBar.open('Productos redistribuidos', 'Cuentas', { duration: 3000 });
+          this.dialogRef.close(true);
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cuentas', { duration: 7000 });
+          this.cancelar();
+        }
+      });
+    } else {
+      this.snackBar.open('Sin cambios en las cuentas.', 'Cuentas', { duration: 7000 });
+      this.dialogRef.close(true);
+    }
   }
 }

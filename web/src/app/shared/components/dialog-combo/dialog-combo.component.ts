@@ -85,7 +85,7 @@ export class DialogComboComponent implements OnInit {
     if (this.seleccion.cantidad) {
       cantidad = this.seleccion.cantidad;
     }
-    
+
     for (let i = 0; i < this.combo.receta.length; i++) {
 
       const element = this.combo.receta[i];
@@ -99,14 +99,13 @@ export class DialogComboComponent implements OnInit {
           });
         }
         this.combo.receta[i].input = list;
-      } 
+      }
     }
   }
 
   onConfirm(): void {
 
     const multi = this.combo.receta.filter(p => +p.multiple === 1);
-    // console.log(multi);
     for (let i = 0; i < multi.length; i++) {
       const element = multi[i];
       this.seleccion.receta.push({
@@ -122,6 +121,7 @@ export class DialogComboComponent implements OnInit {
     }
     this.datos.respuesta = true;
     this.datos.seleccion = this.seleccion;
+    // console.log(this.datos); return;
     this.dialogRef.close(this.datos);
   }
 

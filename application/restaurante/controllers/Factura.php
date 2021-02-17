@@ -71,8 +71,8 @@ class Factura extends CI_Controller {
 								$det->bien_servicio = $det->articulo->bien_servicio;
 								$det->articulo = $det->articulo->articulo;								
 								
-								$det->precio_unitario = (float)$det->precio + (float)$det->monto_extra;
-								$det->total = $det->precio_unitario * $det->cantidad;
+								$det->precio_unitario = (float)$det->precio;
+								$det->total = ($det->precio_unitario * $det->cantidad) + (float)$det->monto_extra;
 
 								$det->descuento = $pdesc > 0 ? ($det->total * $pdesc) : 0;
 								

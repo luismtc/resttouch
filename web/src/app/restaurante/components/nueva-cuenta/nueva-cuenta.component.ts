@@ -54,16 +54,20 @@ export class NuevaCuentaComponent implements OnInit {
 
   guardar = () => {
     if (this.nuevaCuenta.nombre) {
-      this.comanda.cuentas.push(this.nuevaCuenta);
-      this.comandaSrvc.save(this.comanda).subscribe(res => {
-        if (res.exito) {
-          this.snackBar.open('Cuenta agregada con éxito', 'Cuentas', { duration: 3000 });
-          this.dialogRef.close(true);
-        } else {
-          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cuentas', { duration: 7000 });
-        }
-      });
+      const idx = this.comanda.cuentas.findIndex(c => c.nombre.toUpperCase().trim() === this.nuevaCuenta.nombre.toUpperCase().trim());
+      if (idx < 0) {
+        this.comanda.cuentas.push(this.nuevaCuenta);
+        this.comandaSrvc.save(this.comanda).subscribe(res => {
+          if (res.exito) {
+            this.snackBar.open('Cuenta agregada con éxito', 'Cuentas', { duration: 3000 });
+            this.dialogRef.close(true);
+          } else {
+            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cuentas', { duration: 7000 });
+          }
+        });
+      } else {
+        this.snackBar.open('Ya existe una cuenta con ese nombre. Por favor ingrese otro nombre.', 'Cuentas', { duration: 7000 });
+      }
     }
   }
-
 }

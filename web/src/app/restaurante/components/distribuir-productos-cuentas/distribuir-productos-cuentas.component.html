@@ -15,7 +15,7 @@
             </td>
             <td>
                 <mat-select name="cuenta" [(ngModel)]="prod.idcuenta" required>
-                    <mat-option *ngFor="let cta of comanda.cuentas" [value]="+cta.cuenta" [disabled]="+cta.cerrada === 1">
+                    <mat-option *ngFor="let cta of comanda.cuentas" [value]="+cta.cuenta" [disabled]="+cta.cerrada === 1 || +prod.idcuenta === +cta.cuenta">
                         {{cta.nombre}}
                     </mat-option>
                 </mat-select>

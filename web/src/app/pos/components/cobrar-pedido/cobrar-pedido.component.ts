@@ -90,7 +90,7 @@ export class CobrarPedidoComponent implements OnInit {
 
     this.inputData.totalDeCuenta = 0.00;
     this.inputData.productosACobrar.forEach((item: any) => {
-      this.inputData.totalDeCuenta += (item.precio * item.cantidad) + (item.cantidad * item.monto_extra);
+      this.inputData.totalDeCuenta += (item.precio * item.cantidad) + (item.monto_extra);
     });
 
     this.calculaPropina();

@@ -39,6 +39,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   public mesaSeleccionada: any;
   public mesaSeleccionadaToOpen: any;
   public configTipoPantalla = 1;
+  public clientePedido: Cliente = null;
 
   constructor(
     public dialog: MatDialog,
@@ -143,7 +144,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
       pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
         if (cli) {
-          m.mesaSelected.clientePedido = cli;
+          this.clientePedido = cli;
           this.aperturaCargaMesa(m);
         }
       });
@@ -190,7 +191,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   openAbrirMesaDialog(m: any) {
-    console.log(m);
+    // console.log(m);
     this.mesaSeleccionadaToOpen = {
       nombreArea: this.tabArea.textLabel,
       area: +m.area,
@@ -202,11 +203,11 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       esEvento: false,
       dividirCuentasPorSillas: false,
       estatus: 1,
-      clientePedido: m.clientePedido || null,
+      clientePedido: this.clientePedido || null,
       cuentas: [
         {
           numero: 1,
-          nombre: m.clientePedido?.nombre || 'Única',
+          nombre: this.clientePedido?.nombre || 'Única',
           productos: []
         }
       ]

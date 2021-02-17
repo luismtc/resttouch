@@ -92,7 +92,7 @@ class Comanda_model extends General_Model
 		$art = new Articulo_model($args['articulo']);
 		if(!isset($args['cantidad'])) { $args['cantidad'] = 1; }
 		$combo = $this->setDetalle($args['articulo'], $cuenta, null, null, (int)$args['cantidad']);
-		$args['cantidad'] = 1;
+		// $args['cantidad'] = 1;
 
 		if ($combo) {
 			foreach ($args['receta'] as $rec) {
@@ -111,7 +111,8 @@ class Comanda_model extends General_Model
 						"_uno" => true
 					]);
 
-					$precio = $recetaSelec[0]->precio * (int)$seleccion['cantidad'];
+					// $precio = $recetaSelec[0]->precio * (int)$seleccion['cantidad'];
+					$precio = $recetaSelec[0]->precio;
 
 					$selec = $this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $precio, (int)$seleccion['cantidad'] * (float)$recetaSelec[0]->cantidad);
 				}

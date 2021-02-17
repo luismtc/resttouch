@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
+import { MatInput } from '@angular/material/input';
 
 import { UnirCuentaComponent } from '../unir-cuenta/unir-cuenta.component';
 import { TrasladoMesaComponent } from '../traslado-mesa/traslado-mesa.component';
@@ -20,11 +21,13 @@ import { DistribuirProductosCuentasComponent } from '../distribuir-productos-cue
 import { Cuenta } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
-import { ArbolArticulos, ProductoSelected } from '../../../wms/interfaces/articulo';
+import { Articulo, ArbolArticulos, ProductoSelected, NodoProducto } from '../../../wms/interfaces/articulo';
+import { ArticuloService } from '../../../wms/services/articulo.service';
 
 import { ComandaService } from '../../services/comanda.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
+import { Cliente } from '../../../admin/interfaces/cliente';
 
 @Component({
   selector: 'app-tran-comanda',
@@ -34,9 +37,11 @@ import { ConfiguracionService } from '../../../admin/services/configuracion.serv
 export class TranComandaComponent implements OnInit {
 
   @Input() mesaEnUso: ComandaGetResponse;
+  @Input() clientePedido: Cliente = null;
   @Output() closeSideNavEv = new EventEmitter();
   @ViewChild('appLstProdAlt') appLstProdAlt: ListaProductoAltComponent;
   @Output() mesaSavedEv: EventEmitter<any> = new EventEmitter();
+  @ViewChild('txtCodigoBarras') txtCodigoBarras: MatInput;
 
   public lstProductosSeleccionados: ProductoSelected[];
   public lstProductosDeCuenta: ProductoSelected[];
@@ -52,6 +57,8 @@ export class TranComandaComponent implements OnInit {
   public bloqueoBotones = false;
   public rolesUsuario: string[] = [];
   public impreso = 0;
+  public usaCodigoBarras = false;
+  public codigoBarras: string = null;
 
   constructor(
     // private router: Router,
@@ -61,7 +68,8 @@ export class TranComandaComponent implements OnInit {
     private socket: Socket,
     private ls: LocalstorageService,
     private pdfServicio: ReportePdfService,
-    private configSrvc: ConfiguracionService
+    private configSrvc: ConfiguracionService,
+    private articuloSrvc: ArticuloService
   ) { }
 
   ngOnInit() {
@@ -76,6 +84,7 @@ export class TranComandaComponent implements OnInit {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
+    this.usaCodigoBarras = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_USA_CODIGO_BARRAS) || false;
     // console.log('MESA EN USO = ', this.mesaEnUso);
   }
 
@@ -114,6 +123,30 @@ export class TranComandaComponent implements OnInit {
   }
 
   clickOnCategoria = (c: ArbolArticulos) => this.appLstProdAlt.fillSubCategorias(c.categoria_grupo);
+
+  buscarArticulo = () => {
+    // console.log(`CODIGO BARRAS = ${this.codigoBarras}`);
+    if (this.codigoBarras && this.codigoBarras.trim().length > 0) {
+      this.articuloSrvc.getArticulos({ codigo: this.codigoBarras.trim() }).subscribe((arts: Articulo[]) => {
+        if (arts && arts.length > 0) {
+          const art = arts[0];
+          const obj: NodoProducto = {
+            id: +art.articulo,
+            nombre: art.descripcion,
+            precio: +art.precio,
+            impresora: art.impresora,
+            presentacion: art.presentacion,
+            codigo: art.codigo,
+            combo: art.combo,
+            multiple: art.multiple
+          };
+          this.agregarProductos(obj);
+          this.codigoBarras = null;
+          this.txtCodigoBarras.focus();
+        }
+      });
+    }
+  }
 
   llenaProductosSeleccionados = (conQueMesa: ComandaGetResponse = this.mesaEnUso) => {
     if (this.mesaEnUso.comanda == null) {
@@ -494,7 +527,8 @@ export class TranComandaComponent implements OnInit {
     let total = 0.00;
     // for (let i = 0; i < detalle.length; i++) { total += detalle[i].total || 0.00; }
     for (const item of detalle) {
-      total += item.total || 0.00;
+      total += +item.total || 0.00;
+      total += +item.monto_extra || 0.00;
     }
     return total;
   }
@@ -502,9 +536,16 @@ export class TranComandaComponent implements OnInit {
   printCuenta() {
     this.bloqueoBotones = true;
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
+
+    // console.log(this.lstProductosAImprimir);
+    // this.bloqueoBotones = false; return;
+
     this.setSumaCuenta(this.lstProductosAImprimir);
     const totalCuenta = this.sumaDetalle(this.lstProductosAImprimir);
     const printerToUse = this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora;
+    // const cnfPropSug = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
+    // console.log(`CONFIG = ${cnfPropSug}`);
+    const imprimePropSugerida = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
 
     const msgToPrint = {
       Tipo: 'Cuenta',
@@ -514,7 +555,7 @@ export class TranComandaComponent implements OnInit {
       Total: totalCuenta,
       Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
       Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
-      PropinaSugerida: (totalCuenta * 0.10).toFixed(2),
+      PropinaSugerida: imprimePropSugerida ? (totalCuenta * 0.10).toFixed(2) : null,
       Impresora: printerToUse,
       Ubicacion:
         `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero

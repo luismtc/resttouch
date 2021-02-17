@@ -40,7 +40,7 @@ class Cuenta extends CI_Controller {
 
 					if ($cta->cerrada == 0) {
 						foreach ($det as $row) {
-							$total += (((float)$row->cantidad * (float)$row->precio) + ((float)$row->cantidad * (float)$row->monto_extra));
+							$total += (((float)$row->cantidad * (float)$row->precio) + ((float)$row->monto_extra));
 						}
 
 						$total += $req->propina_monto;

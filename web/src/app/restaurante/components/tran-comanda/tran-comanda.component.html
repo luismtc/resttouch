@@ -36,6 +36,9 @@
     <div class="row">
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
             <span class="bld">Productos</span><br />
+            <mat-form-field class="fullWidth" style="margin-left: 10px; margin-right: 10px;" *ngIf="usaCodigoBarras">
+                <input #txtCodigoBarras="matInput" matInput cdkFocusInitial type="text" placeholder="Código" name="codigoBarras" [(ngModel)]="codigoBarras" [ngModelOptions]="{standalone: true}" (keyup.enter)="buscarArticulo()">
+            </mat-form-field><br *ngIf="usaCodigoBarras"/>
             <ng-container *ngFor="let c of categorias">
                 <button mat-raised-button class="btnAccion" color="accent" (click)="clickOnCategoria(c)"
                     [disabled]="bloqueoBotones || !cuentaActiva.cuenta" *ngIf="c.mostrarEnPos">
