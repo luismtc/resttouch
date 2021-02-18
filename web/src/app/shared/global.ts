@@ -18,6 +18,7 @@ export const GLOBAL = {
     urlFacturacion: `${urlBase}/facturacion.php`,
     usrTokenVar: 'rttoken',
     usrUnlockVar: 'rtunlock',
+    rtClientePedido: 'rt_cliente_pedido',
     reintentos: 0,
     CONSTANTES: {
         RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',

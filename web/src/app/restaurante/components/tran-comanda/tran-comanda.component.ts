@@ -603,7 +603,8 @@ export class TranComandaComponent implements OnInit {
               porcentajePropina: 0.00,
               impresora: +this.mesaEnUso.mesa.esmostrador === 0 ?
                 (this.mesaEnUso.mesa.area.impresora_factura || null) :
-                (this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora)
+                (this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora),
+              clientePedido: this.clientePedido
             }
           });
 

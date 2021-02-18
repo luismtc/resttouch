@@ -65,9 +65,9 @@ export class CobrarPedidoComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    this.resetFactReq();
     this.processData();
     this.loadFormasPago();
-    this.resetFactReq();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
@@ -96,7 +96,10 @@ export class CobrarPedidoComponent implements OnInit {
     this.calculaPropina();
     this.actualizaSaldo();
     this.formaPago.monto = parseFloat(this.inputData.saldo).toFixed(2);
-    this.datosPedido.sede = this.ls.get(GLOBAL.usrTokenVar).sede.toString() || null;
+    // console.log('INPUT DATA = ', this.inputData);
+    if (this.inputData.clientePedido) {
+      this.setClienteFacturar(this.inputData.clientePedido);
+    }
   }
 
   loadSedes = () => {

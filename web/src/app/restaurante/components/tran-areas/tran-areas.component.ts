@@ -136,18 +136,26 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     if (+m.mesaSelected.escallcenter === 0) {
       this.aperturaCargaMesa(m);
     } else {
-      const pideTelefonoRef = this.dialog.open(PideTelefonoDialogComponent, {
-        width: '50%',
-        disableClose: true,
-        data: { mesa: m.mesaSelected }
-      });
+      const varCliPedido = `${GLOBAL.rtClientePedido}_${m.mesaSelected.mesa}`;
+      if (+m.mesaSelected.estatus === 1) {
+        this.ls.clear(varCliPedido);
+        const pideTelefonoRef = this.dialog.open(PideTelefonoDialogComponent, {
+          width: '50%',
+          disableClose: true,
+          data: { mesa: m.mesaSelected }
+        });
 
-      pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
-        if (cli) {
-          this.clientePedido = cli;
-          this.aperturaCargaMesa(m);
-        }
-      });
+        pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
+          if (cli) {
+            this.clientePedido = cli;
+            this.ls.set(varCliPedido, this.clientePedido);
+            this.aperturaCargaMesa(m);
+          }
+        });
+      } else {
+        this.clientePedido = this.ls.get(varCliPedido);
+        this.aperturaCargaMesa(m);
+      }
     }
   }
 

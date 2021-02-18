@@ -127,7 +127,8 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
           nombre: item.articulo.impresora.nombre || '',
           sede: +item.articulo.impresora.sede,
           ubicacion: item.articulo.impresora.ubicacion || ''
-        }
+        },
+        detalle: item.detalle
       });
     });
     return lstArticulos;
@@ -240,7 +241,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       NitCertificador: fact.certificador_fel.nit,
       FechaDeAutorizacion: fact.fecha_autorizacion,
       NoOrdenEnLinea: datosOrigen.numero_orden,
-      FormaDePago: datosOrigen.metodo_pago.join(', '),
+      FormaDePago: (datosOrigen.metodo_pago && datosOrigen.metodo_pago.length > 0) ? datosOrigen.metodo_pago.join(', ') : '',
       DetalleFactura: []
     };
 
