@@ -89,15 +89,16 @@ class Reporte extends CI_Controller {
 					(!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo),
 					"{$row->articulo->articulo} ". $row->articulo->descripcion,
 					$row->presentacion->descripcion,
-					number_format($row->ingresos / $row->presentacion->cantidad,2),
-					number_format($row->egresos / $row->presentacion->cantidad,2),
-					number_format($row->comandas / $row->presentacion->cantidad,2),
-					number_format($row->facturas / $row->presentacion->cantidad,2),
-					number_format($row->total_egresos / $row->presentacion->cantidad,2),
-					(count($rec) > 0 && $art->produccion == 0) ? 0 : number_format($row->existencia / $row->presentacion->cantidad,2)
+					((float) $row->ingresos > 0) ? round($row->ingresos / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->egresos > 0) ? round($row->egresos / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->comandas > 0) ? round($row->comandas / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->facturas > 0) ? round($row->facturas / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->total_egresos > 0) ? round($row->total_egresos / $row->presentacion->cantidad,2) : "0.00",
+					(count($rec) > 0 && $art->produccion == 0) ? "0.00" : (((float) $row->existencia > 0) ? round($row->existencia / $row->presentacion->cantidad,2) : "0.00")
 				];
 
 				$hoja->fromArray($reg, null, "A{$fila}");
+				$hoja->getStyle("D{$fila}:I{$fila}")->getNumberFormat()->setFormatCode('0.00');
 				$fila++;
 			}
 
@@ -356,15 +357,16 @@ class Reporte extends CI_Controller {
 								$reg = [
 									$row->descripcion,
 									$row->presentacion,
-									$row->cantidad,
+									((float) $row->cantidad > 0) ? round($row->cantidad, 2) : "0.00",
 									$row->ultima_compra,
-									round($row->precio_unitario, 2),
-									round($row->total, 2)
+									((float) $row->precio_unitario > 0) ? round($row->precio_unitario, 2) : "0.00",
+									((float) $row->total > 0) ? round($row->total, 2) : "0.00"
 								];
 
 								$hoja->fromArray($reg, null, "A{$fila}");
-								$hoja->getStyle("D{$fila}")->getNumberFormat()->setFormatCode('0.00');
+								$hoja->getStyle("C{$fila}")->getNumberFormat()->setFormatCode('0.00');
 								$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+								$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 								$fila++;
 
 								$total += $row->total;
@@ -372,25 +374,26 @@ class Reporte extends CI_Controller {
 								$totalCat += $row->total;
 							}
 							
-							$hoja->setCellValue("D{$fila}", "Total subcategoria");
-							$hoja->setCellValue("E{$fila}", $total);
-							$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
-							$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$hoja->setCellValue("E{$fila}", "Total subcategoria");
+							$hoja->setCellValue("F{$fila}", $total);
+							$hoja->getStyle("E{$fila}:E{$fila}")->getFont()->setBold(true);
+							$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 							$fila++;
 						}
 					}
-					$hoja->setCellValue("D{$fila}", "Total Categoria");
-					$hoja->setCellValue("E{$fila}", $totalCat);
-					$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
-					$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					$hoja->setCellValue("E{$fila}", "Total Categoria");
+					$hoja->setCellValue("F{$fila}", $totalCat);
+					$hoja->getStyle("E{$fila}:E{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 					$fila++;
 				} 
 			}
 			
 			$fila++;
-			$hoja->setCellValue("D{$fila}", "TOTAL");
-			$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
-			$hoja->setCellValue("E{$fila}", round($granTotal, 2));
+			$hoja->setCellValue("E{$fila}", "TOTAL");
+			$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
+			$hoja->setCellValue("F{$fila}", round($granTotal, 2));
+			$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 
 			for ($i=0; $i <= count($nombres) ; $i++) { 
 				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
@@ -399,7 +402,7 @@ class Reporte extends CI_Controller {
 			$hoja->setTitle("Inventario Valorizado");
 
 			header("Content-Type: application/vnd.ms-excel");
-			header("Content-Disposition: attachment;filename=Valorizado.xlsx");
+			header("Content-Disposition: attachment;filename=Valorizado.xls");
 			header("Cache-Control: max-age=1");
 			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
 			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
