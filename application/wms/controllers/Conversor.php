@@ -203,9 +203,11 @@ class Conversor extends CI_Controller {
 			if($ingr->guardar($req)){
 				$egr = new Egreso_model();
 				$egr->guardar($req);
+
 				foreach ($req['detalle'] as $det) {
 					$art = new Articulo_model($det['articulo']);
-					$pres = $art->getPresentacion();
+					$pres = new Presentacion_model($det['presentacion']);
+
 					foreach ($art->getReceta() as $row) {
 						$rec = new Articulo_model($row->articulo->articulo);
 						$row->cantidad = $row->cantidad * $det['cantidad'];
@@ -219,9 +221,9 @@ class Conversor extends CI_Controller {
 							"presentacion" => 1
 						]);
 					}
-					$det['cantidad'] = $det['cantidad'] * $art->rendimiento * $pres->cantidad;
+					$det['cantidad'] = $det['cantidad'] * $art->rendimiento;
 					$det['precio_unitario'] = $art->getCostoReceta();
-					$det["presentacion"] = $art->presentacion;
+					$det["presentacion"] = $pres->getPK();
 					$ingr->setDetalle($det);
 				}
 				$datos['exito'] = true;
