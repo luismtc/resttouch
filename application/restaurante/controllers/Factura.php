@@ -43,19 +43,20 @@ class Factura extends CI_Controller {
 					"_uno" => true
 				]);
 
+				foreach ($req['cuentas'] as $row) {
+					$cta = new Cuenta_model($row['cuenta']);
+					$empresa = $cta->getEmpresa();
+					$fpago = $cta->get_forma_pago(["_sinFactura" => 1]);
+					$data->sede = $empresa->sede;
+					if (count($fpago) > 0) {
+						$continuar = false;
+					}
+				}
 				
 				$req['usuario'] = $data->idusuario;
 				$req['sede'] = $data->sede;
 				$req['certificador_fel'] = $sede->certificador_fel;
 				$req["correo_receptor"] = $clt->correo;
-
-				foreach ($req['cuentas'] as $row) {
-					$cta = new Cuenta_model($row['cuenta']);
-					$fpago = $cta->get_forma_pago(["_sinFactura" => 1]);
-					if (count($fpago) > 0) {
-						$continuar = false;
-					}
-				}
 				
 				if($continuar){
 					$fac = new Factura_model();
