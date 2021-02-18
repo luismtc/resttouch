@@ -103,10 +103,11 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   loadComandasEnLinea = () => {
     this.comandaSrvc.getComandasOnLIne().subscribe((res: any[]) => {
-      this.comandasEnLinea = res.map(cel => {
+      /*this.comandasEnLinea = res.map(cel => {
         cel.fhcreacion = moment.utc(cel.fhcreacion).local().format(GLOBAL.dbDateTimeFormat);
         return cel;
-      });
+      });*/
+      this.comandasEnLinea = res;
       this.dataSource = this.comandasEnLinea;
     });
   }

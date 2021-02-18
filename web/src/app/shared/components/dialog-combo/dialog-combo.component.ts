@@ -1,6 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ArticuloService } from '../../../wms/services/articulo.service'
+import { ArticuloService } from '../../../wms/services/articulo.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class ConfirmDialogComboModel {
   constructor(
@@ -29,7 +30,8 @@ export class DialogComboComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<DialogComboComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogComboModel,
-    private articuloSvr: ArticuloService
+    private articuloSvr: ArticuloService,
+    private snackBar: MatSnackBar
   ) {
     this.datos = {
       respuesta: false,
@@ -104,25 +106,56 @@ export class DialogComboComponent implements OnInit {
   }
 
   onConfirm(): void {
-
     const multi = this.combo.receta.filter(p => +p.multiple === 1);
-    for (let i = 0; i < multi.length; i++) {
-      const element = multi[i];
-      this.seleccion.receta.push({
-        articulo: element.articulo,
-        descripcion: element.descripcion,
-        receta: []
-      });
-      const idx = this.seleccion.receta.findIndex(p => +p.articulo === +element.articulo);
-      for (let j = 0; j < element.input.length; j++) {
-        const prod = element.input[j].seleccion;
-        this.seleccion.receta[idx].receta.push(prod);
+    const vanTodos = this.todosSeleccionados(multi);
+    if (vanTodos) {
+      for (const element of multi) {
+        this.seleccion.receta.push({
+          articulo: element.articulo,
+          descripcion: element.descripcion,
+          receta: []
+        });
+        const idx = this.seleccion.receta.findIndex(p => +p.articulo === +element.articulo);
+        for (const inp of element.input) {
+          const prod = inp.seleccion;
+          this.seleccion.receta[idx].receta.push(prod);
+        }
+      }
+      /*for (let i = 0; i < multi.length; i++) {
+        const element = multi[i];
+        this.seleccion.receta.push({
+          articulo: element.articulo,
+          descripcion: element.descripcion,
+          receta: []
+        });
+        const idx = this.seleccion.receta.findIndex(p => +p.articulo === +element.articulo);
+        for (let j = 0; j < element.input.length; j++) {
+          const prod = element.input[j].seleccion;
+          this.seleccion.receta[idx].receta.push(prod);
+        }
+      }*/
+      this.datos.respuesta = true;
+      this.datos.seleccion = this.seleccion;
+      this.dialogRef.close(this.datos);
+    } else {
+      this.snackBar.open('Por favor seleccione todas las opciones para completar.', 'Combos', { duration: 7000 });
+    }
+  }
+
+  todosSeleccionados = (multi: any[]): boolean => {
+    let vanTodos = true;
+
+    Loop1:
+    for (const element of multi) {
+      for (const inp of element.input) {
+        if (inp.seleccion.articulo === undefined) {
+          vanTodos = false;
+          break Loop1;
+        }
       }
     }
-    this.datos.respuesta = true;
-    this.datos.seleccion = this.seleccion;
-    // console.log(this.datos); return;
-    this.dialogRef.close(this.datos);
+
+    return vanTodos;
   }
 
   onDismiss(): void {
