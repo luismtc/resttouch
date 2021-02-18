@@ -93,12 +93,11 @@
                                 <ng-container *ngFor="let det of element.cuentas[0].productos">
                                     <tr>
                                         <td>
-                                            {{det.cantidad}} {{det.articulo.descripcion}}<br
-                                                *ngIf="det.notas.length > 0" />
+                                            {{det.cantidad}} {{det.articulo.descripcion}}<br *ngIf="det.notas.length > 0"/>
                                             <span *ngIf="det.notas.length > 0">&nbsp;&nbsp;&nbsp;{{det.notas}}</span>
                                         </td>
                                         <!--<td class="rtxt">{{det.precio | number: '1.2-2'}}</td>-->
-                                        <td class="rtxt">{{(+det.total + +det.monto_extra) | number: '1.2-2'}}</td>
+                                        <td class="rtxt">{{ ((+det.precio * +det.cantidad) + +det.monto_extra) | number: '1.2-2'}}</td>
                                     </tr>
                                     <ng-container *ngFor="let dc of det.detalle">
                                         <tr *ngIf="dc.length > 0">
