@@ -7,17 +7,17 @@
       <mat-card-content>
         <form #frmRptFactura="ngForm" novalidate>
           <mat-form-field class="fullWidth">            
-            <input matInput type="date" placeholder="Del" [(ngModel)]="params.fdel" [ngModelOptions]="{standalone: true}" required>
+            <input matInput type="date" placeholder="Del" name="fdel" [(ngModel)]="params.fdel" (change)="chkDates()" required>
           </mat-form-field>
           <mat-form-field class="fullWidth">            
-            <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
+            <input matInput type="date" placeholder="Al" name="fal" [(ngModel)]="params.fal" (change)="chkDates()" required>
           </mat-form-field>
           <div class="row">
             <div class="col">
               <mat-checkbox name="detalle" class="fullWidth" [(ngModel)]="+params._detalle">Mostrar Detalle</mat-checkbox>
             </div>
             <div class="col">
-              <mat-checkbox name="anuladas" class="fullWidth" [(ngModel)]="+params._anuladas">Mostrar Unicamente Anuladas</mat-checkbox>
+              <mat-checkbox name="anuladas" class="fullWidth" [(ngModel)]="+params._anuladas">Mostrar Únicamente Anuladas</mat-checkbox>
             </div>
           </div>          
           <app-rpt-botones [configuracion]="configBotones" (excelClick) = "excelClick()" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>

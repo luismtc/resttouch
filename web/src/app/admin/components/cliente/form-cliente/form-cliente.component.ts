@@ -1,5 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Inject, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatInput } from '@angular/material/input';
 import { GLOBAL } from '../../../../shared/global';
 import { LocalstorageService } from '../../../services/localstorage.service';
 
@@ -17,6 +18,7 @@ export class FormClienteComponent implements OnInit {
   @Input() inicializoCliente = true;
   @Input() verTodos = true;
   @Output() clienteSavedEv = new EventEmitter();
+  @ViewChild('txtNitCliente') txtNitCliente: MatInput;
   public esDialogo = false;
   public esMovil = false;
 
@@ -49,6 +51,25 @@ export class FormClienteComponent implements OnInit {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 7000 });
       }
     });
+  }
+
+  loadInfoContribuyente = (nit: string) => {
+    const tmpnit = nit.trim().toUpperCase().replace(/[^0-9KkcCfF]/gi, '');
+    if (tmpnit !== 'CF') {
+      this.clienteSrvc.getInfoContribuyente(tmpnit).subscribe(res => {
+        if (res.exito) {
+          this.cliente.nombre = res.contribuyente.nombre;
+          this.cliente.nit = tmpnit;
+          this.cliente.direccion = res.contribuyente.direccion;
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 7000 });
+          this.cliente.nombre = null;
+          this.cliente.nit = tmpnit;
+          this.cliente.direccion = null;
+          this.txtNitCliente.focus();
+        }
+      });
+    }
   }
 
 }

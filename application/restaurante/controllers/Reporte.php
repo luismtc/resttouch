@@ -155,7 +155,7 @@ class Reporte extends CI_Controller {
 		}
 
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			// 'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		$mpdf->WriteHTML($this->load->view('caja', $data, true));
@@ -295,7 +295,9 @@ class Reporte extends CI_Controller {
 				if ($anuladas) {
 					array_push($reg, formatoFecha($row->bitacora->fecha));
 					array_push($reg, "{$row->bitacora->usuario->nombres} {$row->bitacora->usuario->apellidos}");
-					array_push($reg, $row->razon_anulacion->descripcion);
+					if (isset($row->razon_anulacion->descripcion)) {
+						array_push($reg, $row->razon_anulacion->descripcion);
+					}
 				}
 
 				array_push($reg, (empty($row->fel_uuid_anulacion) ? round($total, 2) : 0));
@@ -382,7 +384,7 @@ class Reporte extends CI_Controller {
 		} else {
 
 			$mpdf = new \Mpdf\Mpdf([
-				'tempDir' => sys_get_temp_dir(),
+				// 'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
@@ -398,7 +400,7 @@ class Reporte extends CI_Controller {
 		$datos = [];
 		$data = $_GET;
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			// 'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		foreach ($tmp as $row) {
@@ -595,7 +597,7 @@ class Reporte extends CI_Controller {
 		}
 
 		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
+			// 'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
 		
