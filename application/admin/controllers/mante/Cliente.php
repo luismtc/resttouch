@@ -94,7 +94,7 @@ class Cliente extends CI_Controller
 					$datos['exito'] = true;
 					$datos['mensaje'] = 'Contribuyente encontrado.';
 				} else {
-					$datos['mensaje'] = $resultado->return->nombre;
+					$datos['mensaje'] = 'N.I.T. no válido.';
 				}
 			} catch(Exception $e) {
 				$datos['exito'] = false;

@@ -7,17 +7,10 @@
     <mat-card-content>
         <form #frmCliente="ngForm" (ngSubmit)="frmCliente.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.nombre" required>
-            </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
-                    ng-virtual-keyboard-placeholder="Nombre" type="text" placeholder="Nombre" name="nombre"
-                    [(ngModel)]="cliente.nombre" required>
-            </mat-form-field>
-            -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="N.I.T." name="nit" [(ngModel)]="cliente.nit" required>
+                <input matInput #txtNitCliente type="text" placeholder="N.I.T." name="nit" [(ngModel)]="cliente.nit" required maxlength="25">
+                <button type="button" mat-raised-button matSuffix color="accent" (click)="loadInfoContribuyente(cliente.nit)" *ngIf="cliente && cliente.nit && cliente.nit.length >= 4 && !verTodos">
+                    Validar NIT
+                </button>
             </mat-form-field>
             <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
@@ -27,7 +20,17 @@
             </mat-form-field>
             -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="Dirección" name="direccion" [(ngModel)]="cliente.direccion" required>
+                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="cliente.nombre" required maxlength="100">
+            </mat-form-field>
+            <!--
+            <mat-form-field class="fullWidth" *ngIf="!esMovil">
+                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
+                    ng-virtual-keyboard-placeholder="Nombre" type="text" placeholder="Nombre" name="nombre"
+                    [(ngModel)]="cliente.nombre" required>
+            </mat-form-field>
+            -->
+            <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <input matInput type="text" placeholder="Dirección de factura" name="direccion" [(ngModel)]="cliente.direccion" required maxlength="150">
             </mat-form-field>
             <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
@@ -37,7 +40,7 @@
             </mat-form-field>
             -->
             <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono">
+                <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono" maxlength="25">
             </mat-form-field>
             <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
@@ -47,7 +50,7 @@
             </mat-form-field>
             -->
             <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
-                <input matInput type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo">
+                <input matInput type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo" maxlength="50">
             </mat-form-field>
             <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
@@ -57,7 +60,7 @@
             </mat-form-field>
             -->
             <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
-                <input matInput type="text" placeholder="Código postal" name="codigo_postal"
+                <input matInput type="text" placeholder="Código postal" name="codigo_postal" maxlength="25"
                     [(ngModel)]="cliente.codigo_postal">
             </mat-form-field>            
             <!--
@@ -68,7 +71,7 @@
             </mat-form-field>
             -->
             <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
-                <input matInput type="text" placeholder="Municipio" name="municipio" [(ngModel)]="cliente.municipio">
+                <input matInput type="text" placeholder="Municipio" name="municipio" [(ngModel)]="cliente.municipio" maxlength="100">
             </mat-form-field>
             <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">
@@ -78,8 +81,7 @@
             </mat-form-field>
             -->
             <mat-form-field class="fullWidth" *ngIf="esMovil && verTodos">
-                <input matInput type="text" placeholder="Departamento" name="departamento"
-                    [(ngModel)]="cliente.departamento">
+                <input matInput type="text" placeholder="Departamento" name="departamento" [(ngModel)]="cliente.departamento" maxlength="100">
             </mat-form-field>            
             <!--
             <mat-form-field class="fullWidth" *ngIf="!esMovil">

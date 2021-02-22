@@ -52,7 +52,7 @@
         <div matLine class="fullWidth" *ngIf="+p.cantidad > 0">
             <mat-form-field class="fullWidth" *ngIf="p.showInputNotas && esMovil">
                 <input matInput placeholder="Notas de producto" [(ngModel)]="p.notas"
-                    (keyup.enter)="toggleShowInputNotas(p)" (blur)="saveNotasProducto(p)">
+                    (keyup.enter)="toggleShowInputNotas(p)" (blur)="saveNotasProducto(p)" maxlength="1000">
             </mat-form-field>
             <!--
             <mat-form-field class="fullWidth" *ngIf="p.showInputNotas && !esMovil">

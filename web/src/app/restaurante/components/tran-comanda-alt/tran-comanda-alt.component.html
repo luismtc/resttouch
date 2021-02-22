@@ -23,9 +23,11 @@
     <!-- Inicia Categorias -->
     <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start center">
         <!--<a *ngFor="let cat of categorias" class="lnkCategorias" (click)="loadSubcategorias(cat)">{{cat.descripcion}}</a>-->
-        <button mat-raised-button type="button" color="accent" class="btnAccion" *ngFor="let cat of categorias" (click)="loadSubcategorias(cat)">
-            {{cat.descripcion}}
-        </button>
+        <ng-container *ngFor="let cat of categorias">
+            <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="loadSubcategorias(cat)" *ngIf="cat.mostrarEnPos">
+                {{cat.descripcion}}
+            </button>
+        </ng-container>        
     </div>
     <!-- Fin de Categorias -->
     <mat-divider></mat-divider>

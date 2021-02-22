@@ -105,7 +105,7 @@
 										<?php echo "{$row->bitacora->usuario->nombres} {$row->bitacora->usuario->apellidos}" ?>
 									</td>
 									<td style="padding: 5px;" class="text-center">
-										<?php echo $row->razon_anulacion->descripcion ?>
+										<?php echo isset($row->razon_anulacion->descripcion) ? $row->razon_anulacion->descripcion : '' ?>
 									</td>
 								<?php endif ?>
 								<td style="padding: 5px;" class="text-right">

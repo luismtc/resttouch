@@ -116,7 +116,7 @@
             <td>
               <mat-form-field class="fullWidth">
                 <input matInput type="text" placeholder="Dirección de entrega" name="direccion_entrega"
-                  [(ngModel)]="datosPedido.direccion_entrega" required>
+                  [(ngModel)]="datosPedido.direccion_entrega" maxlength="1000" required>
               </mat-form-field>
             </td>
           </tr>
@@ -124,13 +124,13 @@
             <!--<td class="text-right font-weight-bold">Nombre:</td>-->
             <td>
               <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="datosPedido.nombre">
+                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="datosPedido.nombre" maxlength="1000">
               </mat-form-field>
             </td>
             <!--<td class="text-right font-weight-bold">Teléfono:</td>-->
             <td>
               <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="datosPedido.telefono">
+                <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="datosPedido.telefono" maxlength="1000">
               </mat-form-field>
             </td>
           </tr>

@@ -425,7 +425,7 @@ class Reporte extends CI_Controller {
 		} else {
 
 			$mpdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(),
+				'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
@@ -792,15 +792,13 @@ class Reporte extends CI_Controller {
 			$writer->save("php://output");
 		} else {
 			$mpdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(),
+				'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			
 			$mpdf->WriteHTML($this->load->view('propina', $datos, true));
 			$mpdf->Output("Distribucion de Propina.pdf", "D");
 		}
-
-		
 	}
 
 }
