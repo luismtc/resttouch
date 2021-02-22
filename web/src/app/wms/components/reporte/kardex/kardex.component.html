@@ -5,7 +5,7 @@
         <h4>Kardex</h4>
       </mat-card-title>
       <mat-card-content>
-        <form (ngSubmit)="onSubmit()" novalidate>
+        <form novalidate>
           <mat-form-field class="fullWidth">
               <mat-label>Articulo</mat-label>
               <mat-select name="articulo" [(ngModel)]="params.articulo" required>
@@ -37,9 +37,10 @@
             <input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>
           <div align="end">
-            <button mat-button color="accent" type="submit">GENERAR</button>
+            <app-rpt-botones [configuracion]="configBotones" (excelClick) = "excelClick()" (pdfClick)="onSubmit()" (resetParamsClick)="resetParams()"></app-rpt-botones>
           </div>
-        </form>        
+        </form> 
+        <app-cargando *ngIf="cargando"></app-cargando>       
       </mat-card-content>
     </mat-card>
   </div>

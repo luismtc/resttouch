@@ -154,12 +154,55 @@ class Reporte extends CI_Controller {
 			}
 		}
 
-		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
-			'format' => 'Legal'
-		]);
-		$mpdf->WriteHTML($this->load->view('caja', $data, true));
-		$mpdf->Output("Reporte de Caja.pdf", "D");	
+		if (verDato($data, "_excel")) {
+			$fdel = formatoFecha($_GET['fdel'],2);
+			$fal = formatoFecha($_GET['fal'],2);
+			$anuladas = isset($data['_anuladas']) && filter_var($data['_anuladas'], FILTER_VALIDATE_BOOLEAN);
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Articulo")
+				  ->setSubject("Office 2007 xlsx Articulo")
+				  ->setKeywords("office 2007 openxml php");
+
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+			$nombres = [
+				"Factura",
+				"Mesa",
+				"Fecha",
+				"NIT",
+				"Cliente"
+			];
+
+			$hoja->fromArray($total, null, "A{$fila}");
+			$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+			
+			$hoja->setTitle("Ventas por Articulo");
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Ventas.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+
+		} else {
+			$mpdf = new \Mpdf\Mpdf([
+				'tempDir' => sys_get_temp_dir(),
+				'format' => 'Legal'
+			]);
+			$mpdf->WriteHTML($this->load->view('caja', $data, true));
+			$mpdf->Output("Reporte de Caja.pdf", "D");	
+		}
 	}
 
 	public function factura()
@@ -382,7 +425,7 @@ class Reporte extends CI_Controller {
 		} else {
 
 			$mpdf = new \Mpdf\Mpdf([
-				'tempDir' => sys_get_temp_dir(),
+				//'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
@@ -594,13 +637,170 @@ class Reporte extends CI_Controller {
 			}
 		}
 
-		$mpdf = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(),
-			'format' => 'Legal'
-		]);
+		if (verDato($_GET, "_excel")) {
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Existencias")
+				  ->setSubject("Office 2007 xlsx Existencias")
+				  ->setKeywords("office 2007 openxml php");
+
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+
+			/*Encabezado*/
+			$hoja->setCellValue("A1", $emp->nombre);
+			$hoja->setCellValue("A2", $sede->nombre);
+			$hoja->setCellValue("A3", "Distribución de Propinas");
+			$hoja->setCellValue("B4", "Del: ".formatoFecha($datos['fdel']) ." Al: ".formatoFecha($datos['fal']));
+
+			$hoja->getStyle("A1:C4")->getFont()->setBold(true);
+			$coltotal= "A";
+			$coltotalVal = "B";
+			$totalprop = 0;
+
+			if ($datos['detalle']) {
+				$coltotal= "E";
+				$coltotalVal = "F";
+
+				$nombres = [
+					"",
+					"",
+					"Fecha",
+					"Comanda",
+					"Facturas",
+					"Propina"
+				];
+
+				$hoja->fromArray($nombres, null, "A6");
+				$hoja->getStyle("A6:F6")->getFont()->setBold(true);
+				$fila = 7;				
+				foreach ($datos['datos'] as $row) {
+					$hoja->setCellValue("A{$fila}", $row['descripcion']);
+					$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+					$fila++;
+					if (verDato($row, "usuario")) {
+						foreach ($row["usuario"] as $key => $usu) {
+							$hoja->setCellValue("A{$fila}", $usu['nombre']);
+							$fila++;
+
+							foreach ($usu['facturas'] as $fac) {
+								$reg = [
+									"",
+									"",
+									$fac->fecha_factura,
+									$fac->getComanda()->comanda,
+									$fac->numero_factura,
+									round($fac->propina * $row['porcentaje']/100,2)
+								];
+
+								$hoja->fromArray($reg, null, "A{$fila}");
+								$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+								$fila++;
+							}
+							$totalprop+=$usu['propina'];
+							$hoja->setCellValue("E{$fila}", "Total Empleado");
+							$hoja->setCellValue("F{$fila}", round($usu['propina'],2));
+							$hoja->getStyle("E{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						}
+					} else {
+						$hoja->setCellValue("A{$fila}", "N/A");
+						$fila++;
+						foreach ($row['facturas'] as $fac) {
+							$reg = [
+								"",
+								"",
+								$fac->fecha_factura,
+								$fac->getComanda()->comanda,
+								$fac->numero_factura,
+								round($fac->propina * $row['porcentaje']/100,2)
+							];
+
+							$hoja->fromArray($reg, null, "A{$fila}");
+							$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$fila++;
+						}
+						$totalprop+=$row['propina'];
+						$hoja->setCellValue("E{$fila}", "Total Empleado");
+						$hoja->setCellValue("F{$fila}", round($row['propina'],2));
+						$hoja->getStyle("E{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					}
+				}
+			} else {
+				$nombres = [
+					"Empleado",
+					"Propina"
+				];
+
+				$hoja->fromArray($nombres, null, "A6");
+				$hoja->getStyle("A6:B6")->getFont()->setBold(true);
+				$fila = 7;
+
+				foreach ($datos['datos'] as $row) {
+					$totalTipo = 0;
+					$hoja->setCellValue("A{$fila}", $row['descripcion']);
+					$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+					$fila++;
+
+					if (isset($row['usuario'])) {
+						foreach ($row['usuario'] as $usu) {
+							$totalTipo+= $usu['propina'];
+							$totalprop+=$usu['propina'];
+							$hoja->setCellValue("A{$fila}", $usu['nombre']);
+							$hoja->setCellValue("B{$fila}", round($usu['propina'],2));
+							$hoja->getStyle("B{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$fila++;
+						}
+					} else {
+						$totalTipo+= $row['propina'];
+						$totalprop+=$row['propina'];
+						$hoja->setCellValue("A{$fila}", "N/A");
+						$hoja->setCellValue("B{$fila}", round($row['propina'],2));
+						$hoja->getStyle("B{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$fila++;
+					}
+					$hoja->setCellValue("A{$fila}", "Total por tipo:");
+					$hoja->setCellValue("B{$fila}", round($totalTipo,2));
+					$hoja->getStyle("A{$fila}:B{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("A{$fila}:B{$fila}")
+					->getNumberFormat()->setFormatCode('0.00');
+					$fila++;
+				}
+			}
+
+			$hoja->setCellValue("{$coltotal}{$fila}", "Total general:");
+			$hoja->setCellValue("{$coltotalVal}{$fila}", round($totalprop,2));
+
+			$hoja->getStyle("{$coltotal}{$fila}:{$coltotalVal}{$fila}")
+			->getNumberFormat()->setFormatCode('0.00');
+
+			$hoja->getStyle("{$coltotal}{$fila}:{$coltotalVal}{$fila}")->getFont()->setBold(true);
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Kardex.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+		} else {
+			$mpdf = new \Mpdf\Mpdf([
+				//'tempDir' => sys_get_temp_dir(),
+				'format' => 'Legal'
+			]);
+			
+			$mpdf->WriteHTML($this->load->view('propina', $datos, true));
+			$mpdf->Output("Distribucion de Propina.pdf", "D");
+		}
+
 		
-		$mpdf->WriteHTML($this->load->view('propina', $datos, true));
-		$mpdf->Output("Distribucion de Propina.pdf", "D");
 	}
 
 }

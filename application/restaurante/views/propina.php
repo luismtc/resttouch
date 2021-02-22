@@ -21,7 +21,7 @@
 	</div>
 	<table class="tabla-contenido">
 		<tr>
-			<td colspan="6" class="text-center"><h1>Distribucion de propinas</h1></td>
+			<td colspan="6" class="text-center"><h1>Distribución de propinas</h1></td>
 		</tr>
 		<tr>
 			<td colspan="6" class="text-center">
@@ -46,7 +46,7 @@
 						<?php echo $row['descripcion'] ?>
 					</th>
 				</tr>
-
+				$row->usuario
 				<?php if (isset($row['usuario'])): ?>
 					<?php foreach ($row['usuario'] as $key => $usu): ?>
 						<?php $rows = count($usu['facturas'])+1 ?>

@@ -79,6 +79,7 @@ class Reporte extends CI_Controller {
 
 			$hoja->fromArray($nombres, null, "A3");
 			$hoja->getStyle("A3:I3")->getFont()->setBold(true);
+			$hoja->getStyle('A3:I3')->getAlignment()->setHorizontal('center');
 			$hoja->getStyle("A1")->getFont()->setBold(true);
 			$fila = 4;
 			foreach ($args["reg"] as $row) {
@@ -89,12 +90,12 @@ class Reporte extends CI_Controller {
 					(!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo),
 					"{$row->articulo->articulo} ". $row->articulo->descripcion,
 					$row->presentacion->descripcion,
-					((float) $row->ingresos > 0) ? round($row->ingresos / $row->presentacion->cantidad,2) : "0.00",
-					((float) $row->egresos > 0) ? round($row->egresos / $row->presentacion->cantidad,2) : "0.00",
-					((float) $row->comandas > 0) ? round($row->comandas / $row->presentacion->cantidad,2) : "0.00",
-					((float) $row->facturas > 0) ? round($row->facturas / $row->presentacion->cantidad,2) : "0.00",
-					((float) $row->total_egresos > 0) ? round($row->total_egresos / $row->presentacion->cantidad,2) : "0.00",
-					(count($rec) > 0 && $art->produccion == 0) ? "0.00" : (((float) $row->existencia > 0) ? round($row->existencia / $row->presentacion->cantidad,2) : "0.00")
+					((float) $row->ingresos != 0) ? round($row->ingresos / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->egresos != 0) ? round($row->egresos / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->comandas != 0) ? round($row->comandas / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->facturas != 0) ? round($row->facturas / $row->presentacion->cantidad,2) : "0.00",
+					((float) $row->total_egresos != 0) ? round($row->total_egresos / $row->presentacion->cantidad,2) : "0.00",
+					(count($rec) > 0 && $art->produccion == 0) ? "0.00" : (((float) $row->existencia != 0) ? round($row->existencia / $row->presentacion->cantidad,2) : "0.00")
 				];
 
 				$hoja->fromArray($reg, null, "A{$fila}");
@@ -105,6 +106,8 @@ class Reporte extends CI_Controller {
 			for ($i=0; $i <= count($nombres) ; $i++) { 
 				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
 			}
+
+			$hoja->getStyle("A4:A{$fila}")->getAlignment()->setHorizontal('left');
 
 			$fila++;
 			$hoja->setCellValue("A{$fila}", "Supervisor:");
@@ -198,17 +201,115 @@ class Reporte extends CI_Controller {
 			"fal" => $this->input->get("fal")
 		];
 		
-		$vista = $this->load->view('reporte/kardex/imprimir', $args, true);
-		$pdf   = new \Mpdf\Mpdf([
-			'tempDir' => sys_get_temp_dir(), //produccion
-			"format" => "letter", 
-			"lands"
-		]);
+		if (verDato($_GET, "_excel")) {
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				  ->setCreator("Restouch")
+				  ->setTitle("Office 2007 xlsx Existencias")
+				  ->setSubject("Office 2007 xlsx Existencias")
+				  ->setKeywords("office 2007 openxml php");
 
-		$pdf->AddPage("L");
-		$pdf->WriteHTML($vista);
-		$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
-		$pdf->Output("Kardex.pdf", "D");
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+			$nombres = [
+				"Código",
+				"Descripción",
+				"Saldo Anterior",
+				"Ingresos",
+				"Salidas",
+				"Saldo Actual"
+			];
+			/*Encabezado*/
+			$hoja->setCellValue("B1", "Kardex");
+			$hoja->setCellValue("E1", "Del: ".formatoFecha($args['fdel'],2));
+			$hoja->setCellValue("F1", "Al: ".formatoFecha($args['fal'],2));
+
+			
+			$hoja->getStyle("B1:F1")->getFont()->setBold(true);
+			
+			$fila = 4;
+
+			foreach ($args["articulos"] as $row) {
+				$hoja->fromArray($nombres, null, "A{$fila}");
+				$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("A{$fila}:F{$fila}")->getAlignment()->setHorizontal('center');
+				$fila++;
+
+				$saldo = $row['antiguedad'] + $row['ingresos'] - $row['salidas'];
+
+				$reg = [
+					(!empty($row['codigo']) ? $row['codigo'] : $row['articulo']),
+					$row['descripcion'],
+					round($row['antiguedad'],2),
+					round($row['ingresos'],2),
+					round($row['salidas'],2),
+					round($saldo,2)
+				];
+
+				$hoja->fromArray($reg, null, "A{$fila}");
+				$hoja->getStyle("C{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
+				$fila++;
+
+				if (count($row['detalle']) > 0) {
+					$sub = [
+						"",
+						"Fecha",
+						"No",
+						"Tipo Movimiento",
+						"Ingreso",
+						"Salida"
+					];
+					$hoja->fromArray($sub, null, "A{$fila}");
+					$hoja->getStyle("B{$fila}:F{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("B{$fila}:F{$fila}")->getAlignment()->setHorizontal('center');
+					$fila++;
+
+					foreach ($row['detalle'] as $det) {
+						$detalle = [
+							"",
+							$row['descripcion'],
+							formatoFecha($det->fecha,2),
+							$det->id,
+							($det->tipo == 1) ? round($det->cantidad,2) : "0.00",
+							($det->tipo == 2) ? round($det->cantidad,2) : "0.00"
+						];
+
+						$hoja->fromArray($detalle, null, "A{$fila}");
+						$hoja->getStyle("E{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$fila++;
+					}
+					$fila++;
+				}
+			}
+
+			for ($i=0; $i <= count($nombres) ; $i++) { 
+				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+			}
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Kardex.xlsx");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+		} else {
+			$vista = $this->load->view('reporte/kardex/imprimir', $args, true);
+			$pdf   = new \Mpdf\Mpdf([
+				'tempDir' => sys_get_temp_dir(), //produccion
+				"format" => "letter", 
+				"lands"
+			]);
+
+			$pdf->AddPage("L");
+			$pdf->WriteHTML($vista);
+			$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
+			$pdf->Output("Kardex.pdf", "D");
+		}
 
 	}
 
@@ -319,10 +420,10 @@ class Reporte extends CI_Controller {
 			$excel->setActiveSheetIndex(0);
 			$hoja = $excel->getActiveSheet();
 			$nombres = [
-				"Descripcion",
-				"Presentacion",
+				"Descripción",
+				"Presentación",
 				"Existencia",
-				"Fecha Ultima Compra",
+				"Fecha Última Compra",
 				"Costo",
 				"Valor"
 			];
@@ -337,6 +438,7 @@ class Reporte extends CI_Controller {
 			$hoja->fromArray($nombres, null, "A7");
 			$hoja->getStyle("A1:A5")->getFont()->setBold(true);
 			$hoja->getStyle("A7:F7")->getFont()->setBold(true);
+			$hoja->getStyle('A7:F7')->getAlignment()->setHorizontal('center');
 			$hoja->getStyle("E4")->getFont()->setBold(true);
 			$fila = 8;
 			$granTotal = 0;
@@ -357,10 +459,10 @@ class Reporte extends CI_Controller {
 								$reg = [
 									$row->descripcion,
 									$row->presentacion,
-									((float) $row->cantidad > 0) ? round($row->cantidad, 2) : "0.00",
+									((float) $row->cantidad != 0) ? round($row->cantidad, 2) : "0.00",
 									$row->ultima_compra,
-									((float) $row->precio_unitario > 0) ? round($row->precio_unitario, 2) : "0.00",
-									((float) $row->total > 0) ? round($row->total, 2) : "0.00"
+									((float) $row->precio_unitario != 0) ? round($row->precio_unitario, 2) : "0.00",
+									((float) $row->total != 0) ? round($row->total, 2) : "0.00"
 								];
 
 								$hoja->fromArray($reg, null, "A{$fila}");
@@ -374,16 +476,16 @@ class Reporte extends CI_Controller {
 								$totalCat += $row->total;
 							}
 							
-							$hoja->setCellValue("E{$fila}", "Total subcategoria");
+							$hoja->setCellValue("E{$fila}", "Total subcategoría");
 							$hoja->setCellValue("F{$fila}", $total);
-							$hoja->getStyle("E{$fila}:E{$fila}")->getFont()->setBold(true);
+							$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 							$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 							$fila++;
 						}
 					}
-					$hoja->setCellValue("E{$fila}", "Total Categoria");
+					$hoja->setCellValue("E{$fila}", "Total Categoría");
 					$hoja->setCellValue("F{$fila}", $totalCat);
-					$hoja->getStyle("E{$fila}:E{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 					$fila++;
 				} 

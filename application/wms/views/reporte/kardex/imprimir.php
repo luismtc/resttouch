@@ -38,10 +38,10 @@
 			<tr>
 				<td><?php echo (!empty($row['codigo']) ? $row['codigo'] : $row['articulo'])?></td>
 				<td><?php echo $row['descripcion']?></td>
-				<td class="text-right"><?php echo number_format($row['antiguedad'],3)?></td>
+				<td class="text-right"><?php echo number_format($row['antiguedad'],2)?></td>
 				<td class="text-right"><?php echo number_format($row['ingresos'],2)?></td>
 				<td class="text-right"><?php echo number_format($row['salidas'],2)?></td>
-				<td class="text-right"><?php echo number_format($saldo,3)?></td>
+				<td class="text-right"><?php echo number_format($saldo,2)?></td>
 			</tr>
 			<?php if (count($row['detalle']) > 0): ?>
 					<tr>

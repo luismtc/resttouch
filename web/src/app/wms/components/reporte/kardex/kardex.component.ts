@@ -7,6 +7,7 @@ import { Articulo } from '../../../interfaces/articulo';
 import { BodegaService } from '../../../services/bodega.service';
 import { ArticuloService } from '../../../services/articulo.service';
 import { Sede } from '../../../../admin/interfaces/sede';
+import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -21,6 +22,10 @@ export class KardexComponent implements OnInit {
   public articulos: Articulo[] = [];
   public params: any = {};
   public titulo: string = "Kardex";
+  public cargando = false;
+  public configBotones: ConfiguracionBotones = {
+    showPdf: true, showHtml: false, showExcel: true
+  };
 
   constructor(
   	private snackBar: MatSnackBar,
@@ -55,6 +60,7 @@ export class KardexComponent implements OnInit {
   }
 
   onSubmit() {
+    this.params._excel = 0;
   	this.pdfServicio.getReporteKardex(this.params).subscribe(res => {
   		if (res) {
 	        const blob = new Blob([res], { type: 'application/pdf' });
@@ -63,6 +69,25 @@ export class KardexComponent implements OnInit {
 	        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
 	      }
   	});
+  }
+
+  excelClick = () => {
+    this.params._excel = 1;
+    this.cargando = true;
+    this.pdfServicio.getReporteKardex(this.params).subscribe(res => {
+      this.cargando = false;
+      if (res) {
+        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
+        saveAs(blob, `${this.titulo}.xls`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+      }
+    });
+  }
+
+  resetParams = () => {
+    this.params = {};
+    this.cargando = false;
   }
 
 }
