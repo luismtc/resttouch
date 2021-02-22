@@ -144,7 +144,8 @@ if( ! function_exists('url_base')){
 			return base_url("resttouch/{$url}");
 		}
 		
-		return base_url($url);
+		// return base_url($url);
+		return ("http://192.168.168.241/api/{$url}");
 	}
 }
 
