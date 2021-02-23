@@ -59,7 +59,8 @@ class Catalogo extends CI_Controller {
 	public function get_articulo()
 	{
 		$_GET['sede'] = $this->data->sede;
-		$datos = ordenar_array_objetos($this->Catalogo_model->getArticulo($_GET), 'descripcion');
+		// $datos = ordenar_array_objetos($this->Catalogo_model->getArticulo($_GET), 'descripcion');
+		$datos = $this->Catalogo_model->getArticulo($_GET);
 		$this->output->set_output(json_encode($datos));
 	}
 

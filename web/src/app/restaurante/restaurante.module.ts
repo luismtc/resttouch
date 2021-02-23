@@ -30,6 +30,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatChipsModule } from '@angular/material/chips';
 
 // import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
@@ -122,7 +123,8 @@ import { DistribuirProductosCuentasComponent } from './components/distribuir-pro
     MatNativeDateModule,
     EcoFabSpeedDialModule,
     DragDropModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatChipsModule
   ],
   providers: [
     MatNativeDateModule
