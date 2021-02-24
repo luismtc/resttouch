@@ -107,7 +107,7 @@
 									<?php endif ?>
 								</tr>
 							<?php endforeach ?>
-							<?php if ($_validar): ?>
+							<?php if ($_validar): ?><!-- hasta aqui-->
 								<?php foreach ($ingreso_sin_fact as $row): ?>
 									<tr>
 										<td style="padding: 5px;"><?php echo $row->descripcion ?></td>
@@ -118,28 +118,26 @@
 											<?php echo number_format(0.00, 2) ?>
 										</td>
 										<td></td>
-										<?php if ($_validar): ?>
-											<td style="padding: 5px;" class="text-right">
-												<?php 
-													$rec = isset($pagos[$row->forma_pago]) ? $pagos[$row->forma_pago] :0;
-													$recIng += $rec;
-													echo number_format($rec,2) 
-												?>
-											</td>
+										<td style="padding: 5px;" class="text-right">
 											<?php 
-												$clase = "";
-												$ing = 0;
-												$dif = abs($ing -$rec);
-												if ($dif > 0) {
-													$clase = "color:#bd2130";
-												}
+												$rec = isset($pagos[$row->forma_pago]) ? $pagos[$row->forma_pago] :0;
+												$recIng += $rec;
+												echo number_format($rec,2) 
 											?>
-											<td style='<?php echo "padding: 5px; {$clase}" ?>' class="text-right">
-												<?php 
-													echo number_format($dif, 2);
-												 ?>
-											</td>
-										<?php endif ?>
+										</td>
+										<?php 
+											$clase = "";
+											$ing = 0;
+											$dif = abs($ing -$rec);
+											if ($dif > 0) {
+												$clase = "color:#bd2130";
+											}
+										?>
+										<td style='<?php echo "padding: 5px; {$clase}" ?>' class="text-right">
+											<?php 
+												echo number_format($dif, 2);
+											 ?>
+										</td>
 									</tr>
 								<?php endforeach ?>
 							<?php endif ?>
@@ -215,8 +213,8 @@
 											 ?>
 										</td>
 									<?php endif ?>
-								</tr>
-							<?php endforeach ?>
+									</tr>
+								<?php endforeach ?>
 							<?php if ($_validar): ?>
 								<?php foreach ($descuento_sin_fact as $row): ?>
 									<tr>
@@ -333,6 +331,11 @@
 										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format($row->propina, 2) ?>
 										</td>
+
+										<td style="padding: 5px;" class="text-right">
+											<?php echo number_format($row->propina + $row->monto, 2) ?>
+										</td>
+
 										<?php if ($_validar): ?>
 											<td style="padding: 5px;" class="text-right">
 												<?php 
@@ -375,6 +378,11 @@
 											echo number_format($prop,2);
 										?>
 									</td>
+									<td style="padding: 5px;" class="text-right">
+										<?php 
+											echo number_format($prop+$ing,2);
+										?>
+									</td>
 								</tr>
 							<?php endforeach ?>
 							<tr>
@@ -389,6 +397,11 @@
 								<td style="padding: 5px;" class="text-right">
 									<?php 
 										echo number_format($totalPropinas,2);
+									?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php 
+										echo number_format($totalPropinas+$totalIngresos,2);
 									?>
 								</td>
 							</tr>
@@ -407,14 +420,15 @@
 									<tr>
 										<td style="padding: 5px;"><?php echo $row->descripcion ?></td>
 										<td style="padding: 5px;" class="text-right">
-											<?php echo $row->monto ?>
+											<?php echo number_format($row->monto, 2) ?>
 										</td>
-										<td></td>
+										<td style="padding: 5px;" class="text-right">0.00</td>
+										<td style="padding: 5px;" class="text-right"><?php echo number_format($row->monto, 2) ?></td>
 									</tr>
 								<?php endforeach ?>
 								<tr>
 									<td style="padding: 5px;" class="text-right">
-										<b>Total Descuentos:</b>
+										<b>Total Descuentos Sede:</b>
 									</td>
 									<td style="padding: 5px;" class="text-right">
 										<?php 
@@ -423,7 +437,8 @@
 											echo number_format($desc,2);
 										?>
 									</td>
-									<td></td>
+									<td style="padding: 5px;" class="text-right">0.00</td>
+									<td style="padding: 5px;" class="text-right"><?php echo number_format($desc,2); ?></td>
 								</tr>
 							<?php endforeach ?>
 							<tr>
@@ -438,6 +453,11 @@
 								<td style="padding: 5px;" class="text-right">
 									<?php 
 										echo number_format(0,2);
+									?>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php 
+										echo number_format($totalDescuentos,2);
 									?>
 								</td>
 							</tr>

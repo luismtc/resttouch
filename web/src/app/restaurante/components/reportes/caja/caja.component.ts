@@ -95,6 +95,7 @@ export class CajaComponent implements OnInit {
   onSubmit() {
     this.cargando = true;
     this.params._pagos = this.fpagos;
+    this.params._excel = 0;
     
     this.pdfServicio.getReporteCaja(this.params).subscribe(res => {
       this.cargando = false;

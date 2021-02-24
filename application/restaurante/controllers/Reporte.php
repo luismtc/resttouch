@@ -42,6 +42,7 @@ class Reporte extends CI_Controller {
 		$descuentos = $this->Catalogo_model->getFormaPago([
 			"descuento" => 1
 		]);
+
 		$data = json_decode(file_get_contents('php://input'), true);;
 		if (!isset($data['sede'])) {
 			$data['sede'] = [$this->data->sede];
@@ -155,9 +156,9 @@ class Reporte extends CI_Controller {
 		}
 
 		if (verDato($data, "_excel")) {
-			$fdel = formatoFecha($_GET['fdel'],2);
-			$fal = formatoFecha($_GET['fal'],2);
-			$anuladas = isset($data['_anuladas']) && filter_var($data['_anuladas'], FILTER_VALIDATE_BOOLEAN);
+			$fdel = formatoFecha($data['fdel'],2);
+			$fal = formatoFecha($data['fal'],2);
+
 			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 			$excel->getProperties()
 				  ->setCreator("Restouch")
@@ -168,21 +169,326 @@ class Reporte extends CI_Controller {
 			$excel->setActiveSheetIndex(0);
 			$hoja = $excel->getActiveSheet();
 			$nombres = [
-				"Factura",
-				"Mesa",
-				"Fecha",
-				"NIT",
-				"Cliente"
+				"Descripción",
+				"Monto",
+				"Propina",
+				"Total"
 			];
 
-			$hoja->fromArray($total, null, "A{$fila}");
-			$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
+			/*Encabezado*/
+			$hoja->setCellValue("A1", $data['empresa']->nombre);
+			$hoja->setCellValue("A2", $data['nsede']);
+			$hoja->setCellValue("B3", "Reporte de Caja");
+
+			if (isset($data['detalle'])) {
+				$hoja->setCellValue("B4", "--Detalle--");
+			} else {
+				$hoja->setCellValue("B4", "--Resumen--");
+			}
+
+			if (isset($data['turno'])) {
+				$hoja->setCellValue("B5", "--Resumen--");	
+			}
+
+			$hoja->setCellValue("A6", "Del: {$fdel}");
+			$hoja->setCellValue("B6", "Al: {$fal}");
+
+			if ($data['_validar']) {
+				array_push($nombres, "Monto Recibido");
+				array_push($nombres, "Diferencia");
+			}
+
+			$hoja->fromArray($nombres, null, "A8");
+			$hoja->getStyle("A1:F8")->getFont()->setBold(true);
+			$hoja->getStyle('A8:F8')->getAlignment()->setHorizontal('center');
+
+			$fila = 9;
+			$recIng = 0;
+			$recDesc = 0;
+
+			if (!isset($data['_grupo']) || $data['_grupo'] == 1) {
+				$hoja->setCellValue("A{$fila}", "Ingresos");
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+				$fila++;
+
+				foreach ($data['ingresos'] as $row) {
+					$regs = [
+						$row->descripcion,
+						$row->monto,
+						$row->propina,
+						$row->monto + $row->propina
+					];
+
+					if ($data['_validar']){
+						$rec = verDato($data['pagos'], $row->forma_pago, "0");
+						$recIng += $rec;
+						array_push($regs, round($rec, 2));
+
+						$clase = "";
+						$ing=$row->monto + $row->propina;
+						$dif = $ing - $rec;
+
+						array_push($regs, round($dif,2));
+					}
+
+					$hoja->fromArray($regs, null, "A{$fila}");
+					$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					$fila++;
+				}
+
+				if ($data['_validar']) {
+					foreach ($data['ingreso_sin_fact'] as $row) {
+						$regs = [
+							$row->descripcion,
+							"0.00",
+							"0.00",
+							"0.00"
+						];
+
+						$rec = verDato($data['pagos'], $row->forma_pago, "0");
+						$recIng += $rec;
+						array_push($regs, round($rec, 2));
+
+						$clase = "";
+						$ing=$row->monto + $row->propina;
+						$dif = $ing - $rec;
+
+						array_push($regs, round($dif,2));
+
+						$hoja->fromArray($regs, null, "A{$fila}");
+						$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$fila++;
+					}
+				}
+
+				$hoja->setCellValue("A{$fila}", "Total ingresos: ");
+				
+				$ing = suma_field($data['ingresos'], "monto");
+				$hoja->setCellValue("B{$fila}", round($ing,2));
+
+				$prop = suma_field($data['ingresos'], "propina");
+				$hoja->setCellValue("C{$fila}", round($prop,2));
+
+				$hoja->setCellValue("D{$fila}", round($ing+$prop,2));				
+				
+				if ($data['_validar']){
+					$hoja->setCellValue("E{$fila}", round($recIng,2));
+
+					$hoja->setCellValue("F{$fila}", round($ing+$prop - $recIng,2));
+				}
+
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+
+				$hoja->setCellValue("A{$fila}", "Descuentos");
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+
+				foreach ($data['descuentos'] as $row) {
+					$fila++;
+					$hoja->setCellValue("A{$fila}", $row->descripcion);
+
+					$hoja->setCellValue("B{$fila}", round($row->monto,2));
+					
+					$hoja->setCellValue("D{$fila}", round($row->monto,2));
+					
+					if ($data['_validar']) {
+						$rec = verDato($data['pagos'], $row->forma_pago, "0");
+						$recDesc += $rec;
+						$hoja->setCellValue("E{$fila}", round($rec,2));
+
+						$dif = abs($row->monto - $rec);
+						$hoja->setCellValue("F{$fila}", round($dif,2));
+					}
+					$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				}
+
+				if ($data['_validar']) {
+					$fila++;
+					foreach ($data['descuento_sin_fact'] as $row) {
+						$hoja->setCellValue("A{$fila}", $row->descripcion);
+						$hoja->setCellValue("B{$fila}", round("0.00",2));
+
+						if ($data['_validar']) {
+							$rec = verDato($data['pagos'], $row->forma_pago, "0");
+							$recDesc += $rec;
+							$hoja->setCellValue("E{$fila}", $rec);
+
+							$dif = abs(0 - $rec);
+							$hoja->setCellValue("F{$fila}", round($dif,2));
+						}
+						$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					}
+				}
+
+				$fila++;
+
+				$hoja->setCellValue("A{$fila}", "Total Descuentos: ");
+
+				$desc = suma_field($data['descuentos'], "monto");
+				$hoja->setCellValue("B{$fila}", round($desc,2));
+
+				$hoja->setCellValue("D{$fila}", round($desc,2));
+
+				if ($data['_validar']) {
+					$hoja->setCellValue("E{$fila}", round($recDesc,2));
+
+					$hoja->setCellValue("F{$fila}", round($desc - $recDesc,2));
+				}
+
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+
+				$hoja->setCellValue("A{$fila}", "TOTAL: ");
+				$hoja->setCellValue("B{$fila}", round(($desc+$ing),2));
+				$hoja->setCellValue("C{$fila}", round($prop,2));
+				$hoja->setCellValue("D{$fila}", round(($desc+$ing+$prop),2));
+
+				if ($data['_validar']) {
+					$hoja->setCellValue("E{$fila}", round($recIng+$recDesc,2));
+					$hoja->setCellValue("F{$fila}", round($ing+$prop+$desc - ($recIng+$recDesc),2));
+				}
+
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+			} else {
+				$totalIngresos = 0;
+				$totalDescuentos = 0;
+				$totalPropinas = 0;
+
+				foreach ($data['ingresos'] as $value) {
+					$hoja->setCellValue("A{$fila}", $value[0]->nsede);
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('center');
+					$fila++;
+
+					$hoja->setCellValue("A{$fila}", "Ingresos");
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+					$fila++;
+
+					foreach ($value as $row) {
+						$hoja->setCellValue("A{$fila}", $row->descripcion);
+						$hoja->setCellValue("B{$fila}", round($row->monto,2));
+						$hoja->setCellValue("C{$fila}", round($row->propina,2));
+						$total = $row->monto + $row->propina;
+						$hoja->setCellValue("D{$fila}", round($total,2));
+
+						if ($data['_validar']) {
+							$rec = verDato($datos['pagos'], $row->forma_pago, "0");
+							$recIng += $rec;
+							$hoja->setCellValue("E{$fila}", round($rec,2));
+
+							$dif = abs($ing - $rec);
+							$hoja->setCellValue("F{$fila}", round($dif,2));
+						}
+						$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$fila++;
+					}
+					$ing = suma_field($value,"monto");
+					$prop = suma_field($value,"propina");
+					$totalIngresos += $ing;
+					$totalPropinas += $prop;
+
+					$hoja->setCellValue("A{$fila}", "Total Ingresos ".$value[0]->nsede);
+					$hoja->setCellValue("B{$fila}", round($ing,2));
+					$hoja->setCellValue("C{$fila}", round($prop,2));
+					$hoja->setCellValue("D{$fila}", round($prop+$ing,2));
+
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					$fila++;
+				}
+
+				$hoja->setCellValue("A{$fila}", "Total Ingresos: ");
+				$hoja->setCellValue("B{$fila}", round($totalIngresos,2));
+				$hoja->setCellValue("C{$fila}", round($totalPropinas,2));
+				$hoja->setCellValue("D{$fila}", round($totalPropinas+$totalIngresos,2));
+				
+				$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+
+				foreach ($data['descuentos'] as $value) {
+					$fila++;
+					$hoja->setCellValue("A{$fila}", $value[0]->nsede);
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('center');
+
+					$fila++;
+					$hoja->setCellValue("A{$fila}", "Descuentos");
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+
+					foreach ($value as $row) {
+						$fila++;
+						$hoja->setCellValue("A{$fila}", $row->descripcion);
+						$hoja->setCellValue("B{$fila}", round($row->monto,2));
+						$hoja->setCellValue("C{$fila}", "0.00");
+						$hoja->setCellValue("D{$fila}", round($row->monto,2));
+
+						$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					}
+					$fila++;
+					$hoja->setCellValue("A{$fila}", "Total Descuentos ".$value[0]->nsede);
+					$desc = suma_field($value,"monto");
+					$totalDescuentos += $desc;
+					$hoja->setCellValue("B{$fila}", round($desc,2));
+					$hoja->setCellValue("C{$fila}", round("0.00",2));
+					$hoja->setCellValue("D{$fila}", round($desc,2));
+
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				}
+				$fila++;
+				$hoja->setCellValue("A{$fila}", "Total Descuentos: ");
+				$hoja->setCellValue("B{$fila}", round($totalDescuentos,2));
+				$hoja->setCellValue("C{$fila}", round("0",2));
+				$hoja->setCellValue("D{$fila}", round($totalDescuentos,2));
+
+				$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("B{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+			}
+
+			if (verDato($data, 'detalle')) {
+				$fila+= 2;
+				foreach ($data['detalle'] as $key => $row) {
+					$hoja->setCellValue("A{$fila}", $key);
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
+					$fila++;
+
+					$hoja->setCellValue("A{$fila}", "Factura");
+					$hoja->setCellValue("B{$fila}", "Fecha");
+					$hoja->setCellValue("C{$fila}", "Monto");
+					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);	
+					$fila++;
+
+					foreach ($row as $det) {
+						$hoja->setCellValue("A{$fila}", $det->numero_factura);
+						$hoja->setCellValue("B{$fila}", formatoFecha($det->fecha_factura,2));
+						$hoja->setCellValue("C{$fila}", round($det->monto,2));
+						$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
+						$hoja->getStyle("C{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$fila++;
+					}
+				}
+				
+			}
 
 			for ($i=0; $i <= count($nombres) ; $i++) { 
 				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
 			}
 			
-			$hoja->setTitle("Ventas por Articulo");
+			$hoja->setTitle("Corte de caja");
 
 			header("Content-Type: application/vnd.ms-excel");
 			header("Content-Disposition: attachment;filename=Ventas.xlsx");
@@ -303,6 +609,7 @@ class Reporte extends CI_Controller {
 			$hoja->setCellValue("A5", "Del: {$fdel} al: {$fal}");
 
 			$hoja->fromArray($nombres, null, "A9");
+			$hoja->getStyle('A9:L9')->getAlignment()->setHorizontal('center');
 			$hoja->getStyle("A1:A5")->getFont()->setBold(true);
 			$hoja->getStyle("A9:L9")->getFont()->setBold(true);
 			$hoja->setCellValue("A7", "Facturas");
@@ -674,6 +981,7 @@ class Reporte extends CI_Controller {
 
 				$hoja->fromArray($nombres, null, "A6");
 				$hoja->getStyle("A6:F6")->getFont()->setBold(true);
+				$hoja->getStyle('A6:F6')->getAlignment()->setHorizontal('center');
 				$fila = 7;				
 				foreach ($datos['datos'] as $row) {
 					$hoja->setCellValue("A{$fila}", $row['descripcion']);
@@ -734,6 +1042,7 @@ class Reporte extends CI_Controller {
 
 				$hoja->fromArray($nombres, null, "A6");
 				$hoja->getStyle("A6:B6")->getFont()->setBold(true);
+				$hoja->getStyle('A6:F6')->getAlignment()->setHorizontal('center');
 				$fila = 7;
 
 				foreach ($datos['datos'] as $row) {
