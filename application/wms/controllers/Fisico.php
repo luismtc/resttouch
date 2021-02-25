@@ -10,7 +10,8 @@ class Fisico extends CI_Controller {
 			"Catalogo_model",
 			"Fisico_model",
 			"Fisico_detalle_model",
-			"Articulo_model"
+			"Articulo_model",
+			"Receta_model"
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);

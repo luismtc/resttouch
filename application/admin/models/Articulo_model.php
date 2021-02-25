@@ -109,6 +109,10 @@ class Articulo_model extends General_model {
 			$this->db->where('f.sede', $args['sede']);
 		}
 
+		if (verDato($args, 'fecha')) {
+			$this->db->where('date(e.fhcreacion) <=', $args['fecha']);
+		}
+
 		$articulo = $this->articulo;
 		if ($art !== null) {
 			$articulo = $art;
@@ -125,6 +129,14 @@ class Articulo_model extends General_model {
 						 ->where("a.articulo", $articulo)
 						 ->get("detalle_comanda a")
 						 ->row();//total ventas comanda
+
+		if (isset($args['sede'])) {
+			$this->db->where('f.sede', $args['sede']);
+		}
+
+		if (verDato($args, 'fecha')) {
+			$this->db->where('date(f.fecha_factura) <=', $args['fecha']);
+		}
 
 		$facturas = $this->db
 						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
@@ -166,7 +178,7 @@ class Articulo_model extends General_model {
 				//$venta = $this->getVentaReceta();
 				foreach ($receta as $row) {		
 					$art = new Articulo_model($row->articulo->articulo);
-					$art->actualizarExistencia();		
+					$art->actualizarExistencia($args);		
 					$existR = $art->existencias;
 
 					$grupos[] = (int)($art->existencias / $row->cantidad);
@@ -193,6 +205,10 @@ class Articulo_model extends General_model {
 			$this->db->where("f.merma", 0);
 		}
 
+		if (verDato($args, 'fecha')) {
+			$this->db->where('date(e.fecha) <=', $args['fecha']);
+		}
+
 		$ingresos = $this->db
 						 ->select("
 						 	sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
@@ -214,6 +230,10 @@ class Articulo_model extends General_model {
 			$this->db->where('f.bodega', $args['bodega']);
 		}
 
+		if (verDato($args, 'fecha')) {
+			$this->db->where('date(e.fecha) <=', $args['fecha']);
+		}
+
 		$egresos = $this->db
 						->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						->join("articulo b", "a.articulo = b.articulo")
@@ -227,7 +247,7 @@ class Articulo_model extends General_model {
 						->row();//total egresos wms
 
 		//if (!$receta) {
-		$venta = $this->getVentaReceta();
+		$venta = $this->getVentaReceta(null, $args);
 
 		//} else {
 			//$venta = 0;
@@ -273,6 +293,7 @@ class Articulo_model extends General_model {
 						->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
 						->join("presentacion p", "a.presentacion = p.presentacion")
 						->where("a.articulo", $articulo)
+						->where("date(e.fecha) <= ", $args['fecha'])
 						->get("egreso_detalle a")
 						->row();//total egresos wms
 
@@ -287,6 +308,10 @@ class Articulo_model extends General_model {
 		}
 
 		if ($args['tipo'] == 1) {
+			if (verDato($args, 'fecha')) {
+				$this->db->where('date(e.fhcreacion) <=', $args['fecha']);
+			}
+
 			$comandas = $this->db
 						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
@@ -301,6 +326,10 @@ class Articulo_model extends General_model {
 
 			return $comandas->total;
 		} else {
+			if (verDato($args, 'fecha')) {
+				$this->db->where('date(f.fecha_factura) <=', $args['fecha']);
+			}
+
 			$facturas = $this->db
 							 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
 							 ->join("articulo b", "a.articulo = b.articulo")
