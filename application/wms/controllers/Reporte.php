@@ -153,7 +153,7 @@ class Reporte extends CI_Controller {
 		$exist = $rpt->getExistencias($_GET);
 
 		foreach ($exist as $row) {
-			if ($row->existencia > 0) {
+			if ($row->existencia != 0) {
 				$dato[$row->articulo] = [
 					"codigo" => $row->codigo,
 					"articulo" => $row->articulo,
