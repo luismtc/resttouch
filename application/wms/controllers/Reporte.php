@@ -153,7 +153,13 @@ class Reporte extends CI_Controller {
 		$exist = $rpt->getExistencias($_GET);
 
 		foreach ($exist as $row) {
+			$art = new Articulo_model($row->articulo);
+			$pres = $art->getPresentacionReporte();
+			$row->cantidad = $row->cantidad / $pres->cantidad;
+
 			if ($row->existencia != 0) {
+				$row->existencia = $row->existencia/$pres->cantidad;
+
 				$dato[$row->articulo] = [
 					"codigo" => $row->codigo,
 					"articulo" => $row->articulo,
@@ -161,6 +167,7 @@ class Reporte extends CI_Controller {
 					"antiguedad"  => $row->existencia,
 					"ingresos"    => 0,
 					"salidas"     => 0,
+					"presentacion" => $pres->descripcion,
 					"detalle" 	  => []
 				];
 			}
@@ -184,8 +191,6 @@ class Reporte extends CI_Controller {
 				$dato[$row->articulo]['detalle'][] = $row;
 
 			} else{
-				
-
 				$dato[$row->articulo] = [
 					"articulo" => $row->articulo,
 					"codigo" => $row->codigo,
