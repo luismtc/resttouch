@@ -29,6 +29,7 @@
 			<tr>
 				<td class="titulo">Codigo</td>
 				<td class="titulo">Descripción</td>
+				<td class="titulo">Presentación</td>
 				<td class="titulo">Saldo Anterior</td>
 				<td class="titulo">Ingresos</td>
 				<td class="titulo">Salidas</td>
@@ -38,6 +39,8 @@
 			<tr>
 				<td><?php echo (!empty($row['codigo']) ? $row['codigo'] : $row['articulo'])?></td>
 				<td><?php echo $row['descripcion']?></td>
+				<td><?php echo $row['presentacion']?></td>
+
 				<td class="text-right"><?php echo number_format($row['antiguedad'],2)?></td>
 				<td class="text-right"><?php echo number_format($row['ingresos'],2)?></td>
 				<td class="text-right"><?php echo number_format($row['salidas'],2)?></td>
@@ -45,6 +48,7 @@
 			</tr>
 			<?php if (count($row['detalle']) > 0): ?>
 					<tr>
+						<td></td>
 						<td></td>
 						<td class="titulo">Fecha</td>
 						<td class="titulo">No</td>
@@ -55,6 +59,7 @@
 			<?php foreach ($row['detalle'] as $det): ?>
 					<tr>
 						<td></td>
+						<td></td>
 						<td><?php echo formatoFecha($det->fecha,2) ?></td>
 						<td><?php echo $det->id ?></td>
 						<td><?php echo $det->tipo_movimiento ?></td>
@@ -64,7 +69,7 @@
 			<?php endforeach ?>
 				
 			<?php endif ?>
-			<tr><td colspan="6"></td></tr>
+			<tr><td colspan="7"></td></tr>
 		<?php endforeach ?>
 	</table>
 </body>

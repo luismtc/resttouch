@@ -171,22 +171,29 @@ class Reporte extends CI_Controller {
 		$reg = $rpt->getExistencias($_GET);
 
 		foreach ($reg as $row) {
-			$ingresos = ($row->tipo == 1) ? $row->cantidad : 0;
-			$salidas  = ($row->tipo == 2) ? $row->cantidad : 0;
+			$art = new Articulo_model($row->articulo);
+			$pres = $art->getPresentacionReporte();
+			$row->cantidad = $row->cantidad / $pres->cantidad;
+
+			$ingresos = ($row->tipo == 1) ? $row->cantidad/$pres->cantidad : 0;
+			$salidas  = ($row->tipo == 2) ? $row->cantidad/$pres->cantidad : 0;
 
 			if (isset($dato[$row->articulo])) {
-				$dato[$row->articulo]['ingresos'] += $ingresos;
-				$dato[$row->articulo]['salidas'] += $salidas;
+				$dato[$row->articulo]['ingresos'] += ($ingresos);
+				$dato[$row->articulo]['salidas'] += ($salidas);
 				$dato[$row->articulo]['detalle'][] = $row;
 
 			} else{
+				
+
 				$dato[$row->articulo] = [
 					"articulo" => $row->articulo,
 					"codigo" => $row->codigo,
 					"descripcion" => $row->descripcion,
 					"antiguedad"  => 0,
 					"ingresos"    => $ingresos,
-					"salidas"     => $salidas,
+					"salidas"     => $salidas ,
+					"presentacion" => $pres->descripcion,
 					"detalle"	  => [$row]
 				];
 			}
@@ -214,6 +221,7 @@ class Reporte extends CI_Controller {
 			$nombres = [
 				"Código",
 				"Descripción",
+				"Presentación",
 				"Saldo Anterior",
 				"Ingresos",
 				"Salidas",
@@ -240,6 +248,7 @@ class Reporte extends CI_Controller {
 				$reg = [
 					(!empty($row['codigo']) ? $row['codigo'] : $row['articulo']),
 					$row['descripcion'],
+					$row['presentacion'],
 					round($row['antiguedad'],2),
 					round($row['ingresos'],2),
 					round($row['salidas'],2),
@@ -254,6 +263,7 @@ class Reporte extends CI_Controller {
 				if (count($row['detalle']) > 0) {
 					$sub = [
 						"",
+						"",
 						"Fecha",
 						"No",
 						"Tipo Movimiento",
@@ -267,6 +277,7 @@ class Reporte extends CI_Controller {
 
 					foreach ($row['detalle'] as $det) {
 						$detalle = [
+							"",
 							"",
 							$row['descripcion'],
 							formatoFecha($det->fecha,2),
