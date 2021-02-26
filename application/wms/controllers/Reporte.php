@@ -182,8 +182,8 @@ class Reporte extends CI_Controller {
 			$pres = $art->getPresentacionReporte();
 			$row->cantidad = $row->cantidad / $pres->cantidad;
 
-			$ingresos = ($row->tipo == 1) ? $row->cantidad/$pres->cantidad : 0;
-			$salidas  = ($row->tipo == 2) ? $row->cantidad/$pres->cantidad : 0;
+			$ingresos = ($row->tipo == 1) ? $row->cantidad : 0;
+			$salidas  = ($row->tipo == 2) ? $row->cantidad : 0;
 
 			if (isset($dato[$row->articulo])) {
 				$dato[$row->articulo]['ingresos'] += ($ingresos);

@@ -59,15 +59,15 @@
 						<?php echo number_format($row->egresos / $row->presentacion->cantidad,2)?>
 					</td>
 					<td class="text-right">
-						<?php echo number_format($row->comandas / $row->presentacion->cantidad,3)?>
+						<?php echo number_format($row->comandas / $row->presentacion->cantidad,2)?>
 						
 					</td>
 					<td class="text-right">
-						<?php echo number_format($row->facturas / $row->presentacion->cantidad,3)?>
+						<?php echo number_format($row->facturas / $row->presentacion->cantidad,2)?>
 							
 					</td>
 					<td class="text-right">
-						<?php echo number_format($row->total_egresos / $row->presentacion->cantidad,3)?>
+						<?php echo number_format($row->total_egresos / $row->presentacion->cantidad,2)?>
 					</td>
 					<td class="text-right">
 					<?php 
