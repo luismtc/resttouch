@@ -51,12 +51,23 @@ class Fisico extends CI_Controller {
 			]);
 		}
 
+		$articulos = [];
+		foreach ($arts as $row) {
+			$art = new Articulo_model($row->articulo);
+			$rec = $art->getReceta();
+			if (count($req) == 0 || $art->produccion) {
+				$articulos[] = $row;
+			}
+		}
+
+		$arts = $articulos;
+
 		if (count($arts) > 0) {
 			if ($fisico->guardar($req)) {
 				foreach ($arts as $row) {
 					$art = new Articulo_model($row->articulo);
 					if ($art->mostrar_inventario == 1) {
-						$art->actualizarExistencia();
+						$art->actualizarExistencia($req);
 						$fisico->setDetalle([
 							"articulo" => $row->articulo,
 							"precio" => $row->precio,
