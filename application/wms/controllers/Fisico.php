@@ -51,11 +51,12 @@ class Fisico extends CI_Controller {
 			]);
 		}
 
+
 		$articulos = [];
 		foreach ($arts as $row) {
 			$art = new Articulo_model($row->articulo);
 			$rec = $art->getReceta();
-			if (count($req) == 0 || $art->produccion) {
+			if (count($rec) == 0 || $art->produccion) {
 				$articulos[] = $row;
 			}
 		}
@@ -66,14 +67,14 @@ class Fisico extends CI_Controller {
 			if ($fisico->guardar($req)) {
 				foreach ($arts as $row) {
 					$art = new Articulo_model($row->articulo);
-					if ($art->mostrar_inventario == 1) {
+					//if ($art->mostrar_inventario == 1) {
 						$art->actualizarExistencia($req);
 						$fisico->setDetalle([
 							"articulo" => $row->articulo,
 							"precio" => $row->precio,
 							"existencia_sistema" => $art->existencias
 						]);
-					}
+					
 				}
 				$datos['exito'] = true;
 				$datos['inventario'] = $fisico->getPK();
@@ -145,8 +146,8 @@ class Fisico extends CI_Controller {
 				$hoja->setCellValue("D1", "Fecha: ".formatoFecha($args['inventario']->fhcreacion, 2));
 
 				$hoja->fromArray($nombres, null, "A3");
-				$hoja->getStyle("A1:F3")->getFont()->setBold(true);
-				$hoja->getStyle('A1:F3')->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("A1:G3")->getFont()->setBold(true);
+				$hoja->getStyle('A1:G3')->getAlignment()->setHorizontal('center');
 
 				$fila = 4;
 				foreach ($args["detalle"] as $key => $cat) {
@@ -168,23 +169,24 @@ class Fisico extends CI_Controller {
 								empty($art->codigo) ? $art->articulo : $art->codigo,
 								$pres->descripcion,
 								$art->precio,
-								($existencias == 0) ? "0.00" : $existencias
+								($existencias == 0) ? "0.00" : round($existencias,2)
 							];
 
 							if (isset($args['existencia_fisica'])) {
 								if ($art->existencia_fisica == 0) {
 									array_push($reg, "0.00");
 								} else {
-									array_push($reg, $art->existencia_fisica);
+									array_push($reg, round($art->existencia_fisica,2));
 								}								
 							}
 
 							if ($args['inventario']->confirmado) {
-								array_push($nombres, $art->existencia_sistema/$pres->cantidad - $art->existencia_fisica);
+								array_push($reg, round($art->existencia_fisica - $art->existencia_sistema/$pres->cantidad,2));
 							}
 
 							$hoja->fromArray($reg, null, "A{$fila}");
 							$hoja->getStyle("C{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$hoja->getStyle("B{$fila}")->getAlignment()->setHorizontal('left');
 							$fila++;
 						}
 					}
@@ -193,8 +195,6 @@ class Fisico extends CI_Controller {
 				for ($i=0; $i <= count($nombres) ; $i++) { 
 					$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
 				}
-
-				$hoja->getStyle("B4:A{$fila}")->getAlignment()->setHorizontal('left');
 
 				$hoja->setTitle("Inventario_Fisico");
 
