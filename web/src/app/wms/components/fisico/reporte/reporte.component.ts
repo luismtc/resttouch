@@ -95,9 +95,16 @@ export class ReporteComponent implements OnInit {
       this.cargando = false;
       console.log(res)
       if (res.exito) {
-        this.pdfServicio.imprimirInventarioFisico(res.inventario).subscribe(resImp => {
-          const blob = new Blob([resImp], { type: 'application/pdf' });
-          saveAs(blob, `${this.titulo}.pdf`);
+        this.pdfServicio.imprimirInventarioFisico(res.inventario, this.params).subscribe(resImp => {
+          if (this.params._excel) {
+            const blob = new Blob([resImp], { type: 'application/vnd.ms-excel' });  
+            saveAs(blob, `${this.titulo}.xls`);
+          } else {
+            const blob = new Blob([resImp], { type: 'application/pdf' });
+            saveAs(blob, `${this.titulo}.pdf`);
+          }
+
+          
         });
       } else {
         this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });

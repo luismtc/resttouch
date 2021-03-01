@@ -60,7 +60,7 @@ class Fisico extends CI_Controller {
 						$fisico->setDetalle([
 							"articulo" => $row->articulo,
 							"precio" => $row->precio,
-							"existencia_sistema" => $row->existencias
+							"existencia_sistema" => $art->existencias
 						]);
 					}
 				}
@@ -107,17 +107,106 @@ class Fisico extends CI_Controller {
 				$args['detalle'][$row->categoria]['datos'][$row->categoria_grupo]['datos'][] = $row;
 			}
 			
-			$pdf   = new \Mpdf\Mpdf([
-				'tempDir' => sys_get_temp_dir(), //produccion
-				"format" => "letter", 
-				"lands"
-			]);
-			$vista = $this->load->view('reporte/fisico/imprimir', $args, true);
-			$rand  = rand();
-			$pdf->AddPage();
-			$pdf->WriteHTML($vista);
-			$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
-			$pdf->Output("Fisico_{$rand}.pdf", "D");
+			if (verDato($_GET, "_excel")) {
+				$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+				$excel->getProperties()
+					  ->setCreator("Restouch")
+					  ->setTitle("Office 2007 xlsx Fisico")
+					  ->setSubject("Office 2007 xlsx Fisico")
+					  ->setKeywords("office 2007 openxml php");
+
+				$excel->setActiveSheetIndex(0);
+				$hoja = $excel->getActiveSheet();
+				$nombres = [
+					"Descripción",
+					"Código",
+					"Presentación",
+					"Precio",
+					"Existencia Sistema",
+					"Existencia Fisica"
+				];
+
+				if ($args['inventario']->confirmado) {
+					array_push($nombres, "Diferencia");
+				}
+				/*Encabezado*/
+				$hoja->setCellValue("A1", "Inventario Fisico #{$args['inventario']->inventario_fisico}");
+				$hoja->setCellValue("D1", "Fecha: ".formatoFecha($args['inventario']->fhcreacion, 2));
+
+				$hoja->fromArray($nombres, null, "A3");
+				$hoja->getStyle("A1:F3")->getFont()->setBold(true);
+				$hoja->getStyle('A1:F3')->getAlignment()->setHorizontal('center');
+
+				$fila = 4;
+				foreach ($args["detalle"] as $key => $cat) {
+					$hoja->setCellValue("A{$fila}", $cat['descripcion']);
+					$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+					$fila++;
+
+					foreach ($cat['datos'] as $gcat) {
+						$hoja->setCellValue("A{$fila}", $gcat['descripcion']);
+						$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+						$fila++;
+
+						foreach ($gcat['datos'] as $art) {
+							$articulo = new Articulo_model($art->articulo);
+							$pres = $articulo->getPresentacionReporte();
+							$existencias = $art->existencia_sistema/$pres->cantidad;
+							$reg = [
+								$art->narticulo,
+								empty($art->codigo) ? $art->articulo : $art->codigo,
+								$pres->descripcion,
+								$art->precio,
+								($existencias == 0) ? "0.00" : $existencias
+							];
+
+							if (isset($args['existencia_fisica'])) {
+								if ($art->existencia_fisica == 0) {
+									array_push($reg, "0.00");
+								} else {
+									array_push($reg, $art->existencia_fisica);
+								}								
+							}
+
+							$hoja->fromArray($reg, null, "A{$fila}");
+							$hoja->getStyle("C{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$fila++;
+						}
+					}
+				}
+
+				for ($i=0; $i <= count($nombres) ; $i++) { 
+					$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
+				}
+
+				$hoja->getStyle("B4:A{$fila}")->getAlignment()->setHorizontal('left');
+
+				$hoja->setTitle("Inventario_Fisico");
+
+				header("Content-Type: application/vnd.ms-excel");
+				header("Content-Disposition: attachment;filename=Inventario_Fisico.xlsx");
+				header("Cache-Control: max-age=1");
+				header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+				header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GTM");
+				header("Cache-Control: cache, must-revalidate");
+				header("Pragma: public");
+
+				$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+				$writer->save("php://output");
+
+			} else {
+				$pdf   = new \Mpdf\Mpdf([
+					//'tempDir' => sys_get_temp_dir(), //produccion
+					"format" => "letter", 
+					"lands"
+				]);
+				$vista = $this->load->view('reporte/fisico/imprimir', $args, true);
+				$rand  = rand();
+				$pdf->AddPage();
+				$pdf->WriteHTML($vista);
+				$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
+				$pdf->Output("Fisico_{$rand}.pdf", "D");
+			}
 		}
 	}
 

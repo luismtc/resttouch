@@ -44,6 +44,8 @@
             <mat-form-field class="fullWidth">            
               <input matInput type="date" placeholder="Fecha" [(ngModel)]="params.fecha" [ngModelOptions]="{standalone: true}" required>
             </mat-form-field>
+            <mat-checkbox name="excel" class="fullWidth" [(ngModel)]="+params._excel">Generar en Excel
+            </mat-checkbox>
             <div align="end">
               <button mat-button color="accent" type="submit">GENERAR</button>
             </div>

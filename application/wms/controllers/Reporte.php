@@ -64,7 +64,7 @@ class Reporte extends CI_Controller {
 			$hoja = $excel->getActiveSheet();
 			$nombres = [
 				"Codigo",
-				"Descripcion",
+				"Descripción",
 				"Unidad",
 				"Ingresos",
 				"Egresos",

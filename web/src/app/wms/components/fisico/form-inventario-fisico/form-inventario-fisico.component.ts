@@ -92,4 +92,13 @@ export class FormInventarioFisicoComponent implements OnInit {
     });
   }
 
+  imprimirXls = () => {
+    let params = {existencia_fisica: true, "_excel": true};
+
+    this.pdfServicio.imprimirInventarioFisico(this.inventario.inventario_fisico, params).subscribe(resImp => {
+      const blob = new Blob([resImp], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, `${this.titulo}.xls`);
+    });
+  }
+
 }

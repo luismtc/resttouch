@@ -6,7 +6,7 @@
 </head>
 <body>
 	<table class="tabla-contenido">
-		<?php $col = ($inventario->confirmado == 1) ? '4' : '3'; ?>
+		<?php $col = ($inventario->confirmado == 1) ? '5' : '4'; ?>
 		<tr>
 			<td colspan="<?php echo $col ?>" class="text-center"><h1>Inventario Fisico # <?php echo $inventario->inventario_fisico ?></h1></td>
 			<td colspan="2" class="text-center">Fecha <?php echo formatoFecha($inventario->fhcreacion, 2)?></td>
@@ -15,6 +15,7 @@
 		<tr>
 			<td class="titulo">Descripcion</td>
 			<td class="titulo">Código</td>
+			<td class="titulo">Presentación</td>
 			<td class="titulo">Precio</td>
 			<td class="titulo">Existencia Sistema</td>
 			<td class="titulo">Existencia Fisica</td>
@@ -23,7 +24,7 @@
 			<?php endif ?>
 		</tr>
 			<?php 
-				$col = ($inventario->confirmado == 1) ? '6' : '5';
+				$col = ($inventario->confirmado == 1) ? '7' : '6';
 				foreach ($detalle as $key => $cat): 
 			?>
 				<tr>
@@ -38,6 +39,10 @@
 						</td>
 					</tr>	
 					<?php foreach ($gcat['datos'] as $art): ?>
+						<?php 
+							$articulo = new Articulo_model($art->articulo);
+							$pres = $articulo->getPresentacionReporte(); 
+						?>
 						<tr>
 							<td>
 								<?php echo $art->narticulo?>
@@ -45,11 +50,14 @@
 							<td>
 								<?php echo empty($art->codigo) ? $art->articulo : $art->codigo ?>
 							</td>
+							<td>
+								<?php echo $pres->descripcion ?>
+							</td>
 							<td class="text-right">
 								<?php echo $art->precio ?>
 							</td>
 							<td class="text-center">
-								<?php echo $art->existencia_sistema ?>
+								<?php echo $art->existencia_sistema/$pres->cantidad ?>
 							</td>
 							<td>
 								<?php if (isset($existencia_fisica)): ?>
