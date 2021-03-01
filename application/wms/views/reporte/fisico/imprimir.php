@@ -57,16 +57,16 @@
 								<?php echo $art->precio ?>
 							</td>
 							<td class="text-center">
-								<?php echo $art->existencia_sistema/$pres->cantidad ?>
+								<?php echo number_format($art->existencia_sistema/$pres->cantidad, 2) ?>
 							</td>
-							<td>
+							<td class="text-center">
 								<?php if (isset($existencia_fisica)): ?>
-									<?php echo $art->existencia_fisica ?>
+									<?php echo number_format($art->existencia_fisica, 2) ?>
 								<?php endif ?>
 							</td>
 							<?php if ($inventario->confirmado): ?>
 								<td class="text-center">
-									<?php echo $art->existencia_sistema/$pres->cantidad - $art->existencia_fisica; ?>
+									<?php echo number_format($art->existencia_fisica - $art->existencia_sistema/$pres->cantidad, 2); ?>
 								</td>
 							<?php endif ?>
 						</tr>	
