@@ -49,7 +49,10 @@ class Reporte extends CI_Controller {
 		foreach ($arts as $row) {
 			$art = new Articulo_model($row->articulo);
 			$art->actualizarExistencia($_GET);
-			$args["reg"][] = $art->getExistencias($_GET);
+			$rec = $art->getReceta();
+			if (count($rec) == 0 || $art->produccion) {
+				$args["reg"][] = $art->getExistencias($_GET);
+			}
 		}
 
 		if (verDato($_GET, "_excel")) {

@@ -51,6 +51,7 @@ class Reporte_model extends CI_Model {
 		$tmp = $this->db
 		->select("
 			a.forma_pago, 
+			a.documento,
 			f.descripcion, 
 			a.monto, 
 			a.propina,
@@ -75,6 +76,7 @@ class Reporte_model extends CI_Model {
 		return $this->db->query("
 			select 
 				a.forma_pago,
+				a.documento,
 				a.descripcion, 
 				sum(a.monto) as monto, 
 				sum(a.propina) as propina,

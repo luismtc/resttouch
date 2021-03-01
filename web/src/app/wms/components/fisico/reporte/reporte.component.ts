@@ -107,7 +107,7 @@ export class ReporteComponent implements OnInit {
           
         });
       } else {
-        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+        this.snackBar.open('No se pudo generar el reporte... '+res.mensaje, this.titulo, { duration: 3000 });
       }
     });
   }

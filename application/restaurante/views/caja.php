@@ -477,14 +477,16 @@
 							<th colspan="3"><?php echo $key ?></th>
 						</tr>
 						<tr>
-							<td>Factura</td>
-							<td>Fecha</td>
-							<td>Monto</td>
+							<th class="text-center">Factura</th>
+							<th class="text-center">Fecha</th>
+							<th class="text-center">Documento</th>
+							<th class="text-center">Monto</th>
 						</tr>
 						<?php foreach ($row as $det): ?>
 							<tr>
 								<td><?php echo $det->numero_factura ?></td>
 								<td><?php echo formatoFecha($det->fecha_factura, 2) ?></td>
+								<td><?php echo $det->documento ?></td>
 								<td class="text-right"><?php echo number_format($det->monto, 2) ?></td>
 							</tr>
 						<?php endforeach ?>
