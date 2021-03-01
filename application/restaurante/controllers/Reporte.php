@@ -44,9 +44,10 @@ class Reporte extends CI_Controller {
 		]);
 
 		$data = json_decode(file_get_contents('php://input'), true);;
-		if (!isset($data['sede'])) {
+
+		if (!verDato($data, 'sede')) {
 			$data['sede'] = [$this->data->sede];
-		}
+		}  
 		$data["_facturadas"] = true;
 		
 		$data["descuento"] = 0;
@@ -468,16 +469,18 @@ class Reporte extends CI_Controller {
 
 					$hoja->setCellValue("A{$fila}", "Factura");
 					$hoja->setCellValue("B{$fila}", "Fecha");
-					$hoja->setCellValue("C{$fila}", "Monto");
+					$hoja->setCellValue("C{$fila}", "Documento");
+					$hoja->setCellValue("D{$fila}", "Monto");
 					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);	
 					$fila++;
 
 					foreach ($row as $det) {
 						$hoja->setCellValue("A{$fila}", $det->numero_factura);
 						$hoja->setCellValue("B{$fila}", formatoFecha($det->fecha_factura,2));
-						$hoja->setCellValue("C{$fila}", round($det->monto,2));
+						$hoja->setCellValue("B{$fila}", $det->documento);
+						$hoja->setCellValue("D{$fila}", round($det->monto,2));
 						$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
-						$hoja->getStyle("C{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$hoja->getStyle("D{$fila}")->getNumberFormat()->setFormatCode('0.00');
 						$fila++;
 					}
 				}
