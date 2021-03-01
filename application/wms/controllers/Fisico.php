@@ -180,7 +180,7 @@ class Fisico extends CI_Controller {
 							}
 
 							if ($args['inventario']->confirmado) {
-								array_push($nombres, $art->existencia_sistema/$pres->cantidad - $art->existencia_fisica;);
+								array_push($nombres, $art->existencia_sistema/$pres->cantidad - $art->existencia_fisica);
 							}
 
 							$hoja->fromArray($reg, null, "A{$fila}");
