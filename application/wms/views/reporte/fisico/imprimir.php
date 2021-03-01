@@ -66,7 +66,7 @@
 							</td>
 							<?php if ($inventario->confirmado): ?>
 								<td class="text-center">
-									<?php echo $art->existencia_sistema - $art->existencia_fisica; ?>
+									<?php echo $art->existencia_sistema/$pres->cantidad - $art->existencia_fisica; ?>
 								</td>
 							<?php endif ?>
 						</tr>	
