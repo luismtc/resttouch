@@ -395,7 +395,7 @@ export class TranComandaComponent implements OnInit {
           const objCmd: Comanda = {
             area: this.mesaEnUso.mesa.area.area,
             mesa: this.mesaEnUso.mesa.mesa,
-            mesero: this.mesaEnUso.usuario,
+            mesero: this.mesaEnUso.mesero.usuario,
             comanda: this.mesaEnUso.comanda,
             cuentas: this.mesaEnUso.cuentas,
             numero_pedido: this.mesaEnUso.numero_pedido
