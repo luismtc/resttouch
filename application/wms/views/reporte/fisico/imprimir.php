@@ -66,7 +66,7 @@
 							</td>
 							<?php if ($inventario->confirmado): ?>
 								<td class="text-center">
-									<?php echo number_format($art->existencia_fisica - $art->existencia_sistema/$pres->cantidad, 2); ?>
+									<?php echo number_format(($art->existencia_sistema/$pres->cantidad) - $art->existencia_fisica, 2); ?>
 								</td>
 							<?php endif ?>
 						</tr>	
