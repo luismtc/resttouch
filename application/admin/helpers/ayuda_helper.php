@@ -480,22 +480,25 @@ if (! function_exists("ordenar_array_objetos")) {
 	 */
 	function ordenar_array_objetos($data, $campo, $tipo = 2, $direccion = 'asc')
 	{
-		switch($tipo) {			
-			case 2: 
-				usort($data, function ($a, $b) use($campo, $direccion) {
-					$cmp = strcmp(strtoupper($a->{$campo}), strtoupper($b->{$campo}));
-					return $direccion === 'asc' ? $cmp : -$cmp;
-				});
-				break;
-			default:
-				usort($data, function ($a, $b) use($campo, $direccion) {
-					if ($a->{$campo} == $b->{$campo}) {
-						return 0;
-					}
-					$cmp = ($a->{$campo} < $b->{$campo}) ? -1 : 1;
-					return $direccion === 'asc' ? $cmp : -$cmp;
-				});
-		}
+		if(is_array($data))
+		{
+			switch($tipo) {			
+				case 2: 
+					usort($data, function ($a, $b) use($campo, $direccion) {
+						$cmp = strcmp(strtoupper($a->{$campo}), strtoupper($b->{$campo}));
+						return $direccion === 'asc' ? $cmp : -$cmp;
+					});
+					break;
+				default:
+					usort($data, function ($a, $b) use($campo, $direccion) {
+						if ($a->{$campo} == $b->{$campo}) {
+							return 0;
+						}
+						$cmp = ($a->{$campo} < $b->{$campo}) ? -1 : 1;
+						return $direccion === 'asc' ? $cmp : -$cmp;
+					});
+			}
+		} 
 		return $data;
 	}
 }

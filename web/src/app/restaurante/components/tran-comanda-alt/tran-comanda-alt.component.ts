@@ -39,7 +39,7 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
   @ViewChild('txtCodigoBarras') txtCodigoBarras: MatInput;
 
   // public categorias: Categoria[] = [];
-  public subCategorias: CategoriaGrupoImpresora[] = [];
+  public subCategorias: any[] = [];
   public listaSubCategorias: any[] = [];
   public articulos: Articulo[] = [];
   public fullListArticulos: Articulo[] = [];
@@ -61,7 +61,8 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
 
   ngOnInit() {
     this.alIniciar();
-    this.loadCategorias();
+    this.loadArticulosDePOS();
+    // this.loadCategorias();
     this.loadArticulos();
     this.setDatos();
   }
@@ -82,7 +83,18 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
   resetArticulos = () => this.articulos = [];
   resetListaSubCategorias = () => this.listaSubCategorias = [];
 
-  loadCategorias = () => this.articuloSrvc.getCategorias().subscribe((res: Categoria[]) => this.categorias = res);
+  loadArticulosDePOS = () => {
+    this.articuloSrvc.getArticulosDePOS().subscribe((res: any) => {
+      if (res) {
+        this.categorias = res.categorias;
+        this.subCategorias = res.subcategorias;
+        this.articulos = res.articulos;
+        this.fullListArticulos = JSON.parse(JSON.stringify(this.articulos));
+      }
+    });
+  }
+
+  // loadCategorias = () => this.articuloSrvc.getCategorias().subscribe((res: Categoria[]) => this.categorias = res);
 
   loadSubcategorias = (cat: any, subcat: CategoriaGrupoImpresora = null, idx: number = 0) => {
     if (!this.bloqueoBotones) {
@@ -97,6 +109,13 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
       if (this.listaSubCategorias.length > 0) {
         this.listaSubCategorias.splice((idx + 1));
       }
+
+      if (!subcat) {
+        this.listaSubCategorias = this.subCategorias.filter(sc => +sc.categoria === +cat.categoria);
+      } else {
+        
+      }
+
 
       this.articuloSrvc.getCategoriaGrupoImpresora(fltr).subscribe((res: CategoriaGrupoImpresora[]) => {
         if (res.length > 0) {
@@ -122,11 +141,7 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
       }
 
       this.articuloSrvc.getArticulos(fltr).subscribe((res: Articulo[]) => {
-        // console.log(res);
         this.articulos = res;
-        if (!idsubcategoria) {
-          this.fullListArticulos = JSON.parse(JSON.stringify(this.articulos));
-        }
       });
     }
   }

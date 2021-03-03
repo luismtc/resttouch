@@ -202,4 +202,10 @@ export class ArticuloService {
       entidad
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  getArticulosDePOS(): Observable<any> {
+    return this.http.get<any>(
+      `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/articulos_de_pos`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
 }

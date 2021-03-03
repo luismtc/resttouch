@@ -221,6 +221,11 @@ class Catalogo_model extends CI_Model {
 				->where("a.categoria_grupo", $tmp->categoria_grupo)
 				->get("categoria_grupo a")
 				->row();
+
+			$tmp->presentacion = $this->db
+				->where("presentacion", $tmp->presentacion)
+				->get("presentacion")
+				->row();
 		}
 
 		return ordenar_array_objetos($tmp, "descripcion");

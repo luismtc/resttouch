@@ -624,6 +624,82 @@ class Articulo_model extends General_model {
 		$this->db
 			 ->where("receta", $this->getPK())
 			 ->delete("articulo_detalle");
+	}	
+
+	private function getSubcatgorias($sede = null, $padre = null)
+	{
+		if($sede) {
+			$this->db->where("a.sede", $sede);
+		}
+
+		if($padre) {
+			$this->db->where("b.categoria_grupo_grupo", $padre);			
+		} else {
+			$this->db->where("b.categoria_grupo_grupo IS NULL");			
+		}
+
+		$subcategorias = $this->db
+			->select("b.categoria, b.categoria_grupo, b.descripcion, b.categoria_grupo_grupo")
+			->join("categoria a", "a.categoria = b.categoria")
+			->join("articulo c", "b.categoria_grupo = c.categoria_grupo")			
+			->where("c.mostrar_pos", 1)			
+			->group_by("b.categoria, b.categoria_grupo, b.descripcion")
+			->order_by("b.descripcion")
+			->get("categoria_grupo b")
+			->result();
+
+		foreach($subcategorias as $sc) {
+			$sc->subcategorias = $this->getSubcatgorias($sede, $sc->categoria_grupo);
+		}
+
+		return $subcategorias;
+	}
+
+	public function articulosParaPOS($args = [])
+	{
+		$this->load->model('Catalogo_model');
+
+		if(isset($args['sede'])) {
+			$this->db->where("a.sede", $args['sede']);
+		}
+
+		$categorias = $this->db
+			->select("a.categoria, a.descripcion")
+			->join("categoria_grupo b", "a.categoria = b.categoria")
+			->join("articulo c", "b.categoria_grupo = c.categoria_grupo")
+			->where("c.mostrar_pos", 1)
+			->group_by("a.categoria, a.descripcion")
+			->order_by("a.descripcion")
+			->get("categoria a")
+			->result();
+	
+		$subcategorias = $this->getSubcatgorias((isset($args['sede']) ? $args['sede'] : null));	
+		
+		if(isset($args['sede'])) {
+			$this->db->where("a.sede", $args['sede']);
+		}
+
+		$articulos = $this->db
+			->select("c.articulo")
+			->join("categoria_grupo b", "b.categoria_grupo = c.categoria_grupo")
+			->join("categoria a", "a.categoria = b.categoria")
+			->where("c.mostrar_pos", 1)
+			->order_by("c.descripcion")
+			->get("articulo c")
+			->result();
+
+		$arts = [];
+		foreach($articulos as $art) 
+		{
+			$arts[] = $this->Catalogo_model->getArticulo(['articulo' => $art->articulo, '_uno' => true]);
+		}
+
+		return [
+			'categorias' => $categorias,
+			'subcategorias' => $subcategorias,
+			'articulos' => $arts
+		];
+
 	}
 
 }

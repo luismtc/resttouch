@@ -255,6 +255,17 @@ class Articulo extends CI_Controller
 			->set_content_type("application/json")
 			->set_output(json_encode($datos));
 	}
+
+	public function articulos_de_pos()
+	{
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$data = AUTHORIZATION::validateToken($headers['Authorization']);
+
+		$datos = $this->Articulo_model->articulosParaPOS(['sede' => $data->sede]);
+
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
+	}
 }
 
 /* End of file Articulo.php */
