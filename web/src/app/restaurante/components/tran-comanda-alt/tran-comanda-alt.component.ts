@@ -38,7 +38,7 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
   @Output() mesaSavedEv: EventEmitter<any> = new EventEmitter();
   @ViewChild('txtCodigoBarras') txtCodigoBarras: MatInput;
 
-  // public categorias: Categoria[] = [];
+  public categorias: any[] = [];
   public subCategorias: any[] = [];
   public listaSubCategorias: any[] = [];
   public articulos: Articulo[] = [];
@@ -60,10 +60,7 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
   }
 
   ngOnInit() {
-    this.alIniciar();
     this.loadArticulosDePOS();
-    // this.loadCategorias();
-    this.loadArticulos();
     this.setDatos();
   }
 
@@ -71,9 +68,10 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
     if (this.data) {
       if (this.data.mesa) {
         this.mesaEnUso = this.data.mesa;
+        this.alIniciar();
         this.setSelectedCuenta(this.mesaEnUso.cuentas[0].numero);
-        // console.log('DATA.MESA = ', this.data.mesa);
-        // console.log('MESA EN USO', this.mesaEnUso);
+        // console.log('CTA = ', this.cuentaActiva);
+        // console.log(this.mesaEnUso);
       }
     }
   }
@@ -94,55 +92,26 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
     });
   }
 
-  // loadCategorias = () => this.articuloSrvc.getCategorias().subscribe((res: Categoria[]) => this.categorias = res);
-
-  loadSubcategorias = (cat: any, subcat: CategoriaGrupoImpresora = null, idx: number = 0) => {
+  loadSubcategorias = (cat: any, subcat: any = null, idx: number = 0) => {
     if (!this.bloqueoBotones) {
-      const fltr: any = { categoria: cat.categoria };
-
-      if (!!subcat) {
-        fltr.categoria_grupo_grupo = subcat.categoria_grupo;
-      } else {
-        this.resetListaSubCategorias();
-      }
-
-      if (this.listaSubCategorias.length > 0) {
-        this.listaSubCategorias.splice((idx + 1));
-      }
-
+      // console.log('CAT = ', cat); console.log('SUB = ', subcat); // return;
       if (!subcat) {
-        this.listaSubCategorias = this.subCategorias.filter(sc => +sc.categoria === +cat.categoria);
+        this.resetListaSubCategorias();
+        this.resetArticulos();
+        this.listaSubCategorias.push(this.subCategorias.filter(sc => +sc.categoria === +cat.categoria));
       } else {
-        
-      }
-
-
-      this.articuloSrvc.getCategoriaGrupoImpresora(fltr).subscribe((res: CategoriaGrupoImpresora[]) => {
-        if (res.length > 0) {
-          this.listaSubCategorias.push(res);
-        } else {
-          this.filterArticulos(+subcat.categoria_grupo);
+        if (this.listaSubCategorias.length > 0) {
+          this.listaSubCategorias.splice((idx + 1));
         }
-      });
-    }
-  }
 
-  loadArticulos = (idsubcategoria: number = null) => {
-    if (!this.bloqueoBotones) {
-      const fltr = {
-        mostrar_pos: 1,
-        categoria_grupo: null
-      };
-
-      if (idsubcategoria) {
-        fltr.categoria_grupo = idsubcategoria;
-      } else {
-        delete fltr.categoria_grupo;
+        if (subcat.subcategorias) {
+          if (subcat.subcategorias.length === 0) {
+            this.filterArticulos(+subcat.categoria_grupo);
+          } else {
+            this.listaSubCategorias.push(subcat.subcategorias);
+          }
+        }
       }
-
-      this.articuloSrvc.getArticulos(fltr).subscribe((res: Articulo[]) => {
-        this.articulos = res;
-      });
     }
   }
 

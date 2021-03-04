@@ -1,17 +1,13 @@
 .contenido {
     max-height: 85vh !important;
     height: 100%;
-}
-
-.lnkCategorias {
-    margin-right: 8px;
-    text-decoration: underline;
+    overflow-y: hidden;
 }
 
 .divSubCategorias {
-    border-bottom: #E0E0E0 solid 1px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    /*border-bottom: #E0E0E0 solid 1px;*/
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
 
 .divArticulos {
@@ -22,10 +18,12 @@
     width: 200px;
 }
 
-/*
-.fullScreenDialog {
-    max-width: none;
-    width: 100%;
-    height: 95%;
+.divSeparacion {
+    padding-top: 3px;
+    padding-bottom: 3px;
 }
-*/
+
+.bordeTest2 {
+    border: 1px;
+    border-color: blue;
+}

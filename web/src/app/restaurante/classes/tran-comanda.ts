@@ -66,7 +66,7 @@ export class TranComanda {
     ) { }
 
     alIniciar = () => {
-        this.resetMesaEnUso();
+        // this.resetMesaEnUso();
         this.resetLstProductosSeleccionados();
         this.resetLstProductosDeCuenta();
         this.resetCuentaActiva();
