@@ -357,7 +357,7 @@ class Reporte extends CI_Controller {
 			$detalle[$art->getPK()] = [
 				"presentacion" => $pres->descripcion,
 				"cantidad" => $art->existencias, 
-				"total" => $art->existencias * $row->precio_unitario,
+				"total" => (double) round($art->existencias,2) * (double) round($row->precio_unitario, 2),
 				"descripcion" => $art->descripcion,
 				"precio_unitario" => $row->precio_unitario,
 				"ultima_compra" => formatoFecha($row->fecha, 2)
