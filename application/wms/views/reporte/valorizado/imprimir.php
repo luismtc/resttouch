@@ -71,7 +71,7 @@
 							<tr>
 								<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
 								<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->presentacion ?></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo $row->cantidad ?></td>
+								<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo number_format($row->cantidad, 2) ?></td>
 								<td style="border: 1px solid black;padding: 5px;" class="text-right">
 									<?php echo $row->ultima_compra ?></td>
 								<td style="border: 1px solid black;padding: 5px;" class="text-right">

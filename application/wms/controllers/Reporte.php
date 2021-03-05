@@ -353,6 +353,7 @@ class Reporte extends CI_Controller {
 			$art = new Articulo_model($row->articulo);
 			$art->actualizarExistencia($_GET);
 			$pres = $art->getPresentacionReporte();
+			$art->existencias = $art->existencias/$pres->cantidad;
 			$detalle[$art->getPK()] = [
 				"presentacion" => $pres->descripcion,
 				"cantidad" => $art->existencias, 
