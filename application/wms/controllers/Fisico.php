@@ -119,7 +119,7 @@ class Fisico extends CI_Controller {
 				$args['detalle'][$row->categoria]['datos'][$row->categoria_grupo]['datos'][] = $row;
 			}
 			
-			if (verDato($_GET, "_excel")) {
+			if (verDato($_GET, "_excel", 0) != 0) {
 				$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 				$excel->getProperties()
 					  ->setCreator("Restouch")
