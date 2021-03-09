@@ -119,7 +119,7 @@ class Fisico extends CI_Controller {
 				$args['detalle'][$row->categoria]['datos'][$row->categoria_grupo]['datos'][] = $row;
 			}
 			
-			if (verDato($_GET, "_excel", 0) != 0) {
+			if (verDato($_GET, "_excel") && filter_var($_GET['_excel'], FILTER_VALIDATE_BOOLEAN)) {
 				$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 				$excel->getProperties()
 					  ->setCreator("Restouch")
