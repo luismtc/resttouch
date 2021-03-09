@@ -5,6 +5,10 @@
         </span>
     </div>
     <div fxFlex="50%" fxFelx.xs="100%" fxLayoutAlign="end start">
+        <button mat-raised-button type="button" color="warn" (click)="abrirAccionesComanda(dialogRef)"
+            [disabled]="bloqueoBotones">
+            Acciones
+        </button>
         <button mat-raised-button type="button" color="accent" style="margin-left: 8px;" (click)="cerrar()"
             [disabled]="bloqueoBotones">
             Cerrar
@@ -19,6 +23,9 @@
             <mat-chip color="accent" *ngFor="let cta of mesaEnUso.cuentas"
                 [disabled]="+cta.cerrada == 1 || bloqueoBotones" (click)="setSelectedCuenta(cta.numero)" selected>
                 {{cta.nombre}}
+            </mat-chip>
+            <mat-chip (click)="nuevaCuenta(dialogRef)" *ngIf="+mesaEnUso.mesa.esmostrador === 0 && +mesaEnUso.mesa.escallcenter === 0">
+                Nueva
             </mat-chip>
         </mat-chip-list>
     </div>
@@ -66,7 +73,7 @@
             </div>        
         </div>
         <!-- Finaliza artículos -->
-        <div fxFlex.md="45%" fxFlex.xs="100%" fxFlex.sm="100%" class="divArticulos">
+        <div fxFlex="45%" fxFlex.xs="100%" fxFlex.sm="100%" class="divArticulos">
             <app-lista-productos-comanda [listaProductos]="lstProductosDeCuenta" [noCuenta]="+cuentaActiva.numero"
                 [IdComanda]="mesaEnUso.comanda" [IdCuenta]="cuentaActiva.cuenta" [bloqueoBotones]="bloqueoBotones"
                 [mesaEnUso]="mesaEnUso" (productoRemovedEv)="updProductosCuenta($event)"></app-lista-productos-comanda>

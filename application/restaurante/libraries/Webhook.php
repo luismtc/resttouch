@@ -1,5 +1,7 @@
 <?php 
 
+ini_set('default_socket_timeout', 3600);
+
 Class Webhook {
 	private $webhook;
 	private $request;
@@ -16,14 +18,18 @@ Class Webhook {
 
 	public function setEvento()
 	{
-		$metodo = $this->webhook->metodo;
-		if (strtolower(trim($this->webhook->tipo_llamada)) == "soap") {
-			$client = new SoapClient($this->webhook->link);
-			return $client->$metodo($this->request);
-
-
-		} else if(strtolower(trim($this->webhook->tipo_llamada)) == "json") {
-			$req = "";
+		try {
+			$metodo = $this->webhook->metodo;
+			if (strtolower(trim($this->webhook->tipo_llamada)) == "soap") {
+				$client = new SoapClient($this->webhook->link);
+				return $client->$metodo($this->request);
+	
+	
+			} else if(strtolower(trim($this->webhook->tipo_llamada)) == "json") {
+				$req = "";
+			}
+		} catch(Exception $e) {
+			return 'ERROR: '.$e->getMessage();
 		}
 	}
 

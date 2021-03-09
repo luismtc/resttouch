@@ -307,7 +307,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     });
 
     tranComandaRef.afterClosed().subscribe((res: any) => {
-      console.log(res);
+      this.checkEstatusMesa();
+      if (res) {
+        this.loadAreas(true, { mesaenuso: res });
+      }
     });
   }
 

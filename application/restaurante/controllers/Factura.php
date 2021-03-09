@@ -417,6 +417,8 @@ class Factura extends CI_Controller {
 			$listaFacturas[] = [$laFactura];
 		}
 
+		// $elxml = null;
+
 		foreach ($listaFacturas as $qFact) {
 			if(!in_array((int)$qFact, $yaPasaron)){
 				try {
@@ -435,6 +437,7 @@ class Factura extends CI_Controller {
 					//$resp = $fac->enviarDigiFact();
 			
 					$req = $fac->getXmlWebhook();
+					// $elxml = $req;
 					$client = new SoapClient("http://52.35.3.1/jk/php/ws/organization.wsdl");
 			
 					//$res = $client->setVenta($req);
@@ -446,13 +449,14 @@ class Factura extends CI_Controller {
 					echo "</pre>";				
 				} catch(Exception $e) {
 					// echo "<pre> $qFact - ".$e->getMessage()."</pre>";
-					$noPasaron[] = [$qFact];
+					$noPasaron[] = $qFact;
 				}
 			}
 		}
-		echo "<pre>NO PASARON: ";
-		print_r($noPasaron);
-		echo "</pre>";
+
+		// $this->output->set_content_type("application/xlm")->set_output($elxml);
+
+		echo "<pre>NO PASARON: ";print_r($noPasaron);echo "</pre>";
 	}
 }
 

@@ -1,11 +1,12 @@
 import { EventEmitter } from '@angular/core';
 import { WindowConfiguration } from '../../shared/interfaces/window-configuration';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { GLOBAL } from '../../shared/global';
 import { MatInput } from '@angular/material/input';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
 import { UnirCuentaComponent } from '../components/unir-cuenta/unir-cuenta.component';
 import { TrasladoMesaComponent } from '../components/traslado-mesa/traslado-mesa.component';
@@ -16,6 +17,7 @@ import { ConfirmDialogComboModel, DialogComboComponent } from '../../shared/comp
 import { NotasGeneralesComandaComponent } from '../components/notas-generales-comanda/notas-generales-comanda.component';
 import { NuevaCuentaComponent } from '../components/nueva-cuenta/nueva-cuenta.component';
 import { DistribuirProductosCuentasComponent } from '../components/distribuir-productos-cuentas/distribuir-productos-cuentas.component';
+import { TranComandaAltComponent } from '../components/tran-comanda-alt/tran-comanda-alt.component';
 
 import { Cuenta } from '../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../interfaces/comanda';
@@ -28,6 +30,8 @@ import { ReportePdfService } from '../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../admin/services/configuracion.service';
 import { Cliente } from '../../admin/interfaces/cliente';
 import { Categoria } from '../../wms/interfaces/categoria';
+
+import { AccionesComandaComponent } from '../components/acciones-comanda/acciones-comanda.component';
 
 export class TranComanda {
     public mesaEnUso: ComandaGetResponse;
@@ -62,7 +66,8 @@ export class TranComanda {
         protected ls: LocalstorageService,
         protected pdfServicio: ReportePdfService,
         protected configSrvc: ConfiguracionService,
-        protected articuloSrvc: ArticuloService
+        protected articuloSrvc: ArticuloService,
+        protected bsAccionesCmd: MatBottomSheet
     ) { }
 
     alIniciar = () => {
@@ -332,7 +337,7 @@ export class TranComanda {
         return tmp;
     }
 
-    validarImpresion(toPdf = false) {
+    validarImpresion(toPdf = false, dialogRef: MatDialogRef<TranComandaAltComponent> = null) {
         const ingresarPedido = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_INGRESO_NUMERO_PEDIDO);
         // this.mesaEnUso.mesa.esmostrador;
         // console.log(this.mesaEnUso);
@@ -354,17 +359,17 @@ export class TranComanda {
                 // console.log(conf);
                 if (conf && conf.respuesta && conf.pedido) {
                     this.mesaEnUso.numero_pedido = conf.pedido;
-                    this.printComanda(toPdf);
+                    this.printComanda(toPdf, dialogRef);
                 } else {
                     this.snackBar.open('Error, Debe seleccionar un numero de pedido', 'Comanda', { duration: 7000 });
                 }
             });
         } else {
-            this.printComanda(toPdf);
+            this.printComanda(toPdf, dialogRef);
         }
     }
 
-    printComanda(toPdf = false) {
+    printComanda(toPdf = false, dialogRef: MatDialogRef<TranComandaAltComponent> = null) {
         // solicitar numero de pedido
 
         this.bloqueoBotones = true;
@@ -479,9 +484,13 @@ export class TranComanda {
                                     this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
                                     this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
                                     if (+this.mesaEnUso.mesa.esmostrador === 0) {
-                                        this.closeSideNavEv.emit();
+                                        if (dialogRef) {
+                                            dialogRef.close();
+                                        } else {
+                                            this.closeSideNavEv.emit();
+                                        }
                                     } else {
-                                        this.cobrarCuenta();
+                                        this.cobrarCuenta(dialogRef);
                                     }
                                 }
                                 // Fin de impresión de comanda
@@ -533,7 +542,7 @@ export class TranComanda {
         return total;
     }
 
-    printCuenta() {
+    printCuenta(dialogRef: MatDialogRef<TranComandaAltComponent> = null) {
         this.bloqueoBotones = true;
         this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
 
@@ -570,10 +579,14 @@ export class TranComanda {
         }
         this.snackBar.open(`Imprimiendo cuenta de ${this.cuentaActiva.nombre}`, 'Cuenta', { duration: 7000 });
         this.bloqueoBotones = false;
-        this.closeSideNavEv.emit();
+        if (dialogRef) {
+            dialogRef.close();
+        } else {
+            this.closeSideNavEv.emit();
+        }
     }
 
-    unirCuentas() {
+    unirCuentas(dialogRef: MatDialogRef<TranComandaAltComponent> = null) {
         const unirCuentaRef = this.dialog.open(UnirCuentaComponent, {
             width: '55%',
             data: { lstProductosSeleccionados: this.lstProductosSeleccionados, mesaEnUso: this.mesaEnUso }
@@ -581,12 +594,16 @@ export class TranComanda {
 
         unirCuentaRef.afterClosed().subscribe(result => {
             if (result) {
-                this.closeSideNavEv.emit();
+                if (dialogRef) {
+                    dialogRef.close();
+                } else {
+                    this.closeSideNavEv.emit();
+                }
             }
         });
     }
 
-    cobrarCuenta() {
+    cobrarCuenta(dialogRef: MatDialogRef<TranComandaAltComponent> = null) {
         this.comandaSrvc.getCuenta(this.cuentaActiva.cuenta).subscribe(res => {
             if (res.pendiente.length > 0) {
                 this.snackBar.open('Cobro', 'Tiene productos sin comandar', { duration: 3000 });
@@ -613,10 +630,18 @@ export class TranComanda {
                         if (resAC && resAC !== 'closePanel') {
                             // console.log(res);
                             this.cambiarEstatusCuenta(resAC);
-                            this.closeSideNavEv.emit();
+                            if (dialogRef) {
+                                dialogRef.close();
+                            } else {
+                                this.closeSideNavEv.emit();
+                            }
                         } else {
                             if (resAC === 'closePanel') {
-                                this.closeSideNavEv.emit();
+                                if (dialogRef) {
+                                    dialogRef.close();
+                                } else {
+                                    this.closeSideNavEv.emit();
+                                }
                             }
                         }
                     });
@@ -627,7 +652,7 @@ export class TranComanda {
         });
     }
 
-    enviarPedido = () => {
+    enviarPedido = (dialogRef: MatDialogRef<TranComandaAltComponent> = null) => {
         const cuenta = this.mesaEnUso.cuentas[0];
         this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +cuenta.numero);
         const lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
@@ -651,7 +676,7 @@ export class TranComanda {
                     this.comandaSrvc.setProductoImpreso(cuenta.cuenta).subscribe(resImp => {
                         this.llenaProductosSeleccionados(resImp.comanda);
                         this.setSelectedCuenta(cuenta.numero);
-                        this.cobrarCuenta();
+                        this.cobrarCuenta(dialogRef);
                     });
                 }
             });
@@ -666,7 +691,7 @@ export class TranComanda {
     // esCajero = () => (this.rolesUsuario || []).find(r => r.trim().toLocaleLowerCase() === 'cajero') === undefined;
     esCajero = () => false;
 
-    trasladoMesa = () => {
+    trasladoMesa = (dialogRef: MatDialogRef<TranComandaAltComponent> = null) => {
         const trasladoRef = this.dialog.open(TrasladoMesaComponent, {
             width: '55%',
             data: { mesaEnUso: this.mesaEnUso }
@@ -675,7 +700,11 @@ export class TranComanda {
         trasladoRef.afterClosed().subscribe(result => {
             if (result) {
                 this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
-                this.closeSideNavEv.emit(this.mesaEnUso);
+                if (dialogRef) {
+                    dialogRef.close(this.mesaEnUso);
+                } else {
+                    this.closeSideNavEv.emit(this.mesaEnUso);
+                }
             }
         });
     }
@@ -701,7 +730,7 @@ export class TranComanda {
         });
     }
 
-    nuevaCuenta = () => {
+    nuevaCuenta = (dialogRef: MatDialogRef<TranComandaAltComponent> = null) => {
         const nuevaCuentaRef = this.dialog.open(NuevaCuentaComponent, {
             width: '50%',
             data: { mesaEnUso: this.mesaEnUso }
@@ -709,12 +738,16 @@ export class TranComanda {
 
         nuevaCuentaRef.afterClosed().subscribe(result => {
             if (result) {
-                this.closeSideNavEv.emit();
+                if (dialogRef) {
+                    dialogRef.close();
+                } else {
+                    this.closeSideNavEv.emit();
+                }
             }
         });
     }
 
-    distribuirProductos = () => {
+    distribuirProductos = (dialogRef: MatDialogRef<TranComandaAltComponent> = null) => {
         const distProdCtaRef = this.dialog.open(DistribuirProductosCuentasComponent, {
             width: '50%',
             data: { mesaEnUso: this.mesaEnUso, lstProductos: (this.lstProductosSeleccionados || []) }
@@ -722,8 +755,29 @@ export class TranComanda {
 
         distProdCtaRef.afterClosed().subscribe(result => {
             if (result) {
-                this.closeSideNavEv.emit();
+                if (dialogRef) {
+                    dialogRef.close();
+                } else {
+                    this.closeSideNavEv.emit();
+                }
             }
         });
     }
+
+    abrirAccionesComanda = (dialogRef: MatDialogRef<TranComandaAltComponent>) => {
+        const bs = this.bsAccionesCmd.open(AccionesComandaComponent, {
+            autoFocus: false,
+            data: {
+                tranComanda: this,
+                dialogRef
+            }
+        });
+
+        bs.afterDismissed().subscribe((result: any) => {
+            if (result.cerrar) {
+                dialogRef.close();
+            }
+        });
+    }
+
 }

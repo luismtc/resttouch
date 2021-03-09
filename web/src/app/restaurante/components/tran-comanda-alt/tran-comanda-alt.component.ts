@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, Input, Output, ViewChild, EventEmitter } fro
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatInput } from '@angular/material/input';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TranComanda } from '../../classes/tran-comanda';
 
 import { Socket } from 'ngx-socket-io';
@@ -54,9 +55,10 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
     protected ls: LocalstorageService,
     protected pdfServicio: ReportePdfService,
     protected configSrvc: ConfiguracionService,
-    protected articuloSrvc: ArticuloService
+    protected articuloSrvc: ArticuloService,
+    protected bsAccionesCmd: MatBottomSheet
   ) {
-    super(dialog, snackBar, comandaSrvc, socket, ls, pdfServicio, configSrvc, articuloSrvc);
+    super(dialog, snackBar, comandaSrvc, socket, ls, pdfServicio, configSrvc, articuloSrvc, bsAccionesCmd);
   }
 
   ngOnInit() {
@@ -142,4 +144,5 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
       this.agregarProductos(obj);
     }
   }
+
 }

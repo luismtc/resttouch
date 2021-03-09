@@ -31,6 +31,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 // import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
@@ -78,6 +79,7 @@ import { TranComandaAltComponent } from './components/tran-comanda-alt/tran-coma
 import { NotasGeneralesComandaComponent } from './components/notas-generales-comanda/notas-generales-comanda.component';
 import { NuevaCuentaComponent } from './components/nueva-cuenta/nueva-cuenta.component';
 import { DistribuirProductosCuentasComponent } from './components/distribuir-productos-cuentas/distribuir-productos-cuentas.component';
+import { AccionesComandaComponent } from './components/acciones-comanda/acciones-comanda.component';
 
 
 @NgModule({
@@ -89,7 +91,8 @@ import { DistribuirProductosCuentasComponent } from './components/distribuir-pro
     TurnoTipoComponent, PropinaComponent, FormPropinaComponent, ListaPropinaComponent, AutoconsultaComponent,
     CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent,
     ConfiguraMesaComponent, TranCocinaComponent, TranComandaAltComponent, NotasGeneralesComandaComponent, NuevaCuentaComponent,
-    DistribuirProductosCuentasComponent
+    DistribuirProductosCuentasComponent,
+    AccionesComandaComponent
   ],
   imports: [
     CommonModule,
@@ -124,7 +127,8 @@ import { DistribuirProductosCuentasComponent } from './components/distribuir-pro
     EcoFabSpeedDialModule,
     DragDropModule,
     MatBadgeModule,
-    MatChipsModule
+    MatChipsModule,
+    MatBottomSheetModule
   ],
   providers: [
     MatNativeDateModule
