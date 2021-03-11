@@ -662,6 +662,7 @@ class Factura_model extends General_model
 
 		$xml = $this->getFelXml();
 		$datos = $xml->getElementsByTagName('DatosGenerales')->item(0);
+
 		$fecha = $datos->getAttribute('FechaHoraEmision');
 
 		$receptor = $xml->getElementsByTagName('Receptor')->item(0);
@@ -783,7 +784,8 @@ class Factura_model extends General_model
 		$jsonToken = json_decode(post_request($link, json_encode($datos)));
 
 		if (isset($jsonToken->Token)) {
-			$link = $this->certificador->vinculo_firma . $nit;
+			$url = $this->esAnulacion === 'N' ? $this->certificador->vinculo_factura : $this->certificador->vinculo_anulacion;
+			$link = $url . $nit;
 			$header = ["Authorization: {$jsonToken->Token}"];
 			$datos = html_entity_decode($this->xml->saveXML());
 			$res = json_decode(post_request($link, $datos, $header));
@@ -969,9 +971,9 @@ class Factura_model extends General_model
 		foreach ($tmp as $row) {
 			$json = json_decode($row->resultado);
 
-			if (isset($json->resultado) && $json->resultado) {
+			if ((isset($json->resultado) && $json->resultado) || (isset($json->Codigo) && $json->Codigo == 1)) {
 				return $json;
-			}
+			} 
 		}
 
 		return null;
@@ -980,10 +982,12 @@ class Factura_model extends General_model
 	public function getFelXml()
 	{
 		$res = $this->getFelRespuesta();
+		if (!isset($res->xml_certificado) && isset($res->ResponseDATA1)) {
+			$res->xml_certificado = $res->ResponseDATA1;
+		}
 		$xml = new DOMDocument();
 		$xml->validateOnParse = true;
 		$xml->loadXML(base64_decode($res->xml_certificado));
-
 		return $xml;
 	}
 
