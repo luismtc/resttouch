@@ -784,7 +784,7 @@ class Factura_model extends General_model
 		$jsonToken = json_decode(post_request($link, json_encode($datos)));
 
 		if (isset($jsonToken->Token)) {
-			$url = $this->esAnulacion === 'N' ? $this->certificador->vinculo_factura : $this->certificador->vinculo_anulacion;
+			$url = $this->esAnulacion === 'N' ? $this->certificador->vinculo_firma : $this->certificador->vinculo_anulacion;
 			$link = $url . $nit;
 			$header = ["Authorization: {$jsonToken->Token}"];
 			$datos = html_entity_decode($this->xml->saveXML());
