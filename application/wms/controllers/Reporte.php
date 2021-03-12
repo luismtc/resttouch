@@ -158,7 +158,7 @@ class Reporte extends CI_Controller {
 		foreach ($exist as $row) {
 			$art = new Articulo_model($row->articulo);
 			$pres = $art->getPresentacionReporte();
-			$row->cantidad = $row->cantidad / $pres->cantidad;
+			//$row->cantidad = $row->cantidad / $pres->cantidad;
 
 			if ($row->existencia != 0) {
 				$row->existencia = $row->existencia/$pres->cantidad;
@@ -247,8 +247,8 @@ class Reporte extends CI_Controller {
 
 			foreach ($args["articulos"] as $row) {
 				$hoja->fromArray($nombres, null, "A{$fila}");
-				$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
-				$hoja->getStyle("A{$fila}:F{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("A{$fila}:G{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("A{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
 				$fila++;
 
 				$saldo = $row['antiguedad'] + $row['ingresos'] - $row['salidas'];
