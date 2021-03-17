@@ -13,3 +13,8 @@
 .text-pre-wrap{
     white-space: pre-wrap !important;
 }
+
+.lineaDeTotal {
+    font-weight: bold !important;
+    font-size: 11pt !important;
+}

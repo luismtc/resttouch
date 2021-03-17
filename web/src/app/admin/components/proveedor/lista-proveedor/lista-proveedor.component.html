@@ -7,7 +7,8 @@
             <mat-list-item *ngFor="let element of lstProveedoresPaged" (click)="getProveedor(element)">
                 <mat-icon mat-list-icon>person</mat-icon>
                 <h5 mat-line>{{element.razon_social}}</h5>
-                <p mat-line>N.I.T.: {{element.nit}}</p>
+                <span mat-line>N.I.T.: {{element.nit}}</span>
+                <span mat-line>Código: {{element.codigo}}</span>
             </mat-list-item>
         </mat-nav-list>
         <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageChange($event)" showFirstLastButtons>

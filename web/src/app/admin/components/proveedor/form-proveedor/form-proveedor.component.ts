@@ -26,10 +26,12 @@ export class FormProveedorComponent implements OnInit {
     proveedor: null,
     corporacion: null,
     razon_social: null,
-    nit: null
+    nit: null,
+    codigo: null
   }
 
   onSubmit = () => {
+    this.proveedor.nit = this.proveedor.nit.trim().toUpperCase().replace(/[^0-9KkcCfF]/gi, '');
     this.proveedorSrvc.save(this.proveedor).subscribe(res => {
       if (res.exito) {
         this.proveedorSavedEv.emit();

@@ -631,14 +631,14 @@ export class TranComanda {
                             // console.log(res);
                             this.cambiarEstatusCuenta(resAC);
                             if (dialogRef) {
-                                dialogRef.close();
+                                dialogRef.close(this.mesaEnUso);
                             } else {
                                 this.closeSideNavEv.emit();
                             }
                         } else {
                             if (resAC === 'closePanel') {
                                 if (dialogRef) {
-                                    dialogRef.close();
+                                    dialogRef.close(this.mesaEnUso);
                                 } else {
                                     this.closeSideNavEv.emit();
                                 }
@@ -774,8 +774,8 @@ export class TranComanda {
         });
 
         bs.afterDismissed().subscribe((result: any) => {
-            if (result.cerrar) {
-                dialogRef.close();
+            if (result?.cerrar) {
+                dialogRef.close(result.mesaEnUso || null);
             }
         });
     }

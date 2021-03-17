@@ -1,17 +1,23 @@
 <mat-list class="fullWidth" [style.height]="listHeight">
+    <mat-list-item *ngIf="listaProductos.length > 0">
+        <div matLine>
+            <span class="lineaDeTotal">
+                {{cantidadDeProductos}} {{cantidadDeProductos > 1 ? 'artículos' : 'artículo'}} por {{totalDeProductos | number: '1.2-2'}}
+            </span>            
+        </div>
+    </mat-list-item>
     <mat-list-item *ngFor="let p of listaProductos; let i = index;" [ngClass]="{'noImpreso': +p.impreso === 0}" >
         <div matLine class="fullWidth" *ngIf="+p.cantidad > 0">
             <div class="row">
                 <div class="col m6 s12">
                     <span matLine>
-                        <ng-container *ngIf="+p.multiple === 0">
-                            {{p.cantidad}}
-                        </ng-container>
-                        {{p.nombre}}
+                        <span *ngIf="+p.multiple === 0">{{p.cantidad}}</span>&nbsp;{{p.nombre}}
                     </span>
-                    <div matLine *ngFor="let det of p.detalle">
-                        <span class="tabulador">{{det}}</span>
-                    </div>
+                    <ng-container *ngIf="+p.combo === 1">
+                        <div matLine *ngFor="let det of p.detalle">
+                            <span class="tabulador">{{det}}</span>
+                        </div>
+                    </ng-container>
                 </div>
                 <div class="col m6 s12" align="end">
                     <!--<span>{{p.detalle | json}}</span>-->

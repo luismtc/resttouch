@@ -102,6 +102,12 @@ import { RazonAnulacionComponent } from './components/razon-anulacion/razon-anul
 import { FormRazonAnulacionComponent } from './components/razon-anulacion/form-razon-anulacion/form-razon-anulacion.component';
 import { ListaRazonAnulacionComponent } from './components/razon-anulacion/lista-razon-anulacion/lista-razon-anulacion.component';
 import { GraficaLineaComponent } from './components/tablero/graficas/grafica-linea/grafica-linea.component';
+import { TipoCompraVentaComponent } from './components/tipoCompraVenta/tipo-compra-venta/tipo-compra-venta.component';
+import { FormTipoCompraVentaComponent } from './components/tipoCompraVenta/form-tipo-compra-venta/form-tipo-compra-venta.component';
+import { ListaTipoCompraVentaComponent } from './components/tipoCompraVenta/lista-tipo-compra-venta/lista-tipo-compra-venta.component';
+import { DocumentoTipoComponent } from './components/documento-tipo/documento-tipo/documento-tipo.component';
+import { ListaDocumentoTipoComponent } from './components/documento-tipo/lista-documento-tipo/lista-documento-tipo.component';
+import { FormDocumentoTipoComponent } from './components/documento-tipo/form-documento-tipo/form-documento-tipo.component';
 
 @NgModule({
   declarations: [
@@ -119,7 +125,7 @@ import { GraficaLineaComponent } from './components/tablero/graficas/grafica-lin
     CertificadorConfiguracionComponent, FormCertificadorConfiguracionComponent, CertificadorFelComponent,
     FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent,
     ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent, RazonAnulacionComponent,
-    FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent
+    FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent, TipoCompraVentaComponent, FormTipoCompraVentaComponent, ListaTipoCompraVentaComponent, DocumentoTipoComponent, ListaDocumentoTipoComponent, FormDocumentoTipoComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,

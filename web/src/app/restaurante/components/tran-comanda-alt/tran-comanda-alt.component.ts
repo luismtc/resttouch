@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input, Output, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatInput } from '@angular/material/input';
@@ -9,18 +9,18 @@ import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 
-import { Cuenta } from '../../interfaces/cuenta';
-import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
-import { DetalleComanda } from '../../interfaces/detalle-comanda';
-import { Impresora } from '../../../admin/interfaces/impresora';
-import { Categoria } from '../../../wms/interfaces/categoria';
-import { CategoriaGrupoImpresora } from '../../../wms/interfaces/categoria-grupo';
-import { ArbolArticulos, Articulo, NodoProducto } from '../../../wms/interfaces/articulo';
+// import { Cuenta } from '../../interfaces/cuenta';
+import { ComandaGetResponse } from '../../interfaces/comanda';
+// import { DetalleComanda } from '../../interfaces/detalle-comanda';
+// import { Impresora } from '../../../admin/interfaces/impresora';
+// import { Categoria } from '../../../wms/interfaces/categoria';
+// import { CategoriaGrupoImpresora } from '../../../wms/interfaces/categoria-grupo';
+import { Articulo, NodoProducto } from '../../../wms/interfaces/articulo';
 
 import { ComandaService } from '../../services/comanda.service';
 import { ArticuloService } from '../../../wms/services/articulo.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
-import { Cliente } from '../../../admin/interfaces/cliente';
+// import { Cliente } from '../../../admin/interfaces/cliente';
 
 interface IDatosTranComanda {
   mesa: ComandaGetResponse;
@@ -35,8 +35,8 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
 
   // @Input() mesaEnUso: ComandaGetResponse;
   // @Input() clientePedido: Cliente = null;
-  @Output() closeSideNavEv = new EventEmitter();
-  @Output() mesaSavedEv: EventEmitter<any> = new EventEmitter();
+  // @Output() closeSideNavEv = new EventEmitter();
+  // @Output() mesaSavedEv: EventEmitter<any> = new EventEmitter();
   @ViewChild('txtCodigoBarras') txtCodigoBarras: MatInput;
 
   public categorias: any[] = [];

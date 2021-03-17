@@ -3,4 +3,5 @@ export interface Proveedor {
     corporacion: number;
     razon_social: string;
     nit: string;
+    codigo?: string;
 }

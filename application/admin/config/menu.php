@@ -75,6 +75,14 @@ $config['menu'] = [
 					17 => [
 						'nombre' => 'Razones de anulacion',
 						'link' => '/admin/razon_anulacion'
+					],
+					18 => [
+						'nombre' => 'Tipo de compra/venta',
+						'link' => '/admin/tipo_compra_venta'
+					],
+					19 => [
+						'nombre' => 'Tipo de documento',
+						'link' => '/admin/documento_tipo'
 					]
 				]
 			],

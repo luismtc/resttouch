@@ -7,6 +7,7 @@ import * as moment from 'moment';
 
 import { Ingreso } from '../../../interfaces/ingreso';
 import { DetalleIngreso } from '../../../interfaces/detalle-ingreso';
+import { Documento } from '../../../interfaces/documento';
 import { IngresoService } from '../../../services/ingreso.service';
 import { TipoMovimiento } from '../../../interfaces/tipo-movimiento';
 import { TipoMovimientoService } from '../../../services/tipo-movimiento.service';
@@ -18,6 +19,10 @@ import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloService } from '../../../services/articulo.service';
 import { Presentacion } from '../../../../admin/interfaces/presentacion';
 import { PresentacionService } from '../../../../admin/services/presentacion.service';
+import { DocumentoTipo } from '../../../../admin/interfaces/documento-tipo';
+import { DocumentoTipoService } from '../../../../admin/services/documento-tipo.service';
+import { TipoCompraVenta } from '../../../../admin/interfaces/tipo-compra-venta';
+import { TipoCompraVentaService } from '../../../../admin/services/tipo-compra-venta.service';
 
 @Component({
   selector: 'app-form-ingreso',
@@ -32,6 +37,7 @@ export class FormIngresoComponent implements OnInit {
 
   public showIngresoForm = true;
   public showDetalleIngresoForm = true;
+  public showDocumentoForm = true;
 
   public detallesIngreso: DetalleIngreso[] = [];
   public detalleIngreso: DetalleIngreso;
@@ -49,6 +55,9 @@ export class FormIngresoComponent implements OnInit {
   public bloqueoBotones = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
   public txtProveedorSelected: (Proveedor | string) = undefined;
+  public documento: Documento;
+  public documentosTipo: DocumentoTipo[] = [];
+  public tiposCompraVenta: TipoCompraVenta[] = [];
 
   constructor(
     private snackBar: MatSnackBar,
@@ -58,7 +67,9 @@ export class FormIngresoComponent implements OnInit {
     private tipoMovimientoSrvc: TipoMovimientoService,
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
-    private presentacinSrvc: PresentacionService
+    private presentacinSrvc: PresentacionService,
+    private documentoTipoSrvc: DocumentoTipoService,
+    private tipoCompraVentaSrvc: TipoCompraVentaService
   ) { }
 
   ngOnInit() {
@@ -69,6 +80,8 @@ export class FormIngresoComponent implements OnInit {
     this.loadBodegas();
     this.loadArticulos();
     this.loadPresentaciones();
+    this.loadDocumentosTipo();
+    this.loadTiposCompraVenta();
   }
 
   loadTiposMovimiento = () => {
@@ -103,6 +116,22 @@ export class FormIngresoComponent implements OnInit {
     });
   }
 
+  loadDocumentosTipo = () => {
+    this.documentoTipoSrvc.get().subscribe(res => {
+      if (res) {
+        this.documentosTipo = res;
+      }
+    });
+  }
+
+  loadTiposCompraVenta = () => {
+    this.tipoCompraVentaSrvc.get().subscribe(res => {
+      if (res) {
+        this.tiposCompraVenta = res;
+      }
+    });
+  }
+
   resetIngreso = () => {
     this.ingreso = {
       ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null,
@@ -111,6 +140,7 @@ export class FormIngresoComponent implements OnInit {
     };
     this.resetDetalleIngreso();
     this.detallesIngreso = [];
+    this.resetDocumento();
     this.updateTableDataSource();
     this.txtProveedorSelected = undefined;
   }
@@ -264,5 +294,46 @@ export class FormIngresoComponent implements OnInit {
 
   applyFilter = (filter: string) => {
     this.dataSource.filter = filter.toLocaleLowerCase();
+  }
+
+  resetDocumento = () => this.documento = {
+    documento: null, ingreso: null, documento_tipo: null, serie: null, numero: null, fecha: null, tipo_compra_venta: null, enviado: 0
+  }
+
+  setDocumentoIngreso = (dc: any) => {
+    this.documento = {
+      documento: +dc.documento,
+      ingreso: +dc.ingreso,
+      documento_tipo: dc.documento_tipo.documento_tipo,
+      serie: dc.serie,
+      numero: dc.numero,
+      fecha: dc.fecha,
+      tipo_compra_venta: dc.tipo_compra_venta.tipo_compra_venta,
+      enviado: dc.enviado
+    };
+  }
+
+  loadDocumento = (idingreso: number = (this.ingreso.ingreso || null)) => {
+    if (idingreso) {
+      this.ingresoSrvc.getDocumento({ ingreso: idingreso }).subscribe((doc: Documento[]) => {
+        if (doc && doc.length > 0) {
+          this.setDocumentoIngreso(doc[0]);
+        } else {
+          this.resetDocumento();
+        }
+      });
+    }
+  }
+
+  submitDocumento = () => {
+    this.documento.ingreso = this.ingreso.ingreso;
+    this.ingresoSrvc.saveDocumento(this.documento).subscribe(res => {
+      if (res.exito) {
+        this.setDocumentoIngreso(res.documento);
+        this.snackBar.open('Documento guardado con éxito.', 'Ingreso', { duration: 3000 });
+      } else {
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Ingreso', { duration: 3000 });
+      }
+    });
   }
 }

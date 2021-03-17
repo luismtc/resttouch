@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../shared/global';
@@ -17,7 +17,7 @@ import { ComandaService } from '../../services/comanda.service';
   templateUrl: './lista-productos-comanda.component.html',
   styleUrls: ['./lista-productos-comanda.component.css']
 })
-export class ListaProductosComandaComponent implements OnInit {
+export class ListaProductosComandaComponent implements OnInit, OnChanges {
 
   @Input() listaProductos: ProductoSelected[] = [];
   @Input() noCuenta: number = null;
@@ -29,6 +29,8 @@ export class ListaProductosComandaComponent implements OnInit {
   @Output() productoRemovedEv = new EventEmitter();
   public esMovil = false;
   public detalleComanda: DetalleComanda;
+  public totalDeProductos = 0.00;
+  public cantidadDeProductos = 0;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -40,6 +42,12 @@ export class ListaProductosComandaComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (this.listaProductos && this.listaProductos.length > 0) {
+      this.getTotalProductos();
+    }
   }
 
   removeProducto = (p: ProductoSelected, idx: number, estaAutorizado = false) => {
@@ -116,6 +124,15 @@ export class ListaProductosComandaComponent implements OnInit {
 
   doAction(ev: string) {
     console.log(ev);
+  }
+
+  getTotalProductos = () => {
+    this.totalDeProductos = 0.00;
+    this.cantidadDeProductos = 0;
+    for (const p of this.listaProductos) {
+      this.totalDeProductos += ((p.cantidad * p.precio) + p.monto_extra);
+      this.cantidadDeProductos += p.cantidad;
+    }
   }
 
 }

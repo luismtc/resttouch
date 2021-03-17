@@ -34,9 +34,7 @@ export class AccionesComandaComponent implements OnInit {
 
   comandar = () => {
     this.data.tranComanda.validarImpresion(false, this.data.dialogRef);
-    this.cerrar({
-      cerrar: true
-    });
+    this.cerrar();
   }
 
   imprimirCuenta = () => {
@@ -71,6 +69,9 @@ export class AccionesComandaComponent implements OnInit {
 
   cerrarMesa = () => {
     this.data.tranComanda.cerrarMesa();
-    this.cerrar();
+    this.cerrar({
+      cerrar: true,
+      mesaEnUso: this.data.tranComanda.mesaEnUso
+    });
   }
 }

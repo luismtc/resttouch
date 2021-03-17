@@ -4,7 +4,7 @@ import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Ingreso } from '../interfaces/ingreso';
 import { DetalleIngreso } from '../interfaces/detalle-ingreso';
-// import { LocalstorageService } from '../../admin/services/localstorage.service';
+import { Documento } from '../interfaces/documento';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -16,83 +16,51 @@ export class IngresoService {
 
   private srvcErrHndl: ServiceErrorHandler;
   private ingresoUrl = 'ingreso';
-  // private usrToken: string = null;
+  private documentoUrl = 'documento';
 
   constructor(
     private http: HttpClient,
-    // private ls: LocalstorageService
   ) {
     this.srvcErrHndl = new ServiceErrorHandler();
-    // this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
   }
 
   get(fltr: any = {}): Observable<Ingreso[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
     return this.http.get<Ingreso[]>(
       `${GLOBAL.urlWms}/${this.ingresoUrl}/buscar_ingreso?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Ingreso) {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
     return this.http.post<any>(
       `${GLOBAL.urlWms}/${this.ingresoUrl}/guardar${+entidad.ingreso > 0 ? ('/' + entidad.ingreso) : ''}`,
       entidad
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getDetalle(idingreso: number, fltr: any = {}): Observable<DetalleIngreso[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
     return this.http.get<DetalleIngreso[]>(
       `${GLOBAL.urlWms}/${this.ingresoUrl}/buscar_detalle/${idingreso}?${qs.stringify(fltr)}`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   saveDetalle(entidad: DetalleIngreso) {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
     return this.http.post<any>(
       `${GLOBAL.urlWms}/${this.ingresoUrl}/guardar_detalle/${entidad.ingreso}${+entidad.ingreso_detalle > 0 ? ('/' + entidad.ingreso_detalle) : ''}`,
       entidad
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-
-  /*
-  getIngresosDePrueba(): Observable<Ingreso[]> {
-    let lstIngresos: Ingreso[] = [];
-    for (let i = 0; i < 10; i++) {
-      lstIngresos.push({
-        ingreso: Math.floor(Math.random() * 100),
-        tipo_movimiento: Math.floor(Math.random() * 100),
-        fecha: '2020-01-01',
-        bodega: 1,
-        usuario: 1,
-        bodega_origen: null,
-        comentario: '',
-        proveedor: 1
-      });
-    }
-    return of(lstIngresos);
+  getDocumento(fltr: any = {}): Observable<Documento[]> {
+    return this.http.get<Documento[]>(
+      `${GLOBAL.urlWms}/${this.documentoUrl}/buscar?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
-  */
+
+  saveDocumento(entidad: Documento) {
+    return this.http.post<any>(
+      `${GLOBAL.urlWms}/${this.documentoUrl}/guardar${+entidad.documento > 0 ? ('/' + entidad.documento) : ''}`,
+      entidad
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }

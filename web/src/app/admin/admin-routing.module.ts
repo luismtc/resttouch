@@ -21,6 +21,8 @@ import { CertificadorConfiguracionComponent } from './components/certificador/co
 import { CertificadorFelComponent } from './components/certificador/datos/certificador-fel/certificador-fel.component';
 import { CorporacionComponent } from './components/corporacion/corporacion/corporacion.component';
 import { RazonAnulacionComponent } from './components/razon-anulacion/razon-anulacion/razon-anulacion.component';
+import { TipoCompraVentaComponent } from './components/tipoCompraVenta/tipo-compra-venta/tipo-compra-venta.component';
+import { DocumentoTipoComponent } from './components/documento-tipo/documento-tipo/documento-tipo.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -42,6 +44,8 @@ const routes: Routes = [
   { path: 'certificador_fel', component: CertificadorFelComponent, canActivate: [AuthGuard] },
   { path: 'corporacion', component: CorporacionComponent, canActivate: [AuthGuard] },
   { path: 'razon_anulacion', component: RazonAnulacionComponent, canActivate: [AuthGuard] },
+  { path: 'tipo_compra_venta', component: TipoCompraVentaComponent, canActivate: [AuthGuard] },
+  { path: 'documento_tipo', component: DocumentoTipoComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 

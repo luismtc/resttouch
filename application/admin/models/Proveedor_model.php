@@ -6,6 +6,7 @@ class Proveedor_model extends General_model {
 	public $razon_social;
 	public $nit;
 	public $corporacion;
+	public $codigo = null;
 
 	public function __construct($id = "")
 	{

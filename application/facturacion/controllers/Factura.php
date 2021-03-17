@@ -361,7 +361,7 @@ class Factura extends CI_Controller
 		$resp = $fac->getFelRespuesta();
 
 		if ($resp) {
-			$fac->fecha_autorizacion = $resp->fecha;
+			$fac->fecha_autorizacion = isset($resp->fecha) ? $resp->fecha : $resp->Fecha_DTE;
 		} else {
 			$fac->fecha_autorizacion = '';
 		}
