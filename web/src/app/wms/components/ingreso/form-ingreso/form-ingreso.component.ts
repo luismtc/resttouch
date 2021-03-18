@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
@@ -23,6 +24,7 @@ import { DocumentoTipo } from '../../../../admin/interfaces/documento-tipo';
 import { DocumentoTipoService } from '../../../../admin/services/documento-tipo.service';
 import { TipoCompraVenta } from '../../../../admin/interfaces/tipo-compra-venta';
 import { TipoCompraVentaService } from '../../../../admin/services/tipo-compra-venta.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-form-ingreso',
@@ -60,6 +62,7 @@ export class FormIngresoComponent implements OnInit {
   public tiposCompraVenta: TipoCompraVenta[] = [];
 
   constructor(
+    public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private ingresoSrvc: IngresoService,
@@ -332,8 +335,30 @@ export class FormIngresoComponent implements OnInit {
         this.setDocumentoIngreso(res.documento);
         this.snackBar.open('Documento guardado con éxito.', 'Ingreso', { duration: 3000 });
       } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Ingreso', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Ingreso', { duration: 7000 });
       }
     });
+  }
+
+  enviarAConta = () => {
+    if (+this.documento?.documento > 0) {
+      const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: '400px',
+        data: new ConfirmDialogModel('Envío a contabilidad', 'Una vez enviado a contabilidad no podrá modificar el ingreso ni el documento. ¿Desea continuar?', 'Sí', 'No')
+      });
+
+      confirmRef.afterClosed().subscribe((confirma: boolean) => {
+        if (confirma) {
+          this.ingresoSrvc.enviarDocumentoAConta(this.documento.documento).subscribe(res => {
+            if (res.exito) {
+              this.documento = res.documento;
+              this.snackBar.open('Documento enviado a contabilidad.', 'Ingreso', { duration: 3000 });
+            } else {
+              this.snackBar.open(`ERROR: ${res.mensaje}`, 'Ingreso', { duration: 7000 });
+            }
+          });
+        }
+      });
+    }
   }
 }

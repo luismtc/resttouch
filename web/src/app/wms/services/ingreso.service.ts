@@ -63,4 +63,10 @@ export class IngresoService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  enviarDocumentoAConta(idDocumento: number) {
+    return this.http.get<any>(
+      `${GLOBAL.urlWms}/${this.documentoUrl}/enviar/${idDocumento}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }

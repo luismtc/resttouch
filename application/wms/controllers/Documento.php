@@ -6,7 +6,7 @@ class Documento extends CI_Controller {
 	public function __construct()
 	{
         parent::__construct();
-        $this->load->model(['Documento_model', 'Documento_tipo_model', 'Tipo_compra_venta_model', 'Ingreso_model']);
+        $this->load->model(['Documento_model', 'Documento_tipo_model', 'Tipo_compra_venta_model', 'Ingreso_model', 'Webhook_model']);
         $this->output->set_content_type("application/json", "UTF-8");
 	}
 
@@ -50,4 +50,50 @@ class Documento extends CI_Controller {
 		$this->output->set_output(json_encode($datos));
 	}
 
+	public function enviar($id = null) {		
+		$datos = ['exito' => false];
+
+		if($id) {
+			$doc = new Documento_model($id);
+			$datos['data_contable'] = $doc->getDataContable($doc->documento);
+
+			if($datos['data_contable']) {
+				$webhook = $this->Webhook_model->buscar([
+					"evento" => "RTEV_ENVIAR_COMPRA_CONTA",
+					"_uno" => true
+				]);
+				if ($webhook) {
+					$this->load->library('Webhook');
+					if (strtolower(trim($webhook->tipo_llamada)) == "soap") {
+						$req = "";
+					} else if(strtolower(trim($webhook->tipo_llamada)) == "json") {
+						$req = json_encode($datos['data_contable']);
+					}
+					
+					$this->load->helper('api');
+					$web = new Webhook($webhook);
+					$web->setRequest($req);
+					$datos['respuesta'] = json_decode($web->setEvento());
+
+					if ((int)$datos['respuesta']->lastid > 0) {
+						$datos['exito'] = true;
+						$datos['mensaje'] = "Compra enviada con éxito a contabilidad.";
+						$datos['documento'] = $this->getForeignData($doc);
+						unset($datos['data_contable']);
+						unset($datos['respuesta']);
+						$doc->guardar(['enviado' => 1]);
+					} else {
+						$datos['mensaje'] = "Hubo un problema en el envío a la contabilidad.";
+					}
+				} else {
+					$datos['mensaje'] = "No está configurada la conexión a la contabilidad.";
+				}
+			} else {
+				$datos['mensaje'] = "No se encontró la información para el documento seleccionado.";
+			}
+		} else {
+			$datos['mensaje'] = "Parametros inválidos.";			
+		}
+		$this->output->set_output(json_encode($datos));
+	}
 }

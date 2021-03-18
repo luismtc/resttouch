@@ -23,15 +23,15 @@ Class Webhook {
 			if (strtolower(trim($this->webhook->tipo_llamada)) == "soap") {
 				$client = new SoapClient($this->webhook->link);
 				return $client->$metodo($this->request);
-	
-	
 			} else if(strtolower(trim($this->webhook->tipo_llamada)) == "json") {
-				$req = "";
+				if (strtoupper(trim($metodo)) === 'POST') {
+					return post_request($this->webhook->link, $this->request);
+				} else if(strtoupper(trim($metodo)) === 'GET') {
+					return get_request($this->webhook->link);
+				}
 			}
 		} catch(Exception $e) {
 			return 'ERROR: '.$e->getMessage();
 		}
 	}
-
-
 }

@@ -7,6 +7,7 @@ class Proveedor_model extends General_model {
 	public $nit;
 	public $corporacion;
 	public $codigo = null;
+	public $cuenta_contable_gasto = null;
 
 	public function __construct($id = "")
 	{

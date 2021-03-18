@@ -15,7 +15,8 @@
                 </h4>
             </mat-card-title>
             <mat-card-content>
-                <form #frmIngreso="ngForm" *ngIf="showIngresoForm" (ngSubmit)="frmIngreso.form.valid && onSubmit()" novalidate>
+                <form #frmIngreso="ngForm" *ngIf="showIngresoForm" (ngSubmit)="frmIngreso.form.valid && onSubmit()"
+                    novalidate>
                     <mat-form-field class="fullWidth" *ngIf="saveToDB">
                         <mat-label>Tipo de movimiento</mat-label>
                         <mat-select name="tipo_movimiento" [(ngModel)]="ingreso.tipo_movimiento" required>
@@ -25,7 +26,8 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                        <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="ingreso.fecha" required>
+                        <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="ingreso.fecha"
+                            required>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
                         <mat-label>Bodega</mat-label>
@@ -41,8 +43,9 @@
                             <mat-option *ngFor="let bodeO of bodegas" [value]="bodeO.bodega">
                                 {{bodeO.descripcion}}
                             </mat-option>
-                        </mat-select>                
-                        <button type="button" mat-button *ngIf="ingreso.bodega_origen" matSuffix mat-icon-button aria-label="Clear" (click)="ingreso.bodega_origen = undefined">
+                        </mat-select>
+                        <button type="button" mat-button *ngIf="ingreso.bodega_origen" matSuffix mat-icon-button
+                            aria-label="Clear" (click)="ingreso.bodega_origen = undefined">
                             <mat-icon class="iconFontSize">close</mat-icon>
                         </button>
                     </mat-form-field>
@@ -53,13 +56,15 @@
                                 ({{prov.nit}}) {{prov.razon_social}}
                             </mat-option>
                         </mat-select>-->
-                        <input type="text" [(ngModel)]="txtProveedorSelected" [ngModelOptions]="{standalone: true}" placeholder="Proveedor" matInput [matAutocomplete]="autoProveedores" (keyup)="filtrarProveedores(txtProveedorSelected)" required>
+                        <input type="text" [(ngModel)]="txtProveedorSelected" [ngModelOptions]="{standalone: true}"
+                            placeholder="Proveedor" matInput [matAutocomplete]="autoProveedores"
+                            (keyup)="filtrarProveedores(txtProveedorSelected)" required>
                         <mat-autocomplete #autoProveedores="matAutocomplete" [displayWith]="displayProveedor">
                             <mat-option *ngFor="let prov of filteredProveedores" [value]="prov">
                                 ({{prov.nit}}) {{prov.razon_social}}
                             </mat-option>
                         </mat-autocomplete>
-        
+
                     </mat-form-field>
                     <mat-form-field class="fullWidth" *ngIf="esMovil">
                         <input matInput placeholder="Comentarios" name="comentario" [(ngModel)]="ingreso.comentario">
@@ -72,11 +77,12 @@
                     </mat-form-field>
                     -->
                     <div align="end">
-                        <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmIngreso.form.valid || bloqueoBotones"
-                            *ngIf="saveToDB">
+                        <button mat-raised-button type="submit" color="accent" class="btnAccion"
+                            [disabled]="!frmIngreso.form.valid || bloqueoBotones || +documento.enviado === 1" *ngIf="saveToDB">
                             Guardar
                         </button>
-                        <button mat-raised-button type="button" color="accent" (click)="resetIngreso()" *ngIf="ingreso.ingreso">
+                        <button mat-raised-button type="button" color="accent" (click)="resetIngreso()"
+                            *ngIf="ingreso.ingreso">
                             Nuevo
                         </button>
                     </div>
@@ -99,7 +105,8 @@
                 </h4>
             </mat-card-title>
             <mat-card-content>
-                <form #frmDetalleIngreso="ngForm" *ngIf="showDetalleIngresoForm" (ngSubmit)="frmDetalleIngreso.form.valid && onSubmitDetail()" novalidate>
+                <form #frmDetalleIngreso="ngForm" *ngIf="showDetalleIngresoForm"
+                    (ngSubmit)="frmDetalleIngreso.form.valid && onSubmitDetail()" novalidate>
                     <!--<mat-form-field class="fullWidth">
                         <mat-label>Artículo</mat-label>
                         <mat-select name="articulo" [(ngModel)]="detalleIngreso.articulo" required>
@@ -109,9 +116,12 @@
                         </mat-select>
                     </mat-form-field>-->
                     <mat-form-field class="fullWidth">
-                        <mat-label>Artículo</mat-label>                    
-                        <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
-                        <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo" (optionSelected)="setPresentaciones()">
+                        <mat-label>Artículo</mat-label>
+                        <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}"
+                            placeholder="Artículo" matInput [matAutocomplete]="autoArticulos"
+                            (keyup)="filtrarArticulos(txtArticuloSelected)" required>
+                        <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo"
+                            (optionSelected)="setPresentaciones()">
                             <mat-option *ngFor="let a of filteredArticulos" [value]="a">
                                 {{a.descripcion}}
                             </mat-option>
@@ -139,7 +149,7 @@
                             required>
                     </mat-form-field>
                     -->
-                    <mat-form-field class="fullWidth" *ngIf="esMovil && saveToDB" >
+                    <mat-form-field class="fullWidth" *ngIf="esMovil && saveToDB">
                         <input matInput placeholder="Costo unitario Con IVA" name="precio_unitario"
                             [(ngModel)]="detalleIngreso.precio_unitario"
                             (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
@@ -155,8 +165,8 @@
                     </mat-form-field>
                     -->
                     <div align="end">
-                        <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleIngreso.form.valid || bloqueoBotones"
-                            *ngIf="saveToDB">
+                        <button mat-raised-button type="submit" color="accent" class="btnAccion"
+                            [disabled]="!frmDetalleIngreso.form.valid || bloqueoBotones || +documento.enviado === 1" *ngIf="saveToDB">
                             Guardar
                         </button>
                         <button mat-raised-button type="button" color="accent" (click)="addToDetail()"
@@ -184,29 +194,38 @@
                     <ng-container matColumnDef="presentacion">
                         <th mat-header-cell *matHeaderCellDef>Presentación</th>
                         <td mat-cell *matCellDef="let element" class="text-wrap">
-                            {{saveToDB ? element.presentacion.descripcion : getDescripcionPresentacion(element.presentacion)}}
+                            {{saveToDB ? element.presentacion.descripcion :
+                            getDescripcionPresentacion(element.presentacion)}}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="cantidad">
                         <th mat-header-cell *matHeaderCellDef class="text-right">Cantidad</th>
-                        <td mat-cell *matCellDef="let element" class="text-right">{{element.cantidad | number:'1.2-2'}}</td>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{element.cantidad | number:'1.2-2'}}
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="costo_unitario">
                         <th mat-header-cell *matHeaderCellDef class="text-right">Costo Unitario Con IVA</th>
-                        <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_unitario | number:'1.2-2'}}
+                        <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_unitario |
+                            number:'1.2-2'}}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="costo_total">
                         <th mat-header-cell *matHeaderCellDef class="text-right">Costo Total con IVA</th>
-                        <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_total | number:'1.2-2'}}</td>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{element.precio_total |
+                            number:'1.2-2'}}</td>
                     </ng-container>
                     <ng-container matColumnDef="deleteItem">
                         <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
                         <td mat-cell *matCellDef="let element" class="text-wrap">
-                            <button mat-raised-button type="button" color="accent" (click)="getDetalleIngreso(element.ingreso, element.ingreso_detalle)" *ngIf="saveToDB" [disabled]="bloqueoBotones">
+                            <button mat-raised-button type="button" color="accent"
+                                (click)="getDetalleIngreso(element.ingreso, element.ingreso_detalle)" *ngIf="saveToDB"
+                                [disabled]="bloqueoBotones || +documento.enviado === 1">
                                 Editar
                             </button>
-                            <button mat-raised-button type="button" color="accent" (click)="removeFromDetail(element.articulo)" [disabled]="([2, 3].indexOf(+ingreso.estatus_movimiento) >= 0) || bloqueoBotones" *ngIf="!saveToDB">
+                            <button mat-raised-button type="button" color="accent"
+                                (click)="removeFromDetail(element.articulo)"
+                                [disabled]="([2, 3].indexOf(+ingreso.estatus_movimiento) >= 0) || bloqueoBotones"
+                                *ngIf="!saveToDB">
                                 Editar
                             </button>
                         </td>
@@ -233,44 +252,52 @@
                     </button>
                 </h4>
             </mat-card-title>
-            <mat-card-content>                
-                <form #frmDocumento="ngForm" *ngIf="showDocumentoForm" (ngSubmit)="frmDocumento.form.valid && submitDocumento()" novalidate>
+            <mat-card-content>
+                <form #frmDocumento="ngForm" *ngIf="showDocumentoForm"
+                    (ngSubmit)="frmDocumento.form.valid && submitDocumento()" novalidate>
                     <mat-form-field class="fullWidth" *ngIf="saveToDB">
                         <mat-label>Tipo de documento</mat-label>
-                        <mat-select name="documento_tipo" [(ngModel)]="documento.documento_tipo" required>
+                        <mat-select name="documento_tipo" [(ngModel)]="documento.documento_tipo" required
+                            [disabled]="+documento.enviado === 1">
                             <mat-option *ngFor="let dt of documentosTipo" [value]="dt.documento_tipo">
                                 {{dt.descripcion}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                        <input matInput type="text" placeholder="Serie" name="serie" [(ngModel)]="documento.serie" minlength="1" maxlength="50" required>
+                        <input matInput type="text" placeholder="Serie" name="serie" [(ngModel)]="documento.serie"
+                            minlength="1" maxlength="50" required [disabled]="+documento.enviado === 1">
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                        <input matInput type="text" placeholder="Número" name="numero" [(ngModel)]="documento.numero" minlength="1" maxlength="50" required>
+                        <input matInput type="text" placeholder="Número" name="numero" [(ngModel)]="documento.numero"
+                            minlength="1" maxlength="50" required [disabled]="+documento.enviado === 1">
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                        <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="documento.fecha" required>
+                        <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="documento.fecha"
+                            required [disabled]="+documento.enviado === 1">
                     </mat-form-field>
                     <mat-form-field class="fullWidth" *ngIf="saveToDB">
                         <mat-label>Tipo de compra</mat-label>
-                        <mat-select name="tipo_compra_venta" [(ngModel)]="documento.tipo_compra_venta" required>
+                        <mat-select name="tipo_compra_venta" [(ngModel)]="documento.tipo_compra_venta" required [disabled]="+documento.enviado === 1">
                             <mat-option *ngFor="let tcv of tiposCompraVenta" [value]="tcv.tipo_compra_venta">
                                 {{tcv.descripcion}}
                             </mat-option>
                         </mat-select>
-                    </mat-form-field>                                        
+                    </mat-form-field>
                     <div align="end">
-                        <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDocumento.form.valid || bloqueoBotones"
+                        <button mat-raised-button type="submit" color="accent" class="btnAccion"
+                            [disabled]="!frmDocumento.form.valid || bloqueoBotones || +documento.enviado === 1"
                             *ngIf="saveToDB">
                             Guardar
-                        </button>                        
-                        <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDocumento.form.valid || bloqueoBotones || +documento.enviado === 1"
+                        </button>
+                        <button mat-raised-button type="button" color="accent" class="btnAccion"
+                            [disabled]="!frmDocumento.form.valid || bloqueoBotones || +documento.enviado === 1"
+                            (click)="enviarAConta()"
                             *ngIf="saveToDB && +documento.documento > 0 && +documento.enviado === 0">
                             Enviar a contabilidad
                         </button>
                     </div>
-                </form>                
+                </form>
             </mat-card-content>
         </mat-card>
     </mat-tab>
