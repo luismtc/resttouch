@@ -1,0 +1,63 @@
+<mat-card class="mat-elevation-z4">
+    <mat-card-title>
+        <h4>Sub - categorías</h4>
+    </mat-card-title>
+    <mat-card-content>
+        <form #frmCategoriaGrupo="ngForm" novalidate>
+
+            <mat-form-field class="fullWidth">
+                <mat-label>Categoría</mat-label>
+                <mat-select name="categoria" [(ngModel)]="categoriaGrupo.categoria" required>
+                    <mat-option *ngFor="let selCat of categorias" [value]="selCat.categoria">
+                        {{selCat.descripcion}}
+                    </mat-option>
+                </mat-select>                
+            </mat-form-field>            
+
+            <mat-form-field class="fullWidth">
+                <input type="text" matInput placeholder="Descripcion de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" minlength="1" maxlength="45" required>
+            </mat-form-field>
+
+            <mat-checkbox name="descuento" class="fullWidth" [(ngModel)]="+categoriaGrupo.descuento">¿Aplica Descuento?</mat-checkbox>
+
+            <mat-form-field class="fullWidth">
+                <mat-label>Impresora</mat-label>
+                <mat-select name="impresora" [(ngModel)]="categoriaGrupo.impresora" required>
+                    <mat-option *ngFor="let imp of impresoras" [value]="imp.impresora">
+                        {{imp.nombre}}
+                    </mat-option>
+                </mat-select>                
+            </mat-form-field>
+
+            <mat-form-field class="fullWidth">
+                <mat-label>Anidar dentro de</mat-label>
+                <mat-select name="categoriaGrupoPadre" [(ngModel)]="categoriaGrupo.categoria_grupo_grupo">
+                    <mat-option *ngFor="let subcatpadre of categoriasGruposPadre" [value]="subcatpadre.categoria_grupo">
+                        {{subcatpadre.descripcion}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <div align="end">
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="onSubmitSubCategoria()" [disabled]="!frmCategoriaGrupo.form.valid">
+                    Guardar
+                </button>
+                <button mat-raised-button type="button" color="warn" (click)="resetCategoriaGrupo()">
+                    Cancelar
+                </button>
+            </div>
+        </form>
+        <hr />
+        <mat-chip-list>
+            <mat-chip color="accent" *ngFor="let cat of categorias" (click)="categoria = cat; loadSubCategorias(cat.categoria)" selected>
+                {{cat.descripcion}}
+            </mat-chip>
+        </mat-chip-list>
+
+        <mat-chip-list>
+            <mat-chip color="warn" *ngFor="let catGrupo of categoriasGrupos" (click)="categoriaGrupo = catGrupo" selected>
+                {{catGrupo.descripcion}}
+            </mat-chip>
+        </mat-chip-list>
+    </mat-card-content>
+</mat-card>

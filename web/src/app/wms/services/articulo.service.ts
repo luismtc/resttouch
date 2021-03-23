@@ -63,7 +63,7 @@ export class ArticuloService {
     const lst: CategoriaGrupo[] = [];
     lista.forEach(item => lst.push({
       categoria_grupo: +item.categoria_grupo,
-      categoria: +item.categoria.categoria,
+      categoria: item.categoria.categoria,
       categoria_grupo_grupo:
         !!item.categoria_grupo_grupo && item.categoria_grupo_grupo.length > 0 ? +item.categoria_grupo_grupo[0].categoria_grupo : null,
       descripcion: item.descripcion,

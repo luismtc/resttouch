@@ -16,8 +16,9 @@ import { GLOBAL } from '../../../../shared/global';
 export class CategoriaProductoComponent implements OnInit {
 
   @Output() categoriaGrupoSvd = new EventEmitter();
+  // tslint:disable-next-line: no-output-on-prefix
   @Output() onChangeSubCategoriaEv = new EventEmitter();
-  
+
   public categoria: Categoria;
   public categorias: Categoria[] = [];
   public categoriaGrupo: CategoriaGrupo;
@@ -25,12 +26,12 @@ export class CategoriaProductoComponent implements OnInit {
   public categoriasGrupos: CategoriaGrupo[] = [];
   public editCategoriaMode = false;
   public editSubCategoriaMode = false;
-  public showCategoriasForm = false;
-  public esMovil: boolean = false;
+  public showCategoriasForm = true;
+  public esMovil = false;
   public impresoras: Impresora[] = [];
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private articuloSrvc: ArticuloService
   ) { }
@@ -63,8 +64,8 @@ export class CategoriaProductoComponent implements OnInit {
   }
 
   loadCategorias = () => {
-    this.articuloSrvc.getCategorias({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
-      //console.log(res);
+    this.articuloSrvc.getCategorias({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe(res => {
+      // console.log(res);
       if (res) {
         this.categorias = res;
       }
@@ -83,8 +84,8 @@ export class CategoriaProductoComponent implements OnInit {
   }
 
   loadImpresoras = () => {
-    this.articuloSrvc.getImpresoras({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
-      //console.log(res);
+    this.articuloSrvc.getImpresoras({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe(res => {
+      // console.log(res);
       if (res) {
         this.impresoras = res;
       }
@@ -107,10 +108,10 @@ export class CategoriaProductoComponent implements OnInit {
         this.editCategoriaMode = false;
         this.resetCategoria();
         this.loadCategorias();
-        this.categoriaGrupoSvd.emit();
-        this._snackBar.open('Grabada con éxito.', 'Categoría', { duration: 5000 });
+        // this.categoriaGrupoSvd.emit();
+        this.snackBar.open('Grabada con éxito.', 'Categoría', { duration: 5000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Categoría', { duration: 5000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Categoría', { duration: 5000 });
       }
     })
   }
@@ -122,10 +123,10 @@ export class CategoriaProductoComponent implements OnInit {
       if (res.exito) {
         this.resetCategoriaGrupo();
         this.loadSubCategorias(+this.categoria.categoria);
-        this.categoriaGrupoSvd.emit();
-        this._snackBar.open('Grabada con éxito.', 'Sub - Categoría', { duration: 5000 });
+        // this.categoriaGrupoSvd.emit();
+        this.snackBar.open('Grabada con éxito.', 'Sub - Categoría', { duration: 5000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sub - Categoría', { duration: 5000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sub - Categoría', { duration: 5000 });
       }
     })
   }

@@ -14,6 +14,14 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmArticulo="ngForm" *ngIf="showArticuloForm" (ngSubmit)="frmArticulo.form.valid && onSubmit()" novalidate>
+            <mat-chip-list>
+                <mat-chip color="accent" class="catSubCat" *ngIf="categoria" selected>
+                    {{categoria.descripcion}}
+                </mat-chip>
+                <mat-chip color="warn" class="catSubCat" *ngIf="subcategoria" selected>
+                    {{subcategoria.descripcion}}
+                </mat-chip>
+            </mat-chip-list>
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput type="text" placeholder="Descripcion" name="descripcion"
                     [(ngModel)]="articulo.descripcion" required>

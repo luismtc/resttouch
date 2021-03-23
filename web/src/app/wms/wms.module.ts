@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { SharedModule } from '../shared/shared.module';
 
 import { MatListModule } from '@angular/material/list';
@@ -24,6 +25,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 
 // import { MatKeyboardModule } from '@ngx-material-keyboard/core';
 // import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
@@ -52,17 +54,19 @@ import { FisicoComponent } from './components/fisico/fisico/fisico.component';
 import { FormInventarioFisicoComponent } from './components/fisico/form-inventario-fisico/form-inventario-fisico.component';
 import { ReplicarASedesComponent } from './components/producto/replicar-a-sedes/replicar-a-sedes.component';
 import { ReplicarASedesDialogComponent } from './components/producto/replicar-a-sedes-dialog/replicar-a-sedes-dialog.component';
+import { SubCategoriaProductoComponent } from './components/producto/sub-categoria-producto/sub-categoria-producto.component';
 
 @NgModule({
   declarations: [
     ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent,
     CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent,
     KardexComponent, ListaProductoAltComponent, ProduccionComponent, ReporteComponent, ValorizadoComponent, FisicoComponent,
-    FormInventarioFisicoComponent, ReplicarASedesComponent, ReplicarASedesDialogComponent
+    FormInventarioFisicoComponent, ReplicarASedesComponent, ReplicarASedesDialogComponent, SubCategoriaProductoComponent
   ],
   imports: [
     CommonModule,
     WmsRoutingModule,
+    FlexLayoutModule,
     SharedModule,
     HttpClientModule,
     FormsModule,
@@ -85,7 +89,8 @@ import { ReplicarASedesDialogComponent } from './components/producto/replicar-a-
     MatDialogModule,
     MatSidenavModule,
     MatTreeModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   providers: [ ],
   exports: [

@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ListaProductoComponent } from '../lista-producto/lista-producto.component';
+// import { ListaProductoComponent } from '../lista-producto/lista-producto.component';
 import { FormProductoComponent } from '../form-producto/form-producto.component';
+import { LocalstorageService } from '../../../../admin/services/localstorage.service';
+import { GLOBAL, MultiFiltro } from '../../../../shared/global';
 import { Articulo, ArticuloResponse } from '../../../interfaces/articulo';
+import { Categoria } from '../../../interfaces/categoria';
+import { CategoriaGrupo } from '../../../interfaces/categoria-grupo';
 import { ArticuloService } from '../../../services/articulo.service';
 
 @Component({
@@ -11,12 +15,22 @@ import { ArticuloService } from '../../../services/articulo.service';
 })
 export class ProductoComponent implements OnInit {
 
+  public categoria: Categoria;
+  public categorias: Categoria[] = [];
+  public categoriaGrupo: CategoriaGrupo;
+  public categoriasGrupos: CategoriaGrupo[] = [];
+  public listasCategoriasGrupo: any[] = [];
+
   public articulo: Articulo;
-  @ViewChild('lstProducto') lstProductoComponent: ListaProductoComponent;
+  public articulos: Articulo[] = [];
+  public articulosFull: Articulo[] = [];
+  public txtFiltro = '';
+  // @ViewChild('lstProducto') lstProductoComponent: ListaProductoComponent;
   @ViewChild('frmProducto') frmProductoComponent: FormProductoComponent;
 
   constructor(
-    private articuloSrvc: ArticuloService
+    private articuloSrvc: ArticuloService,
+    private ls: LocalstorageService
   ) {
     this.articulo = {
       articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null, bien_servicio: 'B',
@@ -24,10 +38,20 @@ export class ProductoComponent implements OnInit {
     };
   }
   ngOnInit() {
+    this.loadCategorias();
+    this.loadArticulos();
   }
 
-  setArticulo = (art: any) => {
-    this.articuloSrvc.getArticulo({ articulo: art.id }).subscribe(res => {
+  applyFilter() {
+    if (this.txtFiltro.length > 0) {
+      this.articulos = MultiFiltro(this.articulosFull, this.txtFiltro);
+    } else {
+      this.articulos = JSON.parse(JSON.stringify(this.articulosFull));
+    }
+  }
+
+  setArticulo = (art: Articulo) => {
+    this.articuloSrvc.getArticulo({ articulo: art.articulo }).subscribe(res => {
       if (!!res && res.length > 0) {
         const obj: ArticuloResponse = res[0];
         this.articulo = {
@@ -61,7 +85,63 @@ export class ProductoComponent implements OnInit {
   }
 
   refreshArticuloList = (obj: any) => {
-    this.lstProductoComponent.loadArbolArticulos();
+    this.loadArticulos();
   }
+
+  loadCategorias = () => {
+    this.articuloSrvc.getCategorias({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res: Categoria[]) => {
+      if (res) {
+        this.categorias = res;
+      }
+    });
+  }
+
+  loadSubCategorias = (idcategoria: number, idsubcat: number = null) => {
+
+    // console.log(this.articulo);
+
+    const fltr: any = {
+      categoria: +idcategoria,
+      categoria_grupo_grupo: null
+    };
+
+    if (idsubcat) {
+      this.frmProductoComponent.articulo.categoria_grupo = idsubcat;
+      fltr.categoria_grupo_grupo = idsubcat;
+    } else {
+      this.frmProductoComponent.articulo.categoria_grupo = null;
+      delete fltr.categoria_grupo_grupo;
+      this.listasCategoriasGrupo = [];
+    }
+
+    this.articuloSrvc.getCategoriasGrupos(fltr).subscribe((res: any[]) => {
+      if (res && res.length > 0) {
+        this.listasCategoriasGrupo.push(this.articuloSrvc.adaptCategoriaGrupoResponse(res));
+      } else {
+        if (idsubcat) {
+          this.loadArticulos(idsubcat);
+        }
+      }
+    });
+  }
+
+  loadArticulos = (idsubcat: number = null) => {
+
+    const fltr: any = { categoria_grupo: null };
+
+    if (idsubcat) {
+      fltr.categoria_grupo = idsubcat;
+    } else {
+      delete fltr.categoria_grupo;
+    }
+
+    this.articuloSrvc.getArticulos(fltr).subscribe((res: Articulo[]) => {
+      if (res) {
+        this.articulosFull = res;
+        this.articulos = JSON.parse(JSON.stringify(this.articulosFull));
+      }
+    });
+  }
+
 
 }

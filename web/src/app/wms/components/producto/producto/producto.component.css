@@ -1,0 +1,21 @@
+.divArticulos {
+    padding: 3px 8px;
+    overflow-y: auto;
+    margin: 0;
+    height: 85vh;
+}
+
+.divArticulos > mat-card {
+    width: 200px;
+    max-height:95px;
+}
+
+.divSubCategorias {    
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.accion-comanda {
+    background-color: white;
+    margin: 10px 0;
+}

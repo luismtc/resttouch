@@ -6,6 +6,8 @@ import { LocalstorageService } from '../../../../admin/services/localstorage.ser
 import { GLOBAL } from '../../../../shared/global';
 import { saveAs } from 'file-saver';
 
+import { Categoria } from '../../../interfaces/categoria';
+import { CategoriaGrupo } from '../../../interfaces/categoria-grupo';
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloDetalle } from '../../../interfaces/articulo-detalle';
 import { ArticuloService } from '../../../services/articulo.service';
@@ -27,6 +29,8 @@ import { ReplicarASedesDialogComponent } from '../replicar-a-sedes-dialog/replic
 export class FormProductoComponent implements OnInit {
 
   @Input() articulo: Articulo;
+  @Input() categoria: Categoria = null;
+  @Input() subcategoria: CategoriaGrupo = null;
   @Output() articuloSvd = new EventEmitter();
   private titulo = 'Receta';
   public showArticuloForm = true;

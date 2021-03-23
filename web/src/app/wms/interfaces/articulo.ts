@@ -93,5 +93,5 @@ export interface ProductoSelected {
     detalle?: [];
     monto_extra?: number;
     multiple?: number;
-    combo?:number;
+    combo?: number;
 }
