@@ -11,6 +11,8 @@ import { ProductoSelected } from '../../../wms/interfaces/articulo';
 
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { ComandaService } from '../../services/comanda.service';
+import { DialogElminarProductoComponent, ElminarProductoModel } from 'src/app/shared/components/dialog-elminar-producto/dialog-elminar-producto.component';
+
 
 @Component({
   selector: 'app-lista-productos-comanda',
@@ -50,7 +52,7 @@ export class ListaProductosComandaComponent implements OnInit, OnChanges {
     }
   }
 
-  removeProducto = (p: ProductoSelected, idx: number, estaAutorizado = false) => {
+  removeProducto = (p: ProductoSelected, idx: number, estaAutorizado = false, cantidad?: number) => {
     this.bloqueoBotones = true;
     this.detalleComanda = {
       detalle_cuenta: p.detalle_cuenta,
@@ -62,6 +64,11 @@ export class ListaProductosComandaComponent implements OnInit, OnChanges {
       notas: p.notas,
       autorizado: estaAutorizado
     };
+
+    if (cantidad){
+      this.detalleComanda.cantidad = cantidad;
+      this.detalleComanda.total = (cantidad * this.detalleComanda.precio)
+    }
 
     this.comandaSrvc.saveDetalle(this.IdComanda, this.IdCuenta, this.detalleComanda).subscribe(res => {
       if (res.exito) {
@@ -94,8 +101,17 @@ export class ListaProductosComandaComponent implements OnInit, OnChanges {
       // console.log(res);
       if (res) {
         // this.autorizar = true;
-        this.deleteProductoFromList(p, idx, true);
-        this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
+        //this.deleteProductoFromList(p, idx, true);
+        const dialogDelete = this.dialog.open(DialogElminarProductoComponent, {
+          width: '40%', disableClose: true, data: new ElminarProductoModel(p)
+        });
+
+        dialogDelete.afterClosed().subscribe(res => {
+          if (res && res.respuesta){
+            this.removeProducto(res.producto, idx, true, res.producto.cantidad)
+            this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
+          }
+        })        
       } else {
         this.snackBar.open('La contraseña no es correcta', 'Comanda', { duration: 5000 });
       }

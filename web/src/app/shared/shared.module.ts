@@ -35,6 +35,7 @@ import { CheckPasswordComponent } from './components/check-password/check-passwo
 import { DialogCocinaComponent } from './components/dialog-cocina/dialog-cocina.component';
 import { DialogPedidoComponent } from './components/dialog-pedido/dialog-pedido.component';
 import { DialogComboComponent } from './components/dialog-combo/dialog-combo.component';
+import { DialogElminarProductoComponent } from './components/dialog-elminar-producto/dialog-elminar-producto.component';
 
 const config: SocketIoConfig = { url: `http://${window.location.hostname}:8988`, options: {} }; // Solo para desarrollo
 // const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
@@ -50,7 +51,8 @@ const config: SocketIoConfig = { url: `http://${window.location.hostname}:8988`,
     CheckPasswordComponent,
     DialogCocinaComponent,
     DialogPedidoComponent,
-    DialogComboComponent
+    DialogComboComponent,
+    DialogElminarProductoComponent
   ],
   imports: [
     CommonModule,

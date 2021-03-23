@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>
+    Eliminar Articulos
+  </h1>
+  <div mat-dialog-content>
+    <p>Seleccione la cantidad que desea eliminar</p>
+  </div>
+  <form>
+      <mat-form-field class="fullWidth">
+          <input type="number" matInput placeholder="Cantidad" min="1" max="{{prod.cantidad}}" step="1" [(ngModel)] ="cantidad" [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+  </form>
+  <div mat-dialog-actions align="center">
+    <button mat-raised-button class="btnConfig" (click)="onDismiss()">Cancelar</button>
+    <button mat-raised-button class="btnConfig" color="accent" (click)="onConfirm()">Aceptar</button>
+  </div>
