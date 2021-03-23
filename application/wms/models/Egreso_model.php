@@ -11,6 +11,7 @@ class Egreso_model extends General_Model {
 	public $usuario;
 	public $estatus_movimiento;
 	public $traslado = 0;
+	public $idcomandafox = null;
 
 	public function __construct($id = "")
 	{
@@ -66,6 +67,19 @@ class Egreso_model extends General_Model {
 		}
 
 		return $datos;
+	}
+
+	public function checkDetalleApi($idbodega, $codigo) {		
+		$sede = $this->db->query("SELECT sede FROM bodega WHERE bodega = $idbodega")->row();
+		$query = "SELECT a.articulo	";
+		$query.= "FROM articulo a INNER JOIN categoria_grupo b ON b.categoria_grupo = a.categoria_grupo INNER JOIN categoria c ON c.categoria = b.categoria	";
+		$query.= "WHERE c.sede = $sede->sede AND TRIM(a.codigo) = '$codigo' ";
+		$query.= "LIMIT 1";
+		$art = $this->db->query($query)->row();
+		if($art) {
+			return true;
+		}
+		return false;
 	}
 
 	public function guardarDetalleApi($item)

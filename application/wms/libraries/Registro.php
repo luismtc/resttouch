@@ -49,7 +49,8 @@ class Registro
 			"bodega" => $bodega->bodega,
 			"usuario" => 1,
 			"estatus_movimiento" => 2,
-			"fecha" => Hoy(3)
+			"fecha" => Hoy(3),
+			"idcomandafox" => isset($this->egr->idcomandafox) ? trim((string)$this->egr->idcomandafox) : null
 		];
 
 		return $this->egr->guardar($enca);

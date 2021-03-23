@@ -54,31 +54,51 @@ class Api extends CI_Controller {
 			if ($registro->setDB($key)) {
 				$egr = new Egreso_model();
 
-				$egr->bodega = isset($req->encabezado->bodega) ? $req->encabezado->bodega : 1;
-				
-				if (empty($id) || $egr->estatus_movimiento == 1) {
+				$yaExiste = $egr->buscar(['idcomandafox' => $req->encabezado->idcomandafox, '_uno' => true]);
+
+				if(!$yaExiste) {
+					$egr->bodega = isset($req->encabezado->bodega) ? $req->encabezado->bodega : 1;
+					$egr->idcomandafox = isset($req->encabezado->idcomandafox) ? $req->encabezado->idcomandafox : null;
 					
-
-					$registro->setEgreso($egr);
-
-					$res['exito'] = $registro->guardarEgreso();					
-					if($res['exito']) {
-						$egr = $registro->getEgreso();
-						$res['mensaje'] = "Datos Actualizados con Exito";
-						$res['egreso'] = $egr;
+					if (empty($id) || $egr->estatus_movimiento == 1) {
+	
+						$noExisten = [];
 						if (isset($req->detalle) && isset($req->detalle->item)) {
-							
-							for ($i = 0; $i < count($req->detalle->item); $i++) {
-								$row = $req->detalle->item[$i];
-								$egr->guardarDetalleApi($row);
+							$cantDetalles = count($req->detalle->item);
+							for($i = 0; $i < $cantDetalles; $i++) {
+								if(!$egr->checkDetalleApi($egr->bodega, $req->detalle->item[$i]->articulo)) {
+									$noExisten[] = $req->detalle->item[$i]->articulo;
+								}
 							}
-							
+						}
+						
+						if (count($noExisten) === 0) {						
+							$registro->setEgreso($egr);
+		
+							$res['exito'] = $registro->guardarEgreso();					
+							if($res['exito']) {
+								$egr = $registro->getEgreso();
+								$res['mensaje'] = "Datos Actualizados con Exito";
+								$res['egreso'] = $egr;
+								if (isset($req->detalle) && isset($req->detalle->item)) {
+									
+									for ($i = 0; $i < count($req->detalle->item); $i++) {
+										$row = $req->detalle->item[$i];
+										$egr->guardarDetalleApi($row);
+									}
+									
+								}
+							} else {
+								$res['mensaje'] = implode(", ", $registro->getEgreso()->getMensaje());
+							}	
+						} else {
+							$res['mensaje'] = 'No existen los codigos: '.implode(", ", $noExisten);
 						}
 					} else {
-						$res['mensaje'] = implode(",", $registro->getEgreso()->getMensaje());
-					}	
+						$res['mensaje'] = "Solo puede editar egresos en estatus Abierto.";
+					}
 				} else {
-					$res['mensaje'] = "Solo puede editar egresos en estatus Abierto";
+					$res['mensaje'] = "Ya existe el egreso de la comanda ".$req->encabezado->idcomandafox.".";
 				}
 			} else {
 				$res['mensaje'] = "Llave invalida";
