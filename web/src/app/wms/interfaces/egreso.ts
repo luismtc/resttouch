@@ -10,4 +10,5 @@ export interface Egreso {
     bodega_destino?: number;
     proveedor?: number;
     tipo_movimiento_destino?: number;
+    idcomandafox?: string;
 }

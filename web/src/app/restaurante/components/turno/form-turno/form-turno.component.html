@@ -132,16 +132,13 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="btn-group d-flex justify-content-end" role="group">
+            <div align="right">
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="copiaDetalleTurno()" [disabled]="!!turno.fin">
+                    Copiar de turno anterior
+                </button>
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleTurno.form.valid || !!turno.fin">
                     Guardar
-                </button>
-                <!--
-                <button mat-icon-button type="button" color="accent" (click)="resetDetalleIngreso()"
-                    *ngIf="detalleTurno.ingreso_detalle">
-                    <mat-icon>add</mat-icon>
-                </button>
-                -->
+                </button>                
             </div>
         </form>
         <hr *ngIf="detallesTurno.length > 0"/>

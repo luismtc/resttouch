@@ -61,7 +61,8 @@ export class ListaEgresoComponent implements OnInit {
       fecha: obj.fecha,
       usuario: obj.usuario.usuario,
       estatus_movimiento: obj.estatus_movimiento || 1,
-      traslado: obj.traslado || 0
+      traslado: obj.traslado || 0,
+      idcomandafox: obj.idcomandafox
     });
   }
 

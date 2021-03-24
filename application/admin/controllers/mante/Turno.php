@@ -12,7 +12,9 @@ class Turno extends CI_Controller {
         	'Turno_model', 
         	'TurnoTipo_model', 
         	'Comanda_model',
-        	'Factura_model'
+        	'Factura_model', 
+			'Usuario_model',
+			'Catalogo_model'
         ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");
@@ -162,7 +164,7 @@ class Turno extends CI_Controller {
 
 	public function buscar_usuario($turno)
 	{
-		$this->load->model(['Usuario_model', 'Catalogo_model']);
+		// $this->load->model(['Usuario_model', 'Catalogo_model']);
 		$turno = new Turno_model($turno);			
 		$this->output
 		->set_content_type("application/json")
@@ -228,6 +230,32 @@ class Turno extends CI_Controller {
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));
+	}
+
+	public function replica_detalle_turno($original, $nuevo)
+	{
+		$to = new Turno_model($original);
+		$tn = new Turno_model($nuevo);
+
+		$datos = ['exito' => true];
+		$noAgregados = [];
+
+		$detOriginal = $to->getUsuarios(['anulado' => 0]);
+		foreach($detOriginal as $thu) {
+			if(!$tn->setUsuario(['usuario' => $thu->usuario->usuario, 'usuario_tipo' => $thu->usuario_tipo->usuario_tipo])) {
+				$datos['exito'] = false;
+				$noAgregados[] = $thu->usuario->nombres.' '.$thu->usuario->apellidos;
+			}
+		}
+		
+		if (!$datos['exito']) {
+			$datos['mensaje'] = 'No se pudieron agregar al turno los usuarios: '.implode(', ', $noAgregados). '.';
+		} else {
+			$datos['mensaje'] = 'Usuarios agregados con éxito al turno.';
+		}
+
+		$this->output->set_output(json_encode($datos));
+
 	}
 
 }

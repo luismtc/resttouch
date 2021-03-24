@@ -80,6 +80,7 @@ import { NotasGeneralesComandaComponent } from './components/notas-generales-com
 import { NuevaCuentaComponent } from './components/nueva-cuenta/nueva-cuenta.component';
 import { DistribuirProductosCuentasComponent } from './components/distribuir-productos-cuentas/distribuir-productos-cuentas.component';
 import { AccionesComandaComponent } from './components/acciones-comanda/acciones-comanda.component';
+import { SeleccionaTurnoPrevioComponent } from './components/turno/selecciona-turno-previo/selecciona-turno-previo.component';
 
 
 @NgModule({
@@ -92,7 +93,8 @@ import { AccionesComandaComponent } from './components/acciones-comanda/acciones
     CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent,
     ConfiguraMesaComponent, TranCocinaComponent, TranComandaAltComponent, NotasGeneralesComandaComponent, NuevaCuentaComponent,
     DistribuirProductosCuentasComponent,
-    AccionesComandaComponent
+    AccionesComandaComponent,
+    SeleccionaTurnoPrevioComponent
   ],
   imports: [
     CommonModule,

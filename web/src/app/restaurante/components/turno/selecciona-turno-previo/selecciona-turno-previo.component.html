@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>¿De qué turno quiere copiar el detalle?</h1>
+<div mat-dialog-content>
+    <mat-nav-list>
+        <ng-container *ngFor="let element of lstTurnos">
+            <mat-list-item (click)="turnoSelected = element" *ngIf="+element.turno !== +data.turnoCopia.turno">
+                <mat-icon mat-list-icon>schedule</mat-icon>
+                <h5 mat-line>Inicio: {{element.inicio | date: 'dd/MM/yyyy HH:mm:ss'}}</h5><br />
+                <p mat-line>Fin: {{element.fin | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
+            </mat-list-item>
+        </ng-container>
+    </mat-nav-list>
+    <small *ngIf="turnoSelected">
+        <div>
+            <strong>Seleccionó el turno que inicia el {{turnoSelected.inicio | date: 'dd/MM/yyyy HH:mm:ss'}} y finaliza
+                el {{turnoSelected.fin | date: 'dd/MM/yyyy HH:mm:ss'}}</strong>
+        </div>
+    </small>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button type="button" (click)="cancelar()" color="warn">
+        Cancelar
+    </button>
+    <button mat-raised-button type="button" color="accent" (click)="copiar()" [disabled]="!turnoSelected">
+        Copiar
+    </button>
+</div>

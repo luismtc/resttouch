@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-// import {CommonModule} from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { SeleccionaTurnoPrevioComponent } from '../selecciona-turno-previo/selecciona-turno-previo.component';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 
@@ -93,6 +93,8 @@ export class FormTurnoComponent implements OnInit {
       turno: null, turno_tipo: null, inicio: moment().format(GLOBAL.dbDateTimeFormat), fin: null
     };
     this.resetDetalleTurno();
+    this.detallesTurno = [];
+    this.updateTableDataSource();
   }
 
   saveInfoTurno = () => {
@@ -136,7 +138,7 @@ export class FormTurnoComponent implements OnInit {
     }
   }
 
-  resetDetalleTurno = () => this.detalleTurno = { turno: !!this.turno.turno ? this.turno.turno : null, usuario: null, usuario_tipo: null }
+  resetDetalleTurno = () => this.detalleTurno = { turno: !!this.turno.turno ? this.turno.turno : null, usuario: null, usuario_tipo: null };
 
   loadDetalleTurno = (idturno: number = +this.turno.turno) => {
     this.turnoSrvc.getDetalle(idturno, { turno: idturno }).subscribe(res => {
@@ -182,5 +184,14 @@ export class FormTurnoComponent implements OnInit {
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesTurno);
 
   getNow = () => moment().format(GLOBAL.dbDateTimeFormat);
+
+  copiaDetalleTurno = () => {
+    const dialogRef = this.dialog.open(SeleccionaTurnoPrevioComponent, {
+      maxWidth: '400px',
+      data: { turnoCopia: this.turno }
+    });
+
+    dialogRef.afterClosed().subscribe(() =>  this.loadDetalleTurno(+this.turno.turno));
+  }
 
 }

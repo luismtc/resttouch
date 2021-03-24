@@ -11,6 +11,7 @@
                     Fecha: {{element.fecha | date: 'dd/MM/yyyy'}}<br/>
                     Bodega: {{element.bodega.descripcion}}<br/>
                 </p>
+                <span mat-line *ngIf="!!element.idcomandafox">Comanda: #{{element.idcomandafox}}</span>
             </mat-list-item>
         </mat-nav-list>
         <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageChange($event)" showFirstLastButtons>
