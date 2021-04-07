@@ -152,7 +152,9 @@ class Articulo extends CI_Controller
 		$datos["costo"] = $art->getCostoReceta();
 		foreach ($art->getReceta() as $row) {
 			$rec = new Articulo_model($row->articulo->articulo);
-			$row->costo = $rec->getCostoReceta();
+			$costo = $rec->getCostoReceta(["_presentacion" => true]);
+			$pres = new Presentacion_model($costo->presentacion);
+			$row->costo = $costo->costo * ($row->cantidad / $pres->cantidad);
 			$datos["receta"][] = $row;
 		}
 

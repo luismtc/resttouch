@@ -36,6 +36,8 @@ class Reporte extends CI_Controller {
 		if (!isset($_GET['sede'])) {			
 			$_GET['sede'] = $this->data->sede;
 			$data['sede'] = $this->data->sede;
+		} else {
+			$data['sede'] = $_GET['sede'];
 		}
 
 		$data['mostrar_inventario'] = 1;

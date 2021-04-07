@@ -450,7 +450,11 @@ class Articulo_model extends General_model {
 
 		if ($emp->metodo_costeo == 1) {
 			$tmp = $this->db
-						->select("max(c.ingreso_detalle), c.articulo, c.precio_unitario, a.fecha")
+						->select("max(c.ingreso_detalle), 
+							c.articulo, 
+							c.precio_unitario, 
+							a.fecha,
+							c.presentacion")
 						->join("bodega b", "a.bodega = b.bodega")
 						->join("ingreso_detalle c", "a.ingreso = c.ingreso")
 						->where("c.articulo", $this->getPK())
@@ -464,7 +468,8 @@ class Articulo_model extends General_model {
 						->select("
 							sum(c.precio_total) / sum(c.cantidad*d.cantidad) as precio_unitario,
 							c.articulo, 
-							a.fecha")
+							a.fecha,
+							c.presentacion")
 						->join("bodega b", "a.bodega = b.bodega")
 						->join("ingreso_detalle c", "a.ingreso = c.ingreso")
 						->join("presentacion d", "c.presentacion = d.presentacion")
@@ -478,13 +483,19 @@ class Articulo_model extends General_model {
 		}
 
 		if ($tmp) {
+			if (verDato($args, "_presentacion")) {
+				return (object) [
+					"costo" => $tmp->precio_unitario, 
+					"presentacion" => $tmp->presentacion
+				];
+			}
 			return $tmp->precio_unitario;
 		}
 
 		return 0;
 	}
 
-	public function getCostoReceta()
+	public function getCostoReceta($args = [])
 	{
 		$this->actualizarExistencia();
 		$receta = $this->getReceta();
@@ -493,11 +504,13 @@ class Articulo_model extends General_model {
 
 			foreach ($receta as $row) {				
 				$art = new Articulo_model($row->articulo->articulo);				
-				$costo += $art->getCostoReceta();
+				$tmp = $art->getCostoReceta(["_presentacion" => true]);
+				$pres = new Presentacion_model($tmp->presentacion);
+				$costo += $tmp->costo * ($row->cantidad / $pres->cantidad);
 			}
 
 		} else {
-			$costo = $this->getCosto();
+			$costo = $this->getCosto($args);
 		}
 
 		return $costo;
