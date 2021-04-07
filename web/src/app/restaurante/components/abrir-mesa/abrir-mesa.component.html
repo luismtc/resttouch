@@ -9,16 +9,9 @@
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <!--
-            <mat-form-field class="separatorMargin" *ngIf="!esMovil">
-            <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                ng-virtual-keyboard-placeholder="# Comensales" placeholder="# Comensales" name="comensales"
-                [(ngModel)]="data.comensales" required>
-            </mat-form-field>
-            -->
-        <mat-form-field class="separatorMargin" *ngIf="esMovil">
-            <input type="text" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales"
-                required>
+        <mat-form-field class="separatorMargin">
+            <input type="text" *ngIf="!esMovil" [matKeyboard]="keyboardLayout" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>
+            <input type="text" *ngIf="esMovil" matInput placeholder="# Comensales" name="comensales" [(ngModel)]="data.comensales" required>
         </mat-form-field>
         <mat-checkbox name="esEvento" class="separatorMargin" [(ngModel)]="+data.esEvento">¿Es evento?</mat-checkbox>
         <mat-checkbox name="dividirCuentasPorSillas" class="separatorMargin" [(ngModel)]="+data.dividirCuentasPorSillas"

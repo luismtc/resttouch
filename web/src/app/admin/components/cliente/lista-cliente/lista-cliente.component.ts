@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { Cliente } from '../../../interfaces/cliente';
 import { ClienteService } from '../../../services/cliente.service';
@@ -26,14 +27,18 @@ export class ListaClienteComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     public dialogAddCliente: MatDialog,
     private snackBar: MatSnackBar,
-    private clienteSrvc: ClienteService
+    private clienteSrvc: ClienteService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadClientes();
   }
 

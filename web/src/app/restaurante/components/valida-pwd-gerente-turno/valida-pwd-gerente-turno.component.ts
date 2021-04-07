@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { GLOBAL } from '../../../shared/global';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
 
 import { ComandaService } from '../../services/comanda.service';
 
@@ -11,13 +13,17 @@ import { ComandaService } from '../../services/comanda.service';
 export class ValidaPwdGerenteTurnoComponent implements OnInit {
 
   public data: any = { pwd: undefined };
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     public dialogRef: MatDialogRef<ValidaPwdGerenteTurnoComponent>,
-    private comandaSrvc: ComandaService
+    private comandaSrvc: ComandaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   cancelar = () => this.dialogRef.close();

@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 
   esMovil = (): boolean => {
     let estoyEnMovil = false;
-    estoyEnMovil = true; // Solo para desarrollo
+    // estoyEnMovil = true; // Solo para desarrollo
     const ua = navigator.userAgent;
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
       estoyEnMovil = true;

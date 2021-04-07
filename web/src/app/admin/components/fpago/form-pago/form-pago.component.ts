@@ -4,6 +4,7 @@ import { FormaPago } from '../../../interfaces/forma-pago';
 import { FpagoService } from '../../../services/fpago.service';
 import { GLOBAL } from '../../../../shared/global';
 import { ConfiguracionService } from '../../../services/configuracion.service';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 
 @Component({
@@ -16,14 +17,18 @@ export class FormPagoComponent implements OnInit {
   @Input() fpago: FormaPago;
   @Output() fpagoSavedEv = new EventEmitter();
   public noComandaSinFactura = true;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
     private fpagoSrvc: FpagoService,
-    private configSrvc: ConfiguracionService
+    private configSrvc: ConfiguracionService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.noComandaSinFactura = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_COMANDA_SIN_FACTURA) === false;
   }
 

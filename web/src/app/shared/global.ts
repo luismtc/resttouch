@@ -20,6 +20,7 @@ export const GLOBAL = {
     usrUnlockVar: 'rtunlock',
     rtClientePedido: 'rt_cliente_pedido',
     reintentos: 0,
+    IDIOMA_TECLADO: 'Español',
     CONSTANTES: {
         RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',
         RT_PANTALLA_TOMA_COMANDA: 'RT_PANTALLA_TOMA_COMANDA',

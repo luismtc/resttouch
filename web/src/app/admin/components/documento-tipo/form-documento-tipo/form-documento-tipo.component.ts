@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { DocumentoTipo } from '../../../interfaces/documento-tipo';
 import { DocumentoTipoService } from '../../../services/documento-tipo.service';
@@ -13,13 +15,17 @@ export class FormDocumentoTipoComponent implements OnInit {
 
   @Input() documentoTipo: DocumentoTipo;
   @Output() documentoTipoSavedEv = new EventEmitter();
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
-    private documentoTipoSrvc: DocumentoTipoService
+    private documentoTipoSrvc: DocumentoTipoService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit(): void {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   resetDocumentoTipo() {

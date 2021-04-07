@@ -21,6 +21,7 @@ export class FormClienteComponent implements OnInit {
   @ViewChild('txtNitCliente') txtNitCliente: MatInput;
   public esDialogo = false;
   public esMovil = false;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
 
   constructor(
     private snackBar: MatSnackBar,

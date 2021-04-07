@@ -25,9 +25,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
-// import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
-// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { PosRoutingModule } from './pos-routing.module';
 import { CobrarPedidoComponent } from './components/cobrar-pedido/cobrar-pedido.component';
@@ -49,6 +48,7 @@ import { FormFacturaManualComponent } from './components/facturaManual/form-fact
     PosRoutingModule,
     HttpClientModule,
     FormsModule,
+    MatKeyboardModule,
     SharedModule,
     AdminModule,
     MatListModule,

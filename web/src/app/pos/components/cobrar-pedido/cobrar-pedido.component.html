@@ -32,35 +32,22 @@
           </mat-select>
         </mat-form-field>
         <!--Inicia input de monto por forma de pago-->
-        <mat-form-field class="fullWidth" *ngIf="esMovil">
-          <input matInput placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
+        <mat-form-field class="fullWidth">
+          <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
+          <input matInput *ngIf="esMovil" placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
         </mat-form-field>
-        <!--
-        <mat-form-field class="fullWidth" *ngIf="!esMovil">
-          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Monto" placeholder="monto" name="monto" [(ngModel)]="formaPago.monto" required>
-        </mat-form-field>
-        -->
         <!--Fin de input de monto por forma de pago-->
         <!--Inicia input de propina por forma de pago-->
-        <mat-form-field class="fullWidth" *ngIf="esMovil">
-          <input matInput placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
+        <mat-form-field class="fullWidth">
+          <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
+          <input matInput *ngIf="esMovil" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
         </mat-form-field>
-        <!--
-        <mat-form-field class="fullWidth" *ngIf="!esMovil">
-          <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Propina" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
-        </mat-form-field>
-        -->
         <!--Fin de input de propina por forma de pago-->
         <!-- Inicia input de documento -->
-        <mat-form-field class="fullWidth" *ngIf="esMovil && pideDocumento">
-          <input matInput placeholder="Documento" name="documento" [(ngModel)]="formaPago.documento"
-            [required]="pideDocumento">
+        <mat-form-field class="fullWidth" *ngIf="pideDocumento">
+          <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Documento" name="documento" [(ngModel)]="formaPago.documento" [required]="pideDocumento">
+          <input matInput *ngIf="esMovil" placeholder="Documento" name="documento" [(ngModel)]="formaPago.documento" [required]="pideDocumento">
         </mat-form-field>
-        <!--
-        <mat-form-field class="fullWidth" *ngIf="!esMovil && pideDocumento">
-          <input matInput ng-virtual-keyboard ng-virtual-keyboard-placeholder="Documento" placeholder="Documento" name="documento" [(ngModel)]="formaPago.documento" [required]="pideDocumento">
-        </mat-form-field>
-        -->
         <!-- Fin de input de documento -->
         <div align="end">
           <button mat-raised-button type="button" color="accent" (click)="addFormaPago()"

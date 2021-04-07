@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { DocumentoTipo } from '../../../interfaces/documento-tipo';
 import { DocumentoTipoService } from '../../../services/documento-tipo.service';
@@ -23,12 +24,16 @@ export class ListaDocumentoTipoComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private tipoCompraVentaSrvc: DocumentoTipoService
+    private tipoCompraVentaSrvc: DocumentoTipoService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit(): void {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadDocumentosTipo();
   }
 

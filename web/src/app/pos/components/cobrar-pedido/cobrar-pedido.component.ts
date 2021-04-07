@@ -42,6 +42,7 @@ export class CobrarPedidoComponent implements OnInit {
   public factReq: FacturaRequest;
   public clienteSelected: Cliente;
   public esMovil = false;
+  public keyboardLayout: string;
   public facturando = false;
   public cargandoConf: any = { w: 75, h: 75 };
   public pideDocumento = false;
@@ -65,6 +66,7 @@ export class CobrarPedidoComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    this.keyboardLayout = GLOBAL.IDIOMA_TECLADO;
     this.resetFactReq();
     this.processData();
     this.loadFormasPago();

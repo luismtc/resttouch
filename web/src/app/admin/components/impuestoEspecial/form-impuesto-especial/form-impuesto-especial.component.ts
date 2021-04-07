@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { ImpuestoEspecial } from '../../../interfaces/impuesto-especial';
 import { ImpuestoEspecialService } from '../../../services/impuesto-especial.service';
@@ -13,13 +15,17 @@ export class FormImpuestoEspecialComponent implements OnInit {
 
   @Input() impuestoEspecial: ImpuestoEspecial;
   @Output() impuestoEspecialSavedEv = new EventEmitter();
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
-    private impuestoEspecialSrvc: ImpuestoEspecialService
+    private impuestoEspecialSrvc: ImpuestoEspecialService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   resetImpuestoEspecial() {

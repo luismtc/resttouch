@@ -37,6 +37,7 @@
     "@syncfusion/ej2-angular-inputs": "^18.4.39",
     "@syncfusion/ej2-angular-navigations": "^18.4.39",
     "@syncfusion/ej2-angular-pivotview": "^18.4.39",
+    "angular-onscreen-material-keyboard": "^0.5.1",
     "bootstrap": "^4.6.0",
     "chart.js": "^2.9.4",
     "file-saver": "^2.0.5",

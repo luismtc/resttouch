@@ -7,7 +7,8 @@
     <mat-card-content>
         <form #frmFpago="ngForm" (ngSubmit)="frmFpago.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="fpago.descripcion" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="fpago.descripcion" required>
+                <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="fpago.descripcion" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <input matInput type="number" placeholder="Porcentaje de comisión" name="comision_porcentaje" [(ngModel)]="fpago.comision_porcentaje">

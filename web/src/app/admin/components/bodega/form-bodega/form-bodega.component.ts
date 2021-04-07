@@ -1,8 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
-import {BodegaService} from '../../../../wms/services/bodega.service'
-import {Bodega} from '../../../../wms/interfaces/bodega'
+import {BodegaService} from '../../../../wms/services/bodega.service';
+import {Bodega} from '../../../../wms/interfaces/bodega';
 
 @Component({
   selector: 'app-form-bodega',
@@ -13,13 +15,17 @@ export class FormBodegaComponent implements OnInit {
 
   @Input() bodega: Bodega;
   @Output() bodegaSavedEv = new EventEmitter();
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
-    private srvBodega: BodegaService
+    private srvBodega: BodegaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   resetBodega = () => this.bodega = {

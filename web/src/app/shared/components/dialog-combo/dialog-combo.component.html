@@ -3,14 +3,9 @@
         <div class="col m12 s12">
             <h5>Cantidad</h5>
             <mat-form-field class="fullWidth">
-                <input type="number" 
-                    (change)="setCantidad()"
-                    matInput 
-                    placeholder="Cantidad" 
-                    min="1" 
-                    step="1" 
-                    [(ngModel)] ="seleccion.cantidad" 
-                    [ngModelOptions]="{standalone: true}">
+                <!--<input type="number" *ngIf="!esMovil" matKeyboard (change)="setCantidad()" matInput placeholder="Cantidad" min="1" step="1" [(ngModel)] ="seleccion.cantidad" [ngModelOptions]="{standalone: true}">
+                <input type="number" *ngIf="esMovil" (change)="setCantidad()" matInput placeholder="Cantidad" min="1" step="1" [(ngModel)] ="seleccion.cantidad" [ngModelOptions]="{standalone: true}">-->
+                <input type="number" (change)="setCantidad()" matInput placeholder="Cantidad" min="1" step="1" [(ngModel)] ="seleccion.cantidad" [ngModelOptions]="{standalone: true}">
             </mat-form-field>
         </div>
     </div>

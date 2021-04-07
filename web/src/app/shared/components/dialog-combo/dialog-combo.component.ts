@@ -2,6 +2,8 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ArticuloService } from '../../../wms/services/articulo.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../global';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
 
 export class ConfirmDialogComboModel {
   constructor(
@@ -26,12 +28,15 @@ export class DialogComboComponent implements OnInit {
   public producto: any;
   public combo: any;
   public seleccion: any;
+  public esMovil = false;
+  public keyboardLayout: string;
 
   constructor(
     public dialogRef: MatDialogRef<DialogComboComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogComboModel,
     private articuloSvr: ArticuloService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private ls: LocalstorageService
   ) {
     this.datos = {
       respuesta: false,
@@ -49,6 +54,8 @@ export class DialogComboComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    this.keyboardLayout = GLOBAL.IDIOMA_TECLADO;
     this.combo = [];
     this.getArticulos();
   }

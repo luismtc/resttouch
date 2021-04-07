@@ -33,10 +33,8 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
-// import { MatKeyboardModule } from '@ngx-material-keyboard/core';
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
-
-// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
 
 import { RestauranteRoutingModule } from './restaurante-routing.module';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
@@ -130,7 +128,8 @@ import { SeleccionaTurnoPrevioComponent } from './components/turno/selecciona-tu
     DragDropModule,
     MatBadgeModule,
     MatChipsModule,
-    MatBottomSheetModule
+    MatBottomSheetModule,
+    MatKeyboardModule
   ],
   providers: [
     MatNativeDateModule

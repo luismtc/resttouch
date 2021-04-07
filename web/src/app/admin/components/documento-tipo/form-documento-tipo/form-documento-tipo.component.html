@@ -5,10 +5,12 @@
     <mat-card-content>
         <form #frmDocumentoTipo="ngForm" (ngSubmit)="frmDocumentoTipo.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput placeholder="Descripción" name="descripcion" [(ngModel)]="documentoTipo.descripcion" minlength="1" maxlength="45" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Descripción" name="descripcion" [(ngModel)]="documentoTipo.descripcion" minlength="1" maxlength="45" required>
+                <input matInput *ngIf="esMovil" placeholder="Descripción" name="descripcion" [(ngModel)]="documentoTipo.descripcion" minlength="1" maxlength="45" required>
             </mat-form-field>            
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Código" name="codigo" [(ngModel)]="documentoTipo.codigo" minlength="1" maxlength="45">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Código" name="codigo" [(ngModel)]="documentoTipo.codigo" minlength="1" maxlength="45">
+                <input matInput *ngIf="esMovil" type="text" placeholder="Código" name="codigo" [(ngModel)]="documentoTipo.codigo" minlength="1" maxlength="45">
             </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDocumentoTipo.form.valid">

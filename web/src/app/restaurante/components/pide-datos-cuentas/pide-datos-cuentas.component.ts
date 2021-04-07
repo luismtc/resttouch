@@ -22,6 +22,7 @@ export class PideDatosCuentasComponent implements OnInit {
   public displayedColumns: string[] = ['numero', 'nombre'];
   public dataSource: MatTableDataSource<Cuenta>;
   public esMovil = false;
+  public keyboardLayout: string;
 
   constructor(
     public dialogRef: MatDialogRef<PideDatosCuentasComponent>,
@@ -32,6 +33,7 @@ export class PideDatosCuentasComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    this.keyboardLayout = GLOBAL.IDIOMA_TECLADO;
     this.setTableDataSource();
     for (let i = 0; i < (+this.data.comensales - 1); i++) {
       this.agregarFila();

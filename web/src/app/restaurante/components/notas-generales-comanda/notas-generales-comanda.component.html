@@ -2,7 +2,8 @@
 <mat-dialog-content>
     <form #frmNotasGenCom="ngForm" novalidate>
         <mat-form-field class="fullWidth">
-            <textarea matInput placeholder="Notas generales" name="notasGenerales" [(ngModel)]="data.notasGenerales" maxlength="1000"></textarea>
+            <textarea matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Notas generales" name="notasGenerales" [(ngModel)]="data.notasGenerales" maxlength="1000"></textarea>
+            <textarea matInput *ngIf="esMovil" placeholder="Notas generales" name="notasGenerales" [(ngModel)]="data.notasGenerales" maxlength="1000"></textarea>
         </mat-form-field>
     </form>
 </mat-dialog-content>

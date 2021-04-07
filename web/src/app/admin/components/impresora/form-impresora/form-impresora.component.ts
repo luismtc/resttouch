@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -14,13 +16,17 @@ export class FormImpresoraComponent implements OnInit {
 
   @Input() impresora: Impresora;
   @Output() impresoraSavedEv = new EventEmitter();
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
-    private impresoraSrvc: ImpresoraService
+    private impresoraSrvc: ImpresoraService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   resetImpresora = () => this.impresora = {

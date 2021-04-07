@@ -30,6 +30,7 @@ export class ListaProductosComandaComponent implements OnInit, OnChanges {
   @Input() mesaEnUso: any = {};
   @Output() productoRemovedEv = new EventEmitter();
   public esMovil = false;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public detalleComanda: DetalleComanda;
   public totalDeProductos = 0.00;
   public cantidadDeProductos = 0;

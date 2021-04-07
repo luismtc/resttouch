@@ -1,9 +1,10 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
-import {BodegaService} from '../../../../wms/services/bodega.service'
-import {Bodega} from '../../../../wms/interfaces/bodega'
+import { BodegaService } from '../../../../wms/services/bodega.service';
+import { Bodega } from '../../../../wms/interfaces/bodega';
 
 @Component({
   selector: 'app-lista-bodega',
@@ -22,20 +23,24 @@ export class ListaBodegaComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private srvBodega: BodegaService
+    private srvBodega: BodegaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.getBodegas();
   }
 
   getBodegas = () => {
-    this.srvBodega.get().subscribe((res:Bodega[]) => {
+    this.srvBodega.get().subscribe((res: Bodega[]) => {
       this.listaBodega = res;
       this.applyFilter();
-    })
+    });
   }
 
   applyFilter() {

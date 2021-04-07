@@ -5,7 +5,8 @@
     <mat-card-content>
         <form #frmImpuestoEspecial="ngForm" (ngSubmit)="frmImpuestoEspecial.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput placeholder="Descripción" name="descripcion" [(ngModel)]="impuestoEspecial.descripcion" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Descripción" name="descripcion" [(ngModel)]="impuestoEspecial.descripcion" required>
+                <input matInput *ngIf="esMovil" placeholder="Descripción" name="descripcion" [(ngModel)]="impuestoEspecial.descripcion" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <input matInput type="number" placeholder="Porcentaje" name="portcentaje" [(ngModel)]="impuestoEspecial.porcentaje" required>

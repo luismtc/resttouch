@@ -25,6 +25,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatRippleModule } from '@angular/material/core';
 
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
+
 import { FilterPipe } from './pipes/filter.pipe';
 import { WindowComponent } from './components/window/window.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
@@ -59,6 +61,7 @@ const config: SocketIoConfig = { url: `http://${window.location.hostname}:8988`,
     PortalModule,
     FormsModule,
     SocketIoModule.forRoot(config),
+    MatKeyboardModule,
     MatListModule,
     MatIconModule,
     MatFormFieldModule,

@@ -10,20 +10,13 @@
         <ng-container matColumnDef="nombre">
             <th mat-header-cell *matHeaderCellDef>Nombre</th>
             <td mat-cell *matCellDef="let element">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
-                    <input type="text" matInput name="nombre" [(ngModel)]="element.nombre" required>
+                <mat-form-field class="fullWidth">
+                    <input type="text" matInput *ngIf="esMovil" name="nombre" [(ngModel)]="element.nombre" required>
+                    <input type="text" matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" name="nombre" [(ngModel)]="element.nombre" required>
                     <button type="button" mat-button matSuffix mat-icon-button (click)="eliminarFila(element)">
                         <mat-icon class="iconFontSize">close</mat-icon>
                     </button>
                 </mat-form-field>
-                <!--
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Nombre" name="nombre" [(ngModel)]="element.nombre" required>
-                    <button type="button" mat-button matSuffix mat-icon-button (click)="eliminarFila(element)">
-                        <mat-icon class="iconFontSize">close</mat-icon>
-                    </button>
-                </mat-form-field>
-                -->
             </td>
         </ng-container>        
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

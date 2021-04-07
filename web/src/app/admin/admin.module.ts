@@ -27,7 +27,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { SidebarDirective } from './directives/sidebar.directive';
-// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
 import { PivotViewAllModule, PivotFieldListAllModule } from '@syncfusion/ej2-angular-pivotview';
 import {
@@ -132,7 +132,7 @@ import { FormDocumentoTipoComponent } from './components/documento-tipo/form-doc
     MatInputModule, MatCardModule, MatDividerModule, MatTabsModule, MatTableModule, MatSelectModule, MatCheckboxModule, MatButtonModule,
     MatSnackBarModule, MatToolbarModule, MatMenuModule, MatGridListModule, MatPaginatorModule, MatTreeModule, MatDialogModule,
     MatProgressBarModule, PivotViewAllModule, PivotFieldListAllModule, FlexLayoutModule, ChartModule, NgIdleKeepaliveModule.forRoot(),
-    MatAutocompleteModule, ChartsModule
+    MatAutocompleteModule, ChartsModule, MatKeyboardModule
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent
