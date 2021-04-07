@@ -7,7 +7,8 @@
     <mat-card-content>
         <form #frmMedida="ngForm" (ngSubmit)="frmMedida.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="medida.descripcion" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="medida.descripcion" required>
+                <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="medida.descripcion" required>
             </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmMedida.form.valid">

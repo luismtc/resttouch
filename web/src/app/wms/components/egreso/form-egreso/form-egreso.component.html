@@ -54,12 +54,7 @@
                 </mat-select>
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="+egreso.traslado == 1 && ([2, 3].indexOf(+egreso.estatus_movimiento) < 0)">
-                <mat-label>Proveedor</mat-label>
-                <!--<mat-select name="proveedor" [(ngModel)]="egreso.proveedor" [required]="+egreso.traslado == 1">
-                    <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
-                        ({{prov.nit}}) {{prov.razon_social}}
-                    </mat-option>
-                </mat-select>-->
+                <mat-label>Proveedor</mat-label>                
                 <input type="text" [(ngModel)]="txtProveedorSelected" [ngModelOptions]="{standalone: true}" placeholder="Proveedor" matInput [matAutocomplete]="autoProveedores" (keyup)="filtrarProveedores(txtProveedorSelected)" required>
                 <mat-autocomplete #autoProveedores="matAutocomplete" [displayWith]="displayProveedor">
                     <mat-option *ngFor="let prov of filteredProveedores" [value]="prov">
@@ -103,17 +98,7 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmDetalleEgreso="ngForm" *ngIf="showDetalleEgresoForm"
-            (ngSubmit)="frmDetalleEgreso.form.valid && onSubmitDetail()" novalidate>
-            <!--
-            <mat-form-field class="fullWidth">
-                <mat-label>Artículo</mat-label>
-                <mat-select name="articulo" [(ngModel)]="detalleEgreso.articulo" required>
-                    <mat-option *ngFor="let a of articulos" [value]="a.articulo">
-                        {{a.descripcion}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            -->            
+            (ngSubmit)="frmDetalleEgreso.form.valid && onSubmitDetail()" novalidate>            
             <mat-form-field class="fullWidth">
                 <mat-label>Artículo</mat-label>                    
                 <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
@@ -136,25 +121,7 @@
                 <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleEgreso.cantidad"
                     (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                     required>
-            </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                    ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
-                    [(ngModel)]="detalleEgreso.cantidad"
-                    (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
-                    required>
-            </mat-form-field>
-            -->
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                    ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
-                    [(ngModel)]="detalleEgreso.precio_unitario"
-                    (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
-                    required>
-            </mat-form-field>
-            -->
+            </mat-form-field>            
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"
                     [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0 || bloqueoBotones"
@@ -175,7 +142,8 @@
         <hr *ngIf="detallesEgreso.length > 0" />
         
             <mat-form-field class="fullWidth">
-                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" (input)="applyFilter($event.target.value)" placeholder="Buscar">
+                <input matInput *ngIf="esMovil" (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
             </mat-form-field>
         
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z4 full-width"
@@ -264,31 +232,13 @@
                 <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleMerma.cantidad"
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
                     required>
-            </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                    ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
-                    [(ngModel)]="detalleMerma.cantidad"
-                    (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
-                    required>
-            </mat-form-field>
-            -->
+            </mat-form-field>            
             <mat-form-field class="fullWidth" *ngIf="esMovil">
                 <input matInput placeholder="Costo unitario" name="precio_unitario"
                     [(ngModel)]="detalleMerma.precio_unitario"
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
                     required>
-            </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                    ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
-                    [(ngModel)]="detalleMerma.precio_unitario"
-                    (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
-                    required>
-            </mat-form-field>
-            -->
+            </mat-form-field>            
             <div align="end">
                 <button mat-raised-button type="button" color="accent" (click)="addToDetailMerma()"
                     [disabled]="!frmMerma.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"

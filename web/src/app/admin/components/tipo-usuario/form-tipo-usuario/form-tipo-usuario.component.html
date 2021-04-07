@@ -16,7 +16,8 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                        <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" required>
+                        <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" required>
+                        <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" required>
                     </mat-form-field>
                     <div align="end">
                         <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTipoUsuario.form.valid">
@@ -38,7 +39,7 @@
             <mat-card-content>
                 <form #frmTipoUsuarioCGrupo="ngForm" (ngSubmit)="frmTipoUsuarioCGrupo.form.valid && onSubmitUTCGrupo()" novalidate>
                     <mat-form-field class="fullWidth">
-                        <mat-label>Categoría</mat-label>
+                        <mat-label>Categoría</mat-label>                        
                         <input type="text" [(ngModel)]="categoria" [ngModelOptions]="{standalone: true}" placeholder="Categoría" matInput [matAutocomplete]="autoCategorias" (keyup)="filtrarCategorias(categoria)">
                         <mat-autocomplete #autoCategorias="matAutocomplete" [displayWith]="displayCategoria">
                             <mat-option *ngFor="let c of filteredCategorias" [value]="c">
@@ -47,7 +48,7 @@
                         </mat-autocomplete>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                        <mat-label>Sub-categoría</mat-label>
+                        <mat-label>Sub-categoría</mat-label>                        
                         <input type="text" [(ngModel)]="txtSubCat" [ngModelOptions]="{standalone: true}" placeholder="Categoría" matInput [matAutocomplete]="autoSubCategorias" (keyup)="filtrarSubCategorias(txtSubCat)">
                         <mat-autocomplete #autoSubCategorias="matAutocomplete" [displayWith]="displaySubCategoria">
                             <mat-option *ngFor="let cg of filteredCgrupos" [value]="cg">

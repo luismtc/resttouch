@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -14,28 +16,30 @@ export class FormMedidaComponent implements OnInit {
 
   @Input() medida: Medida;
   @Output() medidaSavedEv = new EventEmitter();
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private _snackBar: MatSnackBar,
-    private medidaSrvc: MedidaService
+    private snackBar: MatSnackBar,
+    private medidaSrvc: MedidaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
-  resetMedida = () => this.medida = { 
-    medida: null, descripcion: null
-  };
+  resetMedida = () => this.medida = { medida: null, descripcion: null };
 
   onSubmit = () => {
     this.medidaSrvc.save(this.medida).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res.exito) {
         this.medidaSavedEv.emit();
         this.resetMedida();
-        this._snackBar.open('Medida agregada...', 'Unida de medida', { duration: 3000 });
+        this.snackBar.open('Medida agregada...', 'Unida de medida', { duration: 3000 });
       } else {
-        this._snackBar.open(`ERROR: ${res.mensaje}`, 'Unida de medida', { duration: 3000 });        
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Unida de medida', { duration: 3000 });
       }
     });
   }

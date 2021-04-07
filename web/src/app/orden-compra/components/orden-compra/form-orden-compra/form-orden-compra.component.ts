@@ -26,8 +26,8 @@ export class FormOrdenCompraComponent implements OnInit {
   @Input() ordenCompra: OrdenCompra;
   @Output() ordenCompraSavedEv = new EventEmitter();
 
-  public showOrdenCompraForm: boolean = true;
-  public showDetalleOrdenCompraForm: boolean = true;
+  public showOrdenCompraForm = true;
+  public showDetalleOrdenCompraForm = true;
 
   public detallesOrdenCompra: DetalleOrdenCompra[] = [];
   public detalleOrdenCompra: DetalleOrdenCompra;
@@ -37,10 +37,11 @@ export class FormOrdenCompraComponent implements OnInit {
   public articulos: Articulo[] = [];
   public tiposMovimiento: TipoMovimiento[] = [];
   public bodegas: Bodega[] = [];
-  public esMovil: boolean = false;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private ls: LocalstorageService,
     private ordenCompraSrvc: OrdenCompraService,
     private proveedorSrvc: ProveedorService,
@@ -84,14 +85,15 @@ export class FormOrdenCompraComponent implements OnInit {
 
   resetOrdenCompra = () => {
     this.ordenCompra = {
-      orden_compra: null, proveedor: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), notas: null, estatus_movimiento: 1, bodega: null, tipo_movimiento: null
-    }
+      orden_compra: null, proveedor: null, usuario: (this.ls.get(GLOBAL.usrTokenVar).idusr || 0), notas: null,
+      estatus_movimiento: 1, bodega: null, tipo_movimiento: null
+    };
     this.resetDetalleOrdenCompra();
   }
 
   onSubmit = () => {
     this.ordenCompraSrvc.save(this.ordenCompra).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res.exito) {
         this.ordenCompraSavedEv.emit();
         this.resetOrdenCompra();
@@ -102,7 +104,7 @@ export class FormOrdenCompraComponent implements OnInit {
           usuario: res.compra.usuario,
           notas: res.compra.notas,
           estatus_movimiento: 1
-        }
+        };
         this.loadDetalleOrdenCompra(this.ordenCompra.orden_compra);
       }
     });
@@ -117,23 +119,24 @@ export class FormOrdenCompraComponent implements OnInit {
   }
 
   resetDetalleOrdenCompra = () => this.detalleOrdenCompra = {
-    orden_compra_detalle: null, orden_compra: (!!this.ordenCompra.orden_compra ? this.ordenCompra.orden_compra : null), articulo: null, cantidad: null, monto: null, total: null
-  };
+    orden_compra_detalle: null, orden_compra: (!!this.ordenCompra.orden_compra ? this.ordenCompra.orden_compra : null), articulo: null,
+    cantidad: null, monto: null, total: null
+  }
 
   loadDetalleOrdenCompra = (idoc: number = +this.ordenCompra.orden_compra) => {
-    this.ordenCompraSrvc.getDetalle(idoc, {orden_compra: idoc}).subscribe(res => {
-      //console.log(res);
+    this.ordenCompraSrvc.getDetalle(idoc, { orden_compra: idoc }).subscribe(res => {
+      // console.log(res);
       if (res) {
         this.detallesOrdenCompra = res;
         this.updateTableDataSource();
-      }      
+      }
     });
   }
 
   getDetalleOrdenCompra = (idoc: number = +this.ordenCompra.orden_compra, iddetalle: number) => {
-    this.ordenCompraSrvc.getDetalle(idoc, {orden_compra_detalle: iddetalle}).subscribe((res: any[]) => {
-      //console.log(res);
-      if (res) {        
+    this.ordenCompraSrvc.getDetalle(idoc, { orden_compra_detalle: iddetalle }).subscribe((res: any[]) => {
+      // console.log(res);
+      if (res) {
         this.detalleOrdenCompra = {
           orden_compra_detalle: res[0].orden_compra_detalle,
           orden_compra: res[0].orden_compra,
@@ -143,14 +146,14 @@ export class FormOrdenCompraComponent implements OnInit {
           total: +res[0].total
         };
         this.showDetalleOrdenCompraForm = true;
-      }      
+      }
     });
   }
 
   onSubmitDetail = () => {
     this.detalleOrdenCompra.orden_compra = this.ordenCompra.orden_compra;
     this.ordenCompraSrvc.saveDetalle(this.detalleOrdenCompra).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res) {
         this.loadDetalleOrdenCompra();
         this.resetDetalleOrdenCompra();

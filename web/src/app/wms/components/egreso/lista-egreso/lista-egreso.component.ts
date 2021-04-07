@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 
 import { Egreso } from '../../../interfaces/egreso';
 import { EgresoService } from '../../../services/egreso.service';
@@ -22,12 +23,16 @@ export class ListaEgresoComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private egresoSrvc: EgresoService
+    private egresoSrvc: EgresoService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadEgresos();
   }
 

@@ -14,6 +14,8 @@ import { GLOBAL } from '../../../shared/global';
 export class SolicitaPinInactividadComponent implements OnInit {
 
   public pinDesbloqueo: string = undefined;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     public dialogRef: MatDialogRef<SolicitaPinInactividadComponent>,
@@ -24,6 +26,7 @@ export class SolicitaPinInactividadComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.ls.clear(GLOBAL.usrUnlockVar);
   }
 

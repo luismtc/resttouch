@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { MatDialog } from '@angular/material/dialog';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { Proveedor } from '../../../../wms/interfaces/proveedor';
 import { ProveedorService } from '../../../../wms/services/proveedor.service';
@@ -14,7 +14,7 @@ import { ProveedorService } from '../../../../wms/services/proveedor.service';
 export class ListaProveedorComponent implements OnInit {
 
   public lstProveedores: Proveedor[];
-  public lstProveedoresPaged: Proveedor[];  
+  public lstProveedoresPaged: Proveedor[];
   @Output() getProveedorEv = new EventEmitter();
 
   public length = 0;
@@ -23,12 +23,16 @@ export class ListaProveedorComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private proveedorSrvc: ProveedorService
+    private proveedorSrvc: ProveedorService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadProveedores();
   }
 
@@ -41,7 +45,7 @@ export class ListaProveedorComponent implements OnInit {
       this.length = this.lstProveedores.length;
       this.lstProveedoresPaged = PaginarArray(this.lstProveedores, this.pageSize, this.pageIndex + 1);
     }
-  }  
+  }
 
   loadProveedores = () => {
     this.proveedorSrvc.get().subscribe(lst => {
@@ -51,7 +55,7 @@ export class ListaProveedorComponent implements OnInit {
           this.applyFilter();
         }
       }
-    });        
+    });
   }
 
   getProveedor = (obj: Proveedor) => this.getProveedorEv.emit(obj);

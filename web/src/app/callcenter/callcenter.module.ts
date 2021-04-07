@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { AdminModule } from '../admin/admin.module';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -41,6 +42,7 @@ import { PideTelefonoDialogComponent } from './components/pide-telefono-dialog/p
     CallcenterRoutingModule,
     HttpClientModule,
     FormsModule,
+    MatKeyboardModule,
     SharedModule,
     AdminModule,
     FlexLayoutModule,

@@ -1,6 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../shared/global';
+import { LocalstorageService } from '../../../admin/services/localstorage.service';
 
 import { ClienteService } from '../../../admin/services/cliente.service';
 import { Cliente } from '../../../admin/interfaces/cliente';
@@ -15,16 +17,20 @@ export class PideTelefonoDialogComponent implements OnInit {
 
   public telefonoPedido: string = null;
   public clientes: Cliente[] = [];
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     public dialogRef: MatDialogRef<PideTelefonoDialogComponent>,
     private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private clienteSrvc: ClienteService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit(): void {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   validateKey = (e: any) => {
@@ -40,6 +46,7 @@ export class PideTelefonoDialogComponent implements OnInit {
   cancelar = () => this.dialogRef.close();
 
   buscar = () => {
+    this.telefonoPedido = this.telefonoPedido.trim().toUpperCase().replace(/[^0-9]/gi, '');
     if (this.telefonoPedido && this.telefonoPedido.length >= 8) {
       this.clienteSrvc.get({ telefono: this.telefonoPedido }).subscribe((res: Cliente[]) => {
         if (res && res.length > 0) {

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { TipoCompraVenta } from '../../../interfaces/tipo-compra-venta';
 import { TipoCompraVentaService } from '../../../services/tipo-compra-venta.service';
@@ -13,13 +15,17 @@ export class FormTipoCompraVentaComponent implements OnInit {
 
   @Input() tipoCompraVenta: TipoCompraVenta;
   @Output() tipoCompraVentaSavedEv = new EventEmitter();
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
-    private tipoCompraVentaSrvc: TipoCompraVentaService
+    private tipoCompraVentaSrvc: TipoCompraVentaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit(): void {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   resetTipoCompraVenta() {

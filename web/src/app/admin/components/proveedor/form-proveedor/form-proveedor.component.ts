@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { Proveedor } from '../../../../wms/interfaces/proveedor';
 import { ProveedorService } from '../../../../wms/services/proveedor.service';
@@ -13,13 +15,17 @@ export class FormProveedorComponent implements OnInit {
 
   @Input() proveedor: Proveedor;
   @Output() proveedorSavedEv = new EventEmitter();
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
-    private proveedorSrvc: ProveedorService
+    private proveedorSrvc: ProveedorService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
 
   resetProveedor = () => this.proveedor = {

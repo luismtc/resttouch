@@ -24,8 +24,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 
-// import { MatKeyboardModule } from '@ngx-material-keyboard/core';
-// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
 import { OrdenCompraRoutingModule } from './orden-compra-routing.module';
 import { OrdenCompraComponent } from './components/orden-compra/orden-compra/orden-compra.component';
@@ -41,6 +40,7 @@ import { FormOrdenCompraComponent } from './components/orden-compra/form-orden-c
     SharedModule,
     HttpClientModule,
     FormsModule,
+    MatKeyboardModule,
     MatListModule,
     MatIconModule,
     MatFormFieldModule,

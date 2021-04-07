@@ -5,19 +5,24 @@
     <mat-card-content>
         <form #frmUsuario="ngForm" (ngSubmit)="frmUsuario.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput placeholder="Nombres" name="nombres" [(ngModel)]="usuario.nombres" maxlength="255" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Nombres" name="nombres" [(ngModel)]="usuario.nombres" maxlength="255" required>
+                <input matInput *ngIf="esMovil" placeholder="Nombres" name="nombres" [(ngModel)]="usuario.nombres" maxlength="255" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput placeholder="Apellidos" name="apellidos" [(ngModel)]="usuario.apellidos" maxlength="255" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Apellidos" name="apellidos" [(ngModel)]="usuario.apellidos" maxlength="255" required>
+                <input matInput *ngIf="esMovil" placeholder="Apellidos" name="apellidos" [(ngModel)]="usuario.apellidos" maxlength="255" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" maxlength="15" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" maxlength="15" required>
+                <input matInput *ngIf="esMovil" placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" maxlength="15" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="password" placeholder="Contraseña" name="contrasenia" minlength="4" maxlength="10" [(ngModel)]="usuario.contrasenia">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="password" placeholder="Contraseña" name="contrasenia" minlength="4" maxlength="10" [(ngModel)]="usuario.contrasenia">
+                <input matInput *ngIf="esMovil" type="password" placeholder="Contraseña" name="contrasenia" minlength="4" maxlength="10" [(ngModel)]="usuario.contrasenia">
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="password" placeholder="Pin desbloqueo" name="pindesbloqueo" [(ngModel)]="usuario.pindesbloqueo" minlength="4" maxlength="32" [required]="habilitaBloqueo">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="password" placeholder="Pin desbloqueo" name="pindesbloqueo" [(ngModel)]="usuario.pindesbloqueo" minlength="4" maxlength="32" [required]="habilitaBloqueo">
+                <input matInput *ngIf="esMovil" type="password" placeholder="Pin desbloqueo" name="pindesbloqueo" [(ngModel)]="usuario.pindesbloqueo" minlength="4" maxlength="32" [required]="habilitaBloqueo">
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Sede</mat-label>

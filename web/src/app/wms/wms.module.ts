@@ -27,8 +27,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 
-// import { MatKeyboardModule } from '@ngx-material-keyboard/core';
-// import { NgVirtualKeyboardModule } from '@protacon/ng-virtual-keyboard';
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
 import { WmsRoutingModule } from './wms-routing.module';
 import { ListaProductoComponent } from './components/producto/lista-producto/lista-producto.component';
@@ -70,6 +69,7 @@ import { SubCategoriaProductoComponent } from './components/producto/sub-categor
     SharedModule,
     HttpClientModule,
     FormsModule,
+    MatKeyboardModule,
     MatListModule,
     MatIconModule,
     MatFormFieldModule,

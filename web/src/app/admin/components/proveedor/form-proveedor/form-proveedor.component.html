@@ -7,13 +7,16 @@
     <mat-card-content>
         <form #frmProveedor="ngForm" (ngSubmit)="frmProveedor.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Razón Social" name="razon_social" [(ngModel)]="proveedor.razon_social" minlength="1" maxlength="150" required>
+                <input matInput type="text" *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Razón Social" name="razon_social" [(ngModel)]="proveedor.razon_social" minlength="1" maxlength="150" required>
+                <input matInput type="text" *ngIf="esMovil" placeholder="Razón Social" name="razon_social" [(ngModel)]="proveedor.razon_social" minlength="1" maxlength="150" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="N.I.T." name="nit" [(ngModel)]="proveedor.nit" minlength="1" maxlength="25" required>
+                <input matInput type="text" *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="N.I.T." name="nit" [(ngModel)]="proveedor.nit" minlength="1" maxlength="25" required>
+                <input matInput type="text" *ngIf="esMovil" placeholder="N.I.T." name="nit" [(ngModel)]="proveedor.nit" minlength="1" maxlength="25" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Código" name="codigo" [(ngModel)]="proveedor.codigo" minlength="1" maxlength="45">
+                <input matInput type="text" *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Código" name="codigo" [(ngModel)]="proveedor.codigo" minlength="1" maxlength="45">
+                <input matInput type="text" *ngIf="esMovil" placeholder="Código" name="codigo" [(ngModel)]="proveedor.codigo" minlength="1" maxlength="45">
             </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmProveedor.form.valid">

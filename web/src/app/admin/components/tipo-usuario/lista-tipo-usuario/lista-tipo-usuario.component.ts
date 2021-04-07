@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { UsuarioTipo } from '../../../interfaces/usuario-tipo';
 import { TipoUsuarioService } from '../../../services/tipo-usuario.service';
@@ -23,10 +24,16 @@ export class ListaTipoUsuarioComponent implements OnInit {
 	public pageIndex = 0;
 	public pageEvent: PageEvent;
 	public txtFiltro = '';
+	public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  	public esMovil = false;
 
-	constructor(private tipoUsuarioSrvc: TipoUsuarioService) { }
+	constructor(
+		private tipoUsuarioSrvc: TipoUsuarioService,
+		private ls: LocalstorageService
+	) { }
 
 	ngOnInit() {
+		this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
 		this.loadTipoUsuario();
 	}
 

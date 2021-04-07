@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 
 import { OrdenCompra } from '../../../interfaces/orden-compra';
 import { OrdenCompraService } from '../../../services/orden-compra.service';
@@ -22,12 +23,16 @@ export class ListaOrdenCompraComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private ordenCompraSrvc: OrdenCompraService
+    private ordenCompraSrvc: OrdenCompraService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadOrdenesCompra();
   }
 

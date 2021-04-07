@@ -19,8 +19,8 @@ import { ArticuloService } from '../../../services/articulo.service';
 import { TransformacionService } from '../../../services/transformacion.service';
 import { Presentacion } from '../../../../admin/interfaces/presentacion';
 import { PresentacionService } from '../../../../admin/services/presentacion.service';
-import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+// import { PageEvent } from '@angular/material/paginator';
+// import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 @Component({
   selector: 'app-form-egreso',
@@ -53,6 +53,7 @@ export class FormEgresoComponent implements OnInit {
   public presentaciones: Presentacion[] = [];
   public fltrPresentaciones: Presentacion[] = [];
   public fltrPresentacionesMerma: Presentacion[] = [];
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
   public bloqueoBotones = false;
   public txtArticuloSelected: (Articulo | string) = undefined;

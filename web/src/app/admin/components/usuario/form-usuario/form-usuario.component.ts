@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { Usuario } from '../../../models/usuario';
 import { UsuarioService } from '../../../services/usuario.service';
@@ -19,15 +20,19 @@ export class FormUsuarioComponent implements OnInit {
   @Output() usrSavedEv = new EventEmitter();
   public sedes: Sede[] = [];
   public habilitaBloqueo = false;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
     private usuarioSrvc: UsuarioService,
     private sedeSrvc: SedeService,
-    private configSrvc: ConfiguracionService
+    private configSrvc: ConfiguracionService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadSedes();
     this.habilitaBloqueo = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_HABILITA_BLOQUEO_INACTIVIDAD);
   }

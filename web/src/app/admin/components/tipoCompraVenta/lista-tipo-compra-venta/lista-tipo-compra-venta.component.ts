@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { TipoCompraVenta } from '../../../interfaces/tipo-compra-venta';
 import { TipoCompraVentaService } from '../../../services/tipo-compra-venta.service';
@@ -22,12 +23,16 @@ export class ListaTipoCompraVentaComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private tipoCompraVentaSrvc: TipoCompraVentaService
+    private tipoCompraVentaSrvc: TipoCompraVentaService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit(): void {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadTiposCompraVenta();
   }
 

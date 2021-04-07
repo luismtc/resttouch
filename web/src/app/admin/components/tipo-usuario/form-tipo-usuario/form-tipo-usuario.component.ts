@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MatSelectChange } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GLOBAL } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { UsuarioTipo } from '../../../interfaces/usuario-tipo';
 import { UsuarioTipoCategoriaGrupo, UsuarioTipoCGrupo } from '../../../interfaces/usuario-tipo-categoria-grupo';
@@ -31,15 +32,19 @@ export class FormTipoUsuarioComponent implements OnInit {
   public filteredCategorias: Categoria[] = [];
   public categoria: (Categoria | string) = undefined;
   public txtSubCat: (CategoriaGrupoResponse | string) = undefined;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
     private tipoUsuarioSrvc: TipoUsuarioService,
     private jerarquiaSrvc: JerarquiaService,
-    private articuloSrvc: ArticuloService
+    private articuloSrvc: ArticuloService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadJerarquia();
     this.loadCategorias();
     this.resetTipoUsuarioCGrupo();

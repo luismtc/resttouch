@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { LocalstorageService } from '../../../services/localstorage.service';
 
 import { AnulacionService } from '../../../services/anulacion.service';
 import { RazonAnulacion } from '../../../interfaces/razon-anulacion';
@@ -22,20 +23,24 @@ export class ListaRazonAnulacionComponent implements OnInit {
   public pageIndex = 0;
   public pageEvent: PageEvent;
   public txtFiltro = '';
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private srvAnulacion: AnulacionService
+    private srvAnulacion: AnulacionService,
+    private ls: LocalstorageService
   ) { }
 
   ngOnInit() {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.getRazones();
   }
 
   getRazones = () => {
-    this.srvAnulacion.get().subscribe((res:RazonAnulacion[]) => {
+    this.srvAnulacion.get().subscribe((res: RazonAnulacion[]) => {
       this.listaRazonAnulacion = res;
       this.applyFilter();
-    })
+    });
   }
 
   applyFilter() {
