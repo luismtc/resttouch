@@ -157,11 +157,12 @@ class Comanda_model extends General_Model
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
 		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
+			$nuevo = ($det->getPK() == null);
 			$result = $det->guardar($args);
 			$idx = $det->getPK();
 			$receta = $art->getReceta();
 
-			if (count($receta) > 0 && $art->combo == 0 && $art->multiple == 0) {
+			if (count($receta) > 0 && $art->combo == 0 && $art->multiple == 0 && $nuevo) {
 				foreach ($receta as $rec) {
 					$detr = new Dcomanda_model();
 					$dato = [
