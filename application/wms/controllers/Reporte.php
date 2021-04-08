@@ -12,7 +12,7 @@ class Reporte extends CI_Controller {
 		$this->load->model([
 			'Sede_model',
 			'Empresa_model',
-			'Reporte_model', 
+			'reporte/Reporte_model', 
 			'Articulo_model', 
 			'Receta_model',
 			'Ingreso_model',
@@ -156,7 +156,7 @@ class Reporte extends CI_Controller {
 		$rpt = new Reporte_model();
 		$rpt->setTipo(2);
 		$exist = $rpt->getExistencias($_GET);
-
+		$dato = [];
 		foreach ($exist as $row) {
 			$art = new Articulo_model($row->articulo);
 			$pres = $art->getPresentacionReporte();
