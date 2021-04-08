@@ -117,7 +117,7 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth">
                 <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleEgreso.cantidad"
                     (change)="detalleEgreso.precio_total = +detalleEgreso.precio_unitario * +detalleEgreso.cantidad"
                     required>
@@ -228,12 +228,12 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth">
                 <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleMerma.cantidad"
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
                     required>
             </mat-form-field>            
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth">
                 <input matInput placeholder="Costo unitario" name="precio_unitario"
                     [(ngModel)]="detalleMerma.precio_unitario"
                     (change)="detalleMerma.precio_total = +detalleMerma.precio_unitario * +detalleMerma.cantidad"
