@@ -50,12 +50,7 @@
                         </button>
                     </mat-form-field>
                     <mat-form-field class="fullWidth" *ngIf="saveToDB">
-                        <mat-label>Proveedor</mat-label>
-                        <!--<mat-select name="proveedor" [(ngModel)]="ingreso.proveedor" required>
-                            <mat-option *ngFor="let prov of proveedores" [value]="prov.proveedor">
-                                ({{prov.nit}}) {{prov.razon_social}}
-                            </mat-option>
-                        </mat-select>-->
+                        <mat-label>Proveedor</mat-label>                        
                         <input type="text" [(ngModel)]="txtProveedorSelected" [ngModelOptions]="{standalone: true}"
                             placeholder="Proveedor" matInput [matAutocomplete]="autoProveedores"
                             (keyup)="filtrarProveedores(txtProveedorSelected)" required>
@@ -66,16 +61,9 @@
                         </mat-autocomplete>
 
                     </mat-form-field>
-                    <mat-form-field class="fullWidth" *ngIf="esMovil">
+                    <mat-form-field class="fullWidth">
                         <input matInput placeholder="Comentarios" name="comentario" [(ngModel)]="ingreso.comentario">
-                    </mat-form-field>
-                    <!--
-                    <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                        <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
-                            ng-virtual-keyboard-placeholder="Comentarios" placeholder="Comentarios" name="comentario"
-                            [(ngModel)]="ingreso.comentario">
-                    </mat-form-field>
-                    -->
+                    </mat-form-field>                    
                     <div align="end">
                         <button mat-raised-button type="submit" color="accent" class="btnAccion"
                             [disabled]="!frmIngreso.form.valid || bloqueoBotones || +documento.enviado === 1" *ngIf="saveToDB">
@@ -106,15 +94,7 @@
             </mat-card-title>
             <mat-card-content>
                 <form #frmDetalleIngreso="ngForm" *ngIf="showDetalleIngresoForm"
-                    (ngSubmit)="frmDetalleIngreso.form.valid && onSubmitDetail()" novalidate>
-                    <!--<mat-form-field class="fullWidth">
-                        <mat-label>Artículo</mat-label>
-                        <mat-select name="articulo" [(ngModel)]="detalleIngreso.articulo" required>
-                            <mat-option *ngFor="let a of articulos" [value]="a.articulo">
-                                {{a.descripcion}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>-->
+                    (ngSubmit)="frmDetalleIngreso.form.valid && onSubmitDetail()" novalidate>                    
                     <mat-form-field class="fullWidth">
                         <mat-label>Artículo</mat-label>
                         <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}"
@@ -135,35 +115,17 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-form-field class="fullWidth" *ngIf="esMovil">
+                    <mat-form-field class="fullWidth">
                         <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleIngreso.cantidad"
                             (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                             required>
-                    </mat-form-field>
-                    <!--
-                    <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                        <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                            ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
-                            [(ngModel)]="detalleIngreso.cantidad"
-                            (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
-                            required>
-                    </mat-form-field>
-                    -->
-                    <mat-form-field class="fullWidth" *ngIf="esMovil && saveToDB">
+                    </mat-form-field>                    
+                    <mat-form-field class="fullWidth" *ngIf="saveToDB">
                         <input matInput placeholder="Costo unitario Con IVA" name="precio_unitario"
                             [(ngModel)]="detalleIngreso.precio_unitario"
                             (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                             required>
-                    </mat-form-field>
-                    <!--
-                    <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                        <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                            ng-virtual-keyboard-placeholder="Costo unitario" placeholder="Costo unitario" name="precio_unitario"
-                            [(ngModel)]="detalleIngreso.precio_unitario"
-                            (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
-                            required>
-                    </mat-form-field>
-                    -->
+                    </mat-form-field>                    
                     <div align="end">
                         <button mat-raised-button type="submit" color="accent" class="btnAccion"
                             [disabled]="!frmDetalleIngreso.form.valid || bloqueoBotones || +documento.enviado === 1" *ngIf="saveToDB">

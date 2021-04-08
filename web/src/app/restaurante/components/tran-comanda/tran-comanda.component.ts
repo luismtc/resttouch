@@ -28,6 +28,7 @@ import { ComandaService } from '../../services/comanda.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 import { Cliente } from '../../../admin/interfaces/cliente';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-tran-comanda',
@@ -503,8 +504,9 @@ export class TranComandaComponent implements OnInit {
   }
 
   printToBT = (msgToPrint: string = '') => {
-    const AppHref = `http://resttouch.c807.com/impresion/${msgToPrint}`;
-    const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+    const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
+    // const AppHref = `http://resttouch.c807.com/impresion/${msgToPrint}`;
+    const wref = window.open(AppHref, `PrntBT`, 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
     setTimeout(() => wref.close(), 3000);
     this.bloqueoBotones = false;
   }
