@@ -1,0 +1,6 @@
+<div class="noticia">
+    <p *ngFor="let noti of data; index as i">{{i + 1}}) {{noti.notificacion}}</p>
+</div>
+<div align="right">
+    <button mat-raised-button color="accent" (click)="cerrar()">Cerrar</button>
+</div>

@@ -22,6 +22,8 @@ export class SubCategoriaProductoComponent implements OnInit {
   public categoriaGrupo: CategoriaGrupo;
   public categoriasGruposPadre: CategoriaGrupo[] = [];
   public categoriasGrupos: CategoriaGrupo[] = [];
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -32,6 +34,7 @@ export class SubCategoriaProductoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadCategorias();
     this.loadImpresoras();
   }

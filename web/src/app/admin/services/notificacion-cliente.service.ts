@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
-import { Moneda } from '../interfaces/moneda';
+import { NotificacionCliente } from '../interfaces/notificacion-cliente';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import * as qs from 'qs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MonedaService {
+export class NotificacionClienteService {
 
   private srvcErrHndl: ServiceErrorHandler;
 
@@ -20,9 +19,10 @@ export class MonedaService {
     this.srvcErrHndl = new ServiceErrorHandler();
   }
 
-  get(fltr: any = {}): Observable<Moneda[]> {
-    return this.http.get<Moneda[]>(
-      `${GLOBAL.urlCatalogos}/get_moneda?${qs.stringify(fltr)}`
+  get(): Observable<NotificacionCliente[]> {
+    return this.http.get<NotificacionCliente[]>(
+      `${GLOBAL.urlCatalogos}/get_notificaciones_cliente`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
+
 }

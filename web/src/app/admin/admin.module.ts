@@ -108,6 +108,7 @@ import { ListaTipoCompraVentaComponent } from './components/tipoCompraVenta/list
 import { DocumentoTipoComponent } from './components/documento-tipo/documento-tipo/documento-tipo.component';
 import { ListaDocumentoTipoComponent } from './components/documento-tipo/lista-documento-tipo/lista-documento-tipo.component';
 import { FormDocumentoTipoComponent } from './components/documento-tipo/form-documento-tipo/form-documento-tipo.component';
+import { NotificacionesClienteComponent } from './components/notificaciones-cliente/notificaciones-cliente.component';
 
 @NgModule({
   declarations: [
@@ -125,7 +126,9 @@ import { FormDocumentoTipoComponent } from './components/documento-tipo/form-doc
     CertificadorConfiguracionComponent, FormCertificadorConfiguracionComponent, CertificadorFelComponent,
     FormCertificadorFelComponent, AcercaDeComponent, CorporacionComponent, FormCorporacionComponent,
     ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent, RazonAnulacionComponent,
-    FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent, TipoCompraVentaComponent, FormTipoCompraVentaComponent, ListaTipoCompraVentaComponent, DocumentoTipoComponent, ListaDocumentoTipoComponent, FormDocumentoTipoComponent
+    FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent, TipoCompraVentaComponent,
+    FormTipoCompraVentaComponent, ListaTipoCompraVentaComponent, DocumentoTipoComponent, ListaDocumentoTipoComponent,
+    FormDocumentoTipoComponent, NotificacionesClienteComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,

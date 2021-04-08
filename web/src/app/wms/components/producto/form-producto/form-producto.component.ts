@@ -44,6 +44,7 @@ export class FormProductoComponent implements OnInit {
   public showDetalleForm = true;
   public displayedColumns: string[] = ['articulo', 'cantidad', 'medida', 'editItem'];
   public dataSource: MatTableDataSource<ArticuloDetalle>;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
 

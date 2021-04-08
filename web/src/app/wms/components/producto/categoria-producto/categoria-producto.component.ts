@@ -27,6 +27,7 @@ export class CategoriaProductoComponent implements OnInit {
   public editCategoriaMode = false;
   public editSubCategoriaMode = false;
   public showCategoriasForm = true;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
   public impresoras: Impresora[] = [];
 

@@ -12,6 +12,10 @@ import { Keepalive } from '@ng-idle/keepalive';
 
 import { SolicitaPinInactividadComponent } from '../solicita-pin-inactividad/solicita-pin-inactividad.component';
 import { AcercaDeComponent } from '../acerca-de/acerca-de.component';
+import { NotificacionesClienteComponent } from '../notificaciones-cliente/notificaciones-cliente.component';
+
+import { NotificacionClienteService } from '../../services/notificacion-cliente.service';
+import { NotificacionCliente } from '../../interfaces/notificacion-cliente';
 
 @Component({
   selector: 'app-header',
@@ -25,6 +29,7 @@ export class HeaderComponent implements OnInit {
   public idleState = false;
   public timedOut = false;
   public lastPing?: Date = null;
+  public notificaciones: NotificacionCliente[] = [];
 
   constructor(
     private router: Router,
@@ -35,16 +40,31 @@ export class HeaderComponent implements OnInit {
     private idle: Idle,
     private keepalive: Keepalive,
     private configSrvc: ConfiguracionService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public notificacionClienteSrvc: NotificacionClienteService
   ) {
     this.usrInfo = this.ls.get(GLOBAL.usrTokenVar);
     this.configSrvc.load().then(() => this.setIdleConfigs());
   }
 
   ngOnInit() {
+    this.loadNotificacionesCliente();
     this.appMenuSrvc.getData().subscribe((res: any) => {
       if (res) {
         this.appMenu = res;
+      }
+    });
+  }
+
+  loadNotificacionesCliente = () => {
+    this.notificacionClienteSrvc.get().subscribe((res: NotificacionCliente[]) => {
+      if (res && res.length > 0) {
+        this.notificaciones = res;
+        this.snackBar.openFromComponent(NotificacionesClienteComponent, {
+          data: this.notificaciones,
+          verticalPosition: 'top',
+          horizontalPosition: 'center'
+        });
       }
     });
   }

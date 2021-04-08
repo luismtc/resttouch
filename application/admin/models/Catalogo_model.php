@@ -544,6 +544,17 @@ class Catalogo_model extends CI_Model {
 
 		return $this->getCatalogo($qry, $args);
 	}
+
+	public function notificacionesCliente()
+	{
+		$qry = $this->db
+            ->where("DATE(NOW()) >= a.mostrar_del")
+            ->where("DATE(NOW()) <= a.mostrar_al")
+			->order_by("prioridad DESC, mostrar_del ASC")
+			->get("administracion.notificacion_cliente a");
+
+		return $this->getCatalogo($qry, []);
+	}
 }
 
 /* End of file Catalogo_model.php */

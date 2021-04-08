@@ -1,0 +1,8 @@
+.noticia {
+    color: white;
+    text-align: justify;
+}
+
+::ng-deep .mat-snack-bar-container {
+    max-width: 85vw;
+}

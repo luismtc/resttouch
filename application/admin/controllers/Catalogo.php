@@ -240,6 +240,11 @@ class Catalogo extends CI_Controller {
 		print_r ($art);
 		echo "</pre>";
 	}
+
+	public function get_notificaciones_cliente()
+	{
+		$this->output->set_output(json_encode($this->Catalogo_model->notificacionesCliente()));		
+	}
 }
 
 /* End of file Catalogo.php */

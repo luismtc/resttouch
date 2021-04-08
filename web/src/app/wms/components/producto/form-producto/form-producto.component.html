@@ -22,27 +22,15 @@
                     {{subcategoria.descripcion}}
                 </mat-chip>
             </mat-chip-list>
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="Descripcion" name="descripcion"
-                    [(ngModel)]="articulo.descripcion" required>
+            <mat-form-field class="fullWidth">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripcion" name="descripcion" [(ngModel)]="articulo.descripcion" required>
+                <input matInput *ngIf="esMovil" type="text" placeholder="Descripcion" name="descripcion" [(ngModel)]="articulo.descripcion" required>
             </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
-                    ng-virtual-keyboard-placeholder="Descripción" type="text" placeholder="Descripción"
-                    name="descripcion" [(ngModel)]="articulo.descripcion" required>
-            </mat-form-field>
-            -->
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            
+            <mat-form-field class="fullWidth">
                 <input matInput type="number" placeholder="Precio" name="precio" [(ngModel)]="articulo.precio" required>
             </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                    ng-virtual-keyboard-placeholder="Precio" type="number" placeholder="Precio" name="precio"
-                    [(ngModel)]="articulo.precio" required>
-            </mat-form-field>
-            -->
+
             <mat-form-field class="fullWidth">
                 <mat-label>Presentación Venta</mat-label>
                 <mat-select name="presentacion" [(ngModel)]="articulo.presentacion" required>
@@ -59,19 +47,15 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="Código" name="codigo" [(ngModel)]="articulo.codigo" required>
+            <mat-form-field class="fullWidth">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Código" name="codigo" [(ngModel)]="articulo.codigo" required>
+                <input matInput *ngIf="esMovil" type="text" placeholder="Código" name="codigo" [(ngModel)]="articulo.codigo" required>
             </mat-form-field>
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input matInput type="text" placeholder="Shopify ID" name="shopify_id" [(ngModel)]="articulo.shopify_id">
+            <mat-form-field class="fullWidth">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Shopify ID" name="shopify_id" [(ngModel)]="articulo.shopify_id">
+                <input matInput *ngIf="esMovil" type="text" placeholder="Shopify ID" name="shopify_id" [(ngModel)]="articulo.shopify_id">
             </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                    ng-virtual-keyboard-placeholder="Código" type="text" placeholder="Código" name="codigo"
-                    [(ngModel)]="articulo.codigo" required>
-            </mat-form-field>
-            -->
+            
             <mat-form-field class="fullWidth">
                 <mat-label>Impuesto Especial</mat-label>
                 <mat-select name="impuesto_especial" [(ngModel)]="articulo.impuesto_especial">
@@ -138,17 +122,7 @@
         </h4>
     </mat-card-title>
     <mat-card-content>
-        <form #frmDetalleArticulo="ngForm" *ngIf="showDetalleForm" (ngSubmit)="frmDetalleArticulo.form.valid && onSubmitDetail()" novalidate>
-            <!--
-            <mat-form-field class="fullWidth">
-                <mat-label>Artículo</mat-label>
-                <mat-select name="articulo" [(ngModel)]="receta.articulo" required>
-                    <mat-option *ngFor="let a of articulos" [value]="a.articulo">
-                        {{a.descripcion}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            -->
+        <form #frmDetalleArticulo="ngForm" *ngIf="showDetalleForm" (ngSubmit)="frmDetalleArticulo.form.valid && onSubmitDetail()" novalidate>            
             <mat-form-field class="fullWidth">
                 <mat-label>Artículo</mat-label>                    
                 <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
@@ -158,16 +132,9 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-            <mat-form-field class="fullWidth" *ngIf="esMovil">
+            <mat-form-field class="fullWidth">
                 <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="receta.cantidad" required>
-            </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric"
-                    ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad"
-                    [(ngModel)]="receta.cantidad" required>
-            </mat-form-field>
-            -->
+            </mat-form-field>            
             <mat-form-field class="fullWidth" *ngIf="receta.precio_extra && receta.precio_extra > 0">
                 <input matInput placeholder="Precio" name="precio" [(ngModel)]="receta.precio" required>
             </mat-form-field>
