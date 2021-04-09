@@ -16,7 +16,8 @@ class Egreso extends CI_Controller {
         	'Catalogo_model',
 			'Configuracion_model',
 			'Presentacion_model',
-			'BodegaArticuloCosto_model'
+			'BodegaArticuloCosto_model',
+			'Proveedor_model'
         ]);
         $this->output
 		->set_content_type("application/json", "UTF-8");

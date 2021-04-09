@@ -53,15 +53,6 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="fullWidth" *ngIf="+egreso.traslado == 1 && ([2, 3].indexOf(+egreso.estatus_movimiento) < 0)">
-                <mat-label>Proveedor</mat-label>                
-                <input type="text" [(ngModel)]="txtProveedorSelected" [ngModelOptions]="{standalone: true}" placeholder="Proveedor" matInput [matAutocomplete]="autoProveedores" (keyup)="filtrarProveedores(txtProveedorSelected)" required>
-                <mat-autocomplete #autoProveedores="matAutocomplete" [displayWith]="displayProveedor">
-                    <mat-option *ngFor="let prov of filteredProveedores" [value]="prov">
-                        ({{prov.nit}}) {{prov.razon_social}}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
             <span *ngIf="!!egreso.idcomandafox"><br/><strong>Comanda: #{{egreso.idcomandafox}}</strong></span>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"

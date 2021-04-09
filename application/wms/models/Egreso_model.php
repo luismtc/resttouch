@@ -11,7 +11,7 @@ class Egreso_model extends General_Model {
 	public $usuario;
 	public $estatus_movimiento;
 	public $traslado = 0;
-	public $idcomandafox = null;
+	//public $idcomandafox = null;
 
 	public function __construct($id = "")
 	{
@@ -217,6 +217,21 @@ class Egreso_model extends General_Model {
 	}
 
 	public function trasladar($args = []){
+		$prov = $this->Proveedor_model->buscar([
+			"razon_social" => "Interno",
+			"_uno" => true
+		]);
+		if (!$prov) {
+			$obj = new Proveedor_model();
+			$obj->guardar([
+				"razon_social" => "Interno",
+				"nit" => "cf",
+				"corporacion" => 1
+			]);
+			$idProv = $obj->getPK();
+		} else {
+			$idProv = $prov->proveedor;
+		}
 		$ing = new Ingreso_model();
 		$datos = [
 			'tipo_movimiento' => $args['tipo_movimiento_destino'],
@@ -225,7 +240,7 @@ class Egreso_model extends General_Model {
 			'usuario' => $this->usuario,
 			'bodega_origen' => $this->bodega,
 			'comentario' => isset($args['comentario']) ? $args['comentario'] : '',
-			'proveedor' => $args['proveedor'],
+			'proveedor' => $idProv,
 			'estatus_movimiento' => 2
 		];
 
