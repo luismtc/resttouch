@@ -17,7 +17,8 @@ export class usrLogInResponse {
         public sede_uuid: string,
         public acceso: any,
         public empresa: any,
-        public restaurante: any
+        public restaurante: any,
+        public usatecladovirtual: number
     ) { }
 }
 
@@ -31,6 +32,7 @@ export class Usuario {
         public sede: number,
         public esmesero: number,
         public pindesbloqueo: number,
+        public usatecladovirtual: number,
         public debaja: number
     ) { }
 }

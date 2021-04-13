@@ -512,9 +512,16 @@ export class TranComanda {
     }
 
     printToBT = (msgToPrint: string = '') => {
+        // const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
+        // const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+        // setTimeout(() => wref.close(), 1000);
+        // this.bloqueoBotones = false;
         const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
-        const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-        setTimeout(() => wref.close(), 1000);
+        try {
+            window.location.href = AppHref;
+        } catch (error) {
+            this.snackBar.open('No se pudo conectar con la aplicación de impresión', 'Comanda', { duration: 3000 });
+        }
         this.bloqueoBotones = false;
     }
 

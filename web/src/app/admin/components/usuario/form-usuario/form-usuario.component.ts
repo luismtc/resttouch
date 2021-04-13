@@ -46,7 +46,7 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   resetUsuario() {
-    this.usuario = new Usuario(null, null, null, null, null, null, 0, null, 0);
+    this.usuario = new Usuario(null, null, null, null, null, null, 0, null, 0, 0);
   }
 
   onSubmit() {

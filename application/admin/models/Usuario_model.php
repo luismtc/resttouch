@@ -12,6 +12,7 @@ class Usuario_model extends General_model
     public $debaja = 0;
     public $esmesero = 0;
     public $pindesbloqueo = null;
+    public $usatecladovirtual = 0;
 
     public function __construct($id = '')
     {
@@ -73,7 +74,7 @@ class Usuario_model extends General_model
                     c.nombre as empresa_nombre,
                     c.nit as empresa_nit,
                     c.visa_merchant_id,
-                    CONCAT(d.admin_llave, '-', c.empresa, '-', b.sede) AS sede_uuid")
+                    CONCAT(d.admin_llave, '-', c.empresa, '-', b.sede) AS sede_uuid, a.usatecladovirtual")
                 ->from("{$this->tabla} a")
                 ->join("sede b", "b.sede = a.sede")
                 ->join("empresa c", "c.empresa = b.empresa")
@@ -111,6 +112,7 @@ class Usuario_model extends General_model
                         'sede' => $dbusr->sede,
                         'idusr' => $dbusr->usuario,
                         'sede_uuid' => $dbusr->sede_uuid,
+                        'usatecladovirtual' => $dbusr->usatecladovirtual,
                         'restaurante' => [
                             "nombre" => $dbusr->sede_nombre,
                             "direccion" => $dbusr->sede_direccion,
@@ -230,7 +232,7 @@ class Usuario_model extends General_model
         }
 
         return $this->db
-            ->select('usuario, nombres, apellidos, usrname, debaja, esmesero, pindesbloqueo')
+            ->select('usuario, nombres, apellidos, usrname, debaja, esmesero, pindesbloqueo, usatecladovirtual')
             ->from($this->tabla)
             ->where("sede", $data->sede)
             ->get()
@@ -248,7 +250,7 @@ class Usuario_model extends General_model
         }
 
         $tmp = $this->db
-            ->select('usuario, sede, nombres, apellidos, usrname, debaja, esmesero, pindesbloqueo')
+            ->select('usuario, sede, nombres, apellidos, usrname, debaja, esmesero, pindesbloqueo, usatecladovirtual')
             ->from($this->tabla)
             ->get();
 

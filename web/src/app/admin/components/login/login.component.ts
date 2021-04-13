@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.usr = new usrLogin(null, null);
-    this.usuario = new Usuario(null, null, null, null, null, null, 0, null, 0);
+    this.usuario = new Usuario(null, null, null, null, null, null, 0, null, 0, 0);
   }
 
   ngOnInit() {
@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  esMovil = (): boolean => {
-    let estoyEnMovil = false;
+  esMovil = (usavk: number = 0): boolean => {
+    let estoyEnMovil = usavk === 0 ? true : false;
     // estoyEnMovil = true; // Solo para desarrollo
     const ua = navigator.userAgent;
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
@@ -54,8 +54,8 @@ export class LoginComponent implements OnInit {
       if (res.token) {
         this.ls.set(GLOBAL.usrTokenVar, {
           token: res.token, usuario: res.usrname, nombres: res.nombres, apellidos: res.apellidos, sede: +res.sede,
-          idusr: +res.idusr, enmovil: this.esMovil(), acceso: res.acceso, sede_uuid: res.sede_uuid,
-          empresa: res.empresa, restaurante: res.restaurante, configuracion: []
+          idusr: +res.idusr, enmovil: this.esMovil(+res.usatecladovirtual), acceso: res.acceso, sede_uuid: res.sede_uuid,
+          empresa: res.empresa, restaurante: res.restaurante, configuracion: [], usatecladovirtual: res.usatecladovirtual
         });
         this.router.navigate(['/admin/dashboard']);
       } else {
