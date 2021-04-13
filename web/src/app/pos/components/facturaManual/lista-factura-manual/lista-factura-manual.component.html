@@ -1,14 +1,10 @@
 <mat-card class="mat-elevation-z4 fullWidth">
     <mat-card-content>
-        <mat-form-field class="fullWidth" *ngIf="esMovil">
-            <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
+        <mat-form-field class="fullWidth">
+            <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" (input)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
+            <input matInput *ngIf="esMovil" (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
         </mat-form-field>
-        <mat-checkbox name="pedirdocumento" class="btnAccion" [(ngModel)]="verTodas" [ngModelOptions]="{standalone: true}" (change)="cargarFacturas($event)">Todas</mat-checkbox>
-        <!--
-        <mat-form-field class="fullWidth" *ngIf="!esMovil">
-            <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Buscar..." (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
-        </mat-form-field>
-        -->
+        <mat-checkbox name="pedirdocumento" class="btnAccion" [(ngModel)]="verTodas" [ngModelOptions]="{standalone: true}" (change)="cargarFacturas($event)">Todas</mat-checkbox>        
         <mat-nav-list>
             <mat-list-item *ngFor="let element of lstFacturasPaged" (click)="getFactura(element)">
                 <mat-icon mat-list-icon>receipt</mat-icon>

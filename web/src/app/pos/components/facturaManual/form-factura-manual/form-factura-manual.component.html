@@ -60,14 +60,10 @@
                 <mat-checkbox name="exenta" class="fullWidth" [(ngModel)]="+factura.exenta">Exenta</mat-checkbox>
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
-                    <input matInput type="text" placeholder="Notas" name="notas" [(ngModel)]="factura.notas">
-                </mat-form-field>
-                <!--
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric" ng-virtual-keyboard-placeholder="Notas" type="text" placeholder="Notas" name="notas" [(ngModel)]="factura.notas">
-                </mat-form-field>
-                -->
+                <mat-form-field class="fullWidth">
+                    <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Notas" name="notas" [(ngModel)]="factura.notas">
+                    <input matInput *ngIf="esMovil" type="text" placeholder="Notas" name="notas" [(ngModel)]="factura.notas">
+                </mat-form-field>                
             </div>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"
@@ -137,34 +133,19 @@
                 </mat-form-field>
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <mat-form-field class="fullWidth">
                     <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleFactura.cantidad"
                         (change)="detalleFactura.total = +detalleFactura.precio_unitario * +detalleFactura.cantidad"
                         required>
-                </mat-form-field>
-                <!--
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Cantidad" placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleFactura.cantidad"
-                        (change)="detalleFactura.total = +detalleFactura.precio_unitario * +detalleFactura.cantidad"
-                        required>
-                </mat-form-field>
-                -->
+                </mat-form-field>                
             </div>
             <div class="form-group">
-                <mat-form-field class="fullWidth" *ngIf="esMovil">
+                <mat-form-field class="fullWidth">
                     <input matInput placeholder="Precio unitario" name="precio_unitario"
                         [(ngModel)]="detalleFactura.precio_unitario"
                         (change)="detalleFactura.total = +detalleFactura.precio_unitario * +detalleFactura.cantidad"
                         required>
-                </mat-form-field>
-                <!--
-                <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                    <input matInput ng-virtual-keyboard ng-virtual-keyboard-layout="numeric" ng-virtual-keyboard-placeholder="Precio unitario" placeholder="Precio unitario" name="precio_unitario"
-                        [(ngModel)]="detalleFactura.precio_unitario"
-                        (change)="detalleFactura.total = +detalleFactura.precio_unitario * +detalleFactura.cantidad"
-                        required>
-                </mat-form-field>
-                -->
+                </mat-form-field>                
             </div>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"

@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-//import { MatTableDataSource } from '@angular/material/table';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 
@@ -16,10 +15,11 @@ export class FormFormaPagoComponent implements OnInit {
 
   @Input() formaPago: FormaPago;
   @Output() formaPagoSavedEv = new EventEmitter();
-  public esMovil: boolean = false;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
+  public esMovil = false;
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private formaPagoSrvc: FormaPagoService,
     private ls: LocalstorageService
   ) { }
@@ -32,11 +32,11 @@ export class FormFormaPagoComponent implements OnInit {
 
   onSubmit = () => {
     this.formaPagoSrvc.save(this.formaPago).subscribe(res => {
-      //console.log(res);
+      // console.log(res);
       if (res.exito) {
         this.formaPagoSavedEv.emit();
         this.resetFormaPago();
-        this._snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
+        this.snackBar.open('Forma de pago agregada...', 'Forma de pago', { duration: 3000 });
       }
     });
   }

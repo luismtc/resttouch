@@ -46,6 +46,7 @@ export class FormFacturaManualComponent implements OnInit {
   public filteredArticulos: Articulo[] = [];
   public displayedColumns: string[] = ['articulo', 'cantidad', 'precio_unitario', 'total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleFactura>;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
   public refacturacion = false;
   public txtArticuloSelected: (Articulo | string) = undefined;

@@ -14,6 +14,7 @@ import { FacturaService } from '../../../services/factura.service';
 export class ListaFacturaManualComponent implements OnInit {
 
   public esMovil = false;
+  public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
 
   public lstFacturas: Factura[];
   public lstFacturasPaged: Factura[];
