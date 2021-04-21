@@ -442,7 +442,7 @@ class Factura extends CI_Controller {
 					// echo "<pre> $qFact - ".$e->getMessage()."</pre>";
 					$noPasaron[] = $qFact;
 				}
-				sleep(5);
+				sleep(2);
 			//}// IF
 		}
 

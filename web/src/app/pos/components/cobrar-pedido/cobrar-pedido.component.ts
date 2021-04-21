@@ -378,11 +378,11 @@ export class CobrarPedidoComponent implements OnInit {
     const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
     // const AppHref = `http://resttouch.c807.com/impresion/${msgToPrint}`;
     const wref = window.open(AppHref, `PrntBT`, 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-    /*try {
-      window.location.href = AppHref; 
-    } catch(error) {
-      this.snackBar.open('No se pudo conectar con la aplicación de impresión', 'Comanda', { duration: 3000 });
-    }*/
+    // try {
+    //   window.location.href = AppHref; 
+    // } catch(error) {
+    //   this.snackBar.open('No se pudo conectar con la aplicación de impresión', 'Comanda', { duration: 3000 });
+    // }
     
     setTimeout(() => wref.close(), 3000);
   }
