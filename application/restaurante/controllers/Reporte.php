@@ -23,6 +23,7 @@ class Reporte extends CI_Controller {
 			'Usuario_model',
 			'TurnoTipo_model',
 			'Catalogo_model',
+			'Configuracion_model'
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -33,9 +34,16 @@ class Reporte extends CI_Controller {
 		}
 	}
 
+	private function getEsRangoPorFechaDeTurno()
+	{
+		$config = $this->Configuracion_model->buscar();
+		return get_configuracion($config, "RT_REPORTES_FECHAS_TURNOS", 3);
+	}
+
 	public function caja()
 	{
 		ini_set("pcre.backtrack_limit", "15000000");
+
 		$ingresos = $this->Catalogo_model->getFormaPago([
 			"descuento" => 0
 		]);
@@ -43,7 +51,9 @@ class Reporte extends CI_Controller {
 			"descuento" => 1
 		]);
 
-		$data = json_decode(file_get_contents('php://input'), true);;
+		$data = json_decode(file_get_contents('php://input'), true);
+
+		$data['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
 
 		if (!verDato($data, 'sede')) {
 			$data['sede'] = [$this->data->sede];

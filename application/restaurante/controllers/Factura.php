@@ -411,6 +411,7 @@ class Factura extends CI_Controller {
 			"_uno" => true
 		]);
 		$this->load->library('Webhook');
+		$this->load->helper('api');
 
 		foreach ($listaFacturas as $qFact) {
 			//if(!in_array((int)$qFact, $yaPasaron)){
@@ -424,7 +425,7 @@ class Factura extends CI_Controller {
 					//$fac->procesar_factura();
 					//$resp = $fac->enviarDigiFact();
 			
-					$req = $fac->getXmlWebhook();
+					$req = $fac->getXmlWebhook(true);
 					// $elxml = $req;
 					// $client = new SoapClient("http://52.35.3.1/jk/php/ws/organization.wsdl");
 			
@@ -442,13 +443,13 @@ class Factura extends CI_Controller {
 					// echo "<pre> $qFact - ".$e->getMessage()."</pre>";
 					$noPasaron[] = $qFact;
 				}
-				sleep(2);
+				// sleep(2);
 			//}// IF
 		}
 
 		// $this->output->set_content_type("application/xlm")->set_output($elxml);
 
-		echo "<pre>NO PASARON: ";implode(", ", $noPasaron);echo "</pre>";
+		// echo "<pre>NO PASARON: ";implode(", ", $noPasaron);echo "</pre>";
 	}
 }
 

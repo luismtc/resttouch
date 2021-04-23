@@ -25,7 +25,7 @@ Class Webhook {
 				return $client->$metodo($this->request);
 			} else if(strtolower(trim($this->webhook->tipo_llamada)) == "json") {
 				if (strtoupper(trim($metodo)) === 'POST') {
-					return post_request($this->webhook->link, $this->request);
+					return post_request($this->webhook->link, json_encode($this->request));
 				} else if(strtoupper(trim($metodo)) === 'GET') {
 					return get_request($this->webhook->link);
 				}

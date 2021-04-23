@@ -37,15 +37,33 @@ class Reporte_model extends CI_Model {
 		}
 
 		if (!isset($args['comandas'])) {
-			$this->db
+			$this->db->where("e.fel_uuid_anulacion is null");
+
+			if (isset($args['_rango_turno']) && $args['_rango_turno']) {
+				$this->db
+					->where("date(i.inicio) >=", $args['fdel'])
+					->where("date(i.inicio) <=", $args['fal'])
+					->where("date(i.fin) <=", $args['fal'])
+					->where("date(i.fin) >=", $args['fdel']);
+			} else {
+				$this->db
 				 ->where("e.fecha_factura >=", $args['fdel'])
-				 ->where("e.fecha_factura <=", $args['fal'])
-				 ->where("e.fel_uuid_anulacion is null");
+				 ->where("e.fecha_factura <=", $args['fal']);	
+			}		
 		} else {
-			$this->db
+			$this->db->where("f.sinfactura", 1);
+			
+			if (isset($args['_rango_turno']) && $args['_rango_turno']) {
+				$this->db
+					->where("date(i.inicio) >=", $args['fdel'])
+					->where("date(i.inicio) <=", $args['fal'])
+					->where("date(i.fin) <=", $args['fal'])
+					->where("date(i.fin) >=", $args['fdel']);
+			} else {
+				$this->db
 				 ->where("date(h.fhcreacion) >=", $args['fdel'])
-				 ->where("date(h.fhcreacion) <=", $args['fal'])
-				 ->where("f.sinfactura", 1);
+				 ->where("date(h.fhcreacion) <=", $args['fal']);
+			}				 
 		}
 
 		$tmp = $this->db

@@ -281,7 +281,7 @@ class Factura_model extends General_model
 			->row();
 	}
 
-	public function getXmlWebhook()
+	public function getXmlWebhook($raw = false)
 	{
 
 		$doc = new stdClass();
@@ -391,10 +391,15 @@ class Factura_model extends General_model
 		$doc->encabezado = (array) $enca;
 		$doc->detalle = (array) $det->cuenta;
 
-		$requestDOM = new DOMDocument('1.0');
-		$requestDOM->loadXML(arrayToXml((array)$doc, "<documento/>"));
-
-		return $requestDOM->saveXML();
+		if (!$raw) 
+		{
+			$requestDOM = new DOMDocument('1.0');
+			$requestDOM->loadXML(arrayToXml((array)$doc, "<documento/>"));
+	
+			return $requestDOM->saveXML();
+		} else {
+			return $doc;
+		}
 	}
 
 	public function set_datos_generales($args = array())

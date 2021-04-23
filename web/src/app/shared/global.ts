@@ -1,7 +1,7 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
-// const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
-const urlBase = 'https://resttouch.c807.com/api'; // C807
+const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
+// const urlBase = 'https://resttouch.c807.com/api'; // C807
 
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
@@ -21,6 +21,8 @@ export const GLOBAL = {
     rtClientePedido: 'rt_cliente_pedido',
     reintentos: 0,
     IDIOMA_TECLADO: 'Español',
+    DEEP_LINK_ANDROID: 'com.restouch.impresion://com.restouch.impresion/impresion/',
+    // DEEP_LINK_ANDROID: 'com.restouch.impresion://impresion/',
     CONSTANTES: {
         RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',
         RT_PANTALLA_TOMA_COMANDA: 'RT_PANTALLA_TOMA_COMANDA',
