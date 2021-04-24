@@ -552,9 +552,17 @@ class Comanda_model extends General_Model
 	public function get_sin_factura($args = [])
 	{
 		if (isset($args['fdel']) && isset($args['fal'])) {
-			$this->db
+			if (isset($args['_rango_turno']) && $args['_rango_turno']) {
+				$this->db
+					->where("date(c.inicio) >=", $args['fdel'])
+					->where("date(c.inicio) <=", $args['fal'])
+					->where("date(c.fin) <=", $args['fal'])
+					->where("date(c.fin) >=", $args['fdel']);
+			} else {
+				$this->db
 				->where("date(a.fhcreacion) >=", $args['fdel'])
 				->where("date(a.fhcreacion) <=", $args['fal']);
+			}			
 			unset($args['fdel']);
 			unset($args['fal']);
 		}

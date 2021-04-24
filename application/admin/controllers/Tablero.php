@@ -6,7 +6,10 @@ class Tablero extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model("Tablero_model");
+		$this->load->model([
+			'Tablero_model',
+			'Configuracion_model'
+		]);
 		$this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -14,6 +17,12 @@ class Tablero extends CI_Controller {
 	public function index()
 	{
 		die("Forbidden");
+	}
+
+	private function getEsRangoPorFechaDeTurno()
+	{
+		$config = $this->Configuracion_model->buscar();
+		return get_configuracion($config, "RT_REPORTES_FECHAS_TURNOS", 3);
 	}
 
 	public function get_datos()
@@ -60,26 +69,29 @@ class Tablero extends CI_Controller {
 		$datos = [];
 		if ($this->input->get('fdel') && $this->input->get('fal'))
 		{
-			$datos['pordia'] = $this->Tablero_model->getVentasPorDia($_GET);
-			$datos['porcategoria'] = $this->Tablero_model->getVentasPorCategoria($_GET);
-			$datos['porturno'] = $this->Tablero_model->getVentasPorTurno($_GET);
-			$datos['pormesero'] = $this->Tablero_model->getVentasPorMesero($_GET);
+			$args = $_GET;
+			$args['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
+
+			$datos['pordia'] = $this->Tablero_model->getVentasPorDia($args);
+			$datos['porcategoria'] = $this->Tablero_model->getVentasPorCategoria($args);
+			$datos['porturno'] = $this->Tablero_model->getVentasPorTurno($args);
+			$datos['pormesero'] = $this->Tablero_model->getVentasPorMesero($args);
 			
 			$res['pordia'] = $this->Tablero_model->agruparDatos(
 				$datos['pordia'],
-				verDato($_GET, "_grupo", 1)
+				verDato($args, "_grupo", 1)
 			);
 			$res['porcategoria'] = $this->Tablero_model->agruparDatos(
 				$datos['porcategoria'],
-				verDato($_GET, "_grupo", 1)
+				verDato($args, "_grupo", 1)
 			);
 			$res['porturno'] = $this->Tablero_model->agruparDatos(
 				$datos['porturno'],
-				verDato($_GET, "_grupo", 1)
+				verDato($args, "_grupo", 1)
 			);
 			$res['pormesero'] = $this->Tablero_model->agruparDatos(
 				$datos['pormesero'],
-				verDato($_GET, "_grupo", 1)
+				verDato($args, "_grupo", 1)
 			);
 
 

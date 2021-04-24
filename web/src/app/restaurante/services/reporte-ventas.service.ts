@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { PorCategoria, PorArticulo } from '../interfaces/reporte-ventas';
-// import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -14,47 +13,30 @@ import * as qs from 'qs';
 export class ReporteVentasService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl = 'reporte/venta';
-  // private usrToken: string = null;
+  private moduleUrl = 'reporte/venta'; 
 
   constructor(
-    private http: HttpClient,
-    // private ls: LocalstorageService
+    private http: HttpClient,    
   ) {
-    this.srvcErrHndl = new ServiceErrorHandler();
-    // this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
+    this.srvcErrHndl = new ServiceErrorHandler();    
   }
 
   porCategoria(params: any): Observable<PorCategoria[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
-
     return this.http.get<PorCategoria[]>(
       `${GLOBAL.urlFacturacion}/${this.moduleUrl}/categoria?${qs.stringify(params)}`
-      // , httpOptions
+      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   porArticulo(params: any): Observable<PorArticulo[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
-
     return this.http.get<PorArticulo[]>(
-      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/articulo?${qs.stringify(params)}`
-      // , httpOptions
+      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/articulo?${qs.stringify(params)}`      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   porCategoriaPdf(params: Object) {
     const httpOptions = {
-      headers: new HttpHeaders({
-        // 'Authorization': this.usrToken,
+      headers: new HttpHeaders({        
         Accept: 'application/pdf'
       }),
       responseType: 'blob' as 'json'
@@ -68,8 +50,7 @@ export class ReporteVentasService {
 
   porArticuloPdf(params: Object) {
     const httpOptions = {
-      headers: new HttpHeaders({
-        // 'Authorization': this.usrToken,
+      headers: new HttpHeaders({        
         Accept: 'application/pdf'
       }),
       responseType: 'blob' as 'json'

@@ -20,11 +20,18 @@ class Venta extends CI_Controller {
 			'Categoria_model',
 			'Catalogo_model',
 			'TurnoTipo_model',
-			'Sede_model'
+			'Sede_model',
+			'Configuracion_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
+	}
+
+	private function getEsRangoPorFechaDeTurno()
+	{
+		$config = $this->Configuracion_model->buscar();
+		return get_configuracion($config, "RT_REPORTES_FECHAS_TURNOS", 3);
 	}
 
 	public function categoria()
@@ -38,6 +45,7 @@ class Venta extends CI_Controller {
 		}
 
 		$req["_vivas"] = true;
+		$req['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
 		$facts = $this->Factura_model->get_facturas($req);
 		$comandas = $this->Comanda_model->get_sin_factura($req);
 
@@ -118,6 +126,7 @@ class Venta extends CI_Controller {
 			$req['sede'] = [$this->data->sede];
 		}
 		$req["_vivas"] = true;
+		$req['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
 		$facts = $this->Factura_model->get_facturas($req);
 		$comandas = $this->Comanda_model->get_sin_factura($req);
 
@@ -405,6 +414,7 @@ class Venta extends CI_Controller {
 			$req['sede'] = [$this->data->sede];
 		}
 		$req["_vivas"] = true;
+		$req['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
 		$facts = $this->Factura_model->get_facturas($req);
 		$comandas = $this->Comanda_model->get_sin_factura($req);
 
@@ -481,6 +491,7 @@ class Venta extends CI_Controller {
 			$req['sede'] = [$this->data->sede];
 		}
 		$req["_vivas"] = true;
+		$req['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
 		$facts = $this->Factura_model->get_facturas($req);
 		$comandas = $this->Comanda_model->get_sin_factura($req);
 		$datos = [];
