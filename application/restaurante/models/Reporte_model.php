@@ -75,7 +75,7 @@ class Reporte_model extends CI_Model {
 			a.propina,
 			ifnull(e.factura, concat('Comanda ', h.comanda)) as factura,
 			ifnull(e.numero_factura, concat('Comanda ', h.comanda)) as numero_factura,
-			ifnull(e.fecha_factura, i.fin) as fecha_factura,
+			ifnull(e.fecha_factura, date(h.fhcreacion)) as fecha_factura,
 			h.sede,
 			j.nombre as nsede")
 		->from("cuenta_forma_pago a")
