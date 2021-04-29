@@ -54,6 +54,49 @@ class Tablero_model extends General_model
 			->result();
 	}
 
+	private function getVentasPorDiaSinFactura($args = [])
+	{
+		$this->db->query("SET @@lc_time_names = 'es_GT'");
+
+		if (isset($args["fdel"])) {
+			$this->db->where('DATE(a.fhcreacion) >= ', $args["fdel"]);
+		}
+
+		if (isset($args["fal"])) {
+			$this->db->where('DATE(a.fhcreacion) <= ', $args["fal"]);
+		}
+
+		if (isset($args['sede'])) {
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
+		}
+
+		if (verDato($args, "_grupo", 0) == 2) {
+			$this->db->group_by('a.sede');
+		}
+
+		$vdsf = $this->db
+			->select('DATE_FORMAT(DATE(a.fhcreacion), "%d/%m/%Y") AS fecha, SUM(d.monto) AS venta, a.sede')
+			->from('comanda a')
+			->join('turno b', 'b.turno = a.turno')
+			->join('cuenta c', 'a.comanda = c.comanda')
+			->join('cuenta_forma_pago d', 'c.cuenta = d.cuenta')
+			->join('forma_pago e', 'e.forma_pago = d.forma_pago')
+			->where('e.sinfactura', 1)
+			->where('e.descuento', 0)
+			->group_by('DATE(a.fhcreacion)')
+			->order_by('DATE(a.fhcreacion)')
+			->get()
+			->result();
+
+		$q = $this->db->last_query();
+
+		return $vdsf;
+	}
+
 	public function getVentasPorDia($args = [])
 	{
 		$this->db->query("SET @@lc_time_names = 'es_GT'");
@@ -76,9 +119,9 @@ class Tablero_model extends General_model
 
 		if (verDato($args, "_grupo", 0) == 2) {
 			$this->db->group_by('a.sede');
-		}
+		}	
 
-		return $this->db
+		$facturados = $this->db
 			->select('
 				DATE_FORMAT(a.fecha_factura, "%d/%m/%Y") AS fecha, 
 				SUM(b.total - b.descuento) AS venta,
@@ -91,6 +134,35 @@ class Tablero_model extends General_model
 			->order_by('a.fecha_factura')
 			->get()
 			->result();
+		
+		$q = $this->db->last_query();
+
+		$sinFactura = $this->getVentasPorDiaSinFactura($args);	
+
+		if (count($facturados) > 0 && count($sinFactura) > 0) {
+			foreach($sinFactura as $sf) 
+			{	
+				$existente = false;
+				foreach($facturados as $f)
+				{
+					if($f->fecha === $sf->fecha && (int)$f->sede === (int)$sf->sede)
+					{
+						$f->venta = (float)$f->venta + (float)$sf->venta;
+						$existente = true;
+					}
+				}
+				if (!$existente) 
+				{
+					$facturados[] = $sf;
+				}
+			}
+			$facturados = ordenar_array_objetos($facturados, 'fecha');
+		} else if (count($facturados) === 0 && count($sinFactura) > 0)
+		{
+			$facturados = $sinFactura;
+		}
+
+		return $facturados;
 	}
 
 	public function getVentasPorCategoria($args = [])

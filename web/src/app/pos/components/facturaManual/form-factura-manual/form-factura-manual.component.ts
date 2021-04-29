@@ -24,6 +24,10 @@ import { MonedaService } from '../../../../admin/services/moneda.service';
 import { Articulo } from '../../../../wms/interfaces/articulo';
 import { ArticuloService } from '../../../../wms/services/articulo.service';
 
+import { Impresora } from '../../../../admin/interfaces/impresora';
+import { ImpresoraService } from '../../../../admin/services/impresora.service';
+import { ConfiguracionService } from '../../../../admin/services/configuracion.service';
+
 @Component({
   selector: 'app-form-factura-manual',
   templateUrl: './form-factura-manual.component.html',
@@ -52,6 +56,7 @@ export class FormFacturaManualComponent implements OnInit {
   public txtArticuloSelected: (Articulo | string) = undefined;
   public clienteSelected: (Cliente | string) = undefined;
   public razonAnulacion: RazonAnulacion[] = [];
+  public impresoraPorDefecto: Impresora = null;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -63,7 +68,9 @@ export class FormFacturaManualComponent implements OnInit {
     private articuloSrvc: ArticuloService,
     private anulacionSrvc: AnulacionService,
     private socket: Socket,
-    private ls: LocalstorageService
+    private ls: LocalstorageService,
+    private configSrvc: ConfiguracionService,
+    private impresoraSrvc: ImpresoraService
   ) { }
 
   ngOnInit() {
@@ -75,6 +82,7 @@ export class FormFacturaManualComponent implements OnInit {
     this.loadMonedas();
     this.loadArticulos();
     this.getRazonAnulacion();
+    this.loadImpresoraDefecto();
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
@@ -94,6 +102,19 @@ export class FormFacturaManualComponent implements OnInit {
         this.clientes.filter(c => c.nombre.toLowerCase().includes(filterValue) || c.nit.toLowerCase().includes(filterValue));
     } else {
       this.filteredClientes = this.clientes;
+    }
+  }
+
+  loadImpresoraDefecto = () => {
+    const idImpresoraDefecto: number = +this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRESORA_DEFECTO) || 0;
+    if (idImpresoraDefecto > 0) {
+      this.impresoraSrvc.get({ impresora: idImpresoraDefecto }).subscribe((res: Impresora[]) => {
+        if (res && res.length > 0) {
+          this.impresoraPorDefecto = res[0];
+        } else {
+          this.impresoraPorDefecto = null;
+        }
+      });
     }
   }
 
@@ -247,8 +268,9 @@ export class FormFacturaManualComponent implements OnInit {
     // console.log(this.factura);
     this.facturaSrvc.imprimir(+this.factura.factura).subscribe(res => {
       if (res.factura) {
-        console.log(res.factura);
-        this.socket.emit(`print:factura`, `${JSON.stringify({
+        // console.log(res.factura);
+
+        const datosAImprimir = {
           NombreEmpresa: res.factura.empresa.nombre,
           NitEmpresa: res.factura.empresa.nit,
           SedeEmpresa: res.factura.sedeFactura.nombre,
@@ -267,8 +289,21 @@ export class FormFacturaManualComponent implements OnInit {
           NoOrdenEnLinea: '',
           FormaDePago: '',
           DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
-          ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
-        })}`);
+          ImpuestosAdicionales: (res.factura.impuestos_adicionales || []),
+          Impresora: this.impresoraPorDefecto
+        };
+
+        if (this.impresoraPorDefecto) {
+          if (+this.impresoraPorDefecto.bluetooth === 0) {
+            this.socket.emit(`print:factura`, `${JSON.stringify(datosAImprimir)}`);
+          } else {
+            this.printToBT(JSON.stringify(datosAImprimir));
+          }
+        } else {
+          delete datosAImprimir.Impresora;
+          this.socket.emit(`print:factura`, `${JSON.stringify(datosAImprimir)}`);
+        }
+
         this.snackBar.open(
           `Imprimiendo factura ${this.factura.serie_factura}-${this.factura.numero_factura}`,
           'Impresión', { duration: 3000 }
@@ -277,6 +312,15 @@ export class FormFacturaManualComponent implements OnInit {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 3000 });
       }
     });
+  }
+
+  printToBT = (msgToPrint: string = '') => {
+    const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${btoa(msgToPrint)}`;
+    try {
+      window.location.href = AppHref;
+    } catch (error) {
+      this.snackBar.open('No se pudo conectar con la aplicación de impresión', 'Comanda', { duration: 3000 });
+    }
   }
 
   anularFactura = () => {
@@ -312,7 +356,7 @@ export class FormFacturaManualComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       if (res.resultado) {
-        const params = { };
+        const params = {};
         for (let i = 0; i < res.config.input.length; i++) {
           const input = res.config.input[i];
           params[input.id] = input.valor;

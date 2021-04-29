@@ -41,6 +41,7 @@ class Reporte_model extends CI_Model {
 
 			if (isset($args['_rango_turno']) && $args['_rango_turno']) {
 				$this->db
+					->where("f.sinfactura", 0)
 					->where("date(i.inicio) >=", $args['fdel'])
 					->where("date(i.inicio) <=", $args['fal'])
 					->where("date(i.fin) <=", $args['fal'])

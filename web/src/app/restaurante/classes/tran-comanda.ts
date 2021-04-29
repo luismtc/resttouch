@@ -513,7 +513,7 @@ export class TranComanda {
 
     printToBT = (msgToPrint: string = '') => {
         // const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
-        const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${msgToPrint}`;
+        const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${btoa(msgToPrint)}`;
         // const wref = window.open(AppHref, 'PrntBT', 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');        
         // const wref = window.open('com.restouch.impresion://com.restouch.impresion/impresion/%7B"Tipo":"Comanda","Nombre":"Única","Numero":"55","DetalleCuenta":[%7B"id":80,"nombre":"Combo%20Tapioca","cuenta":1,"idcuenta":55,"cantidad":1,"impreso":1,"precio":35,"total":35,"notas":"","showInputNotas":false,"itemListHeight":"70px","detalle_comanda":311,"detalle_cuenta":195,"impresora":%7B"impresora":"1","sede":"1","nombre":"IMPRESORA","direccion_ip":null,"ubicacion":null,"bluetooth":"1","bluetooth_mac_address":"10","modelo":"10"%7D,"detalle":["%201%20Matcha%20Pound%20Cake%20","%20Bebida%20Fría%20Café%20","%201%20Caramel%20Ice%20Latte%2012%20oz%20",""],"monto_extra":0,"multiple":0,"combo":1%7D],"Ubicacion":"Mostrador%20-%20Mesa%201","Mesero":"Admin%20SPC","Total":null,"NumeroPedido":null%7D');
         // const wref = window.open(AppHref, `_blank`);

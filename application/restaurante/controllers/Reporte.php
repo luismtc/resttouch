@@ -125,6 +125,8 @@ class Reporte extends CI_Controller {
 			}
 		}
 
+		// var_dump($data['detalle']['Efectivo']);
+
 		if (isset($data['_validar']) && $data['_validar'] !== "false") {
 			$data['pagos'] = [];
 			foreach ($data['_pagos'] as $row) {

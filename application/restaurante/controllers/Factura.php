@@ -171,7 +171,8 @@ class Factura extends CI_Controller {
 										$req = $fac->getXmlWebhook();
 
 									} else if(strtolower(trim($webhook->tipo_llamada)) == "json") {
-										$req = "";
+										$this->load->helper('api');
+										$req = $fac->getXmlWebhook(true);
 									}
 
 									$web = new Webhook($webhook);
@@ -350,7 +351,8 @@ class Factura extends CI_Controller {
 									$req = $fac->getXmlWebhook();
 
 								} else if(strtolower(trim($webhook->tipo_llamada)) == "json") {
-									$req = "";
+									$this->load->helper('api');
+									$req = $fac->getXmlWebhook(true);
 								}
 
 								$web = new Webhook($webhook);
