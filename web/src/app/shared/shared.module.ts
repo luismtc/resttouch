@@ -39,8 +39,9 @@ import { DialogPedidoComponent } from './components/dialog-pedido/dialog-pedido.
 import { DialogComboComponent } from './components/dialog-combo/dialog-combo.component';
 import { DialogElminarProductoComponent } from './components/dialog-elminar-producto/dialog-elminar-producto.component';
 
-// const config: SocketIoConfig = { url: `http://${window.location.hostname}:8988`, options: {} }; // Solo para desarrollo
-const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // Produccion C807
+const config: SocketIoConfig = { url: `http://${window.location.hostname}:8988`, options: {} }; // Solo para desarrollo
+// const config: SocketIoConfig = { url: 'http://192.168.18.241:8988', options: {} }; // RT - Dev
+// const config: SocketIoConfig = { url: 'https://restouch.c807.com:8988', options: {} }; // RT - Prod
 
 @NgModule({
   declarations: [

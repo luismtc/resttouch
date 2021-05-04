@@ -19,6 +19,8 @@ import { FacturaService } from '../../services/factura.service';
 import { Sede } from '../../../admin/interfaces/sede';
 import { SedeService } from '../../../admin/services/sede.service';
 import { ComandaService } from '../../../restaurante/services/comanda.service';
+import { ConfiguracionService } from '../../../admin/services/configuracion.service';
+import { Base64 } from 'js-base64';
 
 interface DatosPedido {
   sede: number;
@@ -61,7 +63,8 @@ export class CobrarPedidoComponent implements OnInit {
     private ls: LocalstorageService,
     private socket: Socket,
     private sedeSrvc: SedeService,
-    private comandaSrvc: ComandaService
+    private comandaSrvc: ComandaService,
+    private configSrvc: ConfiguracionService
   ) { }
 
   ngOnInit() {
@@ -374,21 +377,14 @@ export class CobrarPedidoComponent implements OnInit {
   }
 
   printToBT = (msgToPrint: string = '') => {
-    // const AppHref = `intent:#Intent;scheme:http;package:com.restouch.impresion;end`;
-    // const AppHref = `https://www.google.com`;
-    // const AppHref = `com.restouch.impresion://impresion/${msgToPrint}`;
-    const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${btoa(msgToPrint)}`;
-    // const AppHref = `http://resttouch.c807.com/impresion/${msgToPrint}`;
-    // const wref = window.open(AppHref, `PrntBT`, 'height=200,width=200,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-    // const wref = window.open('com.restouch.impresion://com.restouch.impresion/impresion/%7B"Tipo":"Comanda","Nombre":"Única","Numero":"55","DetalleCuenta":[%7B"id":80,"nombre":"Combo%20Tapioca","cuenta":1,"idcuenta":55,"cantidad":1,"impreso":1,"precio":35,"total":35,"notas":"","showInputNotas":false,"itemListHeight":"70px","detalle_comanda":311,"detalle_cuenta":195,"impresora":%7B"impresora":"1","sede":"1","nombre":"IMPRESORA","direccion_ip":null,"ubicacion":null,"bluetooth":"1","bluetooth_mac_address":"10","modelo":"10"%7D,"detalle":["%201%20Matcha%20Pound%20Cake%20","%20Bebida%20Fría%20Café%20","%201%20Caramel%20Ice%20Latte%2012%20oz%20",""],"monto_extra":0,"multiple":0,"combo":1%7D],"Ubicacion":"Mostrador%20-%20Mesa%201","Mesero":"Admin%20SPC","Total":null,"NumeroPedido":null%7D');
-    // const wref = window.open(AppHref, `_blank`);
+    const convertir = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_ENVIA_COMO_BASE64);    
+    const data = convertir ? Base64.encode(msgToPrint, true) : msgToPrint;
+    const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${data}`;
     try {
       window.location.href = AppHref; 
     } catch(error) {
       this.snackBar.open('No se pudo conectar con la aplicación de impresión', 'Comanda', { duration: 3000 });
     }
-    
-    // setTimeout(() => wref.close(), 3000);
   }
 
   onSelectionChangeFP = (msc: MatSelectChange) => {

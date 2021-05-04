@@ -27,6 +27,7 @@ import { ArticuloService } from '../../../../wms/services/articulo.service';
 import { Impresora } from '../../../../admin/interfaces/impresora';
 import { ImpresoraService } from '../../../../admin/services/impresora.service';
 import { ConfiguracionService } from '../../../../admin/services/configuracion.service';
+import { Base64 } from 'js-base64';
 
 @Component({
   selector: 'app-form-factura-manual',
@@ -315,7 +316,9 @@ export class FormFacturaManualComponent implements OnInit {
   }
 
   printToBT = (msgToPrint: string = '') => {
-    const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${btoa(msgToPrint)}`;
+    const convertir = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_ENVIA_COMO_BASE64);    
+    const data = convertir ? Base64.encode(msgToPrint, true) : msgToPrint;
+    const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${data}`;
     try {
       window.location.href = AppHref;
     } catch (error) {

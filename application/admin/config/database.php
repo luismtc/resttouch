@@ -35,4 +35,10 @@ if (isset($_SERVER["GAE_APPLICATION"])) {
 	$db['default']['username'] = 'root';
 	$db['default']['password'] = 'PoChoco2016';
 	$db['default']['database'] = 'administracion';
+
+	/* DEV */
+	// $db['default']['hostname'] = '192.168.18.240';
+	// $db['default']['username'] = 'devja';
+	// $db['default']['password'] = 'D3vJA2020!';
+	// $db['default']['database'] = 'administracion';
 }

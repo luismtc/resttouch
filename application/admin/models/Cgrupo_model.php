@@ -10,6 +10,8 @@ class Cgrupo_model extends General_model {
 	public $receta = 0;
 	public $impresora;
 	public $descuento = 0;
+	public $cuenta_contable = null;
+	public $bodega = null;
 
 	public function __construct($id = "")
 	{

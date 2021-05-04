@@ -91,6 +91,9 @@
                 <div class="col m3 s3">
                     <mat-checkbox name="mostrar_inventario" class="example-margin" [(ngModel)]="+articulo.mostrar_inventario">Mostrar en Inventario</mat-checkbox>
                 </div>
+                <div class="col m3 s3">
+                    <mat-checkbox name="esreceta" class="example-margin" [(ngModel)]="+articulo.esreceta">Es receta</mat-checkbox>
+                </div>
             </div>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmArticulo.form.valid || !articulo.categoria_grupo">

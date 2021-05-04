@@ -23,6 +23,7 @@ class Articulo_model extends General_model {
 	public $rendimiento = 1;
 	public $costo = 0;
 	public $mostrar_inventario = 0;
+	public $esreceta = 0;
 
 	public function __construct($id = "")
 	{

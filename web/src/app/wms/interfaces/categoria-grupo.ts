@@ -10,6 +10,8 @@ export interface CategoriaGrupo {
     receta: number;
     impresora: number;
     descuento: number;
+    cuenta_contable?: string;
+    bodega?: number;
     antecesores?: string;
 }
 
@@ -21,6 +23,8 @@ export interface CategoriaGrupoResponse {
     receta: number;
     impresora: number;
     descuento: number;
+    cuenta_contable?: string;
+    bodega?: number;
     articulo: Articulo[];
 }
 
@@ -31,5 +35,7 @@ export interface CategoriaGrupoImpresora {
     descripcion: string;
     receta: number;
     impresora?: Impresora;
+    cuenta_contable?: string;
+    bodega?: number;
     descuento: number;
 }

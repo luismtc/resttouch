@@ -8,6 +8,9 @@ import { ArticuloService } from '../../../services/articulo.service';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 
+import { Bodega } from '../../../interfaces/bodega';
+import { BodegaService } from '../../../services/bodega.service';
+
 
 @Component({
   selector: 'app-sub-categoria-producto',
@@ -24,10 +27,12 @@ export class SubCategoriaProductoComponent implements OnInit {
   public categoriasGrupos: CategoriaGrupo[] = [];
   public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
+  public bodegas: Bodega[] = [];
 
   constructor(
     private snackBar: MatSnackBar,
     private articuloSrvc: ArticuloService,
+    private bodegaSrvc: BodegaService,
     private ls: LocalstorageService
   ) {
     this.resetCategoriaGrupo();
@@ -37,6 +42,7 @@ export class SubCategoriaProductoComponent implements OnInit {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
     this.loadCategorias();
     this.loadImpresoras();
+    this.loadBodegas();
   }
 
   loadCategorias = () => {
@@ -52,6 +58,14 @@ export class SubCategoriaProductoComponent implements OnInit {
       // console.log(res);
       if (res) {
         this.impresoras = res;
+      }
+    });
+  }
+
+  loadBodegas = () => {
+    this.bodegaSrvc.get({ sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res: Bodega[]) => {
+      if (res) {
+        this.bodegas = res;
       }
     });
   }
@@ -93,4 +107,11 @@ export class SubCategoriaProductoComponent implements OnInit {
       }
     });
   }
+
+  setCatGrp = (obj: CategoriaGrupo) => {
+    this.categoriaGrupo = obj;
+    // console.log(obj);
+    // console.log(this.categoriaGrupo);
+  }
+
 }

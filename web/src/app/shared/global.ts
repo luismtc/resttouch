@@ -1,7 +1,8 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
-// const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
-const urlBase = 'https://resttouch.c807.com/api'; // C807
+const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
+// const urlBase = 'http://192.168.18.241/api'; // RT - Dev
+// const urlBase = 'https://resttouch.c807.com/api'; // RT - Prod
 
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
@@ -44,7 +45,8 @@ export const GLOBAL = {
         RT_CUENTA_CONTABLE_PROPINA: 'RT_CUENTA_CONTABLE_PROPINA',
         RT_CUENTA_CONTABLE_IVA_PROPINA: 'RT_CUENTA_CONTABLE_IVA_PROPINA',
         RT_IMPRIME_PROPINA_SUGERIDA: 'RT_IMPRIME_PROPINA_SUGERIDA',
-        RT_USA_CODIGO_BARRAS: 'RT_USA_CODIGO_BARRAS'
+        RT_USA_CODIGO_BARRAS: 'RT_USA_CODIGO_BARRAS',
+        RT_ENVIA_COMO_BASE64: 'RT_ENVIA_COMO_BASE64'
     },
     grupos: [
         {
@@ -111,3 +113,5 @@ export const MultiFiltro = (array: any[], filtro: any) => {
 
 export const OrdenarArrayObjetos = (objs: any[], campo: string) =>
 objs.sort((a, b) => (a[campo] > b[campo]) ? 1 : ((b[campo] > a[campo]) ? -1 : 0));
+
+export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));

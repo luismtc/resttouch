@@ -22,12 +22,26 @@
             <mat-checkbox name="descuento" class="fullWidth" [(ngModel)]="+categoriaGrupo.descuento">¿Aplica Descuento?</mat-checkbox>
 
             <mat-form-field class="fullWidth">
-                <mat-label>Impresora</mat-label>
+                <mat-label>Impresora:</mat-label>
                 <mat-select name="impresora" [(ngModel)]="categoriaGrupo.impresora" required>
                     <mat-option *ngFor="let imp of impresoras" [value]="imp.impresora">
                         {{imp.nombre}}
                     </mat-option>
                 </mat-select>                
+            </mat-form-field>
+
+            <mat-form-field class="fullWidth">
+                <mat-label>Sacar de la bodega:</mat-label>
+                <mat-select name="bodega" [(ngModel)]="categoriaGrupo.bodega">
+                    <mat-option *ngFor="let bode of bodegas" [value]="bode.bodega">
+                        {{bode.descripcion}}
+                    </mat-option>
+                </mat-select>                
+            </mat-form-field>
+
+            <mat-form-field class="fullWidth">
+                <input type="text" matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Cuenta contable (si aplica)" name="cuenta_contable" [(ngModel)]="categoriaGrupo.cuenta_contable" minlength="0" maxlength="10">
+                <input type="text" matInput *ngIf="esMovil" placeholder="Cuenta contable (si aplica)" name="cuenta_contable" [(ngModel)]="categoriaGrupo.cuenta_contable" minlength="0" maxlength="10">
             </mat-form-field>
 
             <mat-form-field class="fullWidth">
@@ -56,7 +70,7 @@
         </mat-chip-list>
 
         <mat-chip-list>
-            <mat-chip color="warn" *ngFor="let catGrupo of categoriasGrupos" (click)="categoriaGrupo = catGrupo" selected>
+            <mat-chip color="warn" *ngFor="let catGrupo of categoriasGrupos" (click)="setCatGrp(catGrupo)" selected>
                 {{catGrupo.descripcion}}
             </mat-chip>
         </mat-chip-list>

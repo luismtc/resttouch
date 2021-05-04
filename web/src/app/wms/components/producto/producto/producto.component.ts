@@ -71,7 +71,8 @@ export class ProductoComponent implements OnInit {
           cantidad_maxima: obj.cantidad_maxima,
           combo: obj.combo,
           rendimiento: obj.rendimiento,
-          mostrar_inventario: obj.mostrar_inventario
+          mostrar_inventario: obj.mostrar_inventario,
+          esreceta: obj.esreceta
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();

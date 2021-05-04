@@ -70,6 +70,8 @@ export class ArticuloService {
       receta: +item.receta,
       impresora: item.impresora,
       descuento: item.descuento,
+      bodega: item.bodega,
+      cuenta_contable: item.cuenta_contable,
       antecesores: null
     }));
     return lst;

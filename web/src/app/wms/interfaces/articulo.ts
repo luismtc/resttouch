@@ -23,6 +23,7 @@ export interface Articulo {
     rendimiento?: number;
     costo?: number;
     mostrar_inventario?: number;
+    esreceta?: number;
 }
 
 export interface ArticuloResponse {
@@ -43,6 +44,7 @@ export interface ArticuloResponse {
     cantidad_maxima?: number;
     rendimiento?: number;
     mostrar_inventario?: number;
+    esreceta?: number;
 }
 
 export interface ArbolCategoriaGrupo {
@@ -94,4 +96,5 @@ export interface ProductoSelected {
     monto_extra?: number;
     multiple?: number;
     combo?: number;
+    esreceta?: number;
 }
