@@ -16,9 +16,10 @@
                 <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" maxlength="15" required>
                 <input matInput *ngIf="esMovil" placeholder="Usuario" name="usrname" [(ngModel)]="usuario.usrname" maxlength="15" required>
             </mat-form-field>
-            <mat-form-field class="fullWidth">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="password" placeholder="Contraseña" name="contrasenia" minlength="4" maxlength="10" [(ngModel)]="usuario.contrasenia">
-                <input matInput *ngIf="esMovil" type="password" placeholder="Contraseña" name="contrasenia" minlength="4" maxlength="10" [(ngModel)]="usuario.contrasenia">
+            <mat-form-field class="fullWidth separacion">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="password" placeholder="Contraseña" name="contrasenia" minlength="4" maxlength="10" [(ngModel)]="usuario.contrasenia" [required]="!usuario.usuario">
+                <input matInput *ngIf="esMovil" type="password" placeholder="Contraseña" name="contrasenia" minlength="4" maxlength="10" [(ngModel)]="usuario.contrasenia" [required]="!usuario.usuario">
+                <mat-hint align="start"><strong>La contraseña debe tener entre 4 y 10 caracteres. Se recomienda una contraseña segura pero fácil de recordar.</strong></mat-hint>
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="password" placeholder="Pin desbloqueo" name="pindesbloqueo" [(ngModel)]="usuario.pindesbloqueo" minlength="4" maxlength="32" [required]="habilitaBloqueo">
@@ -26,7 +27,7 @@
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Sede</mat-label>
-                <mat-select name="sede" [(ngModel)]="usuario.sede">
+                <mat-select name="sede" [(ngModel)]="usuario.sede" required>
                     <mat-option *ngFor="let s of sedes" [value]="s.sede">
                         {{s.nombre}}
                     </mat-option>

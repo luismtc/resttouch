@@ -144,14 +144,18 @@ class Usuario_model extends General_model
         }
     }
 
-    private function checkUserExists($usr, $sede)
+    private function checkUserExists($usr, $sede = 0)
     {
+        if ((int)$sede > 0)
+        {
+            $this->db->where('sede', $sede);
+        }
+
         $existe = -1;
         $dbusr = $this->db
             ->select('usuario')
             ->from($this->tabla)
-            ->where('usrname', $usr)
-            ->where('sede', $sede)
+            ->where('usrname', $usr)            
             ->get();
         if ($dbusr->num_rows() > 0) {
             $user = $dbusr->row();
@@ -176,7 +180,7 @@ class Usuario_model extends General_model
     {
         //$dataToInsert = $this->getValidData($dataToInsert, $this->columnas);
         if ($dataToInsert) {
-            $idusr = $this->checkUserExists($dataToInsert['usrname'], $dataToInsert['sede']);
+            $idusr = $this->checkUserExists($dataToInsert['usrname']);
             if ($idusr < 0) {
                 if (array_key_exists('contrasenia', $dataToInsert)) {
                     $dataToInsert['contrasenia'] = password_hash($dataToInsert['contrasenia'], PASSWORD_BCRYPT, array('cost' => 12));

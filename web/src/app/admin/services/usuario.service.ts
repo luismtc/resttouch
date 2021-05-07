@@ -9,34 +9,34 @@ import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 // import * as qs from 'qs';
 
-export interface IAppMenu {
-  modulo: number;
-  descripcion: string;
-  icono: string;
-  url?: string;
-  rol?: string;
-}
+// export interface IAppMenu {
+//   modulo: number;
+//   descripcion: string;
+//   icono: string;
+//   url?: string;
+//   rol?: string;
+// }
 
-export interface IBtnModulo {
-  boton: IAppMenu[];
-}
+// export interface IBtnModulo {
+//   boton: IAppMenu[];
+// }
 
-const APPMENU: IBtnModulo[] = [
-  {
-    boton: [
-      { modulo: 1, descripcion: 'Cuenta', icono: 'person', url: '/admin/dashboard' },
-      { modulo: 2, descripcion: 'POS', icono: 'restaurant', url: '/restaurante/tranareas' },
-      { modulo: 3, descripcion: 'WMS', icono: 'store', url: '/wms/ingresos' },
-    ]
-  },
-  {
-    boton: [
-      { modulo: 4, descripcion: 'OCS', icono: 'account_balance_wallet', url: '/ordcomp/ordcomp' },
-      { modulo: 5, descripcion: 'ADMIN', icono: 'supervisor_account', url: '/admin/dashboard' },
-      { modulo: 6, descripcion: 'Salir', icono: 'power_settings_new', url: '/admin/login', rol: 'LOGOUT' }
-    ]
-  }
-];
+// const APPMENU: IBtnModulo[] = [
+//   {
+//     boton: [
+//       { modulo: 1, descripcion: 'Cuenta', icono: 'person', url: '/admin/dashboard' },
+//       { modulo: 2, descripcion: 'POS', icono: 'restaurant', url: '/restaurante/tranareas' },
+//       { modulo: 3, descripcion: 'WMS', icono: 'store', url: '/wms/ingresos' },
+//     ]
+//   },
+//   {
+//     boton: [
+//       { modulo: 4, descripcion: 'OCS', icono: 'account_balance_wallet', url: '/ordcomp/ordcomp' },
+//       { modulo: 5, descripcion: 'ADMIN', icono: 'supervisor_account', url: '/admin/dashboard' },
+//       { modulo: 6, descripcion: 'Salir', icono: 'power_settings_new', url: '/admin/login', rol: 'LOGOUT' }
+//     ]
+//   }
+// ];
 
 @Injectable({
   providedIn: 'root'
@@ -79,39 +79,21 @@ export class UsuarioService {
   }
 
   desbloquear = (pindesbloqueo: number) => {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    }; */
-
     return this.http.post<any>(
       `${GLOBAL.url}/${this.moduleUrl}/desbloqueo_usuario`,
-      { pindesbloqueo }
-      // , httpOptions
+      { pindesbloqueo }      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getAll(debaja: number = 0): Observable<Usuario[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
     return this.http.get<Usuario[]>(
       `${GLOBAL.url}/${this.moduleUrl}/obtener_usuarios`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   async checkUserToken() {
     this.setToken();
     if (this.usrToken) {
-      /* const httpOptions = {
-        headers: new HttpHeaders({
-          'Authorization': this.usrToken
-        })
-      }; */
       const resp: any = await this.http.get(`${GLOBAL.url}/${this.moduleUrl}/checktoken_get`).toPromise();
       if (resp.valido) {
         return resp.valido;
@@ -123,42 +105,23 @@ export class UsuarioService {
   }
 
   get(filtros: any): Observable<Usuario[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
     return this.http.post<Usuario[]>(
       `${GLOBAL.url}/${this.moduleUrl}/usuarios_post`,
       filtros
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getMeserosTurno(): Observable<Usuario[]> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
+  getMeserosTurno(): Observable<Usuario[]> {    
     return this.http.get<Usuario[]>(
       `${GLOBAL.urlCatalogos}/get_mesero`
-      // , httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   save(entidad: Usuario): Observable<Usuario> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
-
     if (entidad.usuario) {
       return this.http.post<Usuario>(
         `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`,
-        entidad
-        // , httpOptions
+        entidad        
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     } else {
       if (!entidad.contrasenia) {
@@ -166,14 +129,13 @@ export class UsuarioService {
       }
       return this.http.post<Usuario>(
         `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`,
-        entidad
-        // , httpOptions
+        entidad        
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
     }
 
   }
 
-  getUserAppMenu = (): IBtnModulo[] => APPMENU;
+  // getUserAppMenu = (): IBtnModulo[] => APPMENU;
 
   getAppMenu = (): AccesoUsuario[] => this.ls.get(GLOBAL.usrTokenVar).acceso || [];
 

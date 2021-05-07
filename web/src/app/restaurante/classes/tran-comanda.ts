@@ -515,7 +515,8 @@ export class TranComanda {
     printToBT = (msgToPrint: string = '') => {        
         const convertir = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_ENVIA_COMO_BASE64);
         const data = convertir ? Base64.encode(msgToPrint, true) : msgToPrint;        
-        const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${data}`;
+        // const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${data}`;
+        const AppHref = GLOBAL.DEEP_LINK_ANDROID.replace('__INFOBASE64__', data);
         try {
             window.location.href = AppHref;
         } catch (error) {

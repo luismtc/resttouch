@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import { GLOBAL } from '../../../../shared/global';
 import { LocalstorageService } from '../../../services/localstorage.service';
 
@@ -8,6 +9,7 @@ import { UsuarioService } from '../../../services/usuario.service';
 import { Sede } from '../../../interfaces/sede';
 import { SedeService } from '../../../services/sede.service';
 import { ConfiguracionService } from '../../../services/configuracion.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-form-usuario',
@@ -28,7 +30,8 @@ export class FormUsuarioComponent implements OnInit {
     private usuarioSrvc: UsuarioService,
     private sedeSrvc: SedeService,
     private configSrvc: ConfiguracionService,
-    private ls: LocalstorageService
+    private ls: LocalstorageService,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -50,6 +53,24 @@ export class FormUsuarioComponent implements OnInit {
   }
 
   onSubmit() {
+    if (+this.usuario.debaja === 0) {
+      this.guardarUsuario();
+    } else {
+      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        maxWidth: '400px',
+        data: new ConfirmDialogModel(
+          'De baja', `¿Está seguro(a) de dar de baja a ${this.usuario.nombres + ' ' + this.usuario.apellidos}?`, 'Sí', 'No'
+        )
+      });
+      dialogRef.afterClosed().subscribe(cnf => {
+        if (cnf) {
+          this.guardarUsuario();
+        }
+      });
+    }
+  }
+
+  guardarUsuario = () => {
     this.usuarioSrvc.save(this.usuario).subscribe((res) => {
       if (res) {
         this.resetUsuario();

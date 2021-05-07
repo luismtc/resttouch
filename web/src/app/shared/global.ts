@@ -22,7 +22,8 @@ export const GLOBAL = {
     rtClientePedido: 'rt_cliente_pedido',
     reintentos: 0,
     IDIOMA_TECLADO: 'Español',
-    DEEP_LINK_ANDROID: 'com.restouch.impresion://com.restouch.impresion/impresion/',
+    DEEP_LINK_ANDROID: 'intent://scan/impresion/__INFOBASE64__#Intent;scheme=restouch;package=com.restouch.impresion;end',
+    // DEEP_LINK_ANDROID: 'com.restouch.impresion://com.restouch.impresion/impresion/',
     // DEEP_LINK_ANDROID: 'com.restouch.impresion://impresion/',
     CONSTANTES: {
         RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',
