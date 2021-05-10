@@ -224,13 +224,24 @@ export class FormIngresoComponent implements OnInit {
   }
 
   addToDetail = () => {
+    this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo), 1);
+    var art:any;
+    art = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo);
+    this.detalleIngreso.presentacion = art[0].presentacion_reporte;
     this.detallesIngreso.push(this.detalleIngreso);
     this.resetDetalleIngreso();
     this.updateTableDataSource();
   }
 
-  removeFromDetail = (idarticulo: number) =>
-    this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo), 1);
+  editFromDetail = (idarticulo: number) => {
+    var tmp = this.detallesIngreso.filter(de => +de.articulo === +idarticulo)[0];
+    this.detalleIngreso = tmp
+    this.setPresentaciones();
+    this.txtArticuloSelected = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo)[0];
+    //this.showDetalleIngresoForm = true;
+    //
+  }
+    
 
   getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
 
