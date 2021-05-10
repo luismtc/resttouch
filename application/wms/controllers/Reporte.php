@@ -172,6 +172,9 @@ class Reporte extends CI_Controller {
 					"antiguedad"  => $row->existencia,
 					"ingresos"    => 0,
 					"salidas"     => 0,
+					"egresos" => 0,
+					"comandas" => 0,
+					"facturas" => 0,
 					"presentacion" => $pres->descripcion,
 					"detalle" 	  => []
 				];
@@ -193,6 +196,9 @@ class Reporte extends CI_Controller {
 			if (isset($dato[$row->articulo])) {
 				$dato[$row->articulo]['ingresos'] += ($ingresos);
 				$dato[$row->articulo]['salidas'] += ($salidas);
+				$dato[$row->articulo]['egresos'] += ($row->tipo_salida == 1) ? $row->cantidad : 0;
+				$dato[$row->articulo]['comandas'] += ($row->tipo_salida == 2) ? $row->cantidad : 0;
+				$dato[$row->articulo]['facturas'] += ($row->tipo_salida == 3) ? $row->cantidad : 0;
 				$dato[$row->articulo]['detalle'][] = $row;
 
 			} else{
@@ -203,6 +209,9 @@ class Reporte extends CI_Controller {
 					"antiguedad"  => 0,
 					"ingresos"    => $ingresos,
 					"salidas"     => $salidas ,
+					"egresos" => ($row->tipo_salida == 1) ? $row->cantidad : 0,
+					"comandas" => ($row->tipo_salida == 2) ? $row->cantidad : 0,
+					"facturas" => ($row->tipo_salida == 3) ? $row->cantidad : 0,
 					"presentacion" => $pres->descripcion,
 					"detalle"	  => [$row]
 				];
@@ -234,7 +243,10 @@ class Reporte extends CI_Controller {
 				"Presentación",
 				"Saldo Anterior",
 				"Ingresos",
-				"Salidas",
+				"Egresos",
+				"Comandas",
+				"Facturas",
+				"Total Egresos",
 				"Saldo Actual"
 			];
 			/*Encabezado*/
@@ -249,8 +261,8 @@ class Reporte extends CI_Controller {
 
 			foreach ($args["articulos"] as $row) {
 				$hoja->fromArray($nombres, null, "A{$fila}");
-				$hoja->getStyle("A{$fila}:G{$fila}")->getFont()->setBold(true);
-				$hoja->getStyle("A{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("A{$fila}:J{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("A{$fila}:J{$fila}")->getAlignment()->setHorizontal('center');
 				$fila++;
 
 				$saldo = $row['antiguedad'] + $row['ingresos'] - $row['salidas'];
@@ -261,17 +273,23 @@ class Reporte extends CI_Controller {
 					$row['presentacion'],
 					round($row['antiguedad'],2),
 					round($row['ingresos'],2),
+					round($row['egresos'],2),
+					round($row['comandas'],2),
+					round($row['facturas'],2),
 					round($row['salidas'],2),
 					round($saldo,2)
 				];
 
 				$hoja->fromArray($reg, null, "A{$fila}");
-				$hoja->getStyle("C{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$hoja->getStyle("C{$fila}:H{$fila}")->getNumberFormat()->setFormatCode('0.00');
 				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
 				$fila++;
 
 				if (count($row['detalle']) > 0) {
 					$sub = [
+						"",
+						"",
+						"",
 						"",
 						"",
 						"Fecha",
@@ -289,6 +307,9 @@ class Reporte extends CI_Controller {
 						$detalle = [
 							"",
 							"",
+							"",
+							"",
+							"",
 							$row['descripcion'],
 							formatoFecha($det->fecha,2),
 							$det->id,
@@ -297,7 +318,7 @@ class Reporte extends CI_Controller {
 						];
 
 						$hoja->fromArray($detalle, null, "A{$fila}");
-						$hoja->getStyle("E{$fila}:F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$hoja->getStyle("I{$fila}:J{$fila}")->getNumberFormat()->setFormatCode('0.00');
 						$fila++;
 					}
 					$fila++;

@@ -164,6 +164,23 @@ class Comanda_model extends General_Model
 
 			if (count($receta) > 0 && $art->combo == 0 && $art->multiple == 0 && $nuevo) {
 				foreach ($receta as $rec) {
+					$presR = $this->Presentacion_model->buscar([
+						"medida" => $rec->medida->medida,
+						"cantidad" => 1,
+						"_uno" => true
+					]);
+
+					if (!$presR) {
+						$presR = new Presentacion_model();
+						$presR->guardar([
+							"medida" => $rec->medida->medida,
+							"descripcion" => $rec->medida->descripcion,
+							"cantidad" => 1
+						]);
+
+						$presR->presentacion = $presR->getPK();
+					}
+
 					$detr = new Dcomanda_model();
 					$dato = [
 						"comanda" => $this->getPK(),
@@ -172,7 +189,7 @@ class Comanda_model extends General_Model
 						"precio" => 0,
 						"total" => 0,
 						"impreso" => 0,
-						"presentacion" => $rec->articulo->presentacion,
+						"presentacion" => $presR->presentacion,
 						"detalle_comanda_id" => $idx
 					];
 					$detr->guardar($dato);

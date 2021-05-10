@@ -46,7 +46,6 @@ class Reporte_model extends CI_Model {
 			$select .= " ,e.ingreso as id,
 				1 as tipo,
 				f.bodega,
-				0 as tipo_salida,
 				e.fecha,
 				g.descripcion as tipo_movimiento,
 				f.descripcion as nbodega";
@@ -98,7 +97,6 @@ EOT;
 			$select .= " ,e.egreso as id,
 				2 as tipo,
 				f.bodega,
-				1 as tipo_salida,
 				e.fecha,
 				g.descripcion as tipo_movimiento,
 				f.descripcion as nbodega";
@@ -133,7 +131,7 @@ EOT;
 
 		if (isset($args['fecha']) && !empty($args['fecha'])) {
 			$fecha = $args['fecha'];
-			$where .= " date(e.fhcreacion) <= '{$fecha}'";
+			$where .= " date(f.inicio) <= '{$fecha}'";
 		}
 
 		if (in_array($this->tipo, [1,2])) {
@@ -141,17 +139,16 @@ EOT;
 		}
 
 		if ($this->tipo == 2) {
-			$where .= " date(e.fhcreacion) < '{$args['fdel']}'";
+			$where .= " date(f.fecha) < '{$args['fdel']}'";
 		}
 
 		if ($this->tipo == 3) {
-			$where .= " date(e.fhcreacion) between '{$args['fdel']}' and '{$args['fal']}'";
+			$where .= " date(f.fecha) between '{$args['fdel']}' and '{$args['fal']}'";
 			$group .= " e.comanda, f.fecha, b.articulo";
 			$select .= " ,e.comanda id,
 				2 as tipo,
 				1 as bodega,
-				2 as tipo_salida,
-				e.fhcreacion,
+				f.fecha,
 				'Comanda' tipo_movimiento,				
 				'Comanda' nbodega";
 		}
@@ -198,7 +195,6 @@ EOT;
 			$select .= " ,f.numero_factura id,
 				2 as tipo,
 				1 as bodega,
-				3 as tipo_salida,
 				f.fecha_factura as fecha,
 				'Factura Directa' tipo_movimiento,
 				'Factura Directa' nbodega";

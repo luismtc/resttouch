@@ -32,7 +32,10 @@
 				<td class="titulo">Presentación</td>
 				<td class="titulo">Saldo Anterior</td>
 				<td class="titulo">Ingresos</td>
-				<td class="titulo">Salidas</td>
+				<td class="titulo">Egresos</td>
+				<td class="titulo">Comandas</td>
+				<td class="titulo">Factura Directa</td>
+				<td class="titulo">Total Egresos</td>
 				<td class="titulo">Saldo Actual</td>
 			</tr>
 			<?php $saldo = $row['antiguedad'] + $row['ingresos'] - $row['salidas'] ?>
@@ -43,11 +46,17 @@
 
 				<td class="text-right"><?php echo number_format($row['antiguedad'],2)?></td>
 				<td class="text-right"><?php echo number_format($row['ingresos'],2)?></td>
+				<td class="text-right"><?php echo number_format($row['egresos'],2)?></td>
+				<td class="text-right"><?php echo number_format($row['comandas'],2)?></td>
+				<td class="text-right"><?php echo number_format($row['facturas'],2)?></td>
 				<td class="text-right"><?php echo number_format($row['salidas'],2)?></td>
 				<td class="text-right"><?php echo number_format($saldo,2)?></td>
 			</tr>
 			<?php if (count($row['detalle']) > 0): ?>
 					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
 						<td></td>
 						<td></td>
 						<td class="titulo">Fecha</td>
@@ -58,6 +67,9 @@
 					</tr>
 			<?php foreach ($row['detalle'] as $det): ?>
 					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
 						<td></td>
 						<td></td>
 						<td><?php echo formatoFecha($det->fecha,2) ?></td>
