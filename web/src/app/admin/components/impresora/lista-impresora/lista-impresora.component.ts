@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { LocalstorageService } from '../../../services/localstorage.service';
 
@@ -16,6 +16,7 @@ export class ListaImpresoraComponent implements OnInit {
   public lstImpresoras: Impresora[];
   public lstImpresorasPaged: Impresora[];
   @Output() getImpresoraEv = new EventEmitter();
+  @ViewChild('paginador') paginador: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
@@ -36,7 +37,7 @@ export class ListaImpresoraComponent implements OnInit {
     this.loadImpresoras();
   }
 
-  applyFilter() {
+  applyFilter(cambioPagina = false) {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.lstImpresoras, this.txtFiltro);
       this.length = tmpList.length;
@@ -45,6 +46,9 @@ export class ListaImpresoraComponent implements OnInit {
       this.length = this.lstImpresoras.length;
       this.lstImpresorasPaged = PaginarArray(this.lstImpresoras, this.pageSize, this.pageIndex + 1);
     }
+    if (!cambioPagina) {
+			this.paginador.firstPage();
+		}
   }
 
   loadImpresoras = () => {
@@ -65,6 +69,6 @@ export class ListaImpresoraComponent implements OnInit {
   pageChange = (e: PageEvent) => {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.applyFilter();
+    this.applyFilter(true);
   }
 }

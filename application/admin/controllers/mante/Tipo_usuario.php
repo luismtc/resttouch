@@ -16,6 +16,12 @@ class Tipo_usuario extends CI_Controller {
 		->set_content_type("application/json", "UTF-8");
 	}
 
+	private function chkExiste($descripcion)
+	{
+		$tu = $this->Tipo_usuario_model->buscar(['TRIM(UPPER(descripcion))' =>  trim(strtoupper($descripcion))]);
+		return $tu ? true : false;
+	}
+
 	public function guardar($id="")
 	{
 		$datos = ["exito" => false];
@@ -23,15 +29,20 @@ class Tipo_usuario extends CI_Controller {
 		if ($this->input->method() == "post") {
 			$datos          = json_decode(file_get_contents("php://input"), true);
 			$tusuario       = new Tipo_usuario_model($id);
-			$datos["exito"] = $tusuario->guardar($datos);;
 
-			if($datos["exito"]) {
-				$datos["mensaje"]   = "Datos Actualizados con Exito";
-				$datos["categoria"] = $tusuario;
+			if (!$this->chkExiste($datos['descripcion']))
+			{
+				$datos["exito"] = $tusuario->guardar($datos);
+
+				if($datos["exito"]) {
+					$datos["mensaje"]   = "Datos Actualizados con Exito";
+					$datos["categoria"] = $tusuario;
+				} else {
+					$datos["mensaje"] = $tusuario->getMensaje();
+				}
 			} else {
-				$datos["mensaje"] = $tusuario->getMensaje();
-			}	
-
+				$datos["mensaje"] = "Este tipo de empleado ya existe.";				
+			}
 		} else {
 			$datos["mensaje"] = "Parametros Invalidos";
 		}

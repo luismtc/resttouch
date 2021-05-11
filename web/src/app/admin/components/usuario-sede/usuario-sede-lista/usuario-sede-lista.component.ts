@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Usuario } from '../../../interfaces/usuario';
@@ -15,6 +15,7 @@ export class UsuarioSedeListaComponent implements OnInit {
   public lstUsuario: Usuario[];
 	public lstUsuarioPaged: Usuario[];
 	@Output() getUsuarioEv = new EventEmitter();
+	@ViewChild('paginador') paginador: MatPaginator;
 
 	public length = 0;
 	public pageSize = 5;
@@ -29,7 +30,7 @@ export class UsuarioSedeListaComponent implements OnInit {
 	  this.loadUsuario();
   }
 
-  applyFilter() {
+  applyFilter(cambioPagina = false) {
 		if (this.txtFiltro.length > 0) {
 			const tmpList = MultiFiltro(this.lstUsuario, this.txtFiltro);
 			this.length = tmpList.length;
@@ -37,6 +38,9 @@ export class UsuarioSedeListaComponent implements OnInit {
 		} else {
 			this.length = this.lstUsuario.length;
 			this.lstUsuarioPaged = PaginarArray(this.lstUsuario, this.pageSize, this.pageIndex + 1);
+		}
+		if (!cambioPagina) {
+			this.paginador.firstPage();
 		}
 	}
 
@@ -58,7 +62,6 @@ export class UsuarioSedeListaComponent implements OnInit {
 	pageChange = (e: PageEvent) => {
 		this.pageSize = e.pageSize;
 		this.pageIndex = e.pageIndex;
-		this.applyFilter();
+		this.applyFilter(true);
 	}
-
 }

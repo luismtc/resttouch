@@ -16,8 +16,8 @@
                         </mat-select>
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
-                        <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" required>
-                        <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" required>
+                        <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" minlength="1" maxlength="75" required>
+                        <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="usuarioTipo.descripcion" minlength="1" maxlength="75" required>
                     </mat-form-field>
                     <div align="end">
                         <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmTipoUsuario.form.valid">

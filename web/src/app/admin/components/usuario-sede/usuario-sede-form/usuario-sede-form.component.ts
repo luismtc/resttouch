@@ -8,35 +8,35 @@ import { UsuarioSede } from '../../../interfaces/acceso';
 import { AccesoUsuarioService } from '../../../services/acceso-usuario.service';
 
 @Component({
-  selector: 'app-usuario-sede-form',
-  templateUrl: './usuario-sede-form.component.html',
-  styleUrls: ['./usuario-sede-form.component.css']
+	selector: 'app-usuario-sede-form',
+	templateUrl: './usuario-sede-form.component.html',
+	styleUrls: ['./usuario-sede-form.component.css']
 })
 export class UsuarioSedeFormComponent implements OnInit {
 
-  @Input() usuario: Usuario;
+	@Input() usuario: Usuario;
 	@Output() AccesoUsuarioSavedEv = new EventEmitter();
 
-  public accesos: UsuarioSede[] = [];
-  public sedes: Sede[] = []
-  public acceso: UsuarioSede;
-  public displayedColumns: string[] = ['sede', 'editItem'];
-  public dataSource: MatTableDataSource<UsuarioSede>;
+	public accesos: UsuarioSede[] = [];
+	public sedes: Sede[] = []
+	public acceso: UsuarioSede;
+	public displayedColumns: string[] = ['sede', 'editItem'];
+	public dataSource: MatTableDataSource<UsuarioSede>;
 
 	constructor(
 		private _snackBar: MatSnackBar,
-    private accesoUsuarioSrvc: AccesoUsuarioService,
-    private sedeSrvc: SedeService
+		private accesoUsuarioSrvc: AccesoUsuarioService,
+		private sedeSrvc: SedeService
 	) {
 		this.resetAcceso();
 	}
 
-  ngOnInit() {
-    this.loadSedes()
-  }
+	ngOnInit() {
+		this.loadSedes()
+	}
 
-  loadAccesos = (idusuario: number = +this.usuario.usuario) => {
-		this.accesoUsuarioSrvc.getSedes({usuario:idusuario}).subscribe((res: any[]) => {
+	loadAccesos = (idusuario: number = +this.usuario.usuario) => {
+		this.accesoUsuarioSrvc.getSedes({ usuario: idusuario }).subscribe((res: any[]) => {
 			if (res) {
 				this.accesos = res
 				this.updateTableDataSource();
@@ -54,12 +54,12 @@ export class UsuarioSedeFormComponent implements OnInit {
 
 	resetAcceso = () => {
 		this.acceso = {
-			usuario_sede: null, sede: null, usuario: null, anulado: 0 
+			usuario_sede: null, sede: null, usuario: null, anulado: 0
 		};
 	}
 
 	setAcceso = (pres: any) => {
-		this.acceso =  {
+		this.acceso = {
 			usuario_sede: pres.usuario_sede,
 			sede: pres.sede.sede,
 			usuario: pres.usuario.usuario,
@@ -67,32 +67,32 @@ export class UsuarioSedeFormComponent implements OnInit {
 		};
 	}
 
-  	onSubmit = () => {
-  		this.acceso.usuario = this.usuario.usuario;
+	onSubmit = () => {
+		this.acceso.usuario = this.usuario.usuario;
 
-  		this.accesoUsuarioSrvc.saveSedes(this.acceso).subscribe(res => {
-  			if (res.exito) {
-  				//this.resetAcceso();
-  				this.loadAccesos(this.usuario.usuario);
-  				this._snackBar.open('Acceso guardado con éxito...', 'Sede Usuario', { duration: 3000 });
-  			} else {
-  				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
-  			}
-  		})
-  	}
+		this.accesoUsuarioSrvc.saveSedes(this.acceso).subscribe(res => {
+			if (res.exito) {
+				//this.resetAcceso();
+				this.loadAccesos(this.usuario.usuario);
+				this._snackBar.open('Acceso guardado con éxito...', 'Sede Usuario', { duration: 3000 });
+			} else {
+				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
+			}
+		})
+	}
 
-  	removerAcceso = (pres: any) => {
-  		pres.anulado = 1;
-  		this.accesoUsuarioSrvc.saveSedes(pres).subscribe(res => {
-  			if (res.exito) {
-  				this.resetAcceso();
-  				this.loadAccesos(this.usuario.usuario);
-  				this._snackBar.open('Removido con éxito...', 'Sede Usuario', { duration: 3000 });
-  			} else {
-  				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
-  			}
-  		})
-  	}
+	removerAcceso = (pres: any) => {
+		pres.anulado = 1;
+		this.accesoUsuarioSrvc.saveSedes(pres).subscribe(res => {
+			if (res.exito) {
+				this.resetAcceso();
+				this.loadAccesos(this.usuario.usuario);
+				this._snackBar.open('Removido con éxito...', 'Sede Usuario', { duration: 3000 });
+			} else {
+				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
+			}
+		})
+	}
 
 	updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.accesos);
 

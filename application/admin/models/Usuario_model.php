@@ -194,7 +194,7 @@ class Usuario_model extends General_model
             } else {
                 return array(
                     'mensaje' => 'Este usuario ya existe.',
-                    'usuario' => $idusr
+                    'usuario' => null
                 );
             }
         } else {

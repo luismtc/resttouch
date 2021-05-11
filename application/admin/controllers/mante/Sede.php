@@ -86,7 +86,7 @@ class Sede extends CI_Controller {
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 
-			$datos['exito'] = $acceso->guardar($req);;
+			$datos['exito'] = $acceso->guardar($req);
 
 			if($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
