@@ -6,27 +6,30 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmImpresora="ngForm" (ngSubmit)="frmImpresora.form.valid && onSubmit()" novalidate>
-            <mat-form-field class="fullWidth">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Nombre" name="nombre" [(ngModel)]="impresora.nombre" required>
-                <input matInput *ngIf="esMovil" type="text" placeholder="Nombre" name="nombre" [(ngModel)]="impresora.nombre" required>
+            <mat-form-field class="fullWidth separacionPorHint">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Nombre" name="nombre" [(ngModel)]="impresora.nombre" minlength="1" maxlength="75" required>
+                <input matInput *ngIf="esMovil" type="text" placeholder="Nombre" name="nombre" [(ngModel)]="impresora.nombre" minlength="1" maxlength="75" required>
+                <mat-hint align="start"><strong>Nombre con el que aparece instalada en el sistema operativo.</strong></mat-hint>                
+            </mat-form-field>
+            <mat-form-field class="fullWidth separacionPorHint">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Dirección IP" name="ip" [(ngModel)]="impresora.direccion_ip" minlength="1" maxlength="40">
+                <input matInput *ngIf="esMovil" type="text" placeholder="Dirección IP" name="ip" [(ngModel)]="impresora.direccion_ip" minlength="1" maxlength="40">
+                <mat-hint align="start"><strong>Ejemplo: 192.168.1.16</strong></mat-hint>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Dirección IP" name="ip" [(ngModel)]="impresora.direccion_ip">
-                <input matInput *ngIf="esMovil" type="text" placeholder="Dirección IP" name="ip" [(ngModel)]="impresora.direccion_ip">
-            </mat-form-field>
-            <mat-form-field class="fullWidth">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Ubicación" name="ubicacion" [(ngModel)]="impresora.ubicacion">
-                <input matInput *ngIf="esMovil" type="text" placeholder="Ubicación" name="ubicacion" [(ngModel)]="impresora.ubicacion">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Ubicación" name="ubicacion" [(ngModel)]="impresora.ubicacion" minlength="1" maxlength="150">
+                <input matInput *ngIf="esMovil" type="text" placeholder="Ubicación" name="ubicacion" [(ngModel)]="impresora.ubicacion" minlength="1" maxlength="150">
             </mat-form-field>
             <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+impresora.bluetooth">¿Es bluetooth?
             </mat-checkbox>
-            <mat-form-field class="fullWidth" *ngIf="+impresora.bluetooth === 1">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Bluetooth MAC Address" name="bluetooth_mac_address" [(ngModel)]="impresora.bluetooth_mac_address" [required]="+impresora.bluetooth === 1">
-                <input matInput *ngIf="esMovil" type="text" placeholder="Bluetooth MAC Address" name="bluetooth_mac_address" [(ngModel)]="impresora.bluetooth_mac_address" [required]="+impresora.bluetooth === 1">
+            <mat-form-field class="fullWidth separacionPorHint" *ngIf="+impresora.bluetooth === 1">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Bluetooth MAC Address" name="bluetooth_mac_address" [(ngModel)]="impresora.bluetooth_mac_address" minlength="1" maxlength="40" [required]="+impresora.bluetooth === 1">
+                <input matInput *ngIf="esMovil" type="text" placeholder="Bluetooth MAC Address" name="bluetooth_mac_address" [(ngModel)]="impresora.bluetooth_mac_address" minlength="1" maxlength="40" [required]="+impresora.bluetooth === 1">
+                <mat-hint align="start"><strong>Ejemplo: AA:BB:CC:DD:EE:FF</strong></mat-hint>
             </mat-form-field>
             <mat-form-field class="fullWidth" *ngIf="+impresora.bluetooth === 1">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Modelo" name="modelo" [(ngModel)]="impresora.modelo" [required]="+impresora.bluetooth === 1">
-                <input matInput *ngIf="esMovil" type="text" placeholder="Modelo" name="modelo" [(ngModel)]="impresora.modelo" [required]="+impresora.bluetooth === 1">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Modelo" name="modelo" [(ngModel)]="impresora.modelo" minlength="1" maxlength="50">
+                <input matInput *ngIf="esMovil" type="text" placeholder="Modelo" name="modelo" [(ngModel)]="impresora.modelo" minlength="1" maxlength="50">
             </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion"

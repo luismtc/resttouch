@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { LocalstorageService } from '../../../services/localstorage.service';
 
@@ -17,6 +17,7 @@ export class ListaTipoUsuarioComponent implements OnInit {
 	public lstUsuarioTipo: UsuarioTipo[];
 	public lstUsuarioTipoPaged: UsuarioTipo[];
 	@Output() getTipoUsuarioEv = new EventEmitter();
+	@ViewChild('paginador') paginador: MatPaginator;
 
 	public length = 0;
 	public pageSize = 5;
@@ -25,7 +26,7 @@ export class ListaTipoUsuarioComponent implements OnInit {
 	public pageEvent: PageEvent;
 	public txtFiltro = '';
 	public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
-  	public esMovil = false;
+	public esMovil = false;
 
 	constructor(
 		private tipoUsuarioSrvc: TipoUsuarioService,
@@ -37,7 +38,7 @@ export class ListaTipoUsuarioComponent implements OnInit {
 		this.loadTipoUsuario();
 	}
 
-	applyFilter() {
+	applyFilter(cambioPagina = false) {
 		if (this.txtFiltro.length > 0) {
 			const tmpList = MultiFiltro(this.lstUsuarioTipo, this.txtFiltro);
 			this.length = tmpList.length;
@@ -45,6 +46,9 @@ export class ListaTipoUsuarioComponent implements OnInit {
 		} else {
 			this.length = this.lstUsuarioTipo.length;
 			this.lstUsuarioTipoPaged = PaginarArray(this.lstUsuarioTipo, this.pageSize, this.pageIndex + 1);
+		}
+		if (!cambioPagina) {
+			this.paginador.firstPage();
 		}
 	}
 
@@ -66,6 +70,6 @@ export class ListaTipoUsuarioComponent implements OnInit {
 	pageChange = (e: PageEvent) => {
 		this.pageSize = e.pageSize;
 		this.pageIndex = e.pageIndex;
-		this.applyFilter();
+		this.applyFilter(true);
 	}
 }

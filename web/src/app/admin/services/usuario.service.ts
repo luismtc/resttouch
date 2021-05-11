@@ -117,9 +117,9 @@ export class UsuarioService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  save(entidad: Usuario): Observable<Usuario> {
+  save(entidad: Usuario): Observable<any> {
     if (entidad.usuario) {
-      return this.http.post<Usuario>(
+      return this.http.post<any>(
         `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario/${entidad.usuario}`,
         entidad        
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
@@ -127,7 +127,7 @@ export class UsuarioService {
       if (!entidad.contrasenia) {
         delete entidad.contrasenia;
       }
-      return this.http.post<Usuario>(
+      return this.http.post<any>(
         `${GLOBAL.url}/${this.moduleUrl}/guardar_usuario`,
         entidad        
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));

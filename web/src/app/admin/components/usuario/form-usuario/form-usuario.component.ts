@@ -72,10 +72,12 @@ export class FormUsuarioComponent implements OnInit {
 
   guardarUsuario = () => {
     this.usuarioSrvc.save(this.usuario).subscribe((res) => {
-      if (res) {
+      if (res && res.usuario) {
         this.resetUsuario();
         this.usrSavedEv.emit();
         this.snackBar.open('Grabado con éxito.', 'Usuario', { duration: 5000 });
+      } else {
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Usuario', { duration: 5000 });        
       }
     });
   }
