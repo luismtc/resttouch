@@ -4,7 +4,7 @@
         <mat-card-title>
           <div class="row">
             <div class="col">
-              <h4>Inventario Fisico</h4>
+              <h4>Inventario Físico</h4>
             </div>
             <div class="col" style="float: right;">
               <button mat-button type="button" color="accent" (click)="showReporte = !showReporte;">
@@ -16,10 +16,10 @@
           
         </mat-card-title>
         <mat-card-content *ngIf="showReporte">
-          <form (ngSubmit)="onSubmit()" novalidate>
+          <form #frmFisicoReporte="ngForm" (ngSubmit)="frmFisicoReporte.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
               <mat-label>Bodega</mat-label>
-              <mat-select name="bodega" [(ngModel)]="params.bodega">
+              <mat-select name="bodega" [(ngModel)]="params.bodega" required>
                   <mat-option *ngFor="let bod of bodegas" [value]="bod.bodega">
                       {{bod.descripcion}}
                   </mat-option>
@@ -27,7 +27,7 @@
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Sede</mat-label>
-                <mat-select name="sede" [(ngModel)]="params.sede">
+                <mat-select name="sede" [(ngModel)]="params.sede" required>
                     <mat-option *ngFor="let sede of sedes" [value]="sede.sede">
                         {{sede.nombre}}
                     </mat-option>
@@ -55,7 +55,12 @@
             <mat-checkbox name="excel" class="fullWidth" [(ngModel)]="+params._excel">Generar en Excel
             </mat-checkbox>
             <div align="end">
-              <button mat-button color="accent" type="submit">GENERAR</button>
+              <button 
+                mat-button 
+                color="accent" 
+                type="submit" 
+                [disabled]="!frmFisicoReporte.form.valid"
+                >GENERAR</button>
             </div>
           </form>  
           <app-cargando *ngIf="cargando"></app-cargando>      

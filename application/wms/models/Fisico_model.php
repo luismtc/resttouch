@@ -11,6 +11,7 @@ class Fisico_model extends General_model {
 	public $notas;
 	public $confirmado = 0;
 	public $confirmado_fecha;
+	public $bodega;
 
 	public function __construct($id = "")
 	{

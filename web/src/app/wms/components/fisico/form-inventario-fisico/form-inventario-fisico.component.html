@@ -5,7 +5,7 @@
       <mat-card-title>
         <div class="row">
           <div class="col">
-            <h4>Ingreso Inventario Fisico</h4>
+            <h4>Ingreso Inventario Físico</h4>
           </div>
           <div class="col" style="float: right;">
             <button mat-button type="button" color="accent" (click)="showForm = !showForm;">
@@ -43,11 +43,25 @@
               </tr>
               <ng-container *ngFor="let gcat of cat.datos">
                 <tr>
-                  <th class="brdTSingleBSingle" colspan="2">{{ gcat.descripcion }}</th>
+                  <th class="brdTSingleBSingle" colspan="3">{{ gcat.descripcion }}</th>
                 </tr>
                 <tr *ngFor="let art of gcat.datos">
                   <td class="brdTSingleBSingle">
                     {{ art.narticulo }}
+                  </td>
+                  <td class="brdTSingleBSingle">
+                    <mat-form-field>
+                      <input 
+                        matInput 
+                        type="number" 
+                        step="0.01" 
+                        placeholder="Existencia Sistema" 
+                        [(ngModel)]="art.existencia_sistema" 
+                        [ngModelOptions]="{standalone: true}" 
+                        disabled
+                        style="color: black;
+                        -webkit-text-fill-color: black">
+                    </mat-form-field>
                   </td>
                   <td class="brdTSingleBSingle">
                     <mat-form-field class="fullWidth">

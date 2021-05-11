@@ -6,9 +6,9 @@
 </head>
 <body>
 	<table class="tabla-contenido">
-		<?php $col = ($inventario->confirmado == 1) ? '5' : '4'; ?>
+		<?php $col = ($inventario->confirmado == 1) ? '4' : '3'; ?>
 		<tr>
-			<td colspan="<?php echo $col ?>" class="text-center"><h1>Inventario Fisico # <?php echo $inventario->inventario_fisico ?></h1></td>
+			<td colspan="<?php echo $col ?>" class="text-center"><h1>Inventario Físico # <?php echo $inventario->inventario_fisico ?></h1></td>
 			<td colspan="2" class="text-center">Fecha <?php echo formatoFecha($inventario->fhcreacion, 2)?></td>
 		</tr>
 	
@@ -16,15 +16,14 @@
 			<td class="titulo">Descripcion</td>
 			<td class="titulo">Código</td>
 			<td class="titulo">Presentación</td>
-			<td class="titulo">Precio</td>
 			<td class="titulo">Existencia Sistema</td>
-			<td class="titulo">Existencia Fisica</td>
+			<td class="titulo">Existencia Física</td>
 			<?php if ($inventario->confirmado): ?>
 				<td class="titulo">Diferencia</td>
 			<?php endif ?>
 		</tr>
 			<?php 
-				$col = ($inventario->confirmado == 1) ? '7' : '6';
+				$col = ($inventario->confirmado == 1) ? '6' : '5';
 				foreach ($detalle as $key => $cat): 
 			?>
 				<tr>
@@ -52,9 +51,6 @@
 							</td>
 							<td>
 								<?php echo $pres->descripcion ?>
-							</td>
-							<td class="text-right">
-								<?php echo $art->precio ?>
 							</td>
 							<td class="text-center">
 								<?php echo number_format($art->existencia_sistema/$pres->cantidad, 2) ?>
