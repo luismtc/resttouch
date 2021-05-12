@@ -29,6 +29,7 @@ export class TransformacionComponent implements OnInit {
   public ingreso: Ingreso;
   public egreso: Egreso;
   public showMerma: boolean = true;
+  public bloqueoBotones = false;
 
   constructor(
     private ls: LocalstorageService,
@@ -49,6 +50,7 @@ export class TransformacionComponent implements OnInit {
   doSomething() { }
 
   transformar = () => {
+    this.bloqueoBotones = true;
     this.egreso = this.frmEgreso.egreso;
     this.ingreso = this.frmIngreso.ingreso;
 
@@ -106,6 +108,7 @@ export class TransformacionComponent implements OnInit {
       !!this.transformacion.ingreso && !!this.transformacion.ingreso.detalle && this.transformacion.ingreso.detalle.length > 0
     ) {
       this.transformacionSrvc.transformar(this.transformacion).subscribe(res => {
+        this.bloqueoBotones = false;
         if (res.exito) {
           this.frmEgreso.resetEgreso();
           this.frmEgreso.detallesEgreso = [];

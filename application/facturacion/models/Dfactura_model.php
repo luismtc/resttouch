@@ -36,6 +36,27 @@ class Dfactura_model extends General_model {
 					->row();
 	}
 
+	public function actualizarCantidadHijos()
+	{
+		$tmp = $this->db
+					->select("a.detalle_factura, b.articulo")
+					->join("articulo b", "a.articulo = b.articulo")
+					->where("a.detalle_factura_id", $this->getPK())
+					->get("detalle_factura a")
+					->result();
+
+		foreach ($tmp as $row) {
+			$det = new Dfactura_model($row->detalle_factura);
+			$art = new Articulo_model($this->articulo);
+			$rec = $art->getReceta([
+				"articulo" => $row->articulo,
+				"_uno" => true
+			]);
+			$det->guardar(['cantidad' => $this->cantidad * $rec[0]->cantidad]);
+			$det->actualizarCantidadHijos();
+		}
+	}
+
 }
 
 /* End of file Dfactura_model.php */

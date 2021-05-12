@@ -77,7 +77,52 @@ class Factura_model extends General_model
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
 		if ($vnegativo || isset($args['detalle_cuenta']) || empty($menu) || !$validar || $art->existencias >= $cantidad * $pres->cantidad || $art->mostrar_pos == 0) {
+			$nuevo = ($det->getPK() == null);
 			$result = $det->guardar($args);
+			$idx = $det->getPK();
+
+			$receta = $art->getReceta();
+
+			if (count($receta) > 0 && $art->combo == 0 && $art->multiple == 0 && $nuevo && !isset($args['detalle_cuenta'])) {
+				foreach ($receta as $rec) {
+					$presR = $this->Presentacion_model->buscar([
+						"medida" => $rec->medida->medida,
+						"cantidad" => 1,
+						"_uno" => true
+					]);
+
+					if (!$presR) {
+						$presR = new Presentacion_model();
+						$presR->guardar([
+							"medida" => $rec->medida->medida,
+							"descripcion" => $rec->medida->descripcion,
+							"cantidad" => 1
+						]);
+
+						$presR->presentacion = $presR->getPK();
+					}
+
+					$detr = new Dfactura_model();
+					$dato = [
+						"factura" => $this->getPK(),
+						"articulo" => $rec->articulo->articulo,
+						"cantidad" => $rec->cantidad,
+						"precio_unitario" => 0,
+						"total" => 0,
+						"monto_base" => 0,
+						"monto_iva" => 0,
+						"bien_servicio" => $det->bien_servicio,
+						"presentacion" => $presR->presentacion,
+						"detalle_factura_id" => $idx
+					];
+					$detr->guardar($dato);
+				}
+			}
+			
+			if ($det->getPK() && $art->combo == 0 && $art->multiple == 0) {
+				$det->actualizarCantidadHijos();
+			}
+
 
 			if ($result) {
 				if (isset($args['detalle_cuenta'])) {

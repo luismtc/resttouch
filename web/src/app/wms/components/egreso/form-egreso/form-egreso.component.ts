@@ -43,6 +43,7 @@ export class FormEgresoComponent implements OnInit {
   public detalleMerma: DetalleEgreso;
   public displayedColumns: string[] = ['articulo', 'presentacion', 'cantidad', 'precio_unitario', 'precio_total', 'editItem'];
   public dataSource: MatTableDataSource<DetalleEgreso>;
+  public dataSourceM: MatTableDataSource<DetalleEgreso>;
   public tiposMovimiento: TipoMovimiento[] = [];
   public tiposMovimientoIngreso: TipoMovimiento[] = [];
   public bodegas: Bodega[] = [];
@@ -57,6 +58,7 @@ export class FormEgresoComponent implements OnInit {
   public esMovil = false;
   public bloqueoBotones = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
+  public txtArticuloSelectedM: (Articulo | string) = undefined;
   public txtProveedorSelected: (Proveedor | string) = undefined;
 
   constructor(
@@ -173,9 +175,13 @@ export class FormEgresoComponent implements OnInit {
     this.txtArticuloSelected = undefined;
   }
 
-  resetDetalleMerma = () => this.detalleMerma = {
-    egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null,
-    precio_unitario: null, precio_total: null, presentacion: 0
+  resetDetalleMerma = () => {
+      this.detalleMerma = {
+        egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null,
+        precio_unitario: null, precio_total: null, presentacion: 0
+      }
+
+      this.txtArticuloSelectedM = undefined;
   }
 
   loadDetalleEgreso = (idegreso: number = +this.egreso.egreso) => {
@@ -229,16 +235,40 @@ export class FormEgresoComponent implements OnInit {
   }
 
   addToDetail = () => {
+    this.detallesEgreso.splice(this.detallesEgreso.findIndex(de => +de.articulo === +this.detalleEgreso.articulo), 1);
     this.detallesEgreso.push(this.detalleEgreso);
     this.resetDetalleEgreso();
     this.updateTableDataSource();
   }
 
   addToDetailMerma = () => {
+    this.detallesMerma.splice(this.detallesMerma.findIndex(de => +de.articulo === +this.detalleMerma.articulo), 1);
     this.detallesMerma.push(this.detalleMerma);
+    this.txtArticuloSelectedM = undefined;
     this.resetDetalleMerma();
     this.updateTableDataSourceM();
   }
+
+  editFromDetail = (idarticulo: number) => {
+    var tmp = this.detallesEgreso.filter(de => +de.articulo === +idarticulo)[0];
+    this.detalleEgreso = tmp;
+    this.setPresentaciones();
+    this.txtArticuloSelected = this.articulos.filter(p => +p.articulo == this.detalleEgreso.articulo)[0];
+    //this.showDetalleIngresoForm = true;
+    //
+  }
+
+  editFromDetailMerma = (idarticulo: number) => {
+    var tmp = this.detallesMerma.filter(de => +de.articulo === +idarticulo)[0];
+    this.detalleMerma = tmp;
+    this.setPresentacionesMerma();
+    this.txtArticuloSelectedM = this.articulos.filter(p => +p.articulo == this.detalleMerma.articulo)[0];
+    //this.showDetalleIngresoForm = true;
+    //
+  }
+
+  removeFromDetailMerma = (idarticulo: number) =>
+    this.detallesMerma.splice(this.detallesMerma.findIndex(de => +de.articulo === +idarticulo), 1)
 
   removeFromDetail = (idarticulo: number) =>
     this.detallesEgreso.splice(this.detallesEgreso.findIndex(de => +de.articulo === +idarticulo), 1)
@@ -254,7 +284,9 @@ export class FormEgresoComponent implements OnInit {
       return data.articulo.descripcion.toLowerCase().includes(filter);
     };
   }
-  updateTableDataSourceM = () => this.dataSource = new MatTableDataSource(this.detallesMerma);
+  updateTableDataSourceM = () => {
+    this.dataSourceM = new MatTableDataSource(this.detallesMerma);
+  }
 
   filtrarArticulos = (value: (Articulo | string)) => {
     if (value && (typeof value === 'string')) {

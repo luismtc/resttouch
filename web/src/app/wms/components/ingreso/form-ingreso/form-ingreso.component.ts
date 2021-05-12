@@ -235,7 +235,7 @@ export class FormIngresoComponent implements OnInit {
 
   editFromDetail = (idarticulo: number) => {
     var tmp = this.detallesIngreso.filter(de => +de.articulo === +idarticulo)[0];
-    this.detalleIngreso = tmp
+    this.detalleIngreso = tmp;
     this.setPresentaciones();
     this.txtArticuloSelected = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo)[0];
     //this.showDetalleIngresoForm = true;
