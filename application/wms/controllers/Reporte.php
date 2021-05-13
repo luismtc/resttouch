@@ -135,7 +135,7 @@ class Reporte extends CI_Controller {
 		} else {
 
 			$pdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(), //produccion
+				'tempDir' => sys_get_temp_dir(), //produccion
 				"format" => "letter", 
 				"lands"
 			]);
@@ -561,7 +561,7 @@ class Reporte extends CI_Controller {
 			$vista = $this->load->view('reporte/valorizado/imprimir', $data, true);
 
 			$mpdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(), //Produccion
+				'tempDir' => sys_get_temp_dir(), //Produccion
 				'format' => 'Legal'
 			]);
 
