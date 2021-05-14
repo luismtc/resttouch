@@ -66,6 +66,7 @@ class Conversor extends CI_Controller {
 				}
 
 				$req['ingreso']['proveedor'] = $idProv;
+				$req['ingreso']['bodega'] = $req['egreso']['bodega'];
 				$req['egreso']['estatus_movimiento'] = 2;
 				$req['ingreso']['estatus_movimiento'] = 2;
 				$req['ingreso']['tipo_movimiento'] = $tipoMov;
@@ -91,6 +92,7 @@ class Conversor extends CI_Controller {
 						if ($continuar) {
 							if (isset($req['egreso']['detalle'])) {					
 								foreach ($req['egreso']['detalle'] as $det) {
+									$det['vnegativo'] = false;
 									$egr->setDetalle($det, $egr->egreso);
 								}
 							}
@@ -219,14 +221,31 @@ class Conversor extends CI_Controller {
 						foreach ($art->getReceta() as $row) {
 							$rec = new Articulo_model($row->articulo->articulo);
 							$row->cantidad = $row->cantidad * $det['cantidad'] / $art->rendimiento;
-							$total = ($row->articulo->precio * $row->cantidad);
+							$costo = $rec->getCostoReceta();
+							$total = ($costo * $row->cantidad);
+							$presR = $this->Presentacion_model->buscar([
+								"medida" => $row->medida->medida,
+								"cantidad" => 1,
+								"_uno" => true
+							]);
 
+							if (!$presR) {
+								$presR = new Presentacion_model();
+								$presR->guardar([
+									"medida" => $row->medida->medida,
+									"descripcion" => $row->medida->descripcion,
+									"cantidad" => 1
+								]);
+
+								$presR->presentacion = $presR->getPK();
+							}
 							$egr->setDetalle([
 								"articulo" => $row->articulo->articulo,
 								"cantidad" => $row->cantidad,
-								"precio_unitario" => $rec->precio,
+								"precio_unitario" => $costo,
 								"precio_total" => $total,
-								"presentacion" => 1
+								"presentacion" => $presR->presentacion,
+								"vnegativo" => false
 							]);
 						}
 						$det['cantidad'] = $det['cantidad'];

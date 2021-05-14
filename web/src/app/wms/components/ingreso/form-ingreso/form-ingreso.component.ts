@@ -35,6 +35,7 @@ export class FormIngresoComponent implements OnInit {
 
   @Input() ingreso: Ingreso;
   @Input() saveToDB = true;
+  @Input() bodega = true;
   @Output() ingresoSavedEv = new EventEmitter();
 
   public showIngresoForm = true;

@@ -29,7 +29,7 @@
                         <input matInput type="date" placeholder="Fecha" name="fecha" [(ngModel)]="ingreso.fecha"
                             required>
                     </mat-form-field>
-                    <mat-form-field class="fullWidth">
+                    <mat-form-field class="fullWidth" *ngIf = "bodega">
                         <mat-label>Bodega</mat-label>
                         <mat-select name="bodega" [(ngModel)]="ingreso.bodega" required>
                             <mat-option *ngFor="let bode of bodegas" [value]="bode.bodega">

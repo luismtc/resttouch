@@ -133,7 +133,7 @@ class Egreso_model extends General_Model {
 	{
 		$tmp = new Configuracion_model();
 		$config = $tmp->buscar();
-		$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
+		$vnegativo = isset($args['vnegativo']) ? $args['vnegativo'] : get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
 		$det = new EDetalle_Model($id);
 		$tmp = new Catalogo_model();
 		$menu = $tmp->getModulo(["modulo" => 4, "_uno" => true]);
