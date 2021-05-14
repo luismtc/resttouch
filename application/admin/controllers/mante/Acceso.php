@@ -1,17 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Acceso extends CI_Controller {
+class Acceso extends CI_Controller
+{
 
 	public function __construct()
 	{
-        parent::__construct();
-        $this->load->model('Acceso_model');
-        $this->output
-		->set_content_type("application/json", "UTF-8");
+		parent::__construct();
+		$this->load->model('Acceso_model');
+		$this->output
+			->set_content_type("application/json", "UTF-8");
 	}
 
-	public function guardar($id = "") 
+	public function guardar($id = "")
 	{
 		$acceso = new Acceso_model($id);
 		$req = json_decode(file_get_contents('php://input'), true);
@@ -20,18 +21,18 @@ class Acceso extends CI_Controller {
 
 			$datos['exito'] = $acceso->guardar($req);;
 
-			if($datos['exito']) {
+			if ($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con Exito";
 				$datos['acceso'] = $acceso;
 			} else {
 				$datos['mensaje'] = $acceso->getMensaje();
-			}	
+			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
-		
+
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function buscar()
@@ -41,7 +42,7 @@ class Acceso extends CI_Controller {
 		$acceso = $this->Acceso_model->buscar($_GET);
 		$datos = [];
 
-		if(is_array($acceso)) {
+		if (is_array($acceso)) {
 			foreach ($acceso as $row) {
 				$tmp = new Acceso_model($row->acceso);
 				$row->modulo = $tmp->getModulo();
@@ -50,7 +51,17 @@ class Acceso extends CI_Controller {
 				$row->opcion = $tmp->getOpcion();
 				$datos[] = $row;
 			}
-		} else if($acceso) {
+
+			usort($datos, function ($a, $b) {
+				if (strcasecmp(quitar_acentos($a->modulo->descripcion), quitar_acentos($b->modulo->descripcion)) === 0) {
+					if (strcasecmp(quitar_acentos($a->submodulo['nombre']), quitar_acentos($b->submodulo['nombre'])) === 0) {
+						return strcasecmp(quitar_acentos($a->opcion['nombre']), quitar_acentos($b->opcion['nombre']));
+					}
+					return strcasecmp(quitar_acentos($a->submodulo['nombre']), quitar_acentos($b->submodulo['nombre']));
+				}
+				return strcasecmp(quitar_acentos($a->modulo->descripcion), quitar_acentos($b->modulo->descripcion));
+			});
+		} else if ($acceso) {
 			$tmp = new Acceso_model($acceso->acceso);
 			$acceso->modulo = $tmp->getModulo();
 			$acceso->submodulo = $tmp->getSubModulo();
@@ -59,9 +70,8 @@ class Acceso extends CI_Controller {
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
-
 }
 
 /* End of file Acceso.php */

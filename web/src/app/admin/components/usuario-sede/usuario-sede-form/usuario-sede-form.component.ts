@@ -1,11 +1,13 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
 import { SedeService } from '../../../services/sede.service';
 import { Sede } from '../../../interfaces/sede'
 import { Usuario } from '../../../interfaces/usuario';
 import { UsuarioSede } from '../../../interfaces/acceso';
 import { AccesoUsuarioService } from '../../../services/acceso-usuario.service';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
 	selector: 'app-usuario-sede-form',
@@ -26,7 +28,8 @@ export class UsuarioSedeFormComponent implements OnInit {
 	constructor(
 		private _snackBar: MatSnackBar,
 		private accesoUsuarioSrvc: AccesoUsuarioService,
-		private sedeSrvc: SedeService
+		private sedeSrvc: SedeService,
+		public dialog: MatDialog,
 	) {
 		this.resetAcceso();
 	}
@@ -82,16 +85,27 @@ export class UsuarioSedeFormComponent implements OnInit {
 	}
 
 	removerAcceso = (pres: any) => {
-		pres.anulado = 1;
-		this.accesoUsuarioSrvc.saveSedes(pres).subscribe(res => {
-			if (res.exito) {
-				this.resetAcceso();
-				this.loadAccesos(this.usuario.usuario);
-				this._snackBar.open('Removido con éxito...', 'Sede Usuario', { duration: 3000 });
-			} else {
-				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
+		const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+			maxWidth: '400px',
+			data: new ConfirmDialogModel(
+				'Eliminar sede de usuario', `¿Seguro(a) de eliminar la sede '${pres.sede.nombre}' del usuario '${this.usuario.nombres}'?`, 'Sí', 'No'
+			)
+		});
+
+		dialogRef.afterClosed().subscribe(cnf => {
+			if (cnf) {
+				pres.anulado = 1;
+				this.accesoUsuarioSrvc.saveSedes(pres).subscribe(res => {
+					if (res.exito) {
+						this.resetAcceso();
+						this.loadAccesos(this.usuario.usuario);
+						this._snackBar.open('Removido con éxito...', 'Sede Usuario', { duration: 3000 });
+					} else {
+						this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
+					}
+				})
 			}
-		})
+		});
 	}
 
 	updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.accesos);

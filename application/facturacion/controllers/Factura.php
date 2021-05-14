@@ -26,7 +26,8 @@ class Factura extends CI_Controller
 			'Cliente_model',
 			'Receta_model',
 			'ImpuestoEspecial_model',
-			"Razon_anulacion_model"
+			'Razon_anulacion_model',
+			'Presentacion_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
 		$this->output

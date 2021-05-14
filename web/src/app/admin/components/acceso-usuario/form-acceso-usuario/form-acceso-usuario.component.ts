@@ -22,17 +22,17 @@ import { OpcionService } from '../../../services/opcion.service';
 })
 
 export class FormAccesoUsuarioComponent implements OnInit {
-	
+
 	@Input() usuario: Usuario;
 	@Output() AccesoUsuarioSavedEv = new EventEmitter();
 
 	public accesos: Acceso[] = [];
-  	public acceso: Acceso;
-  	public displayedColumns: string[] = ['modulo', 'submodulo', 'opcion', 'editItem'];
-  	public dataSource: MatTableDataSource<Acceso>;
-  	public modulos: Modulo[] = [];
-  	public submodulos: SubModulo[] = [];
-  	public opciones: Opcion[] = [];
+	public acceso: Acceso;
+	public displayedColumns: string[] = ['modulo', 'submodulo', 'opcion', 'editItem'];
+	public dataSource: MatTableDataSource<Acceso>;
+	public modulos: Modulo[] = [];
+	public submodulos: SubModulo[] = [];
+	public opciones: Opcion[] = [];
 
 	constructor(
 		private _snackBar: MatSnackBar,
@@ -42,7 +42,7 @@ export class FormAccesoUsuarioComponent implements OnInit {
 		private opcionSrvc: OpcionService
 	) {
 		this.acceso = {
-			acceso: null, modulo: null, usuario: null, submodulo: null, opcion: null, activo: 1 
+			acceso: null, modulo: null, usuario: null, submodulo: null, opcion: null, activo: 1
 		};
 	}
 
@@ -52,7 +52,7 @@ export class FormAccesoUsuarioComponent implements OnInit {
 	}
 
 	loadAccesos = (idusuario: number = +this.usuario.usuario) => {
-		this.accesoUsuarioSrvc.get({usuario:idusuario}).subscribe((res: any[]) => {
+		this.accesoUsuarioSrvc.get({ usuario: idusuario }).subscribe((res: any[]) => {
 			if (res) {
 				this.accesos = res
 				this.updateTableDataSource();
@@ -69,11 +69,11 @@ export class FormAccesoUsuarioComponent implements OnInit {
 	}
 
 	loadSubModulos = (idmodulo: number) => {
-		if(idmodulo) {
+		if (idmodulo) {
 			this.subModuloSrvc.get(idmodulo).subscribe(res => {
 				if (res) {
 					let temp = [];
-					for(let x in res) {
+					for (let x in res) {
 						temp.push({
 							sub_modulo: x,
 							descripcion: res[x].nombre
@@ -91,7 +91,7 @@ export class FormAccesoUsuarioComponent implements OnInit {
 
 		if (idsubmodulo && this.acceso.modulo) {
 			this.opcionSrvc.get(this.acceso.modulo, idsubmodulo).subscribe(res => {
-				for(let x in res) {
+				for (let x in res) {
 					temp.push({
 						opcion: x,
 						descripcion: res[x].nombre
@@ -105,12 +105,12 @@ export class FormAccesoUsuarioComponent implements OnInit {
 
 	resetAcceso = () => {
 		this.acceso = {
-			acceso: null, modulo: null, usuario: null, submodulo: null, opcion: null, activo: 1 
+			acceso: null, modulo: null, usuario: null, submodulo: null, opcion: null, activo: 1
 		};
 	}
 
 	setAcceso = (pres: any) => {
-		this.acceso =  {
+		this.acceso = {
 			acceso: pres.acceso,
 			modulo: pres.modulo.modulo,
 			usuario: pres.usuario.usuario,
@@ -123,32 +123,37 @@ export class FormAccesoUsuarioComponent implements OnInit {
 		this.loadOpciones(this.acceso.submodulo);
 	}
 
-  	onSubmit = () => {
-  		this.acceso.usuario = this.usuario.usuario;
+	onSubmit = () => {
+		this.acceso.usuario = this.usuario.usuario;
+		const cp: any = JSON.parse(JSON.stringify(this.accesos));
+		const idx = cp.findIndex(a => +a.usuario.usuario === +this.acceso.usuario && +a.modulo.modulo === +this.acceso.modulo && +a.submodulo.submodulo === +this.acceso.submodulo && +a.opcion.opcion === +this.acceso.opcion);
+		if (idx < 0) {
+			this.accesoUsuarioSrvc.save(this.acceso).subscribe(res => {
+				if (res.exito) {
+					this.resetAcceso();
+					this.loadAccesos(this.usuario.usuario);
+					this._snackBar.open('Acceso guardado con éxito...', 'Acceso Usuario', { duration: 3000 });
+				} else {
+					this._snackBar.open(`ERROR: ${res.mensaje}`, 'Acceso Usuario', { duration: 3000 });
+				}
+			})
+		} else {
+			this._snackBar.open('Este usuario ya cuenta con este permiso.', 'Acceso Usuario', { duration: 3000 });
+		}
+	}
 
-  		this.accesoUsuarioSrvc.save(this.acceso).subscribe(res => {
-  			if (res.exito) {
-  				this.resetAcceso();
-  				this.loadAccesos(this.usuario.usuario);
-  				this._snackBar.open('Acceso guardado con éxito...', 'Acceso Usuario', { duration: 3000 });
-  			} else {
-  				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Acceso Usuario', { duration: 3000 });
-  			}
-  		})
-  	}
-
-  	removerAcceso = (pres: any) => {
-  		pres.activo = 0;
-  		this.accesoUsuarioSrvc.save(pres).subscribe(res => {
-  			if (res.exito) {
-  				this.resetAcceso();
-  				this.loadAccesos(this.usuario.usuario);
-  				this._snackBar.open('Removido con éxito...', 'Acceso Usuario', { duration: 3000 });
-  			} else {
-  				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Acceso Usuario', { duration: 3000 });
-  			}
-  		})
-  	}
+	removerAcceso = (pres: any) => {
+		pres.activo = 0;
+		this.accesoUsuarioSrvc.save(pres).subscribe(res => {
+			if (res.exito) {
+				this.resetAcceso();
+				this.loadAccesos(this.usuario.usuario);
+				this._snackBar.open('Removido con éxito...', 'Acceso Usuario', { duration: 3000 });
+			} else {
+				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Acceso Usuario', { duration: 3000 });
+			}
+		})
+	}
 
 	updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.accesos);
 

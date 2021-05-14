@@ -474,6 +474,12 @@ if (! function_exists("validar_nit")) {
 	}
 }
 
+if(!function_exists('quitar_acentos')) {
+	function quitar_acentos($string) {
+		return strtolower(trim(preg_replace('~[^0-9a-z]+~i', '-', preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'))), ' '));
+	}
+}
+
 if (! function_exists("ordenar_array_objetos")) {
 	/**
 	 * $tipo = { 1: numero, 2: string }
@@ -485,12 +491,24 @@ if (! function_exists("ordenar_array_objetos")) {
 			switch($tipo) {			
 				case 2: 
 					usort($data, function ($a, $b) use($campo, $direccion) {
-						$cmp = strcmp(strtoupper($a->{$campo}), strtoupper($b->{$campo}));
+						if (is_array($a)) {
+							$a = (object)$a;
+						}
+						if (is_array($b)) {
+							$b = (object)$b;
+						}
+						$cmp = strcasecmp(quitar_acentos($a->{$campo}), quitar_acentos($b->{$campo}));
 						return $direccion === 'asc' ? $cmp : -$cmp;
 					});
 					break;
 				default:
 					usort($data, function ($a, $b) use($campo, $direccion) {
+						if (is_array($a)) {
+							$a = (object)$a;
+						}
+						if (is_array($b)) {
+							$b = (object)$b;
+						}
 						if ($a->{$campo} == $b->{$campo}) {
 							return 0;
 						}
