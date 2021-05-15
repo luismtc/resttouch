@@ -35,7 +35,7 @@
 			</mat-form-field>
 			<!-- <mat-checkbox name="anulado" class="fullWidth">Anulado</mat-checkbox> -->
 			<div>
-				<strong>NOTA: Para que los permisos tengan efecto el usuario debe cerrar sesión y volver a iniciar sesión.</strong>
+				<strong>NOTA: Para que los permisos tengan efecto, el usuario debe cerrar sesión y volver a iniciar sesión.</strong>
 			</div>
 			<div align="end">
 				<button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmAccesoUsuario.form.valid" 
@@ -65,9 +65,11 @@
 			<ng-container matColumnDef="editItem">
 				<th mat-header-cell *matHeaderCellDef>&nbsp;</th>
 				<td mat-cell *matCellDef="let element" class="text-right">
+					<!--
 					<button mat-raised-button type="button" class="btnAccion" color="accent" (click)="setAcceso(element)">
 						Editar
 					</button>
+					-->
 					<button mat-raised-button type="button" color="accent" (click)="removerAcceso(element)">
 						Eliminar
 					</button>

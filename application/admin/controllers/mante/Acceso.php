@@ -14,21 +14,37 @@ class Acceso extends CI_Controller
 
 	public function guardar($id = "")
 	{
-		$acceso = new Acceso_model($id);
+		
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 
-			$datos['exito'] = $acceso->guardar($req);;
+			$tmp = $this->Acceso_model->buscar([
+				'usuario' => is_array($req['usuario']) ? $req['usuario']['usuario'] : $req['usuario'],
+				'modulo' => is_array($req['modulo']) ? $req['modulo']['modulo'] : $req['modulo'],
+				'submodulo' => is_array($req['submodulo']) ? $req['submodulo']['submodulo'] : $req['submodulo'],
+				'opcion' => is_array($req['opcion']) ? $req['opcion']['opcion'] : $req['opcion'],
+				'_uno' => true
+			]);
+
+			if($tmp) {
+				$req['acceso'] = $tmp->acceso;
+			} else {
+				$req['acceso'] = '';
+			}
+
+			$acceso = new Acceso_model($req['acceso']);
+
+			$datos['exito'] = $acceso->guardar($req);
 
 			if ($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
+				$datos['mensaje'] = "Datos actualizados con éxito.";
 				$datos['acceso'] = $acceso;
 			} else {
 				$datos['mensaje'] = $acceso->getMensaje();
 			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
 
 		$this->output

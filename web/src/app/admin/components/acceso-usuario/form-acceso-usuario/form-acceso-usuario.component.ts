@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { LocalstorageService } from '../../../../admin/services/localstorage.service';
-import { GLOBAL } from '../../../../shared/global';
-import * as moment from 'moment';
+// import { LocalstorageService } from '../../../../admin/services/localstorage.service';
+import { OrdenarArrayObjetos } from '../../../../shared/global';
+// import * as moment from 'moment';
 
 import { Usuario } from '../../../interfaces/usuario';
 import { Acceso } from '../../../interfaces/acceso';
@@ -79,8 +79,7 @@ export class FormAccesoUsuarioComponent implements OnInit {
 							descripcion: res[x].nombre
 						});
 					}
-
-					this.submodulos = temp
+					this.submodulos = OrdenarArrayObjetos(temp, 'descripcion');
 				}
 			});
 		}
@@ -97,10 +96,9 @@ export class FormAccesoUsuarioComponent implements OnInit {
 						descripcion: res[x].nombre
 					});
 				}
+				this.opciones = OrdenarArrayObjetos(temp, 'descripcion');
 			});
-		}
-
-		this.opciones = temp;
+		}		
 	}
 
 	resetAcceso = () => {

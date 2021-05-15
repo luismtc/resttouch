@@ -145,8 +145,6 @@ class Catalogo extends CI_Controller {
 		if (isset($menu[$modulo]) && isset($menu[$modulo]['submodulo'][$submodulo])) {
 			$datos = $menu[$modulo]['submodulo'][$submodulo]['opciones'];	
 		}
-
-		$datos = ordenar_array_objetos($datos, 'nombre');
 		
 		$this->output->set_output(json_encode($datos));
 	}

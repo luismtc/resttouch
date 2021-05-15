@@ -1,7 +1,7 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
-const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
-// const urlBase = 'http://192.168.18.241/api'; // RT - Dev
+// const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
+const urlBase = 'http://192.168.18.241/api'; // RT - Dev
 // const urlBase = 'https://resttouch.c807.com/api'; // RT - Prod
 
 export const GLOBAL = {
@@ -112,7 +112,12 @@ export const MultiFiltro = (array: any[], filtro: any) => {
     return array;
 };
 
-export const OrdenarArrayObjetos = (objs: any[], campo: string) =>
-objs.sort((a, b) => (a[campo] > b[campo]) ? 1 : ((b[campo] > a[campo]) ? -1 : 0));
+export const OrdenarArrayObjetos = (objs: any[], campo: string, tipo = 2) => {
+    if (tipo === 2) {
+        return objs.sort((a, b) => a[campo].localeCompare(b[campo]));
+    } else {
+        return objs.sort((a, b) => (a[campo] > b[campo]) ? 1 : ((b[campo] > a[campo]) ? -1 : 0));
+    }
+};
 
 export const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
