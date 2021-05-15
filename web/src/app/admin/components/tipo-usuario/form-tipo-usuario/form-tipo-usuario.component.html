@@ -7,7 +7,7 @@
             <mat-card-content>
                 <form #frmTipoUsuario="ngForm" (ngSubmit)="frmTipoUsuario.form.valid && onSubmit()" novalidate>
                     <mat-form-field class="fullWidth">
-                        <mat-label>Jerarquia</mat-label>
+                        <mat-label>Jerarquía</mat-label>
                         <mat-select name="jerarquia" [(ngModel)]="usuarioTipo.jerarquia" required>
                             <mat-option></mat-option>
                             <mat-option *ngFor="let m of jerarquias" [value]="m.jerarquia">
@@ -31,10 +31,10 @@
             </mat-card-content>
         </mat-card>        
     </mat-tab>
-    <mat-tab label="Categoria grupo" *ngIf="+usuarioTipo.usuario_tipo > 0">
+    <mat-tab label="Categoría grupo" *ngIf="+usuarioTipo.usuario_tipo > 0">
         <mat-card class="mat-elevation-z4 fullWidth">
             <mat-card-title>
-                Categoria grupo
+                Categoría grupo
             </mat-card-title>
             <mat-card-content>
                 <form #frmTipoUsuarioCGrupo="ngForm" (ngSubmit)="frmTipoUsuarioCGrupo.form.valid && onSubmitUTCGrupo()" novalidate>
@@ -49,7 +49,7 @@
                     </mat-form-field>
                     <mat-form-field class="fullWidth">
                         <mat-label>Sub-categoría</mat-label>                        
-                        <input type="text" [(ngModel)]="txtSubCat" [ngModelOptions]="{standalone: true}" placeholder="Categoría" matInput [matAutocomplete]="autoSubCategorias" (keyup)="filtrarSubCategorias(txtSubCat)">
+                        <input type="text" [(ngModel)]="txtSubCat" [ngModelOptions]="{standalone: true}" placeholder="Sub-categoría" matInput [matAutocomplete]="autoSubCategorias" (keyup)="filtrarSubCategorias(txtSubCat)">
                         <mat-autocomplete #autoSubCategorias="matAutocomplete" [displayWith]="displaySubCategoria">
                             <mat-option *ngFor="let cg of filteredCgrupos" [value]="cg">
                                 {{cg.descripcion}}

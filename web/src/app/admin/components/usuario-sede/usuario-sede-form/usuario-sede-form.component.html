@@ -1,6 +1,6 @@
 <mat-card class="mat-elevation-z4 fullWidth">
 	<mat-card-title>
-		<h4>Accesos {{!!this.usuario? this.usuario.nombres : '' }}</h4>
+		<h4>Sedes {{!!this.usuario? this.usuario.nombres : '' }}</h4>
 	</mat-card-title>
 	<mat-card-content>
 		<form #frmAccesoUsuario="ngForm" (ngSubmit)="frmAccesoUsuario.form.valid && onSubmit()" novalidate>
@@ -8,7 +8,7 @@
 				<mat-label>Sede</mat-label>
 				<mat-select name="sede" [(ngModel)]="acceso.sede" required>
 					<mat-option></mat-option>
-					<mat-option *ngFor="let sede of sedes" [value]="sede.sede">
+					<mat-option *ngFor="let sede of sedes" [value]="sede.sede" [disabled]="sedeYaAsignada(+sede.sede)">
 						{{ sede.nombre }}
 					</mat-option>
 				</mat-select>

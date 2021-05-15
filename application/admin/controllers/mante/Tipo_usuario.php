@@ -35,7 +35,7 @@ class Tipo_usuario extends CI_Controller {
 				$datos["exito"] = $tusuario->guardar($datos);
 
 				if($datos["exito"]) {
-					$datos["mensaje"]   = "Datos Actualizados con Exito";
+					$datos["mensaje"]   = "Datos actualizados con éxito.";
 					$datos["categoria"] = $tusuario;
 				} else {
 					$datos["mensaje"] = $tusuario->getMensaje();
@@ -44,7 +44,7 @@ class Tipo_usuario extends CI_Controller {
 				$datos["mensaje"] = "Este tipo de empleado ya existe.";				
 			}
 		} else {
-			$datos["mensaje"] = "Parametros Invalidos";
+			$datos["mensaje"] = "Parámetros inválidos.";
 		}
 		
 
@@ -86,13 +86,13 @@ class Tipo_usuario extends CI_Controller {
 			$datos["exito"] = $tucg->guardar($datos);;
 
 			if($datos["exito"]) {
-				$datos["mensaje"]   = "Datos Actualizados con Exito";
+				$datos["mensaje"]   = "Datos actualizados con éxito.";
 				$datos["tipo_usuario_cgrupo"] = $tucg;
 			} else {
 				$datos["mensaje"] = $tucg->getMensaje();
 			}	
 		} else {
-			$datos["mensaje"] = "Parametros Invalidos";
+			$datos["mensaje"] = "Parámetros inválidos.";
 		}
 		$this->output->set_output(json_encode($datos));
 	}

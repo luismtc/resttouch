@@ -98,15 +98,20 @@ export class FormTipoUsuarioComponent implements OnInit {
 
   onSubmitUTCGrupo = () => {
     this.utcgrupo.usuario_tipo = this.usuarioTipo.usuario_tipo;
-    this.tipoUsuarioSrvc.saveUsuarioTipoCGrupo(this.utcgrupo).subscribe(res => {
-      if (res.exito) {
-        this.resetTipoUsuarioCGrupo();
-        this.loadUTCGrupos(this.utcgrupo.usuario_tipo);
-        this.snackBar.open(res.mensaje, 'Categoria grupo', { duration: 3000 });
-      } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Categoria grupo', { duration: 7000 });
-      }
-    });
+
+    if (this.utcgrupo.usuario_tipo && this.utcgrupo.categoria_grupo) {
+      this.tipoUsuarioSrvc.saveUsuarioTipoCGrupo(this.utcgrupo).subscribe(res => {
+        if (res.exito) {
+          this.resetTipoUsuarioCGrupo();
+          this.loadUTCGrupos(this.utcgrupo.usuario_tipo);
+          this.snackBar.open(res.mensaje, 'Categoría grupo', { duration: 3000 });
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Categoría grupo', { duration: 7000 });
+        }
+      });
+    } else {
+      this.snackBar.open('Por favor seleccione una Sub-categoría.', 'Categoría grupo', { duration: 7000 });
+    }
   }
 
   resetTipoUsuarioCGrupo = () => {

@@ -41,7 +41,7 @@ export class UsuarioSedeFormComponent implements OnInit {
 	loadAccesos = (idusuario: number = +this.usuario.usuario) => {
 		this.accesoUsuarioSrvc.getSedes({ usuario: idusuario }).subscribe((res: any[]) => {
 			if (res) {
-				this.accesos = res
+				this.accesos = res;
 				this.updateTableDataSource();
 			}
 		});
@@ -78,6 +78,7 @@ export class UsuarioSedeFormComponent implements OnInit {
 				//this.resetAcceso();
 				this.loadAccesos(this.usuario.usuario);
 				this._snackBar.open('Acceso guardado con éxito...', 'Sede Usuario', { duration: 3000 });
+				this.acceso.sede = null;
 			} else {
 				this._snackBar.open(`ERROR: ${res.mensaje}`, 'Sede Usuario', { duration: 3000 });
 			}
@@ -109,5 +110,10 @@ export class UsuarioSedeFormComponent implements OnInit {
 	}
 
 	updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.accesos);
+
+	sedeYaAsignada = (idSede: number) => {
+		const asignadas: any[] = JSON.parse(JSON.stringify(this.accesos));
+		return asignadas.findIndex(a => idSede === +a.sede.sede) >= 0;
+	}
 
 }

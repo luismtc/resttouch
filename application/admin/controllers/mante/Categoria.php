@@ -41,11 +41,9 @@ class Categoria extends CI_Controller {
 	public function buscar()
 	{
 		$_GET['sede'] = $this->data->sede;
-		$datos = $this->Categoria_model->buscar($_GET);
+		$datos = $this->Categoria_model->buscar($_GET);		
 
-		usort($datos, function ($a, $b) {
-			return strcmp($a->descripcion, $b->descripcion);
-		});
+		$datos = ordenar_array_objetos($datos, 'descripcion');
 
 		$this->output
 		->set_content_type("application/json")
