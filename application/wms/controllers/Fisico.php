@@ -17,7 +17,8 @@ class Fisico extends CI_Controller {
 			'Egreso_model', 
         	'EDetalle_model',
         	'Ingreso_model',
-        	'IDetalle_Model'
+        	'IDetalle_Model',
+        	'Presentacion_model'
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -396,7 +397,7 @@ class Fisico extends CI_Controller {
 								"articulo" => $row->articulo,
 								"precio_unitario" => $costo,
 								"precio_total" => $costo * abs($row->diferencia),
-								"presentacion" => $art->getCosto()
+								"presentacion" => $pres->presentacion
 							];
 
 							$egr->setDetalle($datos);

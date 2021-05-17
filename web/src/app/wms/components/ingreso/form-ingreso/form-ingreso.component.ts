@@ -136,6 +136,9 @@ export class FormIngresoComponent implements OnInit {
     });
   }
 
+  removeFromDetail = (idarticulo: number) =>
+    this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo), 1)
+
   resetIngreso = () => {
     this.ingreso = {
       ingreso: null, tipo_movimiento: null, fecha: moment().format(GLOBAL.dbDateFormat), bodega: null,

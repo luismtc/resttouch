@@ -12,6 +12,7 @@ import { Sede } from '../../../../admin/interfaces/sede';
 import { saveAs } from 'file-saver';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-reporte',
@@ -44,6 +45,7 @@ export class ReporteComponent implements OnInit {
     this.getSede();
     this.getBodega();
     this.loadCategorias();
+    this.params.fecha = moment().format(GLOBAL.dbDateFormat);
   }
 
   getSede = (params: any = {}) => {
