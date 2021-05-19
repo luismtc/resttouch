@@ -7,6 +7,8 @@ class Conversor extends CI_Controller {
 	{
         parent::__construct();
         $this->load->model([
+        	'Sede_model',
+        	'Empresa_model',
         	'Egreso_model', 
         	'EDetalle_model',
         	'Ingreso_model',
@@ -16,8 +18,16 @@ class Conversor extends CI_Controller {
         	'Receta_model',
         	'Presentacion_model',
         	'Proveedor_model',
-        	'Tipo_movimiento_model'
+        	'Tipo_movimiento_model',
+        	'BodegaArticuloCosto_model'
         ]);
+
+        $this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		if (isset($headers['Authorization'])) {
+			$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
+		}
+
         $this->output
 		->set_content_type("application/json", "UTF-8");
 	}
@@ -31,6 +41,10 @@ class Conversor extends CI_Controller {
 		$tipoMov = null;
 		if ($this->input->method() == 'post') {
 			if (isset($req['egreso']) && isset($req['ingreso'])) {
+
+				$sede = new Sede_model($this->data->sede);
+				$emp = $sede->getEmpresa();
+
 				$prov = $this->Proveedor_model->buscar([
 					"razon_social" => "Interno",
 					"_uno" => true
@@ -66,6 +80,7 @@ class Conversor extends CI_Controller {
 				}
 
 				$req['ingreso']['proveedor'] = $idProv;
+				$req['egreso']['proveedor'] = $idProv;
 				$req['ingreso']['bodega'] = $req['egreso']['bodega'];
 				$req['egreso']['estatus_movimiento'] = 2;
 				$req['ingreso']['estatus_movimiento'] = 2;
@@ -90,21 +105,49 @@ class Conversor extends CI_Controller {
 					if ($continuar) {
 						$continuar = $egr->guardar($req['egreso']);
 						if ($continuar) {
+							$costo = 0;
 							if (isset($req['egreso']['detalle'])) {					
 								foreach ($req['egreso']['detalle'] as $det) {
 									$det['vnegativo'] = false;
+									$bcosto = $this->BodegaArticuloCosto_model->buscar([
+										'bodega' => $req['egreso']['bodega'], 
+										'articulo' => $det['articulo'], 
+										'_uno' => true
+									]);
+
+									if ($bcosto) {
+										$pres = new Presentacion_model($det['presentacion']);
+										if ($emp->metodo_costeo == 1) {
+											$det['precio_unitario'] = $bcosto->costo_ultima_compra * $pres->cantidad;
+											
+										} else if ($emp->metodo_costeo == 2) {
+											$det['precio_unitario'] = $bcosto->costo_promedio * $pres->cantidad;
+										} else {
+											$det['precio_unitario'] = 0;
+										}
+									} else {
+										$det['precio_unitario'] = 0;
+									}
+
+									$costo = $det['precio_unitario'];
+
 									$egr->setDetalle($det, $egr->egreso);
 								}
 							}
 
 							$ing = new Ingreso_model();
+
 							$datos['exito'] = $ing->guardar($req['ingreso']);
 
 							if (isset($req['ingreso']['detalle'])) {					
 								foreach ($req['ingreso']['detalle'] as $det) {	
 									$art = new Articulo_model($det['articulo']);
-									$det['precio_unitario'] = $art->getCostoReceta();						
-									$ing->setDetalle($det, $ing->ingreso);
+									$det['precio_total'] = $costo * (double)$det['cantidad_utilizada'];
+									$det['precio_unitario'] = $det['precio_total']/$det['cantidad'];
+									$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;						
+									$ing->setDetalle($det);
+									$bac = new BodegaArticuloCosto_model();
+									$bac->guardar_costos($ing->bodega, $det['articulo']);
 								}
 							}
 
@@ -112,8 +155,13 @@ class Conversor extends CI_Controller {
 								$req['egreso']['bodega'] = $bod->bodega;
 								$merma = new Ingreso_model();						
 								$merma->guardar($req['egreso']);
-								foreach ($req['merma'] as $det) {							
-									$merma->setDetalle($det, $merma->ingreso);
+								foreach ($req['merma'] as $det) {
+									$det['precio_total'] = $costo * (double)$det['cantidad_utilizada'];
+									$det['precio_unitario'] = $det['precio_total']/$det['cantidad'];
+									$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;							
+									$merma->setDetalle($det);
+									$bac = new BodegaArticuloCosto_model();
+									$bac->guardar_costos($merma->bodega, $det['articulo']);
 								}
 							}
 							if($datos['exito']) {
@@ -153,6 +201,9 @@ class Conversor extends CI_Controller {
 		$idProv = null;
 		$tipoMov = null;
 		$conReceta = false;
+		$costo = true;
+		$sede = new Sede_model($this->data->sede);
+        $emp = $sede->getEmpresa();
 
 		foreach ($req['detalle'] as $det) {
 			$art = new Articulo_model($det['articulo']);
@@ -169,102 +220,118 @@ class Conversor extends CI_Controller {
 					$continuar = false;
 				}
 			}
+
+			$pres = new Presentacion_model($art->presentacion_reporte);
+			$precio = $art->getCostoReceta();
+			
+			if ($precio <= 0) {
+				$costo = false;
+			}
 		}
 
-		if ($conReceta) {
-			if ($continuar) {
-				$mov = $this->Tipo_movimiento_model->buscar([
-					"descripcion" => "Produccion",					
-					"_uno" => true
-				]);
+		if ($costo) {
+			if ($conReceta) {
+				if ($continuar) {
+					$mov = $this->Tipo_movimiento_model->buscar([
+						"descripcion" => "Produccion",					
+						"_uno" => true
+					]);
 
-				$prov = $this->Proveedor_model->buscar([
-					"razon_social" => "Interno",
-					"_uno" => true
-				]);
-
-				if (!$prov) {
-					$obj = new Proveedor_model();
-					$obj->guardar([
+					$prov = $this->Proveedor_model->buscar([
 						"razon_social" => "Interno",
-						"nit" => "cf",
-						"corporacion" => 1
+						"_uno" => true
 					]);
-					$idProv = $obj->getPK();
-				} else {
-					$idProv = $prov->proveedor;
-				}
 
-				if (!$mov) {
-					$obj = new Tipo_movimiento_model();
-					$obj->guardar([
-						"descripcion" => "Produccion",
-						"ingreso" => 1,
-						"egreso" => 1
-					]);
-					$tipoMov = $obj->getPK();
-				} else {
-					$tipoMov = $mov->tipo_movimiento;
-				}
+					if (!$prov) {
+						$obj = new Proveedor_model();
+						$obj->guardar([
+							"razon_social" => "Interno",
+							"nit" => "cf",
+							"corporacion" => 1
+						]);
+						$idProv = $obj->getPK();
+					} else {
+						$idProv = $prov->proveedor;
+					}
 
-				$req['proveedor'] = $idProv;
-				$req['tipo_movimiento'] = $tipoMov;
+					if (!$mov) {
+						$obj = new Tipo_movimiento_model();
+						$obj->guardar([
+							"descripcion" => "Produccion",
+							"ingreso" => 1,
+							"egreso" => 1
+						]);
+						$tipoMov = $obj->getPK();
+					} else {
+						$tipoMov = $mov->tipo_movimiento;
+					}
 
-				if($ingr->guardar($req)){
-					$egr = new Egreso_model();
-					$egr->guardar($req);
+					$req['proveedor'] = $idProv;
+					$req['tipo_movimiento'] = $tipoMov;
 
-					foreach ($req['detalle'] as $det) {
-						$art = new Articulo_model($det['articulo']);
-						$pres = new Presentacion_model($det['presentacion']);
+					if($ingr->guardar($req)){
+						$egr = new Egreso_model();
+						$egr->guardar($req);
 
-						foreach ($art->getReceta() as $row) {
-							$rec = new Articulo_model($row->articulo->articulo);
-							$row->cantidad = $row->cantidad * $det['cantidad'] / $art->rendimiento;
-							$costo = $rec->getCostoReceta();
-							$total = ($costo * $row->cantidad);
-							$presR = $this->Presentacion_model->buscar([
-								"medida" => $row->medida->medida,
-								"cantidad" => 1,
-								"_uno" => true
-							]);
+						foreach ($req['detalle'] as $det) {
+							$art = new Articulo_model($det['articulo']);
+							$pres = new Presentacion_model($det['presentacion']);
 
-							if (!$presR) {
-								$presR = new Presentacion_model();
-								$presR->guardar([
+							foreach ($art->getReceta() as $row) {
+								$rec = new Articulo_model($row->articulo->articulo);
+								$row->cantidad = $row->cantidad * $det['cantidad'] / $art->rendimiento;
+								$costo = $rec->getCostoReceta();
+								$total = ($costo * $row->cantidad);
+								$presR = $this->Presentacion_model->buscar([
 									"medida" => $row->medida->medida,
-									"descripcion" => $row->medida->descripcion,
-									"cantidad" => 1
+									"cantidad" => 1,
+									"_uno" => true
 								]);
 
-								$presR->presentacion = $presR->getPK();
+								if (!$presR) {
+									$presR = new Presentacion_model();
+									$presR->guardar([
+										"medida" => $row->medida->medida,
+										"descripcion" => $row->medida->descripcion,
+										"cantidad" => 1
+									]);
+
+									$presR->presentacion = $presR->getPK();
+								}
+								$egr->setDetalle([
+									"articulo" => $row->articulo->articulo,
+									"cantidad" => $row->cantidad,
+									"precio_unitario" => $costo,
+									"precio_total" => $total,
+									"presentacion" => $presR->presentacion,
+									"vnegativo" => false
+								]);
 							}
-							$egr->setDetalle([
-								"articulo" => $row->articulo->articulo,
-								"cantidad" => $row->cantidad,
-								"precio_unitario" => $costo,
-								"precio_total" => $total,
-								"presentacion" => $presR->presentacion,
-								"vnegativo" => false
-							]);
+							$pres = new Presentacion_model($art->presentacion_reporte);
+							$det['cantidad'] = $det['cantidad'];
+							$det['precio_unitario'] = $art->getCostoReceta();
+							$det['precio_total'] = $det['precio_unitario'] * $det['cantidad'];
+							$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;
+
+							$det["presentacion"] = $art->presentacion_reporte;
+							$ingr->setDetalle($det);
+							$bac = new BodegaArticuloCosto_model();
+							$bac->guardar_costos($ingr->bodega, $det['articulo']);
 						}
-						$det['cantidad'] = $det['cantidad'];
-						$det['precio_unitario'] = $art->getCostoReceta();
-						$det["presentacion"] = $art->presentacion_reporte;
-						$ingr->setDetalle($det);
+						$datos['exito'] = true;
+						$datos['mensaje'] = "Datos Actualizados con Exito";
+					} else {
+						$datos['mensaje'] = "Ocurrio un error al guardar el ingreso";	
 					}
-					$datos['exito'] = true;
-					$datos['mensaje'] = "Datos Actualizados con Exito";
 				} else {
-					$datos['mensaje'] = "Ocurrio un error al guardar el ingreso";	
+					$datos['mensaje'] = "No hay suficientes ingredientes para producir la receta";
 				}
 			} else {
-				$datos['mensaje'] = "No hay suficientes ingredientes para producir la receta";
+				$datos['mensaje'] = "El artículo debe tener una receta para realizar la produccion";
 			}
 		} else {
-			$datos['mensaje'] = "El articulo debe tener una receta para realizar la produccion";
-		}
-			
+			$datos['mensaje'] = "El artículo debe tener costo para realizar la produccion";
+		}	
 		
 		$this->output
 		->set_output(json_encode($datos));

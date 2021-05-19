@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col m12 s12" style="padding-bottom: 5px !important;">
         <div align="end">
-            <button mat-raised-button type="button" color="accent" (click)="transformar()">
+            <button [disabled]="bloqueoBotones" mat-raised-button type="button" color="accent" (click)="transformar()">
                 <mat-icon style="font-size: 18pt;">transform</mat-icon>&nbsp;Transformar
             </button>
         </div>
@@ -9,7 +9,7 @@
 </div>
 <div class="row">
     <div class="col m12 s12">
-        <app-form-ingreso #frmIngreso [(ingreso)]="ingreso" [saveToDB]="false" (ingresoSavedEv)="doSomething()">
+        <app-form-ingreso #frmIngreso [produccion] = "true" [(ingreso)]="ingreso" [saveToDB]="false" (ingresoSavedEv)="doSomething()">
         </app-form-ingreso>
     </div>
 </div>

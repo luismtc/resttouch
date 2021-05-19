@@ -21,6 +21,7 @@ export class ProduccionComponent implements OnInit {
   @ViewChild('frmIngreso') frmIngreso: FormIngresoComponent;
   public ingreso: Ingreso;
   public produccion: TransformacionIngreso;
+  public bloqueoBotones = false;
 
   constructor(
     private ls: LocalstorageService,
@@ -36,6 +37,7 @@ export class ProduccionComponent implements OnInit {
   }
 
   transformar = () => {
+    this.bloqueoBotones = true;
     this.ingreso = this.frmIngreso.ingreso;
 
     this.produccion = {
@@ -61,6 +63,7 @@ export class ProduccionComponent implements OnInit {
       !!this.produccion && !!this.produccion.detalle && this.produccion.detalle.length > 0
     ) {
       this.transformacionSrvc.producir(this.produccion).subscribe(res => {
+        this.bloqueoBotones = false;
         if (res.exito) {
           this.frmIngreso.resetIngreso();
           this.frmIngreso.detallesIngreso = [];
@@ -70,6 +73,7 @@ export class ProduccionComponent implements OnInit {
         }
       });
     } else {
+      this.bloqueoBotones = false;
       this.snackBar.open(`Faltan datos necesario. Favor complete los datos e intente de nuevo.`, 'Transformación', { duration: 3000 });
     }
   }

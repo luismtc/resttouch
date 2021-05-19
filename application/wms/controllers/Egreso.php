@@ -66,7 +66,7 @@ class Egreso extends CI_Controller {
 				$art = new Articulo_model($req['articulo']);
 				$bac = new BodegaArticuloCosto_model();
 				// $req['precio_unitario']	= $art->costo;
-				$req['precio_unitario']	= $bac->get_costo($egr->bodega, $art->articulo);
+				$req['precio_unitario']	= $bac->get_costo($egr->bodega, $art->articulo, $req['presentacion']);
 				$pres = new Presentacion_model($req['presentacion']);
 				$presArt = $art->getPresentacionReporte();
 

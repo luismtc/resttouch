@@ -172,6 +172,7 @@ class Factura_model extends General_model
 		$datos = [];
 		$tmp = $this->db
 			->where("factura", $this->factura)
+			->where("total > 0")
 			->get("detalle_factura")
 			->result();
 

@@ -44,8 +44,10 @@ class BodegaArticuloCosto_model extends General_model {
         return $bac->guardar();
     }
 
-    public function get_costo($idBodega, $idArticulo)
+    public function get_costo($idBodega, $idArticulo, $idPresentacion)
     {        
+        $pres = $this->db->where("presentacion", $idPresentacion)->get("presentacion")->row();
+
         $sede = $this->db
             ->select("c.sede")
             ->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
@@ -61,9 +63,9 @@ class BodegaArticuloCosto_model extends General_model {
 
         if ($bac) {
             if ($emp->metodo_costeo == 1) {
-                return $bac->costo_ultima_compra;
+                return $bac->costo_ultima_compra * $pres->cantidad;
             } else if ($emp->metodo_costeo == 2) {
-                return $bac->costo_promedio;
+                return $bac->costo_promedio * $pres->cantidad;
             }
         }
 

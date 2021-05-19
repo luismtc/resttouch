@@ -450,12 +450,8 @@ class Articulo_model extends General_model {
 		}
 
 		if ($emp->metodo_costeo == 1) {
-			$tmp = $this->db
-						->select("max(c.ingreso_detalle), 
-							c.articulo, 
-							c.precio_unitario, 
-							a.fecha,
-							c.presentacion")
+			$det = $this->db
+						->select("max(c.ingreso_detalle) as id")
 						->join("bodega b", "a.bodega = b.bodega")
 						->join("ingreso_detalle c", "a.ingreso = c.ingreso")
 						->where("c.articulo", $this->getPK())
@@ -464,6 +460,25 @@ class Articulo_model extends General_model {
 						->get("ingreso a")
 						->row();
 
+			if ($det) {
+				$tmp = $this->db
+							->select("c.ingreso_detalle, 
+								c.articulo, 
+								c.precio_unitario / d.cantidad as precio_unitario, 
+								a.fecha,
+								c.presentacion", false)
+							->join("bodega b", "a.bodega = b.bodega")
+							->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+							->join("presentacion d", "c.presentacion = d.presentacion")
+							->where("c.articulo", $this->getPK())
+							->where("b.sede", $sede->getPK())
+							->where("c.ingreso_detalle", $det->id)
+							->group_by("c.articulo")
+							->get("ingreso a")
+							->row();
+			} else {
+				$tmp = false;
+			}
 		} else if ($emp->metodo_costeo == 2) {
 			$tmp = $this->db
 						->select("
@@ -505,9 +520,8 @@ class Articulo_model extends General_model {
 
 			foreach ($receta as $row) {				
 				$art = new Articulo_model($row->articulo->articulo);				
-				$tmp = $art->getCostoReceta(["_presentacion" => true]);
-				$pres = new Presentacion_model($tmp->presentacion);
-				$costo += $tmp->costo * ($row->cantidad / $pres->cantidad);
+				$tmp = $art->getCostoReceta();
+				$costo += $tmp * ($row->cantidad);
 			}
 
 		} else {

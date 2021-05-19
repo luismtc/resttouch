@@ -17,7 +17,8 @@ class Reporte extends CI_Controller {
 			'Receta_model',
 			'Ingreso_model',
 			'Categoria_model',
-			'Bodega_model'
+			'Bodega_model',
+			'BodegaArticuloCosto_model'
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -368,6 +369,9 @@ class Reporte extends CI_Controller {
 		} else {
 			$ingresos = [];
 		}
+
+		$arts = $this->Ingreso_model->get_articulos_sin_costo($req);
+		$ingresos = array_merge($ingresos, $arts);
 		
 		$datos = [];
 		$detalle = [];
@@ -377,13 +381,36 @@ class Reporte extends CI_Controller {
 			$art->actualizarExistencia($_GET);
 			$pres = $art->getPresentacionReporte();
 			$art->existencias = $art->existencias/$pres->cantidad;
+
+
+			$bcosto = $this->BodegaArticuloCosto_model->buscar([
+				'bodega' => $req['bodega'], 
+				'articulo' => $row->articulo, 
+				'_uno' => true
+			]);
+
+			if ($bcosto) {
+				if ($emp->metodo_costeo == 1) {
+					$row->precio_unitario = $bcosto->costo_ultima_compra;
+					
+				} else if ($emp->metodo_costeo == 2) {
+					$row->precio_unitario = $bcosto->costo_promedio;
+				} else {
+					$row->precio_unitario = 0;
+				}
+			} else {
+				$row->precio_unitario = 0;
+			}
+
+			$row->precio_unitario = $row->precio_unitario * $pres->cantidad;
+
 			$detalle[$art->getPK()] = [
 				"presentacion" => $pres->descripcion,
 				"cantidad" => $art->existencias, 
 				"total" => (double) round($art->existencias,2) * (double) round($row->precio_unitario, 2),
 				"descripcion" => $art->descripcion,
 				"precio_unitario" => $row->precio_unitario,
-				"ultima_compra" => formatoFecha($row->fecha, 2)
+				"ultima_compra" => isset($row->fecha) ? formatoFecha($row->fecha, 2) : ''
 			];
 			
 		}

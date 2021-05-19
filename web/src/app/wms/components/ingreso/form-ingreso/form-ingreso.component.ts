@@ -36,6 +36,7 @@ export class FormIngresoComponent implements OnInit {
   @Input() ingreso: Ingreso;
   @Input() saveToDB = true;
   @Input() bodega = true;
+  @Input() produccion = false;
   @Output() ingresoSavedEv = new EventEmitter();
 
   public showIngresoForm = true;
@@ -86,6 +87,9 @@ export class FormIngresoComponent implements OnInit {
     this.loadPresentaciones();
     this.loadDocumentosTipo();
     this.loadTiposCompraVenta();
+    if(!this.bodega) {
+      this.displayedColumns = ['cantidad_utilizada', 'articulo', 'presentacion', 'cantidad', 'deleteItem'];
+    }
   }
 
   loadTiposMovimiento = () => {
@@ -167,7 +171,11 @@ export class FormIngresoComponent implements OnInit {
   }
 
   loadArticulos = () => {
-    this.articuloSrvc.getArticulosIngreso().subscribe(res => {
+    var args = {};
+    if (this.produccion) {
+      args = {produccion: 1};
+    }
+    this.articuloSrvc.getArticulosIngreso(args).subscribe(res => {
       if (res) {
         this.articulos = res;
       }
@@ -228,7 +236,11 @@ export class FormIngresoComponent implements OnInit {
   }
 
   addToDetail = () => {
-    this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo), 1);
+    var index = this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo)
+    if (index > -1) {
+      this.detallesIngreso.splice(index, 1);
+    }
+    
     var art:any;
     art = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo);
     this.detalleIngreso.presentacion = art[0].presentacion_reporte;
@@ -239,7 +251,11 @@ export class FormIngresoComponent implements OnInit {
 
   editFromDetail = (idarticulo: number) => {
     var tmp = this.detallesIngreso.filter(de => +de.articulo === +idarticulo)[0];
-    this.detalleIngreso = tmp;
+    this.detalleIngreso = {
+      ingreso_detalle: tmp.ingreso_detalle, ingreso: tmp.ingreso, articulo: tmp.articulo,
+      cantidad: tmp.cantidad, precio_unitario: tmp.precio_unitario, precio_total: tmp.precio_total, 
+      presentacion: tmp.presentacion, cantidad_utilizada: tmp.cantidad_utilizada
+    };
     this.setPresentaciones();
     this.txtArticuloSelected = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo)[0];
     //this.showDetalleIngresoForm = true;

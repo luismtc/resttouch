@@ -84,7 +84,8 @@ export class TransformacionComponent implements OnInit {
       cantidad: dm.cantidad,
       precio_unitario: dm.precio_unitario,
       precio_total: dm.precio_total,
-      presentacion: dm.presentacion
+      presentacion: dm.presentacion,
+      cantidad_utilizada: dm.cantidad_utilizada
     }));
 
     this.frmEgreso.detallesEgreso.forEach(de => this.transformacion.egreso.detalle.push({
@@ -100,7 +101,8 @@ export class TransformacionComponent implements OnInit {
       cantidad: di.cantidad,
       precio_unitario: di.precio_unitario,
       precio_total: di.precio_total,
-      presentacion: di.presentacion
+      presentacion: di.presentacion,
+      cantidad_utilizada: di.cantidad_utilizada
     }));
 
     if (
@@ -112,6 +114,8 @@ export class TransformacionComponent implements OnInit {
         if (res.exito) {
           this.frmEgreso.resetEgreso();
           this.frmEgreso.detallesEgreso = [];
+          this.frmEgreso.resetDetalleMerma();
+          this.frmEgreso.detallesMerma = [];
           this.frmIngreso.resetIngreso();
           this.frmIngreso.detallesIngreso = [];
           this._snackBar.open('Transformación generada con éxito...', 'Transformación', { duration: 5000 });
@@ -120,6 +124,7 @@ export class TransformacionComponent implements OnInit {
         }
       });
     } else {
+      this.bloqueoBotones = false;
       this._snackBar.open(`Faltan datos necesario. Favor complete los datos e intente de nuevo.`, 'Transformación', { duration: 3000 });      
     }
   }

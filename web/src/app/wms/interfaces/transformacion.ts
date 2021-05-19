@@ -10,6 +10,7 @@ export interface TransformacionDetalleMovimiento {
     precio_unitario: number;
     precio_total: number;
     presentacion: number;
+    cantidad_utilizada?: number;
 }
 
 export interface TransformacionEgreso {

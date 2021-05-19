@@ -42,6 +42,7 @@ export class FormEgresoComponent implements OnInit {
   public detallesMerma: DetalleEgreso[] = [];
   public detalleMerma: DetalleEgreso;
   public displayedColumns: string[] = ['articulo', 'presentacion', 'cantidad', 'precio_unitario', 'precio_total', 'editItem'];
+  public displayedColumnsM: string[] = ['cantidad_utilizada', 'articulo', 'presentacion', 'cantidad', 'editItem'];
   public dataSource: MatTableDataSource<DetalleEgreso>;
   public dataSourceM: MatTableDataSource<DetalleEgreso>;
   public tiposMovimiento: TipoMovimiento[] = [];
@@ -178,7 +179,7 @@ export class FormEgresoComponent implements OnInit {
   resetDetalleMerma = () => {
       this.detalleMerma = {
         egreso_detalle: null, egreso: (!!this.egreso.egreso ? this.egreso.egreso : null), articulo: null, cantidad: null,
-        precio_unitario: null, precio_total: null, presentacion: 0
+        precio_unitario: null, precio_total: null, presentacion: 0, cantidad_utilizada: 0
       }
 
       this.txtArticuloSelectedM = undefined;
@@ -237,12 +238,20 @@ export class FormEgresoComponent implements OnInit {
   addToDetail = () => {
     this.detallesEgreso.splice(this.detallesEgreso.findIndex(de => +de.articulo === +this.detalleEgreso.articulo), 1);
     this.detallesEgreso.push(this.detalleEgreso);
+    
     this.resetDetalleEgreso();
     this.updateTableDataSource();
   }
 
   addToDetailMerma = () => {
-    this.detallesMerma.splice(this.detallesMerma.findIndex(de => +de.articulo === +this.detalleMerma.articulo), 1);
+    var index = this.detallesMerma.findIndex(de => +de.articulo === +this.detalleMerma.articulo);
+    if (index > -1) {
+      this.detallesMerma.splice(index, 1);
+    }
+    var art:any;
+    art = this.articulos.filter(p => +p.articulo == this.detalleMerma.articulo);
+    this.detalleMerma.presentacion = art[0].presentacion_reporte;
+
     this.detallesMerma.push(this.detalleMerma);
     this.txtArticuloSelectedM = undefined;
     this.resetDetalleMerma();
@@ -251,7 +260,10 @@ export class FormEgresoComponent implements OnInit {
 
   editFromDetail = (idarticulo: number) => {
     var tmp = this.detallesEgreso.filter(de => +de.articulo === +idarticulo)[0];
-    this.detalleEgreso = tmp;
+    this.detalleEgreso = {
+      egreso_detalle: tmp.egreso_detalle, egreso: tmp.egreso_detalle, articulo: tmp.articulo, cantidad: tmp.cantidad,
+      precio_unitario: tmp.precio_unitario, precio_total: tmp.precio_unitario, presentacion: tmp.presentacion
+    };
     this.setPresentaciones();
     this.txtArticuloSelected = this.articulos.filter(p => +p.articulo == this.detalleEgreso.articulo)[0];
     //this.showDetalleIngresoForm = true;
@@ -260,7 +272,11 @@ export class FormEgresoComponent implements OnInit {
 
   editFromDetailMerma = (idarticulo: number) => {
     var tmp = this.detallesMerma.filter(de => +de.articulo === +idarticulo)[0];
-    this.detalleMerma = tmp;
+    this.detalleMerma = {
+      egreso_detalle: tmp.egreso_detalle, egreso: tmp.egreso_detalle, articulo: tmp.articulo, cantidad: tmp.cantidad,
+      precio_unitario: tmp.precio_unitario, precio_total: tmp.precio_unitario, presentacion: tmp.presentacion, 
+      cantidad_utilizada: tmp.cantidad_utilizada
+    };
     this.setPresentacionesMerma();
     this.txtArticuloSelectedM = this.articulos.filter(p => +p.articulo == this.detalleMerma.articulo)[0];
     //this.showDetalleIngresoForm = true;

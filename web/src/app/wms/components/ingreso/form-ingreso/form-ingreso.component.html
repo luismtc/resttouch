@@ -115,6 +115,11 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+                    
+                    <mat-form-field class="fullWidth" *ngIf = "!bodega">
+                        <input matInput placeholder="Cantidad a Utilizar" name="cantidad_utilizada" [(ngModel)]="detalleIngreso.cantidad_utilizada"
+                            required>
+                    </mat-form-field>  
                     <mat-form-field class="fullWidth">
                         <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleIngreso.cantidad"
                             (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
@@ -158,6 +163,11 @@
                         <td mat-cell *matCellDef="let element" class="text-wrap">
                             {{saveToDB ? element.presentacion.descripcion :
                             getDescripcionPresentacion(element.presentacion)}}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="cantidad_utilizada">
+                        <th mat-header-cell *matHeaderCellDef class="text-right">Cantidad a Utilizar</th>
+                        <td mat-cell *matCellDef="let element" class="text-right">{{element.cantidad | number:'1.2-2'}}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="cantidad">

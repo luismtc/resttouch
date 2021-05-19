@@ -18,6 +18,7 @@ class Dfactura_model extends General_model {
 	public $impuesto_especial;
 	public $porcentaje_impuesto_especial = 0.00;
 	public $valor_impuesto_especial = 0.00;
+	public $detalle_factura_id;
 
 	public function __construct($id = '')
 	{

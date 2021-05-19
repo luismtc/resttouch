@@ -125,10 +125,15 @@ class Ingreso_model extends General_Model {
 		}
 
 		return $this->db
-					->select("max(c.ingreso_detalle), c.articulo, c.precio_unitario, a.fecha")
+					->select("
+						max(c.ingreso_detalle), 
+						c.articulo, 
+						(c.precio_unitario / e.cantidad) as precio_unitario, 
+						a.fecha")
 					->join("bodega b", "a.bodega = b.bodega")
 					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
 					->join("articulo d", "c.articulo = d.articulo")
+					->join("presentacion e", "c.presentacion = e.presentacion")
 					->where("date(a.fecha) <= '{$args['fecha']}'")
 					->where("d.mostrar_inventario", 1)
 					->group_by("c.articulo")
@@ -159,6 +164,25 @@ class Ingreso_model extends General_Model {
 					->where("d.mostrar_inventario", 1)
 					->group_by("c.articulo")
 					->get("ingreso a")
+					->result();
+	}
+
+	public function get_articulos_sin_costo($args = [])
+	{
+		if (isset($args['sede'])) {
+			$this->db->where('c.sede', $args['sede']);
+		}
+
+		return $this->db
+					->select("
+						a.articulo, 
+						0 as precio_unitario")
+					->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
+					->join("categoria c", "c.categoria = b.categoria")
+					->join("ingreso_detalle d", "d.articulo = a.articulo", "left")
+					->where("a.mostrar_inventario", 1)
+					->where("d.ingreso_detalle is null")
+					->get("articulo a")
 					->result();
 	}
 }
