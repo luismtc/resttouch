@@ -94,8 +94,8 @@ class Ingreso_model extends General_Model {
 				$row->presentacion = $detalle->getPresentacion();
 				
 				if (verDato($args, "_costo")) {
-					$row->precio_total = $row->precio_total + $row->precio_costo_iva;
-					$row->precio_unitario = (int)$row->cantidad !== 0 ? ($row->precio_total / $row->cantidad) : 0.00;
+					$row->precio_total = round($row->precio_total + $row->precio_costo_iva, 2);
+					$row->precio_unitario = round((int)$row->cantidad !== 0 ? ($row->precio_total / $row->cantidad) : 0.00, 2);
 				}
 				$datos[] = $row;
 			}
