@@ -464,7 +464,7 @@ class Articulo_model extends General_model {
 				$tmp = $this->db
 							->select("c.ingreso_detalle, 
 								c.articulo, 
-								c.precio_unitario / d.cantidad as precio_unitario, 
+								(c.precio_total/c.cantidad) / d.cantidad as precio_unitario, 
 								a.fecha,
 								c.presentacion", false)
 							->join("bodega b", "a.bodega = b.bodega")
@@ -602,7 +602,10 @@ class Articulo_model extends General_model {
 			"multiple" => $this->multiple,
 			"cantidad_minima" => $this->cantidad_minima,
 			"cantidad_maxima" => $this->cantidad_maxima,
-			"rendimiento" => $this->rendimiento
+			"rendimiento" => $this->rendimiento,
+			"costo" => $this->costo,
+			"mostrar_inventario" => $this->mostrar_inventario,
+			"esreceta" => $this->esreceta
 		];
 
 		$art->guardar($datos);
