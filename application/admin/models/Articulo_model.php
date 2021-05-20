@@ -120,7 +120,7 @@ class Articulo_model extends General_model {
 		}
 
 		$comandas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+						 ->select("sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
@@ -140,7 +140,7 @@ class Articulo_model extends General_model {
 		}
 
 		$facturas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+						 ->select("sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
@@ -212,7 +212,7 @@ class Articulo_model extends General_model {
 
 		$ingresos = $this->db
 						 ->select("
-						 	sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+						 	sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
@@ -236,7 +236,7 @@ class Articulo_model extends General_model {
 		}
 
 		$egresos = $this->db
-						->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+						->select("sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 						->join("articulo b", "a.articulo = b.articulo")
 						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						->join("categoria d", "d.categoria = c.categoria")
@@ -271,7 +271,7 @@ class Articulo_model extends General_model {
 		if ($args['tipo'] == 1) {
 			$ingresos = $this->db
 						 ->select("
-						 	sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+						 	sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
@@ -286,7 +286,7 @@ class Articulo_model extends General_model {
 			return $ingresos->total;
 		} else {
 			$egresos = $this->db
-						->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+						->select("sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 						->join("articulo b", "a.articulo = b.articulo")
 						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						->join("categoria d", "d.categoria = c.categoria")
@@ -314,7 +314,7 @@ class Articulo_model extends General_model {
 			}
 
 			$comandas = $this->db
-						 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+						 ->select("sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
@@ -332,7 +332,7 @@ class Articulo_model extends General_model {
 			}
 
 			$facturas = $this->db
-							 ->select("sum(ifnull(a.cantidad, 0) * p.cantidad) as total")
+							 ->select("sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
 							 ->join("articulo b", "a.articulo = b.articulo")
 							 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 							 ->join("categoria d", "d.categoria = c.categoria")

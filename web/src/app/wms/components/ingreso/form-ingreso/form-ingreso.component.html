@@ -121,12 +121,13 @@
                             required>
                     </mat-form-field>  
                     <mat-form-field class="fullWidth">
-                        <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleIngreso.cantidad"
+                        <input matInput placeholder="Cantidad" name="cantidad" type="number" step="0.01" [(ngModel)]="detalleIngreso.cantidad"
                             (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                             required>
                     </mat-form-field>                    
                     <mat-form-field class="fullWidth" *ngIf="saveToDB">
                         <input matInput placeholder="Costo unitario Con IVA" name="precio_unitario"
+                            type="number" step="0.01"
                             [(ngModel)]="detalleIngreso.precio_unitario"
                             (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                             required>

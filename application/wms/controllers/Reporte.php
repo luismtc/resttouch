@@ -311,9 +311,9 @@ class Reporte extends CI_Controller {
 							"",
 							"",
 							"",
-							$row['descripcion'],
 							formatoFecha($det->fecha,2),
 							$det->id,
+							$row['descripcion'],
 							($det->tipo == 1) ? round($det->cantidad,2) : "0.00",
 							($det->tipo == 2) ? round($det->cantidad,2) : "0.00"
 						];
