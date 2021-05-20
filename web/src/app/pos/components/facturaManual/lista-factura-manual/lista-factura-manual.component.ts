@@ -6,6 +6,8 @@ import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { Factura } from '../../../interfaces/factura';
 import { FacturaService } from '../../../services/factura.service';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-lista-factura-manual',
   templateUrl: './lista-factura-manual.component.html',
@@ -27,6 +29,7 @@ export class ListaFacturaManualComponent implements OnInit {
   public pageEvent: PageEvent;
   public txtFiltro = '';
   public verTodas = false;
+  public rango = { fdel: null, fal: null };
 
   constructor(
     private facturaSrvc: FacturaService,
@@ -35,6 +38,8 @@ export class ListaFacturaManualComponent implements OnInit {
 
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
+    this.rango.fdel = moment().startOf('month').format(GLOBAL.dbDateFormat);
+    this.rango.fal = moment().endOf('month').format(GLOBAL.dbDateFormat);
     this.loadFacturas();
   }
 
@@ -54,6 +59,15 @@ export class ListaFacturaManualComponent implements OnInit {
     if (this.verTodas) {
       fltr._todas = true;
     }
+
+    if (moment(this.rango.fdel).isValid()) {
+      fltr._fdel = this.rango.fdel
+    }
+
+    if (moment(this.rango.fal).isValid()) {
+      fltr._fal = this.rango.fal
+    }
+
     this.facturaSrvc.get(fltr).subscribe(lst => {
       // console.log(lst);
       if (lst) {

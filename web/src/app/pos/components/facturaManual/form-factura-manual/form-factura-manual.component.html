@@ -134,14 +134,14 @@
             </div>
             <div class="form-group">
                 <mat-form-field class="fullWidth">
-                    <input matInput placeholder="Cantidad" name="cantidad" [(ngModel)]="detalleFactura.cantidad"
+                    <input matInput placeholder="Cantidad" name="cantidad" type="number" step="0.01" [(ngModel)]="detalleFactura.cantidad"
                         (change)="detalleFactura.total = +detalleFactura.precio_unitario * +detalleFactura.cantidad"
                         required>
                 </mat-form-field>                
             </div>
             <div class="form-group">
                 <mat-form-field class="fullWidth">
-                    <input matInput placeholder="Precio unitario" name="precio_unitario"
+                    <input matInput placeholder="Precio unitario" name="precio_unitario" type="number" step="0.01"
                         [(ngModel)]="detalleFactura.precio_unitario"
                         (change)="detalleFactura.total = +detalleFactura.precio_unitario * +detalleFactura.cantidad"
                         required>

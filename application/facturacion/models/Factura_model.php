@@ -1132,6 +1132,14 @@ class Factura_model extends General_model
 			$this->db->where('a.fel_uuid IS NULL AND fel_uuid_anulacion IS NULL');
 		}
 
+		if(isset($args['_fdel'])) {
+			$this->db->where('a.fecha_factura >=', $args['_fdel']);
+		}
+
+		if(isset($args['_fal'])) {
+			$this->db->where('a.fecha_factura <=', $args['_fal']);
+		}
+
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if (substr($key, 0, 1) != "_") {

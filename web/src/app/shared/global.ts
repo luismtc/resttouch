@@ -1,7 +1,7 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
-// const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
-const urlBase = 'http://192.168.18.241/api'; // RT - Dev
+const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
+// const urlBase = 'http://192.168.18.241/api'; // RT - Dev
 // const urlBase = 'https://resttouch.c807.com/api'; // RT - Prod
 
 export const GLOBAL = {
