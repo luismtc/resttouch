@@ -42,10 +42,8 @@ class Reporte_model extends CI_Model {
 			if (isset($args['_rango_turno']) && $args['_rango_turno']) {
 				$this->db
 					->where("f.sinfactura", 0)
-					->where("date(i.inicio) >=", $args['fdel'])
-					->where("date(i.inicio) <=", $args['fal'])
-					->where("date(i.fin) <=", $args['fal'])
-					->where("date(i.fin) >=", $args['fdel']);
+					->where("date(i.fecha) >=", $args['fdel'])
+					->where("date(i.fecha) <=", $args['fal']);
 			} else {
 				$this->db
 				 ->where("e.fecha_factura >=", $args['fdel'])
@@ -56,10 +54,8 @@ class Reporte_model extends CI_Model {
 			
 			if (isset($args['_rango_turno']) && $args['_rango_turno']) {
 				$this->db
-					->where("date(i.inicio) >=", $args['fdel'])
-					->where("date(i.inicio) <=", $args['fal'])
-					->where("date(i.fin) <=", $args['fal'])
-					->where("date(i.fin) >=", $args['fdel']);
+					->where("date(i.fecha) >=", $args['fdel'])
+					->where("date(i.fecha) <=", $args['fal']);
 			} else {
 				$this->db
 				 ->where("date(h.fhcreacion) >=", $args['fdel'])

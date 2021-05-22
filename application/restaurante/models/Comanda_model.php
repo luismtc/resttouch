@@ -65,6 +65,7 @@ class Comanda_model extends General_Model
 		$cuenta = new Cuenta_model($idcta);
 		$combo = new Articulo_model($articulo);
 		$precio = ($precio !== null) ? $precio : $combo->precio;
+		$bodega = $combo->getBodega();
 
 		$args = [
 			"articulo" => $combo->getPK(),
@@ -72,7 +73,8 @@ class Comanda_model extends General_Model
 			"notas" => "",
 			"precio" => $precio,
 			"total" => (float)$precio * $cantidad,
-			"detalle_comanda_id" => $padre
+			"detalle_comanda_id" => $padre,
+			"bodega" => $bodega ? $bodega->bodega : null
 		];
 		$det = $this->guardarDetalle($args);
 		if ($det) {
@@ -153,6 +155,8 @@ class Comanda_model extends General_Model
 		$art = new Articulo_model($articulo);
 		$pres = $art->getPresentacion();
 		$args['presentacion'] = $art->presentacion;
+		$bodega = $art->getBodega();
+		$args['bodega'] = $bodega ? $bodega->bodega : null;
 		$cantPres = ($pres) ? $pres->cantidad : 0;
 		$oldart = new Articulo_model($det->articulo);
 		$art->actualizarExistencia();
@@ -181,6 +185,9 @@ class Comanda_model extends General_Model
 						$presR->presentacion = $presR->getPK();
 					}
 
+					$artR = new Articulo_model($rec->articulo->articulo);
+					$bodegaR = $artR->getBodega();
+
 					$detr = new Dcomanda_model();
 					$dato = [
 						"comanda" => $this->getPK(),
@@ -190,7 +197,8 @@ class Comanda_model extends General_Model
 						"total" => 0,
 						"impreso" => 0,
 						"presentacion" => $presR->presentacion,
-						"detalle_comanda_id" => $idx
+						"detalle_comanda_id" => $idx,
+						"bodega" => $bodegaR ? $bodegaR->bodega : null
 					];
 					$detr->guardar($dato);
 				}

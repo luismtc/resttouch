@@ -285,7 +285,7 @@ if ( ! function_exists('formatoFecha')) {
 			$date    = new DateTime($fecha);
 			$formato = '';
 
-			switch ($tipo) {
+			switch ((int)$tipo) {
 				case 1:
 					$formato = "d/m/Y H:i";
 					break;

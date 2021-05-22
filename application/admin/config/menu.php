@@ -83,6 +83,10 @@ $config['menu'] = [
 					19 => [
 						'nombre' => 'Tipo de documento',
 						'link' => '/admin/documento_tipo'
+					],
+					20 => [
+						'nombre' => 'Bodegas',
+						'link' => '/admin/bodega'
 					]
 				]
 			],

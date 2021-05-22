@@ -61,6 +61,15 @@ class Articulo_model extends General_model {
 					->row();
 	}
 
+	public function getBodega()
+	{
+		return $this->db->select('b.bodega')
+			->from('articulo a')
+			->join('categoria_grupo b', 'b.categoria_grupo = a.categoria_grupo')
+			->where('a.articulo', $this->articulo)
+			->get()->row();
+	}
+
 	public function guardarReceta(Array $args, $id = '')
 	{
 		$rec = new Receta_model($id);

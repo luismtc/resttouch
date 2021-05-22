@@ -488,8 +488,10 @@ class Reporte extends CI_Controller {
 
 					foreach ($row as $det) {
 						$hoja->setCellValue("A{$fila}", $det->numero_factura);
-						$hoja->setCellValue("B{$fila}", formatoFecha($det->fecha_factura,2));
-						$hoja->setCellValue("B{$fila}", $det->documento);
+						$hoja->getStyle("B{$fila}")->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
+						$valFecha = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($det->fecha_factura);
+						$hoja->setCellValue("B{$fila}", $valFecha);
+						$hoja->setCellValue("C{$fila}", $det->documento);
 						$hoja->setCellValue("D{$fila}", round($det->monto,2));
 						$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
 						$hoja->getStyle("D{$fila}")->getNumberFormat()->setFormatCode('0.00');

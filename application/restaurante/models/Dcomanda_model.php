@@ -19,6 +19,7 @@ class Dcomanda_model extends General_Model {
 	public $fecha_impresion;
 	public $fecha_proceso;
 	public $detalle_comanda_id;
+	public $bodega;
 
 	public function __construct($id = '')
 	{
