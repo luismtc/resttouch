@@ -19,7 +19,8 @@ class Conversor extends CI_Controller {
         	'Presentacion_model',
         	'Proveedor_model',
         	'Tipo_movimiento_model',
-        	'BodegaArticuloCosto_model'
+        	'BodegaArticuloCosto_model',
+        	'Bodega_model'
         ]);
 
         $this->load->helper(['jwt', 'authorization']);
@@ -204,6 +205,7 @@ class Conversor extends CI_Controller {
 		$costo = true;
 		$sede = new Sede_model($this->data->sede);
         $emp = $sede->getEmpresa();
+        $bod = new Bodega_model($req['bodega']);
 
 		foreach ($req['detalle'] as $det) {
 			$art = new Articulo_model($det['articulo']);
@@ -215,7 +217,11 @@ class Conversor extends CI_Controller {
 
 			foreach ($receta as $row) {
 				$rec = new Articulo_model($row->articulo->articulo);
-				$rec->actualizarExistencia();
+				$args = [
+					"bodega" => $req['bodega'],
+					"sede" => $bod->sede
+				];
+				$rec->actualizarExistencia($args);
 				if(($rec->existencias < ($row->cantidad * $det['cantidad']/$art->rendimiento))){
 					$continuar = false;
 				}
