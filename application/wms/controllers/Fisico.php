@@ -366,7 +366,7 @@ class Fisico extends CI_Controller {
 				foreach ($inv->getDetalle() as $row) {
 					$art = new Articulo_model($row->articulo);
 					$pres = $art->getPresentacionReporte();
-					$row->diferencia = ($row->existencia_sistema/$pres->cantidad) - $row->existencia_fisica;
+					$row->diferencia = round(($row->existencia_sistema/$pres->cantidad), 2) - $row->existencia_fisica;
 
 					if ($row->diferencia > 0){
 						$egreso[] = $row;
