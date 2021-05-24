@@ -368,10 +368,10 @@ class Fisico extends CI_Controller {
 					$pres = $art->getPresentacionReporte();
 					$row->diferencia = round(($row->existencia_sistema/$pres->cantidad), 2) - $row->existencia_fisica;
 
-					if ($row->diferencia > 0){
+					if (round($row->diferencia, 2) > 0){
 						$egreso[] = $row;
 					}
-					elseif ($row->diferencia < 0){
+					elseif (round($row->diferencia, 2) < 0){
 						$ingreso[] = $row;
 					}
 				}

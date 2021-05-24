@@ -89,15 +89,18 @@ class Ingreso_model extends General_Model {
 		$datos = [] ;
 		if(is_array($det)) {
 			foreach ($det as $row) {
-				$detalle = new IDetalle_Model($row->ingreso_detalle);
-				$row->articulo = $detalle->getArticulo();
-				$row->presentacion = $detalle->getPresentacion();
-				
-				if (verDato($args, "_costo")) {
-					$row->precio_total = round($row->precio_total + $row->precio_costo_iva, 2);
-					$row->precio_unitario = round((float)$row->cantidad !== 0 ? ($row->precio_total / $row->cantidad) : 0.00, 2);
+				if ($row->cantidad != 0) {
+					$detalle = new IDetalle_Model($row->ingreso_detalle);
+					$row->articulo = $detalle->getArticulo();
+					$row->presentacion = $detalle->getPresentacion();
+					
+					if (verDato($args, "_costo")) {
+						$row->precio_total = round($row->precio_total + $row->precio_costo_iva, 2);
+						$row->precio_unitario = round((float)$row->cantidad == 0 ? 0.00 : ($row->precio_total / $row->cantidad), 2);
+					}
+					$datos[] = $row;
 				}
-				$datos[] = $row;
+				
 			}
 		} else if($det) {
 			$detalle = new IDetalle_Model($det->ingreso_detalle);
