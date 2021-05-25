@@ -18,7 +18,8 @@ class Fisico extends CI_Controller {
         	'EDetalle_model',
         	'Ingreso_model',
         	'IDetalle_Model',
-        	'Presentacion_model'
+        	'Presentacion_model',
+        	'BodegaArticuloCosto_model'
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -391,6 +392,7 @@ class Fisico extends CI_Controller {
 			// }
 			
 			if ($inv->guardar($args)) {
+
 				foreach ($inv->getDetalle() as $row) {
 					$art = new Articulo_model($row->articulo);
 					$pres = $art->getPresentacionReporte();
@@ -416,10 +418,11 @@ class Fisico extends CI_Controller {
 					$egr = new Egreso_model();
 					if ($egr->guardar($gegreso)) {
 						foreach ($egreso as $row) {
-
+							$bac = new BodegaArticuloCosto_model();
 							$art = new Articulo_model($row->articulo);
 							$pres = $art->getPresentacionReporte();
-							$costo = $art->getCosto(["bodega" => $inv->bodega]);
+
+							$costo = $bac->get_costo($egr->bodega, $row->articulo, $pres->presentacion);
 
 							$datos = [
 								"cantidad" => abs($row->diferencia),
@@ -449,9 +452,10 @@ class Fisico extends CI_Controller {
 					$ing = new Ingreso_model();
 					if ($ing->guardar($gingreso)) {
 						foreach ($ingreso as $row) {
+							$bac = new BodegaArticuloCosto_model();
 							$articulo = new Articulo_model($row->articulo);
 							$pres = $articulo->getPresentacionReporte();
-							$costo = $articulo->getCosto(["bodega" => $inv->bodega]);
+							$costo = $bac->get_costo($ing->bodega, $row->articulo, $pres->presentacion);
 
 							$datos = [
 								"articulo" => $row->articulo, 

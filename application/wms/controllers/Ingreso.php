@@ -87,7 +87,7 @@ class Ingreso extends CI_Controller {
 							'_uno' => true
 						]);
 
-						$costo = 0;
+						$costo = $art->getCosto(["bodega" => $ing->bodega]);
 
 						if ($bcosto) {
 							if ($emp->metodo_costeo == 1) {
