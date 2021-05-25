@@ -12,7 +12,8 @@ class Ingreso extends CI_Controller {
         	'Articulo_model',
         	'Receta_model', 
 			'Presentacion_model',
-			'BodegaArticuloCosto_model'
+			'BodegaArticuloCosto_model',
+			'Bodega_model'
         ]);
         $this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
@@ -55,6 +56,7 @@ class Ingreso extends CI_Controller {
 	public function guardar_detalle($ingreso, $id = '') {
 		$ing = new Ingreso_model($ingreso);
 		$bac = new BodegaArticuloCosto_model();
+		$bod = new Bodega_model($ing->bodega);
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 
@@ -75,8 +77,31 @@ class Ingreso extends CI_Controller {
 				if ($pres->medida == $presArt->medida) {
 					$det = $ing->setDetalle($req, $id);
 					if($det) {
-						$art->actualizarExistencia();
-						$costo = $art->getCosto();
+						$art->actualizarExistencia([
+							"bodega" => $ing->bodega,
+							"sede" => $bod->sede
+						]);
+						$bcosto = $this->BodegaArticuloCosto_model->buscar([
+							'bodega' => $ing->bodega, 
+							'articulo' => $art->getPK(), 
+							'_uno' => true
+						]);
+
+						$costo = 0;
+
+						if ($bcosto) {
+							if ($emp->metodo_costeo == 1) {
+								$costo = $art->getCosto(["bodega" => $ing->bodega]);
+								
+							} else if ($emp->metodo_costeo == 2) {
+								$costo = $bcosto->costo_promedio + $req['precio_total'];
+								$existencia = $art->existencias + $req['cantidad'];
+								if ($existencia != 0) {
+									$costo = $costo / $existencia;
+								} 
+							} 
+						} 
+
 						$art->guardar(["costo" => $costo]);
 						$bac->guardar_costos($ing->bodega, $art->articulo);
 						$datos['exito'] = true;
