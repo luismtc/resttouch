@@ -75,12 +75,12 @@ class Ingreso extends CI_Controller {
 
 				
 				if ($pres->medida == $presArt->medida) {
+					$art->actualizarExistencia([
+						"bodega" => $ing->bodega,
+						"sede" => $bod->sede
+					]);
 					$det = $ing->setDetalle($req, $id);
 					if($det) {
-						$art->actualizarExistencia([
-							"bodega" => $ing->bodega,
-							"sede" => $bod->sede
-						]);
 						$bcosto = $this->BodegaArticuloCosto_model->buscar([
 							'bodega' => $ing->bodega, 
 							'articulo' => $art->getPK(), 
@@ -90,20 +90,32 @@ class Ingreso extends CI_Controller {
 						$costo = $art->getCosto(["bodega" => $ing->bodega]);
 
 						if ($bcosto) {
-							if ($emp->metodo_costeo == 1) {
-								$costo = $art->getCosto(["bodega" => $ing->bodega]);
-								
-							} else if ($emp->metodo_costeo == 2) {
-								$costo = $bcosto->costo_promedio + $req['precio_total'];
-								$existencia = $art->existencias + $req['cantidad'];
-								if ($existencia != 0) {
-									$costo = $costo / $existencia;
-								} 
+							$bac->cargar($bcosto->bodega_articulo_costo);
+							/*Ultima compra*/
+							$costo_uc = $art->getCosto([
+								"bodega" => $ing->bodega, 
+								"metodo_costeo" => 1
+							]);
+							$bac->costo_ultima_compra = $costo_uc;
+
+							/*Costo promedio*/
+							$costo = $bcosto->costo_promedio * $art->existencias + $req['precio_total']/$pres->cantidad;
+							$existencia = $art->existencias + $req['cantidad']*$pres->cantidad;
+							if ($existencia != 0) {
+								$costo = $costo / $existencia;
 							} 
-						} 
+
+							$bac->costo_promedio = $costo;
+							
+						} else {
+							$bac->bodega = $ing->bodega;
+							$bac->articulo = $art->getPK();
+							$bac->costo_ultima_compra = $costo;
+							$bac->costo_promedio = $costo;
+						}
 
 						$art->guardar(["costo" => $costo]);
-						$bac->guardar_costos($ing->bodega, $art->articulo);
+						$bac->guardar();
 						$datos['exito'] = true;
 						$datos['mensaje'] = "Datos Actualizados con Exito";
 						$datos['detalle'] = $det;
