@@ -311,6 +311,34 @@ class Fisico extends CI_Controller {
         	 ->set_output(json_encode($datos));
 	}
 
+	private function getMovAjuste($deIngreso = 0, $deEgreso = 0)
+	{		
+		$tm = $this->Tipo_movimiento_model->buscar([ "descripcion" => "Ajuste", "ingreso" => 1, "egreso" => 1, "_uno" => true ]);
+
+		if (!$tm)
+		{
+			$tm = $this->Tipo_movimiento_model->buscar([
+				"descripcion" => "Ajuste",
+				"ingreso" => $deIngreso,
+				"egreso" => $deEgreso,
+				"_uno" => true
+			]);
+
+			if(!$tm)
+			{
+				$obj = new Tipo_movimiento_model();
+				$obj->guardar([
+					"descripcion" => "Ajuste",
+					"ingreso" => $deIngreso,
+					"egreso" => $deEgreso
+				]);
+				return $obj->getPK();
+			}
+		}
+
+		return $tm->tipo_movimiento;		
+	}
+
 	public function confirmar($id)
 	{
 		$datos = ["exito" => false, "mensaje" => ""];
@@ -333,10 +361,10 @@ class Fisico extends CI_Controller {
 				"_uno" => true
 			]);
 
-			$mov = $this->Tipo_movimiento_model->buscar([
-				"descripcion" => "Ajuste",					
-				"_uno" => true
-			]);
+			// $mov = $this->Tipo_movimiento_model->buscar([
+			// 	"descripcion" => "Ajuste",
+			// 	"_uno" => true
+			// ]);
 
 			if (!$prov) {
 				$obj = new Proveedor_model();
@@ -350,17 +378,17 @@ class Fisico extends CI_Controller {
 				$idProv = $prov->proveedor;
 			}
 
-			if (!$mov) {
-				$obj = new Tipo_movimiento_model();
-				$obj->guardar([
-					"descripcion" => "Ajuste",
-					"ingreso" => 1,
-					"egreso" => 1
-				]);
-				$tipoMov = $obj->getPK();
-			} else {
-				$tipoMov = $mov->tipo_movimiento;
-			}
+			// if (!$mov) {
+			// 	$obj = new Tipo_movimiento_model();
+			// 	$obj->guardar([
+			// 		"descripcion" => "Ajuste",
+			// 		"ingreso" => 1,
+			// 		"egreso" => 1
+			// 	]);
+			// 	$tipoMov = $obj->getPK();
+			// } else {
+			// 	$tipoMov = $mov->tipo_movimiento;
+			// }
 			
 			if ($inv->guardar($args)) {
 				foreach ($inv->getDetalle() as $row) {
@@ -378,7 +406,7 @@ class Fisico extends CI_Controller {
 
 				if (count($egreso) > 0){
 					$gegreso = [
-						"tipo_movimiento" => $tipoMov,
+						"tipo_movimiento" => $this->getMovAjuste(0, 1),
 						"bodega" => $inv->bodega,
 						"fecha" => Hoy(),
 						"usuario" => $inv->usuario,
@@ -408,7 +436,7 @@ class Fisico extends CI_Controller {
 
 				if (count($ingreso) > 0){
 					$gingreso = [
-						"tipo_movimiento" => $tipoMov,
+						"tipo_movimiento" => $this->getMovAjuste(1, 0),
 						"fecha" => Hoy(),
 						"bodega" => $inv->bodega,
 						"usuario" => $inv->usuario,
