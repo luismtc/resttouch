@@ -11,7 +11,8 @@ class Egreso_model extends General_Model {
 	public $usuario;
 	public $estatus_movimiento;
 	public $traslado = 0;
-	//public $idcomandafox = null;
+	public $idcomandafox = null;
+	public $ajuste = 0;
 
 	public function __construct($id = "")
 	{

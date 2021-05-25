@@ -12,6 +12,7 @@ class Ingreso_model extends General_Model {
 	public $comentario;
 	public $proveedor;
 	public $estatus_movimiento;
+	public $ajuste = 0;
 
 	public function __construct($id = "")
 	{

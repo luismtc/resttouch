@@ -465,6 +465,7 @@ class Articulo_model extends General_model {
 						->join("ingreso_detalle c", "a.ingreso = c.ingreso")
 						->where("c.articulo", $this->getPK())
 						->where("b.sede", $sede->getPK())
+						->where("a.ajuste", 0)
 						->group_by("c.articulo")
 						->get("ingreso a")
 						->row();
@@ -498,7 +499,8 @@ class Articulo_model extends General_model {
 						->join("bodega b", "a.bodega = b.bodega")
 						->join("ingreso_detalle c", "a.ingreso = c.ingreso")
 						->join("presentacion d", "c.presentacion = d.presentacion")
-						->where("c.articulo", $this->getPK())						
+						->where("c.articulo", $this->getPK())	
+						->where("a.ajuste", 0)					
 						->group_by("c.articulo")
 						->get("ingreso a")
 						->row();

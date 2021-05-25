@@ -382,7 +382,8 @@ class Fisico extends CI_Controller {
 						"bodega" => $inv->bodega,
 						"fecha" => Hoy(),
 						"usuario" => $inv->usuario,
-						"estatus_movimiento" => 2
+						"estatus_movimiento" => 2,
+						"ajuste" => 1
 					];
 					$egr = new Egreso_model();
 					if ($egr->guardar($gegreso)) {
@@ -413,7 +414,8 @@ class Fisico extends CI_Controller {
 						"usuario" => $inv->usuario,
 						"comentario" => "Ajuste mediante Inventario Físico",
 						"proveedor" => $idProv,
-						"estatus_movimiento" => 2
+						"estatus_movimiento" => 2,
+						"ajuste" => 1
 					];
 
 					$ing = new Ingreso_model();
