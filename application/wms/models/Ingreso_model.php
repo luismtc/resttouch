@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Ingreso_model extends General_Model {
+class Ingreso_model extends General_Model
+{
 
 	public $ingreso;
 	public $tipo_movimiento;
@@ -19,62 +20,63 @@ class Ingreso_model extends General_Model {
 		parent::__construct();
 		$this->setTabla("ingreso");
 
-		if(!empty($id)) {
+		if (!empty($id)) {
 			$this->cargar($id);
 		}
 	}
 
-	public function getTipoMovimiento() {
+	public function getTipoMovimiento()
+	{
 		return $this->db
-					->where("tipo_movimiento", $this->tipo_movimiento)
-					->get("tipo_movimiento")
-					->row();
+			->where("tipo_movimiento", $this->tipo_movimiento)
+			->get("tipo_movimiento")
+			->row();
 	}
 
 	public function getProveedor()
 	{
 		return $this->db
-					->where("proveedor", $this->proveedor)
-					->get("proveedor")
-					->row();
+			->where("proveedor", $this->proveedor)
+			->get("proveedor")
+			->row();
 	}
 
 	public function getBodega()
 	{
 		return $this->db
-					->where("bodega", $this->bodega)
-					->get("bodega")
-					->row();
+			->where("bodega", $this->bodega)
+			->get("bodega")
+			->row();
 	}
 
 	public function getBodegaOrigen()
 	{
 		return $this->db
-					->where("bodega", $this->bodega_origen)
-					->get("bodega")
-					->row();
+			->where("bodega", $this->bodega_origen)
+			->get("bodega")
+			->row();
 	}
 
 	public function getUsuario()
 	{
 		return $this->db
-					->where("usuario", $this->usuario)
-					->get("usuario")
-					->row();
+			->where("usuario", $this->usuario)
+			->get("usuario")
+			->row();
 	}
 
-	public function setDetalle(Array $args, $id = "")
+	public function setDetalle(array $args, $id = "")
 	{
 		$det = new IDetalle_Model($id);
 		$args['ingreso'] = $this->ingreso;
 
-		if(is_object($args['presentacion'])) {
+		if (is_object($args['presentacion'])) {
 			$args['presentacion'] = $args['presentacion']->presentacion;
 		}
 
 		$result = $det->guardar($args);
 
-		if($result) {
+		if ($result) {
 			return $det;
 		}
 
@@ -87,23 +89,23 @@ class Ingreso_model extends General_Model {
 	{
 		$args['ingreso'] = $this->ingreso;
 		$det = $this->IDetalle_Model->buscar($args);
-		$datos = [] ;
-		if(is_array($det)) {
+		$datos = [];
+		if (is_array($det)) {
 			foreach ($det as $row) {
-				if ($row->cantidad != 0) {
-					$detalle = new IDetalle_Model($row->ingreso_detalle);
-					$row->articulo = $detalle->getArticulo();
-					$row->presentacion = $detalle->getPresentacion();
-					
-					if (verDato($args, "_costo")) {
-						$row->precio_total = round($row->precio_total + $row->precio_costo_iva, 2);
-						$row->precio_unitario = round((float)$row->cantidad == 0 ? 0.00 : ($row->precio_total / $row->cantidad), 2);
-					}
-					$datos[] = $row;
+				// if ($row->cantidad != 0) {
+				$detalle = new IDetalle_Model($row->ingreso_detalle);
+				$row->articulo = $detalle->getArticulo();
+				$row->presentacion = $detalle->getPresentacion();
+
+				if (verDato($args, "_costo")) {
+					$row->precio_total = round($row->precio_total + $row->precio_costo_iva, 2);
+					$row->precio_unitario = round((float)$row->cantidad === 0.00 ? 0.00 : ($row->precio_total / $row->cantidad), 2);
 				}
-				
+				$datos[] = $row;
+				// }
+
 			}
-		} else if($det) {
+		} else if ($det) {
 			$detalle = new IDetalle_Model($det->ingreso_detalle);
 			$det->articulo = $detalle->getArticulo();
 			$det->presentacion = $detalle->getPresentacion();
@@ -129,20 +131,20 @@ class Ingreso_model extends General_Model {
 		}
 
 		return $this->db
-					->select("
+			->select("
 						max(c.ingreso_detalle), 
 						c.articulo, 
 						(c.precio_unitario / e.cantidad) as precio_unitario, 
 						a.fecha")
-					->join("bodega b", "a.bodega = b.bodega")
-					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
-					->join("articulo d", "c.articulo = d.articulo")
-					->join("presentacion e", "c.presentacion = e.presentacion")
-					->where("date(a.fecha) <= '{$args['fecha']}'")
-					->where("d.mostrar_inventario", 1)
-					->group_by("c.articulo")
-					->get("ingreso a")
-					->result();
+			->join("bodega b", "a.bodega = b.bodega")
+			->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+			->join("articulo d", "c.articulo = d.articulo")
+			->join("presentacion e", "c.presentacion = e.presentacion")
+			->where("date(a.fecha) <= '{$args['fecha']}'")
+			->where("d.mostrar_inventario", 1)
+			->group_by("c.articulo")
+			->get("ingreso a")
+			->result();
 	}
 
 	public function get_costo_promedio($args = [])
@@ -156,19 +158,19 @@ class Ingreso_model extends General_Model {
 		}
 
 		return $this->db
-					->select("
+			->select("
 						sum(c.precio_total)/sum(c.cantidad*e.cantidad) as precio_unitario, 
 						c.articulo, 
 						a.fecha")
-					->join("bodega b", "a.bodega = b.bodega")
-					->join("ingreso_detalle c", "a.ingreso = c.ingreso")
-					->join("articulo d", "c.articulo = d.articulo")
-					->join("presentacion e", "c.presentacion = e.presentacion")
-					->where("date(a.fecha) <= '{$args['fecha']}'")
-					->where("d.mostrar_inventario", 1)
-					->group_by("c.articulo")
-					->get("ingreso a")
-					->result();
+			->join("bodega b", "a.bodega = b.bodega")
+			->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+			->join("articulo d", "c.articulo = d.articulo")
+			->join("presentacion e", "c.presentacion = e.presentacion")
+			->where("date(a.fecha) <= '{$args['fecha']}'")
+			->where("d.mostrar_inventario", 1)
+			->group_by("c.articulo")
+			->get("ingreso a")
+			->result();
 	}
 
 	public function get_articulos_sin_costo($args = [])
@@ -178,16 +180,16 @@ class Ingreso_model extends General_Model {
 		}
 
 		return $this->db
-					->select("
+			->select("
 						a.articulo, 
 						0 as precio_unitario")
-					->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
-					->join("categoria c", "c.categoria = b.categoria")
-					->join("ingreso_detalle d", "d.articulo = a.articulo", "left")
-					->where("a.mostrar_inventario", 1)
-					->where("d.ingreso_detalle is null")
-					->get("articulo a")
-					->result();
+			->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
+			->join("categoria c", "c.categoria = b.categoria")
+			->join("ingreso_detalle d", "d.articulo = a.articulo", "left")
+			->where("a.mostrar_inventario", 1)
+			->where("d.ingreso_detalle is null")
+			->get("articulo a")
+			->result();
 	}
 }
 
