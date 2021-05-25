@@ -225,6 +225,10 @@ export class FormIngresoComponent implements OnInit {
     this.detalleIngreso.ingreso = this.ingreso.ingreso;
     this.detalleIngreso.precio_total = +this.detalleIngreso.cantidad * +this.detalleIngreso.precio_unitario;
     // console.log(this.detalleIngreso);
+    if (+this.detalleIngreso.cantidad < 1) 
+    {
+      this.detalleIngreso.cantidad = 1;
+    }
     this.ingresoSrvc.saveDetalle(this.detalleIngreso).subscribe(res => {
       // console.log(res);
       if (res) {
@@ -244,6 +248,12 @@ export class FormIngresoComponent implements OnInit {
     var art:any;
     art = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo);
     this.detalleIngreso.presentacion = art[0].presentacion_reporte;
+
+    if(+this.detalleIngreso.cantidad < 1)
+    {
+      this.detalleIngreso.cantidad = 1;
+    }
+
     this.detallesIngreso.push(this.detalleIngreso);
     this.resetDetalleIngreso();
     this.updateTableDataSource();
@@ -253,7 +263,7 @@ export class FormIngresoComponent implements OnInit {
     var tmp = this.detallesIngreso.filter(de => +de.articulo === +idarticulo)[0];
     this.detalleIngreso = {
       ingreso_detalle: tmp.ingreso_detalle, ingreso: tmp.ingreso, articulo: tmp.articulo,
-      cantidad: tmp.cantidad, precio_unitario: tmp.precio_unitario, precio_total: tmp.precio_total, 
+      cantidad: (+tmp.cantidad < 1 ? 1 : tmp.cantidad), precio_unitario: tmp.precio_unitario, precio_total: tmp.precio_total, 
       presentacion: tmp.presentacion, cantidad_utilizada: tmp.cantidad_utilizada
     };
     this.setPresentaciones();

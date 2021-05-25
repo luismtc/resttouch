@@ -250,7 +250,8 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       dataToPrint.DetalleFactura.push({
         Cantidad: det.cantidad,
         Descripcion: det.articulo.descripcion,
-        Total: parseFloat(det.total)
+        Total: parseFloat(det.total),
+        PrecioUnitario: +det.precio_unitario
       });
       dataToPrint.Total += parseFloat(det.total);
     }

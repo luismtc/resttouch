@@ -310,7 +310,8 @@ export class CobrarPedidoComponent implements OnInit {
     detalle.forEach(d => detFact.push({
       Cantidad: +d.cantidad,
       Descripcion: d.articulo.descripcion,
-      Total: +d.total
+      Total: +d.total,
+      PrecioUnitario: +d.precio_unitario
     }));
     return detFact;
   }

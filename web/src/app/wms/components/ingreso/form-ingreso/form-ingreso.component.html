@@ -121,7 +121,7 @@
                             required>
                     </mat-form-field>  
                     <mat-form-field class="fullWidth">
-                        <input matInput placeholder="Cantidad" name="cantidad" type="number" step="0.01" [(ngModel)]="detalleIngreso.cantidad"
+                        <input matInput placeholder="Cantidad" name="cantidad" type="number" step="0.01" min="1" [(ngModel)]="detalleIngreso.cantidad"
                             (change)="detalleIngreso.precio_total = +detalleIngreso.precio_unitario * +detalleIngreso.cantidad"
                             required>
                     </mat-form-field>                    
@@ -134,11 +134,11 @@
                     </mat-form-field>                    
                     <div align="end">
                         <button mat-raised-button type="submit" color="accent" class="btnAccion"
-                            [disabled]="!frmDetalleIngreso.form.valid || bloqueoBotones || +documento.enviado === 1" *ngIf="saveToDB">
+                            [disabled]="!frmDetalleIngreso.form.valid || bloqueoBotones || +documento.enviado === 1 || +detalleIngreso.cantidad < 1" *ngIf="saveToDB">
                             Guardar
                         </button>
                         <button mat-raised-button type="button" color="accent" (click)="addToDetail()"
-                            [disabled]="!frmDetalleIngreso.form.valid || [2, 3].indexOf(+ingreso.estatus_movimiento) >= 0"
+                            [disabled]="!frmDetalleIngreso.form.valid || [2, 3].indexOf(+ingreso.estatus_movimiento) >= 0 || +detalleIngreso.cantidad < 1"
                             *ngIf="!saveToDB">
                             Guardar
                         </button>
