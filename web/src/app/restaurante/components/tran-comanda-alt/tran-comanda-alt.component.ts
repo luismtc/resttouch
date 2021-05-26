@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatInput } from '@angular/material/input';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { GLOBAL } from '../../../shared/global';
 import { TranComanda } from '../../classes/tran-comanda';
 
 import { Socket } from 'ngx-socket-io';
@@ -62,6 +63,7 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
   }
 
   ngOnInit() {
+    this.usaCodigoBarras = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_USA_CODIGO_BARRAS);
     this.loadArticulosDePOS();
     this.setDatos();
   }

@@ -62,6 +62,7 @@ export class TranComandaComponent implements OnInit {
   public impreso = 0;
   public usaCodigoBarras = false;
   public codigoBarras: string = null;
+  public imprimeRecetaEnComanda = true;
 
   constructor(
     // private router: Router,
@@ -88,6 +89,7 @@ export class TranComandaComponent implements OnInit {
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
     this.usaCodigoBarras = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_USA_CODIGO_BARRAS);
+    this.imprimeRecetaEnComanda = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_RECETA_EN_COMANDA);
     // console.log('MESA EN USO = ', this.mesaEnUso);
   }
 
@@ -177,7 +179,8 @@ export class TranComandaComponent implements OnInit {
           detalle: p.detalle,
           monto_extra: +p.monto_extra || 0.00,
           multiple: +p.articulo.multiple,
-          combo: +p.articulo.combo
+          combo: +p.articulo.combo,
+          esreceta: +p.articulo.esreceta || 0
         });
       }
     }
@@ -437,6 +440,16 @@ export class TranComandaComponent implements OnInit {
                 if (!toPdf) {
                   if (AImpresoraNormal.length > 0) {
                     if (modoComanda !== 3) {
+
+                      if (!this.imprimeRecetaEnComanda) {
+                        AImpresoraNormal.map(d => {
+                          if (+d.combo === 0 && +d.esreceta === 1) {
+                            d.detalle = []
+                          }
+                          return d;
+                        });
+                      }
+
                       this.socket.emit('print:comanda', `${JSON.stringify({
                         Tipo: 'Comanda',
                         Nombre: this.cuentaActiva.nombre,
@@ -459,6 +472,15 @@ export class TranComandaComponent implements OnInit {
 
                   if (AImpresoraBT.length > 0) {
                     if (modoComanda !== 3) {
+                      if (!this.imprimeRecetaEnComanda) {
+                        AImpresoraBT.map(d => {
+                          if (+d.combo === 0 && +d.esreceta === 1) {
+                            d.detalle = []
+                          }
+                          return d;
+                        });
+                      }
+
                       this.printToBT(
                         JSON.stringify({
                           Tipo: 'Comanda',
@@ -505,7 +527,7 @@ export class TranComandaComponent implements OnInit {
 
   }
 
-  printToBT = (msgToPrint: string = '') => {    
+  printToBT = (msgToPrint: string = '') => {
     const convertir = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_ENVIA_COMO_BASE64);
     const data = convertir ? Base64.encode(msgToPrint, true) : msgToPrint;
     // const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${data}`;
