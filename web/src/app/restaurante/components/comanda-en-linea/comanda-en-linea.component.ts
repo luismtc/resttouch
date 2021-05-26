@@ -248,7 +248,7 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
     for (const det of fact.detalle) {
       dataToPrint.DetalleFactura.push({
-        Cantidad: det.cantidad,
+        Cantidad: parseInt(det.cantidad),
         Descripcion: det.articulo.descripcion,
         Total: parseFloat(det.total),
         PrecioUnitario: +det.precio_unitario

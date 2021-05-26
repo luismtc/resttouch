@@ -246,7 +246,7 @@ export class FormFacturaManualComponent implements OnInit {
   procesaDetalleFactura = (detalle: any[]) => {
     const detFact: any[] = [];
     detalle.forEach(d => detFact.push({
-      Cantidad: +d.cantidad,
+      Cantidad: parseInt(d.cantidad),
       Descripcion: d.articulo.descripcion,
       Total: +d.total,
       PrecioUnitario: +d.precio_unitario
