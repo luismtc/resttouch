@@ -32,8 +32,8 @@
     <!-- Fin de div de cuentas-->
     <!--<mat-divider></mat-divider>-->
     <!-- Inicia input para código de barras -->
-    <mat-form-field style="width: 25%;" *ngIf="usaCodigoBarras">
-        <input #txtCodigoBarras="matInput" matInput cdkFocusInitial type="text" placeholder="Código" name="codigoBarras" [(ngModel)]="codigoBarras" [ngModelOptions]="{standalone: true}" (keyup.enter)="buscarArticulo()">
+    <mat-form-field style="width: 25%;" *ngIf="usaCodigoBarras">        
+        <input #txtCodigoBarras="matInput" matInput cdkFocusInitial ngxBarCodePut type="text" placeholder="Código" name="codigoBarras" [(ngModel)]="codigoBarras" [ngModelOptions]="{standalone: true}" (onDetected)="buscarArticulo()">
     </mat-form-field><br *ngIf="usaCodigoBarras"/>
     <!-- Fin de input para código de barras -->
     <!-- Inicia Categorias -->

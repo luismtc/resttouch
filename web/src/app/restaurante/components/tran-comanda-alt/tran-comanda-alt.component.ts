@@ -146,5 +146,4 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
       this.agregarProductos(obj);
     }
   }
-
 }

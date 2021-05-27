@@ -36,6 +36,8 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
+import { NgxBarCodePutModule } from 'ngx-barcodeput';
+
 import { RestauranteRoutingModule } from './restaurante-routing.module';
 import { TranAreasComponent } from './components/tran-areas/tran-areas.component';
 import { MesaComponent } from './components/mesa/mesa.component';
@@ -99,6 +101,7 @@ import { SeleccionaTurnoPrevioComponent } from './components/turno/selecciona-tu
     RestauranteRoutingModule,
     HttpClientModule,
     FormsModule,
+    NgxBarCodePutModule,
     SharedModule,
     WmsModule,
     PosModule,

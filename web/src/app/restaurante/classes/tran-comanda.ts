@@ -140,9 +140,9 @@ export class TranComanda {
                         multiple: art.multiple
                     };
                     this.agregarProductos(obj);
-                    this.codigoBarras = null;
-                    this.txtCodigoBarras.focus();
                 }
+                this.codigoBarras = null;
+                this.txtCodigoBarras.focus();
             });
         }
     }
