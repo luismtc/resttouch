@@ -80,10 +80,10 @@ class Comanda_model extends General_Model
 		if ($det) {
 			$cuenta->guardarDetalle([
 				'detalle_comanda' => $det->detalle_comanda
-			]);	
+			]);
 			return $det;
 		} else {
-			$datos['exito'] = false;						
+			$datos['exito'] = false;
 		}
 
 		return false;
@@ -92,7 +92,9 @@ class Comanda_model extends General_Model
 	public function guardarDetalleCombo($args = [], $cuenta)
 	{
 		$art = new Articulo_model($args['articulo']);
-		if(!isset($args['cantidad'])) { $args['cantidad'] = 1; }
+		if (!isset($args['cantidad'])) {
+			$args['cantidad'] = 1;
+		}
 		$combo = $this->setDetalle($args['articulo'], $cuenta, null, null, (float)$args['cantidad']);
 		// $args['cantidad'] = 1;
 
@@ -224,7 +226,7 @@ class Comanda_model extends General_Model
 	}
 
 	public function getDetalle($args = [])
-	{		
+	{
 		$args['comanda'] = $this->comanda;
 		$det = $this->Dcomanda_model->buscar($args);
 		$datos = [];
@@ -374,40 +376,40 @@ class Comanda_model extends General_Model
 			->where("t.sede", $args['sede'])
 			->group_by("a.comanda");
 
-		if (isset($args["domicilio"]) || isset($args['cocinado'])) {						
+		if (isset($args["domicilio"]) || isset($args['cocinado'])) {
 			$this->db
 				->join("detalle_comanda b", "a.comanda = b.comanda")
 				->join("detalle_cuenta c", "b.detalle_comanda = c.detalle_comanda")
 				->join("detalle_factura_detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta", "left")
 				->join("detalle_factura e", "e.detalle_factura = d.detalle_factura", (isset($args['cocinado']) ? "left" : ''))
-				->join("factura f", "f.factura = e.factura", "left")	
+				->join("factura f", "f.factura = e.factura", "left")
 				->join("articulo g", "b.articulo = g.articulo")
 				->where("f.fel_uuid is null");
 
-				if(isset($args["domicilio"])) {
-					$this->db->where('a.domicilio', $args['domicilio']);
+			if (isset($args["domicilio"])) {
+				$this->db->where('a.domicilio', $args['domicilio']);
+			}
+
+			if (isset($args['cocinado'])) {
+				if (isset($args['categoria_grupo'])) {
+					if (is_array($args['categoria_grupo'])) {
+						if (count($args["categoria_grupo"]) == 0) {
+							$args['categoria_grupo'][] = null;
+						}
+						$this->db->where_in('g.categoria_grupo', $args['categoria_grupo']);
+					}
 				}
 
-				if(isset($args['cocinado'])) {
-					if (isset($args['categoria_grupo'])) {
-						if (is_array($args['categoria_grupo'])) {
-							if (count($args["categoria_grupo"]) == 0) {
-								$args['categoria_grupo'][] = null;
-							}
-							$this->db->where_in('g.categoria_grupo', $args['categoria_grupo']);
-						} 
-					}
-
-					if (verDato($args, "order_by")) {
-						$this->db->order_by($args['order_by'], );
-					}
-
-					$this->db
-						 ->select("b.numero")
-						 ->where('b.cocinado', $args['cocinado'])
-						 ->where("b.numero is not null")
-						 ->group_by("b.numero");
+				if (verDato($args, "order_by")) {
+					$this->db->order_by($args['order_by'],);
 				}
+
+				$this->db
+					->select("b.numero")
+					->where('b.cocinado', $args['cocinado'])
+					->where("b.numero is not null")
+					->group_by("b.numero");
+			}
 		}
 
 		$lista = [];
@@ -479,6 +481,25 @@ class Comanda_model extends General_Model
 				$datos["numero_orden"] = isset($json->order_number) ? $json->order_number : '';
 				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
 				$datos['fhcreacion'] = isset($json->created_at) ? $json->created_at : '';
+
+				$dataCliente = new stdClass();
+				if (isset($json->shipping_address)) {
+					$dataCliente = $json->shipping_address;
+				} else {
+					if (isset($json->customer)){
+						if (isset($json->customer->default_address)){
+							$dataCliente = $json->customer->default_address;
+						}						
+					}					
+				}
+				$datos['direccion_entrega']->Nombre = isset($dataCliente->name) ? $dataCliente->name : '';
+				$datos['direccion_entrega']->Direccion = isset($dataCliente->address1) ? ($dataCliente->address1 . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($dataCliente->address2) ? ($dataCliente->address2 . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($dataCliente->city) ? ($dataCliente->city . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($dataCliente->province) ? ($dataCliente->province . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($dataCliente->country) ? ($dataCliente->country) : '';
+				$datos['direccion_entrega']->Telefono = isset($dataCliente->phone) ? ($dataCliente->phone) : '';
+				$datos['direccion_entrega']->Correo = isset($json->contact_email) ? $json->contact_email : '';
 			} else if ($nombre == 'api') {
 				$datos["numero_orden"] = isset($json->numero_orden) ? $json->numero_orden : '';
 				$datos["metodo_pago"] = isset($json->metodo_pago) ? $json->metodo_pago : '';
@@ -523,11 +544,11 @@ class Comanda_model extends General_Model
 	public function envioMail()
 	{
 		$datos = $this->getComanda();
-		if(isset($datos->factura->factura)) {
+		if (isset($datos->factura->factura)) {
 			$fac   = new Factura_model($datos->factura->factura);
 
 			$fac->cargarEmpresa();
-	
+
 			enviarCorreo([
 				"de"     => ["noreply@c807.com", "noreply"],
 				"para"   => [$fac->empresa->correo_emisor],
@@ -585,9 +606,9 @@ class Comanda_model extends General_Model
 					->where("date(c.fin) >=", $args['fdel']);
 			} else {
 				$this->db
-				->where("date(a.fhcreacion) >=", $args['fdel'])
-				->where("date(a.fhcreacion) <=", $args['fal']);
-			}			
+					->where("date(a.fhcreacion) >=", $args['fdel'])
+					->where("date(a.fhcreacion) <=", $args['fal']);
+			}
 			unset($args['fdel']);
 			unset($args['fal']);
 		}
@@ -612,7 +633,7 @@ class Comanda_model extends General_Model
 					$this->db->where("a.{$key}", $row);
 				}
 			}
-		}	
+		}
 
 		return $this->db
 			->select("a.comanda")
