@@ -15,11 +15,11 @@ class Empresa_model extends General_model {
     public $municipio;
     public $departamento;
     public $pais_iso_dos;
-    public $agente_retenedor;
-    public $porcentaje_iva;
+    public $agente_retenedor = 0;
+    public $porcentaje_iva = 0.00;
     public $visa_merchant_id;
     public $visa_transaction_key;
-    public $metodo_costeo;
+    public $metodo_costeo = 1;
     public $leyenda_isr;
 
 	public function __construct($id = "")

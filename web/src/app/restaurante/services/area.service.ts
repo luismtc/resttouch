@@ -23,7 +23,7 @@ export class AreaService {
 
   get(fltr: any = {}): Observable<Area[]> {   
     return this.http.get<Area[]>(
-      `${GLOBAL.url}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`      
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 

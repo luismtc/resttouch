@@ -1,7 +1,7 @@
 // import * as urls from '../../assets/json/cnfurls.json';
 // const urlBase = urls.default.api;
-const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
-// const urlBase = 'http://192.168.18.241/api'; // RT - Dev
+// const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
+const urlBase = 'http://192.168.18.241/api'; // RT - Dev
 // const urlBase = 'https://resttouch.c807.com/api'; // RT - Prod
 
 export const GLOBAL = {
@@ -62,21 +62,21 @@ export const GLOBAL = {
     frases_isr: [
         {
             id: 1,
-            descripcion: 'Sujeto a pagos trimestrales ISR'
+            descripcion: 'Sujeto a pagos trimestrales I.S.R.'
         },
         {
             id: 2,
-            descripcion: 'Sujeto a retención definitiva ISR'
+            descripcion: 'Sujeto a retención definitiva I.S.R.'
         },
         {
             id: 3,
-            descripcion: 'Sujeto a pago directo ISR'
+            descripcion: 'Sujeto a pago directo I.S.R.'
         }
     ],
     frases_iva: [
         {
             id: 1,
-            descripcion: 'Agente de Retención del IVA'
+            descripcion: 'Agente de retención del I.V.A.'
         }
     ]
 };
