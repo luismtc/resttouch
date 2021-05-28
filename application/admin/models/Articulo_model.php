@@ -523,7 +523,7 @@ class Articulo_model extends General_model {
 	}
 
 	public function getCostoReceta($args = [])
-	{
+	{		
 		$this->actualizarExistencia();
 		$receta = $this->getReceta();
 		$costo = 0;
@@ -531,12 +531,23 @@ class Articulo_model extends General_model {
 
 			foreach ($receta as $row) {				
 				$art = new Articulo_model($row->articulo->articulo);				
-				$tmp = $art->getCostoReceta();
+				$tmp = $art->getCostoReceta($args);
 				$costo += $tmp * ($row->cantidad);
 			}
 
 		} else {
-			$costo = $this->getCosto($args);
+			if (isset($args['bodega']) && isset($args['presentacion'])) {
+				$bac = $this->BodegaArticuloCosto_model->buscar([
+					"articulo" => $this->getPK(),
+					"bodega" => $args['bodega'],
+					"_uno" => true
+				]);
+				$bac = new BodegaArticuloCosto_model($bac->bodega_articulo_costo);
+				$costo = $bac->get_costo($args['bodega'], $this->getPK(), $args['presentacion']);
+			} else {
+				$costo = $this->getCosto($args);
+			}
+			
 		}
 
 		return $costo;

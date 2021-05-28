@@ -282,12 +282,8 @@ class Conversor extends CI_Controller {
 						foreach ($req['detalle'] as $det) {
 							$art = new Articulo_model($det['articulo']);
 							$pres = new Presentacion_model($det['presentacion']);
-
+							$costoIngr = 0;
 							foreach ($art->getReceta() as $row) {
-								$rec = new Articulo_model($row->articulo->articulo);
-								$row->cantidad = $row->cantidad * $det['cantidad'] / $art->rendimiento;
-								$costo = $rec->getCostoReceta();
-								$total = ($costo * $row->cantidad);
 								$presR = $this->Presentacion_model->buscar([
 									"medida" => $row->medida->medida,
 									"cantidad" => 1,
@@ -304,6 +300,18 @@ class Conversor extends CI_Controller {
 
 									$presR->presentacion = $presR->getPK();
 								}
+
+								$bac = $this->BodegaArticuloCosto_model->buscar([
+									"articulo" => $row->articulo->articulo,
+									"bodega" => $egr->bodega,
+									"_uno" => true
+								]);
+								$bac = new BodegaArticuloCosto_model($bac->bodega_articulo_costo);
+								$rec = new Articulo_model($row->articulo->articulo);
+								$row->cantidad = $row->cantidad * $det['cantidad'] / $art->rendimiento;
+								$costo = $bac->get_costo($egr->bodega, $rec->getPK(), $presR->presentacion);
+								$total = ($costo * $row->cantidad);
+								$costoIngr += $total;
 								$egr->setDetalle([
 									"articulo" => $row->articulo->articulo,
 									"cantidad" => $row->cantidad,
@@ -314,9 +322,10 @@ class Conversor extends CI_Controller {
 								]);
 							}
 							$pres = new Presentacion_model($art->presentacion_reporte);
+
 							$det['cantidad'] = $det['cantidad'];
-							$det['precio_unitario'] = $art->getCostoReceta();
-							$det['precio_total'] = $det['precio_unitario'] * $det['cantidad'];
+							$det['precio_total'] = $costoIngr * $pres->cantidad;
+							$det['precio_unitario'] = $det['precio_total'] / $det['cantidad'];
 							$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;
 
 							$det["presentacion"] = $art->presentacion_reporte;

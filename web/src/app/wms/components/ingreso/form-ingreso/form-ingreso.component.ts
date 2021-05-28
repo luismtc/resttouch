@@ -90,6 +90,10 @@ export class FormIngresoComponent implements OnInit {
     if(!this.bodega) {
       this.displayedColumns = ['cantidad_utilizada', 'articulo', 'presentacion', 'cantidad', 'deleteItem'];
     }
+
+    if (this.produccion) {
+      this.displayedColumns = ['articulo', 'presentacion', 'cantidad',  'deleteItem'];
+    }
   }
 
   loadTiposMovimiento = () => {
