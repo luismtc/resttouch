@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Area } from '../interfaces/area';
-// import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -12,41 +11,26 @@ import * as qs from 'qs';
   providedIn: 'root'
 })
 export class AreaService {
-
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl = 'mante/area';
-  // private usrToken: string = null;
+  private moduleUrl = 'area';
 
   constructor(
     private http: HttpClient,
-    // private ls: LocalstorageService
+    
   ) {
-    this.srvcErrHndl = new ServiceErrorHandler();
-    // this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
+    this.srvcErrHndl = new ServiceErrorHandler();    
   }
 
-  get(fltr: any = {}): Observable<Area[]> {
-    /*const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    };*/
+  get(fltr: any = {}): Observable<Area[]> {   
     return this.http.get<Area[]>(
-      `${GLOBAL.url}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`
-      // httpOptions
+      `${GLOBAL.url}/${this.moduleUrl}/get_areas?${qs.stringify(fltr)}`      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  save(entidad: Area) {
-    /*const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    };*/
+  save(entidad: Area) {   
     return this.http.post<any>(
-      `${GLOBAL.url}/${this.moduleUrl}/guardar${entidad.area ? ('/' + entidad.area) : ''}`,
-      entidad
-      // httpOptions
+      `${GLOBAL.urlMantenimientos}/${this.moduleUrl}/guardar${entidad.area ? ('/' + entidad.area) : ''}`,
+      entidad      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

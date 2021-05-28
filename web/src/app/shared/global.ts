@@ -23,8 +23,7 @@ export const GLOBAL = {
     reintentos: 0,
     IDIOMA_TECLADO: 'Español',
     DEEP_LINK_ANDROID: 'intent://scan/impresion/__INFOBASE64__#Intent;scheme=restouch;package=com.restouch.impresion;end',
-    // DEEP_LINK_ANDROID: 'com.restouch.impresion://com.restouch.impresion/impresion/',
-    // DEEP_LINK_ANDROID: 'com.restouch.impresion://impresion/',
+    FORMATO_EMAIL: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
     CONSTANTES: {
         RT_IMPRESORA_DEFECTO: 'RT_IMPRESORA_DEFECTO',
         RT_PANTALLA_TOMA_COMANDA: 'RT_PANTALLA_TOMA_COMANDA',

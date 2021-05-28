@@ -23,8 +23,8 @@
                 </mat-chip>
             </mat-chip-list>
             <mat-form-field class="fullWidth">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripcion" name="descripcion" [(ngModel)]="articulo.descripcion" required>
-                <input matInput *ngIf="esMovil" type="text" placeholder="Descripcion" name="descripcion" [(ngModel)]="articulo.descripcion" required>
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" required>
+                <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" required>
             </mat-form-field>
             
             <mat-form-field class="fullWidth">
@@ -75,7 +75,7 @@
             </mat-form-field>
             <div class="row">
                 <div class="col m3 s3">
-                    <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion">¿Es produccion?</mat-checkbox>
+                    <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion">¿Es producción?</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
                     <mat-checkbox name="mostrar_pos" class="example-margin" [(ngModel)]="+articulo.mostrar_pos">Mostrar en POS</mat-checkbox>
@@ -84,7 +84,7 @@
                     <mat-checkbox name="combo" class="example-margin" [(ngModel)]="+articulo.combo">Combo</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
-                    <mat-checkbox name="multiple" class="example-margin" [(ngModel)]="+articulo.multiple">Opcion multiple</mat-checkbox>
+                    <mat-checkbox name="multiple" class="example-margin" [(ngModel)]="+articulo.multiple">Opción múltiple</mat-checkbox>
                 </div>
             </div>
             <div class="row">

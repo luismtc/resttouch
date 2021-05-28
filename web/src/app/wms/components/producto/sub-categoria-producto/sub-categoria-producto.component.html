@@ -15,8 +15,8 @@
             </mat-form-field>            
 
             <mat-form-field class="fullWidth">
-                <input type="text" matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Descripcion de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" minlength="1" maxlength="45" required>
-                <input type="text" matInput *ngIf="esMovil" placeholder="Descripcion de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" minlength="1" maxlength="45" required>
+                <input type="text" matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Descripción de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" minlength="1" maxlength="45" required>
+                <input type="text" matInput *ngIf="esMovil" placeholder="Descripción de la sub - categoría" name="descripcion" [(ngModel)]="categoriaGrupo.descripcion" minlength="1" maxlength="45" required>
             </mat-form-field>
 
             <mat-checkbox name="descuento" class="fullWidth" [(ngModel)]="+categoriaGrupo.descuento">¿Aplica Descuento?</mat-checkbox>

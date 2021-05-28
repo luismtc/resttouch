@@ -7,10 +7,10 @@
     <mat-card-content>
         <form #frmCorporacion="ngForm" (ngSubmit)="frmCorporacion.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="corporacion.nombre" required>
+                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="corporacion.nombre" minlength="1" maxlength="100" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Llave" name="llave" [(ngModel)]="corporacion.admin_llave">
+                <input matInput type="text" placeholder="Llave" name="llave" [(ngModel)]="corporacion.admin_llave" minlength="1" maxlength="100" required>
             </mat-form-field>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmCorporacion.form.valid">

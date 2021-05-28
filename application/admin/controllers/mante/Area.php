@@ -28,16 +28,21 @@ class Area extends CI_Controller
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 
-			$datos['exito'] = $mesa->guardar($req);;
-
-			if ($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['area'] = $mesa;
+			$existe = $this->Area_model->buscar(['TRIM(UPPER(nombre))' => trim(strtoupper($req['nombre']))]);
+			if (!$existe) {
+				$datos['exito'] = $mesa->guardar($req);
+	
+				if ($datos['exito']) {
+					$datos['mensaje'] = "Datos actualizados con éxito.";
+					$datos['area'] = $mesa;
+				} else {
+					$datos['mensaje'] = $mesa->getMensaje();
+				}
 			} else {
-				$datos['mensaje'] = $mesa->getMensaje();
+				$datos['mensaje'] = "Ya hay un área con ese nombre.";				
 			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
 
 		$this->output

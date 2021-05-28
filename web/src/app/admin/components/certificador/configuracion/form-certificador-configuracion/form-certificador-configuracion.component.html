@@ -7,28 +7,28 @@
     <mat-card-content>
         <form #frmCertificador="ngForm" (ngSubmit)="frmCertificador.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="certificador.nombre" required>
+                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="certificador.nombre" minlength="1" maxlength="75" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Vinculo Factura" name="vinculo_factura" [(ngModel)]="certificador.vinculo_factura" required>
+                <input matInput type="text" placeholder="Vinculo Factura" name="vinculo_factura" [(ngModel)]="certificador.vinculo_factura" minlength="1" maxlength="250" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Vinculo Firma" name="vinculo_firma" [(ngModel)]="certificador.vinculo_firma" required>
+                <input matInput type="text" placeholder="Vinculo Firma" name="vinculo_firma" [(ngModel)]="certificador.vinculo_firma" minlength="1" maxlength="250" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Metodo Factura" name="metodo_factura" [(ngModel)]="certificador.metodo_factura" required>
+                <input matInput type="text" placeholder="Metodo Factura" name="metodo_factura" [(ngModel)]="certificador.metodo_factura" minlength="1" maxlength="50" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Vinculo Anulacion" name="vinculo_anulacion" [(ngModel)]="certificador.vinculo_anulacion" required>
+                <input matInput type="text" placeholder="Vinculo Anulacion" name="vinculo_anulacion" [(ngModel)]="certificador.vinculo_anulacion" minlength="1" maxlength="250" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Metodo Anulacion" name="metodo_anulacion" [(ngModel)]="certificador.metodo_anulacion" required>
+                <input matInput type="text" placeholder="Metodo Anulacion" name="metodo_anulacion" [(ngModel)]="certificador.metodo_anulacion" minlength="1" maxlength="50" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Vinculo Grafo" name="vinculo_grafo" [(ngModel)]="certificador.vinculo_grafo" required>
+                <input matInput type="text" placeholder="Vinculo Grafo" name="vinculo_grafo" [(ngModel)]="certificador.vinculo_grafo" minlength="1" maxlength="250" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Metodo Grafo" name="metodo_grafo" [(ngModel)]="certificador.metodo_grafo" required>
+                <input matInput type="text" placeholder="Metodo Grafo" name="metodo_grafo" [(ngModel)]="certificador.metodo_grafo" minlength="1" maxlength="50" required>
             </mat-form-field>
             
             <div align="end">

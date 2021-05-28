@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
@@ -20,6 +20,7 @@ export class ListaClienteComponent implements OnInit {
   public lstClientesPaged: Cliente[];
   @Input() showAddButton = false;
   @Output() getClienteEv = new EventEmitter();
+  @ViewChild('paginador') paginador: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
@@ -42,7 +43,7 @@ export class ListaClienteComponent implements OnInit {
     this.loadClientes();
   }
 
-  applyFilter = () => {
+  applyFilter = (cambioPagina = false) => {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.lstClientes, this.txtFiltro);
       this.length = tmpList.length;
@@ -51,11 +52,14 @@ export class ListaClienteComponent implements OnInit {
       this.length = this.lstClientes.length;
       this.lstClientesPaged = PaginarArray(this.lstClientes, this.pageSize, this.pageIndex + 1);
     }
+    if (!cambioPagina) {
+      this.paginador.firstPage();
+    }
   }
 
   validateKey = (e: any) => {
     const inp = String.fromCharCode(e.keyCode);
-    if (/[a-zA-Z0-9]/.test(inp)) {
+    if (/[a-zA-Z0-9 -]/.test(inp)) {
       return true;
     } else {
       e.preventDefault();
@@ -121,6 +125,6 @@ export class ListaClienteComponent implements OnInit {
   pageChange = (e: PageEvent) => {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.applyFilter();
+    this.applyFilter(true);
   }
 }

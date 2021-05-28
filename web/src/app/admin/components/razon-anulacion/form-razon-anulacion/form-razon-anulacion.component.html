@@ -7,10 +7,10 @@
     <mat-card-content>
         <form #frmRazonAnulacion="ngForm" (ngSubmit)="frmRazonAnulacion.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Descripción" name="descripcion" [(ngModel)]="razon.descripcion" required>
-                <input matInput type="text" *ngIf="esMovil" placeholder="Descripción" name="descripcion" [(ngModel)]="razon.descripcion" required>
+                <input matInput type="text" *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Descripción" name="descripcion" [(ngModel)]="razon.descripcion" minlength="1" maxlength="100" required>
+                <input matInput type="text" *ngIf="esMovil" placeholder="Descripción" name="descripcion" [(ngModel)]="razon.descripcion" minlength="1" maxlength="100" required>
             </mat-form-field>
-            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+razon.anulado">Anulado
+            <mat-checkbox name="traslado" class="fullWidth" [(ngModel)]="+razon.anulado" [disabled]="!razon.razon_anulacion">Anulado
             </mat-checkbox>
             <div align="end">
                 <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmRazonAnulacion.form.valid">

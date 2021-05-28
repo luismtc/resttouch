@@ -15,20 +15,23 @@ class Ranulacion extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-
-			$datos['exito'] = $razon->guardar($req);
-
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['razon_anulacion'] = $this->Razon_anulacion_model->buscar([
-					"razon_anulacion" => $razon->getPK(),
-					"_uno" => true
-				]);
+			$existe = (int)$req['anulado'] === 0 ? $this->Razon_anulacion_model->buscar(['anulado' => 0, 'TRIM(UPPER(descripcion))' => trim(strtoupper($req['descripcion']))]) : false;
+			if(!$existe) {
+				$datos['exito'] = $razon->guardar($req);	
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos actualizados con éxito.";
+					$datos['razon_anulacion'] = $this->Razon_anulacion_model->buscar([
+						"razon_anulacion" => $razon->getPK(),
+						"_uno" => true
+					]);
+				} else {
+					$datos['mensaje'] = $razon->getMensaje();
+				}
 			} else {
-				$datos['mensaje'] = $razon->getMensaje();
-			}	
+				$datos['mensaje'] = "Ya existe esta razón de anulación.";
+			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
 		
 		$this->output

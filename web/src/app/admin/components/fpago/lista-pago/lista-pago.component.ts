@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { LocalstorageService } from '../../../services/localstorage.service';
 
@@ -16,6 +16,7 @@ export class ListaPagoComponent implements OnInit {
   public listaFpago: FormaPago[];
   public listaFpagoPaged: FormaPago[];
   @Output() getFpagoEv = new EventEmitter();
+  @ViewChild('paginador') paginador: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
@@ -36,7 +37,7 @@ export class ListaPagoComponent implements OnInit {
     this.getFormasPago();
   }
 
-  applyFilter() {
+  applyFilter(cambioPagina = false) {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.listaFpago, this.txtFiltro);
       this.length = tmpList.length;
@@ -44,6 +45,9 @@ export class ListaPagoComponent implements OnInit {
     } else {
       this.length = this.listaFpago.length;
       this.listaFpagoPaged = PaginarArray(this.listaFpago, this.pageSize, this.pageIndex + 1);
+    }
+    if (!cambioPagina) {
+      this.paginador.firstPage();
     }
   }
 
@@ -73,6 +77,6 @@ export class ListaPagoComponent implements OnInit {
   pageChange = (e: PageEvent) => {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.applyFilter();
+    this.applyFilter(true);
   }
 }

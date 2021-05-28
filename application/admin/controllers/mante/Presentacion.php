@@ -18,16 +18,21 @@ class Presentacion extends CI_Controller {
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 
-			$datos['exito'] = $presentacion->guardar($req);
-
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['presentacion'] = $presentacion;
+			$existe = $this->Presentacion_model->buscar(['TRIM(UPPER(descripcion))' => trim(strtoupper($req['descripcion']))]);
+			if (!$existe) {				
+				$datos['exito'] = $presentacion->guardar($req);
+	
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos actualizados con éxito.";
+					$datos['presentacion'] = $presentacion;
+				} else {
+					$datos['mensaje'] = $presentacion->getMensaje();
+				}	
 			} else {
-				$datos['mensaje'] = $presentacion->getMensaje();
-			}	
+				$datos['mensaje'] = "Ya hay una presentación con ese nombre.";
+			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
 		
 		$this->output
@@ -46,7 +51,7 @@ class Presentacion extends CI_Controller {
 			}
 			$datos = ordenar_array_objetos($datos, 'descripcion');
 		} else if($tmp){
-			$pres = new Compra_model($tmp->presentacion);
+			$pres = new Presentacion_model($tmp->presentacion);
 			$tmp->medida = $pres->getMedida();
 			$datos[] = $tmp;
 		}

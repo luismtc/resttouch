@@ -5,25 +5,25 @@
 	<mat-card-content>
 		<form #frmCertificadorFel="ngForm" (ngSubmit)="frmCertificadorFel.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Token" name="token" [(ngModel)]="registro.llave" required>
+                <input matInput type="text" placeholder="Token" name="token" [(ngModel)]="registro.llave" minlength="1" maxlength="75" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Usuario" name="usuario" [(ngModel)]="registro.usuario" required>
+                <input matInput type="text" placeholder="Usuario" name="usuario" [(ngModel)]="registro.usuario" minlength="1" maxlength="25" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Llave de Firma" name="firma_llave" [(ngModel)]="registro.firma_llave" required>
+                <input matInput type="text" placeholder="Llave de Firma" name="firma_llave" [(ngModel)]="registro.firma_llave" minlength="1" maxlength="75" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Codigo de Firma" name="firma_codigo" [(ngModel)]="registro.firma_codigo" required>
+                <input matInput type="text" placeholder="Codigo de Firma" name="firma_codigo" [(ngModel)]="registro.firma_codigo" minlength="1" maxlength="25" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Alias de Firma" name="firma_alias" [(ngModel)]="registro.firma_alias" required>
+                <input matInput type="text" placeholder="Alias de Firma" name="firma_alias" [(ngModel)]="registro.firma_alias" minlength="1" maxlength="25" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="NIT" name="nit" [(ngModel)]="registro.nit" required>
+                <input matInput type="text" placeholder="NIT" name="nit" [(ngModel)]="registro.nit" minlength="1" maxlength="25" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="email" placeholder="Correo Emisor" name="correo_emisor" [(ngModel)]="registro.correo_emisor" required>
+                <input matInput type="email" placeholder="Correo Emisor" name="correo_emisor" [(ngModel)]="registro.correo_emisor" minlength="1" maxlength="75" required>
             </mat-form-field>
             
             <mat-form-field class="fullWidth">
