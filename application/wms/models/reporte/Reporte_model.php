@@ -156,6 +156,10 @@ EOT;
 				'Comanda' nbodega";
 		}
 
+		if (isset($args['bodega']) && !empty($args['bodega'])) {
+			$where .= " and a.bodega = {$args['bodega']}";
+		}
+
 		$this->sqlComanda = <<<EOT
 select 
 	sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as cantidad,
@@ -202,6 +206,10 @@ EOT;
 				f.fecha_factura as fecha,
 				'Factura Directa' tipo_movimiento,
 				'Factura Directa' nbodega";
+		}
+
+		if (isset($args['bodega']) && !empty($args['bodega'])) {
+			$where .= " and a.bodega = {$args['bodega']}";
 		}
 
 
