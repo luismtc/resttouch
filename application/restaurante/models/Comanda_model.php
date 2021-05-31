@@ -161,7 +161,9 @@ class Comanda_model extends General_Model
 		$args['bodega'] = $bodega ? $bodega->bodega : null;
 		$cantPres = ($pres) ? $pres->cantidad : 0;
 		$oldart = new Articulo_model($det->articulo);
-		$art->actualizarExistencia();
+		$art->actualizarExistencia([
+			"bodega" => $args['bodega']
+		]);
 		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
 			$nuevo = ($det->getPK() == null);
 			$result = $det->guardar($args);

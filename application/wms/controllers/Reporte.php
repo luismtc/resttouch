@@ -160,26 +160,30 @@ class Reporte extends CI_Controller {
 		$dato = [];
 		foreach ($exist as $row) {
 			$art = new Articulo_model($row->articulo);
-			$pres = $art->getPresentacionReporte();
+			$rec = $art->getReceta();
+			if (count($rec) == 0 || $art->produccion) {
+				$pres = $art->getPresentacionReporte();
 			//$row->cantidad = $row->cantidad / $pres->cantidad;
 
-			if ($row->existencia != 0) {
-				$row->existencia = $row->existencia/$pres->cantidad;
+				if ($row->existencia != 0) {
+					$row->existencia = $row->existencia/$pres->cantidad;
 
-				$dato[$row->articulo] = [
-					"codigo" => $row->codigo,
-					"articulo" => $row->articulo,
-					"descripcion" => $row->descripcion,
-					"antiguedad"  => $row->existencia,
-					"ingresos"    => 0,
-					"salidas"     => 0,
-					"egresos" => 0,
-					"comandas" => 0,
-					"facturas" => 0,
-					"presentacion" => $pres->descripcion,
-					"detalle" 	  => []
-				];
+					$dato[$row->articulo] = [
+						"codigo" => $row->codigo,
+						"articulo" => $row->articulo,
+						"descripcion" => $row->descripcion,
+						"antiguedad"  => $row->existencia,
+						"ingresos"    => 0,
+						"salidas"     => 0,
+						"egresos" => 0,
+						"comandas" => 0,
+						"facturas" => 0,
+						"presentacion" => $pres->descripcion,
+						"detalle" 	  => []
+					];
+				}
 			}
+			
 			
 		}
 
@@ -188,38 +192,41 @@ class Reporte extends CI_Controller {
 
 		foreach ($reg as $row) {
 			$art = new Articulo_model($row->articulo);
-			$pres = $art->getPresentacionReporte();
-			$row->cantidad = $row->cantidad / $pres->cantidad;
+			$rec = $art->getReceta();
+			if (count($rec) == 0 || $art->produccion) {
+				$pres = $art->getPresentacionReporte();
+				$row->cantidad = $row->cantidad / $pres->cantidad;
 
-			$ingresos = ($row->tipo == 1) ? $row->cantidad : 0;
-			$salidas  = ($row->tipo == 2) ? $row->cantidad : 0;
+				$ingresos = ($row->tipo == 1) ? $row->cantidad : 0;
+				$salidas  = ($row->tipo == 2) ? $row->cantidad : 0;
 
-			if (isset($dato[$row->articulo])) {
-				$dato[$row->articulo]['ingresos'] += ($ingresos);
-				$dato[$row->articulo]['salidas'] += ($salidas);
-				$dato[$row->articulo]['egresos'] += ($row->tipo_salida == 1) ? $row->cantidad : 0;
-				$dato[$row->articulo]['comandas'] += ($row->tipo_salida == 2) ? $row->cantidad : 0;
-				$dato[$row->articulo]['facturas'] += ($row->tipo_salida == 3) ? $row->cantidad : 0;
-				$dato[$row->articulo]['detalle'][] = $row;
+				if (isset($dato[$row->articulo])) {
+					$dato[$row->articulo]['ingresos'] += ($ingresos);
+					$dato[$row->articulo]['salidas'] += ($salidas);
+					$dato[$row->articulo]['egresos'] += ($row->tipo_salida == 1) ? $row->cantidad : 0;
+					$dato[$row->articulo]['comandas'] += ($row->tipo_salida == 2) ? $row->cantidad : 0;
+					$dato[$row->articulo]['facturas'] += ($row->tipo_salida == 3) ? $row->cantidad : 0;
+					$dato[$row->articulo]['detalle'][] = $row;
 
-			} else{
-				$dato[$row->articulo] = [
-					"articulo" => $row->articulo,
-					"codigo" => $row->codigo,
-					"descripcion" => $row->descripcion,
-					"antiguedad"  => 0,
-					"ingresos"    => $ingresos,
-					"salidas"     => $salidas ,
-					"egresos" => ($row->tipo_salida == 1) ? $row->cantidad : 0,
-					"comandas" => ($row->tipo_salida == 2) ? $row->cantidad : 0,
-					"facturas" => ($row->tipo_salida == 3) ? $row->cantidad : 0,
-					"presentacion" => $pres->descripcion,
-					"detalle"	  => [$row]
-				];
+				} else{
+					$dato[$row->articulo] = [
+						"articulo" => $row->articulo,
+						"codigo" => $row->codigo,
+						"descripcion" => $row->descripcion,
+						"antiguedad"  => 0,
+						"ingresos"    => $ingresos,
+						"salidas"     => $salidas ,
+						"egresos" => ($row->tipo_salida == 1) ? $row->cantidad : 0,
+						"comandas" => ($row->tipo_salida == 2) ? $row->cantidad : 0,
+						"facturas" => ($row->tipo_salida == 3) ? $row->cantidad : 0,
+						"presentacion" => $pres->descripcion,
+						"detalle"	  => [$row]
+					];
+				}
+				usort($dato[$row->articulo]["detalle"], function($a, $b) {
+					return strtotime($b->fecha) < strtotime($a->fecha);
+				});
 			}
-			usort($dato[$row->articulo]["detalle"], function($a, $b) {
-				return strtotime($b->fecha) < strtotime($a->fecha);
-			});
 		}
 
 		$args = [
@@ -378,40 +385,44 @@ class Reporte extends CI_Controller {
 
 		foreach ($ingresos as $row) {
 			$art = new Articulo_model($row->articulo);
-			$art->actualizarExistencia($_GET);
-			$pres = $art->getPresentacionReporte();
-			$art->existencias = $art->existencias/$pres->cantidad;
+			$receta = $art->getReceta();
+			if (count($receta) == 0 || $art->produccion) {
+				$art->actualizarExistencia($_GET);
+				$pres = $art->getPresentacionReporte();
+				$art->existencias = $art->existencias/$pres->cantidad;
 
 
-			$bcosto = $this->BodegaArticuloCosto_model->buscar([
-				'bodega' => $req['bodega'], 
-				'articulo' => $row->articulo, 
-				'_uno' => true
-			]);
+				$bcosto = $this->BodegaArticuloCosto_model->buscar([
+					'bodega' => $req['bodega'], 
+					'articulo' => $row->articulo, 
+					'_uno' => true
+				]);
 
-			if ($bcosto) {
-				if ($emp->metodo_costeo == 1) {
-					$row->precio_unitario = $bcosto->costo_ultima_compra;
-					
-				} else if ($emp->metodo_costeo == 2) {
-					$row->precio_unitario = $bcosto->costo_promedio;
+				if ($bcosto) {
+					if ($emp->metodo_costeo == 1) {
+						$row->precio_unitario = $bcosto->costo_ultima_compra;
+						
+					} else if ($emp->metodo_costeo == 2) {
+						$row->precio_unitario = $bcosto->costo_promedio;
+					} else {
+						$row->precio_unitario = 0;
+					}
 				} else {
 					$row->precio_unitario = 0;
 				}
-			} else {
-				$row->precio_unitario = 0;
+
+				$row->precio_unitario = $row->precio_unitario * $pres->cantidad;
+
+				$detalle[$art->getPK()] = [
+					"presentacion" => $pres->descripcion,
+					"cantidad" => $art->existencias, 
+					"total" => (double) round($art->existencias,2) * (double) round($row->precio_unitario, 2),
+					"descripcion" => $art->descripcion,
+					"precio_unitario" => $row->precio_unitario,
+					"ultima_compra" => isset($row->fecha) ? formatoFecha($row->fecha, 2) : ''
+				];
 			}
-
-			$row->precio_unitario = $row->precio_unitario * $pres->cantidad;
-
-			$detalle[$art->getPK()] = [
-				"presentacion" => $pres->descripcion,
-				"cantidad" => $art->existencias, 
-				"total" => (double) round($art->existencias,2) * (double) round($row->precio_unitario, 2),
-				"descripcion" => $art->descripcion,
-				"precio_unitario" => $row->precio_unitario,
-				"ultima_compra" => isset($row->fecha) ? formatoFecha($row->fecha, 2) : ''
-			];
+				
 			
 		}
 

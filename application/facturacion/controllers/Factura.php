@@ -98,6 +98,7 @@ class Factura extends CI_Controller
 				$req['presentacion'] = $art->presentacion;
 				$req['monto_iva'] = $req['total'] - $req['monto_base'];
 				$req['bien_servicio'] = $art->bien_servicio;
+				$req["bodega"] = $art->getCategoriaGrupo()->bodega;
 				$det = $fac->setDetalle($req, $id);
 
 				if ($det) {

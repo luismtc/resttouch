@@ -119,6 +119,10 @@ class Articulo_model extends General_model {
 			$this->db->where('f.sede', $args['sede']);
 		}
 
+		if (isset($args['bodega'])) {
+			$this->db->where('a.bodega', $args['bodega']);
+		}
+
 		if (verDato($args, 'fecha')) {
 			$this->db->where('date(e.fhcreacion) <=', $args['fecha']);
 		}
@@ -146,6 +150,10 @@ class Articulo_model extends General_model {
 
 		if (verDato($args, 'fecha')) {
 			$this->db->where('date(f.fecha_factura) <=', $args['fecha']);
+		}
+
+		if (isset($args['bodega'])) {
+			$this->db->where('a.bodega', $args['bodega']);
 		}
 
 		$facturas = $this->db
@@ -315,6 +323,10 @@ class Articulo_model extends General_model {
 	{
 		if (isset($args['sede'])) {
 			$this->db->where('f.sede', $args['sede']);
+		}
+
+		if (isset($args['bodega'])) {
+			$this->db->where('a.bodega', $args['bodega']);
 		}
 
 		if ($args['tipo'] == 1) {
