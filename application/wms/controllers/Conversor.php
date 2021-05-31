@@ -87,7 +87,7 @@ class Conversor extends CI_Controller {
 				$req['ingreso']['estatus_movimiento'] = 2;
 				$req['ingreso']['tipo_movimiento'] = $tipoMov;
 				$req['egreso']['tipo_movimiento'] = $tipoMov;
-
+				$bod = new Bodega_model($req['egreso']['bodega']);
 				$continuar = true;
 				if (isset($req['merma']) && is_array($req['merma'])) {
 					$bod = $this->Catalogo_model->getBodega(['merma' => 1, "_uno" => true]);
@@ -98,7 +98,11 @@ class Conversor extends CI_Controller {
 				if ($continuar) {			
 					foreach ($req['egreso']['detalle'] as $det) {
 						$art = new Articulo_model($det['articulo']);
-						$art->actualizarExistencia();
+						$args = [
+							"bodega" => $bod->getPK(),
+							"sede" => $bod->sede
+						];
+						$art->actualizarExistencia($args);
 						if ($art->existencias < $det['cantidad']) {
 							$continuar = false;
 						}
