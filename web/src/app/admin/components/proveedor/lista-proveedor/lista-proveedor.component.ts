@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { LocalstorageService } from '../../../services/localstorage.service';
 
@@ -16,6 +16,7 @@ export class ListaProveedorComponent implements OnInit {
   public lstProveedores: Proveedor[];
   public lstProveedoresPaged: Proveedor[];
   @Output() getProveedorEv = new EventEmitter();
+  @ViewChild('paginador') paginador: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
@@ -36,7 +37,7 @@ export class ListaProveedorComponent implements OnInit {
     this.loadProveedores();
   }
 
-  applyFilter() {
+  applyFilter(cambioPagina = false) {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.lstProveedores, this.txtFiltro);
       this.length = tmpList.length;
@@ -44,6 +45,9 @@ export class ListaProveedorComponent implements OnInit {
     } else {
       this.length = this.lstProveedores.length;
       this.lstProveedoresPaged = PaginarArray(this.lstProveedores, this.pageSize, this.pageIndex + 1);
+    }
+    if (!cambioPagina) {
+      this.paginador.firstPage();
     }
   }
 
@@ -63,6 +67,6 @@ export class ListaProveedorComponent implements OnInit {
   pageChange = (e: PageEvent) => {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.applyFilter();
+    this.applyFilter(true);
   }
 }

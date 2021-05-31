@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { LocalstorageService } from '../../../services/localstorage.service';
 
@@ -16,6 +16,7 @@ export class ListaImpuestoEspecialComponent implements OnInit {
   public lstImpuestosEspeciales: ImpuestoEspecial[];
   public lstImpuestosEspecialesPaged: ImpuestoEspecial[];
   @Output() getImpuestoEspecialEv = new EventEmitter();
+  @ViewChild('paginador') paginador: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
@@ -36,7 +37,7 @@ export class ListaImpuestoEspecialComponent implements OnInit {
     this.loadImpuestosEspeciales();
   }
 
-  applyFilter() {
+  applyFilter(cambioPagina = false) {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.lstImpuestosEspeciales, this.txtFiltro);
       this.length = tmpList.length;
@@ -44,6 +45,9 @@ export class ListaImpuestoEspecialComponent implements OnInit {
     } else {
       this.length = this.lstImpuestosEspeciales.length;
       this.lstImpuestosEspecialesPaged = PaginarArray(this.lstImpuestosEspeciales, this.pageSize, this.pageIndex + 1);
+    }
+    if (!cambioPagina) {
+      this.paginador.firstPage();
     }
   }
 
@@ -65,7 +69,7 @@ export class ListaImpuestoEspecialComponent implements OnInit {
   pageChange = (e: PageEvent) => {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.applyFilter();
+    this.applyFilter(true);
   }
 
 }

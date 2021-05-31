@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Sede, Empresa } from '../../../interfaces/sede';
@@ -16,6 +16,7 @@ export class ListaSedeComponent implements OnInit {
   public listaSede: Sede[];
   public listaSedePaged: Sede[];
   @Output() getSedeEv = new EventEmitter();
+  @ViewChild('paginador') paginador: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
@@ -32,7 +33,7 @@ export class ListaSedeComponent implements OnInit {
     this.getSedes();
   }
 
-  applyFilter() {
+  applyFilter(cambioPagina = false) {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.listaSede, this.txtFiltro);
       this.length = tmpList.length;
@@ -41,12 +42,15 @@ export class ListaSedeComponent implements OnInit {
       this.length = this.listaSede.length;
       this.listaSedePaged = PaginarArray(this.listaSede, this.pageSize, this.pageIndex + 1);
     }
+    if (!cambioPagina && this.paginador) {
+      this.paginador.firstPage();
+    }
   }
 
   pageChange = (e: PageEvent) => {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.applyFilter();
+    this.applyFilter(true);
   }
 
   getSedes = () => {

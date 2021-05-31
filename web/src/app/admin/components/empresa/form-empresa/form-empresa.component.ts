@@ -46,17 +46,17 @@ export class FormEmpresaComponent implements OnInit {
     municipio: null,
     departamento: null,
     pais_iso_dos: null,
-    agente_retenedor: null,
-    porcentaje_iva: null,
+    agente_retenedor: 0,
+    porcentaje_iva: 0.00,
     visa_merchant_id: null,
     visa_transaction_key: null,
     codigo: null,
-    metodo_costeo: null,
+    metodo_costeo: 1,
     leyenda_isr: null
   }
 
   onSubmit = () => {
-    this.empresa.corporacion = this.corporacion.corporacion;
+    this.empresa.corporacion = this.corporacion.corporacion;    
 
     this.sedeSrvc.saveEmpresa(this.empresa).subscribe(res => {
       if (res.exito) {

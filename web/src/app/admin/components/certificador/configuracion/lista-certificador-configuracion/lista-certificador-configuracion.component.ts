@@ -1,20 +1,21 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { PaginarArray, MultiFiltro } from '../../../../../shared/global';
 
 import { Configuracion } from '../../../../interfaces/certificador';
 import { CertificadorService } from '../../../../services/certificador.service';
 
 @Component({
-  selector: 'app-lista-certificador-configuracion',
-  templateUrl: './lista-certificador-configuracion.component.html',
-  styleUrls: ['./lista-certificador-configuracion.component.css']
+	selector: 'app-lista-certificador-configuracion',
+	templateUrl: './lista-certificador-configuracion.component.html',
+	styleUrls: ['./lista-certificador-configuracion.component.css']
 })
 export class ListaCertificadorConfiguracionComponent implements OnInit {
 
-  public lstCertificador: Configuracion[];
+	public lstCertificador: Configuracion[];
 	public lstCertificadorPaged: Configuracion[];
 	@Output() getCertificadorEv = new EventEmitter();
+	@ViewChild('paginador') paginador: MatPaginator;
 
 	public length = 0;
 	public pageSize = 5;
@@ -25,11 +26,11 @@ export class ListaCertificadorConfiguracionComponent implements OnInit {
 
 	constructor(private CertificadorSrvc: CertificadorService) { }
 
-  ngOnInit() {
-    this.loadCertificador();
-  }
+	ngOnInit() {
+		this.loadCertificador();
+	}
 
-  applyFilter() {
+	applyFilter(cambioPagina = false) {
 		if (this.txtFiltro.length > 0) {
 			const tmpList = MultiFiltro(this.lstCertificador, this.txtFiltro);
 			this.length = tmpList.length;
@@ -37,6 +38,9 @@ export class ListaCertificadorConfiguracionComponent implements OnInit {
 		} else {
 			this.length = this.lstCertificador.length;
 			this.lstCertificadorPaged = PaginarArray(this.lstCertificador, this.pageSize, this.pageIndex + 1);
+		}
+		if (!cambioPagina) {
+			this.paginador.firstPage();
 		}
 	}
 
@@ -58,7 +62,7 @@ export class ListaCertificadorConfiguracionComponent implements OnInit {
 	pageChange = (e: PageEvent) => {
 		this.pageSize = e.pageSize;
 		this.pageIndex = e.pageIndex;
-		this.applyFilter();
+		this.applyFilter(true);
 	}
 
 }

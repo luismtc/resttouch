@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { PaginarArray, MultiFiltro } from '../../../../shared/global';
 
 import { Corporacion } from '../../../interfaces/sede';
@@ -15,6 +15,7 @@ export class ListaCorporacionComponent implements OnInit {
   public listaCorporacion: Corporacion[];
   public listaCorporacionPaged: Corporacion[];
   @Output() getCorporacionEv = new EventEmitter();
+  @ViewChild('paginador') paginador: MatPaginator;
 
   public length = 0;
   public pageSize = 5;
@@ -31,7 +32,7 @@ export class ListaCorporacionComponent implements OnInit {
     this.getCorporaciones();
   }
 
-  applyFilter() {
+  applyFilter(cambioPagina = false) {
     if (this.txtFiltro.length > 0) {
       const tmpList = MultiFiltro(this.listaCorporacion, this.txtFiltro);
       this.length = tmpList.length;
@@ -45,7 +46,7 @@ export class ListaCorporacionComponent implements OnInit {
   pageChange = (e: PageEvent) => {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
-    this.applyFilter();
+    this.applyFilter(true);
   }
 
   getCorporaciones = () => {

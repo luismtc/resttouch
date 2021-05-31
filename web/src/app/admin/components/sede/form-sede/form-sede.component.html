@@ -16,29 +16,29 @@
 				</mat-select>
 			</mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="sede.nombre" required>
+                <input matInput type="text" placeholder="Nombre" name="nombre" [(ngModel)]="sede.nombre" minlength="1" maxlength="100" required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Direccion" name="direccion" [(ngModel)]="sede.direccion">
+                <input matInput type="text" placeholder="Dirección" name="direccion" [(ngModel)]="sede.direccion" minlength="1" maxlength="150">
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Telefono" name="telefono" [(ngModel)]="sede.telefono">
+                <input matInput type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="sede.telefono" minlength="1" maxlength="25" (keypress)="validatePhone($event)">
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Correo" name="correo" [(ngModel)]="sede.correo">
+                <input matInput type="text" placeholder="Correo electrónico" name="correo" [(ngModel)]="sede.correo" minlength="1" maxlength="75" (keypress)="validateEmail($event)">
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Codigo" name="codigo" [(ngModel)]="sede.codigo">
+                <input matInput type="text" placeholder="Código" name="codigo" [(ngModel)]="sede.codigo" minlength="1" maxlength="45">
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="text" placeholder="Cuenta Contable" name="cuenta_contable" [(ngModel)]="sede.cuenta_contable">
+                <input matInput type="text" placeholder="Cuenta contable" name="cuenta_contable" [(ngModel)]="sede.cuenta_contable" minlength="1" maxlength="10">
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput type="number" step="1" placeholder="Fel Establecimiento" name="fel_establecimiento" [(ngModel)]="sede.fel_establecimiento">
+                <input matInput type="number" step="1" placeholder="Establecimiento F.E.L." name="fel_establecimiento" [(ngModel)]="sede.fel_establecimiento">
             </mat-form-field>
             <mat-form-field class="fullWidth">
-				<mat-label>Certificador Fel</mat-label>
-				<mat-select name="certificador_fel" [(ngModel)]="sede.certificador_fel">
+				<mat-label>Certificador F.E.L.</mat-label>
+				<mat-select name="certificador_fel" [(ngModel)]="sede.certificador_fel" required>
 					<mat-option></mat-option>
 					<mat-option *ngFor="let cert of certificadores" [value]="cert.certificador_fel">
 						{{ cert.nombre }} - {{ cert.usuario }}

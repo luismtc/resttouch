@@ -4,6 +4,7 @@ import { Sede, Empresa } from '../../../interfaces/sede';
 import { Certificador } from '../../../interfaces/certificador';
 import { SedeService } from '../../../services/sede.service';
 import { CertificadorService } from '../../../services/certificador.service';
+import { GLOBAL } from '../../../../shared/global';
 
 @Component({
   selector: 'app-form-sede',
@@ -61,8 +62,19 @@ export class FormSedeComponent implements OnInit {
   }
 
   onSubmit = () => {
-    this.sede.empresa = this.empresa.empresa;
+    if(this.sede.correo.length > 0) {
+      if (this.sede.correo.match(GLOBAL.FORMATO_EMAIL)) {
+        this.guardarSede();
+      } else {
+        this.snackBar.open(`El correo '${this.sede.correo}' no es válido.`, 'Sede', { duration: 3000 });
+      }
+    } else {
+      this.guardarSede();
+    }
+  }
 
+  guardarSede = () => {
+    this.sede.empresa = this.empresa.empresa;  
     this.sedeSrvc.saveSede(this.sede).subscribe(res => {
       if (res.exito) {
         this.sedeSavedEv.emit();
@@ -72,6 +84,26 @@ export class FormSedeComponent implements OnInit {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sede', { duration: 3000 });
       }
     });
+  }
+
+  validatePhone = (e: any) => {
+    const inp = String.fromCharCode(e.keyCode);
+    if (/[0-9 +()-]/.test(inp)) {
+      return true;
+    } else {
+      e.preventDefault();
+      return false;
+    }
+  }
+
+  validateEmail = (e: any) => {
+    const inp = String.fromCharCode(e.keyCode);
+    if (/[a-zA-Z0-9_@.]/.test(inp)) {
+      return true;
+    } else {
+      e.preventDefault();
+      return false;
+    }
   }
 
 }

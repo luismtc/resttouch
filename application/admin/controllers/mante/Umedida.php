@@ -18,16 +18,22 @@ class Umedida extends CI_Controller {
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 
-			$datos['exito'] = $medida->guardar($req);
+			$existe = $this->Umedida_model->buscar(['TRIM(UPPER(descripcion))' => trim(strtoupper($req['descripcion']))]);
 
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['unidad_medida'] = $medida;
+			if (!$existe) {
+				$datos['exito'] = $medida->guardar($req);
+	
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos actualizados con éxito.";
+					$datos['unidad_medida'] = $medida;
+				} else {
+					$datos['mensaje'] = $medida->getMensaje();
+				}	
 			} else {
-				$datos['mensaje'] = $medida->getMensaje();
-			}	
+				$datos['mensaje'] = "Ya existe esta unidad de medida.";
+			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
 		
 		$this->output

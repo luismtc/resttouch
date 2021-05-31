@@ -104,7 +104,7 @@ export class FormProductoComponent implements OnInit {
         this.articulo = res.articulo;
         this.loadRecetas(this.articulo.articulo);
         this.loadArticulos();
-        this.snackBar.open('Articulo guardado con éxito...', 'Articulo', { duration: 3000 });
+        this.snackBar.open('Artículo guardado con éxito...', 'Artículo', { duration: 3000 });
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
       }
@@ -244,7 +244,7 @@ export class FormProductoComponent implements OnInit {
           this.loadRecetas();
           this.resetReceta();
         } else {
-          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Artículo', { duration: 3000 });
         }
       }
     });

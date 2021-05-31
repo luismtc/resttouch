@@ -5,15 +5,8 @@
     <mat-card-content>
         <form #frmEntidad="ngForm" (ngSubmit)="frmEntidad.form.valid && onSubmit()" novalidate>
             <mat-form-field class="fullWidth" *ngIf="esMovil">
-                <input type="text" matInput placeholder="Nombre" name="nombre" [(ngModel)]="entidad.nombre" required>
+                <input type="text" matInput placeholder="Nombre" name="nombre" [(ngModel)]="entidad.nombre" minlength="1" maxlength="100" required>
             </mat-form-field>
-            <!--
-            <mat-form-field class="fullWidth" *ngIf="!esMovil">
-                <input type="text" matInput ng-virtual-keyboard ng-virtual-keyboard-layout="alphanumeric"
-                    ng-virtual-keyboard-placeholder="Nombre" placeholder="Nombre" name="nombre"
-                    [(ngModel)]="entidad.nombre" required>
-            </mat-form-field>
-            -->
             <mat-form-field class="fullWidth">
                 <mat-label>Área padre</mat-label>
                 <mat-select name="area_padre" [(ngModel)]="entidad.area_padre">
