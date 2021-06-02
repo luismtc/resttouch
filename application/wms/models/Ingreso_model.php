@@ -132,7 +132,7 @@ class Ingreso_model extends General_Model
 
 		return $this->db
 			->select("
-						max(c.ingreso_detalle), 
+						max(c.ingreso_detalle) ingreso_detalle, 
 						c.articulo, 
 						(c.precio_unitario / e.cantidad) as precio_unitario, 
 						a.fecha")
@@ -185,9 +185,10 @@ class Ingreso_model extends General_Model
 						0 as precio_unitario")
 			->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
 			->join("categoria c", "c.categoria = b.categoria")
-			->join("ingreso_detalle d", "d.articulo = a.articulo", "left")
+			->join("bodega_articulo_costo d", "d.articulo = a.articulo and d.bodega = {$args['bodega']}", "left")
 			->where("a.mostrar_inventario", 1)
-			->where("d.ingreso_detalle is null")
+			->where("d.bodega_articulo_costo is null")
+
 			->get("articulo a")
 			->result();
 	}
