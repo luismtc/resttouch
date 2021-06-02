@@ -842,8 +842,8 @@ class Factura_model extends General_model
 			$res = json_decode(post_request($link, $datos, $header));
 
 			if ($res->Codigo == 1 && $this->esAnulacion === 'N') {
-				$this->numero_factura = $res->Serie;
-				$this->serie_factura = $res->NUMERO;
+				$this->numero_factura = $res->NUMERO;
+				$this->serie_factura = $res->Serie;
 				$this->fel_uuid = $res->Autorizacion;
 			} else if ($this->esAnulacion === 'S') {
 				$this->fel_uuid_anulacion = $res->Autorizacion;
