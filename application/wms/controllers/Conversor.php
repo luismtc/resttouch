@@ -346,7 +346,7 @@ class Conversor extends CI_Controller {
 					$datos['mensaje'] = "No hay suficientes ingredientes para producir la receta";
 				}
 			} else {
-				$datos['mensaje'] = "El artículo debe tener una receta para realizar la produccion";
+				$datos['mensaje'] = "El artículo debe tener una receta para realizar la producción";
 			}
 		} else {
 			$datos['mensaje'] = "El artículo debe tener costo para realizar la producción";

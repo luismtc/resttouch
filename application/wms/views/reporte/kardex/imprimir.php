@@ -75,8 +75,8 @@
 						<td><?php echo formatoFecha($det->fecha,2) ?></td>
 						<td><?php echo $det->id ?></td>
 						<td><?php echo $det->tipo_movimiento ?></td>
-						<td><?php echo ($det->tipo == 1) ? number_format($det->cantidad,2) : 0.00 ?></td>
-						<td><?php echo ($det->tipo == 2) ? number_format($det->cantidad,2) : 0.00 ?></td>
+						<td><?php echo ($det->tipo == 1) ? number_format($det->cantidad,2) : "0.00" ?></td>
+						<td><?php echo ($det->tipo == 2) ? number_format($det->cantidad,2) : "0.00" ?></td>
 					</tr>
 			<?php endforeach ?>
 				
