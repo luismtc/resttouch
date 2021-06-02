@@ -33,10 +33,10 @@
 	<table class="tabla-contenido" style="padding: 5px; border: 1px solid black">
 		<thead>
 			<tr>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Descripcion</th>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Presentacion</th>
+				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Descripción</th>
+				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Presentación</th>
 				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Existencia</th>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Fecha Ultima Compra</th>
+				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Fecha Última Compra</th>
 				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Costo</th>
 				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Valor</th>
 			</tr>
@@ -85,7 +85,7 @@
 							?>	
 						<?php endforeach ?>
 						<tr>
-							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoria</b></td>
+							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoría</b></td>
 							<td style="border: 1px solid black;padding: 5px;" class="text-right">
 								<?php echo number_format($total, 2) ?>
 							</td>
@@ -93,7 +93,7 @@
 					<?php endif ?>
 				<?php endforeach ?>
 				<tr>
-					<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoria</b></td>
+					<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoría</b></td>
 					<td style="border: 1px solid black;padding: 5px;" class="text-right">
 						<?php echo number_format($totalCat, 2) ?>
 					</td>

@@ -12,7 +12,7 @@
 		</tr>
 	
 		<tr>
-			<td class="titulo">Codigo</td>
+			<td class="titulo">Código</td>
 			<td class="titulo">Descripción</td>
 			<td class="titulo">Unidad</td>
 			<td class="titulo">Ingresos</td>

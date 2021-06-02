@@ -349,7 +349,7 @@ class Conversor extends CI_Controller {
 				$datos['mensaje'] = "El artículo debe tener una receta para realizar la produccion";
 			}
 		} else {
-			$datos['mensaje'] = "El artículo debe tener costo para realizar la produccion";
+			$datos['mensaje'] = "El artículo debe tener costo para realizar la producción";
 		}	
 		
 		$this->output

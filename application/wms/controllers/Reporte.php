@@ -69,7 +69,7 @@ class Reporte extends CI_Controller {
 			$excel->setActiveSheetIndex(0);
 			$hoja = $excel->getActiveSheet();
 			$nombres = [
-				"Codigo",
+				"Código",
 				"Descripción",
 				"Unidad",
 				"Ingresos",
@@ -279,13 +279,13 @@ class Reporte extends CI_Controller {
 					(!empty($row['codigo']) ? $row['codigo'] : $row['articulo']),
 					$row['descripcion'],
 					$row['presentacion'],
-					round($row['antiguedad'],2),
-					round($row['ingresos'],2),
-					round($row['egresos'],2),
-					round($row['comandas'],2),
-					round($row['facturas'],2),
-					round($row['salidas'],2),
-					round($saldo,2)
+					($row['antiguedad'] == 0) ? "0.00" : round($row['antiguedad'],2),
+					($row['ingresos'] == 0) ? "0.00" : round($row['ingresos'],2),
+					($row['egresos'] == 0) ? "0.00" : round($row['egresos'],2),
+					($row['comandas'] == 0) ? "0.00" : round($row['comandas'],2),
+					($row['facturas'] == 0) ? "0.00" : round($row['facturas'],2),
+					($row['salidas'] == 0) ? "0.00" : round($row['salidas'],2),
+					($saldo == 0) ? "0.00" : round($saldo,2) 
 				];
 
 				$hoja->fromArray($reg, null, "A{$fila}");
@@ -307,8 +307,8 @@ class Reporte extends CI_Controller {
 						"Salida"
 					];
 					$hoja->fromArray($sub, null, "A{$fila}");
-					$hoja->getStyle("B{$fila}:F{$fila}")->getFont()->setBold(true);
-					$hoja->getStyle("B{$fila}:F{$fila}")->getAlignment()->setHorizontal('center');
+					$hoja->getStyle("B{$fila}:J{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("B{$fila}:J{$fila}")->getAlignment()->setHorizontal('center');
 					$fila++;
 
 					foreach ($row['detalle'] as $det) {
