@@ -289,7 +289,7 @@ class Reporte extends CI_Controller {
 				];
 
 				$hoja->fromArray($reg, null, "A{$fila}");
-				$hoja->getStyle("C{$fila}:H{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$hoja->getStyle("D{$fila}:J{$fila}")->getNumberFormat()->setFormatCode('0.00');
 				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
 				$fila++;
 
