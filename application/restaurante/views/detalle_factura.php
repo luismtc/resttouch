@@ -55,8 +55,8 @@
 								</th>	
 							<?php endif ?>
 							<?php if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)): ?>
-								<th style="padding: 5px;" class="text-center">Fecha Anulacion</th>
-								<th style="padding: 5px;" class="text-center">Usuario Anulacion</th>
+								<th style="padding: 5px;" class="text-center">Fecha de anulación</th>
+								<th style="padding: 5px;" class="text-center">Usuario que anuló</th>
 								<th style="padding: 5px;" class="text-center">Motivo</th>
 							<?php endif ?>
 							<th style="padding: 5px;" class="text-center">Total</th>

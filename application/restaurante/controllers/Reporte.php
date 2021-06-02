@@ -606,31 +606,74 @@ class Reporte extends CI_Controller {
 			];
 
 			if ($data['impuesto_especial']) {
-				$nombres[] = "Impuesto Especial";
+				$nombres[] = "Impuesto Especial";				
+				$hoja->getStyle("F9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("G9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("H9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("I9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle('I')->getNumberFormat()->setFormatCode('0.00');
+				$hoja->getStyle('I')->getAlignment()->setHorizontal('right');
+				$hoja->getStyle('J')->getAlignment()->setHorizontal('center');
+			} else {
+				$hoja->getStyle("F9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("G9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("H9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle('I')->getAlignment()->setHorizontal('center');				
 			}
 
 			if ($anuladas) {
-				array_push($nombres, "Fecha Anulacion");
-				array_push($nombres, "Usuario Anulacion");
+				array_push($nombres, "Fecha de anulación");
+				array_push($nombres, "Usuario que anuló");
 				array_push($nombres, "Motivo");
 			}
 
 			array_push($nombres, "Total");
 			array_push($nombres, "Propina");
 			array_push($nombres, "Descuento");
+			array_push($nombres, "Estatus");
 
 			/*Encabezado*/
 			$hoja->setCellValue("A1", $data["empresa"]->nombre);
 			$hoja->setCellValue("A2", $data["sede"]->nombre);
-			$hoja->setCellValue("A4", "Detalle de Facturas");
+			$hoja->setCellValue("A4", "Detalle de facturas");
 			$hoja->setCellValue("A5", "Del: {$fdel} al: {$fal}");
 
 			$hoja->fromArray($nombres, null, "A9");
-			$hoja->getStyle('A9:L9')->getAlignment()->setHorizontal('center');
-			$hoja->getStyle("A1:A5")->getFont()->setBold(true);
-			$hoja->getStyle("A9:L9")->getFont()->setBold(true);
+			$hoja->getStyle("A1:A8")->getFont()->setBold(true);
+			$hoja->getStyle("A9:M9")->getFont()->setBold(true);
 			$hoja->setCellValue("A7", "Facturas");
-			$hoja->setCellValue("A8", "FEL");
+			$hoja->setCellValue("A8", "FEL");			
+			$hoja->getStyle('A')->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_TEXT);
+			$hoja->getStyle('E')->getNumberFormat()->setFormatCode('0.00');
+			$hoja->getStyle('E')->getNumberFormat()->setFormatCode('0.00');
+			$hoja->getStyle('F')->getNumberFormat()->setFormatCode('0.00');
+			$hoja->getStyle('G')->getNumberFormat()->setFormatCode('0.00');
+			$hoja->getStyle('H')->getNumberFormat()->setFormatCode('0.00');			
+			
+			$hoja->getStyle('E')->getAlignment()->setHorizontal('right');
+			$hoja->getStyle('F')->getAlignment()->setHorizontal('right');
+			$hoja->getStyle('G')->getAlignment()->setHorizontal('right');
+			$hoja->getStyle('H')->getAlignment()->setHorizontal('right');			
+			
+			// $hoja->getStyle('A9:M9')->getAlignment()->setHorizontal('center');
+			$hoja->getStyle("A9")->getAlignment()->setHorizontal('left');
+			$hoja->getStyle("B9")->getAlignment()->setHorizontal('center');
+			$hoja->getStyle("C9")->getAlignment()->setHorizontal('center');
+			$hoja->getStyle("D9")->getAlignment()->setHorizontal('left');
+			$hoja->getStyle("E9")->getAlignment()->setHorizontal('left');			
+
+			if (isset($_GET['_anuladas']) && filter_var($_GET['_anuladas'], FILTER_VALIDATE_BOOLEAN)) {
+				$hoja->getStyle("F9")->getAlignment()->setHorizontal('left');
+				$hoja->getStyle("G9")->getAlignment()->setHorizontal('left');
+				$hoja->getStyle("H9")->getAlignment()->setHorizontal('left');
+				$hoja->getStyle("I9")->getAlignment()->setHorizontal('right');				
+				$hoja->getStyle("J9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("K9")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("L9")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle('I')->getNumberFormat()->setFormatCode('0.00');
+				$hoja->getStyle('J')->getNumberFormat()->setFormatCode('0.00');
+				$hoja->getStyle('K')->getNumberFormat()->setFormatCode('0.00');
+			}
 
 			$fila = 11;
 			$totalFactura = 0;
@@ -651,12 +694,15 @@ class Reporte extends CI_Controller {
 					$row->numero_factura,
 					isset($row->mesa->mesa) ? $row->mesa->mesa : '',
 					formatoFecha($row->fecha_factura,2),
-					(empty($row->fel_uuid_anulacion) ? $row->receptor->nit : ''),
-					(empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA')
+					// (empty($row->fel_uuid_anulacion) ? $row->receptor->nit : ''),
+					$row->receptor->nit,
+					// (empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA')
+					$row->receptor->nombre
 				];
 
 				if ($data['impuesto_especial']) {
-					$reg[] = (empty($row->fel_uuid_anulacion) ? round($imp, 2) : 0);
+					// $reg[] = (empty($row->fel_uuid_anulacion) ? round($imp, 2) : 0);
+					$reg[] = round($imp, 2);
 				}
 
 				if ($anuladas) {
@@ -665,11 +711,31 @@ class Reporte extends CI_Controller {
 					array_push($reg, $row->razon_anulacion->descripcion);
 				}
 
-				array_push($reg, (empty($row->fel_uuid_anulacion) ? round($total, 2) : 0));
-				array_push($reg, (empty($row->fel_uuid_anulacion) ? round($row->propina, 2) : 0));
-				array_push($reg, (empty($row->fel_uuid_anulacion) ? round($desc, 2) : 0));
+				// array_push($reg, (empty($row->fel_uuid_anulacion) ? round($total, 2) : 0));
+				array_push($reg, round($total, 2));
+				// array_push($reg, (empty($row->fel_uuid_anulacion) ? round($row->propina, 2) : 0));
+				array_push($reg, (float)$row->propina === 0.00 ? '0.00' : round($row->propina, 2));
+				// array_push($reg, (empty($row->fel_uuid_anulacion) ? round($desc, 2) : 0));
+				array_push($reg, (float)$desc === 0.00 ? '0.00' : round($desc, 2));
+				array_push($reg, (empty($row->fel_uuid_anulacion) ? 'ACTIVA' : 'ANULADA'));
 
 				$hoja->fromArray($reg, null, "A{$fila}");
+				$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
+				$hoja->getStyle("B{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("C{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("D{$fila}")->getAlignment()->setHorizontal('left');
+				$hoja->getStyle("E{$fila}")->getAlignment()->setHorizontal('left');
+
+				if (isset($_GET['_anuladas']) && filter_var($_GET['_anuladas'], FILTER_VALIDATE_BOOLEAN)) {
+					$hoja->getStyle("F{$fila}")->getAlignment()->setHorizontal('left');
+					$hoja->getStyle("G{$fila}")->getAlignment()->setHorizontal('left');
+					$hoja->getStyle("H{$fila}")->getAlignment()->setHorizontal('left');
+					$hoja->getStyle("I{$fila}")->getAlignment()->setHorizontal('right');				
+					$hoja->getStyle("J{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("K{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->getStyle("L{$fila}")->getAlignment()->setHorizontal('center');					
+				}
+
 				$fila++;
 
 				if (isset($data['_detalle']) && $data['_detalle'] !== "false") {
@@ -677,16 +743,16 @@ class Reporte extends CI_Controller {
 						"",
 						"",
 						"",
-						"Articulo",
+						"Artículo",
 						"Cantidad"
 					];
 
-					if ($data['impuesto_especial']) {
-						$tituloDet[] = "Impuesto Especial";
-					}
+					// if ($data['impuesto_especial']) {
+					// 	$tituloDet[] = "Impuesto Especial";
+					// }
 
 					array_push($tituloDet, "Total");
-					array_push($tituloDet, "Descuento");
+					array_push($tituloDet, "");
 					$hoja->fromArray($tituloDet, null, "A{$fila}");
 					$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
 					$fila++;
@@ -734,7 +800,7 @@ class Reporte extends CI_Controller {
 				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
 			}
 			
-			$hoja->setTitle("Ventas por Articulo");
+			$hoja->setTitle("Facturas");
 
 			header("Content-Type: application/vnd.ms-excel");
 			header("Content-Disposition: attachment;filename=Ventas.xlsx");
