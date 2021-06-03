@@ -87,16 +87,20 @@ class Conversor extends CI_Controller {
 				$req['ingreso']['estatus_movimiento'] = 2;
 				$req['ingreso']['tipo_movimiento'] = $tipoMov;
 				$req['egreso']['tipo_movimiento'] = $tipoMov;
-				$bod = new Bodega_model($req['egreso']['bodega']);
+				
 				$continuar = true;
+
 				if (isset($req['merma']) && is_array($req['merma'])) {
 					$bod = $this->Catalogo_model->getBodega(['merma' => 1, "_uno" => true]);
 					if(!$bod) {
 						$continuar = false;
 					}
 				}
-				if ($continuar) {			
+				if ($continuar) {	
+					$bod = new Bodega_model($req['egreso']['bodega']);		
 					foreach ($req['egreso']['detalle'] as $det) {
+						$cantidad = 0;
+						$cantEgreso = (float) $det['cantidad'];
 						$art = new Articulo_model($det['articulo']);
 						$args = [
 							"bodega" => $bod->getPK(),
@@ -105,6 +109,22 @@ class Conversor extends CI_Controller {
 						$art->actualizarExistencia($args);
 						if ($art->existencias < $det['cantidad']) {
 							$continuar = false;
+							$datos['mensaje'] = 'No hay existencias suficientes para realizar la transformación';
+						}
+
+						foreach ($req['ingreso']['detalle'] as $det) {
+							$cantidad += $det['cantidad_utilizada'];
+						}
+
+						if (isset($req['merma'])) {
+							foreach ($req['merma'] as $det) {
+								$cantidad += $det['cantidad_utilizada'];
+							}
+						}
+
+						if ($cantidad < $cantEgreso || $cantidad > $cantEgreso) {
+							$continuar = false;
+							$datos['mensaje'] = 'La cantidad del producto original no coincide con la cantidad a utilizar en ingreso y merma';
 						}
 					}		
 					if ($continuar) {
@@ -258,9 +278,7 @@ class Conversor extends CI_Controller {
 						} else {
 							$datos['mensaje'] = 'Ocurrio un error al guardar el egreso';
 						}
-					} else {
-						$datos['mensaje'] = 'No hay existencias suficientes para realizar la transformación';
-					}
+					} 
 						
 				} else {
 					$datos['mensaje'] = 'No existe una bodega para merma';
