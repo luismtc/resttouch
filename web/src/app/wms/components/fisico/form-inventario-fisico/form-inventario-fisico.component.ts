@@ -48,9 +48,11 @@ export class FormInventarioFisicoComponent implements OnInit {
   buscar = () => {
     this.resetDatos();
     this.fisicoSrvc.getDetalle(this.params.numero).subscribe(res => {
-      if(res) {
+      if(res && res.exito) {
         this.articulos = res.detalle;
         this.inventario = res.inventario;
+      } else {
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Inventario', { duration: 3000 });
       }
     })
   }
