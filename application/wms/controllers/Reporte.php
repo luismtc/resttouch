@@ -559,24 +559,24 @@ class Reporte extends CI_Controller {
 							
 							$hoja->setCellValue("E{$fila}", "Total subcategoría");
 							$hoja->setCellValue("F{$fila}", $total);
-							$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 							$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 							$fila++;
 						}
 					}
 					$hoja->setCellValue("E{$fila}", "Total Categoría");
 					$hoja->setCellValue("F{$fila}", $totalCat);
-					$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 					$fila++;
 				} 
 			}
 			
 			$fila++;
 			$hoja->setCellValue("E{$fila}", "TOTAL");
-			$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 			$hoja->setCellValue("F{$fila}", round($granTotal, 2));
 			$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+			$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 
 			for ($i=0; $i <= count($nombres) ; $i++) { 
 				$hoja->getColumnDimensionByColumn($i)->setAutoSize(true);
