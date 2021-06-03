@@ -139,7 +139,7 @@
 							<?php if (isset($_detalle) && $_detalle !== "false"): ?>
 								<tr>
 									<td class="text-center" colspan="3"></td>
-									<td class="text-center">Articulo</td>
+									<td class="text-center">Artículo</td>
 									<td class="text-center">Cantidad</td>
 									<?php if ($impuesto_especial): ?>
 										<td class="text-center">

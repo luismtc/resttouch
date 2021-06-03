@@ -9,6 +9,11 @@ class Cliente_model extends General_model {
 	public $nit;
 	public $telefono;
 	public $correo;
+	public $codigo_postal;
+	public $municipio;
+	public $departamento;
+	public $pais_iso_dos;
+	public $observaciones;
 
 	public function __construct($id = "")
 	{

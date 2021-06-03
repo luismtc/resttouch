@@ -35,16 +35,16 @@ class Cliente extends CI_Controller
 				$datos['exito'] = $clt->guardar($req);
 
 				if ($datos['exito']) {
-					$datos['mensaje'] = "Datos Actualizados con Exito";
+					$datos['mensaje'] = "Datos actualizados con éxito.";
 					$datos['cliente'] = $clt;
 				} else {
 					$datos['mensaje'] = $clt->getMensaje();
 				}
 			} else {
-				$datos['mensaje'] = "Ya existe un cliente con este nit";
+				$datos['mensaje'] = "Ya existe un cliente con este N.I.T.";
 			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
 
 		$this->output
