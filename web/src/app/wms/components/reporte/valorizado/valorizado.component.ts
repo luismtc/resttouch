@@ -7,6 +7,8 @@ import { BodegaService } from '../../../services/bodega.service';
 import { Sede } from '../../../../admin/interfaces/sede';
 import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 import { saveAs } from 'file-saver';
+import { GLOBAL } from '../../../../shared/global';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-valorizado',
@@ -32,6 +34,7 @@ export class ValorizadoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.params.fecha = moment().format(GLOBAL.dbDateFormat);
     this.getSede();
   	this.getBodega();
   }

@@ -18,7 +18,7 @@
       <mat-card-content *ngIf="showForm">
         <form (ngSubmit)="buscar()" novalidate>
           <mat-form-field class="fullWidth">
-            <input matInput type="text" placeholder="Número" name="numero" [(ngModel)]="params.numero" required>
+            <input matInput type="number" placeholder="Número" name="numero" [(ngModel)]="params.numero" required>
             <button mat-raised-button matSuffix color="accent" type="submit">Buscar</button>
           </mat-form-field>
         </form>

@@ -237,38 +237,46 @@ class Fisico extends CI_Controller {
 	{
 		$fisico = new Fisico_model($inv);
 		$datos = [];
-		$data = [];
-		foreach ($fisico->getDetalle() as $row) {
-			$art = new Articulo_model($row->articulo);
-			$pres = $art->getPresentacionReporte();
-			$row->existencia_sistema = round($row->existencia_sistema/$pres->cantidad, 2);
-			if (!isset($datos[$row->categoria])) {
-				$datos[$row->categoria] = [
-					"descripcion" => $row->ncategoria,
-					"datos" => []
-				];
-			} 
+		$data = ["exito" => 0];
+
+		if ($fisico->getPK()) {
+			foreach ($fisico->getDetalle() as $row) {
+				$art = new Articulo_model($row->articulo);
+				$pres = $art->getPresentacionReporte();
+				$row->existencia_sistema = round($row->existencia_sistema/$pres->cantidad, 2);
+				if (!isset($datos[$row->categoria])) {
+					$datos[$row->categoria] = [
+						"descripcion" => $row->ncategoria,
+						"datos" => []
+					];
+				} 
 
 
-			if (!isset($datos[$row->categoria]['datos'][$row->categoria_grupo])) {
-				$datos[$row->categoria]['datos'][$row->categoria_grupo] = [
-					"descripcion" => $row->ncategoria_grupo,
-					"datos" => []
-				];
+				if (!isset($datos[$row->categoria]['datos'][$row->categoria_grupo])) {
+					$datos[$row->categoria]['datos'][$row->categoria_grupo] = [
+						"descripcion" => $row->ncategoria_grupo,
+						"datos" => []
+					];
+				}
+
+				$datos[$row->categoria]['datos'][$row->categoria_grupo]['datos'][] = $row;
 			}
 
-			$datos[$row->categoria]['datos'][$row->categoria_grupo]['datos'][] = $row;
-		}
+			foreach ($datos as $row) {
+				$row['datos'] = array_values($row['datos']);
+				$data['detalle'][] = $row;
+			}
 
-		foreach ($datos as $row) {
-			$row['datos'] = array_values($row['datos']);
-			$data['detalle'][] = $row;
-		}
+			$data['inventario'] = $this->Fisico_model->buscar([
+				"inventario_fisico" => $fisico->getPK(),
+				"_uno" => true
+			]);	
 
-		$data['inventario'] = $this->Fisico_model->buscar([
-			"inventario_fisico" => $fisico->getPK(),
-			"_uno" => true
-		]);
+			$data['exito'] = 1;
+		} else {
+			$data['mensaje'] = "No existe un inventario físico con este número {inv}";
+		}
+		
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($data));

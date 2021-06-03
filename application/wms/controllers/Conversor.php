@@ -87,16 +87,20 @@ class Conversor extends CI_Controller {
 				$req['ingreso']['estatus_movimiento'] = 2;
 				$req['ingreso']['tipo_movimiento'] = $tipoMov;
 				$req['egreso']['tipo_movimiento'] = $tipoMov;
-				$bod = new Bodega_model($req['egreso']['bodega']);
+				
 				$continuar = true;
+
 				if (isset($req['merma']) && is_array($req['merma'])) {
 					$bod = $this->Catalogo_model->getBodega(['merma' => 1, "_uno" => true]);
 					if(!$bod) {
 						$continuar = false;
 					}
 				}
-				if ($continuar) {			
+				if ($continuar) {	
+					$bod = new Bodega_model($req['egreso']['bodega']);		
 					foreach ($req['egreso']['detalle'] as $det) {
+						$cantidad = 0;
+						$cantEgreso = (float) $det['cantidad'];
 						$art = new Articulo_model($det['articulo']);
 						$args = [
 							"bodega" => $bod->getPK(),
@@ -105,6 +109,22 @@ class Conversor extends CI_Controller {
 						$art->actualizarExistencia($args);
 						if ($art->existencias < $det['cantidad']) {
 							$continuar = false;
+							$datos['mensaje'] = 'No hay existencias suficientes para realizar la transformación';
+						}
+
+						foreach ($req['ingreso']['detalle'] as $det) {
+							$cantidad += $det['cantidad_utilizada'];
+						}
+
+						if (isset($req['merma'])) {
+							foreach ($req['merma'] as $det) {
+								$cantidad += $det['cantidad_utilizada'];
+							}
+						}
+
+						if ($cantidad < $cantEgreso || $cantidad > $cantEgreso) {
+							$continuar = false;
+							$datos['mensaje'] = 'La cantidad del producto original no coincide con la cantidad a utilizar en ingreso y merma';
 						}
 					}		
 					if ($continuar) {
@@ -143,16 +163,57 @@ class Conversor extends CI_Controller {
 							$ing = new Ingreso_model();
 
 							$datos['exito'] = $ing->guardar($req['ingreso']);
+							$bodegaIng = new Bodega_model($ing->bodega);
 
 							if (isset($req['ingreso']['detalle'])) {					
 								foreach ($req['ingreso']['detalle'] as $det) {	
 									$art = new Articulo_model($det['articulo']);
+									$pres = new Presentacion_model($det['presentacion']);
+
 									$det['precio_total'] = $costo * (double)$det['cantidad_utilizada'];
 									$det['precio_unitario'] = $det['precio_total']/$det['cantidad'];
-									$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;						
+									$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;
+									$art->actualizarExistencia([
+										"bodega" => $ing->bodega,
+										"sede" => $bodegaIng->sede
+									]);			
 									$ing->setDetalle($det);
 									$bac = new BodegaArticuloCosto_model();
-									$bac->guardar_costos($ing->bodega, $det['articulo']);
+									//$bac->guardar_costos($ing->bodega, $det['articulo']);
+									$bcosto = $this->BodegaArticuloCosto_model->buscar([
+										'bodega' => $ing->bodega, 
+										'articulo' => $art->getPK(), 
+										'_uno' => true
+									]);
+
+									$costo = $art->getCosto(["bodega" => $ing->bodega]);
+
+									if ($bcosto) {
+										$bac->cargar($bcosto->bodega_articulo_costo);
+										/*Ultima compra*/
+										$costo_uc = $art->getCosto([
+											"bodega" => $ing->bodega, 
+											"metodo_costeo" => 1
+										]);
+										$bac->costo_ultima_compra = $costo_uc;
+
+										/*Costo promedio*/
+										$costo = $bcosto->costo_promedio * $art->existencias + $det['precio_total']/$pres->cantidad;
+										$existencia = $art->existencias + $det['cantidad']*$pres->cantidad;
+										if ($existencia != 0) {
+											$costo = $costo / $existencia;
+										} 
+
+										$bac->costo_promedio = $costo;
+										
+									} else {
+										$bac->bodega = $ing->bodega;
+										$bac->articulo = $art->getPK();
+										$bac->costo_ultima_compra = $costo;
+										$bac->costo_promedio = $costo;
+									}
+
+									$bac->guardar();
 								}
 							}
 
@@ -160,13 +221,55 @@ class Conversor extends CI_Controller {
 								$req['egreso']['bodega'] = $bod->bodega;
 								$merma = new Ingreso_model();						
 								$merma->guardar($req['egreso']);
+								$bod = new Bodega_model($merma->bodega);
+
 								foreach ($req['merma'] as $det) {
+									$pres = new Presentacion_model($det['presentacion']);
 									$det['precio_total'] = $costo * (double)$det['cantidad_utilizada'];
 									$det['precio_unitario'] = $det['precio_total']/$det['cantidad'];
-									$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;							
+									$det['precio_costo_iva'] = $det['precio_total'] * $emp->porcentaje_iva;	
+									$art = new Articulo_model($det['articulo']);
+
+									$art->actualizarExistencia([
+										"bodega" => $merma->bodega,
+										"sede" => $bod->sede
+									]);
+
 									$merma->setDetalle($det);
 									$bac = new BodegaArticuloCosto_model();
-									$bac->guardar_costos($merma->bodega, $det['articulo']);
+									
+									$bcosto = $this->BodegaArticuloCosto_model->buscar([
+										'bodega' => $merma->bodega, 
+										'articulo' => $art->getPK(), 
+										'_uno' => true
+									]);
+
+									$costo = $art->getCosto(["bodega" => $merma->bodega]);
+									if ($bcosto) {
+										$bac->cargar($bcosto->bodega_articulo_costo);
+										/*Ultima compra*/
+										$costo_uc = $art->getCosto([
+											"bodega" => $merma->bodega, 
+											"metodo_costeo" => 1
+										]);
+										$bac->costo_ultima_compra = $costo_uc;
+
+										/*Costo promedio*/
+										$costo = $bcosto->costo_promedio * $art->existencias + $det['precio_total']/$pres->cantidad;
+										$existencia = $art->existencias + $det['cantidad']*$pres->cantidad;
+										if ($existencia != 0) {
+											$costo = $costo / $existencia;
+										} 
+
+										$bac->costo_promedio = $costo;
+										
+									} else {
+										$bac->bodega = $merma->bodega;
+										$bac->articulo = $art->getPK();
+										$bac->costo_ultima_compra = $costo;
+										$bac->costo_promedio = $costo;
+									}
+									$bac->guardar();
 								}
 							}
 							if($datos['exito']) {
@@ -175,9 +278,7 @@ class Conversor extends CI_Controller {
 						} else {
 							$datos['mensaje'] = 'Ocurrio un error al guardar el egreso';
 						}
-					} else {
-						$datos['mensaje'] = 'No hay existencias suficientes para realizar la transformación';
-					}
+					} 
 						
 				} else {
 					$datos['mensaje'] = 'No existe una bodega para merma';
@@ -312,6 +413,7 @@ class Conversor extends CI_Controller {
 								]);
 								$bac = new BodegaArticuloCosto_model($bac->bodega_articulo_costo);
 								$rec = new Articulo_model($row->articulo->articulo);
+
 								$row->cantidad = $row->cantidad * $det['cantidad'] / $art->rendimiento;
 								$costo = $bac->get_costo($egr->bodega, $rec->getPK(), $presR->presentacion);
 								$total = ($costo * $row->cantidad);
@@ -319,7 +421,7 @@ class Conversor extends CI_Controller {
 								$egr->setDetalle([
 									"articulo" => $row->articulo->articulo,
 									"cantidad" => $row->cantidad,
-									"precio_unitario" => $costo,
+									"precio_unitario" => $costo/$det['cantidad'],
 									"precio_total" => $total,
 									"presentacion" => $presR->presentacion,
 									"vnegativo" => false
