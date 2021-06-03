@@ -6,7 +6,7 @@
             </mat-card-title>
             <mat-card-content>
                 <form #frmReplicaArticulosSedes="ngForm" (ngSubmit)="frmReplicaArticulosSedes.form.valid && onSubmit()" novalidate>
-                    <mat-form-field class="fullWidth">
+                    <mat-form-field style="width: 90%;">
                         <mat-label>Sede</mat-label>
                         <mat-select name="sede" multiple [(ngModel)]="params.sede" required>
                             <mat-option *ngFor="let sede of sedes" [value]="sede.sede" [disabled]="+sede.sede === +miSede">

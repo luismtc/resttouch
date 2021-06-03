@@ -17,7 +17,7 @@ import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { ComandaService } from '../../services/comanda.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 import { Cliente } from '../../../admin/interfaces/cliente';
-// import * as moment from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-tran-areas',
@@ -138,29 +138,33 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   onClickMesa(m: any) {
     // console.log(m.mesaSelected); return;
-    if (+m.mesaSelected.escallcenter === 0) {
-      this.aperturaCargaMesa(m);
-    } else {
-      const varCliPedido = `${GLOBAL.rtClientePedido}_${m.mesaSelected.mesa}`;
-      if (+m.mesaSelected.estatus === 1) {
-        this.ls.clear(varCliPedido);
-        const pideTelefonoRef = this.dialog.open(PideTelefonoDialogComponent, {
-          width: '50%',
-          disableClose: true,
-          data: { mesa: m.mesaSelected }
-        });
-
-        pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
-          if (cli) {
-            this.clientePedido = cli;
-            this.ls.set(varCliPedido, this.clientePedido);
-            this.aperturaCargaMesa(m);
-          }
-        });
-      } else {
-        this.clientePedido = this.ls.get(varCliPedido);
+    if (!this.cargando) {
+      if (+m.mesaSelected.escallcenter === 0) {
         this.aperturaCargaMesa(m);
+      } else {
+        const varCliPedido = `${GLOBAL.rtClientePedido}_${m.mesaSelected.mesa}`;
+        if (+m.mesaSelected.estatus === 1) {
+          this.ls.clear(varCliPedido);
+          const pideTelefonoRef = this.dialog.open(PideTelefonoDialogComponent, {
+            width: '50%',
+            disableClose: true,
+            data: { mesa: m.mesaSelected }
+          });
+
+          pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
+            if (cli) {
+              this.clientePedido = cli;
+              this.ls.set(varCliPedido, this.clientePedido);
+              this.aperturaCargaMesa(m);
+            }
+          });
+        } else {
+          this.clientePedido = this.ls.get(varCliPedido);
+          this.aperturaCargaMesa(m);
+        }
       }
+    } else {
+      this.snackBar.open('El sistema está terminando de cargar información. Por favor intente de nuevo.', 'Áreas', { duration: 5000 });
     }
   }
 
@@ -259,9 +263,13 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   toggleRightSidenav = (obj: any = null) => {
     this.rightSidenav.toggle().then((res: MatDrawerToggleResult) => {
       if (res === 'close') {
-        this.checkEstatusMesa();
+        // this.checkEstatusMesa();
         if (obj) {
           this.loadAreas(true, { mesaenuso: obj });
+        } else {
+          // console.log('MESA EN MEMORIA: ', this.mesaSeleccionada);
+          // console.log(`TOGGLE SIDE NAV ${moment().format(GLOBAL.dateTimeFormatMilli)}`);
+          this.cargando = false;
         }
       } else if (res === 'open') {
         // console.log('MESA SELECTED: ', this.mesaSeleccionada);
@@ -283,14 +291,18 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     this.snTrancomanda.resetCuentaActiva();
     // console.log('Antes de "loadComandaMesa"');
     this.snTrancomanda.resetListadoArticulos();
-    // console.log('MESA SELECCIONADA EN CERRANDO RIGHT SIDE PANEL = ', this.mesaSeleccionada);
-    /*this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(res => {
-      console.log('CERRANDO RIGHT SIDE PANEL.', res);
-      this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
-    });*/
-    // console.log(`CERRANDO ${moment().format(GLOBAL.dateTimeFormat)}`);
-    // this.loadComandaMesa(this.mesaSeleccionada.mesa, false);
-    this.fuerzaCierreComanda(false);
+    // console.log('MESA SELECCIONADA EN CERRANDO RIGHT SIDE PANEL = ', this.mesaSeleccionada);    
+    // console.log(`CERRANDO ${moment().format(GLOBAL.dateTimeFormatMilli)}`);    
+    // this.fuerzaCierreComanda(false);
+    this.checkEstatusMesa();
+    this.resetMesaSeleccionada();
+    // this.cargando = false;
+  }
+
+  msnOpenedChange = (abierto: boolean) => {
+    if (!abierto) {
+      this.cerrandoRightSideNav();
+    }
   }
 
   checkEstatusMesa = () => {
@@ -330,10 +342,15 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   loadComandaMesa = (obj: any, shouldToggle = true) => {
     // console.log('OBJETO = ', obj);
+    if(shouldToggle && this.cargando) {
+      this.snackBar.open('El sistema está terminando de cargar información. Por favor intente de nuevo.', 'Áreas', { duration: 5000 });
+      return;
+    }
+
     this.cargando = true;
     this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
       // console.log('RESPUESTA DE GET COMANDA = ', res);
-      this.cargando = false;
+      // this.cargando = false;
       if (res.exito) {
         if (!Array.isArray(res)) {
           this.mesaSeleccionada = res;
@@ -362,6 +379,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         } else {
           // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
           this.checkEstatusMesa();
+          this.cargando = false;
         }
       } else {
         if (res.mensaje) {
@@ -378,6 +396,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
           }
         }
         this.checkEstatusMesa();
+        this.cargando = false;
       }
       this.checkEstatusMesa();
     });

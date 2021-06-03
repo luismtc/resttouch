@@ -6,7 +6,7 @@
     </div>
     <div fxFlex="50%" fxFelx.xs="100%" fxLayoutAlign="end start">
         <button mat-raised-button type="button" color="accent" style="margin-left: 8px;"
-            (click)="closeSideNavEv.emit()">
+            (click)="closeSideNavEv.emit()" [disabled]="bloqueoBotones">
             Cerrar Panel
         </button>
     </div>
@@ -47,8 +47,8 @@
             </ng-container>
         </div>
         <div class="col m6 s12" align="center" style="padding: 0 !important;">
-            <span class="bld" *ngIf="cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</span>
-            <span class="bld" *ngIf="!cuentaActiva.nombre">Por favor seleccione una cuenta. Gracias.</span>
+            <span class="bld" *ngIf="cuentaActiva && cuentaActiva.nombre">Cuenta de {{cuentaActiva.nombre}}</span>
+            <span class="bld" *ngIf="!cuentaActiva || !cuentaActiva.nombre">Por favor seleccione una cuenta. Gracias.</span>
             <div align="center">
                 <eco-fab-speed-dial direction="down">
                     <eco-fab-speed-dial-trigger>

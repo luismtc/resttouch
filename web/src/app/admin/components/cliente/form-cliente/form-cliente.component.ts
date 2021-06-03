@@ -42,12 +42,24 @@ export class FormClienteComponent implements OnInit {
   }
 
   onSubmit = () => {
+    if (this.cliente.correo && this.cliente.correo.length > 0) {
+      if (this.cliente.correo.match(GLOBAL.FORMATO_EMAIL)) {
+        this.guardarCliente();
+      } else {
+        this.snackBar.open(`El correo '${this.cliente.correo}' no es válido.`, 'Cliente', { duration: 3000 });
+      }
+    } else {
+      this.guardarCliente();
+    }
+  }
+
+  guardarCliente = () => {
     this.clienteSrvc.save(this.cliente).subscribe(res => {
       // console.log(res);
       if (res.exito) {
         this.clienteSavedEv.emit(res.cliente);
         this.resetCliente();
-        this.snackBar.open('Cliente agregado...', 'Cliente', { duration: 3000 });
+        this.snackBar.open(res.mensaje, 'Cliente', { duration: 3000 });
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Cliente', { duration: 7000 });
       }
@@ -70,6 +82,26 @@ export class FormClienteComponent implements OnInit {
           this.txtNitCliente.focus();
         }
       });
+    }
+  }
+
+  validatePhone = (e: any) => {
+    const inp = String.fromCharCode(e.keyCode);
+    if (/[0-9 +()-]/.test(inp)) {
+      return true;
+    } else {
+      e.preventDefault();
+      return false;
+    }
+  }
+
+  validateEmail = (e: any) => {
+    const inp = String.fromCharCode(e.keyCode);
+    if (/[a-zA-Z0-9_@.]/.test(inp)) {
+      return true;
+    } else {
+      e.preventDefault();
+      return false;
     }
   }
 

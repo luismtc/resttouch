@@ -1,16 +1,18 @@
-// import * as urls from '../../assets/json/cnfurls.json';
-// const urlBase = urls.default.api;
-// const urlBase = `http://${window.location.hostname}/resttouch`; // Desarrollo
-const urlBase = 'http://192.168.18.241/api'; // RT - Dev
-// const urlBase = 'https://resttouch.c807.com/api'; // RT - Prod
+const LOCALHOST = ['localhost', '127.0.0.1'];
+export const PROTOCOLO = window.location.protocol;
+export const ANFITRION = window.location.hostname;
+const urlBase = `${PROTOCOLO}//${ANFITRION}/${LOCALHOST.indexOf(ANFITRION) < 0 ? 'api' : 'resttouch'}`;
 
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
     dbDateTimeFormat: 'YYYY-MM-DD HH:mm:ss',
+    dbDateTimeFormatMilli: 'YYYY-MM-DD HH:mm:ss.SSS',
     dateFormat: 'DD/MM/YYYY',
     dateFormatBT: 'DD-MM-YYYY',
     dateTimeFormat: 'DD/MM/YYYY HH:mm:ss',
+    dateTimeFormatMilli: 'DD/MM/YYYY HH:mm:ss.SSS',
     dateTimeFormatBT: 'DD-MM-YYYY HH:mm:ss',
+    dateTimeFormatBTMilli: 'DD-MM-YYYY HH:mm:ss.SSS',
     url: `${urlBase}/index.php`,
     urlAppRestaurante: `${urlBase}/restaurante.php`,
     urlCatalogos: `${urlBase}/index.php/catalogo`,

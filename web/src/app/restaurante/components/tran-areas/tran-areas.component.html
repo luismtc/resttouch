@@ -1,5 +1,6 @@
 <mat-sidenav-container class="matSideNavContainer">
-    <mat-sidenav #rightSidenav mode="over" [(opened)]="openedRightPanel" (closedStart)="cerrandoRightSideNav()" position="end" disableClose>        
+    <!-- <mat-sidenav #rightSidenav mode="over" [(opened)]="openedRightPanel" (closedStart)="cerrandoRightSideNav()" position="end" disableClose> -->
+    <mat-sidenav #rightSidenav mode="over" [(opened)]="openedRightPanel" (openedChange)="msnOpenedChange($event)" position="end" disableClose>
         <app-tran-comanda #snTranComanda [mesaEnUso]="mesaSeleccionada" [clientePedido]="clientePedido" (mesaSavedEv)="actualizar()" (closeSideNavEv)="toggleRightSidenav($event)"></app-tran-comanda>
     </mat-sidenav>
     <mat-sidenav-content>

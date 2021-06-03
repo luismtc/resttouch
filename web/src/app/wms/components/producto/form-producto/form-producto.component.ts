@@ -35,6 +35,7 @@ export class FormProductoComponent implements OnInit {
   private titulo = 'Receta';
   public showArticuloForm = true;
   public medidas: Medida[] = [];
+  public medidasFull: Medida[] = [];
   public presentaciones: Presentacion[] = [];
   public articulos: Articulo[] = [];
   public filteredArticulos: Articulo[] = [];
@@ -114,7 +115,7 @@ export class FormProductoComponent implements OnInit {
   loadMedidas = () => {
     this.medidaSrvc.get().subscribe(res => {
       if (res) {
-        this.medidas = res;
+        this.medidasFull = res;
       }
     });
   }
@@ -146,9 +147,20 @@ export class FormProductoComponent implements OnInit {
   displayArticulo = (art: Articulo) => {
     if (art) {
       this.receta.articulo = art.articulo;
+      this.filtrarMedidas(art);
       return art.descripcion;
     }
+    this.medidas = [];
     return undefined;
+  }
+
+  filtrarMedidas = (art: Articulo) => {
+    const pres: Presentacion = this.presentaciones.find(p => +p.presentacion === +art.presentacion_reporte);
+    if (pres) {
+      this.medidas = this.medidasFull.filter(m => +m.medida === +pres.medida.medida);
+    } else {
+      this.medidas = [];
+    }
   }
 
   filtrarArticulos = (value: (Articulo | string)) => {

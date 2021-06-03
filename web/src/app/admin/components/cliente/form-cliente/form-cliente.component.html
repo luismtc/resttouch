@@ -25,13 +25,13 @@
             </mat-form-field>
             
             <mat-form-field class="fullWidth">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono" maxlength="25">
-                <input matInput *ngIf="esMovil" type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono" maxlength="25">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono" maxlength="25" (keypress)="validatePhone($event)">
+                <input matInput *ngIf="esMovil" type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="cliente.telefono" maxlength="25" (keypress)="validatePhone($event)">
             </mat-form-field>
             
             <mat-form-field class="fullWidth" *ngIf="verTodos">
-                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo" maxlength="50">
-                <input matInput *ngIf="esMovil" type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo" maxlength="50">
+                <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo" maxlength="50" (keypress)="validateEmail($event)">
+                <input matInput *ngIf="esMovil" type="text" placeholder="E-mail" name="correo" [(ngModel)]="cliente.correo" maxlength="50" (keypress)="validateEmail($event)">
             </mat-form-field>
             
             <mat-form-field class="fullWidth" *ngIf="verTodos">
