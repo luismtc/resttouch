@@ -389,39 +389,26 @@ class Conversor extends CI_Controller {
 							$pres = new Presentacion_model($det['presentacion']);
 							$costoIngr = 0;
 							foreach ($art->getReceta() as $row) {
-								$presR = $this->Presentacion_model->buscar([
-									"medida" => $row->medida->medida,
-									"cantidad" => 1,
-									"_uno" => true
-								]);
-
-								if (!$presR) {
-									$presR = new Presentacion_model();
-									$presR->guardar([
-										"medida" => $row->medida->medida,
-										"descripcion" => $row->medida->descripcion,
-										"cantidad" => 1
-									]);
-
-									$presR->presentacion = $presR->getPK();
-								}
+								$rec = new Articulo_model($row->articulo->articulo);
+								$presR = $rec->getPresentacionReporte();
 
 								$bac = $this->BodegaArticuloCosto_model->buscar([
 									"articulo" => $row->articulo->articulo,
 									"bodega" => $egr->bodega,
 									"_uno" => true
 								]);
-								$bac = new BodegaArticuloCosto_model($bac->bodega_articulo_costo);
-								$rec = new Articulo_model($row->articulo->articulo);
 
-								$row->cantidad = $row->cantidad * $det['cantidad'] / $art->rendimiento;
+								$bac = new BodegaArticuloCosto_model($bac->bodega_articulo_costo);
+								
+
+								$row->cantidad = ($row->cantidad * $det['cantidad'] / $art->rendimiento)/ $presR->cantidad;
 								$costo = $bac->get_costo($egr->bodega, $rec->getPK(), $presR->presentacion);
 								$total = ($costo * $row->cantidad);
 								$costoIngr += $total;
 								$egr->setDetalle([
 									"articulo" => $row->articulo->articulo,
 									"cantidad" => $row->cantidad,
-									"precio_unitario" => $costo/$det['cantidad'],
+									"precio_unitario" => $costo,
 									"precio_total" => $total,
 									"presentacion" => $presR->presentacion,
 									"vnegativo" => false

@@ -274,7 +274,7 @@ class Fisico extends CI_Controller {
 
 			$data['exito'] = 1;
 		} else {
-			$data['mensaje'] = "No existe un inventario físico con este número {inv}";
+			$data['mensaje'] = "No existe un inventario físico con este número {$inv}";
 		}
 		
 		$this->output
