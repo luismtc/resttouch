@@ -902,8 +902,8 @@ class Factura_model extends General_model
 					$data = simplexml_load_string(base64_decode($res->ResponseData->ResponseData2));
 					$data = json_decode(json_encode($data->doc));
 
-					$this->numero_factura = $data->serial;
-					$this->serie_factura = $data->batch;
+					$this->numero_factura = $data->batch;
+					$this->serie_factura = $data->serial;
 					$this->fel_uuid = $data->uuid;
 				} 
 			} else if ($res->Response->Result == 1) {
