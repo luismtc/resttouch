@@ -46,15 +46,21 @@ export class FormInventarioFisicoComponent implements OnInit {
   }
 
   buscar = () => {
-    this.resetDatos();
-    this.fisicoSrvc.getDetalle(this.params.numero).subscribe(res => {
-      if(res && res.exito) {
-        this.articulos = res.detalle;
-        this.inventario = res.inventario;
-      } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Inventario', { duration: 3000 });
-      }
-    })
+    let numero = ""+this.params.numero;
+    if (numero.length < 19) {
+      this.resetDatos();
+      this.fisicoSrvc.getDetalle(this.params.numero).subscribe(res => {
+        if(res && res.exito) {
+          this.articulos = res.detalle;
+          this.inventario = res.inventario;
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Inventario', { duration: 3000 });
+        }
+      })
+    } else {
+      this.snackBar.open(`ERROR: El texto sobrepasa la longitud permitida`, 'Inventario', { duration: 3000 });
+    }
+    
   }
 
   actualizar = () => {

@@ -167,16 +167,22 @@ class Egreso_model extends General_Model {
 		
 		$args['precio_total'] = ((float)$args['precio_unitario'] * (float)$args['cantidad']);
 
-		$art->actualizarExistencia();
+		$art->actualizarExistencia([
+			"bodega" => $this->bodega
+		]);
 		$oldart = new Articulo_model($det->articulo);
 		if (empty($menu) || (!$validar || $art->existencias >= $cantidad * $pres->cantidad) ||$vnegativo) {
 			$args['egreso'] = $this->egreso;
 			$result = $det->guardar($args);
 
 			if($result) {
-				$art->actualizarExistencia();
+				$art->actualizarExistencia([
+					"bodega" => $this->bodega
+				]);
 				if ($oldart->articulo) {					
-					$oldart->actualizarExistencia();
+					$oldart->actualizarExistencia([
+						"bodega" => $this->bodega
+					]);
 				}
 				return $det;
 			}

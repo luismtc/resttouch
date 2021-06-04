@@ -99,7 +99,7 @@ class Ingreso extends CI_Controller {
 							$bac->costo_ultima_compra = $costo_uc;
 
 							/*Costo promedio*/
-							$costo = $bcosto->costo_promedio * $art->existencias + $req['precio_total']/$pres->cantidad;
+							$costo = $bcosto->costo_promedio * $art->existencias + $req['precio_total'];
 							$existencia = $art->existencias + $req['cantidad']*$pres->cantidad;
 							if ($existencia != 0) {
 								$costo = $costo / $existencia;
