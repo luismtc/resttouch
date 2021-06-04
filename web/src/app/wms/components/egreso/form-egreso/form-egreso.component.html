@@ -120,7 +120,7 @@
                     Guardar
                 </button>
                 <button mat-raised-button type="button" color="accent" (click)="addToDetail()"
-                    [disabled]="!frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
+                    [disabled]="!egreso.bodega || !frmDetalleEgreso.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
                     *ngIf="!saveToDB">
                     Guardar
                 </button>
@@ -218,7 +218,7 @@
                 </mat-autocomplete>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput placeholder="Cantidad a Utilizar" name="cantidad_utilizar" [(ngModel)]="detalleMerma.cantidad_utilizada"
+                <input type="number" step="0.01" matInput placeholder="Cantidad a Utilizar" name="cantidad_utilizar" [(ngModel)]="detalleMerma.cantidad_utilizada"
                     required>
             </mat-form-field>
             <mat-form-field class="fullWidth">
@@ -228,7 +228,7 @@
             
             <div align="end">
                 <button mat-raised-button type="button" color="accent" (click)="addToDetailMerma()"
-                    [disabled]="!frmMerma.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
+                    [disabled]="!detalleMerma.articulo || !frmMerma.form.valid || [2, 3].indexOf(+egreso.estatus_movimiento) >= 0"
                     *ngIf="!saveToDB">
                     Guardar
                 </button>

@@ -244,23 +244,29 @@ export class FormIngresoComponent implements OnInit {
   }
 
   addToDetail = () => {
-    var index = this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo)
-    if (index > -1) {
-      this.detallesIngreso.splice(index, 1);
-    }
-    
-    var art:any;
-    art = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo);
-    this.detalleIngreso.presentacion = art[0].presentacion_reporte;
+      if (this.detalleIngreso.cantidad > 0 && this.detalleIngreso.cantidad_utilizada > 0){
+        var index = this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo)
+        if (index > -1) {
+          this.detallesIngreso.splice(index, 1);
+        }
+        
+        var art:any;
+        art = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo);
+        this.detalleIngreso.presentacion = art[0].presentacion_reporte;
 
-    if(+this.detalleIngreso.cantidad < 1)
-    {
-      this.detalleIngreso.cantidad = 1;
-    }
+        if(+this.detalleIngreso.cantidad < 1)
+        {
+          this.detalleIngreso.cantidad = 1;
+        }
 
-    this.detallesIngreso.push(this.detalleIngreso);
-    this.resetDetalleIngreso();
-    this.updateTableDataSource();
+        this.detallesIngreso.push(this.detalleIngreso);
+        this.resetDetalleIngreso();
+        this.updateTableDataSource();
+      } else if(this.detalleIngreso.cantidad <= 0){
+        this.snackBar.open(`ERROR: La cantidad debe ser mayor a 0`, 'Egreso', { duration: 3000 });
+      } else if(this.detalleIngreso.cantidad_utilizada <= 0){
+        this.snackBar.open(`ERROR: La cantidad a utilizar debe ser mayor a 0`, 'Egreso', { duration: 3000 });
+      }
   }
 
   editFromDetail = (idarticulo: number) => {

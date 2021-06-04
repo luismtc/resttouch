@@ -19,7 +19,7 @@ class Presentacion extends CI_Controller {
 		if ($this->input->method() == 'post') {
 
 			$existe = $this->Presentacion_model->buscar(['TRIM(UPPER(descripcion))' => trim(strtoupper($req['descripcion']))]);
-			if (!$existe) {				
+			if (!$existe || !empty($id)) {				
 				$datos['exito'] = $presentacion->guardar($req);
 	
 				if($datos['exito']) {

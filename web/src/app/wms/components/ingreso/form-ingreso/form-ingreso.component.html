@@ -138,7 +138,7 @@
                             Guardar
                         </button>
                         <button mat-raised-button type="button" color="accent" (click)="addToDetail()"
-                            [disabled]="!frmDetalleIngreso.form.valid || [2, 3].indexOf(+ingreso.estatus_movimiento) >= 0 || +detalleIngreso.cantidad < 1"
+                            [disabled]="!detalleIngreso.articulo || !frmDetalleIngreso.form.valid || [2, 3].indexOf(+ingreso.estatus_movimiento) >= 0 || +detalleIngreso.cantidad < 1"
                             *ngIf="!saveToDB">
                             Guardar
                         </button>
