@@ -31,6 +31,10 @@ export class DashboardComponent implements OnInit {
     this.appMenuSrvc.getData().subscribe((res: any) => {
       if (res) {
         this.appMenu = res;
+        const lastModule: string = this.ls.get(GLOBAL.usrLastModuleVar);
+        if (lastModule) {
+          this.handleClick(lastModule);
+        }
       }
     });
     this.dns.havePermission().then((res) => {
@@ -41,6 +45,7 @@ export class DashboardComponent implements OnInit {
   }
 
   handleClick = (modulo: string = '') => {
+    this.ls.set(GLOBAL.usrLastModuleVar, modulo);
     const objModulo: any = this.appMenu.find(m => m.nombre === modulo);
     // console.log(objModulo);
     if (objModulo) {
@@ -52,10 +57,11 @@ export class DashboardComponent implements OnInit {
   }
 
   LogOut() {
-    this.ls.clear(GLOBAL.usrTokenVar);
-    this.ls.clear(GLOBAL.usrUnlockVar);
     this.ls.clear('ng2Idle.main.expiry');
     this.ls.clear('ng2Idle.main.idling');
+    this.ls.clear(GLOBAL.usrTokenVar);
+    this.ls.clear(GLOBAL.usrUnlockVar);
+    this.ls.clear(GLOBAL.usrLastModuleVar);
     this.router.navigate(['/admin/login']);
   }
 

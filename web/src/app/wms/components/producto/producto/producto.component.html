@@ -1,9 +1,9 @@
 <mat-tab-group>
     <mat-tab label="Categorías">
-        <app-categoria-producto (categoriaGrupoSvd)="refreshArticuloList($event)" (onChangeSubCategoriaEv)="setArticuloCategoriaGrupo($event)"></app-categoria-producto>
+        <app-categoria-producto (categoriaGrupoSvd)="reloadCategoriasInSubcategoriasArticulos()" (onChangeSubCategoriaEv)="setArticuloCategoriaGrupo($event)"></app-categoria-producto>
     </mat-tab>
     <mat-tab label="Sub-categorías">
-        <app-sub-categoria-producto></app-sub-categoria-producto>
+        <app-sub-categoria-producto #frmSubcategoria></app-sub-categoria-producto>
     </mat-tab>
     <mat-tab label="Artículos">
         <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start start">            

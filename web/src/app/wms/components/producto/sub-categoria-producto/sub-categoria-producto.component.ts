@@ -86,7 +86,8 @@ export class SubCategoriaProductoComponent implements OnInit {
   resetCategoriaGrupo = () => {
     this.categoriaGrupo = {
       categoria_grupo: null,
-      categoria: this.categoria?.categoria || null,
+      // categoria: this.categoria?.categoria || null,
+      categoria: null,
       categoria_grupo_grupo: null,
       descripcion: null,
       receta: 0,

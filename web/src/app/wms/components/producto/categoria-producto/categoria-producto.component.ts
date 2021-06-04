@@ -109,7 +109,7 @@ export class CategoriaProductoComponent implements OnInit {
         this.editCategoriaMode = false;
         this.resetCategoria();
         this.loadCategorias();
-        // this.categoriaGrupoSvd.emit();
+        this.categoriaGrupoSvd.emit();
         this.snackBar.open('Grabada con éxito.', 'Categoría', { duration: 5000 });
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Categoría', { duration: 5000 });

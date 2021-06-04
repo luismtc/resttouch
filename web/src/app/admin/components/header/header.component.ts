@@ -52,6 +52,10 @@ export class HeaderComponent implements OnInit {
     this.appMenuSrvc.getData().subscribe((res: any) => {
       if (res) {
         this.appMenu = res;
+        const lastModule: string = this.ls.get(GLOBAL.usrLastModuleVar);
+        if (lastModule) {
+          this.handleClick(lastModule);
+        }
       }
     });
   }
@@ -112,6 +116,7 @@ export class HeaderComponent implements OnInit {
   }
 
   handleClick = (modulo: string = '') => {
+    this.ls.set(GLOBAL.usrLastModuleVar, modulo);
     const objModulo: any = this.appMenu.find(m => m.nombre === modulo);
     // console.log(objModulo);
     if (objModulo) {
@@ -127,6 +132,7 @@ export class HeaderComponent implements OnInit {
     this.ls.clear('ng2Idle.main.idling');
     this.ls.clear(GLOBAL.usrTokenVar);
     this.ls.clear(GLOBAL.usrUnlockVar);
+    this.ls.clear(GLOBAL.usrLastModuleVar);
     this.idle.stop();
     this.router.navigate(['/admin/login']);
   }

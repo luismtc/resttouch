@@ -43,7 +43,7 @@ export class FormProductoComponent implements OnInit {
   public receta: ArticuloDetalle;
   public impuestosEspeciales: ImpuestoEspecial[] = [];
   public showDetalleForm = true;
-  public displayedColumns: string[] = ['articulo', 'cantidad', 'medida', 'editItem'];
+  public displayedColumns: string[] = ['articulo', 'cantidad', 'medida', 'precio', 'editItem'];
   public dataSource: MatTableDataSource<ArticuloDetalle>;
   public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;

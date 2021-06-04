@@ -21,21 +21,22 @@ class Categoria extends CI_Controller {
 		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $cat->guardar($req);
-
-			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
+			$existe = $this->Categoria_model->buscar(['sede' => $req['sede'], 'TRIM(UPPER(descripcion))' => trim(strtoupper($req['descripcion']))]);
+			if(!$existe) {
+				$datos['exito'] = $cat->guardar($req);	
+				if($datos['exito']) {
+					$datos['mensaje'] = "Datos actualizados con éxito.";
+				} else {
+					$datos['mensaje'] = $cat->getMensaje();
+				}
 			} else {
-				$datos['mensaje'] = $cat->getMensaje();
-			}	
-
+				$datos['mensaje'] = 'La categoría '.$req['descripcion'].' ya existe.';
+			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
-		
 
-		$this->output
-		->set_output(json_encode($datos));
+		$this->output->set_output(json_encode($datos));
 	}
 
 	public function buscar()

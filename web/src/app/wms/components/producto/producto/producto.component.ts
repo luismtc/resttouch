@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 // import { ListaProductoComponent } from '../lista-producto/lista-producto.component';
 import { FormProductoComponent } from '../form-producto/form-producto.component';
+import { SubCategoriaProductoComponent } from '../sub-categoria-producto/sub-categoria-producto.component';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL, MultiFiltro } from '../../../../shared/global';
 import { Articulo, ArticuloResponse } from '../../../interfaces/articulo';
@@ -27,6 +28,7 @@ export class ProductoComponent implements OnInit {
   public txtFiltro = '';
   // @ViewChild('lstProducto') lstProductoComponent: ListaProductoComponent;
   @ViewChild('frmProducto') frmProductoComponent: FormProductoComponent;
+  @ViewChild('frmSubcategoria') frmSubcategoria: SubCategoriaProductoComponent;
 
   constructor(
     private articuloSrvc: ArticuloService,
@@ -142,6 +144,11 @@ export class ProductoComponent implements OnInit {
         this.articulos = JSON.parse(JSON.stringify(this.articulosFull));
       }
     });
+  }
+
+  reloadCategoriasInSubcategoriasArticulos = () => {
+    this.loadCategorias();
+    this.frmSubcategoria.loadCategorias();
   }
 
 
