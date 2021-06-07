@@ -244,7 +244,7 @@ export class FormIngresoComponent implements OnInit {
   }
 
   addToDetail = () => {
-      if (this.detalleIngreso.cantidad > 0 && this.detalleIngreso.cantidad_utilizada > 0){
+      if ((this.detalleIngreso.cantidad > 0 && this.detalleIngreso.cantidad_utilizada > 0) || this.produccion){
         var index = this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo)
         if (index > -1) {
           this.detallesIngreso.splice(index, 1);
@@ -263,9 +263,9 @@ export class FormIngresoComponent implements OnInit {
         this.resetDetalleIngreso();
         this.updateTableDataSource();
       } else if(this.detalleIngreso.cantidad <= 0){
-        this.snackBar.open(`ERROR: La cantidad debe ser mayor a 0`, 'Egreso', { duration: 3000 });
+        this.snackBar.open(`ERROR: La cantidad debe ser mayor a 0`, 'Ingreso', { duration: 3000 });
       } else if(this.detalleIngreso.cantidad_utilizada <= 0){
-        this.snackBar.open(`ERROR: La cantidad a utilizar debe ser mayor a 0`, 'Egreso', { duration: 3000 });
+        this.snackBar.open(`ERROR: La cantidad a utilizar debe ser mayor a 0`, 'Ingreso', { duration: 3000 });
       }
   }
 
