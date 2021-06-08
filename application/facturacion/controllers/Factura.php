@@ -27,7 +27,8 @@ class Factura extends CI_Controller
 			'Receta_model',
 			'ImpuestoEspecial_model',
 			'Razon_anulacion_model',
-			'Presentacion_model'
+			'Presentacion_model',
+			'Configuracion_model'
 		]);
 		$this->load->helper(['jwt', 'authorization']);
 		$this->output
@@ -81,11 +82,15 @@ class Factura extends CI_Controller
 				$fac->cargarEmpresa();
 				$pimpuesto = $fac->empresa->porcentaje_iva + 1;
 				$art = new Articulo_model($req['articulo']);
+				$req['precio_unitario_ext'] = $req['precio_unitario'];
+				$req['total_ext'] = $req['total'];
 
 				if ($fac->exenta) {
 					$req['monto_base'] = $req['total'];
+					$req['monto_base_ext'] = $req['total_ext'];
 				} else {
 					$req['monto_base'] = $req['total'] / $pimpuesto;
+					$req['monto_base_ext'] = $req['total_ext'] / $pimpuesto;
 				}
 
 				$impuesto_especial = $art->getImpuestoEspecial();
@@ -93,10 +98,12 @@ class Factura extends CI_Controller
 					$req['impuesto_especial'] = $impuesto_especial->impuesto_especial;
 					$req['porcentaje_impuesto_especial'] = $impuesto_especial->porcentaje;
 					$req['valor_impuesto_especial'] = $req['monto_base'] * ((float)$impuesto_especial->porcentaje / 100);
+					$req['valor_impuesto_especial_ext'] = $req['monto_base_ext'] * ((float)$impuesto_especial->porcentaje / 100);
 				}
 
 				$req['presentacion'] = $art->presentacion;
 				$req['monto_iva'] = $req['total'] - $req['monto_base'];
+				$req['monto_iva_ext'] = $req['total_ext'] - $req['monto_base_ext'];
 				$req['bien_servicio'] = $art->bien_servicio;
 				$req["bodega"] = $art->getCategoriaGrupo()->bodega;
 				$det = $fac->setDetalle($req, $id);
@@ -180,13 +187,14 @@ class Factura extends CI_Controller
 			$fac = new Factura_model($factura);
 
 			if (empty($fac->numero_factura)) {
+				$facturaRedondeaMontos = $this->Configuracion_model->buscar(["campo" => "RT_FACTURA_REDONDEA_MONTOS", "_uno" => true]);
 				$fac->cargarFacturaSerie();
 				$fac->cargarEmpresa();
 				$fac->cargarMoneda();
 				$fac->cargarReceptor();
 				$fac->cargarSede();
 				$fac->cargarCertificadorFel();
-				$fac->procesar_factura();
+				$fac->procesar_factura($facturaRedondeaMontos && (int)$facturaRedondeaMontos->valor === 0 ? false : true);
 
 				$cer = $fac->getCertificador();
 
@@ -381,8 +389,8 @@ class Factura extends CI_Controller
 
 	public function xml($factura)
 	{
-		$this->output
-			->set_content_type("application/xml", "UTF-8");
+		$facturaRedondeaMontos = $this->Configuracion_model->buscar(["campo" => "RT_FACTURA_REDONDEA_MONTOS", "_uno" => true]);
+		$this->output->set_content_type("application/xml", "UTF-8");
 
 		$fac = new Factura_model($factura);
 		$fac->cargarFacturaSerie();
@@ -391,7 +399,7 @@ class Factura extends CI_Controller
 		$fac->cargarReceptor();
 		$fac->cargarSede();
 		$fac->cargarCertificadorFel();
-		$fac->procesar_factura();
+		$fac->procesar_factura($facturaRedondeaMontos && (int)$facturaRedondeaMontos->valor === 0 ? false : true);
 
 		echo $fac->getXml();
 	}

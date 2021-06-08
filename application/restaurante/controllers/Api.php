@@ -373,32 +373,41 @@ class Api extends CI_Controller {
 												foreach ($cuenta->getDetalle() as $det) {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
+													$det->total_ext = $det->total;
 
 													if (count($descuentoArticulo) == 0) {
 														$det->descuento = $det->total * $pdescuento;
+														$det->descuento_ext = $det->total_ext * $pdescuento;
 													} else {
 														$det->descuento = 0;
 														foreach ($descuentoArticulo as $desc) {
 															if ($det->detalle_comanda == $desc["detalle"]) 
 															{
 																$det->descuento += $desc["descuento"];
+																$det->descuento_ext += $desc["descuento"];
 															}
 														}
 													}
 													
 													$det->precio_unitario = $det->precio;
+													$det->precio_unitario_ext = $det->precio;													
 													$total = $det->total - $det->descuento;
+													$total_ext = $det->total_ext - $det->descuento_ext;
 													if ($fac->exenta) {
 														$det->monto_base = $total;
+														$det->monto_base_ext = $total_ext;
 													} else {
 														$det->monto_base = $total / $pimpuesto;
+														$det->monto_base_ext = $total_ext / $pimpuesto;
 													}
 													
 													$det->monto_iva = $total - $det->monto_base;
+													$det->monto_iva_ext = $total_ext - $det->monto_base_ext;
 													$fac->setDetalle((array) $det);
 												}
 												if (get_configuracion($config, "RT_FIRMA_DTE_AUTOMATICA", 3)) {
-													$fac->firmar();
+													$facturaRedondeaMontos = get_configuracion($config, "RT_FACTURA_REDONDEA_MONTOS", 3);
+													$fac->firmar($facturaRedondeaMontos);
 													if (!empty($fac->numero_factura)) {
 														$fact = new Factura_model($fac->factura);
 														$fact->guardar([
@@ -626,7 +635,8 @@ class Api extends CI_Controller {
 											$cuenta->guardar($datosCta);	
 										}
 										
-										$total = 0;		
+										$total = 0;	
+										$total_ext = 0;	
 										$exito = true;
 										foreach ($req['detalle'] as $row) {
 											$art = $this->Articulo_model->buscarArticulo([
@@ -646,6 +656,7 @@ class Api extends CI_Controller {
 												];
 												
 												$total += $row['total'];
+												$total_ext += $row['total'];
 												
 												$det = $comanda->guardarDetalle($datosDcomanda);
 												$id = '';
@@ -667,10 +678,12 @@ class Api extends CI_Controller {
 										if ($datos['exito']) {
 											$pagos = [];
 											$descuento = 0;
+											$descuento_ext = 0;
 											if (isset($req['descuento']) && is_array($req['descuento'])) {
 
 												foreach ($req['descuento'] as $desc) {
 													$descuento += ($total * $desc['valor'] /100);
+													$descuento_ext += ($total_ext * $desc['valor'] /100);
 													
 												}
 												$pagos[] = [
@@ -751,18 +764,26 @@ class Api extends CI_Controller {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
 													$det->precio_unitario = $det->precio;
+													$det->precio_unitario_ext = $det->precio;
 													if ($det->descuento == 1) {
 														$det->descuento = 0; // $det->total * $pdescuento/100;	
+														$det->descuento_ext = 0; // $det->total * $pdescuento/100;	
 													} else {
 														$det->descuento = 0;
+														$det->descuento_ext = 0;
 													}
-													$total = $det->total-$det->descuento;
+													$det->total_ext = $det->total;
+													$total = $det->total - $det->descuento;
+													$total_ext = $det->total_ext - $det->descuento_ext;
 													if ($fac->exenta) {
 														$det->monto_base = $total;
+														$det->monto_base_ext = $total_ext;
 													} else {
 														$det->monto_base = $total / $pimpuesto;
+														$det->monto_base_ext = $total_ext / $pimpuesto;
 													}
-													$det->monto_iva = $total - $det->monto_base;	
+													$det->monto_iva = $total - $det->monto_base;
+													$det->monto_iva_ext = $total_ext - $det->monto_base_ext;
 													$fac->setDetalle((array) $det);
 												}
 											} else {
@@ -1071,18 +1092,26 @@ class Api extends CI_Controller {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
 													$det->precio_unitario = $det->precio;
+													$det->precio_unitario_ext = $det->precio;
 													if ($det->descuento == 1) {
 														$det->descuento = 0; // $det->total * $pdescuento/100;	
+														$det->descuento_ext = 0; // $det->total * $pdescuento/100;	
 													} else {
 														$det->descuento = 0;
+														$det->descuento_ext = 0;
 													}
-													$total = $det->total-$det->descuento;
+													$det->total_ext = $det->total;
+													$total = $det->total - $det->descuento;
+													$total_ext = $det->total_ext - $det->descuento_ext;
 													if ($fac->exenta) {
 														$det->monto_base = $total;
+														$det->monto_base_ext = $total_ext;
 													} else {
 														$det->monto_base = $total / $pimpuesto;
+														$det->monto_base_ext = $total_ext / $pimpuesto;
 													}
-													$det->monto_iva = $total - $det->monto_base;	
+													$det->monto_iva = $total - $det->monto_base;
+													$det->monto_iva_ext = $total_ext - $det->monto_base_ext;
 													$fac->setDetalle((array) $det);
 												}
 											} else {

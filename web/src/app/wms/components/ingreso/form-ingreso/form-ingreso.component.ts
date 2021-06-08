@@ -87,12 +87,12 @@ export class FormIngresoComponent implements OnInit {
     this.loadPresentaciones();
     this.loadDocumentosTipo();
     this.loadTiposCompraVenta();
-    if(!this.bodega) {
+    if (!this.bodega) {
       this.displayedColumns = ['cantidad_utilizada', 'articulo', 'presentacion', 'cantidad', 'deleteItem'];
     }
 
     if (this.produccion) {
-      this.displayedColumns = ['articulo', 'presentacion', 'cantidad',  'deleteItem'];
+      this.displayedColumns = ['articulo', 'presentacion', 'cantidad', 'deleteItem'];
     }
   }
 
@@ -144,8 +144,13 @@ export class FormIngresoComponent implements OnInit {
     });
   }
 
-  removeFromDetail = (idarticulo: number) =>
-    this.detallesIngreso.splice(this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo), 1)
+  removeFromDetail = (idarticulo: number) => {
+    const idx = this.detallesIngreso.findIndex(de => +de.articulo === +idarticulo);
+    if (idx >= 0) {
+      this.detallesIngreso.splice(idx, 1);
+      this.updateTableDataSource();
+    }
+  }
 
   resetIngreso = () => {
     this.ingreso = {
@@ -177,7 +182,7 @@ export class FormIngresoComponent implements OnInit {
   loadArticulos = () => {
     var args = {};
     if (this.produccion) {
-      args = {produccion: 1};
+      args = { produccion: 1 };
     }
     this.articuloSrvc.getArticulosIngreso(args).subscribe(res => {
       if (res) {
@@ -229,8 +234,7 @@ export class FormIngresoComponent implements OnInit {
     this.detalleIngreso.ingreso = this.ingreso.ingreso;
     this.detalleIngreso.precio_total = +this.detalleIngreso.cantidad * +this.detalleIngreso.precio_unitario;
     // console.log(this.detalleIngreso);
-    if (+this.detalleIngreso.cantidad < 1) 
-    {
+    if (+this.detalleIngreso.cantidad < 1) {
       this.detalleIngreso.cantidad = 1;
     }
     this.ingresoSrvc.saveDetalle(this.detalleIngreso).subscribe(res => {
@@ -243,37 +247,48 @@ export class FormIngresoComponent implements OnInit {
     });
   }
 
+  agregaADetalle = () => {
+    var index = this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo)
+    if (index > -1) {
+      this.detallesIngreso.splice(index, 1);
+    }
+
+    var art: any;
+    art = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo);
+    this.detalleIngreso.presentacion = art[0].presentacion_reporte;
+
+    if (+this.detalleIngreso.cantidad < 1) {
+      this.detalleIngreso.cantidad = 1;
+    }
+
+    this.detallesIngreso.push(this.detalleIngreso);
+    this.resetDetalleIngreso();
+    this.updateTableDataSource();
+  }
+
   addToDetail = () => {
-      if (this.detalleIngreso.cantidad > 0 && this.detalleIngreso.cantidad_utilizada > 0){
-        var index = this.detallesIngreso.findIndex(de => +de.articulo === +this.detalleIngreso.articulo)
-        if (index > -1) {
-          this.detallesIngreso.splice(index, 1);
+    // console.log('DETALLE INGRESO = ', this.detalleIngreso);
+    // console.log('ESTOY EN PRODUCCION = ', this.produccion);
+    if (this.detalleIngreso.cantidad > 0) {
+      if (this.produccion) {
+        this.agregaADetalle();
+      } else {
+        if (this.detalleIngreso.cantidad_utilizada > 0) {
+          this.agregaADetalle();
+        } else {
+          this.snackBar.open(`ERROR: La cantidad a utilizar debe ser mayor a 0`, 'Egreso', { duration: 3000 });
         }
-        
-        var art:any;
-        art = this.articulos.filter(p => +p.articulo == this.detalleIngreso.articulo);
-        this.detalleIngreso.presentacion = art[0].presentacion_reporte;
-
-        if(+this.detalleIngreso.cantidad < 1)
-        {
-          this.detalleIngreso.cantidad = 1;
-        }
-
-        this.detallesIngreso.push(this.detalleIngreso);
-        this.resetDetalleIngreso();
-        this.updateTableDataSource();
-      } else if(this.detalleIngreso.cantidad <= 0){
-        this.snackBar.open(`ERROR: La cantidad debe ser mayor a 0`, 'Egreso', { duration: 3000 });
-      } else if(this.detalleIngreso.cantidad_utilizada <= 0){
-        this.snackBar.open(`ERROR: La cantidad a utilizar debe ser mayor a 0`, 'Egreso', { duration: 3000 });
       }
+    } else {
+      this.snackBar.open(`ERROR: La cantidad debe ser mayor a 0`, 'Egreso', { duration: 3000 });
+    }
   }
 
   editFromDetail = (idarticulo: number) => {
     var tmp = this.detallesIngreso.filter(de => +de.articulo === +idarticulo)[0];
     this.detalleIngreso = {
       ingreso_detalle: tmp.ingreso_detalle, ingreso: tmp.ingreso, articulo: tmp.articulo,
-      cantidad: (+tmp.cantidad < 1 ? 1 : tmp.cantidad), precio_unitario: tmp.precio_unitario, precio_total: tmp.precio_total, 
+      cantidad: (+tmp.cantidad < 1 ? 1 : tmp.cantidad), precio_unitario: tmp.precio_unitario, precio_total: tmp.precio_total,
       presentacion: tmp.presentacion, cantidad_utilizada: tmp.cantidad_utilizada
     };
     this.setPresentaciones();
@@ -281,7 +296,7 @@ export class FormIngresoComponent implements OnInit {
     //this.showDetalleIngresoForm = true;
     //
   }
-    
+
 
   getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
 
