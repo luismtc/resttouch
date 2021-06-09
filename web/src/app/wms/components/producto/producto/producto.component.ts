@@ -76,6 +76,17 @@ export class ProductoComponent implements OnInit {
           mostrar_inventario: obj.mostrar_inventario,
           esreceta: obj.esreceta
         };
+
+        this.categoria = this.categorias.find(c => +c.categoria === +obj.categoria_grupo.categoria);
+        this.categoriaGrupo = {
+          categoria_grupo: +obj.categoria_grupo.categoria_grupo,
+          categoria: +obj.categoria_grupo.categoria,
+          categoria_grupo_grupo: +obj.categoria_grupo.categoria_grupo_grupo,
+          descripcion: obj.categoria_grupo.descripcion,
+          receta: +obj.categoria_grupo.receta,
+          impresora: +obj.categoria_grupo.impresora,
+          descuento: +obj.categoria_grupo.descuento
+        };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();
       }
@@ -151,5 +162,18 @@ export class ProductoComponent implements OnInit {
     this.frmSubcategoria.loadCategorias();
   }
 
+  verTodos = () => {
+    this.categoria = null;
+    this.categoriaGrupo = null;
+    this.frmProductoComponent.resetArticulo();
+    this.loadArticulos();
+  }
 
+  selectCategoria = (cat: Categoria) => {
+    this.categoria = cat;
+    this.categoriaGrupo = null;
+    this.frmProductoComponent.resetArticulo();
+    this.articulos = [];
+    this.loadSubCategorias(cat.categoria)    
+  }
 }

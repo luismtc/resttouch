@@ -166,11 +166,11 @@ export class FormProductoComponent implements OnInit {
   filtrarArticulos = (value: (Articulo | string)) => {
     if (value && (typeof value === 'string')) {
       const filterValue = value.toLowerCase();
-      this.filteredArticulos =
-        this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
+      this.filteredArticulos = this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
     } else {
-      this.filteredArticulos = this.articulos;
+      this.filteredArticulos = JSON.parse(JSON.stringify(this.articulos));
     }
+    // console.log(this.filteredArticulos);
   }
 
   resetReceta = () => {

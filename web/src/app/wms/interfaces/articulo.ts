@@ -24,6 +24,7 @@ export interface Articulo {
     costo?: number;
     mostrar_inventario?: number;
     esreceta?: number;
+    subcategoria?: CategoriaGrupo;
 }
 
 export interface ArticuloResponse {

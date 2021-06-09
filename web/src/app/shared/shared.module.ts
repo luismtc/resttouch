@@ -39,6 +39,7 @@ import { DialogCocinaComponent } from './components/dialog-cocina/dialog-cocina.
 import { DialogPedidoComponent } from './components/dialog-pedido/dialog-pedido.component';
 import { DialogComboComponent } from './components/dialog-combo/dialog-combo.component';
 import { DialogElminarProductoComponent } from './components/dialog-elminar-producto/dialog-elminar-producto.component';
+import { TruncarPipe } from './pipes/truncar.pipe';
 
 const config: SocketIoConfig = { url: `${PROTOCOLO}//${ANFITRION}:8988`, options: {} }; // Dev
 // const config: SocketIoConfig = { url: `${PROTOCOLO}//restouch.c807.com:8988`, options: {} }; // Prod
@@ -55,7 +56,8 @@ const config: SocketIoConfig = { url: `${PROTOCOLO}//${ANFITRION}:8988`, options
     DialogCocinaComponent,
     DialogPedidoComponent,
     DialogComboComponent,
-    DialogElminarProductoComponent
+    DialogElminarProductoComponent,
+    TruncarPipe
   ],
   imports: [
     CommonModule,
@@ -94,7 +96,8 @@ const config: SocketIoConfig = { url: `${PROTOCOLO}//${ANFITRION}:8988`, options
     CheckPasswordComponent,
     DialogCocinaComponent,
     DialogPedidoComponent,
-    DialogComboComponent
+    DialogComboComponent,
+    TruncarPipe
   ]
 })
 export class SharedModule { }
