@@ -642,6 +642,9 @@ SOFTWARE.
 ng2-charts
 ISC
 
+ngx-barcodeput
+MIT
+
 ngx-socket-io
 MIT
 MIT License

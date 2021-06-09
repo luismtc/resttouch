@@ -221,7 +221,8 @@ export class TranComandaComponent implements OnInit {
   }
 
   setLstProductosDeCuenta() {
-    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
+    const noCta = this.cuentaActiva?.numero || 1;
+    this.lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +noCta);
     // console.log(this.lstProductosDeCuenta);
   }
 
