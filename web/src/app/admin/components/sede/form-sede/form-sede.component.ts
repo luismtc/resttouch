@@ -62,7 +62,7 @@ export class FormSedeComponent implements OnInit {
   }
 
   onSubmit = () => {
-    if(this.sede.correo.length > 0) {
+    if(this.sede.correo && this.sede.correo.length > 0) {
       if (this.sede.correo.match(GLOBAL.FORMATO_EMAIL)) {
         this.guardarSede();
       } else {
@@ -79,6 +79,7 @@ export class FormSedeComponent implements OnInit {
       if (res.exito) {
         this.sedeSavedEv.emit();
         this.resetSede();
+        this.getSedes();
         this.snackBar.open('Sede guardada exitosamente', 'Sede', { duration: 3000 });
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sede', { duration: 3000 });

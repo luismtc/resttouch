@@ -12,12 +12,12 @@
                     <mat-chip color="primary" (click)="verTodos()" selected>
                         Ver todos
                     </mat-chip>
-                    <mat-chip color="accent" *ngFor="let cat of categorias" (click)="selectCategoria(cat)" selected>
+                    <mat-chip color="accent" *ngFor="let cat of categorias" (click)="!cargando && selectCategoria(cat)" selected>
                         {{cat.descripcion}}
                     </mat-chip>
                 </mat-chip-list>
                 <mat-chip-list *ngFor="let lcg of listasCategoriasGrupo" class="divSubCategorias">
-                    <mat-chip color="warn" *ngFor="let subcat of lcg" (click)="categoriaGrupo = subcat; loadSubCategorias(categoria.categoria, subcat.categoria_grupo)" selected>
+                    <mat-chip color="warn" *ngFor="let subcat of lcg" (click)="!cargando && selectSubcat(subcat)" selected>
                         {{subcat.descripcion}}
                     </mat-chip>
                 </mat-chip-list>                

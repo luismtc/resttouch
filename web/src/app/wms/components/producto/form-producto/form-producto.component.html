@@ -24,7 +24,7 @@
                     {{subcategoria.descripcion}}
                 </mat-chip>
             </mat-chip-list>
-            <mat-form-field class="fullWidth">
+            <mat-form-field class="fullWidth" style="margin-top: 10px;">
                 <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" minlength="1" maxlength="250" required>
                 <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" minlength="1" maxlength="250" required>
             </mat-form-field>
