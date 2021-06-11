@@ -73,7 +73,7 @@ export class TableroComponent implements OnInit {
         this.button = new Button({ isPrimary: true });
         this.button.appendTo('#export');
 
-        // this.button.element.onclick = (): void => { this.pivotGridObj.excelExport(); };
+        this.button.element.onclick = (): void => { this.pivotGridObj.excelExport(); };
         this.loadDataGraficas();
     }
 

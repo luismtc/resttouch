@@ -4,6 +4,45 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Tablero_model extends General_model
 {
 
+
+	public function getServiciosSinFactura($args = []) {
+		$this->db->query("SET @@lc_time_names = 'es_GT'");
+
+		if (isset($args["fdel"])) {
+			$this->db->where('DATE(a.fhcreacion) >= ', $args["fdel"]);
+		}
+
+		if (isset($args["fal"])) {
+			$this->db->where('DATE(a.fhcreacion) <= ', $args["fal"]);
+		}
+
+		if (isset($args['sede'])) {
+			if (is_array($args['sede'])) {
+				$this->db->where_in('a.sede', $args['sede']);
+			} else {
+				$this->db->where('a.sede', $args['sede']);
+			}
+		}
+
+		return $this->db
+			->select("d.total, 'B' AS bien_servicio, DATE(a.fhcreacion) AS fecha_factura, monthname(a.fhcreacion) as mes, dayname(a.fhcreacion) as dia, 
+			e.descripcion, f.descripcion as grupo, g.nombre as sede, 'Comanda' as operacion, IF(a.domicilio = 1, 'SI', 'NO') as domicilio, i.descripcion as turno")
+			->from('comanda a')
+			->join('cuenta b', 'a.comanda = b.cuenta')
+			->join('cuenta_forma_pago c', 'b.cuenta = c.cuenta')
+			->join('detalle_comanda d', 'a.comanda = d.comanda')
+			->join('articulo e', 'e.articulo = d.articulo')
+			->join('categoria_grupo f', 'f.categoria_grupo = e.categoria_grupo')
+			->join('sede g', 'g.sede = a.sede')
+			->join('turno h', 'h.turno = a.turno')
+			->join('turno_tipo i', 'i.turno_tipo = h.turno_tipo')
+			->join('forma_pago j', 'j.forma_pago = c.forma_pago')
+			->where('d.detalle_comanda_id IS NULL')
+			->where('j.sinfactura', 1)
+			->get()
+			->result();
+	}
+
 	public function getServiciosFacturados($args = [])
 	{
 		$this->db->query("SET @@lc_time_names = 'es_GT'");
@@ -24,7 +63,7 @@ class Tablero_model extends General_model
 			}
 		}
 
-		return $this->db
+		$servFact = $this->db
 			->select("
 			(a.total-a.descuento) as total, 
 		    a.bien_servicio,
@@ -52,6 +91,12 @@ class Tablero_model extends General_model
 			->where("b.fel_uuid_anulacion is null")
 			->get()
 			->result();
+		
+		$q = $this->db->last_query();
+
+		$servSinFact = $this->getServiciosSinFactura($args);
+
+		return array_merge($servFact, $servSinFact);
 	}
 
 	private function getVentasPorDiaSinFactura($args = [])
