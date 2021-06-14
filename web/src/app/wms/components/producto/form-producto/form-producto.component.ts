@@ -295,5 +295,17 @@ export class FormProductoComponent implements OnInit {
   applyFilter = (filter: string) => {
     this.dataSource.filter = filter.toLocaleLowerCase();
   }
+
+  setOpcMultOff = () => {    
+    if (+this.articulo.combo === 1) {
+      this.articulo.multiple = 0;
+    }
+  }
+
+  setComboOff = () => {    
+    if (+this.articulo.multiple === 1) {
+      this.articulo.combo = 0;
+    }
+  }
   
 }

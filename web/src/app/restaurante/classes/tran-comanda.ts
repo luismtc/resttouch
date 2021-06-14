@@ -571,45 +571,45 @@ export class TranComanda {
     printCuenta(dialogRef: MatDialogRef<TranComandaAltComponent> = null) {
         this.bloqueoBotones = true;
         this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
-
         // console.log(this.lstProductosAImprimir);
-        // this.bloqueoBotones = false; return;
 
-        this.setSumaCuenta(this.lstProductosAImprimir);
-        const totalCuenta = this.sumaDetalle(this.lstProductosAImprimir);
-        const printerToUse = this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora;
-        // const cnfPropSug = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
-        // console.log(`CONFIG = ${cnfPropSug}`);
-        const imprimePropSugerida = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
+        if (this.lstProductosAImprimir.length > 0) {
+            this.setSumaCuenta(this.lstProductosAImprimir);
+            const totalCuenta = this.sumaDetalle(this.lstProductosAImprimir);
+            const printerToUse = this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora;
+            const imprimePropSugerida = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
 
-        const msgToPrint = {
-            Tipo: 'Cuenta',
-            Nombre: this.cuentaActiva.nombre,
-            Numero: null,
-            DetalleCuenta: this.lstProductosAImprimir,
-            Total: totalCuenta,
-            Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
-            Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
-            PropinaSugerida: imprimePropSugerida ? (totalCuenta * 0.10).toFixed(2) : null,
-            Impresora: printerToUse,
-            Ubicacion:
-                `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero
-                } - Comanda ${this.mesaEnUso.comanda}`,
-            Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
-        };
+            const msgToPrint = {
+                Tipo: 'Cuenta',
+                Nombre: this.cuentaActiva.nombre,
+                Numero: null,
+                DetalleCuenta: this.lstProductosAImprimir,
+                Total: totalCuenta,
+                Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
+                Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
+                PropinaSugerida: imprimePropSugerida ? (totalCuenta * 0.10).toFixed(2) : null,
+                Impresora: printerToUse,
+                Ubicacion:
+                    `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero
+                    } - Comanda ${this.mesaEnUso.comanda}`,
+                Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
+            };
 
-        if (+printerToUse.bluetooth === 0) {
-            this.socket.emit(`print:cuenta`, `${JSON.stringify(msgToPrint)}`);
+            if (+printerToUse.bluetooth === 0) {
+                this.socket.emit(`print:cuenta`, `${JSON.stringify(msgToPrint)}`);
+            } else {
+                this.printToBT(JSON.stringify(msgToPrint));
+            }
+            this.snackBar.open(`Imprimiendo cuenta de ${this.cuentaActiva.nombre}`, 'Cuenta', { duration: 7000 });            
+            if (dialogRef) {
+                dialogRef.close();
+            } else {
+                this.closeSideNavEv.emit();
+            }
         } else {
-            this.printToBT(JSON.stringify(msgToPrint));
+            this.snackBar.open(`La cuenta de ${this.cuentaActiva.nombre} no tiene ningún artículo.`, 'Cuenta', { duration: 7000 });
         }
-        this.snackBar.open(`Imprimiendo cuenta de ${this.cuentaActiva.nombre}`, 'Cuenta', { duration: 7000 });
         this.bloqueoBotones = false;
-        if (dialogRef) {
-            dialogRef.close();
-        } else {
-            this.closeSideNavEv.emit();
-        }
     }
 
     unirCuentas(dialogRef: MatDialogRef<TranComandaAltComponent> = null) {

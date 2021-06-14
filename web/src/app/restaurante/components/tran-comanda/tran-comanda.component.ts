@@ -194,7 +194,7 @@ export class TranComandaComponent implements OnInit {
       if (res.exito) {
         // console.log('EXITO PARA CERRAR LA MESA...', res);
         this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
-        this.mesaEnUso.mesa.estatus = 1;        
+        this.mesaEnUso.mesa.estatus = 1;
         this.mesaSavedEv.emit();
         this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
       } else {
@@ -506,7 +506,7 @@ export class TranComandaComponent implements OnInit {
                   this.impreso = 0;
                   this.socket.emit('refrescar:mesa', { mesaenuso: meu });
                   this.socket.emit('refrescar:listaCocina', { mesaenuso: meu });
-                  if (+meu.mesa.esmostrador === 0) {                  
+                  if (+meu.mesa.esmostrador === 0) {
                     this.closeSideNavEv.emit();
                   } else {
                     this.cobrarCuenta();
@@ -558,7 +558,7 @@ export class TranComandaComponent implements OnInit {
       if (res) {
         const blob = new Blob([res], { type: 'application/pdf' });
         const url = window.URL.createObjectURL(blob);
-        window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');        
+        window.open(url, `cuenta_${noCuenta}`, 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
       } else {
         this.snackBar.open('No se pudo generar la comanda...', 'Comanda', { duration: 3000 });
       }
@@ -578,41 +578,41 @@ export class TranComandaComponent implements OnInit {
   printCuenta() {
     this.bloqueoBotones = true;
     this.lstProductosAImprimir = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
-
     // console.log(this.lstProductosAImprimir);
-    // this.bloqueoBotones = false; return;
 
-    this.setSumaCuenta(this.lstProductosAImprimir);
-    const totalCuenta = this.sumaDetalle(this.lstProductosAImprimir);
-    const printerToUse = this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora;
-    // const cnfPropSug = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
-    // console.log(`CONFIG = ${cnfPropSug}`);
-    const imprimePropSugerida = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
+    if (this.lstProductosAImprimir.length > 0) {
+      this.setSumaCuenta(this.lstProductosAImprimir);
+      const totalCuenta = this.sumaDetalle(this.lstProductosAImprimir);
+      const printerToUse = this.mesaEnUso.mesa.impresora || this.mesaEnUso.mesa.area.impresora;
+      const imprimePropSugerida = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_PROPINA_SUGERIDA);
 
-    const msgToPrint = {
-      Tipo: 'Cuenta',
-      Nombre: this.cuentaActiva.nombre,
-      Numero: null,
-      DetalleCuenta: this.lstProductosAImprimir,
-      Total: totalCuenta,
-      Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
-      Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
-      PropinaSugerida: imprimePropSugerida ? (totalCuenta * 0.10).toFixed(2) : null,
-      Impresora: printerToUse,
-      Ubicacion:
-        `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero
-        } - Comanda ${this.mesaEnUso.comanda}`,
-      Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
-    };
+      const msgToPrint = {
+        Tipo: 'Cuenta',
+        Nombre: this.cuentaActiva.nombre,
+        Numero: null,
+        DetalleCuenta: this.lstProductosAImprimir,
+        Total: totalCuenta,
+        Empresa: this.ls.get(GLOBAL.usrTokenVar).empresa,
+        Restaurante: this.ls.get(GLOBAL.usrTokenVar).restaurante,
+        PropinaSugerida: imprimePropSugerida ? (totalCuenta * 0.10).toFixed(2) : null,
+        Impresora: printerToUse,
+        Ubicacion:
+          `${this.mesaEnUso.mesa.area.nombre} - Mesa ${this.mesaEnUso.mesa.etiqueta || this.mesaEnUso.mesa.numero
+          } - Comanda ${this.mesaEnUso.comanda}`,
+        Mesero: `${this.mesaEnUso.mesero.nombres} ${this.mesaEnUso.mesero.apellidos}`
+      };
 
-    if (+printerToUse.bluetooth === 0) {
-      this.socket.emit(`print:cuenta`, `${JSON.stringify(msgToPrint)}`);
+      if (+printerToUse.bluetooth === 0) {
+        this.socket.emit(`print:cuenta`, `${JSON.stringify(msgToPrint)}`);
+      } else {
+        this.printToBT(JSON.stringify(msgToPrint));
+      }
+      this.snackBar.open(`Imprimiendo cuenta de ${this.cuentaActiva.nombre}`, 'Cuenta', { duration: 7000 });      
+      this.closeSideNavEv.emit();
     } else {
-      this.printToBT(JSON.stringify(msgToPrint));
+      this.snackBar.open(`La cuenta de ${this.cuentaActiva.nombre} no tiene ningún artículo.`, 'Cuenta', { duration: 7000 });
     }
-    this.snackBar.open(`Imprimiendo cuenta de ${this.cuentaActiva.nombre}`, 'Cuenta', { duration: 7000 });
     this.bloqueoBotones = false;
-    this.closeSideNavEv.emit();
   }
 
   unirCuentas() {

@@ -80,7 +80,7 @@ export class FormSedeComponent implements OnInit {
         this.sedeSavedEv.emit();
         this.resetSede();
         this.getSedes();
-        this.snackBar.open('Sede guardada exitosamente', 'Sede', { duration: 3000 });
+        this.snackBar.open('Sede guardada exitosamente.', 'Sede', { duration: 3000 });
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sede', { duration: 3000 });
       }

@@ -30,9 +30,9 @@ export class FormCorporacionComponent implements OnInit {
       if (res.exito) {
         this.corporacionSavedEv.emit();
         this.resetCorporacion();
-        this.snackBar.open('Corporacion guardada exitosamente', 'Corporacion', { duration: 3000 });
+        this.snackBar.open('Corporación guardada exitosamente.', 'Corporación', { duration: 3000 });
       } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Corporacion', { duration: 3000 });
+        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Corporación', { duration: 3000 });
       }
     });
   }
