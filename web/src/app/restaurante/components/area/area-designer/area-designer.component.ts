@@ -23,6 +23,7 @@ export class AreaDesignerComponent implements OnInit {
   public mesas: Mesa[] = [];
   public contextMenuPosition = { x: '0px', y: '0px' };
   // public impresoras: Impresora[] = [];
+  public cargando = false;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -48,6 +49,7 @@ export class AreaDesignerComponent implements OnInit {
       1
 
   addTable = (w = 72, h = 72, esmostrador = 0, vertical = 0, escallcenter = 0) => {
+    this.cargando = true;
     this.mesas.push({
       mesa: null,
       area: this.data.area,
@@ -78,6 +80,7 @@ export class AreaDesignerComponent implements OnInit {
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Mesa', { duration: 7000 });
       }
+      this.cargando = false;
     });
   }
 

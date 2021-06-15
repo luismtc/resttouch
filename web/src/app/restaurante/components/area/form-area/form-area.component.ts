@@ -63,7 +63,7 @@ export class FormAreaComponent implements OnInit {
   openDesigner = () => {
     const areaDesignerRef = this.dialog.open(AreaDesignerComponent, {
       width: '800px',
-      disableClose: false,
+      disableClose: true,
       data: { area: +this.entidad.area, mesas: this.entidad.mesas || [] }
     });
 
