@@ -98,7 +98,7 @@ class General_model extends CI_Model {
 			$exito = $this->db->affected_rows() > 0;
 
 			if (!$exito) {
-				$this->setMensaje("Nada que actualizar");
+				$this->setMensaje("Nada que actualizar.");
 			}
 		}
 

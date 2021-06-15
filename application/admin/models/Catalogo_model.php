@@ -477,6 +477,22 @@ class Catalogo_model extends CI_Model {
 		return $this->getCatalogo($qry, $args);
 	}
 
+	public function getDetalleConfigComandaOrigen($args = []) {
+		if(count($args) > 0) {
+			foreach ($args as $key => $row) {
+				if ($key != '_uno') {
+					$this->db->where($key, $row);
+				}
+			}
+		}
+
+		$qry = $this->db
+		->order_by("comanda_origen, configuracion_comanda_origen")
+		->get("detalle_configuracion_comanda_origen");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
 	public function getCorporacion($args=[])
 	{
 		if(count($args) > 0) {
