@@ -37,6 +37,7 @@ export class FormProductoComponent implements OnInit {
   public medidas: Medida[] = [];
   public medidasFull: Medida[] = [];
   public presentaciones: Presentacion[] = [];
+  public presentacionesFiltered: Presentacion[] = [];
   public articulos: Articulo[] = [];
   public filteredArticulos: Articulo[] = [];
   public recetas: ArticuloDetalle[] = [];
@@ -91,6 +92,7 @@ export class FormProductoComponent implements OnInit {
     };
     this.recetas = [];
     this.resetReceta();
+    this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));
   }
 
   setArticuloCategoriaGrupo = (idcatgrp: number) => this.articulo.categoria_grupo = +idcatgrp;
@@ -124,8 +126,32 @@ export class FormProductoComponent implements OnInit {
     this.presentacionSrvc.get().subscribe(res => {
       if (res) {
         this.presentaciones = res;
+        this.filtrarPresentaciones();
       }
     });
+  }
+
+  filtrarPresentaciones = (art: Articulo = null) => {
+    if (this.presentaciones && this.presentaciones.length > 0) {
+      if (art?.articulo) {
+        // console.log('ARTICULO = ', art);
+        this.articuloSrvc.tieneMovimientos(art.articulo).subscribe(res => {
+          if (res.exito) {
+            if (res.tiene_movimientos) {
+              const presReporte = this.presentaciones.find(p => +p.presentacion === +art.presentacion_reporte);
+              // console.log('PRES REPORTE = ', presReporte);
+              this.presentacionesFiltered = this.presentaciones.filter(p => +p.medida.medida === +presReporte.medida.medida);
+            } else {
+              this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));              
+            }
+          } else {
+            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Artículo', { duration: 7000 });
+          }
+        });
+      } else {
+        this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));
+      }
+    }
   }
 
   loadArticulos = () => {
@@ -296,16 +322,16 @@ export class FormProductoComponent implements OnInit {
     this.dataSource.filter = filter.toLocaleLowerCase();
   }
 
-  setOpcMultOff = () => {    
+  setOpcMultOff = () => {
     if (+this.articulo.combo === 1) {
       this.articulo.multiple = 0;
     }
   }
 
-  setComboOff = () => {    
+  setComboOff = () => {
     if (+this.articulo.multiple === 1) {
       this.articulo.combo = 0;
     }
   }
-  
+
 }

@@ -185,6 +185,10 @@ export class ArticuloService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  tieneMovimientos(idarticulo: number) {
+    return this.http.get<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/tiene_movimientos/${idarticulo}`).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   getArticuloDetalle(idarticulo: number, fltr: any = {}): Observable<ArticuloDetalle[]> {
     return this.http.get<ArticuloDetalle[]>(
       `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/buscar_receta/${idarticulo}?${qs.stringify(fltr)}`

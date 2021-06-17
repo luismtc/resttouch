@@ -90,6 +90,7 @@ export class ProductoComponent implements OnInit {
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();
+        this.frmProductoComponent.filtrarPresentaciones(this.articulo);
       }
     });
   }

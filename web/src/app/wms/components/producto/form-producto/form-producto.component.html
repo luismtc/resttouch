@@ -44,7 +44,7 @@
             <mat-form-field class="fullWidth">
                 <mat-label>Presentación Reportes</mat-label>
                 <mat-select name="presentacion_reporte" [(ngModel)]="articulo.presentacion_reporte" required>
-                    <mat-option *ngFor="let p of presentaciones" [value]="p.presentacion">
+                    <mat-option *ngFor="let p of presentacionesFiltered" [value]="p.presentacion">
                         {{p.descripcion}}
                     </mat-option>
                 </mat-select>
