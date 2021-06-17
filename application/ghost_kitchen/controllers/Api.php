@@ -29,24 +29,6 @@ class Api extends CI_Controller
         $this->db = $this->load->database($db, true);
     }
 
-    private function get_dato($obj, $ruta)
-    {
-        $dato = null;
-		foreach (explode("->", $ruta) as $row) {
-			$dato = verDato($obj, $row);
-			if (is_object($dato)) {
-				$obj = $dato;
-				$dato = null;
-			} 
-		}
-
-		if($dato !== null) {
-            return $dato;
-		}
-
-		return false;
-    }
-
     private function get_origen_orden($host)
     {
         $comanda_origen = null;
@@ -88,8 +70,9 @@ class Api extends CI_Controller
                             $ordengk->host = $req->host;
                             $ordengk->ip = $req->ip;
                             $ordengk->url_original = $req->url_original;
+                            $ordengk->comanda_origen = $origen->comanda_origen;
                             $ordengk->estatus_orden_gk = 1;
-                            $ordengk->numero_orden = $this->get_dato($req->orden, $ruta->ruta);
+                            $ordengk->numero_orden = get_dato_from_object($req->orden, $ruta->ruta);
                             $ordengk->raw_orden = json_encode($req->orden);
                             $datos->exito = $ordengk->guardar();
                             if ($datos->exito)
