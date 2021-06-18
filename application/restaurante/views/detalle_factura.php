@@ -62,6 +62,7 @@
 							<th style="padding: 5px;" class="text-center">Total</th>
 							<th style="padding: 5px;" class="text-center">Propina</th>
 							<th style="padding: 5px;" class="text-center">Descuento</th>
+							<th style="padding: 5px;" class="text-center">Estatus</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -86,15 +87,17 @@
 								</td>
 								<td style="padding: 5px;"><?php echo formatoFecha($row->fecha_factura,2) ?></td>
 								<td style="padding: 5px;">
-									<?php echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nit : '') ?>
+									<!-- <?php //echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nit : '') ?> -->
+									<?php echo $row->receptor->nit ?>
 								</td>
 								<td style="padding: 5px;">
-									<?php echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA') ?>
+									<!-- <?php //echo (empty($row->fel_uuid_anulacion) ? $row->receptor->nombre : 'ANULADA') ?> -->
+									<?php echo $row->receptor->nombre ?>
 								</td>
 								<?php if ($impuesto_especial): ?>
 									<td style="padding: 5px;" class="text-right">
-										<?php echo (empty($row->fel_uuid_anulacion) ? 
-										number_format($imp, 2) : 0) ?>
+										<!-- <?php //echo (empty($row->fel_uuid_anulacion) ?  number_format($imp, 2) : 0) ?> -->
+										<?php echo number_format($imp, 2) ?>
 									</td>	
 								<?php endif ?>
 								<?php if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)): ?>
@@ -105,36 +108,34 @@
 										<?php echo "{$row->bitacora->usuario->nombres} {$row->bitacora->usuario->apellidos}" ?>
 									</td>
 									<td style="padding: 5px;" class="text-center">
-										<?php echo isset($row->razon_anulacion->descripcion) ? $row->razon_anulacion->descripcion : '' ?>
+										<?php echo isset($row->razon_anulacion->descripcion) ? $row->razon_anulacion->descripcion : (isset($row->bitacora->comentario) ? $row->bitacora->comentario : '' ) ?>
 									</td>
 								<?php endif ?>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo (empty($row->fel_uuid_anulacion) ? 
-										number_format($total, 2) : 0) ?>
+									<!-- <?php //echo (empty($row->fel_uuid_anulacion) ? number_format($total, 2) : 0) ?> -->
+									<?php echo number_format($total, 2) ?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php 
+										echo number_format($row->propina, 2);
 										if (empty($row->fel_uuid_anulacion)) {
-											echo number_format($row->propina, 2);
 											$totalPropina += $row->propina;
-										} else {
-											echo 0;
 										}
 									?>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php 
+										$desc = suma_field($detalle, "descuento");
+										echo number_format($desc, 2);
 										if (empty($row->fel_uuid_anulacion)) {
-											$desc = suma_field($detalle, "descuento");
-											echo number_format($desc, 2);
 											$totalDescuento += $desc;
 											$totalFactura += ($total - $desc);
-										} else {
-											echo "0.00";
 										}
 									 ?>
 								</td>
-								
+								<td style="padding: 5px;" class="text-center">
+									<?php echo empty($row->fel_uuid_anulacion) ? 'VIGENTE' : 'ANULADA'; ?>
+								</td>								
 							</tr>
 							<?php if (isset($_detalle) && $_detalle !== "false"): ?>
 								<tr>
@@ -148,6 +149,12 @@
 									<?php endif ?>
 									<td class="text-center">Total</td>
 									<td class="text-center">Descuento</td>
+									<td class="text-center">&nbsp;</td>
+									<?php  if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)): ?>
+										<td class="text-center">&nbsp;</td>
+										<td class="text-center">&nbsp;</td>
+										<td class="text-center">&nbsp;</td>
+									<?php endif ?>
 								</tr>
 								<?php foreach ($detalle as $det): ?>
 									<?php 
@@ -176,6 +183,12 @@
 										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format($det->descuento+$det->valor_impuesto_especial,2) ?>
 										</td>
+										<td class="text-center">&nbsp;</td>
+										<?php  if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)): ?>
+											<td class="text-center">&nbsp;</td>
+											<td class="text-center">&nbsp;</td>
+											<td class="text-center">&nbsp;</td>
+										<?php endif ?>
 									</tr>
 								<?php endforeach ?>
 							<?php endif ?>
@@ -197,6 +210,7 @@
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalPropina,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalDescuento, 2) ?></td>
+							<td style="padding: 5px;" class="text-center">&nbsp;</td>
 						</tr>
 					</tfoot>
 				</table>
