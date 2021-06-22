@@ -786,6 +786,25 @@ class Articulo_model extends General_model {
 		return false;
 	}
 
+	public function get_sede_articulo($args = [])
+	{
+		if(!isset($args['_uno'])) {
+			$args['_uno'] = true;			
+		}
+		$art = $this->buscar($args);
+		if($art) {
+			return $this->db
+				->select('a.sede')
+				->from('categoria a')
+				->join('categoria_grupo b', 'a.categoria = b.categoria')
+				->join('articulo c', 'b.categoria_grupo = c.categoria_grupo')				
+				->where('c.articulo', $art->articulo)
+				->get()->row();
+		}
+
+		return null;
+	}
+
 }
 
 /* End of file Articulo_model.php */

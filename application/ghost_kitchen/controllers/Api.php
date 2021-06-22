@@ -74,6 +74,10 @@ class Api extends CI_Controller
                             $ordengk->estatus_orden_gk = 1;
                             $ordengk->numero_orden = get_dato_from_object($req->orden, $ruta->ruta);
                             $ordengk->raw_orden = json_encode($req->orden);
+                            $ordenrt = $ordengk->get_orden_rt();
+                            if ($ordenrt) {
+                                $ordengk->orden_rt = json_encode($ordenrt);
+                            }
                             $datos->exito = $ordengk->guardar();
                             if ($datos->exito)
                             {
