@@ -27,4 +27,10 @@ export class OrdenGkService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  anular(params: any): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlGhostKitchen}/${this.moduleUrl}/anular_orden_gk`, params
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }
