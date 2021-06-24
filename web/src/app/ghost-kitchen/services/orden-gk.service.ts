@@ -33,4 +33,10 @@ export class OrdenGkService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  enviarVendors(params: any): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlGhostKitchen}/${this.moduleUrl}/envio_vendors`, params
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
+  }
+
 }

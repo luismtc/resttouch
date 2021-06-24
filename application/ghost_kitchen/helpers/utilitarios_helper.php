@@ -1,6 +1,5 @@
 <?php
-if (!function_exists('get_dato_from_object')) {
-    /* Verifica que un índice se encuentre dentro de un arreglo. o una propiedad en un objeto */
+if (!function_exists('get_dato_from_object')) {    
     function get_dato_from_object($obj, $ruta)
     {
         $dato = null;
@@ -9,13 +8,25 @@ if (!function_exists('get_dato_from_object')) {
             if (is_object($dato)) {
                 $obj = $dato;
                 $dato = null;
+            } else {
+                break;
             }
         }
-
-        if ($dato !== null) {
-            return $dato;
-        }
-
-        return false;
+        return $dato;
     }
 }
+
+if (!function_exists('get_dato_from_paths')) {    
+    function get_dato_from_paths($obj, $rutas)
+    {
+        $dato = null;
+        foreach (explode("|", $rutas) as $row) {
+            $dato = get_dato_from_object($obj, $row);
+            if ($dato) {
+                break;
+            }
+        }
+        return $dato;
+    }
+}
+

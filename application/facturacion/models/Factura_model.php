@@ -503,9 +503,11 @@ class Factura_model extends General_model
 		// $emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
 		$emisor->setAttribute('NombreComercial', $this->sedeFactura->nombre);
 		$emisor->setAttribute('NombreEmisor', $this->empresa->nombre);
+		
+		$laDireccion = !empty($this->sedeFactura->direccion) ? $this->sedeFactura->direccion : $this->empresa->direccion;
 
 		$direccionEmisor = $this->xml->getElementsByTagName('DireccionEmisor')->item(0);
-		$direccionEmisor->appendChild($this->crearElemento('dte:Direccion', $this->empresa->direccion, array(), true));
+		$direccionEmisor->appendChild($this->crearElemento('dte:Direccion', $laDireccion, array(), true));
 		$direccionEmisor->appendChild($this->crearElemento('dte:CodigoPostal', $this->empresa->codigo_postal));
 		$direccionEmisor->appendChild($this->crearElemento('dte:Municipio', $this->empresa->municipio));
 		$direccionEmisor->appendChild($this->crearElemento('dte:Departamento', $this->empresa->departamento));

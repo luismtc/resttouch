@@ -12,7 +12,9 @@ class Orden_gk extends CI_Controller
             'Estatus_orden_gk_model',
             'Usuario_model',
             'Bitacora_model',
-            'Accion_model'
+            'Accion_model',
+            'Turno_model',
+            'Articulo_model'
         ]);
 
         $this->load->helper(['jwt', 'authorization']);
@@ -89,6 +91,82 @@ class Orden_gk extends CI_Controller
         return $sedes;
     }
 
+    private function get_turnos_sedes($sedes)
+    {
+        $datos = new stdClass();        
+        $datos->faltantes = '';
+        $datos->exito = true;
+        foreach($sedes as $sede) 
+        {
+            $turno = $this->Turno_model->getTurno(['sede' => $sede->sede, 'abierto' => true, '_uno' => true]);
+            if ($turno) {
+                $sede->turno = $turno;
+            } else {
+                $datos->exito = false;
+                if ($datos->faltantes !== '') {
+                    $datos->faltantes .= ', ';
+                }
+                $datos->faltantes .= $sede->nombre;
+            }
+        }      
+        $datos->sedes = $sedes;  
+        return $datos;
+    }
+
+    private function get_meseros_turnos($sedes)
+    {
+        $datos = new stdClass();        
+        $datos->faltantes = '';
+        $datos->exito = true;
+
+        foreach($sedes as $sede) {
+            $tmp = new Turno_model($sede->turno->turno);
+            $usrs_turno = $tmp->getUsuarios();
+            $found = false;
+            foreach($usrs_turno as $usr){
+                if (strtolower(trim($usr->usuario_tipo->descripcion)) == 'mesero') {
+                    $sede->turno->mesero = $usr;
+                    $found = true;
+                    break;
+				}
+            }
+            if (!$found) {
+                $datos->exito = false;
+                if ($datos->faltantes !== '') {
+                    $datos->faltantes .= ', ';
+                }
+                $datos->faltantes .= $sede->nombre;
+            }
+        }
+        $datos->sedes = $sedes;
+        return $datos;
+    }
+
+    private function genera_comanda_sede($sede, $ordenrt)
+    {
+        $comandaHeader = [
+            'usuario' => $sede->turno->mesero->usuario->usuario, 
+            'sede' => $sede->sede, 
+            'estatus' => 1, 
+            'turno' => $sede->turno->turno,
+            'domicilio' => 1,
+            'comanda_origen' => $ordenrt->comanda_origen,
+            'comanda_origen_datos' => json_encode($ordenrt),
+            'mesero' => $sede->turno->mesero->usuario->usuario,             
+            'notas_generales' => "Pedido #{$ordenrt->numero_orden}",
+            'orden_gk' => $ordenrt->orden_gk
+        ];
+
+        $cuentaHeader = [
+            'comanda' => null,
+            'nombre' => $ordenrt->datos_entrega->nombre ? $ordenrt->datos_entrega->nombre : 'Unica',
+            'numero' => 1
+        ];
+
+
+        $articulos = [];
+    }
+
     public function envio_vendors()
     {
         $datos = new stdClass();
@@ -100,11 +178,32 @@ class Orden_gk extends CI_Controller
             if ((int)$ordenGk->estatus_orden_gk === 1) {
 
                 $ordenrt = json_decode($ordenGk->orden_rt);
+                $ordenrt->orden_gk = $ordenGk->orden_gk;
 
                 if (count($ordenrt->articulos) > 0) {
                     $sedes = $this->get_distinct_sedes($ordenrt->articulos);
-                    foreach($sedes as $sede) {
-                        
+                    $dataTurnos = $this->get_turnos_sedes($sedes);
+                    if ($dataTurnos->exito) 
+                    {
+                        $sedes = $dataTurnos->sedes;
+                        $dataMeseros = $this->get_meseros_turnos($sedes);
+                        if($dataMeseros->exito) 
+                        {
+                            $sedes = $dataMeseros->sedes;
+                            $datos->sedes = $sedes;
+
+                            foreach ($sedes as $sede) 
+                            {
+                                $this->genera_comanda_sede($sede, $ordenrt);
+                            }
+
+                            $datos->exito = true;
+                            $datos->mensaje = 'Exito al encontrar la data...';
+                        } else {
+                            $datos->mensaje = "Los siguientes vendors no tienen meseros en su turno: {$dataMeseros->faltantes}.";
+                        }
+                    } else {
+                        $datos->mensaje = "Los siguientes vendors no han abierto turno: {$dataTurnos->faltantes}.";
                     }
                 } else {
                     $datos->mensaje = 'La orden debe tener 1 artículo por lo menos.';
@@ -117,10 +216,7 @@ class Orden_gk extends CI_Controller
         } else {
             $datos->mensaje = 'El método de llamada no es válido.';
         }
-
-
         $this->output->set_output(json_encode($datos));
-
     }
 
 }
