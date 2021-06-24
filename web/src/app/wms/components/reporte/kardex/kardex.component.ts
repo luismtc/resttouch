@@ -60,6 +60,14 @@ export class KardexComponent implements OnInit {
     }
   }
 
+  displayArticulo = (art: Articulo) => {
+    if (art) {
+      this.params.articulo = art.articulo;
+      return art.descripcion;
+    }
+    return undefined;
+  }
+
   getSede = (params: any = {}) => {
     this.sedeSrvc.getSedes(params).subscribe(res => {
       this.sedes = res;
