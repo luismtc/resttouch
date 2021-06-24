@@ -9,12 +9,15 @@
         <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start start">            
             <div fxFlex="100%">
                 <mat-chip-list>
-                    <mat-chip color="accent" *ngFor="let cat of categorias" (click)="categoria = cat; categoriaGrupo = null; loadSubCategorias(cat.categoria)" selected>
+                    <mat-chip color="primary" (click)="verTodos()" selected>
+                        Ver todos
+                    </mat-chip>
+                    <mat-chip color="accent" *ngFor="let cat of categorias" (click)="!cargando && selectCategoria(cat)" selected>
                         {{cat.descripcion}}
                     </mat-chip>
                 </mat-chip-list>
                 <mat-chip-list *ngFor="let lcg of listasCategoriasGrupo" class="divSubCategorias">
-                    <mat-chip color="warn" *ngFor="let subcat of lcg" (click)="categoriaGrupo = subcat; loadSubCategorias(categoria.categoria, subcat.categoria_grupo)" selected>
+                    <mat-chip color="warn" *ngFor="let subcat of lcg" (click)="!cargando && selectSubcat(subcat)" selected>
                         {{subcat.descripcion}}
                     </mat-chip>
                 </mat-chip-list>                
@@ -24,7 +27,7 @@
                     <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
                 </mat-form-field>
                 <mat-action-list>
-                    <button mat-list-item class="accion-comanda mat-elevation-z4" *ngFor="let producto of articulos" (click)="setArticulo(producto)">{{producto.descripcion}}</button>
+                    <button mat-list-item class="accion-comanda mat-elevation-z4" *ngFor="let producto of articulos" (click)="setArticulo(producto)">{{producto.descripcion | truncar:35}}</button>
                 </mat-action-list>
             </div>
             <div class="divArticulos" fxFlex="60%" fxFlex.xs="100%" fxFlex.sm="100%">

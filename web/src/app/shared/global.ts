@@ -19,6 +19,7 @@ export const GLOBAL = {
     urlMantenimientos: `${urlBase}/index.php/mante`,
     urlWms: `${urlBase}/wms.php`,
     urlFacturacion: `${urlBase}/facturacion.php`,
+    urlGhostKitchen: `${urlBase}/ghost_kitchen.php`,
     usrTokenVar: 'rttoken',
     usrUnlockVar: 'rtunlock',
     rtClientePedido: 'rt_cliente_pedido',

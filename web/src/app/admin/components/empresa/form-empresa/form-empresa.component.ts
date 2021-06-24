@@ -62,7 +62,7 @@ export class FormEmpresaComponent implements OnInit {
       if (res.exito) {
         this.empresaSavedEv.emit();
         this.resetEmpresa();
-        this.snackBar.open('Empresa guardada exitosamente', 'Empresa', { duration: 3000 });
+        this.snackBar.open('Empresa guardada exitosamente.', 'Empresa', { duration: 3000 });
       } else {
         this.snackBar.open(`ERROR: ${res.mensaje}`, 'Empresa', { duration: 3000 });
       }

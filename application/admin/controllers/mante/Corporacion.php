@@ -20,7 +20,7 @@ class Corporacion extends CI_Controller {
 			$datos['exito'] = $corp->guardar($req);
 
 			if($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
+				$datos['mensaje'] = "Datos actualizados con éxito.";
 				$datos['corporacion'] = $this->Corporacion_model->buscar([
 					"corporacion" => $corp->getPK(), 
 					"_uno" => true
@@ -29,7 +29,7 @@ class Corporacion extends CI_Controller {
 				$datos['mensaje'] = $corp->getMensaje();
 			}	
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
 		
 		$this->output

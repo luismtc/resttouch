@@ -268,6 +268,24 @@ class Articulo extends CI_Controller
 
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
+
+	public function tiene_movimientos($id = 0)
+	{
+		$datos = new stdClass();
+		$datos->exito = false;
+		if ((int)$id > 0) {
+			$art = new Articulo_model($id);
+			$datos->tiene_movimientos = $art->tiene_movimientos();
+			$datos->exito = true;
+			$datos->mensaje = 'El artículo '.($datos->tiene_movimientos ? 'SÍ' : 'NO'). ' tiene movimientos.';
+		} else {
+			$datos->tiene_movimientos = null;
+			$datos->mensaje = 'Parámetros inválidos.';
+		}		
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
+	}
+
+
 }
 
 /* End of file Articulo.php */

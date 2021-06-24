@@ -480,9 +480,13 @@ export class FormFacturaManualComponent implements OnInit {
 
   openPdfDocument = (pdf: string) => {
     const pdfWindow = window.open('', 'winFactPdf', 'height=700,width=800,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
-    pdfWindow.document.write(
-      '<iframe width="100%" style="margin: -8px;border: none;" height="100%" src="data:application/pdf;base64, ' +
-      encodeURI(pdf) +
-      '"></iframe>');
+    try {
+      pdfWindow.document.write(
+        '<iframe width="100%" style="margin: -8px;border: none;" height="100%" src="data:application/pdf;base64, ' +
+        encodeURI(pdf) +
+        '"></iframe>');
+    } catch(e) {
+      this.snackBar.open('No se pudo abrir la ventana emergente para ver la representación gráfica. Revise la configuración de su explorador, por favor.', 'PDF', { duration: 7000 });
+    }
   }
 }

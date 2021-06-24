@@ -1,24 +1,25 @@
 <div class="diseniador">
     <div style="height: 55px;" align="center">
-        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addTable()">
+        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addTable()" [disabled]="cargando">
             <mat-icon class="btnIconSize">add</mat-icon>&nbsp;Mesa
         </button>
-        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addMostrador()">
+        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addMostrador()" [disabled]="cargando">
             <mat-icon class="btnIconSize">add</mat-icon>&nbsp;Mostrador
         </button>
-        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addMostrador(true)">
+        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addMostrador(true)" [disabled]="cargando">
             <mat-icon class="btnIconSize">add</mat-icon>&nbsp;Mostrador vertical
         </button>
-        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addCallCenter()">
+        <button mat-raised-button type="button" class="btnAccion" color="accent" (click)="addCallCenter()" [disabled]="cargando">
             <mat-icon class="btnIconSize">add</mat-icon>&nbsp;Call center
         </button>        
-        <button mat-raised-button type="button" color="accent" (click)="terminar()">
+        <button mat-raised-button type="button" color="accent" (click)="terminar()" [disabled]="cargando">
             Terminar
         </button>
     </div>
     <div style="height: 5px; width: 100%;"></div>
     <div id="divAreaPosicionamiento" class="areaPosicionamiento">
-        <app-mesa *ngFor="let m of mesas" [configuracion]="m" (onClickMesa)="onClickMesa($event)" [dontAllowDrag]="false" (contextmenu)="onContextMenu($event, m)"></app-mesa>
+        <app-mesa *ngFor="let m of mesas" [configuracion]="m" (onClickMesa)="!cargando && onClickMesa($event)" (moviendoMesa)="cargando = $event" [dontAllowDrag]="cargando" (contextmenu)="!cargando && onContextMenu($event, m)">            
+        </app-mesa>
     </div>
     <!-- Inicio del menu contextual -->
     <div style="visibility: hidden; position: fixed;" [style.left]="contextMenuPosition.x" [style.top]="contextMenuPosition.y" [matMenuTriggerFor]="contextMenu"></div>

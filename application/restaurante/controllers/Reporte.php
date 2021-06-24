@@ -707,8 +707,8 @@ class Reporte extends CI_Controller {
 
 				if ($anuladas) {
 					array_push($reg, formatoFecha($row->bitacora->fecha));
-					array_push($reg, "{$row->bitacora->usuario->nombres} {$row->bitacora->usuario->apellidos}");
-					array_push($reg, $row->razon_anulacion->descripcion);
+					array_push($reg, "{$row->bitacora->usuario->nombres} {$row->bitacora->usuario->apellidos}");					
+					array_push($reg, isset($row->razon_anulacion->descripcion) ? $row->razon_anulacion->descripcion : (isset($row->bitacora->comentario) ? $row->bitacora->comentario : '' ));
 				}
 
 				// array_push($reg, (empty($row->fel_uuid_anulacion) ? round($total, 2) : 0));

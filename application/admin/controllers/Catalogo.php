@@ -7,7 +7,10 @@ class Catalogo extends CI_Controller {
 	{
 		parent::__construct();
 		//$this->datos = [];
-		$this->load->model("Catalogo_model");
+		$this->load->model([
+			"Catalogo_model",
+			'Cgrupo_model'
+		]);
 		$headers = $this->input->request_headers();
         $this->data = AUTHORIZATION::validateToken($headers['Authorization']); 
 		$this->output
@@ -63,6 +66,15 @@ class Catalogo extends CI_Controller {
 		$_GET['sede'] = $this->data->sede;
 		// $datos = ordenar_array_objetos($this->Catalogo_model->getArticulo($_GET), 'descripcion');
 		$datos = $this->Catalogo_model->getArticulo($_GET);
+
+		if (is_array($datos)) {
+			foreach($datos as $d) {
+				$d->subcategoria = $this->Cgrupo_model->buscar(['categoria_grupo' => $d->categoria_grupo, '_uno' => true]);
+			}
+		} else {
+			$datos->subcategoria = $this->Cgrupo_model->buscar(['categoria_grupo' => $datos->categoria_grupo, '_uno' => true]);
+		}
+
 		$this->output->set_output(json_encode($datos));
 	}
 

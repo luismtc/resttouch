@@ -159,7 +159,7 @@ class Factura_model extends General_model
 			->total;
 	}
 
-	public function getDetalle($args = [])
+	public function getDetalle($args = [], $redondeaMontos = true)
 	{
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
@@ -179,8 +179,8 @@ class Factura_model extends General_model
 		foreach ($tmp as $row) {
 			$det = new Dfactura_model($row->detalle_factura);
 			$row->articulo = $det->getArticulo();
-			$row->subtotal = $row->total;
-			$row->total = ($row->total - $row->descuento);
+			$row->subtotal = $redondeaMontos ? $row->total : $row->total_ext;
+			$row->total = $redondeaMontos ? ($row->total - $row->descuento) : ($row->total_ext - $row->descuento_ext);
 			if ($row->impuesto_especial) {
 				$imp = $this->db
 							->where("impuesto_especial", $row->impuesto_especial)
@@ -503,9 +503,11 @@ class Factura_model extends General_model
 		// $emisor->setAttribute('NombreComercial', $this->empresa->nombre_comercial);
 		$emisor->setAttribute('NombreComercial', $this->sedeFactura->nombre);
 		$emisor->setAttribute('NombreEmisor', $this->empresa->nombre);
+		
+		$laDireccion = !empty($this->sedeFactura->direccion) ? $this->sedeFactura->direccion : $this->empresa->direccion;
 
 		$direccionEmisor = $this->xml->getElementsByTagName('DireccionEmisor')->item(0);
-		$direccionEmisor->appendChild($this->crearElemento('dte:Direccion', $this->empresa->direccion, array(), true));
+		$direccionEmisor->appendChild($this->crearElemento('dte:Direccion', $laDireccion, array(), true));
 		$direccionEmisor->appendChild($this->crearElemento('dte:CodigoPostal', $this->empresa->codigo_postal));
 		$direccionEmisor->appendChild($this->crearElemento('dte:Municipio', $this->empresa->municipio));
 		$direccionEmisor->appendChild($this->crearElemento('dte:Departamento', $this->empresa->departamento));
@@ -537,7 +539,7 @@ class Factura_model extends General_model
 		$direccionReceptor->appendChild($this->crearElemento('dte:Pais', 'GT'));
 	}
 
-	public function set_servicios_propios($args = array())
+	public function set_servicios_propios($args = array(), $redondeaMontos = true)
 	{
 		$items = $this->xml->getElementsByTagName('Items')->item(0);
 
@@ -546,7 +548,7 @@ class Factura_model extends General_model
 		$impuestosEsp = [];
 
 
-		foreach ($this->getDetalle() as $key => $row) {
+		foreach ($this->getDetalle([], $redondeaMontos) as $key => $row) {
 			$item = $this->crearElemento('dte:Item', '', array(
 				'BienOServicio' => $row->bien_servicio,
 				'NumeroLinea'   => $key + 1
@@ -555,9 +557,9 @@ class Factura_model extends General_model
 			$item->appendChild($this->crearElemento('dte:Cantidad', $row->cantidad));
 			$item->appendChild($this->crearElemento('dte:UnidadMedida', 'PZA'));
 			$item->appendChild($this->crearElemento('dte:Descripcion', $row->articulo->descripcion, array(), true));
-			$item->appendChild($this->crearElemento('dte:PrecioUnitario', round(($row->precio_unitario), 6)));
+			$item->appendChild($this->crearElemento('dte:PrecioUnitario', $redondeaMontos ? round(($row->precio_unitario), 6) : $row->precio_unitario_ext));
 			$item->appendChild($this->crearElemento('dte:Precio', $row->subtotal));
-			$item->appendChild($this->crearElemento('dte:Descuento', $row->descuento));
+			$item->appendChild($this->crearElemento('dte:Descuento', $redondeaMontos ? $row->descuento : $row->descuento_ext));
 
 			$impuestos = $this->crearElemento('dte:Impuestos');
 			$impuesto = $this->crearElemento('dte:Impuesto');
@@ -569,8 +571,8 @@ class Factura_model extends General_model
 				$valorBase = $row->total;
 				$valorIva = 0;
 			} else {
-				$valorBase = $row->monto_base;
-				$valorIva = $row->monto_iva;
+				$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
+				$valorIva = $redondeaMontos ?  $row->monto_iva : $row->monto_iva_ext;
 			}
 
 			$montoIva += $valorIva;
@@ -589,25 +591,25 @@ class Factura_model extends General_model
 				$impuesto->appendChild($this->crearElemento('dte:NombreCorto', $imp->descripcion));
 				$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : 1)));
 
-				$valorImp = $row->valor_impuesto_especial;
+				$valorImp = $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
 
 				if ($this->exenta) {
 					$valorBase = $row->total;
 				} else {
-					$valorBase = $row->monto_base;
+					$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
 				}
 
-				$row->total += $row->valor_impuesto_especial;
+				$row->total += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
 
 				$impuesto->appendChild($this->crearElemento('dte:MontoGravable', $valorBase));
 				$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
 				$impuestos->appendChild($impuesto);
 				if (isset($impuestosEsp[$row->impuesto_especial])) {
-					$impuestosEsp[$row->impuesto_especial]['monto'] += $row->valor_impuesto_especial;
+					$impuestosEsp[$row->impuesto_especial]['monto'] += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
 				} else {
 					$impuestosEsp[$row->impuesto_especial] = [
 						"descripcion" => $imp->descripcion,
-						"monto" => $row->valor_impuesto_especial
+						"monto" => $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext
 					];
 				}
 			}
@@ -690,13 +692,13 @@ class Factura_model extends General_model
 		return $nodo;
 	}
 
-	public function procesar_factura()
+	public function procesar_factura($redondeaMontos = true)
 	{
 		$this->iniciar_xml();
 		$this->set_datos_generales();
 		$this->set_emisor();
 		$this->set_receptor();
-		$this->set_servicios_propios();
+		$this->set_servicios_propios([], $redondeaMontos);
 		$this->set_frases();
 		$this->esAnulacion = 'N';
 	}
@@ -902,14 +904,85 @@ class Factura_model extends General_model
 					$data = simplexml_load_string(base64_decode($res->ResponseData->ResponseData2));
 					$data = json_decode(json_encode($data->doc));
 
-					$this->numero_factura = $data->batch;
-					$this->serie_factura = $data->serial;
+					$this->numero_factura = $data->serial;
+					$this->serie_factura = $data->batch;
 					$this->fel_uuid = $data->uuid;
 				} 
 			} else if ($res->Response->Result == 1) {
 				if ($this->esAnulacion === 'N') {
-					$this->numero_factura = $res->Response->Identifier->Batch;
-					$this->serie_factura = $res->Response->Identifier->Serial;
+					$this->numero_factura = $res->Response->Identifier->Serial;
+					$this->serie_factura = $res->Response->Identifier->Batch;
+					$this->fel_uuid = $res->Response->Identifier->DocumentGUID;	
+				} else {
+					$this->fel_uuid_anulacion = $this->fel_uuid;
+				}
+
+				$res->resultado = true;
+				$res->xml_certificado = $res->ResponseData->ResponseData1;
+				$res->fecha = $res->Response->TimeStamp;
+			}
+
+			$this->guardar();
+
+			return $res;
+		}
+
+		return $res->RequestTransactionResult->Response;
+	}
+
+	public function enviarCorposistemas($args = [])
+	{
+		$link = $this->certificador->vinculo_factura;
+		$nit = str_repeat("0", 12 - strlen($this->empresa->nit)) . $this->empresa->nit;
+		$datos = array(
+			"Requestor" => $this->certificador->llave,
+			"Transaction" => $this->certificador->firma_codigo,
+			"Country" => $this->empresa->pais_iso_dos,
+			"Entity" => $nit,
+			"User" => $this->certificador->llave,
+			"UserName" => $this->certificador->usuario,
+			"Data1" => $this->esAnulacion == "S" ? $this->certificador->vinculo_anulacion : $this->certificador->vinculo_firma,
+			"Data2" => base64_encode(html_entity_decode($this->xml->saveXML())),
+			"Data3" => $this->getPK()
+		);
+
+		$client = new SoapClient($link);
+		
+		$res = $client->RequestTransaction($datos);
+		$res = $res->RequestTransactionResult;
+
+		if (isset($res->Response->Result) || $res->Response->Code == 9) {
+			if ($res->Response->Code == 9) {
+
+				$client = new SoapClient($link);
+
+				$datos = array(
+					"Requestor" => $this->certificador->llave,
+					"Transaction" => $this->certificador->firma_alias,
+					"Country" => $this->empresa->pais_iso_dos,
+					"Entity" => $nit,
+					"User" => $this->certificador->llave,
+					"UserName" => $this->certificador->usuario,
+					"Data1" => $this->getPK(),
+					"Data2" => "",
+					"Data3" => ""
+				);
+
+				$res = $client->RequestTransaction($datos);
+				$res = $res->RequestTransactionResult;
+
+				if ($res->Response->Result == 1 && $this->esAnulacion === 'N') {
+					$data = simplexml_load_string(base64_decode($res->ResponseData->ResponseData2));
+					$data = json_decode(json_encode($data->doc));
+
+					$this->numero_factura = $data->serial;
+					$this->serie_factura = $data->batch;
+					$this->fel_uuid = $data->uuid;
+				} 
+			} else if ($res->Response->Result == 1) {
+				if ($this->esAnulacion === 'N') {
+					$this->numero_factura = $res->Response->Identifier->Serial;
+					$this->serie_factura = $res->Response->Identifier->Batch;
 					$this->fel_uuid = $res->Response->Identifier->DocumentGUID;	
 				} else {
 					$this->fel_uuid_anulacion = $this->fel_uuid;
@@ -960,9 +1033,39 @@ class Factura_model extends General_model
 			}
 		}
 		return ['documento' => null, 'tipo' => null];
-	}
+	}	
 
 	public function pdfCofidi()
+	{
+		$link = $this->certificador->vinculo_factura;
+		$nit = str_repeat("0", 12 - strlen($this->empresa->nit)) . $this->empresa->nit;
+		$datos = array(
+			"Requestor" => $this->certificador->llave,
+			"Transaction" => $this->certificador->vinculo_grafo,
+			"Country" => $this->empresa->pais_iso_dos,
+			"Entity" => $nit,
+			"User" => $this->certificador->llave,
+			"UserName" => $this->certificador->usuario,
+			"Data1" => $this->fel_uuid,
+			"Data2" => "",
+			"Data3" => "PDF"
+		);
+
+		$client = new SoapClient($link);
+		
+		$res = $client->RequestTransaction($datos);
+		$res = $res->RequestTransactionResult;
+		if ($res->Response->Result == 1) {
+			
+			return [
+				'documento' => $res->ResponseData->ResponseData3,
+				'tipo' => 'pdf'
+			];
+			
+		}
+	}
+
+	public function pdfCorposistemas()
 	{
 		$link = $this->certificador->vinculo_factura;
 		$nit = str_repeat("0", 12 - strlen($this->empresa->nit)) . $this->empresa->nit;
@@ -1170,14 +1273,14 @@ class Factura_model extends General_model
 		return $tmp->result();
 	}
 
-	function firmar()
+	function firmar($redondeaMontos = true)
 	{
 		$this->cargarFacturaSerie();
 		$this->cargarMoneda();
 		$this->cargarReceptor();
 		$this->cargarSede();
 		$this->cargarCertificadorFel();
-		$this->procesar_factura();
+		$this->procesar_factura($redondeaMontos);
 		
 		$funcion = $this->getCertificador()->metodo_factura;
 		$resp = $this->$funcion();

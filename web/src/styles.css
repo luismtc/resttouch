@@ -83,6 +83,14 @@ button .mat-icon {
     text-align: right;
 }
 
+.ctxt {
+    text-align: center;
+}
+
+.ltxt {
+    text-align: left;
+}
+
 .brdTSingleBDouble {
     border-top: solid 1px black;
     border-bottom: double 3px black;

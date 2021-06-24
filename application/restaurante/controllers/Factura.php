@@ -70,21 +70,28 @@ class Factura extends CI_Controller {
 
 							foreach ($cta->getDetalle(["impreso" => 1]) as $det) {
 								$det->bien_servicio = $det->articulo->bien_servicio;
-								$det->articulo = $det->articulo->articulo;								
+								$det->articulo = $det->articulo->articulo;
 								
 								$det->precio_unitario = (float)$det->precio;
+								$det->precio_unitario_ext = (float)$det->precio;
 								$det->total = ($det->precio_unitario * $det->cantidad) + (float)$det->monto_extra;
+								$det->total_ext = ($det->precio_unitario * $det->cantidad) + (float)$det->monto_extra;
 								// $det->total = ($det->precio_unitario * $det->cantidad);
 								$det->precio_unitario = round($det->total / $det->cantidad, 2);
+								$det->precio_unitario_ext = $det->total_ext / $det->cantidad;
 
 								$det->descuento = $pdesc > 0 ? ($det->total * $pdesc) : 0;
+								$det->descuento_ext = $pdesc > 0 ? ($det->total_ext * $pdesc) : 0;
 								
 								$total = $det->total - (float)$det->descuento;
+								$total_ext = $det->total_ext - (float)$det->descuento_ext;
 
 								if ($fac->exenta) {
 									$det->monto_base = $total;
+									$det->monto_base_ext = $total_ext;
 								} else {
 									$det->monto_base = $total / $pimpuesto;
+									$det->monto_base_ext = $total_ext / $pimpuesto;
 								}
 								$art = new Articulo_model($det->articulo);
 								$impuesto_especial = $art->getImpuestoEspecial();
@@ -92,8 +99,10 @@ class Factura extends CI_Controller {
 									$det->impuesto_especial = $impuesto_especial->impuesto_especial;
 									$det->porcentaje_impuesto_especial = $impuesto_especial->porcentaje;
 									$det->valor_impuesto_especial = $det->monto_base * ((float)$impuesto_especial->porcentaje / 100);
+									$det->valor_impuesto_especial_ext = $det->monto_base_ext * ((float)$impuesto_especial->porcentaje / 100);
 								}
 								$det->monto_iva = $total - $det->monto_base;	
+								$det->monto_iva_ext = $total_ext - $det->monto_base_ext;
 								$fac->setDetalle((array) $det);
 							}
 						}
@@ -120,20 +129,27 @@ class Factura extends CI_Controller {
 							}
 
 							$total = suma_field($prop, "propina_monto");
+							$total_ext = suma_field($prop, "propina_monto");
 							if ($total > 0) {
 								if ($fac->exenta) {
 									$monto_base = $total;
+									$monto_base_ext = $total_ext;
 								} else {
 									$monto_base = $total / $pimpuesto;
+									$monto_base_ext = $total_ext / $pimpuesto;
 								}
 
 								$fac->setDetalle([
 									"articulo" => $art->articulo,
 									"cantidad" => 1,
 									"precio_unitario" => $total,
+									"precio_unitario_ext" => $total_ext,
 									"total" => $total,
+									"total_ext" => $total_ext,
 									"monto_base" => $monto_base,
+									"monto_base_ext" => $monto_base_ext,
 									"monto_iva" => $total - $monto_base,
+									"monto_iva_ext" => $total_ext - $monto_base_ext,
 									"bien_servicio" => $art->bien_servicio,
 									"presentacion" => $art->presentacion
 								]);
@@ -141,12 +157,14 @@ class Factura extends CI_Controller {
 						}
 
 						if (!isset($req['sinfirma'])) {
+							$facturaRedondeaMontos = $this->Configuracion_model->buscar(["campo" => "RT_FACTURA_REDONDEA_MONTOS", "_uno" => true]);
+
 							$fac->cargarFacturaSerie();
 							$fac->cargarMoneda();
 							$fac->cargarReceptor();
 							$fac->cargarSede();
 							$fac->cargarCertificadorFel();
-							$fac->procesar_factura();
+							$fac->procesar_factura($facturaRedondeaMontos && (int)$facturaRedondeaMontos->valor === 0 ? false : true);
 							
 							$funcion = $fac->getCertificador()->metodo_factura;
 							$resp = $fac->$funcion();

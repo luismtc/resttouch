@@ -277,5 +277,33 @@ $config['menu'] = [
 				]
 			]
 		]
+	],
+	6 => [
+		'nombre' => 'CC',
+		'submodulo' => [
+			1 => [
+				'nombre' => 'Transacción',
+				'opciones' => [
+					1 => [
+						'nombre' => 'N/A',
+						'link' => '/admin/dashboard'
+					]
+				]
+			]
+		]
+	],
+	7 => [
+		'nombre' => 'GK',
+		'submodulo' => [
+			1 => [
+				'nombre' => 'Transacción',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Seguimiento',
+						'link' => '/gk/seguimiento'
+					]
+				]
+			]
+		]
 	]
 ];

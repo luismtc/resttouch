@@ -770,6 +770,44 @@ class Articulo_model extends General_model {
 
 	}
 
+	public function tiene_movimientos()
+	{
+		$ingresos = $this->db->select('COUNT(ingreso_detalle) AS conteo')->from('ingreso_detalle')->where('articulo', $this->_pk)->get()->row();
+		$egresos = $this->db->select('COUNT(egreso_detalle) AS conteo')->from('egreso_detalle')->where('articulo', $this->_pk)->get()->row();
+		$comandas = $this->db->select('COUNT(detalle_comanda) AS conteo')->from('detalle_comanda')->where('articulo', $this->_pk)->get()->row();
+		$facturas = $this->db
+			->select('COUNT(a.detalle_factura) AS conteo')
+			->from('detalle_factura a')
+			->join('factura b', 'b.factura = a.factura')
+			->where('b.fel_uuid_anulacion IS NULL')
+			->where('a.articulo', $this->_pk)
+			->get()->row();
+			
+		if((int)$ingresos->conteo > 0 || (int)$egresos->conteo > 0 || (int)$comandas->conteo > 0 || (int)$facturas->conteo > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public function get_sede_articulo($args = [])
+	{
+		if(!isset($args['_uno'])) {
+			$args['_uno'] = true;			
+		}
+		$art = $this->buscar($args);
+		if($art) {
+			return $this->db
+				->select('a.sede')
+				->from('categoria a')
+				->join('categoria_grupo b', 'a.categoria = b.categoria')
+				->join('articulo c', 'b.categoria_grupo = c.categoria_grupo')				
+				->where('c.articulo', $art->articulo)
+				->get()->row();
+		}
+
+		return null;
+	}
+
 }
 
 /* End of file Articulo_model.php */

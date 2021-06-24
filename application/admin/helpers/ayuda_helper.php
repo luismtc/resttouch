@@ -447,7 +447,7 @@ if (! function_exists("buscar_propiedad")) {
 		}
 
 		if($dato !== null) {
-			$dato = strtoupper(preg_replace("/[^0-9Kk?!]/",'', $dato));
+			$dato = strtoupper(preg_replace("/[^0-9KkCcFf?!]/",'', $dato));
 			if (validar_nit($dato)) {
 				return $dato;
 			}

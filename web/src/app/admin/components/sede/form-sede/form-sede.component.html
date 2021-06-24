@@ -10,8 +10,8 @@
 				<mat-label>Sede Padre</mat-label>
 				<mat-select name="sede" [(ngModel)]="sede.sede_padre">
 					<mat-option></mat-option>
-					<mat-option *ngFor="let sede of sedes" [value]="sede.sede">
-						{{ sede.nombre }}
+					<mat-option *ngFor="let s of sedes" [value]="s.sede" [disabled]="+s.sede === +this.sede.sede">
+						{{ s.nombre }}
 					</mat-option>
 				</mat-select>
 			</mat-form-field>

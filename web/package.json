@@ -47,7 +47,7 @@
     "moment": "^2.29.1",
     "ng2-charts": "^2.4.2",
     "ngx-barcodeput": "^1.1.0",
-    "ngx-socket-io": "^3.2.0",
+    "ngx-socket-io": "^3.3.1",
     "popper.js": "^1.16.1",
     "qs": "^6.9.6",
     "rxjs": "~6.6.3",

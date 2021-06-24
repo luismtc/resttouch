@@ -30,6 +30,7 @@ export class MesaComponent implements OnInit, AfterViewInit {
   @Input() isDisabled = false;
   // tslint:disable-next-line: no-output-on-prefix
   @Output() onClickMesa = new EventEmitter();
+  @Output() moviendoMesa = new EventEmitter();
   @ViewChild('divMesa') divMesa: ElementRef;
 
   public objMesa: HTMLElement;
@@ -76,6 +77,7 @@ export class MesaComponent implements OnInit, AfterViewInit {
   }
 
   dragEnded = (obj: any) => {
+    this.dontAllowDrag = true;
     // console.log('Drag ended = ', obj);
     const item = obj.source.element.nativeElement;
     // console.log('HTML ITEM: ', item);
@@ -105,10 +107,12 @@ export class MesaComponent implements OnInit, AfterViewInit {
       } else {
         this.snackBar.open(`ERROR:${res.mensaje}.`, 'Diseño de área', { duration: 3000 });
       }
+      this.dontAllowDrag = false;
+      this.moviendoMesa.emit(false);
     });
   }
 
-  moviendo = (obj: any) => {
-    // console.log(obj);
-  }
+  dragStarted = (obj: any) => {
+    this.moviendoMesa.emit(true);
+  }  
 }

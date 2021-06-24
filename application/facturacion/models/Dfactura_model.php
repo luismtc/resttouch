@@ -8,16 +8,22 @@ class Dfactura_model extends General_model {
 	public $articulo;
 	public $cantidad;
 	public $precio_unitario;
+	public $precio_unitario_ext = 0.0000000000;
 	//public $factura_
 	public $total;
+	public $total_ext = 0.0000000000;
 	public $monto_base;
-	public $monto_iva;	
+	public $monto_base_ext = 0.0000000000;
+	public $monto_iva;
+	public $monto_iva_ext = 0.0000000000;
 	public $bien_servicio = 'B';
 	public $descuento = 0;
+	public $descuento_ext = 0.0000000000;
 	public $presentacion;
 	public $impuesto_especial;
 	public $porcentaje_impuesto_especial = 0.00;
 	public $valor_impuesto_especial = 0.00;
+	public $valor_impuesto_especial_ext = 0.0000000000;
 	public $detalle_factura_id;
 	public $bodega;
 

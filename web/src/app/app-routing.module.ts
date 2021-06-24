@@ -8,6 +8,8 @@ const routes: Routes = [
   { path: 'wms', loadChildren:() => import('./wms/wms.module').then(m => m.WmsModule) },
   { path: 'ordcomp', loadChildren:() => import('./orden-compra/orden-compra.module').then(m => m.OrdenCompraModule) },
   { path: 'pos', loadChildren:() => import('./pos/pos.module').then(m => m.PosModule) },
+  { path: 'callcenter', loadChildren:() => import('./callcenter/callcenter.module').then(m => m.CallcenterModule) },
+  { path: 'gk', loadChildren:() => import('./ghost-kitchen/ghost-kitchen.module').then(m => m.GhostKitchenModule) },
   { path: '', redirectTo: 'admin/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
