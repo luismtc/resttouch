@@ -85,7 +85,7 @@
 							?>	
 						<?php endforeach ?>
 						<tr>
-							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoría</b></td>
+							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoría <?php echo $sub['descripcion'] ?></b></td>
 							<td style="border: 1px solid black;padding: 5px;" class="text-right">
 								<?php echo number_format($total, 2) ?>
 							</td>
@@ -93,7 +93,7 @@
 					<?php endif ?>
 				<?php endforeach ?>
 				<tr>
-					<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoría</b></td>
+					<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoría <?php echo $det->descripcion ?></b></td>
 					<td style="border: 1px solid black;padding: 5px;" class="text-right">
 						<?php echo number_format($totalCat, 2) ?>
 					</td>

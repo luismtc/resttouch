@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
-import { SedeService } from '../../../../admin/services/sede.service';
+import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service';
 import { Bodega } from '../../../interfaces/bodega';
 import { Articulo } from '../../../interfaces/articulo';
 import { BodegaService } from '../../../services/bodega.service';
 import { ArticuloService } from '../../../services/articulo.service';
-import { Sede } from '../../../../admin/interfaces/sede';
+import { UsuarioSede } from '../../../../admin/interfaces/acceso';
 import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 import { saveAs } from 'file-saver';
+import { GLOBAL } from '../../../../shared/global';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-kardex',
@@ -18,8 +20,10 @@ import { saveAs } from 'file-saver';
 export class KardexComponent implements OnInit {
 
   public bodegas: Bodega[] = [];
-  public sedes: Sede[] = [];
+  public sedes: UsuarioSede[] = [];
   public articulos: Articulo[] = [];
+  public filteredArticulos: Articulo[] = [];
+  public txtArticuloSelected: (Articulo | string) = undefined;
   public params: any = {};
   public titulo: string = "Kardex";
   public cargando = false;
@@ -30,7 +34,7 @@ export class KardexComponent implements OnInit {
   constructor(
   	private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
-    private sedeSrvc: SedeService,
+    private sedeSrvc: AccesoUsuarioService,
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService
   ) { }
@@ -39,10 +43,25 @@ export class KardexComponent implements OnInit {
   	this.getSede();
   	this.getBodega();
     this.getArticulo();
+    this.txtArticuloSelected = undefined;
+    this.params.fdel = moment().format(GLOBAL.dbDateFormat);
+    this.params.fal = moment().format(GLOBAL.dbDateFormat);
+  }
+
+  getDescripcionArticulo = (idarticulo: number) => this.articulos.find(art => +art.articulo === +idarticulo).descripcion || '';
+
+  filtrarArticulos = (value: (Articulo | string)) => {
+    if (value && (typeof value === 'string')) {
+      const filterValue = value.toLowerCase();
+      this.filteredArticulos =
+        this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredArticulos = this.articulos;
+    }
   }
 
   getSede = (params: any = {}) => {
-    this.sedeSrvc.get(params).subscribe(res => {
+    this.sedeSrvc.getSedes(params).subscribe(res => {
       this.sedes = res;
     });
   }
@@ -84,6 +103,8 @@ export class KardexComponent implements OnInit {
       }
     });
   }
+
+  onSedesSelected = (obj: any) => this.getBodega({sede: +this.params.sede});
 
   resetParams = () => {
     this.params = {};

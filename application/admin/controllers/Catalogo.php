@@ -45,7 +45,9 @@ class Catalogo extends CI_Controller {
 
 	public function get_bodega()
 	{
-		$_GET['sede'] = $this->data->sede;
+		if (!$this->input->get('sede')) {
+			$_GET['sede'] = $this->data->sede;
+		}
 		$this->output
 		->set_output(json_encode($this->Catalogo_model->getBodega($_GET)));
 	}

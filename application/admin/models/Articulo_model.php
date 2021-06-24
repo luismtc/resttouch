@@ -213,6 +213,7 @@ class Articulo_model extends General_model {
 
 	public function obtenerExistencia($args = [], $articulo, $receta = false)
 	{
+		$pres = $this->getPresentacionReporte();
 		if (isset($args['sede'])) {
 			$this->db->where('f.sede', $args['sede']);
 		}
@@ -229,13 +230,14 @@ class Articulo_model extends General_model {
 
 		$ingresos = $this->db
 						 ->select("
-						 	sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
+						 	round(sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2))/pr.cantidad, 2) as total")
 						 ->join("articulo b", "a.articulo = b.articulo")
 						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						 ->join("categoria d", "d.categoria = c.categoria")
 						 ->join("ingreso e", "e.ingreso = a.ingreso")
 						 ->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
 						 ->join("presentacion p", "a.presentacion = p.presentacion")
+						 ->join("presentacion pr", "b.presentacion_reporte = pr.presentacion")
 						 ->where("a.articulo", $articulo)
 						 ->get("ingreso_detalle a")
 						 ->row(); //total ingresos
@@ -253,13 +255,14 @@ class Articulo_model extends General_model {
 		}
 
 		$egresos = $this->db
-						->select("sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2)) as total")
+						->select("round(sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2))/pr.cantidad, 2) as total")
 						->join("articulo b", "a.articulo = b.articulo")
 						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
 						->join("categoria d", "d.categoria = c.categoria")
 						->join("egreso e", "e.egreso = a.egreso")
 						->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
 						->join("presentacion p", "a.presentacion = p.presentacion")
+						->join("presentacion pr", "b.presentacion_reporte = pr.presentacion")
 						->where("a.articulo", $articulo)
 						->get("egreso_detalle a")
 						->row();//total egresos wms
@@ -272,7 +275,7 @@ class Articulo_model extends General_model {
 		//}
 
 
-		return $ingresos->total - ($egresos->total + $venta);
+		return ($ingresos->total - ($egresos->total + $venta/$pres->cantidad)) * $pres->cantidad;
 	}
 
 	function getIngresoEgreso($articulo, $args=[])

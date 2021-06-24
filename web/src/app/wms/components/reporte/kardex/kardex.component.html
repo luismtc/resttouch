@@ -7,29 +7,31 @@
       <mat-card-content>
         <form novalidate>
           <mat-form-field class="fullWidth">
-              <mat-label>Articulo</mat-label>
-              <mat-select name="articulo" [(ngModel)]="params.articulo" required>
-                  <mat-option *ngFor="let art of articulos" [value]="art.articulo">
-                      {{art.descripcion}}
-                  </mat-option>
-              </mat-select>
-          </mat-form-field>
-          <mat-form-field class="fullWidth">
-              <mat-label>Bodega</mat-label>
-              <mat-select name="bodega" [(ngModel)]="params.bodega">
-                  <mat-option *ngFor="let bod of bodegas" [value]="bod.bodega">
-                      {{bod.descripcion}}
-                  </mat-option>
-              </mat-select>
-          </mat-form-field>
+            <mat-label>Artículo</mat-label>                    
+            <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
+            <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo">
+                <mat-option *ngFor="let a of filteredArticulos" [value]="a">
+                    {{a.descripcion}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+          
           <mat-form-field class="fullWidth">
               <mat-label>Sede</mat-label>
-              <mat-select name="sede" [(ngModel)]="params.sede">
+              <mat-select name="sede" multiple [(ngModel)]="params.sede" (selectionChange)="onSedesSelected($event)">
                   <mat-option *ngFor="let sede of sedes" [value]="sede.sede">
                       {{sede.nombre}}
                   </mat-option>
               </mat-select>
           </mat-form-field>
+          <mat-form-field class="fullWidth">
+            <mat-label>Bodega</mat-label>
+            <mat-select name="bodega" [(ngModel)]="params.bodega">
+                <mat-option *ngFor="let bod of bodegas" [value]="bod.bodega">
+                    {{bod.descripcion}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
           <mat-form-field class="fullWidth">            
             <input matInput type="date" placeholder="Del" [(ngModel)]="params.fdel" [ngModelOptions]="{standalone: true}" required>
           </mat-form-field>

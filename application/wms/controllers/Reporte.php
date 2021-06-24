@@ -557,14 +557,14 @@ class Reporte extends CI_Controller {
 								$totalCat += $row->total;
 							}
 							
-							$hoja->setCellValue("E{$fila}", "Total subcategoría");
+							$hoja->setCellValue("E{$fila}", "Total subcategoría {$sub['descripcion']}");
 							$hoja->setCellValue("F{$fila}", $total);
 							$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 							$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);
 							$fila++;
 						}
 					}
-					$hoja->setCellValue("E{$fila}", "Total Categoría");
+					$hoja->setCellValue("E{$fila}", "Total Categoría {$det->descripcion}");
 					$hoja->setCellValue("F{$fila}", $totalCat);
 					$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 					$hoja->getStyle("E{$fila}:F{$fila}")->getFont()->setBold(true);

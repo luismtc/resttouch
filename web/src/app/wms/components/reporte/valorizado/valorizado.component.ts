@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
-import { SedeService } from '../../../../admin/services/sede.service';
+import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service';
 import { Bodega } from '../../../interfaces/bodega';
 import { BodegaService } from '../../../services/bodega.service';
-import { Sede } from '../../../../admin/interfaces/sede';
+import { UsuarioSede } from '../../../../admin/interfaces/acceso';
 import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
 import { saveAs } from 'file-saver';
 import { GLOBAL } from '../../../../shared/global';
@@ -18,7 +18,7 @@ import * as moment from 'moment';
 export class ValorizadoComponent implements OnInit {
 
   public bodegas: Bodega[] = [];
-  public sedes: Sede[] = [];
+  public sedes: UsuarioSede[] = [];
   public params: any = {};
   public titulo: string = "Valorizado";
   public cargando = false;
@@ -29,7 +29,7 @@ export class ValorizadoComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
-    private sedeSrvc: SedeService,
+    private sedeSrvc: AccesoUsuarioService,
     private bodegaSrvc: BodegaService
   ) { }
 
@@ -40,7 +40,7 @@ export class ValorizadoComponent implements OnInit {
   }
 
   getSede = (params: any = {}) => {
-    this.sedeSrvc.get(params).subscribe(res => {
+    this.sedeSrvc.getSedes(params).subscribe(res => {
       this.sedes = res;
     });
   }
