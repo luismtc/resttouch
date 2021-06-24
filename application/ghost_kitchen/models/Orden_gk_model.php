@@ -29,7 +29,8 @@ class Orden_gk_model extends General_model
 			'Vendor_tercero_model',
 			'Sede_vendor_tercero_model',
 			'Articulo_model',
-			'Sede_model'
+			'Sede_model',
+			'Articulo_vendor_tercero_model'
 		]);
 	}
 
@@ -127,8 +128,13 @@ class Orden_gk_model extends General_model
 							$svt = $this->Sede_vendor_tercero_model->full_search(['vendor_tercero' => $vendor->vendor_tercero, '_uno' => true]);
 							if ($svt) {
 								$sede = $svt->sede;
-							} else if(!empty($obj->id_tercero)) {
-								$sede_articulo = $this->Articulo_model->get_sede_articulo(['TRIM(shopify_id)' => $obj->id_tercero]);
+								if(!empty($obj->id_tercero)) {
+									$this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
+								}
+							} else if(!empty($obj->id_tercero)) {								
+								$idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
+								$sede_articulo = $idArticulo > 0 ? $this->Articulo_model->get_sede_articulo(['articulo' => $idArticulo]) : null;
+
 								if($sede_articulo) 
 								{
 									$nsvt = new Sede_vendor_tercero_model();

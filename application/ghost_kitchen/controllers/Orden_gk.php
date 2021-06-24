@@ -14,7 +14,8 @@ class Orden_gk extends CI_Controller
             'Bitacora_model',
             'Accion_model',
             'Turno_model',
-            'Articulo_model'
+            'Articulo_model',
+            'Articulo_vendor_tercero_model'
         ]);
 
         $this->load->helper(['jwt', 'authorization']);
@@ -144,6 +145,9 @@ class Orden_gk extends CI_Controller
 
     private function genera_comanda_sede($sede, $ordenrt)
     {
+        $datos = new stdClass();
+        $datos->exito = false;
+
         $comandaHeader = [
             'usuario' => $sede->turno->mesero->usuario->usuario, 
             'sede' => $sede->sede, 
@@ -165,6 +169,29 @@ class Orden_gk extends CI_Controller
 
 
         $articulos = [];
+
+        foreach($ordenrt->articulos as $articulo)
+        {
+            if ((int)$articulo->atiende->sede === (int)$sede->sede) {
+                $idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($articulo->vendor->vendor_tercero, $articulo->id_tercero);
+                if($idArticulo > 0) {
+                    $articulos[] = [
+                        'articulo' => $idArticulo,
+                        'cantidad' => $articulo->cantidad,
+                        'precio' => $articulo->precio,
+                        'impreso' => 0,
+                        'total' => (float)$articulo->precio * (float)$articulo->cantidad
+                    ];
+                } else {
+
+                }
+            }
+        }
+
+
+
+
+        return $datos;
     }
 
     public function envio_vendors()
