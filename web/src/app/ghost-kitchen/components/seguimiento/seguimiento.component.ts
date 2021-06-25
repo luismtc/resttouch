@@ -171,7 +171,8 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
         this.snackBar.open(`Enviando orden #${ord.numero_orden} de ${ord.comanda_origen.descripcion}`, 'Envío a vendors', { duration: 5000 });
         this.ordengkSrvc.enviarVendors({ orden_gk: ord.orden_gk }).subscribe(resEnvio => {
           if (resEnvio.exito) {
-            this.snackBar.open(`Orden enviada con éxito a vendors.`, 'Envío a vendors', { duration: 7000 });
+            this.updateEstatusOrden(ord.orden_gk, resEnvio.estatus_orden_gk);
+            this.snackBar.open(`${resEnvio.mensaje}`, 'Envío a vendors', { duration: 7000 });
           } else {
             this.snackBar.open(`ERROR: ${resEnvio.mensaje}`, 'Envío a vendors', { duration: 10000 });
           }

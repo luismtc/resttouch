@@ -17,6 +17,7 @@ class Comanda_model extends General_Model
 	public $fhcreacion;
 	public $numero_pedido;
 	public $notas_generales;
+	public $orden_gk = null;
 
 	public function __construct($id = '')
 	{

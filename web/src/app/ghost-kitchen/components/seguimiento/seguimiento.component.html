@@ -66,7 +66,7 @@
                         <tbody>                        
                             <ng-container *ngFor="let det of element.orden_rt.articulos">
                                 <tr>
-                                    <td class="atiende-style">{{det.atiende.nombre}}</td>
+                                    <td class="atiende-style">{{det.atiende && det.atiende.nombre ? det.atiende.nombre : 'NO EXISTE' }}</td>
                                     <td class="ctxt num-width">{{det.cantidad}}</td>
                                     <td class="articulo-style">{{det.descripcion}}</td>
                                     <td class="rtxt num-width">{{det.precio | number:'1.2-2'}}</td>
