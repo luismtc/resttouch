@@ -228,6 +228,10 @@ class Orden_gk extends CI_Controller
                         return $datos;
                     }
                 }
+                if ($datos->exito) 
+                {
+                    
+                }
             } else {
                 $datos->exito = false;
                 $datos->mensaje = $cuenta->getMensaje();
