@@ -79,6 +79,10 @@ export class ValorizadoComponent implements OnInit {
     });
   }
 
+  onSedesSelected = (obj: any) => {
+    this.getBodega({sede: this.params.sede});
+  }
+
   resetParams = () => {
     this.params = {};
     this.cargando = false;

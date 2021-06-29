@@ -36,19 +36,18 @@ export class ReportePdfService {
   }
 
   getReporteExistencia(params: Object) {
-    this.httpOptions['params'] = params;
 
-    return this.http.get<string>(
+    return this.http.post<string>(
         `${GLOBAL.urlWms}/reporte/existencia`,
+        params,
         this.httpOptions
         ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
   getReporteValorizado(params: Object) {
-    this.httpOptions['params'] = params;
-
-    return this.http.get<string>(
+    return this.http.post<string>(
       `${GLOBAL.urlWms}/reporte/valorizado`,
+      params,
       this.httpOptions
       ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
@@ -69,10 +68,9 @@ export class ReportePdfService {
   }
 
   getReporteKardex(params: Object) {
-    this.httpOptions['params'] = params;
-
-    return this.http.get<string>(
+    return this.http.post<string>(
         `${GLOBAL.urlWms}/reporte/kardex`,
+        params,
         this.httpOptions
         ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }

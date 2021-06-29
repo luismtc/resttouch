@@ -116,11 +116,19 @@ class Articulo_model extends General_model {
 	public function getVentaReceta($art = null, $args = [])
 	{
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('f.sede', $args['sede']);
+			} else {
+				$this->db->where('f.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('a.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('a.bodega', $args['bodega']);
+			} else {
+				$this->db->where('a.bodega', $args['bodega']);
+			}
 		}
 
 		if (verDato($args, 'fecha')) {
@@ -145,7 +153,11 @@ class Articulo_model extends General_model {
 						 ->row();//total ventas comanda
 
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('f.sede', $args['sede']);
+			} else {
+				$this->db->where('f.sede', $args['sede']);
+			}
 		}
 
 		if (verDato($args, 'fecha')) {
@@ -153,7 +165,11 @@ class Articulo_model extends General_model {
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('a.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('a.bodega', $args['bodega']);
+			} else {
+				$this->db->where('a.bodega', $args['bodega']);
+			}
 		}
 
 		$facturas = $this->db
@@ -215,11 +231,19 @@ class Articulo_model extends General_model {
 	{
 		$pres = $this->getPresentacionReporte();
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('f.sede', $args['sede']);
+			} else {
+				$this->db->where('f.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('f.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('f.bodega', $args['bodega']);
+			} else {
+				$this->db->where('f.bodega', $args['bodega']);
+			}
 		} else {
 			$this->db->where("f.merma", 0);
 		}
@@ -243,11 +267,19 @@ class Articulo_model extends General_model {
 						 ->row(); //total ingresos
 
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('f.sede', $args['sede']);
+			} else {
+				$this->db->where('f.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('f.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('f.bodega', $args['bodega']);
+			} else {
+				$this->db->where('f.bodega', $args['bodega']);
+			}
 		}
 
 		if (verDato($args, 'fecha')) {
@@ -281,11 +313,19 @@ class Articulo_model extends General_model {
 	function getIngresoEgreso($articulo, $args=[])
 	{
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('f.sede', $args['sede']);
+			} else {
+				$this->db->where('f.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('f.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('f.bodega', $args['bodega']);
+			} else {
+				$this->db->where('f.bodega', $args['bodega']);
+			}
 		}
 
 		if ($args['tipo'] == 1) {
@@ -325,11 +365,19 @@ class Articulo_model extends General_model {
 	function getComandaFactura($articulo, $args = [])
 	{
 		if (isset($args['sede'])) {
-			$this->db->where('f.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('f.sede', $args['sede']);
+			} else {
+				$this->db->where('f.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('a.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('a.bodega', $args['bodega']);
+			} else {
+				$this->db->where('a.bodega', $args['bodega']);
+			}
 		}
 
 		if ($args['tipo'] == 1) {

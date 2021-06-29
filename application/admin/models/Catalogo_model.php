@@ -84,7 +84,11 @@ class Catalogo_model extends CI_Model {
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if ($key != '_uno') {
-					$this->db->where($key, $row);
+					if (is_array($row)) {
+						$this->db->where_in($key, $row);
+					} else {
+						$this->db->where($key, $row);
+					}
 				}
 			}
 		}
@@ -180,7 +184,11 @@ class Catalogo_model extends CI_Model {
 		}
 
 		if ($sede) {
-			$this->db->where('c.sede', $sede);
+			if (is_array($sede)) {
+				$this->db->where_in('c.sede', $sede);
+			} else {
+				$this->db->where('c.sede', $sede);
+			}
 		}
 
 		if ($ingreso) {
@@ -188,7 +196,7 @@ class Catalogo_model extends CI_Model {
 		}
 
 		$qry = $this->db
-		->select("a.*")
+		->select("a.*, c.sede")
 		->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
 		->join("categoria c", "c.categoria = b.categoria")
 		->order_by("a.articulo")

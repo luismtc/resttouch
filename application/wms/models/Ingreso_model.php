@@ -123,11 +123,20 @@ class Ingreso_model extends General_Model
 	public function get_ultima_compra($args = [])
 	{
 		if (isset($args['sede'])) {
-			$this->db->where('b.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('b.sede', $args['sede']);
+			} else {
+				$this->db->where('b.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('a.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('a.bodega', $args['bodega']);
+			} else {
+				$this->db->where('a.bodega', $args['bodega']);
+			}
+			
 		}
 
 		return $this->db
@@ -150,11 +159,20 @@ class Ingreso_model extends General_Model
 	public function get_costo_promedio($args = [])
 	{
 		if (isset($args['sede'])) {
-			$this->db->where('b.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('b.sede', $args['sede']);
+			} else {
+				$this->db->where('b.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['bodega'])) {
-			$this->db->where('a.bodega', $args['bodega']);
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('a.bodega', $args['bodega']);
+			} else {
+				$this->db->where('a.bodega', $args['bodega']);
+			}
+			
 		}
 
 		return $this->db
@@ -176,8 +194,14 @@ class Ingreso_model extends General_Model
 	public function get_articulos_sin_costo($args = [])
 	{
 		if (isset($args['sede'])) {
-			$this->db->where('c.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('c.sede', $args['sede']);
+			} else {
+				$this->db->where('c.sede', $args['sede']);
+			}
 		}
+
+		$bodega = implode(",", $args['bodega']);
 
 		return $this->db
 			->select("
@@ -185,7 +209,7 @@ class Ingreso_model extends General_Model
 						0 as precio_unitario")
 			->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
 			->join("categoria c", "c.categoria = b.categoria")
-			->join("bodega_articulo_costo d", "d.articulo = a.articulo and d.bodega = {$args['bodega']}", "left")
+			->join("bodega_articulo_costo d", "d.articulo = a.articulo and d.bodega in ({$bodega})", "left")
 			->where("a.mostrar_inventario", 1)
 			->where("d.bodega_articulo_costo is null")
 

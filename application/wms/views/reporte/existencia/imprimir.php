@@ -32,50 +32,56 @@
 
 			if ($reg): 
 		?>
-			<?php 
-				foreach ($reg as $key => $row): 
-					$art = new Articulo_model($row->articulo->articulo);
-					$rec = $art->getReceta();
-					$ingresos += $row->ingresos;
-					$egresos += $row->egresos;
-					$existencia    += $row->existencia;
-					$comandas      += $row->comandas;
-					$facturas      += $row->facturas;
-					$total_egreso += $row->total_egresos;
-			?>
-					<tr>
-						<td><?php echo (!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo)?></td>
-						<td>
-							<?php echo "{$row->articulo->articulo} ". $row->articulo->descripcion ?>
+			<?php foreach ($sedes as $sede): ?>
+				<?php $obj = new Sede_model($sede); ?>
+				<tr>
+					<td colspan="9" class="titulo"><?php echo $obj->nombre; ?></td>
+				</tr>
+				<?php 
+					foreach ($reg[$sede] as $key => $row): 
+						$art = new Articulo_model($row->articulo->articulo);
+						$rec = $art->getReceta();
+						$ingresos += $row->ingresos;
+						$egresos += $row->egresos;
+						$existencia    += $row->existencia;
+						$comandas      += $row->comandas;
+						$facturas      += $row->facturas;
+						$total_egreso += $row->total_egresos;
+				?>
+						<tr>
+							<td><?php echo (!empty($row->articulo->codigo) ? $row->articulo->codigo : $row->articulo->articulo)?></td>
+							<td>
+								<?php echo "{$row->articulo->articulo} ". $row->articulo->descripcion ?>
+									
+							</td>
+							<td>
+								<?php echo $row->presentacion->descripcion ?>
+							</td>
+							<td class="text-right">
+								<?php echo number_format($row->ingresos / $row->presentacion->cantidad,2)?>
+							</td>
+							<td class="text-right">
+								<?php echo number_format($row->egresos / $row->presentacion->cantidad,2)?>
+							</td>
+							<td class="text-right">
+								<?php echo number_format($row->comandas / $row->presentacion->cantidad,2)?>
 								
-						</td>
-						<td>
-							<?php echo $row->presentacion->descripcion ?>
-						</td>
-						<td class="text-right">
-							<?php echo number_format($row->ingresos / $row->presentacion->cantidad,2)?>
-						</td>
-						<td class="text-right">
-							<?php echo number_format($row->egresos / $row->presentacion->cantidad,2)?>
-						</td>
-						<td class="text-right">
-							<?php echo number_format($row->comandas / $row->presentacion->cantidad,2)?>
-							
-						</td>
-						<td class="text-right">
-							<?php echo number_format($row->facturas / $row->presentacion->cantidad,2)?>
-								
-						</td>
-						<td class="text-right">
-							<?php echo number_format($row->total_egresos / $row->presentacion->cantidad,2)?>
-						</td>
-						<td class="text-right">
-						<?php 
-							echo number_format($row->existencia / $row->presentacion->cantidad,2);
-						?>	
-						</td>
-					</tr>
-					
+							</td>
+							<td class="text-right">
+								<?php echo number_format($row->facturas / $row->presentacion->cantidad,2)?>
+									
+							</td>
+							<td class="text-right">
+								<?php echo number_format($row->total_egresos / $row->presentacion->cantidad,2)?>
+							</td>
+							<td class="text-right">
+							<?php 
+								echo number_format($row->existencia / $row->presentacion->cantidad,2);
+							?>	
+							</td>
+						</tr>
+						
+				<?php endforeach ?>
 			<?php endforeach ?>
 		<?php endif ?>
 		

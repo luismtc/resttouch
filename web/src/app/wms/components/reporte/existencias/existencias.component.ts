@@ -37,7 +37,7 @@ export class ExistenciasComponent implements OnInit {
   ngOnInit() {
     this.params.fecha = moment().format(GLOBAL.dbDateFormat);
   	this.getSede();
-  	this.getBodega();
+  	//this.getBodega();
   }
 
   getSede = (params: any = {}) => {
@@ -78,6 +78,10 @@ export class ExistenciasComponent implements OnInit {
         this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
       }
     });
+  }
+
+  onSedesSelected = (obj: any) => {
+    this.getBodega({sede: this.params.sede});
   }
 
   resetParams = () => {

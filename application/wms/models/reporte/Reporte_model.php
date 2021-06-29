@@ -53,7 +53,12 @@ class Reporte_model extends CI_Model {
 		} 
 
 		if (isset($args['bodega']) && !empty($args['bodega'])) {
-			$where .= " and f.bodega = {$args['bodega']}";
+			if (is_array($args['bodega'])) {
+				$bod = implode(",", $args['bodega']);
+				$where .= " and f.bodega in ({$bod})";
+			} else {
+				$where .= " and f.bodega = {$args['bodega']}";
+			}
 		}
 
 		$this->sqlIngreso = <<<EOT
@@ -105,7 +110,12 @@ EOT;
 		}
 
 		if (isset($args['bodega']) && !empty($args['bodega'])) {
-			$where .= " and f.bodega = {$args['bodega']}";
+			if (is_array($args['bodega'])) {
+				$bod = implode(",", $args['bodega']);
+				$where .= " and f.bodega in ({$bod})";
+			} else {
+				$where .= " and f.bodega = {$args['bodega']}";
+			}
 		}
 
 		$this->sqlEgreso = <<<EOT
@@ -157,7 +167,12 @@ EOT;
 		}
 
 		if (isset($args['bodega']) && !empty($args['bodega'])) {
-			$where .= " and a.bodega = {$args['bodega']}";
+			if (is_array($args['bodega'])) {
+				$bod = implode(",", $args['bodega']);
+				$where .= " and a.bodega in ({$bod})";
+			} else {
+				$where .= " and a.bodega = {$args['bodega']}";
+			}
 		}
 
 		$this->sqlComanda = <<<EOT
@@ -209,7 +224,12 @@ EOT;
 		}
 
 		if (isset($args['bodega']) && !empty($args['bodega'])) {
-			$where .= " and a.bodega = {$args['bodega']}";
+			if (is_array($args['bodega'])) {
+				$bod = implode(",", $args['bodega']);
+				$where .= " and a.bodega in ({$bod})";
+			} else {
+				$where .= " and a.bodega = {$args['bodega']}";
+			}
 		}
 
 
@@ -237,7 +257,11 @@ EOT;
 		$this->consultaComandas($args);
 		$this->consultaFacturas($args);
 		if (isset($args['sede'])) {
-			$this->db->where('d.sede', $args['sede']);
+			if (is_array($args['sede'])) {
+				$this->db->where_in('d.sede', $args['sede']);
+			} else {
+				$this->db->where('d.sede', $args['sede']);
+			}
 		}
 
 		if (isset($args['articulo'])) {

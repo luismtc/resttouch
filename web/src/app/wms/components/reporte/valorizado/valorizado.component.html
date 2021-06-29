@@ -7,21 +7,23 @@
         <mat-card-content>
           <form #frmRptValorizado="ngForm" novalidate>
             <mat-form-field class="fullWidth">
+              <mat-label>Sede</mat-label>
+              <mat-select name="sede" multiple [(ngModel)]="params.sede" (selectionChange)="onSedesSelected($event)">
+                  <mat-option *ngFor="let sede of sedes" [value]="sede.sede.sede" >
+                      {{sede.sede.nombre}}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field> 
+            
+            <mat-form-field class="fullWidth">
                 <mat-label>Bodega</mat-label>
-                <mat-select name="bodega" [(ngModel)]="params.bodega">
+                <mat-select name="bodega" multiple [(ngModel)]="params.bodega">
                     <mat-option *ngFor="let bod of bodegas" [value]="bod.bodega">
                         {{bod.descripcion}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-            <mat-form-field class="fullWidth">
-                <mat-label>Sede</mat-label>
-                <mat-select name="sede" [(ngModel)]="params.sede">
-                    <mat-option *ngFor="let sede of sedes" [value]="sede.sede">
-                        {{sede.nombre}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+            
             <mat-form-field class="fullWidth">            
               <input matInput type="date" placeholder="Al" [(ngModel)]="params.fecha" [ngModelOptions]="{standalone: true}" required>
             </mat-form-field>

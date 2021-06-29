@@ -41,7 +41,7 @@ export class KardexComponent implements OnInit {
 
   ngOnInit() {
   	this.getSede();
-  	this.getBodega();
+  	//this.getBodega();
     this.getArticulo();
     this.txtArticuloSelected = undefined;
     this.params.fdel = moment().format(GLOBAL.dbDateFormat);
@@ -112,7 +112,9 @@ export class KardexComponent implements OnInit {
     });
   }
 
-  onSedesSelected = (obj: any) => this.getBodega({sede: +this.params.sede});
+  onSedesSelected = (obj: any) => {
+    this.getBodega({sede: this.params.sede});
+  }
 
   resetParams = () => {
     this.params = {};

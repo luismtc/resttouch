@@ -14,7 +14,7 @@
 					<td><?php echo $empresa->nombre ?></td>
 				</tr>
 				<tr>
-					<td><?php echo $nsede->nombre ?></td>
+					<td><?php echo $nsede ?></td>
 				</tr>
 			</table>
 		</div>
@@ -45,60 +45,67 @@
 		<?php $granTotal = 0; ?>
 
 		<tbody>
-			<?php foreach ($detalle as $det): ?>
-				<?php $totalCat = 0; ?>
-				<?php if (count($det->subcategoria) > 0): ?>
-				<tr>
-					<td style="border: 1px solid black;padding: 5px;"><b><?php echo $det->descripcion ?></b></td>
-					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-					<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-				</tr>
-				<?php foreach ($det->subcategoria as $sub): ?>
-					<?php if (count($sub['articulos']) > 0): ?>
-						<tr>
-							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;"><b><?php echo $sub['descripcion'] ?></b></td>
-							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-							<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-						</tr>
-						<?php $total = 0 ?>
-						<?php foreach ($sub['articulos'] as $row): ?>
+			<?php foreach ($bodega as $bodegas): ?>
+				<?php $bod = new Bodega_model($bodegas); ?>
+					<tr>
+						<td class="titulo" colspan="6"><?php echo $bod->descripcion ?></td>
+					</tr>
+			
+				<?php foreach ($detalle[$bodegas] as $det): ?>
+					<?php $totalCat = 0; ?>
+					<?php if (count($det->subcategoria) > 0): ?>
+					<tr>
+						<td style="border: 1px solid black;padding: 5px;"><b><?php echo $det->descripcion ?></b></td>
+						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+					</tr>
+					<?php foreach ($det->subcategoria as $sub): ?>
+						<?php if (count($sub['articulos']) > 0): ?>
 							<tr>
-								<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
-								<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->presentacion ?></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo number_format($row->cantidad, 2) ?></td>
+								<td style="border: 1px solid black;padding: 5px; margin-left: 5px;"><b><?php echo $sub['descripcion'] ?></b></td>
+								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
+							</tr>
+							<?php $total = 0 ?>
+							<?php foreach ($sub['articulos'] as $row): ?>
+								<tr>
+									<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
+									<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->presentacion ?></td>
+									<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo number_format($row->cantidad, 2) ?></td>
+									<td style="border: 1px solid black;padding: 5px;" class="text-right">
+										<?php echo $row->ultima_compra ?></td>
+									<td style="border: 1px solid black;padding: 5px;" class="text-right">
+										<?php echo number_format($row->precio_unitario, 2) ?></td>
+									<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo number_format($row->total, 2) ?></td>
+								</tr>	
+								<?php 
+									$total += $row->total;
+									$granTotal += $row->total;
+									$totalCat += $row->total;
+								?>	
+							<?php endforeach ?>
+							<tr>
+								<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoría <?php echo $sub['descripcion'] ?></b></td>
 								<td style="border: 1px solid black;padding: 5px;" class="text-right">
-									<?php echo $row->ultima_compra ?></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right">
-									<?php echo number_format($row->precio_unitario, 2) ?></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo number_format($row->total, 2) ?></td>
-							</tr>	
-							<?php 
-								$total += $row->total;
-								$granTotal += $row->total;
-								$totalCat += $row->total;
-							?>	
-						<?php endforeach ?>
-						<tr>
-							<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoría <?php echo $sub['descripcion'] ?></b></td>
-							<td style="border: 1px solid black;padding: 5px;" class="text-right">
-								<?php echo number_format($total, 2) ?>
-							</td>
-						</tr>
+									<?php echo number_format($total, 2) ?>
+								</td>
+							</tr>
+						<?php endif ?>
+					<?php endforeach ?>
+					<tr>
+						<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoría <?php echo $det->descripcion ?></b></td>
+						<td style="border: 1px solid black;padding: 5px;" class="text-right">
+							<?php echo number_format($totalCat, 2) ?>
+						</td>
+					</tr>
 					<?php endif ?>
 				<?php endforeach ?>
-				<tr>
-					<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoría <?php echo $det->descripcion ?></b></td>
-					<td style="border: 1px solid black;padding: 5px;" class="text-right">
-						<?php echo number_format($totalCat, 2) ?>
-					</td>
-				</tr>
-				<?php endif ?>
 			<?php endforeach ?>
 		</tbody>
 		<tfoot>
