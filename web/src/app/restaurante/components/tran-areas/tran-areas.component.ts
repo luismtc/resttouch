@@ -336,6 +336,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       this.checkEstatusMesa();
       if (res) {
         this.loadAreas(true, { mesaenuso: res });
+      } else {
+        this.cargando = false;
       }
     });
   }

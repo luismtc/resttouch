@@ -30,7 +30,8 @@ class Orden_gk_model extends General_model
 			'Sede_vendor_tercero_model',
 			'Articulo_model',
 			'Sede_model',
-			'Articulo_vendor_tercero_model'
+			'Articulo_vendor_tercero_model',
+			'Forma_pago_comanda_origen_model'
 		]);
 	}
 
@@ -53,7 +54,7 @@ class Orden_gk_model extends General_model
 	{
 		$ordenrt = new stdClass();
 		$ordenrt->numero_orden = $this->numero_orden;
-		$ordenrt->total_orden = 0.00;		
+		$ordenrt->total_orden = 0.00;
 		$ordenrt->comanda_origen = $this->comanda_origen;
 		$orden_original = json_decode($this->raw_orden);
 
@@ -85,6 +86,27 @@ class Orden_gk_model extends General_model
 			'email' => $this->get_ruta(20)
 		];
 
+		$rutaFormasDePago = $this->get_ruta(21);
+		$ordenrt->formas_pago = [];
+		if ($rutaFormasDePago) {
+			$formasDePago = get_dato_from_paths($orden_original, $rutaFormasDePago);
+			if ($formasDePago) {
+				if (is_array($formasDePago)) {
+					foreach ($formasDePago as $fdp) {
+						$fp = $this->Forma_pago_comanda_origen_model->buscar_agregar(['comanda_origen' => $ordenrt->comanda_origen, 'codigo' => trim($fdp), '_uno' => true]);
+						if ($fp && $fp->forma_pago) {
+							$ordenrt->formas_pago[] = $fp->forma_pago;
+						}
+					}
+				} else if (is_string($formasDePago)) {
+					$fp = $this->Forma_pago_comanda_origen_model->buscar_agregar(['comanda_origen' => $ordenrt->comanda_origen, 'codigo' => trim($formasDePago), '_uno' => true]);
+					if ($fp && $fp->forma_pago) {
+						$ordenrt->formas_pago[] = $fp->forma_pago;
+					}
+				}
+			}
+		}
+
 		$ordenrt->datos_factura = new stdClass();
 		$ordenrt->datos_factura->nit = $rutasFacturacion['nit'] ? get_dato_from_paths($orden_original, $rutasFacturacion['nit']) : 'CF';
 		if (!$ordenrt->datos_factura->nit) {
@@ -103,8 +125,7 @@ class Orden_gk_model extends General_model
 		$ordenrt->articulos = [];
 		$rutaArticulos = $this->get_ruta(2);
 		if ($rutaArticulos) {
-			$listaArticulos = get_dato_from_paths($orden_original, $rutaArticulos);
-			$obj = new stdClass();
+			$listaArticulos = get_dato_from_paths($orden_original, $rutaArticulos);			
 			if ($listaArticulos) {
 				$rutas = [
 					'id_tercero' => $this->get_ruta(3),
@@ -116,27 +137,26 @@ class Orden_gk_model extends General_model
 				];
 				$rutas = (object)$rutas;
 				foreach ($listaArticulos as $art) {
+					$obj = new stdClass();
 					$nombreVendor = $rutas->vendor ? get_dato_from_paths($art, $rutas->vendor) : null;
 					$vendor = null;
 					$sede = null;
 					$obj->id_tercero = $rutas->id_tercero ? get_dato_from_paths($art, $rutas->id_tercero) : null;
 
-					if ($nombreVendor)
-					{
+					if ($nombreVendor) {
 						$vendor = $this->Vendor_tercero_model->buscar_agregar($nombreVendor, $this->comanda_origen);
 						if ($vendor) {
 							$svt = $this->Sede_vendor_tercero_model->full_search(['vendor_tercero' => $vendor->vendor_tercero, '_uno' => true]);
 							if ($svt) {
 								$sede = $svt->sede;
-								if(!empty($obj->id_tercero)) {
+								if (!empty($obj->id_tercero)) {
 									$this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
 								}
-							} else if(!empty($obj->id_tercero)) {								
+							} else if (!empty($obj->id_tercero)) {
 								$idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
 								$sede_articulo = $idArticulo > 0 ? $this->Articulo_model->get_sede_articulo(['articulo' => $idArticulo]) : null;
 
-								if($sede_articulo) 
-								{
+								if ($sede_articulo) {
 									$nsvt = new Sede_vendor_tercero_model();
 									$nsvt->sede = $sede_articulo->sede;
 									$nsvt->vendor_tercero = $vendor->vendor_tercero;
@@ -155,11 +175,9 @@ class Orden_gk_model extends General_model
 					$obj->descuento = $rutas->descuento ? get_dato_from_paths($art, $rutas->descuento) : null;
 					$obj->total = 0.00;
 
-					if ($obj->precio && $obj->cantidad)
-					{
+					if ($obj->precio && $obj->cantidad) {
 						$obj->total = (float)$obj->precio * (float)$obj->cantidad;
-						if ($obj->descuento)
-						{
+						if ($obj->descuento) {
 							$obj->total -= (float)$obj->descuento;
 						}
 					}
@@ -170,7 +188,7 @@ class Orden_gk_model extends General_model
 					$obj = null;
 				}
 			}
-		}		
+		}
 
 		return $ordenrt;
 	}
