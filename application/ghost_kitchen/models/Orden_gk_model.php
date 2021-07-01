@@ -55,8 +55,11 @@ class Orden_gk_model extends General_model
 		$ordenrt = new stdClass();
 		$ordenrt->numero_orden = $this->numero_orden;
 		$ordenrt->total_orden = 0.00;
+		$ordenrt->total_descuento = 0.00;
 		$ordenrt->comanda_origen = $this->comanda_origen;
 		$orden_original = json_decode($this->raw_orden);
+		$ordenrt->completa = true;
+		$ordenrt->pendiente = '';
 
 		$rutasEntrega = [
 			'nombre' => $this->get_ruta(9),
@@ -107,11 +110,23 @@ class Orden_gk_model extends General_model
 			}
 		}
 
+		if (count($ordenrt->formas_pago) === 0) {
+			$ordenrt->completa = false;
+			if (trim($ordenrt->pendiente) !== '') {
+				$ordenrt->pendiente .= ' ';
+			}
+			$ordenrt->pendiente .= 'RT no encontró una forma de pago que corresponda al origen de la orden.';
+		}
+
 		$ordenrt->datos_factura = new stdClass();
 		$ordenrt->datos_factura->nit = $rutasFacturacion['nit'] ? get_dato_from_paths($orden_original, $rutasFacturacion['nit']) : 'CF';
 		if (!$ordenrt->datos_factura->nit) {
 			$ordenrt->datos_factura->nit = 'CF';
+		} else {
+			$ordenrt->datos_factura->nit = strtoupper(preg_replace("/[^0-9KkCcFf?!]/", '', $ordenrt->datos_factura->nit));
 		}
+
+
 		$ordenrt->datos_factura->nombre = $rutasFacturacion['nombre'] ? get_dato_from_paths($orden_original, $rutasFacturacion['nombre']) : 'Consumidor Final';
 		if (!$ordenrt->datos_factura->nombre) {
 			$ordenrt->datos_factura->nombre = 'Consumidor Final';
@@ -125,7 +140,7 @@ class Orden_gk_model extends General_model
 		$ordenrt->articulos = [];
 		$rutaArticulos = $this->get_ruta(2);
 		if ($rutaArticulos) {
-			$listaArticulos = get_dato_from_paths($orden_original, $rutaArticulos);			
+			$listaArticulos = get_dato_from_paths($orden_original, $rutaArticulos);
 			if ($listaArticulos) {
 				$rutas = [
 					'id_tercero' => $this->get_ruta(3),
@@ -136,6 +151,7 @@ class Orden_gk_model extends General_model
 					'descuento' => $this->get_ruta(8),
 				];
 				$rutas = (object)$rutas;
+				$sedesNoEncontradas = [];
 				foreach ($listaArticulos as $art) {
 					$obj = new stdClass();
 					$nombreVendor = $rutas->vendor ? get_dato_from_paths($art, $rutas->vendor) : null;
@@ -167,12 +183,19 @@ class Orden_gk_model extends General_model
 						}
 					}
 
+					if (!$sede) {
+						$nombreVendor = !empty($nombreVendor) ? trim($nombreVendor) : 'Artículo sin vendor';
+						if (!in_array($nombreVendor, $sedesNoEncontradas)) {
+							$sedesNoEncontradas[] = $nombreVendor;
+						}
+					}
+
 					$obj->descripcion = $rutas->descripcion ? get_dato_from_paths($art, $rutas->descripcion) : null;
 					$obj->vendor = $vendor;
 					$obj->atiende = $sede;
 					$obj->precio = $rutas->precio ? get_dato_from_paths($art, $rutas->precio) : null;
 					$obj->cantidad = $rutas->cantidad ? get_dato_from_paths($art, $rutas->cantidad) : null;
-					$obj->descuento = $rutas->descuento ? get_dato_from_paths($art, $rutas->descuento) : null;
+					$obj->descuento = $rutas->descuento ? get_dato_from_paths($art, $rutas->descuento) : 0.00;
 					$obj->total = 0.00;
 
 					if ($obj->precio && $obj->cantidad) {
@@ -182,14 +205,45 @@ class Orden_gk_model extends General_model
 						}
 					}
 
+					if ($obj->descuento && (float)$obj->descuento > 0) {
+						$ordenrt->total_descuento += (float)$obj->descuento;
+					}
+
 					$ordenrt->total_orden += $obj->total;
 
 					$ordenrt->articulos[] = $obj;
 					$obj = null;
 				}
+
+				if (count($sedesNoEncontradas) > 0) {
+					$ordenrt->completa = false;
+					if (trim($ordenrt->pendiente) !== '') {
+						$ordenrt->pendiente .= ' ';
+					}
+					$ordenrt->pendiente .= 'Rest-Touch Pro no encontró una sede que corresponda a: '.implode(', ', $sedesNoEncontradas).'.';
+				}
 			}
 		}
 
 		return $ordenrt;
+	}
+
+	public function actualiza_estatus($estatus, $orden_gk = null)
+	{
+		if (!$orden_gk)
+		{
+			$orden_gk = $this->getPK();
+		}
+
+		$cantidadSedes = $this->db->select('COUNT(DISTINCT(sede)) AS cantidad')->from('estatus_orden_gk_sede')->where('orden_gk', $orden_gk)->get()->row();
+		$cantidadSedesEstatus = $this->db->select('COUNT(DISTINCT(sede)) AS cantidad')->from('estatus_orden_gk_sede')->where('orden_gk', $orden_gk)->where('estatus_orden_gk', $estatus)->get()->row();
+
+		if((int)$cantidadSedes->cantidad === (int)$cantidadSedesEstatus->cantidad)
+		{
+			$ord = new Orden_gk_model($orden_gk);
+			$ord->guardar(['estatus_orden_gk' => $estatus]);
+			return (int)$estatus;
+		}
+		return null;
 	}
 }

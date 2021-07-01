@@ -39,4 +39,10 @@ export class OrdenGkService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
   }
 
+  cambiarEstatus(params: any): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlGhostKitchen}/${this.moduleUrl}/cambiar_estatus`, params
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }

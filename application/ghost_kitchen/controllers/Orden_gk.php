@@ -20,7 +20,13 @@ class Orden_gk extends CI_Controller
             'Cuenta_model',
             'Dcomanda_model',
             'Dcuenta_model',
-            'Receta_model'
+            'Receta_model',
+            'Cliente_model',
+            'Factura_model',
+            'Dfactura_model',
+            'Configuracion_model',
+            'Fpago_model',
+            'Estatus_orden_gk_sede_model'
         ]);
 
         $this->load->helper(['jwt', 'authorization']);
@@ -146,6 +152,108 @@ class Orden_gk extends CI_Controller
         return $datos;
     }
 
+    private function get_fpago_descuento()
+    {
+        $fp_descuento = $this->Fpago_model->buscar([
+            'UPPER(TRIM(descripcion))' => 'DESCUENTO',
+            'activo' => 1,
+            'descuento' => 1,
+            '_uno' => true
+        ]);
+
+        if (!$fp_descuento) {
+            $fp_descuento = new Factura_model();
+            $fp_descuento->descripcion = 'Descuento';
+            $fp_descuento->activo = 1;
+            $fp_descuento->descuento = 1;
+            $fp_descuento->pedirautorizacion = 1;
+            $fp_descuento->guardar();
+        }
+
+        return $fp_descuento;
+    }
+
+    private function buscar_agregar_cliente($datosCliente)
+    {
+        $conf_corpo = $this->Configuracion_model->buscar();
+        $cliente = $this->Cliente_model->buscar(['TRIM(nit)' => $datosCliente->nit, '_uno' => true]);
+        if ($cliente) {
+            if (strtoupper(trim($cliente->nit)) !== 'CF' || get_configuracion($conf_corpo, 'RT_ACTUALIZA_CORREO_CF', 3)) {
+                $encontrado = new Cliente_model($cliente->cliente);
+                $encontrado->guardar([
+                    'direccion' => $datosCliente->direccion,
+                    'correo' => $datosCliente->email
+                ]);
+                $cliente = $encontrado;
+            }
+        } else {
+            $cliente = new Cliente_model();
+            $cliente->nit = $datosCliente->nit;
+            $cliente->nombre = $datosCliente->nombre;
+            $cliente->direccion = $datosCliente->direccion;
+            $cliente->correo = $datosCliente->email;
+            $cliente->guardar();
+        }
+
+        return $cliente;
+    }
+
+    private function genera_factura_comanda($sede, $ordenrt, $cuenta, $descuentoArticulo)
+    {
+        $cliente = $this->buscar_agregar_cliente($ordenrt->datos_factura);
+
+        $facturaHeader = [
+            'usuario' => $sede->turno->mesero->usuario->usuario,
+            'factura_serie' => 1,
+            'sede' => $sede->sede,
+            'certificador_fel' => $sede->certificador_fel,
+            'cliente' => $cliente->cliente,
+            'fecha_factura' => date('Y-m-d'),
+            'moneda' => 1,
+            'correo_receptor' => $ordenrt->datos_factura->email
+        ];
+
+        $factura = new Factura_model();
+        $factura->guardar($facturaHeader);
+        $factura->cargarEmpresa();
+        $pimpuesto = $factura->empresa->porcentaje_iva + 1;
+        foreach ($cuenta->getDetalle() as $det) {
+            $det->bien_servicio = $det->articulo->bien_servicio;
+            $det->articulo = $det->articulo->articulo;
+            $det->total_ext = $det->total;
+
+            if (count($descuentoArticulo) > 0) {
+                $det->descuento = 0;
+                $det->descuento_ext = 0;
+                foreach ($descuentoArticulo as $desc) {
+                    if ($det->detalle_comanda == $desc["detalle"]) {
+                        $det->descuento += $desc["descuento"];
+                        $det->descuento_ext += $desc["descuento"];
+                    }
+                }
+            } else {
+                $det->descuento = 0;
+                $det->descuento_ext = 0;
+            }
+
+            $det->precio_unitario = $det->precio;
+            $det->precio_unitario_ext = $det->precio;
+            $total = $det->total - $det->descuento;
+            $total_ext = $det->total_ext - $det->descuento_ext;
+            if ($factura->exenta) {
+                $det->monto_base = $total;
+                $det->monto_base_ext = $total_ext;
+            } else {
+                $det->monto_base = $total / $pimpuesto;
+                $det->monto_base_ext = $total_ext / $pimpuesto;
+            }
+
+            $det->monto_iva = $total - $det->monto_base;
+            $det->monto_iva_ext = $total_ext - $det->monto_base_ext;
+            $factura->setDetalle((array) $det);
+        }
+    }
+
     private function genera_comanda_sede($sede, $ordenrt)
     {
         $datos = new stdClass();
@@ -174,9 +282,14 @@ class Orden_gk extends CI_Controller
 
         $articulos = [];
         $datos->articulosFaltantes = '';
+        $totales = new stdClass();
+        $totales->comanda = 0.00;
+        $totales->descuento = 0.00;
         foreach ($ordenrt->articulos as $articulo) {
             if ((int)$articulo->atiende->sede === (int)$sede->sede) {
                 $idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($articulo->vendor->vendor_tercero, $articulo->id_tercero);
+                $totales->comanda += ((float)$articulo->precio * (float)$articulo->cantidad);
+                $totales->descuento += (float)$articulo->descuento;
                 if ($idArticulo > 0) {
                     $art = new Articulo_model($idArticulo);
                     $articulos[] = [
@@ -186,7 +299,8 @@ class Orden_gk extends CI_Controller
                         'impreso' => 0,
                         'total' => (float)$articulo->precio * (float)$articulo->cantidad,
                         'notas' => '',
-                        'bodega' => $art->getBodega()
+                        'bodega' => $art->getBodega(),
+                        'descuento' => (float)$articulo->descuento
                     ];
                 } else {
                     if ($datos->articulosFaltantes !== '') {
@@ -216,9 +330,16 @@ class Orden_gk extends CI_Controller
             $cuentaHeader['comanda'] = $comanda->comanda;
             $cuenta = new Cuenta_model();
             if ($cuenta->guardar($cuentaHeader)) {
+                $descuentoArticulo = [];
                 foreach ($articulos as $articulo) {
                     $det = $comanda->guardarDetalle($articulo);
                     if ($det) {
+                        if ($articulo['descuento'] > 0) {
+                            $descuentoArticulo[] = [
+                                'detalle' => $det->detalle_comanda,
+                                'descuento' => $articulo['descuento']
+                            ];
+                        }
                         $cuenta->guardarDetalle(['detalle_comanda' => $det->detalle_comanda]);
                         $datos->exito = true;
                         $datos->mensaje = "Se generó la comanda #{$comanda->comanda} de {$sede->nombre}.";
@@ -228,9 +349,21 @@ class Orden_gk extends CI_Controller
                         return $datos;
                     }
                 }
-                if ($datos->exito) 
-                {
-                    
+                if ($datos->exito) {
+                    if (count($ordenrt->formas_pago) === 1) {
+                        $pago = ['forma_pago' => $ordenrt->formas_pago[0]->forma_pago, 'monto' => ($totales->comanda - $totales->descuento)];
+                        if ($cuenta->cobrar((object)$pago)) {
+                            if ($ordenrt->total_descuento > 0) {
+                                $fp_descuento = $this->get_fpago_descuento();
+                                if ($fp_descuento) {
+                                    $pago = ['forma_pago' => $fp_descuento->forma_pago, 'monto' => $ordenrt->total_descuento];
+                                    $cuenta->cobrar((object)$pago);
+                                }
+                            }
+                            $cuenta->guardar(['cerrada' => 1]);
+                            $this->genera_factura_comanda($sede, $ordenrt, $cuenta, $descuentoArticulo);
+                        }
+                    }
                 }
             } else {
                 $datos->exito = false;
@@ -259,35 +392,53 @@ class Orden_gk extends CI_Controller
                 $ordenrt->orden_gk = $ordenGk->orden_gk;
 
                 if (count($ordenrt->articulos) > 0) {
-                    $sedes = $this->get_distinct_sedes($ordenrt->articulos);
-                    $dataTurnos = $this->get_turnos_sedes($sedes);
-                    if ($dataTurnos->exito) {
-                        $sedes = $dataTurnos->sedes;
-                        $dataMeseros = $this->get_meseros_turnos($sedes);
-                        if ($dataMeseros->exito) {
-                            $sedes = $dataMeseros->sedes;
-                            $datos->sedes = $sedes;
-                            foreach ($sedes as $sede) {
-                                $cmdGenerada = $this->genera_comanda_sede($sede, $ordenrt);
-                                $datos->exito = $cmdGenerada->exito;
-                                if ($datos->mensaje !== '') {
-                                    $datos->mensaje .= '. ';
+                    if (count($ordenrt->formas_pago) > 0) {
+                        $sedes = $this->get_distinct_sedes($ordenrt->articulos);
+                        $dataTurnos = $this->get_turnos_sedes($sedes);
+                        if ($dataTurnos->exito) {
+                            $sedes = $dataTurnos->sedes;
+                            $dataMeseros = $this->get_meseros_turnos($sedes);
+                            if ($dataMeseros->exito) {
+                                $sedes = $dataMeseros->sedes;
+                                $datos->sedes = $sedes;
+                                foreach ($sedes as $sede) {
+                                    $cmdGenerada = $this->genera_comanda_sede($sede, $ordenrt);
+                                    $datos->exito = $cmdGenerada->exito;
+                                    if ($datos->mensaje !== '') {
+                                        $datos->mensaje .= '. ';
+                                    }
+                                    $datos->mensaje .= $cmdGenerada->mensaje;
+                                    if (!$cmdGenerada->exito) {
+                                        $datos->exito = false;
+                                        break;
+                                    } else {
+                                        $estatus_sede = new Estatus_orden_gk_sede_model();
+                                        $estatus_sede->orden_gk = $ordenGk->orden_gk;
+                                        $estatus_sede->sede = $sede->sede;
+                                        $estatus_sede->estatus_orden_gk = 4;
+                                        $estatus_sede->comentario = $cmdGenerada->mensaje;
+                                        $estatus_sede->guardar();
+                                    }
                                 }
-                                $datos->mensaje .= $cmdGenerada->mensaje;
-                                if (!$cmdGenerada->exito) {
-                                    $datos->exito = false;
-                                    break;
+                                if ($datos->exito) {
+                                    $ordenGk->guardar(['estatus_orden_gk' => 4]);
+                                    $datos->estatus_orden_gk = $this->Estatus_orden_gk_model->buscar(['estatus_orden_gk' => 4, '_uno' => true]);
+                                    $urlWs = 'http://localhost:8988/api/updlstpedidos';
+                                    // $urlWs = 'https://restouch.c807.com:8988/api/updlstpedidos';
+                                    $corporacion = $this->Catalogo_model->getCorporacion(['corporacion' => $ordenGk->corporacion, '_uno' => true]);
+                                    if ($corporacion) {
+                                        $urlWs .= "/{$corporacion->admin_llave}";
+                                    }
+                                    get_request($urlWs, []);
                                 }
-                            }
-                            if ($datos->exito) {
-                                $ordenGk->guardar(['estatus_orden_gk' => 3]);
-                                $datos->estatus_orden_gk = $this->Estatus_orden_gk_model->buscar(['estatus_orden_gk' => 3, '_uno' => true]);
+                            } else {
+                                $datos->mensaje = "Los siguientes vendors no tienen meseros en su turno: {$dataMeseros->faltantes}.";
                             }
                         } else {
-                            $datos->mensaje = "Los siguientes vendors no tienen meseros en su turno: {$dataMeseros->faltantes}.";
+                            $datos->mensaje = "Los siguientes vendors no han abierto turno: {$dataTurnos->faltantes}.";
                         }
                     } else {
-                        $datos->mensaje = "Los siguientes vendors no han abierto turno: {$dataTurnos->faltantes}.";
+                        $datos->mensaje = 'La orden no tiene formas de pago reconocibles por Rest-Touch Pro.';
                     }
                 } else {
                     $datos->mensaje = 'La orden debe tener 1 artículo por lo menos.';
@@ -296,6 +447,47 @@ class Orden_gk extends CI_Controller
                 $datos->mensaje = 'Esta orden ya fue anulada.';
             } else {
                 $datos->mensaje = 'Esta orden ya fue enviada a los vendors.';
+            }
+        } else {
+            $datos->mensaje = 'El método de llamada no es válido.';
+        }
+        $this->output->set_output(json_encode($datos));
+    }
+
+    public function cambiar_estatus()
+    {
+        $datos = new stdClass();
+        $datos->exito = false;
+        $datos->mensaje = '';
+
+        if ($this->input->method() == 'post') {
+            $req = json_decode(file_get_contents('php://input'));
+
+            if (isset($req->orden_gk) && isset($req->estatus_orden_gk) && isset($req->sede)) {
+                $ordenGk = new Orden_gk_model($req->orden_gk);
+
+                $existe = $this->Estatus_orden_gk_sede_model->buscar(['orden_gk' => $ordenGk->orden_gk, 'sede' => $req->sede, 'estatus_orden_gk' => $req->estatus_orden_gk, '_uno' => true]);
+
+                if (!$existe)
+                {
+                    $estatus_sede = new Estatus_orden_gk_sede_model();
+                    $estatus_sede->orden_gk = $ordenGk->orden_gk;
+                    $estatus_sede->sede = $req->sede;
+                    $estatus_sede->estatus_orden_gk = $req->estatus_orden_gk;
+                    $estatus_sede->comentario = isset($req->comentario) && trim($req->comentario) !== '' ? trim($req->comentario) : null;
+                    $estatus_sede->guardar();
+                }
+
+                $estatus = $ordenGk->actualiza_estatus($req->estatus_orden_gk);
+                
+                $datos->exito = true;
+                $datos->mensaje = "Se actualizó el estatus de la orden #{$ordenGk->orden_gk} de Ghost Kitchen.";
+                $datos->estatus_orden_gk = $this->Estatus_orden_gk_model->buscar([
+                    'estatus_orden_gk' => $estatus ? $estatus : $ordenGk->estatus_orden_gk,
+                    '_uno' => true
+                ]);
+            } else {
+                $datos->mensaje = "Faltan datos para cambiar el estatus de la orden #{$req->orden_gk} de Ghost Kitchen.";
             }
         } else {
             $datos->mensaje = 'El método de llamada no es válido.';

@@ -81,3 +81,7 @@ tr.example-element-row:not(.example-expanded-row):active {
     margin-left: 5px;
     margin-right: 5px;
 }
+
+.pendientes {
+    background-color: #f7dc6f;
+}

@@ -14,6 +14,7 @@ import { ComandaService } from '../../services/comanda.service';
 import { FacturaService } from '../../../pos/services/factura.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
+import { OrdenGkService } from '../../../ghost-kitchen/services/orden-gk.service';
 
 @Component({
   selector: 'app-comanda-en-linea',
@@ -45,16 +46,25 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
     private facturaSrvc: FacturaService,
     private dns: DesktopNotificationService,
     private pdfServicio: ReportePdfService,
-    private configSrvc: ConfiguracionService
+    private configSrvc: ConfiguracionService,
+    private ordenGkSrvc: OrdenGkService
   ) { }
 
   ngOnInit() {
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
 
-      this.socket.on('shopify:updlist', () => {
-        this.loadComandasEnLinea();
-        this.notificarUsuario();
+      this.socket.on('shopify:updlist', (obj: any = null) => {
+        if (obj && obj.corporacion) {
+          const suuid = this.ls.get(GLOBAL.usrTokenVar).sede_uuid;
+          if (suuid.indexOf(obj.corporacion) > -1) {
+            this.loadComandasEnLinea();
+            this.notificarUsuario();
+          }
+        } else {
+          this.loadComandasEnLinea();
+          this.notificarUsuario();
+        }
       });
 
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
@@ -187,6 +197,16 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       // console.log('STRING (BT) = ', JSON.stringify(objToPrint));
       // console.log('OBJETO (BT) = ', objToPrint);
       this.printToBT(JSON.stringify(objToPrint));
+    }   
+
+    if (+obj.orden_gk > 0) {      
+      const params = {
+        orden_gk: +obj.orden_gk,
+        estatus_orden_gk: 5,
+        sede: this.ls.get(GLOBAL.usrTokenVar).sede,
+        comentario: `Se mandó a imprimir la comanda #${obj.comanda} de la orden #${obj.orden_gk} de Ghost Kitchen.`
+      };
+      this.cambiarEstatusOrdenGK(params);
     }
   }
 
@@ -202,6 +222,16 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       // console.log(res);
       if (res.exito) {
         this.loadComandasEnLinea();
+
+        if (+obj.orden_gk > 0) {
+          const params = {
+            orden_gk: +obj.orden_gk,
+            estatus_orden_gk: 6,
+            sede: this.ls.get(GLOBAL.usrTokenVar).sede,
+            comentario: `Se firmó la factura de la comanda #${obj.comanda} de la orden #${obj.orden_gk} de Ghost Kitchen.`
+          };
+          this.cambiarEstatusOrdenGK(params);
+        }
 
         const confirmRef = this.dialog.open(ConfirmDialogComponent, {
           maxWidth: '400px',
@@ -321,6 +351,17 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
         this.comandaSrvc.cancelarPedido(obj.comanda, params).subscribe(resAnula => {
           if (resAnula.exito) {
+
+            if (+obj.orden_gk > 0) {
+              const params = {
+                orden_gk: +obj.orden_gk,
+                estatus_orden_gk: 2,
+                sede: this.ls.get(GLOBAL.usrTokenVar).sede,
+                comentario: `Se canceló la comanda #${obj.comanda} de la orden #${obj.orden_gk} de Ghost Kitchen.`
+              };
+              this.cambiarEstatusOrdenGK(params);
+            }
+
             this.snackBar.open('Pedido cancelado con éxito...', 'Pedido', { duration: 3000 });
           } else {
             this.snackBar.open(`ERROR: ${resAnula.mensaje}`, 'Pedido', { duration: 7000 });
@@ -330,6 +371,16 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
       }
     });
 
+  }
+
+  cambiarEstatusOrdenGK = (params: any) => {    
+    this.ordenGkSrvc.cambiarEstatus(params).subscribe(res => {
+      if (res.exito) {        
+        this.socket.emit('gk:updEstatusOrden', `${JSON.stringify({ orden_gk: params.orden_gk, estatus_orden_gk: res.estatus_orden_gk, sede_uuid: this.ls.get(GLOBAL.usrTokenVar).sede_uuid })}`);
+      } else {
+        this.snackBar.open(`ERROR:${res.mensaje}`, 'Orden de Ghost Kitchen', { duration: 7000 });          
+      }
+    });
   }
 
 }

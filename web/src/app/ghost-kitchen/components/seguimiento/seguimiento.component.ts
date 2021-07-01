@@ -55,6 +55,17 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
         }
       });
 
+      this.socket.on('gk:updEstatusOrden', (msg: any) => {
+        const obj = JSON.parse(msg);        
+        const corporacion = obj.sede_uuid.substring(0, 36);
+        if (this.ls.get(GLOBAL.usrTokenVar).sede_uuid.indexOf(corporacion) > -1) {
+          if (obj.orden_gk && obj.estatus_orden_gk)
+          {            
+            this.updateEstatusOrden(obj.orden_gk, obj.estatus_orden_gk);
+          }
+        }
+      });
+
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
 
       this.socket.on('connect_timeout', () => {

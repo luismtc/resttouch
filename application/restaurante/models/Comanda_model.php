@@ -304,6 +304,7 @@ class Comanda_model extends General_Model
 	{
 		$tmp = $this->getTurno();
 		$mesa = $this->getMesas();
+		$tmp->orden_gk = $this->orden_gk;
 
 		if ($mesa) {
 			$area = $this->Area_model->buscar(["area" => $mesa->area, "_uno" => true]);
@@ -478,42 +479,55 @@ class Comanda_model extends General_Model
 
 			$datos["nombre"] = $origen->descripcion;
 
-			$nombre = strtolower(trim($origen->descripcion));
+			if ((int)$this->orden_gk > 0) {
+				$datos['numero_orden'] = $json->numero_orden;
+				$datos['metodo_pago'] = $json->formas_pago[0]->descripcion;
+				$datos['direccion_entrega']->Nombre = isset($json->datos_entrega->nombre) ? $json->datos_entrega->nombre : '';
+				$datos['direccion_entrega']->Direccion = isset($json->datos_entrega->direccion1) ? ($json->datos_entrega->direccion1 . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($json->datos_entrega->direccion2) ? ($json->datos_entrega->direccion2 . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($json->datos_entrega->pais) ? ($json->datos_entrega->pais . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($json->datos_entrega->departamento) ? ($json->datos_entrega->departamento . ', ') : '';
+				$datos['direccion_entrega']->Direccion .= isset($json->datos_entrega->municipio) ? ($json->datos_entrega->municipio) : '';
+				$datos['direccion_entrega']->Telefono = isset($json->datos_entrega->telefono) ? ($json->datos_entrega->telefono) : '';
+				$datos['direccion_entrega']->Correo = isset($json->datos_entrega->email) ? $json->datos_entrega->email : '';
+				$datos['fhcreacion'] = $this->fhcreacion;
+			} else {
+				$nombre = strtolower(trim($origen->descripcion));
+				if ($nombre == 'shopify') {
+					$datos["numero_orden"] = isset($json->order_number) ? $json->order_number : '';
+					$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
+					$datos['fhcreacion'] = isset($json->created_at) ? $json->created_at : '';
 
-			if ($nombre == 'shopify') {
-				$datos["numero_orden"] = isset($json->order_number) ? $json->order_number : '';
-				$datos["metodo_pago"] = isset($json->payment_gateway_names) ? $json->payment_gateway_names : '';
-				$datos['fhcreacion'] = isset($json->created_at) ? $json->created_at : '';
+					$dataCliente = new stdClass();
+					if (isset($json->shipping_address)) {
+						$dataCliente = $json->shipping_address;
+					} else {
+						if (isset($json->customer)) {
+							if (isset($json->customer->default_address)) {
+								$dataCliente = $json->customer->default_address;
+							}
+						}
+					}
+					$datos['direccion_entrega']->Nombre = isset($dataCliente->name) ? $dataCliente->name : '';
+					$datos['direccion_entrega']->Direccion = isset($dataCliente->address1) ? ($dataCliente->address1 . ', ') : '';
+					$datos['direccion_entrega']->Direccion .= isset($dataCliente->address2) ? ($dataCliente->address2 . ', ') : '';
+					$datos['direccion_entrega']->Direccion .= isset($dataCliente->city) ? ($dataCliente->city . ', ') : '';
+					$datos['direccion_entrega']->Direccion .= isset($dataCliente->province) ? ($dataCliente->province . ', ') : '';
+					$datos['direccion_entrega']->Direccion .= isset($dataCliente->country) ? ($dataCliente->country) : '';
+					$datos['direccion_entrega']->Telefono = isset($dataCliente->phone) ? ($dataCliente->phone) : '';
+					$datos['direccion_entrega']->Correo = isset($json->contact_email) ? $json->contact_email : '';
+				} else if ($nombre == 'api') {
+					$datos["numero_orden"] = isset($json->numero_orden) ? $json->numero_orden : '';
+					$datos["metodo_pago"] = isset($json->metodo_pago) ? $json->metodo_pago : '';
+					if (isset($json->transferencia)) {
+						$datos['transferencia'] = $json->transferencia;
+					}
 
-				$dataCliente = new stdClass();
-				if (isset($json->shipping_address)) {
-					$dataCliente = $json->shipping_address;
-				} else {
-					if (isset($json->customer)){
-						if (isset($json->customer->default_address)){
-							$dataCliente = $json->customer->default_address;
-						}						
-					}					
-				}
-				$datos['direccion_entrega']->Nombre = isset($dataCliente->name) ? $dataCliente->name : '';
-				$datos['direccion_entrega']->Direccion = isset($dataCliente->address1) ? ($dataCliente->address1 . ', ') : '';
-				$datos['direccion_entrega']->Direccion .= isset($dataCliente->address2) ? ($dataCliente->address2 . ', ') : '';
-				$datos['direccion_entrega']->Direccion .= isset($dataCliente->city) ? ($dataCliente->city . ', ') : '';
-				$datos['direccion_entrega']->Direccion .= isset($dataCliente->province) ? ($dataCliente->province . ', ') : '';
-				$datos['direccion_entrega']->Direccion .= isset($dataCliente->country) ? ($dataCliente->country) : '';
-				$datos['direccion_entrega']->Telefono = isset($dataCliente->phone) ? ($dataCliente->phone) : '';
-				$datos['direccion_entrega']->Correo = isset($json->contact_email) ? $json->contact_email : '';
-			} else if ($nombre == 'api') {
-				$datos["numero_orden"] = isset($json->numero_orden) ? $json->numero_orden : '';
-				$datos["metodo_pago"] = isset($json->metodo_pago) ? $json->metodo_pago : '';
-				if (isset($json->transferencia)) {
-					$datos['transferencia'] = $json->transferencia;
-				}
-
-				if (isset($json->direccion_entrega)) {
-					if ($json->direccion_entrega) {
-						$json->cliente->direccion = $json->direccion_entrega;
-						$datos['direccion_entrega'] = $json->cliente;
+					if (isset($json->direccion_entrega)) {
+						if ($json->direccion_entrega) {
+							$json->cliente->direccion = $json->direccion_entrega;
+							$datos['direccion_entrega'] = $json->cliente;
+						}
 					}
 				}
 			}
