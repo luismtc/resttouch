@@ -258,6 +258,13 @@ class Catalogo extends CI_Controller {
 	{
 		$this->output->set_output(json_encode($this->Catalogo_model->notificacionesCliente()));		
 	}
+
+	public function get_comanda_origen()
+	{
+		$datos = $this->Catalogo_model->getComandaOrigen($_GET);
+		$datos = ordenar_array_objetos($datos, 'descripcion');
+		$this->output->set_output(json_encode($datos));
+	}
 }
 
 /* End of file Catalogo.php */

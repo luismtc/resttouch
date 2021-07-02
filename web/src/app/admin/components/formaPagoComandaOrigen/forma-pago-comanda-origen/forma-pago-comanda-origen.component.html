@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col m5 s12">
+        <app-lista-forma-pago-comanda-origen #lstFormaPagoComandaOrigen [comanda_origen]="comanda_origen" (getFormaPagoComandaOrigenEv)="setFormaPagoComandaOrigen($event)"></app-lista-forma-pago-comanda-origen>
+    </div>
+    <div class="col m7 s12">
+        <app-form-forma-pago-comanda-origen #frmFormaPagoComandaOrigen [formaPagoComandaOrigen]="formaPagoComandaOrigen" (formaPagoComandaOrigenSavedEv)="refreshFormaPagoComandOrigenList()"></app-form-forma-pago-comanda-origen>
+    </div>
+</div>

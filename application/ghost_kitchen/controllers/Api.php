@@ -70,6 +70,7 @@ class Api extends CI_Controller
                             $ordengk->host = $req->host;
                             $ordengk->ip = $req->ip;
                             $ordengk->url_original = $req->url_original;
+                            $ordengk->encabezados = $req->encabezados;
                             $ordengk->comanda_origen = $origen->comanda_origen;
                             $ordengk->numero_orden = get_dato_from_object($req->orden, $ruta->ruta);
                             $ordengk->raw_orden = json_encode($req->orden);

@@ -10,6 +10,7 @@ class Orden_gk_model extends General_model
 	public $host = null;
 	public $ip = null;
 	public $url_original = null;
+	public $encabezados = null;
 	public $comanda_origen;
 	public $fhcreacion;
 	public $numero_orden;

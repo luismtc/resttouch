@@ -23,6 +23,7 @@ import { CorporacionComponent } from './components/corporacion/corporacion/corpo
 import { RazonAnulacionComponent } from './components/razon-anulacion/razon-anulacion/razon-anulacion.component';
 import { TipoCompraVentaComponent } from './components/tipoCompraVenta/tipo-compra-venta/tipo-compra-venta.component';
 import { DocumentoTipoComponent } from './components/documento-tipo/documento-tipo/documento-tipo.component';
+import { FormaPagoComandaOrigenComponent } from './components/formaPagoComandaOrigen/forma-pago-comanda-origen/forma-pago-comanda-origen.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -46,6 +47,7 @@ const routes: Routes = [
   { path: 'razon_anulacion', component: RazonAnulacionComponent, canActivate: [AuthGuard] },
   { path: 'tipo_compra_venta', component: TipoCompraVentaComponent, canActivate: [AuthGuard] },
   { path: 'documento_tipo', component: DocumentoTipoComponent, canActivate: [AuthGuard] },
+  { path: 'fp_co', component: FormaPagoComandaOrigenComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 

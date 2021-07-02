@@ -8,6 +8,7 @@ import { DesktopNotificationService } from '../../../shared/services/desktop-not
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FormaPagoComandaOrigenDialogComponent } from '../../../admin/components/formaPagoComandaOrigen/forma-pago-comanda-origen-dialog/forma-pago-comanda-origen-dialog.component';
 
 import { OrdenGkResponse } from '../../interfaces/orden-gk';
 import { EstatusOrdenGk } from '../../interfaces/estatus-orden-gk';
@@ -205,5 +206,18 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
     if (idx > -1) {
       this.ordenesgkFiltered[idx].estatus_orden_gk = estatus;
     }
+  }
+
+  openFormaPagoComandaOrigen = (ord: OrdenGkResponse) => {
+    this.cargando = true;
+    const dialogRef = this.dialog.open(FormaPagoComandaOrigenDialogComponent, {
+      maxWidth: '100vw', width: '90vw', height: '80vh',
+      disableClose: true,
+      data: { comanda_origen: +ord.comanda_origen.comanda_origen }
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      this.cargando = false;
+    });
   }
 }

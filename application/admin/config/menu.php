@@ -1,5 +1,5 @@
-<?php 
-defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') or exit('No direct script access allowed');
 
 $config['menu'] = [
 	1 => [
@@ -301,6 +301,15 @@ $config['menu'] = [
 					1 => [
 						'nombre' => 'Seguimiento',
 						'link' => '/gk/seguimiento'
+					]
+				]
+			],
+			2 => [
+				'nombre' => 'Mantenimiento',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Formas de pago por origen',
+						'link' => '/admin/fp_co'
 					]
 				]
 			]

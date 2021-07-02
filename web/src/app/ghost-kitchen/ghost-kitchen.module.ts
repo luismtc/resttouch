@@ -6,6 +6,8 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { AdminModule } from '../admin/admin.module';
+
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -47,6 +49,7 @@ import { SeguimientoComponent } from './components/seguimiento/seguimiento.compo
     FormsModule,
     SharedModule,
     FlexLayoutModule,
+    AdminModule,
     MatListModule,
     MatIconModule,
     MatFormFieldModule,

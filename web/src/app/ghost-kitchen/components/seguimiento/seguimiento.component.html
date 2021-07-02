@@ -32,8 +32,7 @@
             <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
             <td mat-cell *matCellDef="let element" class="ctxt">
                 <eco-fab-speed-dial direction="left">
-                    <eco-fab-speed-dial-trigger>
-                        <!-- <button mat-fab [disabled]="+element.estatus_orden_gk.estatus_orden_gk > 1"> -->
+                    <eco-fab-speed-dial-trigger>                        
                         <button mat-fab>
                             <mat-icon style="font-size: 18pt !important;">keyboard_arrow_left</mat-icon>
                         </button>
@@ -44,6 +43,9 @@
                         </button>                        
                         <button mat-mini-fab (click)="enviarVendors(element)" color="accent" [disabled]="cargando || +element.estatus_orden_gk.estatus_orden_gk > 1">
                             <mat-icon style="font-size: 16pt !important;">send</mat-icon>
+                        </button>
+                        <button mat-mini-fab (click)="openFormaPagoComandaOrigen(element)" color="warn" [disabled]="cargando" *ngIf="+element.estatus_orden_gk.estatus_orden_gk === 3">
+                            <mat-icon style="font-size: 16pt !important;">payments</mat-icon>
                         </button>
                     </eco-fab-speed-dial-actions>
                 </eco-fab-speed-dial>

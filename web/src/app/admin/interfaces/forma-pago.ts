@@ -1,3 +1,5 @@
+import { ComandaOrigen } from '../interfaces/comanda-origen';
+
 export interface FormaPago {
     forma_pago: number;
     descripcion: string;
@@ -9,4 +11,18 @@ export interface FormaPago {
     adjuntararchivo?: number;
     pedirautorizacion?: number;
     sinfactura?: number;
+}
+
+export interface FormaPagoComandaOrigen {
+    forma_pago_comanda_origen: number;
+    forma_pago?: number;
+    comanda_origen: number;
+    codigo: string;
+}
+
+export interface FormaPagoComandaOrigenResponse {
+    forma_pago_comanda_origen: number;
+    forma_pago?: FormaPago;
+    comanda_origen: ComandaOrigen;
+    codigo: string;        
 }

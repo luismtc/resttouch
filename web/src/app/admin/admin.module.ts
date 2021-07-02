@@ -109,6 +109,10 @@ import { DocumentoTipoComponent } from './components/documento-tipo/documento-ti
 import { ListaDocumentoTipoComponent } from './components/documento-tipo/lista-documento-tipo/lista-documento-tipo.component';
 import { FormDocumentoTipoComponent } from './components/documento-tipo/form-documento-tipo/form-documento-tipo.component';
 import { NotificacionesClienteComponent } from './components/notificaciones-cliente/notificaciones-cliente.component';
+import { FormaPagoComandaOrigenComponent } from './components/formaPagoComandaOrigen/forma-pago-comanda-origen/forma-pago-comanda-origen.component';
+import { ListaFormaPagoComandaOrigenComponent } from './components/formaPagoComandaOrigen/lista-forma-pago-comanda-origen/lista-forma-pago-comanda-origen.component';
+import { FormFormaPagoComandaOrigenComponent } from './components/formaPagoComandaOrigen/form-forma-pago-comanda-origen/form-forma-pago-comanda-origen.component';
+import { FormaPagoComandaOrigenDialogComponent } from './components/formaPagoComandaOrigen/forma-pago-comanda-origen-dialog/forma-pago-comanda-origen-dialog.component';
 
 @NgModule({
   declarations: [
@@ -128,7 +132,8 @@ import { NotificacionesClienteComponent } from './components/notificaciones-clie
     ListaCorporacionComponent, FormSedeComponent, ListaSedeComponent, FormEmpresaComponent, ListaEmpresaComponent, RazonAnulacionComponent,
     FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent, TipoCompraVentaComponent,
     FormTipoCompraVentaComponent, ListaTipoCompraVentaComponent, DocumentoTipoComponent, ListaDocumentoTipoComponent,
-    FormDocumentoTipoComponent, NotificacionesClienteComponent
+    FormDocumentoTipoComponent, NotificacionesClienteComponent, FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent,
+    FormFormaPagoComandaOrigenComponent, FormaPagoComandaOrigenDialogComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
@@ -138,7 +143,8 @@ import { NotificacionesClienteComponent } from './components/notificaciones-clie
     MatAutocompleteModule, ChartsModule, MatKeyboardModule
   ],
   exports: [
-    HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent
+    HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent,
+    FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent, FormFormaPagoComandaOrigenComponent
   ],
   providers: [
     LineSeriesService, CategoryService, LegendService, DataLabelService, TooltipService
