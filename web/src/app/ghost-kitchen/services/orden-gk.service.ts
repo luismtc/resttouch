@@ -45,4 +45,10 @@ export class OrdenGkService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  regeneraOrdenRT(idOrdenGk: number): Observable<any> {
+    return this.http.get<any>(
+      `${GLOBAL.urlGhostKitchen}/${this.moduleUrl}/regenera_orden_rt/${idOrdenGk}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }

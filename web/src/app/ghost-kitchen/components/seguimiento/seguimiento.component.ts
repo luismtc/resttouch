@@ -4,10 +4,11 @@ import { Socket } from 'ngx-socket-io';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
 import { GLOBAL, MultiFiltro } from '../../../shared/global';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
 import { DesktopNotificationService } from '../../../shared/services/desktop-notification.service';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 import { FormaPagoComandaOrigenDialogComponent } from '../../../admin/components/formaPagoComandaOrigen/forma-pago-comanda-origen-dialog/forma-pago-comanda-origen-dialog.component';
 
 import { OrdenGkResponse } from '../../interfaces/orden-gk';
@@ -28,6 +29,8 @@ import { OrdenGkService } from '../../services/orden-gk.service';
 })
 export class SeguimientoComponent implements AfterViewInit, OnInit {
 
+  @ViewChild('tblOrdenesGk') tblOrdenesGk: MatTable<OrdenGkResponse[]>;
+  
   public ordenesgk: OrdenGkResponse[] = [];
   public ordenesgkFiltered: OrdenGkResponse[] = [];
   public columnsToDisplay = ['orden_gk', 'comanda_origen', 'fhcreacion', 'numero_orden', 'estatus_orden_gk', 'total', 'acciones'];
@@ -208,6 +211,19 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
     }
   }
 
+  updateRegistroOrden = (ord: OrdenGkResponse) => {
+    let idx = this.ordenesgk.findIndex(o => +o.orden_gk === +ord.orden_gk);
+    if (idx > -1) {
+      this.ordenesgk[idx] = ord;
+    }
+
+    idx = this.ordenesgkFiltered.findIndex(o => +o.orden_gk === +ord.orden_gk);
+    if (idx > -1) {
+      this.ordenesgkFiltered[idx] = ord;
+      this.tblOrdenesGk.renderRows();
+    }
+  }
+
   openFormaPagoComandaOrigen = (ord: OrdenGkResponse) => {
     this.cargando = true;
     const dialogRef = this.dialog.open(FormaPagoComandaOrigenDialogComponent, {
@@ -216,8 +232,16 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
       data: { comanda_origen: +ord.comanda_origen.comanda_origen }
     });
 
-    dialogRef.afterClosed().subscribe(res => {
-      this.cargando = false;
+    dialogRef.afterClosed().subscribe(() => {
+      this.ordengkSrvc.regeneraOrdenRT(ord.orden_gk).subscribe(res => {
+        if (res.exito) {
+          this.updateRegistroOrden(res.orden);
+          this.snackBar.open(res.mensaje, 'Formas de pago por origen.', { duration: 7000 });
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Formas de pago por origen.', { duration: 7000 });
+        }
+        this.cargando = false;
+      });
     });
   }
 }

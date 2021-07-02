@@ -150,6 +150,7 @@ class Orden_gk_model extends General_model
 					'precio' => $this->get_ruta(6),
 					'cantidad' => $this->get_ruta(7),
 					'descuento' => $this->get_ruta(8),
+					'id_padre_tercero' => $this->get_ruta(22)
 				];
 				$rutas = (object)$rutas;
 				$sedesNoEncontradas = [];
@@ -159,6 +160,7 @@ class Orden_gk_model extends General_model
 					$vendor = null;
 					$sede = null;
 					$obj->id_tercero = $rutas->id_tercero ? get_dato_from_paths($art, $rutas->id_tercero) : null;
+					$obj->id_padre_tercero = $rutas->id_padre_tercero ? get_dato_from_paths($art, $rutas->id_padre_tercero) : null;
 
 					if ($nombreVendor) {
 						$vendor = $this->Vendor_tercero_model->buscar_agregar($nombreVendor, $this->comanda_origen);

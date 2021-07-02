@@ -3,7 +3,7 @@
     <input matInput (keyup)="applyFilter($event)" placeholder="Buscar pedido..." #input>
 </mat-form-field>
 <div class="mat-elevation-z8 margenes">
-    <table mat-table [dataSource]="ordenesgkFiltered" multiTemplateDataRows>
+    <table #tblOrdenesGk mat-table [dataSource]="ordenesgkFiltered" multiTemplateDataRows>
         <ng-container matColumnDef="orden_gk">
             <th mat-header-cell *matHeaderCellDef style="text-align: center !important;">No.</th>
             <td mat-cell *matCellDef="let element" class="ctxt">{{element.orden_gk}} </td>

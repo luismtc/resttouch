@@ -485,6 +485,22 @@ class Catalogo_model extends CI_Model {
 		return $this->getCatalogo($qry, $args);
 	}
 
+	public function getComandaOrigenEndpoint($args = []) {
+		if (isset($args['comanda_origen'])) {
+			$this->db->where('comanda_origen', $args['comanda_origen']);
+		}
+
+		if (isset($args['tipo_endpoint'])) {
+			$this->db->where('tipo_endpoint', $args['tipo_endpoint']);
+		}
+
+		$qry = $this->db
+		->order_by("comanda_origen_endpoint")
+		->get("comanda_origen_endpoint");
+
+		return $this->getCatalogo($qry, $args);
+	}
+
 	public function getDetalleConfigComandaOrigen($args = []) {
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {

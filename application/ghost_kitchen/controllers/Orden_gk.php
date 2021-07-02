@@ -36,9 +36,9 @@ class Orden_gk extends CI_Controller
         $this->output->set_content_type("application/json", "UTF-8");
     }
 
-    public function seguimiento()
+    private function getOrdenesGk($args = [])
     {
-        $datos = $this->Orden_gk_model->buscar($_GET);
+        $datos = $this->Orden_gk_model->buscar($args);
         if (is_array($datos)) {
             foreach ($datos as $d) {
                 $d->corporacion = $this->Catalogo_model->getCorporacion(['corporacion' => $d->corporacion, '_uno' => true]);
@@ -56,7 +56,12 @@ class Orden_gk extends CI_Controller
                 unset($datos->raw_orden);
             }
         }
-        $this->output->set_output(json_encode($datos));
+        return $datos;
+    }
+
+    public function seguimiento()
+    {        
+        $this->output->set_output(json_encode($this->getOrdenesGk($_GET)));
     }
 
     public function anular_orden_gk()
@@ -254,6 +259,29 @@ class Orden_gk extends CI_Controller
         }
     }
 
+    public function agregar_articulo_tercero($ordenrt, $reemplazos = [])
+    {
+
+    }
+
+    private function existen_articulos($ordenrt)
+    {
+        $datos = new stdClass();
+        $datos->exito = true;        
+        $datos->articulosFaltantes = '';
+        foreach ($ordenrt->articulos as $articulo) {
+            $idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($articulo->vendor->vendor_tercero, $articulo->id_tercero);                
+            if ($idArticulo <= 0) {
+                $datos->exito = false;
+                if ($datos->articulosFaltantes !== '') {
+                    $datos->articulosFaltantes .= ', ';
+                }
+                $datos->articulosFaltantes .= "{$articulo->descripcion} de {$articulo->vendor->nombre}";                
+            }
+        }
+        return $datos;
+    }
+
     private function genera_comanda_sede($sede, $ordenrt)
     {
         $datos = new stdClass();
@@ -399,37 +427,42 @@ class Orden_gk extends CI_Controller
                             $sedes = $dataTurnos->sedes;
                             $dataMeseros = $this->get_meseros_turnos($sedes);
                             if ($dataMeseros->exito) {
-                                $sedes = $dataMeseros->sedes;
-                                $datos->sedes = $sedes;
-                                foreach ($sedes as $sede) {
-                                    $cmdGenerada = $this->genera_comanda_sede($sede, $ordenrt);
-                                    $datos->exito = $cmdGenerada->exito;
-                                    if ($datos->mensaje !== '') {
-                                        $datos->mensaje .= '. ';
+                                $existenTodosLosArticulos = $this->existen_articulos($ordenrt);
+                                if ($existenTodosLosArticulos->exito) {
+                                    $sedes = $dataMeseros->sedes;
+                                    $datos->sedes = $sedes;
+                                    foreach ($sedes as $sede) {
+                                        $cmdGenerada = $this->genera_comanda_sede($sede, $ordenrt);
+                                        $datos->exito = $cmdGenerada->exito;
+                                        if ($datos->mensaje !== '') {
+                                            $datos->mensaje .= '. ';
+                                        }
+                                        $datos->mensaje .= $cmdGenerada->mensaje;
+                                        if (!$cmdGenerada->exito) {
+                                            $datos->exito = false;
+                                            break;
+                                        } else {
+                                            $estatus_sede = new Estatus_orden_gk_sede_model();
+                                            $estatus_sede->orden_gk = $ordenGk->orden_gk;
+                                            $estatus_sede->sede = $sede->sede;
+                                            $estatus_sede->estatus_orden_gk = 4;
+                                            $estatus_sede->comentario = $cmdGenerada->mensaje;
+                                            $estatus_sede->guardar();
+                                        }
                                     }
-                                    $datos->mensaje .= $cmdGenerada->mensaje;
-                                    if (!$cmdGenerada->exito) {
-                                        $datos->exito = false;
-                                        break;
-                                    } else {
-                                        $estatus_sede = new Estatus_orden_gk_sede_model();
-                                        $estatus_sede->orden_gk = $ordenGk->orden_gk;
-                                        $estatus_sede->sede = $sede->sede;
-                                        $estatus_sede->estatus_orden_gk = 4;
-                                        $estatus_sede->comentario = $cmdGenerada->mensaje;
-                                        $estatus_sede->guardar();
+                                    if ($datos->exito) {
+                                        $ordenGk->guardar(['estatus_orden_gk' => 4]);
+                                        $datos->estatus_orden_gk = $this->Estatus_orden_gk_model->buscar(['estatus_orden_gk' => 4, '_uno' => true]);
+                                        $urlWs = 'http://localhost:8988/api/updlstpedidos';
+                                        // $urlWs = 'https://restouch.c807.com:8988/api/updlstpedidos';
+                                        $corporacion = $this->Catalogo_model->getCorporacion(['corporacion' => $ordenGk->corporacion, '_uno' => true]);
+                                        if ($corporacion) {
+                                            $urlWs .= "/{$corporacion->admin_llave}";
+                                        }
+                                        get_request($urlWs, []);
                                     }
-                                }
-                                if ($datos->exito) {
-                                    $ordenGk->guardar(['estatus_orden_gk' => 4]);
-                                    $datos->estatus_orden_gk = $this->Estatus_orden_gk_model->buscar(['estatus_orden_gk' => 4, '_uno' => true]);
-                                    $urlWs = 'http://localhost:8988/api/updlstpedidos';
-                                    // $urlWs = 'https://restouch.c807.com:8988/api/updlstpedidos';
-                                    $corporacion = $this->Catalogo_model->getCorporacion(['corporacion' => $ordenGk->corporacion, '_uno' => true]);
-                                    if ($corporacion) {
-                                        $urlWs .= "/{$corporacion->admin_llave}";
-                                    }
-                                    get_request($urlWs, []);
+                                } else {
+                                    $datos->mensaje = "No se encontraron los siguientes artículos: {$existenTodosLosArticulos->articulosFaltantes}.";
                                 }
                             } else {
                                 $datos->mensaje = "Los siguientes vendors no tienen meseros en su turno: {$dataMeseros->faltantes}.";
@@ -468,8 +501,7 @@ class Orden_gk extends CI_Controller
 
                 $existe = $this->Estatus_orden_gk_sede_model->buscar(['orden_gk' => $ordenGk->orden_gk, 'sede' => $req->sede, 'estatus_orden_gk' => $req->estatus_orden_gk, '_uno' => true]);
 
-                if (!$existe)
-                {
+                if (!$existe) {
                     $estatus_sede = new Estatus_orden_gk_sede_model();
                     $estatus_sede->orden_gk = $ordenGk->orden_gk;
                     $estatus_sede->sede = $req->sede;
@@ -479,7 +511,7 @@ class Orden_gk extends CI_Controller
                 }
 
                 $estatus = $ordenGk->actualiza_estatus($req->estatus_orden_gk);
-                
+
                 $datos->exito = true;
                 $datos->mensaje = "Se actualizó el estatus de la orden #{$ordenGk->orden_gk} de Ghost Kitchen.";
                 $datos->estatus_orden_gk = $this->Estatus_orden_gk_model->buscar([
@@ -492,6 +524,36 @@ class Orden_gk extends CI_Controller
         } else {
             $datos->mensaje = 'El método de llamada no es válido.';
         }
+        $this->output->set_output(json_encode($datos));
+    }
+
+    public function regenera_orden_rt($idOrdenGk = null)
+    {
+        $datos = new stdClass();
+        $datos->exito = false;
+        $datos->mensaje = '';
+
+        if ((int)$idOrdenGk > 0) {
+            $ordengk = new Orden_gk_model($idOrdenGk);
+            $ordenrt = $ordengk->get_orden_rt();
+            if ($ordenrt) {
+                $ordengk->estatus_orden_gk = $ordenrt->completa ? 1 : 3;
+                $ordengk->orden_rt = json_encode($ordenrt);
+            }
+            $datos->exito = $ordengk->guardar();
+            if ($datos->exito)
+            {
+                $ogk = $this->getOrdenesGk(['orden_gk' => $idOrdenGk, '_uno' => true]);
+                $datos->orden = $ogk;
+                $datos->mensaje = 'Datos actualizados con éxito.';
+            } else 
+            {
+                $datos->mensaje = $ordengk->getMensaje();
+            }
+        } else {
+            $datos->mensaje = "El #{$idOrdenGk} no es válido.";
+        }
+
         $this->output->set_output(json_encode($datos));
     }
 }

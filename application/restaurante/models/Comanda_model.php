@@ -481,7 +481,7 @@ class Comanda_model extends General_Model
 
 			if ((int)$this->orden_gk > 0) {
 				$datos['numero_orden'] = $json->numero_orden;
-				$datos['metodo_pago'] = $json->formas_pago[0]->descripcion;
+				$datos['metodo_pago'][] = $json->formas_pago[0]->descripcion;
 				$datos['direccion_entrega']->Nombre = isset($json->datos_entrega->nombre) ? $json->datos_entrega->nombre : '';
 				$datos['direccion_entrega']->Direccion = isset($json->datos_entrega->direccion1) ? ($json->datos_entrega->direccion1 . ', ') : '';
 				$datos['direccion_entrega']->Direccion .= isset($json->datos_entrega->direccion2) ? ($json->datos_entrega->direccion2 . ', ') : '';
