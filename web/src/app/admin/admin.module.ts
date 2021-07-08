@@ -117,6 +117,7 @@ import { VendorTerceroComponent } from './components/vendor-tercero/vendor-terce
 import { ListaVendorTerceroComponent } from './components/vendor-tercero/lista-vendor-tercero/lista-vendor-tercero.component';
 import { FormVendorTerceroComponent } from './components/vendor-tercero/form-vendor-tercero/form-vendor-tercero.component';
 import { FormSedeVendorTerceroComponent } from './components/vendor-tercero/form-sede-vendor-tercero/form-sede-vendor-tercero.component';
+import { FormSedeVendorTerceroDialogComponent } from './components/vendor-tercero/form-sede-vendor-tercero-dialog/form-sede-vendor-tercero-dialog.component';
 
 @NgModule({
   declarations: [
@@ -137,7 +138,7 @@ import { FormSedeVendorTerceroComponent } from './components/vendor-tercero/form
     FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent, TipoCompraVentaComponent,
     FormTipoCompraVentaComponent, ListaTipoCompraVentaComponent, DocumentoTipoComponent, ListaDocumentoTipoComponent,
     FormDocumentoTipoComponent, NotificacionesClienteComponent, FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent,
-    FormFormaPagoComandaOrigenComponent, FormaPagoComandaOrigenDialogComponent, VendorTerceroComponent, ListaVendorTerceroComponent, FormVendorTerceroComponent, FormSedeVendorTerceroComponent
+    FormFormaPagoComandaOrigenComponent, FormaPagoComandaOrigenDialogComponent, VendorTerceroComponent, ListaVendorTerceroComponent, FormVendorTerceroComponent, FormSedeVendorTerceroComponent, FormSedeVendorTerceroDialogComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
@@ -148,7 +149,7 @@ import { FormSedeVendorTerceroComponent } from './components/vendor-tercero/form
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent,
-    FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent, FormFormaPagoComandaOrigenComponent, FormSedeVendorTerceroComponent
+    FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent, FormFormaPagoComandaOrigenComponent, FormSedeVendorTerceroComponent, FormSedeVendorTerceroDialogComponent
   ],
   providers: [
     LineSeriesService, CategoryService, LegendService, DataLabelService, TooltipService

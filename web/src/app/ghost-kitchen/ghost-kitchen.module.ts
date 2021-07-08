@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
@@ -61,6 +62,7 @@ import { SeguimientoComponent } from './components/seguimiento/seguimiento.compo
     MatSelectModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatSnackBarModule,
     MatToolbarModule,
     MatMenuModule,

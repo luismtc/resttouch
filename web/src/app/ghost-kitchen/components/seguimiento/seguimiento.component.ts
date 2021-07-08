@@ -10,9 +10,11 @@ import { DesktopNotificationService } from '../../../shared/services/desktop-not
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { FormaPagoComandaOrigenDialogComponent } from '../../../admin/components/formaPagoComandaOrigen/forma-pago-comanda-origen-dialog/forma-pago-comanda-origen-dialog.component';
+import { FormSedeVendorTerceroDialogComponent } from '../../../admin/components/vendor-tercero/form-sede-vendor-tercero-dialog/form-sede-vendor-tercero-dialog.component';
 
 import { OrdenGkResponse } from '../../interfaces/orden-gk';
 import { EstatusOrdenGk } from '../../interfaces/estatus-orden-gk';
+import { VendorTercero } from '../../../admin/interfaces/vendor-tercero';
 import { OrdenGkService } from '../../services/orden-gk.service';
 
 @Component({
@@ -95,10 +97,18 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
     this.dns.createNotification('Rest-Touch Pro', 10000, opciones);
   }
 
-  loadOrdenesGK = () => {
+  loadOrdenesGK = (estatus: number = 0) => {
     this.cargando = true;
-    this.ordengkSrvc.seguimiento().subscribe((res: OrdenGkResponse[]) => {
-      if (res && res.length > 0) {
+
+    const fltr = { estatus_orden_gk: estatus };
+
+    if (+estatus === 0)
+    {
+      delete fltr.estatus_orden_gk;
+    }    
+
+    this.ordengkSrvc.seguimiento(fltr).subscribe((res: OrdenGkResponse[]) => {
+      if (res) {
         this.ordenesgk = res;
         this.ordenesgkFiltered = JSON.parse(JSON.stringify(this.ordenesgk));        
       }
@@ -200,15 +210,20 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
   }
 
   updateEstatusOrden = (idordengk: number, estatus: EstatusOrdenGk) => {
-    let idx = this.ordenesgk.findIndex(o => +o.orden_gk === +idordengk);
-    if (idx > -1) {
-      this.ordenesgk[idx].estatus_orden_gk = estatus;
-    }
-
-    idx = this.ordenesgkFiltered.findIndex(o => +o.orden_gk === +idordengk);
-    if (idx > -1) {
-      this.ordenesgkFiltered[idx].estatus_orden_gk = estatus;
-    }
+    this.ordengkSrvc.cambiarEstatusSede(idordengk).subscribe(res => {
+      if (res.exito && res.orden) {
+        this.updateRegistroOrden(res.orden);
+      }
+      let idx = this.ordenesgk.findIndex(o => +o.orden_gk === +idordengk);
+      if (idx > -1) {
+        this.ordenesgk[idx].estatus_orden_gk = estatus;
+      }
+  
+      idx = this.ordenesgkFiltered.findIndex(o => +o.orden_gk === +idordengk);
+      if (idx > -1) {
+        this.ordenesgkFiltered[idx].estatus_orden_gk = estatus;
+      }
+    });
   }
 
   updateRegistroOrden = (ord: OrdenGkResponse) => {
@@ -239,6 +254,28 @@ export class SeguimientoComponent implements AfterViewInit, OnInit {
           this.snackBar.open(res.mensaje, 'Formas de pago por origen.', { duration: 7000 });
         } else {
           this.snackBar.open(`ERROR: ${res.mensaje}`, 'Formas de pago por origen.', { duration: 7000 });
+        }
+        this.cargando = false;
+      });
+    });
+  }
+
+  openSedeVendorTercero = (vt: VendorTercero, idOrdenGk: number) => {    
+    console.log(vt);
+    this.cargando = true;
+    const dialogRef = this.dialog.open(FormSedeVendorTerceroDialogComponent, {
+      maxWidth: '100vw', width: '50vw', height: '40vh',
+      disableClose: true,
+      data: { vendor_tercero: vt.vendor_tercero, nombre_vendor_tercero: vt.nombre }
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.ordengkSrvc.regeneraOrdenRT(idOrdenGk).subscribe(res => {
+        if (res.exito) {
+          this.updateRegistroOrden(res.orden);
+          this.snackBar.open(res.mensaje, 'Sede para vendor.', { duration: 7000 });
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sede para vendor.', { duration: 7000 });
         }
         this.cargando = false;
       });

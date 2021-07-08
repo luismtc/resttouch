@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>
+    {{data.nombre_vendor_tercero}}
+</h1>
+<div mat-dialog-content class="contenido">
+    <app-form-sede-vendor-tercero [sedeVendorTercero]="sedeVendorTercero"></app-form-sede-vendor-tercero>
+</div>
+<div mat-dialog-actions align="end">
+    <button mat-raised-button (click)="cancelar()" color="accent">
+        Cerrar
+    </button>
+</div>

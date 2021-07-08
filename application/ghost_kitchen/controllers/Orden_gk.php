@@ -42,6 +42,14 @@ class Orden_gk extends CI_Controller
 
     private function getOrdenesGk($args = [])
     {
+
+        if(!isset($args['orden_gk']) && !isset($args['estatus_orden_gk']))
+        {
+            $args['_not_in'] = [
+                'estatus_orden_gk' => [2, 6]
+            ];
+        }
+
         $datos = $this->Orden_gk_model->buscar($args);
         if (is_array($datos)) {
             foreach ($datos as $d) {
@@ -612,6 +620,37 @@ class Orden_gk extends CI_Controller
         $this->output->set_output(json_encode($datos));
     }
 
+    private function update_status_branch($idOrdenGk = null)
+    {
+        $datos = new stdClass();
+        $datos->exito = false;
+        $datos->mensaje = '';
+
+        if ((int)$idOrdenGk > 0) {
+            $ordengk = new Orden_gk_model($idOrdenGk);
+            $ordenrt = json_decode($ordengk->orden_rt);
+
+            foreach($ordenrt->articulos as $articulo)
+            {
+                $articulo->estatus_sede = $this->Estatus_orden_gk_sede_model->ultimo_estatus_sede($ordengk->orden_gk, $articulo->atiende->sede);
+            }
+            $ordengk->orden_rt = json_encode($ordenrt);
+            $datos->exito = $ordengk->guardar();
+            $datos->orden = null;
+            if($datos->exito)
+            {
+                $datos->orden = $this->getOrdenesGk(['orden_gk' => $idOrdenGk, '_uno' => true]);
+                $datos->mensaje = 'Se actualizó el estatus de cada sede con éxito.';
+            } else {
+                $datos->mensaje = implode('. ', $ordengk->getMensaje());                
+            }
+        } else {
+            $datos->mensaje = "El #{$idOrdenGk} no es válido.";
+        }
+
+        return $datos;
+    }
+
     public function cambiar_estatus()
     {
         $datos = new stdClass();
@@ -635,14 +674,14 @@ class Orden_gk extends CI_Controller
                     $estatus_sede->guardar();
                 }
 
-                $estatus = $ordenGk->actualiza_estatus($req->estatus_orden_gk);
+                $estatus = $ordenGk->actualiza_estatus($req->estatus_orden_gk);                
 
                 $datos->exito = true;
                 $datos->mensaje = "Se actualizó el estatus de la orden #{$ordenGk->orden_gk} de Ghost Kitchen.";
                 $datos->estatus_orden_gk = $this->Estatus_orden_gk_model->buscar([
                     'estatus_orden_gk' => $estatus ? $estatus : $ordenGk->estatus_orden_gk,
                     '_uno' => true
-                ]);
+                ]);                
             } else {
                 $datos->mensaje = "Faltan datos para cambiar el estatus de la orden #{$req->orden_gk} de Ghost Kitchen.";
             }
@@ -680,5 +719,11 @@ class Orden_gk extends CI_Controller
         }
 
         $this->output->set_output(json_encode($datos));
+    }
+
+    public function actualiza_estatus_sede($idOrdenGk = null)
+    {
+        $datos = $this->update_status_branch($idOrdenGk);
+        $this->output->set_output(json_encode($datos));        
     }
 }

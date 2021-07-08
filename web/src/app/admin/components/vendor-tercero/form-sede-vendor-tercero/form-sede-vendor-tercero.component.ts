@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Sede } from '../../../interfaces/sede';
@@ -13,7 +13,7 @@ import { VendorTerceroService } from '../../../services/vendor-tercero.service';
 })
 export class FormSedeVendorTerceroComponent implements OnInit {
 
-  public sedeVendorTercero: SedeVendorTercero;
+  @Input() sedeVendorTercero: SedeVendorTercero = { sede_vendor_tercero: null, sede: null, vendor_tercero: null };
   public lstSedes: Sede[] = [];
 
   constructor(
@@ -21,7 +21,7 @@ export class FormSedeVendorTerceroComponent implements OnInit {
     private snackBar: MatSnackBar,
     private vendorTerceroSrvc: VendorTerceroService
   ) {
-    this.sedeVendorTercero = { sede_vendor_tercero: null, sede: null, vendor_tercero: null };
+    // this.sedeVendorTercero = { sede_vendor_tercero: null, sede: null, vendor_tercero: null };
   }
 
   ngOnInit(): void {
@@ -52,8 +52,7 @@ export class FormSedeVendorTerceroComponent implements OnInit {
     if (+this.sedeVendorTercero.vendor_tercero > 0) {
       this.vendorTerceroSrvc.getSedeVendorTercero({ vendor_tercero: +this.sedeVendorTercero.vendor_tercero }).subscribe(res => {
         if (res && res.length > 0) {
-          this.sedeVendorTercero = res[0];
-          console.log('SEDE VENDOR TERCERO = ', this.sedeVendorTercero);
+          this.sedeVendorTercero = res[0];          
         }
       });
     }

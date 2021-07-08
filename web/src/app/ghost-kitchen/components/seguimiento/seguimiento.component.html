@@ -2,6 +2,12 @@
     <mat-label>Buscar</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Buscar pedido..." #input>
 </mat-form-field>
+<mat-button-toggle-group name="estatusOrden" aria-label="Filtro por esatus" class="margenes">
+    <mat-button-toggle value="" (click)="loadOrdenesGK()">En proceso</mat-button-toggle>
+    <mat-button-toggle value="3" (click)="loadOrdenesGK(3)">Incompletas</mat-button-toggle>
+    <mat-button-toggle value="6" (click)="loadOrdenesGK(6)">Terminadas</mat-button-toggle>
+    <mat-button-toggle value="2" (click)="loadOrdenesGK(2)">Canceladas</mat-button-toggle>
+  </mat-button-toggle-group>
 <div class="mat-elevation-z8 margenes">
     <table #tblOrdenesGk mat-table [dataSource]="ordenesgkFiltered" multiTemplateDataRows>
         <ng-container matColumnDef="orden_gk">
@@ -43,7 +49,7 @@
                         </button>                        
                         <button mat-mini-fab (click)="enviarVendors(element)" color="accent" [disabled]="cargando || +element.estatus_orden_gk.estatus_orden_gk > 1">
                             <mat-icon style="font-size: 16pt !important;">send</mat-icon>
-                        </button>
+                        </button>                        
                         <button mat-mini-fab (click)="openFormaPagoComandaOrigen(element)" color="warn" [disabled]="cargando" *ngIf="+element.estatus_orden_gk.estatus_orden_gk === 3">
                             <mat-icon style="font-size: 16pt !important;">payments</mat-icon>
                         </button>
@@ -64,7 +70,7 @@
                             </h6>
                         </caption>
                         <thead>
-                            <th class="ltxt atiende-style">Atiende</th>                        
+                            <th class="ltxt atiende-style">Atiende</th>                            
                             <th class="ctxt num-width">Cantidad</th>
                             <th class="ltxt articulo-style">Artículo</th>
                             <th class="rtxt num-width">Precio</th>
@@ -73,8 +79,17 @@
                         </thead>
                         <tbody>                        
                             <ng-container *ngFor="let det of element.orden_rt.articulos">
-                                <tr>
-                                    <td class="atiende-style">{{det.atiende && det.atiende.nombre ? det.atiende.nombre : 'NO EXISTE' }}</td>
+                                <tr [style.backgroundColor]="det.estatus_sede?.color">
+                                    <td class="atiende-style">
+                                        {{det.atiende && det.atiende.nombre ? det.atiende.nombre : 'NO EXISTE' }}
+                                        <button mat-button (click)="openSedeVendorTercero(det.vendor, element.orden_gk)" color="accent" [disabled]="cargando" *ngIf="+element.estatus_orden_gk.estatus_orden_gk === 3 && !(det.atiende && det.atiende.nombre)">
+                                            <mat-icon style="font-size: 16pt !important;">store</mat-icon>
+                                        </button>
+                                        <small *ngIf="det.estatus_sede">
+                                            <br/>
+                                            <span>{{det.estatus_sede.descripcion}}</span>
+                                        </small>                                        
+                                    </td>                                    
                                     <td class="ctxt num-width">{{det.cantidad}}</td>
                                     <td class="articulo-style">{{det.descripcion}}</td>
                                     <td class="rtxt num-width">{{det.precio | number:'1.2-2'}}</td>

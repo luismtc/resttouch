@@ -123,6 +123,12 @@ class General_model extends CI_Model {
         	}
         }
 
+		if (isset($args["_not_in"])) {
+        	foreach ($args["_not_in"] as $campo => $valor) {
+        		$this->db->where_not_in($campo, $valor);
+        	}
+        }
+
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if (substr($key, 0, 1) != "_") {

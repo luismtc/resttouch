@@ -29,6 +29,7 @@ export class VendorTerceroComponent implements OnInit {
       comanda_origen: obj.comanda_origen.comanda_origen
     }
     this.frmVendorTercero.vendorTercero = this.vendorTercero;
+    this.frmVendorTercero.frmSedeVendorTercero.resetSedeVendorTercero();
     this.frmVendorTercero.frmSedeVendorTercero.sedeVendorTercero.vendor_tercero = this.vendorTercero.vendor_tercero;
     this.frmVendorTercero.frmSedeVendorTercero.getSedeVendorTercero();
   }

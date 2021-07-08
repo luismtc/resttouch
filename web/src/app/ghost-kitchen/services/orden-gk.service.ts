@@ -45,6 +45,12 @@ export class OrdenGkService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
+  cambiarEstatusSede(idOrdenGk: number): Observable<any> {
+    return this.http.get<any>(
+      `${GLOBAL.urlGhostKitchen}/${this.moduleUrl}/actualiza_estatus_sede/${idOrdenGk}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
   regeneraOrdenRT(idOrdenGk: number): Observable<any> {
     return this.http.get<any>(
       `${GLOBAL.urlGhostKitchen}/${this.moduleUrl}/regenera_orden_rt/${idOrdenGk}`

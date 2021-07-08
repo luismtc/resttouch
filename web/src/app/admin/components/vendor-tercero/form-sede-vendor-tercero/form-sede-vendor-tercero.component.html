@@ -1,4 +1,4 @@
-<mat-card class="mat-elevation-z4 fullWidth" *ngIf="+sedeVendorTercero.sede_vendor_tercero > 0">
+<mat-card class="mat-elevation-z4 fullWidth" *ngIf="+sedeVendorTercero.sede_vendor_tercero > 0 || (+sedeVendorTercero.sede_vendor_tercero === 0 && +sedeVendorTercero.vendor_tercero > 0)">
     <mat-card-title>
         <h4>Atiende</h4>
     </mat-card-title>
