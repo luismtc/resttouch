@@ -36,7 +36,7 @@ class Orden_gk_model extends General_model
 		]);
 	}
 
-	private function get_ruta($configuracion)
+	public function get_ruta($configuracion)
 	{
 		$ruta = $this->Catalogo_model->getDetalleConfigComandaOrigen([
 			'configuracion_comanda_origen' => $configuracion,

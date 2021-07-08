@@ -310,6 +310,10 @@ $config['menu'] = [
 					1 => [
 						'nombre' => 'Formas de pago por origen',
 						'link' => '/admin/fp_co'
+					],
+					2 => [
+						'nombre' => 'Vendors por origen',
+						'link' => '/admin/vdt'
 					]
 				]
 			]

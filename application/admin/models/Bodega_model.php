@@ -6,6 +6,7 @@ class Bodega_model extends General_model {
 	public $descripcion;
 	public $sede;
 	public $merma = 0;
+	public $pordefecto = 0;
 
 	public function __construct($id = '')
 	{

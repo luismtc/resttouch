@@ -11,6 +11,7 @@ class Impresora_model extends General_model {
 	public $bluetooth = 0;
 	public $bluetooth_mac_address;
 	public $modelo;
+	public $pordefecto = 0;
 
 	public function __construct($id = "")
 	{

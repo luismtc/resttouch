@@ -26,7 +26,11 @@ class Orden_gk extends CI_Controller
             'Dfactura_model',
             'Configuracion_model',
             'Fpago_model',
-            'Estatus_orden_gk_sede_model'
+            'Estatus_orden_gk_sede_model',
+            'Categoria_model',
+            'Cgrupo_model',
+            'Bodega_model',
+            'Impresora_model'
         ]);
 
         $this->load->helper(['jwt', 'authorization']);
@@ -259,9 +263,115 @@ class Orden_gk extends CI_Controller
         }
     }
 
-    public function agregar_articulo_tercero($ordenrt, $reemplazos = [])
+    private function agregar_articulo_tercero($ordenrt, $articulo, $reemplazos = [])
     {
+        $idArticulo = 0;
+        $endpoint = $this->Catalogo_model->getComandaOrigenEndpoint(['comanda_origen' => $ordenrt->comanda_origen, 'tipo_endpoint' => 1, '_uno' => true]);
+        if($endpoint && $endpoint->verbo && $endpoint->endpoint && $articulo->atiende && isset($articulo->atiende->sede))
+        {
+            $url = $endpoint->endpoint;
+            foreach($reemplazos as $key => $value)
+            {                
+                $url = str_replace(('{{'.$key.'}}'), $value, $url);
+            }
 
+            if (strtoupper(trim($endpoint->verbo)) === 'GET')
+            {
+                $respuesta = json_decode(get_request($url));
+                if ($respuesta)
+                {
+                    $sede = $articulo->atiende;
+                    $ordenGk = new Orden_gk_model($ordenrt->orden_gk);
+
+                    $rutasArticulo = [
+                        'categoria' => $ordenGk->get_ruta(23),
+                        'subcategoria' => $ordenGk->get_ruta(24),
+                        'descripcion_producto' => $ordenGk->get_ruta(25),
+                        'variantes' => $ordenGk->get_ruta(26),
+                        'id_variante' => $ordenGk->get_ruta(27),
+                        'descripcion_variante' => $ordenGk->get_ruta(28),
+                        'precio_variante' => $ordenGk->get_ruta(29)
+                    ];
+                    $infoArticulo = [];
+                    foreach($rutasArticulo as $key => $value)
+                    {
+                        if (!in_array($key, array('id_variante', 'descripcion_variante', 'precio_variante')))
+                        {
+                            $infoArticulo[$key] = $value ? get_dato_from_paths($respuesta, $value) : null;
+                        }
+                    }
+
+                    if ($infoArticulo['variantes'] && count($infoArticulo['variantes']) > 0)
+                    {
+                        foreach($infoArticulo['variantes'] as $variante)
+                        {
+                            $idVariante = $rutasArticulo['id_variante'] ? get_dato_from_paths($variante, $rutasArticulo['id_variante']) : null;
+                            if ($idVariante && trim($idVariante) === trim($articulo->id_tercero))
+                            {
+                                $infoArticulo['descripcion_variante'] = $rutasArticulo['descripcion_variante'] ? get_dato_from_paths($variante, $rutasArticulo['descripcion_variante']) : 0.00;
+                                if($infoArticulo['descripcion_variante'] && strtoupper(trim($infoArticulo['descripcion_variante'])) === 'DEFAULT TITLE') 
+                                {
+                                    $infoArticulo['descripcion_variante'] = null;
+                                }
+                                $infoArticulo['precio_variante'] = $rutasArticulo['precio_variante'] ? get_dato_from_paths($variante, $rutasArticulo['precio_variante']) : 0.00;
+                            }
+                        }
+                    }
+                    $infoArticulo = (object)$infoArticulo;
+
+                    $infoArticulo->categoria = !empty($infoArticulo->categoria) ? $infoArticulo->categoria : 'Otros';                    
+                    $categoria = $this->Categoria_model->buscar(['UPPER(TRIM(descripcion))' => strtoupper(trim($infoArticulo->categoria)), 'sede' => $sede->sede, '_uno' => true]);
+
+                    if (!$categoria)
+                    {
+                        $categoria = new Categoria_model();
+                        $categoria->descripcion = trim($infoArticulo->categoria);
+                        $categoria->sede = $sede->sede;
+                        $categoria->guardar();
+                    }
+
+                    if ($categoria && $categoria->categoria)
+                    {
+                        $infoArticulo->subcategoria = !empty($infoArticulo->subcategoria) ? $infoArticulo->subcategoria : 'Otros';
+                        $subcategoria = $this->Cgrupo_model->buscar(['categoria' => $categoria->categoria, 'UPPER(TRIM(descripcion))' => strtoupper(trim($infoArticulo->subcategoria)), '_uno' => true]);
+
+                        if (!$subcategoria)
+                        {
+                            $impresora = $this->Impresora_model->buscar(['sede' => $sede->sede, 'pordefecto' => 1, '_uno' => true]);
+                            $bodega = $this->Bodega_model->buscar(['sede' => $sede->sede, 'pordefecto' => 1, '_uno' => true]);
+                            $subcategoria = new Cgrupo_model();
+                            $subcategoria->categoria = $categoria->categoria;
+                            $subcategoria->descripcion = trim($infoArticulo->subcategoria);
+                            $subcategoria->impresora = $impresora && $impresora->impresora ? $impresora->impresora : null;
+                            $subcategoria->bodega = $bodega && $bodega->bodega ? $bodega->bodega : null;
+                            $subcategoria->guardar();
+                        }
+
+                        if ($subcategoria && $subcategoria->categoria_grupo)
+                        {
+                            $art = new Articulo_model();
+                            $art->categoria_grupo = $subcategoria->categoria_grupo;
+                            $art->presentacion = 1;
+                            $art->descripcion = trim($infoArticulo->descripcion_producto).($infoArticulo->descripcion_variante ? (' / '.trim($infoArticulo->descripcion_variante)) : '');
+                            $art->precio = (float)$infoArticulo->precio_variante;
+                            $art->bien_servicio = 'B';
+                            $art->shopify_id = trim($articulo->id_tercero);
+                            $art->codigo = trim($articulo->id_tercero);
+                            $art->presentacion_reporte = 1;
+                            $art->mostrar_pos = 1;
+                            $art->guardar();
+
+                            if ($art && $art->articulo)
+                            {
+                                $idArticulo = $art->articulo;
+                                $this->Articulo_vendor_tercero_model->get_articulo_vendor($articulo->vendor->vendor_tercero, $articulo->id_tercero);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return (int)$idArticulo;
     }
 
     private function existen_articulos($ordenrt)
@@ -272,14 +382,29 @@ class Orden_gk extends CI_Controller
         foreach ($ordenrt->articulos as $articulo) {
             $idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($articulo->vendor->vendor_tercero, $articulo->id_tercero);                
             if ($idArticulo <= 0) {
-                $datos->exito = false;
-                if ($datos->articulosFaltantes !== '') {
-                    $datos->articulosFaltantes .= ', ';
+                $idArticulo = $this->agregar_articulo_tercero($ordenrt, $articulo, [
+                    'articulo' => (!empty($articulo->id_padre_tercero) ? $articulo->id_padre_tercero : $articulo->id_tercero)
+                ]);
+                if ($idArticulo <= 0)
+                {
+                    $datos->exito = false;
+                    if ($datos->articulosFaltantes !== '') {
+                        $datos->articulosFaltantes .= ', ';
+                    }
+                    $datos->articulosFaltantes .= "{$articulo->descripcion} de {$articulo->vendor->nombre}";
                 }
-                $datos->articulosFaltantes .= "{$articulo->descripcion} de {$articulo->vendor->nombre}";                
             }
         }
         return $datos;
+    }
+
+    public function test_articulos($idOrdenGK = '')
+    {
+        $ordengk = new Orden_gk_model((int)$idOrdenGK > 0 ? (int)$idOrdenGK : 1);
+        $ordenrt = $ordengk->get_orden_rt();
+        $ordenrt->orden_gk = $ordengk->orden_gk;
+        $datos = $this->existen_articulos($ordenrt);
+        $this->output->set_output(json_encode($datos));        
     }
 
     private function genera_comanda_sede($sede, $ordenrt)

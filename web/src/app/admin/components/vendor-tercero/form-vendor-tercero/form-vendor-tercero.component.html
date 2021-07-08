@@ -1,0 +1,36 @@
+<mat-tab-group>
+    <mat-tab label="Vendor">
+        <mat-card class="mat-elevation-z4 fullWidth">
+            <mat-card-title>
+                <h4>Vendor</h4>
+            </mat-card-title>
+            <mat-card-content>
+                <form #frmVendorTercero="ngForm" (ngSubmit)="frmVendorTercero.form.valid && onSubmit()" novalidate>
+                    <mat-form-field class="fullWidth">
+                        <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Nombre" name="nombre" [(ngModel)]="vendorTercero.nombre" minlength="1" maxlength="75" required>
+                        <input matInput *ngIf="esMovil" placeholder="Nombre" name="nombre" [(ngModel)]="vendorTercero.nombre" minlength="1" maxlength="75" required>
+                    </mat-form-field>
+                    <mat-form-field class="fullWidth">
+                        <mat-label>Origen</mat-label>
+                        <mat-select name="comanda_origen" [(ngModel)]="vendorTercero.comanda_origen" required>
+                            <mat-option *ngFor="let comorigen of lstComandaOrigen" [value]="comorigen.comanda_origen">
+                                {{comorigen.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div align="end">
+                        <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmVendorTercero.form.valid">
+                            Guardar
+                        </button>
+                        <button mat-raised-button type="button" color="accent" (click)="resetVendorTercero()" *ngIf="vendorTercero.vendor_tercero">
+                            Nuevo
+                        </button>
+                    </div>
+                </form>
+            </mat-card-content>
+        </mat-card>        
+    </mat-tab>
+    <mat-tab label="Atiende">
+        <app-form-sede-vendor-tercero #frmSedeVendorTercero></app-form-sede-vendor-tercero>
+    </mat-tab>
+</mat-tab-group>

@@ -113,6 +113,10 @@ import { FormaPagoComandaOrigenComponent } from './components/formaPagoComandaOr
 import { ListaFormaPagoComandaOrigenComponent } from './components/formaPagoComandaOrigen/lista-forma-pago-comanda-origen/lista-forma-pago-comanda-origen.component';
 import { FormFormaPagoComandaOrigenComponent } from './components/formaPagoComandaOrigen/form-forma-pago-comanda-origen/form-forma-pago-comanda-origen.component';
 import { FormaPagoComandaOrigenDialogComponent } from './components/formaPagoComandaOrigen/forma-pago-comanda-origen-dialog/forma-pago-comanda-origen-dialog.component';
+import { VendorTerceroComponent } from './components/vendor-tercero/vendor-tercero/vendor-tercero.component';
+import { ListaVendorTerceroComponent } from './components/vendor-tercero/lista-vendor-tercero/lista-vendor-tercero.component';
+import { FormVendorTerceroComponent } from './components/vendor-tercero/form-vendor-tercero/form-vendor-tercero.component';
+import { FormSedeVendorTerceroComponent } from './components/vendor-tercero/form-sede-vendor-tercero/form-sede-vendor-tercero.component';
 
 @NgModule({
   declarations: [
@@ -133,7 +137,7 @@ import { FormaPagoComandaOrigenDialogComponent } from './components/formaPagoCom
     FormRazonAnulacionComponent, ListaRazonAnulacionComponent, GraficaLineaComponent, TipoCompraVentaComponent,
     FormTipoCompraVentaComponent, ListaTipoCompraVentaComponent, DocumentoTipoComponent, ListaDocumentoTipoComponent,
     FormDocumentoTipoComponent, NotificacionesClienteComponent, FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent,
-    FormFormaPagoComandaOrigenComponent, FormaPagoComandaOrigenDialogComponent
+    FormFormaPagoComandaOrigenComponent, FormaPagoComandaOrigenDialogComponent, VendorTerceroComponent, ListaVendorTerceroComponent, FormVendorTerceroComponent, FormSedeVendorTerceroComponent
   ],
   imports: [
     CommonModule, AdminRoutingModule, HttpClientModule, FormsModule, SharedModule, MatListModule, MatIconModule, MatFormFieldModule,
@@ -144,7 +148,7 @@ import { FormaPagoComandaOrigenDialogComponent } from './components/formaPagoCom
   ],
   exports: [
     HeaderComponent, MenuComponent, ListaClienteComponent, FormClienteComponent, FormClienteDialogComponent,
-    FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent, FormFormaPagoComandaOrigenComponent
+    FormaPagoComandaOrigenComponent, ListaFormaPagoComandaOrigenComponent, FormFormaPagoComandaOrigenComponent, FormSedeVendorTerceroComponent
   ],
   providers: [
     LineSeriesService, CategoryService, LegendService, DataLabelService, TooltipService

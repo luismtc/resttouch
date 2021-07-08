@@ -13,7 +13,9 @@ class Vendor_tercero_model extends General_model
 		$this->setTabla("vendor_tercero");
 		if (!empty($id)) {
 			$this->cargar($id);
-		}		
+		}
+
+        $this->load->model(['Catalogo_model']);
 	}
 
     public function buscar_agregar($nombre, $comanda_origen)
@@ -36,4 +38,22 @@ class Vendor_tercero_model extends General_model
         }
         return null;
     }
+
+    public function full_search($args = [])
+    {
+        $datos = $this->buscar($args);
+        if(is_array($datos))
+        {
+            foreach($datos as $d) 
+            {
+                $d->comanda_origen = $this->Catalogo_model->getComandaOrigen(['comanda_origen' => $d->comanda_origen, '_uno' => true]);
+            }
+        } else {
+            if($datos) {
+                $datos->comanda_origen = $this->Catalogo_model->getComandaOrigen(['comanda_origen' => $datos->comanda_origen, '_uno' => true]);
+            }
+        }
+        return $datos;
+    }
+
 }

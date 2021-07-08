@@ -41,7 +41,7 @@ class Api extends CI_Controller {
 	    $server->handle();
 	}
 
-	public function set_egreso($egreso, $key = "")
+	public function set_egreso($egreso, $key = "", $asXml = true)
 	{	
 		$ci =& get_instance();
 		$res = ["exito" => 0, "mensaje" => $key];
@@ -107,10 +107,34 @@ class Api extends CI_Controller {
 			$res['mensaje'] = "Hacen falta datos obligatorios para poder continuar, apikey";
 		}
 
-		$xml = new DOMDocument('1.0');
-		$xml->loadXML(arrayToXml($res, "<resultado/>"));
+		if ($asXml)
+		{
+			$xml = new DOMDocument('1.0');
+			$xml->loadXML(arrayToXml($res, "<resultado/>"));
+	
+			return $xml->saveXML();		
+		} else {
+			return $res;
+		}
+	}
 
-		return $xml->saveXML();
+	public function pruebas($key = "")
+	{
+		$datos = new stdClass();
+		$datos->exito = true;
+		$datos->mensaje = 'La prueba fue exitosa';
+		$resultado = [];
+		if ($this->input->method() == 'post') {
+            $req = json_decode(file_get_contents('php://input'));
+			try 
+			{
+				$resultado = $this->set_egreso($req->egreso, $key, false);
+			} catch(Exception $ex)
+			{
+				$resultado[] = $ex->getMessage();
+			}
+		}
+		$this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode($resultado));
 	}
 
 }

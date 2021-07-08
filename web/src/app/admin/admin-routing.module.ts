@@ -24,6 +24,7 @@ import { RazonAnulacionComponent } from './components/razon-anulacion/razon-anul
 import { TipoCompraVentaComponent } from './components/tipoCompraVenta/tipo-compra-venta/tipo-compra-venta.component';
 import { DocumentoTipoComponent } from './components/documento-tipo/documento-tipo/documento-tipo.component';
 import { FormaPagoComandaOrigenComponent } from './components/formaPagoComandaOrigen/forma-pago-comanda-origen/forma-pago-comanda-origen.component';
+import { VendorTerceroComponent } from './components/vendor-tercero/vendor-tercero/vendor-tercero.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -48,6 +49,7 @@ const routes: Routes = [
   { path: 'tipo_compra_venta', component: TipoCompraVentaComponent, canActivate: [AuthGuard] },
   { path: 'documento_tipo', component: DocumentoTipoComponent, canActivate: [AuthGuard] },
   { path: 'fp_co', component: FormaPagoComandaOrigenComponent, canActivate: [AuthGuard] },
+  { path: 'vdt', component: VendorTerceroComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
