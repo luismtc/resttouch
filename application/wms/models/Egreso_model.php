@@ -86,10 +86,20 @@ class Egreso_model extends General_Model {
 	public function guardarDetalleApi($item)
 	{
 		$art = new Articulo_model();
-		$tmpArt = $art->buscar([
-			"codigo" => $item->articulo,
-			"_uno" => true
-		]);
+		$tmpArt = $art->buscar(["codigo" => $item->articulo, "_uno" => true]);
+
+		$bodega = $this->getBodega();
+		if ($bodega)
+		{			
+			$tmpArt = $this->db
+				->select('a.*')
+				->from('articulo a')
+				->join('categoria_grupo b', 'b.categoria_grupo = a.categoria_grupo')
+				->join('categoria c', 'c.categoria = b.categoria')
+				->where('c.sede', $bodega->sede)
+				->where('a.codigo', $item->articulo)
+				->get()->row();
+		}
 
 		$particion = (isset($item->particion)) ? $item->particion : 1;
 
