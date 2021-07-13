@@ -129,6 +129,18 @@ class General_model extends CI_Model {
         	}
         }
 
+		if (isset($args["_fdel"])) {
+        	foreach ($args["_fdel"] as $campo => $valor) {
+        		$this->db->where("{$campo} >=", $valor);
+        	}
+        }
+
+		if (isset($args["_fal"])) {
+        	foreach ($args["_fal"] as $campo => $valor) {
+        		$this->db->where("{$campo} <=", $valor);
+        	}
+        }
+
 		if (count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if (substr($key, 0, 1) != "_") {

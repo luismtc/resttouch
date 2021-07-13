@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Egreso_model extends General_Model {
+class Egreso_model extends General_Model
+{
 
 	public $egreso;
 	public $tipo_movimiento;
@@ -13,38 +14,40 @@ class Egreso_model extends General_Model {
 	public $traslado = 0;
 	public $idcomandafox = null;
 	public $ajuste = 0;
+	public $raw_egreso = null;
 
 	public function __construct($id = "")
 	{
 		parent::__construct();
 		$this->setTabla("egreso");
 
-		if(!empty($id)) {
+		if (!empty($id)) {
 			$this->cargar($id);
 		}
 	}
 
-	public function getTipoMovimiento() {
+	public function getTipoMovimiento()
+	{
 		return $this->db
-					->where("tipo_movimiento", $this->tipo_movimiento)
-					->get("tipo_movimiento")
-					->row();
+			->where("tipo_movimiento", $this->tipo_movimiento)
+			->get("tipo_movimiento")
+			->row();
 	}
 
 	public function getUsuario()
 	{
 		return $this->db
-					->where("usuario", $this->usuario)
-					->get("usuario")
-					->row();
+			->where("usuario", $this->usuario)
+			->get("usuario")
+			->row();
 	}
 
 	public function getBodega()
 	{
 		return $this->db
-					->where("bodega", $this->bodega)
-					->get("bodega")
-					->row();
+			->where("bodega", $this->bodega)
+			->get("bodega")
+			->row();
 	}
 
 	public function getDetalleDatos($item)
@@ -54,7 +57,7 @@ class Egreso_model extends General_Model {
 			"articulo" => "",
 			"precio_unitario" => $item->precio_unitario,
 			"precio_total" => $item->cantidad * $item->precio_unitario,
-			"presentacion" => "" 
+			"presentacion" => ""
 		];
 
 		$art = $this->Articulo_model->buscar([
@@ -70,14 +73,15 @@ class Egreso_model extends General_Model {
 		return $datos;
 	}
 
-	public function checkDetalleApi($idbodega, $codigo) {		
+	public function checkDetalleApi($idbodega, $codigo)
+	{
 		$sede = $this->db->query("SELECT sede FROM bodega WHERE bodega = $idbodega")->row();
 		$query = "SELECT a.articulo	";
-		$query.= "FROM articulo a INNER JOIN categoria_grupo b ON b.categoria_grupo = a.categoria_grupo INNER JOIN categoria c ON c.categoria = b.categoria	";
-		$query.= "WHERE c.sede = $sede->sede AND TRIM(a.codigo) = '$codigo' ";
-		$query.= "LIMIT 1";
+		$query .= "FROM articulo a INNER JOIN categoria_grupo b ON b.categoria_grupo = a.categoria_grupo INNER JOIN categoria c ON c.categoria = b.categoria	";
+		$query .= "WHERE c.sede = $sede->sede AND TRIM(a.codigo) = '$codigo' ";
+		$query .= "LIMIT 1";
 		$art = $this->db->query($query)->row();
-		if($art) {
+		if ($art) {
 			return true;
 		}
 		return false;
@@ -89,8 +93,7 @@ class Egreso_model extends General_Model {
 		$tmpArt = $art->buscar(["codigo" => $item->articulo, "_uno" => true]);
 
 		$bodega = $this->getBodega();
-		if ($bodega)
-		{			
+		if ($bodega) {
 			$tmpArt = $this->db
 				->select('a.*')
 				->from('articulo a')
@@ -103,44 +106,53 @@ class Egreso_model extends General_Model {
 
 		$particion = (isset($item->particion)) ? $item->particion : 1;
 
-
 		if ($tmpArt) {
-			$art = new Articulo_model($tmpArt->articulo);
-			$receta = $art->getReceta();
-			if (count($receta) > 0) {
-				foreach ($receta as $rec) {
-					$bac = new BodegaArticuloCosto_model();
-					$tmp = new Presentacion_model();
-					$pres = $tmp->buscar([
-						"medida" => $rec->medida->medida,
-						"cantidad" => 1,
-						"_uno" => true
-					]);
-					$precio_unitario = $bac->get_costo($this->bodega, $rec->articulo->articulo, $pres->presentacion);
+			try {
+				$art = new Articulo_model($tmpArt->articulo);
+				$receta = $art->getReceta();
+				if (count($receta) > 0) {
+					foreach ($receta as $row) {
+						$rec = new Articulo_model($row->articulo->articulo);
+						$presR = $rec->getPresentacionReporte();
 
+						$bac = $this->BodegaArticuloCosto_model->buscar([
+							"articulo" => $row->articulo->articulo,
+							"bodega" => $this->bodega,
+							"_uno" => true
+						]);
+
+						if ($bac && $bac->bodega_articulo_costo)
+						{
+							$bac = new BodegaArticuloCosto_model($bac->bodega_articulo_costo);
+						}
+
+						$row->cantidad = ((float)$presR->cantidad == 0) ? 0 : (($row->cantidad * $item->cantidad) / $presR->cantidad);
+						$costo = ($bac && $bac->bodega_articulo_costo) ? $bac->get_costo($this->bodega, $rec->getPK(), $presR->presentacion) : 0;
+						$total = ($costo * $row->cantidad);						
+						$this->setDetalle([
+							"cantidad" => $row->cantidad,
+							"articulo" => $row->articulo->articulo,
+							"precio_unitario" => $costo,
+							"precio_total" => $total,
+							"presentacion" => $presR->presentacion
+						]);
+					}
+				} else {
 					$datos = [
-						"cantidad" => $rec->cantidad/$particion,
-						"articulo" => $rec->articulo->articulo,
-						"precio_unitario" => $precio_unitario*1,
-						"precio_total" => $rec->cantidad * $precio_unitario/$particion,
-						"presentacion" => $pres->presentacion
+						"cantidad" => $item->cantidad / $particion,
+						"articulo" => $art->getPK(),
+						"precio_unitario" => $item->precio_unitario * 1,
+						"precio_total" => $item->cantidad * $item->precio_unitario / $particion,
+						"presentacion" => $art->presentacion
 					];
 					$this->setDetalle($datos);
 				}
-			} else {
-				$datos = [
-					"cantidad" => $item->cantidad/$particion,
-					"articulo" => $art->getPK(),
-					"precio_unitario" => $item->precio_unitario*1,
-					"precio_total" => $item->cantidad * $item->precio_unitario/$particion,
-					"presentacion" => $art->presentacion
-				];
-				$this->setDetalle($datos);
+			} catch (Exception $ex) {
 			}
 		}
 	}
 
-	public function setDetalle(Array $args, $id = "")
+	public function setDetalle(array $args, $id = "")
 	{
 		$tmp = new Configuracion_model();
 		$config = $tmp->buscar();
@@ -155,10 +167,10 @@ class Egreso_model extends General_Model {
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
 		} else {
-			if($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']){
+			if ($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']) {
 				$articulo = $det->articulo;
 				$cantidad = $args['cantidad'] - $det->cantidad;
-			} else if($det->articulo != $args['articulo']){				
+			} else if ($det->articulo != $args['articulo']) {
 				$articulo = $args['articulo'];
 				$cantidad = $args['cantidad'];
 			} else {
@@ -167,29 +179,29 @@ class Egreso_model extends General_Model {
 			}
 		}
 
-		
+
 		$art = new Articulo_model($articulo);
 		$tmp = new Presentacion_model();
 		$pres = $tmp->buscar([
 			"presentacion" => $args['presentacion'],
 			"_uno" => true
 		]);
-		
+
 		$args['precio_total'] = ((float)$args['precio_unitario'] * (float)$args['cantidad']);
 
 		$art->actualizarExistencia([
 			"bodega" => $this->bodega
 		]);
 		$oldart = new Articulo_model($det->articulo);
-		if (empty($menu) || (!$validar || $art->existencias >= $cantidad * $pres->cantidad) ||$vnegativo) {
+		if (empty($menu) || (!$validar || $art->existencias >= $cantidad * $pres->cantidad) || $vnegativo) {
 			$args['egreso'] = $this->egreso;
 			$result = $det->guardar($args);
 
-			if($result) {
+			if ($result) {
 				$art->actualizarExistencia([
 					"bodega" => $this->bodega
 				]);
-				if ($oldart->articulo) {					
+				if ($oldart->articulo) {
 					$oldart->actualizarExistencia([
 						"bodega" => $this->bodega
 					]);
@@ -199,11 +211,11 @@ class Egreso_model extends General_Model {
 
 			$this->mensaje = $det->getMensaje();
 
-			return $result;	
+			return $result;
 		} else {
 			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
 		}
-		
+
 		return false;
 	}
 
@@ -211,15 +223,15 @@ class Egreso_model extends General_Model {
 	{
 		$args['egreso'] = $this->egreso;
 		$det = $this->EDetalle_model->buscar($args);
-		$datos = [] ;
-		if(is_array($det)) {
+		$datos = [];
+		if (is_array($det)) {
 			foreach ($det as $row) {
 				$detalle = new EDetalle_Model($row->egreso_detalle);
 				$row->articulo = $detalle->getArticulo();
 				$row->presentacion = $detalle->getPresentacion();
 				$datos[] = $row;
 			}
-		} else if($det) {
+		} else if ($det) {
 			$detalle = new EDetalle_Model($det->egreso_detalle);
 			$det->articulo = $detalle->getArticulo();
 			$det->presentacion = $detalle->getPresentacion();
@@ -229,11 +241,12 @@ class Egreso_model extends General_Model {
 		usort($datos, function ($a, $b) {
 			return strcmp(trim(strtoupper($a->articulo->descripcion)), trim(strtoupper($b->articulo->descripcion)));
 		});
-		
+
 		return $datos;
 	}
 
-	public function trasladar($args = []){
+	public function trasladar($args = [])
+	{
 		$prov = $this->Proveedor_model->buscar([
 			"razon_social" => "Interno",
 			"_uno" => true
@@ -261,15 +274,15 @@ class Egreso_model extends General_Model {
 			'estatus_movimiento' => 2
 		];
 
-		if($ing->guardar($datos)) {
+		if ($ing->guardar($datos)) {
 			foreach ($this->getDetalle() as $row) {
 				$row->articulo = $row->articulo->articulo;
 				$det = $ing->setDetalle((array) $row);
-				if($det) {
+				if ($det) {
 					$this->db
-						 ->set("egreso_detalle", $row->egreso_detalle)
-						 ->set("ingreso_detalle", $det->ingreso_detalle)
-						 ->insert("traslado_detalle");
+						->set("egreso_detalle", $row->egreso_detalle)
+						->set("ingreso_detalle", $det->ingreso_detalle)
+						->insert("traslado_detalle");
 				}
 			}
 			return $ing;

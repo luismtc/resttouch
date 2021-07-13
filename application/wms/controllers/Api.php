@@ -44,7 +44,7 @@ class Api extends CI_Controller {
 	public function set_egreso($egreso, $key = "", $asXml = true)
 	{	
 		$ci =& get_instance();
-		$res = ["exito" => 0, "mensaje" => $key];
+		$res = ["exito" => false, "mensaje" => $key];
 		$req = simplexml_load_string($egreso);
 		if (!empty($key)) {
 			$ci->load->library('Registro');
@@ -59,6 +59,7 @@ class Api extends CI_Controller {
 				if(!$yaExiste) {
 					$egr->bodega = isset($req->encabezado->bodega) ? $req->encabezado->bodega : 1;
 					$egr->idcomandafox = isset($req->encabezado->idcomandafox) ? $req->encabezado->idcomandafox : null;
+					$egr->raw_egreso = $egreso;
 					
 					if (empty($id) || $egr->estatus_movimiento == 1) {
 	
@@ -110,19 +111,18 @@ class Api extends CI_Controller {
 		if ($asXml)
 		{
 			$xml = new DOMDocument('1.0');
-			$xml->loadXML(arrayToXml($res, "<resultado/>"));
-	
+			$xml->loadXML(arrayToXml($res, "<resultado/>"));	
 			return $xml->saveXML();		
 		} else {
 			return $res;
 		}
 	}
 
-	public function pruebas($key = "")
+	public function endpoint_set_egreso($key = "")
 	{
-		$datos = new stdClass();
-		$datos->exito = true;
-		$datos->mensaje = 'La prueba fue exitosa';
+		// $datos = new stdClass();
+		// $datos->exito = true;
+		// $datos->mensaje = 'La prueba fue exitosa';
 		$resultado = [];
 		if ($this->input->method() == 'post') {
             $req = json_decode(file_get_contents('php://input'));

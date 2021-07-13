@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import { PaginarArray, MultiFiltro } from '../../../../shared/global';
+import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
+import * as moment from 'moment';
 
 import { Ingreso } from '../../../interfaces/ingreso';
 import { IngresoService } from '../../../services/ingreso.service';
@@ -23,6 +24,11 @@ export class ListaIngresoComponent implements OnInit {
   public pageEvent: PageEvent;
   public txtFiltro = '';
 
+  public params = {
+    _fdel: moment().startOf('month').format(GLOBAL.dbDateFormat),
+    _fal: moment().endOf('month').format(GLOBAL.dbDateFormat)
+  }
+
   constructor(
     private ingresoSrvc: IngresoService
   ) { }
@@ -43,12 +49,10 @@ export class ListaIngresoComponent implements OnInit {
   }
 
   loadIngresos = () => {
-    this.ingresoSrvc.get().subscribe(lst => {
+    this.ingresoSrvc.get(this.params).subscribe(lst => {
       if (lst) {
-        if (lst.length > 0) {
-          this.lstIngresos = lst;
-          this.applyFilter();
-        }
+        this.lstIngresos = lst;
+        this.applyFilter();        
       }
     });
   }

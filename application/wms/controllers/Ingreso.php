@@ -140,9 +140,20 @@ class Ingreso extends CI_Controller {
 
 	public function buscar_ingreso(){
 		$this->load->helper(['jwt', 'authorization']);
-		$headers = $this->input->request_headers();
+		$headers = $this->input->request_headers();		
 		$dataToken = AUTHORIZATION::validateToken($headers['Authorization']);
-		$ingresos = $this->Ingreso_model->buscar($_GET);
+
+		$fltr = $_GET;
+		if(isset($fltr['_fdel']))
+		{
+			$fltr['_fdel'] = ['fecha' => $fltr['_fdel']];
+		}
+		if(isset($fltr['_fal']))
+		{
+			$fltr['_fal'] = ['fecha' => $fltr['_fal']];
+		}
+
+		$ingresos = $this->Ingreso_model->buscar($fltr);
 		$datos = [];
 		if(is_array($ingresos)) {
 			foreach ($ingresos as $row) {

@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { GLOBAL, PaginarArray, MultiFiltro } from '../../../../shared/global';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
+import * as moment from 'moment';
 
 import { Egreso } from '../../../interfaces/egreso';
 import { EgresoService } from '../../../services/egreso.service';
@@ -25,6 +26,10 @@ export class ListaEgresoComponent implements OnInit {
   public txtFiltro = '';
   public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
+  public params = {
+    _fdel: moment().startOf('month').format(GLOBAL.dbDateFormat),
+    _fal: moment().endOf('month').format(GLOBAL.dbDateFormat)
+  }
 
   constructor(
     private egresoSrvc: EgresoService,
@@ -48,12 +53,10 @@ export class ListaEgresoComponent implements OnInit {
   }
 
   loadEgresos = () => {
-    this.egresoSrvc.get().subscribe(lst => {
+    this.egresoSrvc.get(this.params).subscribe(lst => {
       if (lst) {
-        if (lst.length > 0) {
-          this.lstEgresos = lst;
-          this.applyFilter();
-        }
+        this.lstEgresos = lst;
+        this.applyFilter();
       }
     });
   }

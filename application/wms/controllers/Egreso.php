@@ -100,7 +100,18 @@ class Egreso extends CI_Controller {
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$dataToken = AUTHORIZATION::validateToken($headers['Authorization']);	
-		$egresos = $this->Egreso_model->buscar($_GET);
+
+		$fltr = $_GET;
+		if(isset($fltr['_fdel']))
+		{
+			$fltr['_fdel'] = ['fecha' => $fltr['_fdel']];
+		}
+		if(isset($fltr['_fal']))
+		{
+			$fltr['_fal'] = ['fecha' => $fltr['_fal']];
+		}
+
+		$egresos = $this->Egreso_model->buscar($fltr);
 		$datos = [];
 		if(is_array($egresos)) {
 			foreach ($egresos as $row) {

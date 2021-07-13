@@ -1,6 +1,15 @@
 <mat-card class="mat-elevation-z4 fullWidth" style="height: 100% important;">
     <mat-card-content>
         <mat-form-field class="fullWidth">
+            <input matInput type="date" placeholder="Del" [(ngModel)]="params._fdel" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>
+        <mat-form-field class="fullWidth">
+            <input matInput type="date" placeholder="Al" [(ngModel)]="params._fal" [ngModelOptions]="{standalone: true}">
+        </mat-form-field>        
+        <button mat-raised-button type="button" color="accent" (click)="loadIngresos()">
+            Buscar
+        </button>
+        <mat-form-field class="fullWidth">
             <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
         </mat-form-field>
         <mat-nav-list>
