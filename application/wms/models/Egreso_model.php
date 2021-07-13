@@ -13,6 +13,7 @@ class Egreso_model extends General_Model {
 	public $traslado = 0;
 	public $idcomandafox = null;
 	public $ajuste = 0;
+	public $raw_egreso = null;
 
 	public function __construct($id = "")
 	{
@@ -89,8 +90,7 @@ class Egreso_model extends General_Model {
 		$tmpArt = $art->buscar(["codigo" => $item->articulo, "_uno" => true]);
 
 		$bodega = $this->getBodega();
-		if ($bodega)
-		{			
+		if ($bodega) {
 			$tmpArt = $this->db
 				->select('a.*')
 				->from('articulo a')
@@ -103,39 +103,48 @@ class Egreso_model extends General_Model {
 
 		$particion = (isset($item->particion)) ? $item->particion : 1;
 
-
 		if ($tmpArt) {
-			$art = new Articulo_model($tmpArt->articulo);
-			$receta = $art->getReceta();
-			if (count($receta) > 0) {
-				foreach ($receta as $rec) {
-					$bac = new BodegaArticuloCosto_model();
-					$tmp = new Presentacion_model();
-					$pres = $tmp->buscar([
-						"medida" => $rec->medida->medida,
-						"cantidad" => 1,
-						"_uno" => true
-					]);
-					$precio_unitario = $bac->get_costo($this->bodega, $rec->articulo->articulo, $pres->presentacion);
+			try {
+				$art = new Articulo_model($tmpArt->articulo);
+				$receta = $art->getReceta();
+				if (count($receta) > 0) {
+					foreach ($receta as $row) {
+						$rec = new Articulo_model($row->articulo->articulo);
+						$presR = $rec->getPresentacionReporte();
 
+						$bac = $this->BodegaArticuloCosto_model->buscar([
+							"articulo" => $row->articulo->articulo,
+							"bodega" => $this->bodega,
+							"_uno" => true
+						]);
+
+						if ($bac && $bac->bodega_articulo_costo)
+						{
+							$bac = new BodegaArticuloCosto_model($bac->bodega_articulo_costo);
+						}
+
+						$row->cantidad = ((float)$presR->cantidad == 0) ? 0 : (($row->cantidad * $item->cantidad) / $presR->cantidad);
+						$costo = ($bac && $bac->bodega_articulo_costo) ? $bac->get_costo($this->bodega, $rec->getPK(), $presR->presentacion) : 0;
+						$total = ($costo * $row->cantidad);						
+						$this->setDetalle([
+							"cantidad" => $row->cantidad,
+							"articulo" => $row->articulo->articulo,
+							"precio_unitario" => $costo,
+							"precio_total" => $total,
+							"presentacion" => $presR->presentacion
+						]);
+					}
+				} else {
 					$datos = [
-						"cantidad" => $rec->cantidad/$particion,
-						"articulo" => $rec->articulo->articulo,
-						"precio_unitario" => $precio_unitario*1,
-						"precio_total" => $rec->cantidad * $precio_unitario/$particion,
-						"presentacion" => $pres->presentacion
+						"cantidad" => $item->cantidad / $particion,
+						"articulo" => $art->getPK(),
+						"precio_unitario" => $item->precio_unitario * 1,
+						"precio_total" => $item->cantidad * $item->precio_unitario / $particion,
+						"presentacion" => $art->presentacion
 					];
 					$this->setDetalle($datos);
 				}
-			} else {
-				$datos = [
-					"cantidad" => $item->cantidad/$particion,
-					"articulo" => $art->getPK(),
-					"precio_unitario" => $item->precio_unitario*1,
-					"precio_total" => $item->cantidad * $item->precio_unitario/$particion,
-					"presentacion" => $art->presentacion
-				];
-				$this->setDetalle($datos);
+			} catch (Exception $ex) {
 			}
 		}
 	}
