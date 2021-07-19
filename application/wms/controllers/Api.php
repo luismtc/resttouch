@@ -68,7 +68,7 @@ class Api extends CI_Controller {
 							$cantDetalles = count($req->detalle->item);
 							for($i = 0; $i < $cantDetalles; $i++) {
 								if(!$egr->checkDetalleApi($egr->bodega, $req->detalle->item[$i]->articulo)) {
-									$noExisten[] = $req->detalle->item[$i]->articulo;
+									$noExisten[] = $req->detalle->item[$i]->articulo.(isset($req->detalle->item[$i]->descripcion) ? (': '.$req->detalle->item[$i]->descripcion) : '');
 								}
 							}
 						}
