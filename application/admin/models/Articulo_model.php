@@ -24,6 +24,9 @@ class Articulo_model extends General_model {
 	public $costo = 0;
 	public $mostrar_inventario = 0;
 	public $esreceta = 0;
+	public $debaja = 0;
+	public $fechabaja = null;
+	public $usuariobaja = null;
 
 	public function __construct($id = "")
 	{
@@ -265,6 +268,8 @@ class Articulo_model extends General_model {
 						 ->where("a.articulo", $articulo)
 						 ->get("ingreso_detalle a")
 						 ->row(); //total ingresos
+		
+		$qi = $this->db->last_query();
 
 		if (isset($args['sede'])) {
 			if (is_array($args['sede'])) {
@@ -298,6 +303,8 @@ class Articulo_model extends General_model {
 						->where("a.articulo", $articulo)
 						->get("egreso_detalle a")
 						->row();//total egresos wms
+		
+		$qe = $this->db->last_query();
 
 		//if (!$receta) {
 		$venta = $this->getVentaReceta(null, $args);
@@ -758,7 +765,10 @@ class Articulo_model extends General_model {
 			->select("b.categoria, b.categoria_grupo, b.descripcion, b.categoria_grupo_grupo")
 			->join("categoria a", "a.categoria = b.categoria")
 			->join("articulo c", "b.categoria_grupo = c.categoria_grupo")			
-			->where("c.mostrar_pos", 1)			
+			->where("c.mostrar_pos", 1)	
+			->where("a.debaja", 0)
+			->where("b.debaja", 0)
+			->where("c.debaja", 0)		
 			->group_by("b.categoria, b.categoria_grupo, b.descripcion")
 			->order_by("b.descripcion")
 			->get("categoria_grupo b")
@@ -784,6 +794,9 @@ class Articulo_model extends General_model {
 			->join("categoria_grupo b", "a.categoria = b.categoria")
 			->join("articulo c", "b.categoria_grupo = c.categoria_grupo")
 			->where("c.mostrar_pos", 1)
+			->where("a.debaja", 0)
+			->where("b.debaja", 0)
+			->where("c.debaja", 0)
 			->group_by("a.categoria, a.descripcion")
 			->order_by("a.descripcion")
 			->get("categoria a")
@@ -800,6 +813,9 @@ class Articulo_model extends General_model {
 			->join("categoria_grupo b", "b.categoria_grupo = c.categoria_grupo")
 			->join("categoria a", "a.categoria = b.categoria")
 			->where("c.mostrar_pos", 1)
+			->where("a.debaja", 0)
+			->where("b.debaja", 0)
+			->where("c.debaja", 0)
 			->order_by("c.descripcion")
 			->get("articulo c")
 			->result();

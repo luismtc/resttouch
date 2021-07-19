@@ -59,7 +59,7 @@ export class ExistenciasComponent implements OnInit {
       this.cargando = false;
   		if (res) {
 	        const blob = new Blob([res], { type: 'application/pdf' });
-	        saveAs(blob, `${this.titulo}.pdf`);
+	        saveAs(blob, `${this.titulo}_${moment().format(GLOBAL.dateTimeFormatRptName)}.pdf`);
 	      } else {
 	        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
 	      }
@@ -73,7 +73,7 @@ export class ExistenciasComponent implements OnInit {
       this.cargando = false;
       if (res) {
         const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
-        saveAs(blob, `${this.titulo}.xls`);
+        saveAs(blob, `${this.titulo}_${moment().format(GLOBAL.dateTimeFormatRptName)}.xls`);
       } else {
         this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
       }

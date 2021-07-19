@@ -15,7 +15,8 @@ export class RptBotonesComponent implements OnInit {
   @Output() resetParamsClick = new EventEmitter();
 
   @Input() configuracion: ConfiguracionBotones = {
-    isHtmlDisabled: false, isPdfDisabled: false, isExcelDisabled: false, showHtml: true, showPdf: true, showExcel: true
+    isHtmlDisabled: false, isPdfDisabled: false, isExcelDisabled: false, 
+    showHtml: true, showPdf: true, showExcel: true
   };
 
   constructor() { }

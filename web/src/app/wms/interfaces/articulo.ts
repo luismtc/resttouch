@@ -25,6 +25,9 @@ export interface Articulo {
     mostrar_inventario?: number;
     esreceta?: number;
     subcategoria?: CategoriaGrupo;
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }
 
 export interface ArticuloResponse {
@@ -46,6 +49,9 @@ export interface ArticuloResponse {
     rendimiento?: number;
     mostrar_inventario?: number;
     esreceta?: number;
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }
 
 export interface ArbolCategoriaGrupo {
@@ -56,6 +62,9 @@ export interface ArbolCategoriaGrupo {
     receta: number;
     articulo: Articulo[];
     mostrarEnPos?: boolean;
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }
 
 export interface ArbolArticulos {
@@ -64,6 +73,9 @@ export interface ArbolArticulos {
     descripcion: string;
     categoria_grupo: ArbolCategoriaGrupo[];
     mostrarEnPos?: boolean;
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }
 
 export interface NodoProducto {
@@ -76,6 +88,9 @@ export interface NodoProducto {
     combo?: number;
     multiple?: number;
     hijos?: NodoProducto[];
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }
 
 export interface ProductoSelected {

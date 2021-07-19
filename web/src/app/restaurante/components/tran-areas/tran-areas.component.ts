@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTab } from '@angular/material/tabs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,14 +17,15 @@ import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { ComandaService } from '../../services/comanda.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 import { Cliente } from '../../../admin/interfaces/cliente';
-import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+// import * as moment from 'moment';
 
 @Component({
   selector: 'app-tran-areas',
   templateUrl: './tran-areas.component.html',
   styleUrls: ['./tran-areas.component.css']
 })
-export class TranAreasComponent implements OnInit, AfterViewInit {
+export class TranAreasComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public divSize: any = { h: 0, w: 0 };
   public openedRightPanel: boolean;
@@ -40,6 +41,8 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   public mesaSeleccionadaToOpen: any;
   public configTipoPantalla = 1;
   public clientePedido: Cliente = null;
+
+  private endSubs = new Subscription();
 
   constructor(
     public dialog: MatDialog,
@@ -74,6 +77,10 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     }, 600);
   }
 
+  ngOnDestroy() {
+    this.endSubs.unsubscribe();
+  }
+
   actualizar = () => {
     // console.log('MESA SELECCIONADA = ', this.mesaSeleccionada);
     const area = this.lstTabsAreas.find((c: Area) => +c.area === +this.mesaSeleccionada.mesa.area.area);
@@ -104,15 +111,17 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
 
   loadAreas = (saveOnTemp = false, objMesaEnUso: any = {}) => {
     this.cargando = true;
-    this.areaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res) => {
-      if (!saveOnTemp) {
-        this.lstTabsAreas = res;
-        this.cargando = false;
-      } else {
-        this.lstTabsAreasForUpdate = res;
-        this.updateTableStatus(objMesaEnUso.mesaenuso);
-      }
-    });
+    this.endSubs.add(      
+      this.areaSrvc.get({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res) => {
+        if (!saveOnTemp) {
+          this.lstTabsAreas = res;
+          this.cargando = false;
+        } else {
+          this.lstTabsAreasForUpdate = res;
+          this.updateTableStatus(objMesaEnUso.mesaenuso);
+        }
+      })
+    );
   }
 
   updateTableStatus = (objMesaEnUso: any = {}) => {
@@ -151,13 +160,15 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
             data: { mesa: m.mesaSelected }
           });
 
-          pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
-            if (cli) {
-              this.clientePedido = cli;
-              this.ls.set(varCliPedido, this.clientePedido);
-              this.aperturaCargaMesa(m);
-            }
-          });
+          this.endSubs.add(            
+            pideTelefonoRef.afterClosed().subscribe((cli: Cliente) => {
+              if (cli) {
+                this.clientePedido = cli;
+                this.ls.set(varCliPedido, this.clientePedido);
+                this.aperturaCargaMesa(m);
+              }
+            })
+          );
         } else {
           this.clientePedido = this.ls.get(varCliPedido);
           this.aperturaCargaMesa(m);
@@ -190,27 +201,29 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   guardarMesa = (m: any) => {
-    this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
-      // console.log(res);
-      this.cargando = false;
-      if (res.exito) {
-        this.socket.emit('refrescar:mesa', {});
-        this.mesaSeleccionada = res.comanda;
-        // console.log('m', m);
-        this.setEstatusMesa(m, +res.comanda.mesa.estatus);
-        this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
-        this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
-        this.snTrancomanda.rolesUsuario = this.mesaSeleccionada.turno_rol;
-        // this.toggleRightSidenav();
-        switch (this.configTipoPantalla) {
-          case 1: this.toggleRightSidenav(); break;
-          case 2: this.openTranComandaAlt(); break;
-          default: this.toggleRightSidenav();
+    this.endSubs.add(      
+      this.comandaSrvc.save(this.mesaSeleccionadaToOpen).subscribe(res => {
+        // console.log(res);
+        this.cargando = false;
+        if (res.exito) {
+          this.socket.emit('refrescar:mesa', {});
+          this.mesaSeleccionada = res.comanda;
+          // console.log('m', m);
+          this.setEstatusMesa(m, +res.comanda.mesa.estatus);
+          this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
+          this.snTrancomanda.setSelectedCuenta(this.mesaSeleccionada.cuentas[0].numero);
+          this.snTrancomanda.rolesUsuario = this.mesaSeleccionada.turno_rol;
+          // this.toggleRightSidenav();
+          switch (this.configTipoPantalla) {
+            case 1: this.toggleRightSidenav(); break;
+            case 2: this.openTranComandaAlt(); break;
+            default: this.toggleRightSidenav();
+          }
+        } else {
+          this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
         }
-      } else {
-        this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
-      }
-    });
+      })
+    );
   }
 
   openAbrirMesaDialog(m: any) {
@@ -245,15 +258,17 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
         data: this.mesaSeleccionadaToOpen
       });
 
-      abrirMesaRef.afterClosed().subscribe((result: Comanda) => {
-        if (result) {
-          this.mesaSeleccionadaToOpen = result;
-          // console.log(JSON.stringify(this.mesaSeleccionada));
-          this.guardarMesa(m);
-        } else {
-          this.cargando = false;
-        }
-      });
+      this.endSubs.add(        
+        abrirMesaRef.afterClosed().subscribe((result: Comanda) => {
+          if (result) {
+            this.mesaSeleccionadaToOpen = result;
+            // console.log(JSON.stringify(this.mesaSeleccionada));
+            this.guardarMesa(m);
+          } else {
+            this.cargando = false;
+          }
+        })
+      );
     } else {
       this.mesaSeleccionadaToOpen.mesero = this.ls.get(GLOBAL.usrTokenVar).idusr;
       this.guardarMesa(m);
@@ -320,9 +335,11 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
   }
 
   fuerzaCierreComanda = (shouldToggle: boolean) => {
-    this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {
-      this.loadComandaMesa(this.mesaSeleccionada.mesa, shouldToggle);
-    });
+    this.endSubs.add(      
+      this.comandaSrvc.cerrarEstacion(this.mesaSeleccionada.comanda).subscribe(resCierre => {
+        this.loadComandaMesa(this.mesaSeleccionada.mesa, shouldToggle);
+      })
+    );
   }
 
   openTranComandaAlt = () => {
@@ -332,14 +349,16 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
       data: { mesa: this.mesaSeleccionada }
     });
 
-    tranComandaRef.afterClosed().subscribe((res: any) => {
-      this.checkEstatusMesa();
-      if (res) {
-        this.loadAreas(true, { mesaenuso: res });
-      } else {
-        this.cargando = false;
-      }
-    });
+    this.endSubs.add(      
+      tranComandaRef.afterClosed().subscribe((res: any) => {
+        this.checkEstatusMesa();
+        if (res) {
+          this.loadAreas(true, { mesaenuso: res });
+        } else {
+          this.cargando = false;
+        }
+      })
+    );
   }
 
   loadComandaMesa = (obj: any, shouldToggle = true) => {
@@ -350,58 +369,60 @@ export class TranAreasComponent implements OnInit, AfterViewInit {
     }
 
     this.cargando = true;
-    this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
-      // console.log('RESPUESTA DE GET COMANDA = ', res);
-      // this.cargando = false;
-      if (res.exito) {
-        if (!Array.isArray(res)) {
-          this.mesaSeleccionada = res;
-          this.snTrancomanda.rolesUsuario = this.mesaSeleccionada.turno_rol;
-        } else {
-          if (res.length === 0) {
-            this.mesaSeleccionada = {
-              mesa: this.mesaSeleccionada.mesa,
-              cuentas: [
-                { cerrada: 1 }
-              ]
-            };
+    this.endSubs.add(      
+      this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
+        // console.log('RESPUESTA DE GET COMANDA = ', res);
+        // this.cargando = false;
+        if (res.exito) {
+          if (!Array.isArray(res)) {
+            this.mesaSeleccionada = res;
+            this.snTrancomanda.rolesUsuario = this.mesaSeleccionada.turno_rol;
+          } else {
+            if (res.length === 0) {
+              this.mesaSeleccionada = {
+                mesa: this.mesaSeleccionada.mesa,
+                cuentas: [
+                  { cerrada: 1 }
+                ]
+              };
+            }
+            this.checkEstatusMesa();
           }
+          // console.log('MESA SELECTED = ', this.mesaSeleccionada);
           this.checkEstatusMesa();
-        }
-        // console.log('MESA SELECTED = ', this.mesaSeleccionada);
-        this.checkEstatusMesa();
-        if (shouldToggle) {
-          // const cuentas = this.mesaSeleccionada.cuentas;
-          this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
-          switch (this.configTipoPantalla) {
-            case 1: this.toggleRightSidenav(); break;
-            case 2: this.openTranComandaAlt(); break;
-            default: this.toggleRightSidenav();
+          if (shouldToggle) {
+            // const cuentas = this.mesaSeleccionada.cuentas;
+            this.snTrancomanda.llenaProductosSeleccionados(this.mesaSeleccionada);
+            switch (this.configTipoPantalla) {
+              case 1: this.toggleRightSidenav(); break;
+              case 2: this.openTranComandaAlt(); break;
+              default: this.toggleRightSidenav();
+            }
+          } else {
+            // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
+            this.checkEstatusMesa();
+            this.cargando = false;
           }
         } else {
-          // console.log(`SIN TOGGLE RIGHT PANEL ${moment().format(GLOBAL.dateTimeFormat)}`);
+          if (res.mensaje) {
+            this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
+          }
+          if (Array.isArray(res)) {
+            if (res.length === 0) {
+              this.mesaSeleccionada = {
+                mesa: this.mesaSeleccionada.mesa,
+                cuentas: [
+                  { cerrada: 1 }
+                ]
+              };
+            }
+          }
           this.checkEstatusMesa();
           this.cargando = false;
         }
-      } else {
-        if (res.mensaje) {
-          this.snackBar.open(`${res.mensaje}`, 'ERROR', { duration: 5000 });
-        }
-        if (Array.isArray(res)) {
-          if (res.length === 0) {
-            this.mesaSeleccionada = {
-              mesa: this.mesaSeleccionada.mesa,
-              cuentas: [
-                { cerrada: 1 }
-              ]
-            };
-          }
-        }
         this.checkEstatusMesa();
-        this.cargando = false;
-      }
-      this.checkEstatusMesa();
-    });
+      })
+    );
   }
 
 }

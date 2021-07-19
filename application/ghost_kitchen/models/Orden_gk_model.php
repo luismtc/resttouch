@@ -58,6 +58,7 @@ class Orden_gk_model extends General_model
 		$ordenrt->total_orden = 0.00;
 		$ordenrt->total_descuento = 0.00;
 		$ordenrt->comanda_origen = $this->comanda_origen;
+		$ordenrt->total_propina = 0.00;
 		$orden_original = json_decode($this->raw_orden);
 		$ordenrt->completa = true;
 		$ordenrt->pendiente = '';
@@ -138,6 +139,12 @@ class Orden_gk_model extends General_model
 		}
 		$ordenrt->datos_factura->email = $rutasFacturacion['email'] ? get_dato_from_paths($orden_original, $rutasFacturacion['email']) : null;
 
+		$descripcionesPropina = $this->get_ruta(30);
+		if (!$descripcionesPropina || strlen(trim($descripcionesPropina)) == 0)
+		{
+			$descripcionesPropina = 'tip,propina';
+		}
+
 		$ordenrt->articulos = [];
 		$rutaArticulos = $this->get_ruta(2);
 		if ($rutaArticulos) {
@@ -155,67 +162,75 @@ class Orden_gk_model extends General_model
 				$rutas = (object)$rutas;
 				$sedesNoEncontradas = [];
 				foreach ($listaArticulos as $art) {
-					$obj = new stdClass();
-					$nombreVendor = $rutas->vendor ? get_dato_from_paths($art, $rutas->vendor) : null;
-					$vendor = null;
-					$sede = null;
-					$obj->id_tercero = $rutas->id_tercero ? get_dato_from_paths($art, $rutas->id_tercero) : null;
-					$obj->id_padre_tercero = $rutas->id_padre_tercero ? get_dato_from_paths($art, $rutas->id_padre_tercero) : null;
-
-					if ($nombreVendor) {
-						$vendor = $this->Vendor_tercero_model->buscar_agregar($nombreVendor, $this->comanda_origen);
-						if ($vendor) {
-							$svt = $this->Sede_vendor_tercero_model->full_search(['vendor_tercero' => $vendor->vendor_tercero, '_uno' => true]);
-							if ($svt) {
-								$sede = $svt->sede;
-								if (!empty($obj->id_tercero)) {
-									$this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
-								}
-							} else if (!empty($obj->id_tercero)) {
-								$idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
-								$sede_articulo = $idArticulo > 0 ? $this->Articulo_model->get_sede_articulo(['articulo' => $idArticulo]) : null;
-
-								if ($sede_articulo) {
-									$nsvt = new Sede_vendor_tercero_model();
-									$nsvt->sede = $sede_articulo->sede;
-									$nsvt->vendor_tercero = $vendor->vendor_tercero;
-									$nsvt->guardar();
-									$sede = $this->Sede_model->buscar(['sede' => $sede_articulo->sede, '_uno' => true]);
+					$descripcionArticulo = $rutas->descripcion ? get_dato_from_paths($art, $rutas->descripcion) : '';
+					$pos = stripos($descripcionesPropina, $descripcionArticulo);
+					if($pos === false)
+					{
+						$obj = new stdClass();
+						$nombreVendor = $rutas->vendor ? get_dato_from_paths($art, $rutas->vendor) : null;
+						$vendor = null;
+						$sede = null;
+						$obj->id_tercero = $rutas->id_tercero ? get_dato_from_paths($art, $rutas->id_tercero) : null;
+						$obj->id_padre_tercero = $rutas->id_padre_tercero ? get_dato_from_paths($art, $rutas->id_padre_tercero) : null;
+	
+						if ($nombreVendor) {
+							$vendor = $this->Vendor_tercero_model->buscar_agregar($nombreVendor, $this->comanda_origen);
+							if ($vendor) {
+								$svt = $this->Sede_vendor_tercero_model->full_search(['vendor_tercero' => $vendor->vendor_tercero, '_uno' => true]);
+								if ($svt) {
+									$sede = $svt->sede;
+									if (!empty($obj->id_tercero)) {
+										$this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
+									}
+								} else if (!empty($obj->id_tercero)) {
+									$idArticulo = $this->Articulo_vendor_tercero_model->get_articulo_vendor($vendor->vendor_tercero, $obj->id_tercero);
+									$sede_articulo = $idArticulo > 0 ? $this->Articulo_model->get_sede_articulo(['articulo' => $idArticulo]) : null;
+	
+									if ($sede_articulo) {
+										$nsvt = new Sede_vendor_tercero_model();
+										$nsvt->sede = $sede_articulo->sede;
+										$nsvt->vendor_tercero = $vendor->vendor_tercero;
+										$nsvt->guardar();
+										$sede = $this->Sede_model->buscar(['sede' => $sede_articulo->sede, '_uno' => true]);
+									}
 								}
 							}
 						}
-					}
-
-					if (!$sede) {
-						$nombreVendor = !empty($nombreVendor) ? trim($nombreVendor) : 'Artículo sin vendor';
-						if (!in_array($nombreVendor, $sedesNoEncontradas)) {
-							$sedesNoEncontradas[] = $nombreVendor;
+	
+						if (!$sede) {
+							$nombreVendor = !empty($nombreVendor) ? trim($nombreVendor) : 'Artículo sin vendor';
+							if (!in_array($nombreVendor, $sedesNoEncontradas)) {
+								$sedesNoEncontradas[] = $nombreVendor;
+							}
 						}
-					}
-
-					$obj->descripcion = $rutas->descripcion ? get_dato_from_paths($art, $rutas->descripcion) : null;
-					$obj->vendor = $vendor;
-					$obj->atiende = $sede;
-					$obj->precio = $rutas->precio ? get_dato_from_paths($art, $rutas->precio) : null;
-					$obj->cantidad = $rutas->cantidad ? get_dato_from_paths($art, $rutas->cantidad) : null;
-					$obj->descuento = $rutas->descuento ? get_dato_from_paths($art, $rutas->descuento) : 0.00;
-					$obj->total = 0.00;
-
-					if ($obj->precio && $obj->cantidad) {
-						$obj->total = (float)$obj->precio * (float)$obj->cantidad;
-						if ($obj->descuento) {
-							$obj->total -= (float)$obj->descuento;
+	
+						$obj->descripcion = !empty(trim($descripcionArticulo)) ? trim($descripcionArticulo) : null;
+						$obj->vendor = $vendor;
+						$obj->atiende = $sede;
+						$obj->precio = $rutas->precio ? get_dato_from_paths($art, $rutas->precio) : null;
+						$obj->cantidad = $rutas->cantidad ? get_dato_from_paths($art, $rutas->cantidad) : null;
+						$obj->descuento = $rutas->descuento ? get_dato_from_paths($art, $rutas->descuento) : 0.00;
+						$obj->total = 0.00;
+	
+						if ($obj->precio && $obj->cantidad) {
+							$obj->total = (float)$obj->precio * (float)$obj->cantidad;
+							if ($obj->descuento) {
+								$obj->total -= (float)$obj->descuento;
+							}
 						}
-					}
-
-					if ($obj->descuento && (float)$obj->descuento > 0) {
-						$ordenrt->total_descuento += (float)$obj->descuento;
-					}
-
-					$ordenrt->total_orden += $obj->total;
-
-					$ordenrt->articulos[] = $obj;
-					$obj = null;
+	
+						if ($obj->descuento && (float)$obj->descuento > 0) {
+							$ordenrt->total_descuento += (float)$obj->descuento;
+						}
+	
+						$ordenrt->total_orden += $obj->total;
+	
+						$ordenrt->articulos[] = $obj;
+						$obj = null;
+					} else {
+						$montoPropina = $rutas->precio ? get_dato_from_paths($art, $rutas->precio) : 0.00;
+						$ordenrt->total_propina += (float)$montoPropina;
+					}					
 				}
 
 				if (count($sedesNoEncontradas) > 0) {
@@ -249,4 +264,15 @@ class Orden_gk_model extends General_model
 		}
 		return null;
 	}
+
+	public function get_distinct_sedes($articulos = [])
+    {
+        $sedes = [];
+        foreach ($articulos as $art) {
+            if (!in_array($art->atiende, $sedes)) {
+                $sedes[] = $art->atiende;
+            }
+        }
+        return $sedes;
+    }
 }

@@ -13,6 +13,9 @@ export interface CategoriaGrupo {
     cuenta_contable?: string;
     bodega?: number;
     antecesores?: string;
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }
 
 export interface CategoriaGrupoResponse {
@@ -26,6 +29,9 @@ export interface CategoriaGrupoResponse {
     cuenta_contable?: string;
     bodega?: number;
     articulo: Articulo[];
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }
 
 export interface CategoriaGrupoImpresora {
@@ -38,4 +44,7 @@ export interface CategoriaGrupoImpresora {
     cuenta_contable?: string;
     bodega?: number;
     descuento: number;
+    debaja?: number;
+    fechabaja?: string;
+    usuariobaja?: number;
 }

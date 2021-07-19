@@ -168,7 +168,7 @@ if ( ! function_exists("array_result")) {
 	}
 }
 
-if( ! function_exists('insertar_articulo')){
+if( ! function_exists('buscar_articulo')){
 	function buscar_articulo($datos, $articulos, $descripcion='', $result=[]) {
 		$cat = [];
 		foreach ($datos as $row) {
@@ -180,7 +180,7 @@ if( ! function_exists('insertar_articulo')){
 				$art = [];
 				$cantidad = 0;
 				foreach ($row->articulo as $value) {
-					if (isset($articulos[$value->articulo])) {
+					if (isset($value->articulo) && isset($articulos[$value->articulo])) {
 						$value = (object) $articulos[$value->articulo];
 						$art[] = $value;
 						$cantidad += $value->cantidad;

@@ -49,14 +49,19 @@ export class ListaProductoAltComponent implements OnInit {
     this.subcategorias = [];
     this.articulos = [];
     for (const subcat of subcats) {
-      this.subcategorias.push(subcat);
+      if (+subcat.debaja === 0){
+        this.subcategorias.push(subcat);
+      }
     }
   }
 
   fillArticulos = (arts: Articulo[]) => {
     this.articulos = [];
     for (const a of arts) {
-      this.articulos.push(a);
+      if (+a.debaja === 0)
+      {
+        this.articulos.push(a);
+      }
     }
   }
 
@@ -81,7 +86,8 @@ export class ListaProductoAltComponent implements OnInit {
       presentacion: art.presentacion,
       codigo: art.codigo,
       combo: art.combo,
-      multiple: art.multiple
+      multiple: art.multiple,
+      debaja: art.debaja
     };
     // console.log(obj);
     this.productoClickedEv.emit(obj);

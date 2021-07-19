@@ -13,6 +13,7 @@ export const GLOBAL = {
     dateTimeFormatMilli: 'DD/MM/YYYY HH:mm:ss.SSS',
     dateTimeFormatBT: 'DD-MM-YYYY HH:mm:ss',
     dateTimeFormatBTMilli: 'DD-MM-YYYY HH:mm:ss.SSS',
+    dateTimeFormatRptName: 'YYYYMMDDHHmmss',
     url: `${urlBase}/index.php`,
     urlAppRestaurante: `${urlBase}/restaurante.php`,
     urlCatalogos: `${urlBase}/index.php/catalogo`,

@@ -12,6 +12,9 @@ class Cgrupo_model extends General_model {
 	public $descuento = 0;
 	public $cuenta_contable = null;
 	public $bodega = null;
+	public $debaja = 0;
+	public $fechabaja = null;
+	public $usuariobaja = null;
 
 	public function __construct($id = "")
 	{

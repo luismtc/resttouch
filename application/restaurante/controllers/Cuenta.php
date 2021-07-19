@@ -1,21 +1,22 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cuenta extends CI_Controller {
+class Cuenta extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model([
-			"Comanda_model", 
-			"Dcomanda_model", 
-			"Cuenta_model", 
+			"Comanda_model",
+			"Dcomanda_model",
+			"Cuenta_model",
 			"Dcuenta_model",
-			"Mesa_model"
+			"Mesa_model",
+			"Sede_model"
 		]);
 
-		$this->output
-		->set_content_type("application/json", "UTF-8");
+		$this->output->set_content_type("application/json", "UTF-8");
 	}
 
 	public function index()
@@ -29,7 +30,7 @@ class Cuenta extends CI_Controller {
 		$datos = ["exito" => false, "facturada" => false];
 
 		if ($this->input->method() == 'post') {
-			if (isset($req->forma_pago)) {		
+			if (isset($req->forma_pago)) {
 				$cta = new Cuenta_model($cuenta);
 				$pagos = $cta->get_forma_pago();
 
@@ -49,7 +50,7 @@ class Cuenta extends CI_Controller {
 							$total += $req->comision_monto;
 						}
 
-						if($total == $req->total) {
+						if ($total == $req->total) {
 							$exito = true;
 							$continuar = true;
 							$facturar = true;
@@ -63,7 +64,7 @@ class Cuenta extends CI_Controller {
 									$facturar = false;
 								}
 								$fpagos[] = $fpago->sinfactura;
-							}	
+							}
 
 							$fpagos = array_unique($fpagos);
 							if (count($fpagos) > 1) {
@@ -72,10 +73,10 @@ class Cuenta extends CI_Controller {
 
 							if ($continuar) {
 								foreach ($req->forma_pago as $row) {
-									if(!$cta->cobrar($row)) {
+									if (!$cta->cobrar($row)) {
 										$exito = false;
-									} 	
-								}			
+									}
+								}
 
 								if ($exito) {
 									$cta->guardar(["cerrada" => 1]);
@@ -89,7 +90,7 @@ class Cuenta extends CI_Controller {
 									}
 									if ($cerrada == count($cuentas)) {
 										$tmp = $com->getMesas();
-										
+
 										if ($tmp) {
 											$mesa = new Mesa_model($tmp->mesa);
 											$mesa->guardar(["estatus" => 1]);
@@ -99,18 +100,18 @@ class Cuenta extends CI_Controller {
 									}
 									$datos['exito'] = true;
 									$datos['mensaje'] = "Cobro realizado exitosamente";
-									$datos['cuenta'] = $cta;	
+									$datos['cuenta'] = $cta;
 									$datos['facturar'] = $facturar;
+									$datos['entidad'] = $facturar ? null : $this->getDatosRecibo($cta->cuenta);
 								} else {
 									$datos['mensaje'] = "Ocurrio un error al realizar el cobro, intentelo nuevamente";
 								}
 							} else {
 								$datos['mensaje'] = "No puede combinar pago con factura y sin factura";
 							}
-								
 						} else {
 							$datos['mensaje'] = "El monto no conincide con el total de la cuenta";
-						}	
+						}
 					} else {
 						$datos['mensaje'] = "La cuenta ya esta cerrada";
 					}
@@ -124,7 +125,32 @@ class Cuenta extends CI_Controller {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
+	}
+
+	private function getDatosRecibo($idCta)
+	{
+		$cuenta = new Cuenta_model($idCta);
+		$detalle = $cuenta->getDetalle();
+		$empresa = $cuenta->getEmpresa();
+		$formas_pago = $cuenta->get_forma_pago();
+		$sede = new Sede_model($empresa->sede);
+
+		$propina = 0.00;
+		foreach($formas_pago as $fp)
+		{
+			$propina += (float)$fp->propina;
+		}
+
+		return [
+			'empresa' => $empresa,
+			'sede' => $sede,
+			'comanda' => $cuenta->comanda,
+			'numero' => $cuenta->numero,
+			'nombre' => $cuenta->nombre,
+			'propina' => $propina,
+			'detalle' => $detalle
+		];
 	}
 
 	public function get_cuenta($id)
@@ -134,17 +160,16 @@ class Cuenta extends CI_Controller {
 		$pendiente = $cuenta->getDetalle(["impreso" => 0]);
 
 		$this->output
-		->set_output(json_encode([
-			"cuenta" => [
-				"nombre" => $cuenta->nombre,
-				"numero" => $cuenta->numero,
-				"cerrada" => $cuenta->cerrada
-			],
-			"detalle" => $detalle,
-			"pendiente" => $pendiente
-		]));
+			->set_output(json_encode([
+				"cuenta" => [
+					"nombre" => $cuenta->nombre,
+					"numero" => $cuenta->numero,
+					"cerrada" => $cuenta->cerrada
+				],
+				"detalle" => $detalle,
+				"pendiente" => $pendiente
+			]));
 	}
-
 }
 
 /* End of file Cuenta.php */

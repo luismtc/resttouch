@@ -39,10 +39,11 @@ import { EcoFabSpeedDialModule } from '@ecodev/fab-speed-dial';
 
 import { GhostKitchenRoutingModule } from './ghost-kitchen-routing.module';
 import { SeguimientoComponent } from './components/seguimiento/seguimiento.component';
+import { DistribucionPropinasComponent } from './components/reporte/distribucion-propinas/distribucion-propinas.component';
 
 
 @NgModule({
-  declarations: [SeguimientoComponent],
+  declarations: [SeguimientoComponent, DistribucionPropinasComponent],
   imports: [
     CommonModule,
     GhostKitchenRoutingModule,

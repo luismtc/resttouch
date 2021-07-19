@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,13 +20,14 @@ import { ImpuestoEspecialService } from '../../../../admin/services/impuesto-esp
 import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { ReplicarASedesDialogComponent } from '../replicar-a-sedes-dialog/replicar-a-sedes-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-form-producto',
   templateUrl: './form-producto.component.html',
   styleUrls: ['./form-producto.component.css']
 })
-export class FormProductoComponent implements OnInit {
+export class FormProductoComponent implements OnInit, OnDestroy {
 
   @Input() articulo: Articulo;
   @Input() categoria: Categoria = null;
@@ -50,6 +51,8 @@ export class FormProductoComponent implements OnInit {
   public esMovil = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
 
+  private endSubs = new Subscription();
+
   constructor(
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -68,6 +71,10 @@ export class FormProductoComponent implements OnInit {
     this.loadArticulos();
     this.loadPresentaciones();
     this.loadImpuestosEspeciales();
+  }
+
+  ngOnDestroy() {
+    this.endSubs.unsubscribe();
   }
 
   resetArticulo = () => {
@@ -99,55 +106,64 @@ export class FormProductoComponent implements OnInit {
 
   onSubmit = () => {
     // console.log(this.articulo);
-    this.articuloSrvc.saveArticulo(this.articulo).subscribe(res => {
-      // console.log(res);
-      if (res.exito) {
-        this.articuloSvd.emit();
-        this.resetArticulo();
-        this.articulo = res.articulo;
-        this.loadRecetas(this.articulo.articulo);
-        this.loadArticulos();
-        this.snackBar.open('Artículo guardado con éxito...', 'Artículo', { duration: 3000 });
-      } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
-      }
-    });
+    this.endSubs.add(      
+      this.articuloSrvc.saveArticulo(this.articulo).subscribe(res => {
+        // console.log(res);
+        if (res.exito) {
+          this.articuloSvd.emit();
+          this.resetArticulo();
+          this.articulo = res.articulo;
+          this.loadRecetas(this.articulo.articulo);
+          this.loadArticulos();
+          this.filtrarPresentaciones(this.articulo);
+          this.snackBar.open('Artículo guardado con éxito...', 'Artículo', { duration: 3000 });
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Articulo', { duration: 3000 });
+        }
+      })
+    );
   }
 
   loadMedidas = () => {
-    this.medidaSrvc.get().subscribe(res => {
-      if (res) {
-        this.medidasFull = res;
-      }
-    });
+    this.endSubs.add(      
+      this.medidaSrvc.get().subscribe(res => {
+        if (res) {
+          this.medidasFull = res;
+        }
+      })
+    );
   }
 
   loadPresentaciones = () => {
-    this.presentacionSrvc.get().subscribe(res => {
-      if (res) {
-        this.presentaciones = res;
-        this.filtrarPresentaciones();
-      }
-    });
+    this.endSubs.add(      
+      this.presentacionSrvc.get().subscribe(res => {
+        if (res) {
+          this.presentaciones = res;
+          this.filtrarPresentaciones();
+        }
+      })
+    );
   }
 
   filtrarPresentaciones = (art: Articulo = null) => {
     if (this.presentaciones && this.presentaciones.length > 0) {
       if (art?.articulo) {
         // console.log('ARTICULO = ', art);
-        this.articuloSrvc.tieneMovimientos(art.articulo).subscribe(res => {
-          if (res.exito) {
-            if (res.tiene_movimientos) {
-              const presReporte = this.presentaciones.find(p => +p.presentacion === +art.presentacion_reporte);
-              // console.log('PRES REPORTE = ', presReporte);
-              this.presentacionesFiltered = this.presentaciones.filter(p => +p.medida.medida === +presReporte.medida.medida);
+        this.endSubs.add(          
+          this.articuloSrvc.tieneMovimientos(art.articulo).subscribe(res => {
+            if (res.exito) {
+              if (res.tiene_movimientos) {
+                const presReporte = this.presentaciones.find(p => +p.presentacion === +art.presentacion_reporte);
+                // console.log('PRES REPORTE = ', presReporte);
+                this.presentacionesFiltered = this.presentaciones.filter(p => +p.medida.medida === +presReporte.medida.medida);
+              } else {
+                this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));              
+              }
             } else {
-              this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));              
+              this.snackBar.open(`ERROR: ${res.mensaje}`, 'Artículo', { duration: 7000 });
             }
-          } else {
-            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Artículo', { duration: 7000 });
-          }
-        });
+          })
+        );
       } else {
         this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));
       }
@@ -155,19 +171,23 @@ export class FormProductoComponent implements OnInit {
   }
 
   loadArticulos = () => {
-    this.articuloSrvc.getArticulos().subscribe(res => {
-      if (res) {
-        this.articulos = res;
-      }
-    });
+    this.endSubs.add(      
+      this.articuloSrvc.getArticulos().subscribe(res => {
+        if (res) {
+          this.articulos = res;
+        }
+      })
+    );
   }
 
   loadImpuestosEspeciales = () => {
-    this.impuestoEspecialSrvc.get().subscribe(res => {
-      if (res) {
-        this.impuestosEspeciales = res;
-      }
-    });
+    this.endSubs.add(      
+      this.impuestoEspecialSrvc.get().subscribe(res => {
+        if (res) {
+          this.impuestosEspeciales = res;
+        }
+      })
+    );
   }
 
   displayArticulo = (art: Articulo) => {
@@ -217,33 +237,37 @@ export class FormProductoComponent implements OnInit {
   }
 
   loadRecetas = (idarticulo: number = +this.articulo.articulo) => {
-    this.articuloSrvc.getArticuloDetalle(+idarticulo, { receta: +idarticulo }).subscribe(res => {
-      if (res) {
-        this.recetas = res;
-        this.updateTableDataSource();
-      }
-    });
+    this.endSubs.add(
+      this.articuloSrvc.getArticuloDetalle(+idarticulo, { receta: +idarticulo }).subscribe(res => {
+        if (res) {
+          this.recetas = res;
+          this.updateTableDataSource();
+        }
+      })
+    );
   }
 
   getReceta = (idarticulo: number = +this.articulo.articulo, iddetalle: number) => {
-    this.articuloSrvc.getArticuloDetalle(idarticulo, { articulo_detalle: iddetalle }).subscribe((res: any[]) => {
-      // console.log(res);
-      if (res) {
-        this.receta = {
-          articulo_detalle: res[0].articulo_detalle,
-          receta: res[0].receta.articulo,
-          racionable: res[0].articulo.articulo,
-          articulo: res[0].articulo.articulo,
-          cantidad: +res[0].cantidad,
-          medida: res[0].medida.medida,
-          anulado: res[0].anulado || 0,
-          precio_extra: res[0].precio_extra || 0,
-          precio: +res[0].precio
-        };
-        this.txtArticuloSelected = res[0].articulo;
-        this.showDetalleForm = true;
-      }
-    });
+    this.endSubs.add(      
+      this.articuloSrvc.getArticuloDetalle(idarticulo, { articulo_detalle: iddetalle }).subscribe((res: any[]) => {
+        // console.log(res);
+        if (res) {
+          this.receta = {
+            articulo_detalle: res[0].articulo_detalle,
+            receta: res[0].receta.articulo,
+            racionable: res[0].articulo.articulo,
+            articulo: res[0].articulo.articulo,
+            cantidad: +res[0].cantidad,
+            medida: res[0].medida.medida,
+            anulado: res[0].anulado || 0,
+            precio_extra: res[0].precio_extra || 0,
+            precio: +res[0].precio
+          };
+          this.txtArticuloSelected = res[0].articulo;
+          this.showDetalleForm = true;
+        }
+      })
+    );
   }
 
   eliminaReceta = (item: any) => {
@@ -258,45 +282,53 @@ export class FormProductoComponent implements OnInit {
       )
     });
 
-    confirmRef.afterClosed().subscribe((conf: boolean) => {
-      if (conf) {
-        item.anulado = 1;
-        item.articulo = item.articulo.articulo;
-        this.articuloSrvc.saveArticuloDetalle(item).subscribe(res => {
-          // console.log(res);
-          this.loadRecetas();
-          this.resetReceta();
-        });
-      }
-    });
+    this.endSubs.add(      
+      confirmRef.afterClosed().subscribe((conf: boolean) => {
+        if (conf) {
+          item.anulado = 1;
+          item.articulo = item.articulo.articulo;
+          this.endSubs.add(            
+            this.articuloSrvc.saveArticuloDetalle(item).subscribe(res => {
+              // console.log(res);
+              this.loadRecetas();
+              this.resetReceta();
+            })
+          );
+        }
+      })
+    );
   }
 
   onSubmitDetail = () => {
     this.receta.receta = this.articulo.articulo;
     // console.log(this.articulo);
     // console.log(this.receta); return;
-    this.articuloSrvc.saveArticuloDetalle(this.receta).subscribe(res => {
-      // console.log(res);
-      if (res) {
-        if (res.exito) {
-          this.loadRecetas();
-          this.resetReceta();
-        } else {
-          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Artículo', { duration: 3000 });
+    this.endSubs.add(      
+      this.articuloSrvc.saveArticuloDetalle(this.receta).subscribe(res => {
+        // console.log(res);
+        if (res) {
+          if (res.exito) {
+            this.loadRecetas();
+            this.resetReceta();
+          } else {
+            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Artículo', { duration: 3000 });
+          }
         }
-      }
-    });
+      })
+    );
   }
 
   imprimirReceta = () => {
-    this.rptSrvc.imprimirReceta(this.articulo.articulo).subscribe(res => {
-      if (res) {
-        const blob = new Blob([res], { type: 'application/pdf' });
-        saveAs(blob, `${this.titulo}_${this.articulo.descripcion}.pdf`);
-      } else {
-        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
-      }
-    });
+    this.endSubs.add(      
+      this.rptSrvc.imprimirReceta(this.articulo.articulo).subscribe(res => {
+        if (res) {
+          const blob = new Blob([res], { type: 'application/pdf' });
+          saveAs(blob, `${this.titulo}_${this.articulo.descripcion}.pdf`);
+        } else {
+          this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+        }
+      })
+    );
   }
 
   updateTableDataSource = () => {
@@ -312,10 +344,12 @@ export class FormProductoComponent implements OnInit {
       data: { articulo: this.articulo }
     });
 
-    replicarASedesRef.afterClosed().subscribe((conf: boolean) => {
-      if (conf) {
-      }
-    });
+    this.endSubs.add(      
+      replicarASedesRef.afterClosed().subscribe((conf: boolean) => {
+        if (conf) {
+        }
+      })
+    );
   }
 
   applyFilter = (filter: string) => {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectChange } from '@angular/material/select';
@@ -21,6 +21,7 @@ import { SedeService } from '../../../admin/services/sede.service';
 import { ComandaService } from '../../../restaurante/services/comanda.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 import { Base64 } from 'js-base64';
+import { Subscription } from 'rxjs';
 
 interface DatosPedido {
   sede: number;
@@ -35,7 +36,7 @@ interface DatosPedido {
   templateUrl: './cobrar-pedido.component.html',
   styleUrls: ['./cobrar-pedido.component.css']
 })
-export class CobrarPedidoComponent implements OnInit {
+export class CobrarPedidoComponent implements OnInit, OnDestroy {
 
   @Input() inputData: any = {};
   public lstFormasPago: FormaPago[] = [];
@@ -51,6 +52,8 @@ export class CobrarPedidoComponent implements OnInit {
   public sedes: Sede[] = [];
   public sede: Sede;
   public datosPedido: DatosPedido = { sede: null, direccion_entrega: null, telefono: null, nombre: null, cliente: null };
+
+  private endSubs = new Subscription();
 
   constructor(
     public dialog: MatDialog,
@@ -78,6 +81,10 @@ export class CobrarPedidoComponent implements OnInit {
       this.socket.on('reconnect', () => this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid));
     }
     this.loadSedes();
+  }
+
+  ngOnDestroy() {
+    this.endSubs.unsubscribe();
   }
 
   resetFactReq = () => {
@@ -108,11 +115,13 @@ export class CobrarPedidoComponent implements OnInit {
   }
 
   loadSedes = () => {
-    this.sedeSrvc.get().subscribe(res => {
-      if (res) {
-        this.sedes = res;
-      }
-    });
+    this.endSubs.add(      
+      this.sedeSrvc.get().subscribe(res => {
+        if (res) {
+          this.sedes = res;
+        }
+      })
+    );
   }
 
   calculaPropina = () => {
@@ -126,11 +135,13 @@ export class CobrarPedidoComponent implements OnInit {
   }
 
   loadFormasPago = () => {
-    this.formaPagoSrvc.get({ activo: 1 }).subscribe((res: any) => {
-      if (!!res && res.length > 0) {
-        this.lstFormasPago = res;
-      }
-    });
+    this.endSubs.add(      
+      this.formaPagoSrvc.get({ activo: 1 }).subscribe((res: any) => {
+        if (!!res && res.length > 0) {
+          this.lstFormasPago = res;
+        }
+      })
+    );
   }
 
   addFormaPago = () => {
@@ -142,13 +153,15 @@ export class CobrarPedidoComponent implements OnInit {
         data: new ConfigCheckPasswordModel(1)
       });
 
-      vpgtRef.afterClosed().subscribe(res => {
-        if (res) {
-          this.agregaFormaPago(fp);
-        } else {
-          this.snackBar.open('La contraseña no es correcta', 'Formas de pago', { duration: 5000 });
-        }
-      });
+      this.endSubs.add(        
+        vpgtRef.afterClosed().subscribe(res => {
+          if (res) {
+            this.agregaFormaPago(fp);
+          } else {
+            this.snackBar.open('La contraseña no es correcta', 'Formas de pago', { duration: 5000 });
+          }
+        })
+      );
     } else {
       this.agregaFormaPago(fp);
     }
@@ -223,46 +236,63 @@ export class CobrarPedidoComponent implements OnInit {
     }
 
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
-    this.cobroSrvc.save(objCobro).subscribe(res => {
-      if (res.exito && !res.facturada) {
-        this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
-        if (res.facturar) {
-          this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
-            // console.log('RESPUESTA DE FACTURAR = ', resFact);
-            if (resFact.exito) {
-              const confirmRef = this.dialog.open(ConfirmDialogComponent, {
-                maxWidth: '400px',
-                data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
-              });
-
+    this.endSubs.add(      
+      this.cobroSrvc.save(objCobro).subscribe(res => {
+        if (res.exito && !res.facturada) {
+          this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
+          if (res.facturar) {
+            this.endSubs.add(
+              this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
+                // console.log('RESPUESTA DE FACTURAR = ', resFact);
+                if (resFact.exito) {
+                  const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+                    maxWidth: '400px',
+                    data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
+                  });
+    
+                  this.endSubs.add(                
+                    confirmRef.afterClosed().subscribe((confirma: boolean) => {
+                      if (confirma) {
+                        this.printFactura(resFact.factura);
+                      }
+                      this.resetFactReq();
+                      this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
+                      this.facturando = false;
+                      this.dialogRef.close(res.cuenta);
+                      this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
+                    })
+                  );
+                } else {
+                  this.facturando = false;
+                  this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
+                  this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
+                  this.dialogRef.close(res.cuenta);
+                }
+              })
+            );
+          } else {
+            const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+              maxWidth: '400px',
+              data: new ConfirmDialogModel('Imprimir recibo', '¿Desea imprimir un recibo?', 'Sí', 'No')
+            });
+            this.endSubs.add(
               confirmRef.afterClosed().subscribe((confirma: boolean) => {
                 if (confirma) {
-                  this.printFactura(resFact.factura);
+                  this.printRecibo(res.entidad);
                 }
-                this.resetFactReq();
-                this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
-                this.facturando = false;
-                this.dialogRef.close(res.cuenta);
                 this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
-              });
-            } else {
-              this.facturando = false;
-              this.snackBar.open('Factura', `ERROR: ${res.mensaje}`, { duration: 7000 });
-              this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
-              this.dialogRef.close(res.cuenta);
-            }
-          });
+                this.dialogRef.close(res.cuenta);
+              })
+            );            
+          }
         } else {
+          this.facturando = false;
+          this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
           this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
-          this.dialogRef.close(res.cuenta);
+          this.dialogRef.close('closePanel');
         }
-      } else {
-        this.facturando = false;
-        this.snackBar.open('Cobro', `ERROR: ${res.mensaje}`, { duration: 7000 });
-        this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
-        this.dialogRef.close('closePanel');
-      }
-    });
+      })
+    );
   }
 
   enviarPedido = (cobro: Cobro) => {
@@ -293,16 +323,18 @@ export class CobrarPedidoComponent implements OnInit {
     };
 
     // console.log('PEDIDO = ', obj);
-    this.comandaSrvc.enviarPedido(+this.data.mesaenuso.comanda, obj).subscribe(res => {
-      if (res.exito) {
-        this.snackBar.open('Pedido', `#${res.pedido}. ${res.mensaje}`, { duration: 3000 });
-        this.dialogRef.close('closePanel');
-      } else {
-        this.snackBar.open('Pedido', `ERROR: ${res.mensaje}`, { duration: 7000 });
-      }
-      this.facturando = false;
-      this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
-    });
+    this.endSubs.add(      
+      this.comandaSrvc.enviarPedido(+this.data.mesaenuso.comanda, obj).subscribe(res => {
+        if (res.exito) {
+          this.snackBar.open('Pedido', `#${res.pedido}. ${res.mensaje}`, { duration: 3000 });
+          this.dialogRef.close('closePanel');
+        } else {
+          this.snackBar.open('Pedido', `ERROR: ${res.mensaje}`, { duration: 7000 });
+        }
+        this.facturando = false;
+        this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
+      })
+    );
   }
 
   procesaDetalleFactura = (detalle: any[]) => {
@@ -311,7 +343,7 @@ export class CobrarPedidoComponent implements OnInit {
       Cantidad: parseInt(d.cantidad),
       Descripcion: d.articulo.descripcion,
       Total: +d.total,
-      PrecioUnitario: +d.precio_unitario
+      PrecioUnitario: !!d.precio_unitario ? +d.precio_unitario : +d.precio
     }));
     return detFact;
   }
@@ -330,51 +362,85 @@ export class CobrarPedidoComponent implements OnInit {
 
   printFactura = (factura: any) => {
     // console.log('FACTURA = ', factura);
-    this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
-      if (res.factura) {
-
-        const msgToPrint = {
-          NombreEmpresa: res.factura.empresa.nombre,
-          NitEmpresa: res.factura.empresa.nit,
-          SedeEmpresa: res.factura.sedeFactura.nombre,
-          DireccionEmpresa: res.factura.empresa.direccion,
-          Fecha: moment(res.factura.fecha_factura).format(GLOBAL.dateFormat),
-          Nit: res.factura.receptor.nit,
-          Nombre: res.factura.receptor.nombre,
-          Direccion: res.factura.receptor.direccion,
-          Serie: res.factura.serie_factura,
-          Numero: res.factura.numero_factura,
-          Total: this.getTotalDetalle(res.factura.detalle) + this.getTotalImpuestosAdicionales((res.factura.impuestos_adicionales || [])),
-          NoAutorizacion: res.factura.fel_uuid,
-          NombreCertificador: res.factura.certificador_fel.nombre,
-          NitCertificador: res.factura.certificador_fel.nit,
-          FechaDeAutorizacion: res.factura.fecha_autorizacion,
-          NoOrdenEnLinea: '',
-          FormaDePago: '',
-          DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
-          Impresora: this.data.impresora,
-          ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
-        };
-
-        if (!!this.data.impresora) {
-          if (+this.data.impresora.bluetooth === 0) {
-            this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
+    this.endSubs.add(      
+      this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
+        if (res.factura) {
+  
+          const msgToPrint = {
+            NombreEmpresa: res.factura.empresa.nombre,
+            NitEmpresa: res.factura.empresa.nit,
+            SedeEmpresa: res.factura.sedeFactura.nombre,
+            DireccionEmpresa: res.factura.empresa.direccion,
+            Fecha: moment(res.factura.fecha_factura).format(GLOBAL.dateFormat),
+            Nit: res.factura.receptor.nit,
+            Nombre: res.factura.receptor.nombre,
+            Direccion: res.factura.receptor.direccion,
+            Serie: res.factura.serie_factura,
+            Numero: res.factura.numero_factura,
+            Total: this.getTotalDetalle(res.factura.detalle) + this.getTotalImpuestosAdicionales((res.factura.impuestos_adicionales || [])),
+            NoAutorizacion: res.factura.fel_uuid,
+            NombreCertificador: res.factura.certificador_fel.nombre,
+            NitCertificador: res.factura.certificador_fel.nit,
+            FechaDeAutorizacion: res.factura.fecha_autorizacion,
+            NoOrdenEnLinea: '',
+            FormaDePago: '',
+            DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
+            Impresora: this.data.impresora,
+            ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
+          };
+  
+          if (!!this.data.impresora) {
+            if (+this.data.impresora.bluetooth === 0) {
+              this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
+            } else {
+              msgToPrint.Fecha = moment(res.factura.fecha_factura).format(GLOBAL.dateFormatBT);
+              this.printToBT(JSON.stringify(msgToPrint));
+            }
           } else {
-            msgToPrint.Fecha = moment(res.factura.fecha_factura).format(GLOBAL.dateFormatBT);
-            this.printToBT(JSON.stringify(msgToPrint));
+            this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
           }
+  
+          this.snackBar.open(
+            `Imprimiendo factura ${res.factura.serie_factura}-${res.factura.numero_factura}`,
+            'Impresión', { duration: 3000 }
+          );
         } else {
-          this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 7000 });
         }
+      })
+    );
+  }
 
-        this.snackBar.open(
-          `Imprimiendo factura ${res.factura.serie_factura}-${res.factura.numero_factura}`,
-          'Impresión', { duration: 3000 }
-        );
+  printRecibo = (entidad: any) => {
+
+    const msgToPrint: any = {
+      NombreEmpresa: entidad.empresa.nombre,
+      NitEmpresa: entidad.empresa.nit,
+      SedeEmpresa: entidad.sede.nombre,
+      DireccionEmpresa: entidad.sede.direccion,
+      Fecha: moment().format(GLOBAL.dateFormat),      
+      Nombre: this.clienteSelected.nombre || entidad.nombre,
+      Numero: `${entidad.comanda}-${entidad.numero}`,
+      Total: this.getTotalDetalle(entidad.detalle) + +entidad.propina,
+      Propina: +entidad.propina,
+      DetalleRecibo: this.procesaDetalleFactura(entidad.detalle),
+      Impresora: this.data.impresora      
+    };
+
+    // console.log(JSON.stringify(msgToPrint));
+
+    if (!!this.data.impresora) {
+      if (+this.data.impresora.bluetooth === 0) {
+        this.socket.emit(`print:recibo`, `${JSON.stringify(msgToPrint)}`);
       } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 7000 });
+        msgToPrint.Fecha = moment().format(GLOBAL.dateFormatBT);
+        this.printToBT(JSON.stringify(msgToPrint));
       }
-    });
+    } else {
+      this.socket.emit(`print:recibo`, `${JSON.stringify(msgToPrint)}`);
+    }
+
+    this.snackBar.open(`Imprimiendo recibo ${entidad.comanda}-${entidad.numero}`, 'Impresión', { duration: 3000 });
   }
 
   printToBT = (msgToPrint: string = '') => {

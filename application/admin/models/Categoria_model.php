@@ -6,6 +6,9 @@ class Categoria_model extends General_Model {
 	public $categoria;
 	public $descripcion;
 	public $sede;
+	public $debaja = 0;
+	public $fechabaja = null;
+	public $usuariobaja = null;
 
 	public function __construct($id = "")
 	{

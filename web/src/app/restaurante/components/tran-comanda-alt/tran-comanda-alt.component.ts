@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatInput } from '@angular/material/input';
@@ -32,7 +32,7 @@ interface IDatosTranComanda {
   templateUrl: './tran-comanda-alt.component.html',
   styleUrls: ['./tran-comanda-alt.component.css']
 })
-export class TranComandaAltComponent extends TranComanda implements OnInit {
+export class TranComandaAltComponent extends TranComanda implements OnInit, OnDestroy {
 
   // @Input() mesaEnUso: ComandaGetResponse;
   // @Input() clientePedido: Cliente = null;
@@ -44,7 +44,7 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
   public subCategorias: any[] = [];
   public listaSubCategorias: any[] = [];
   public articulos: Articulo[] = [];
-  public fullListArticulos: Articulo[] = [];
+  public fullListArticulos: Articulo[] = [];  
 
   constructor(
     public dialogRef: MatDialogRef<TranComandaAltComponent>,
@@ -68,6 +68,10 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
     this.setDatos();
   }
 
+  ngOnDestroy() {
+    this.endSubs.unsubscribe();
+  }
+
   setDatos = () => {
     if (this.data) {
       if (this.data.mesa) {
@@ -86,14 +90,16 @@ export class TranComandaAltComponent extends TranComanda implements OnInit {
   resetListaSubCategorias = () => this.listaSubCategorias = [];
 
   loadArticulosDePOS = () => {
-    this.articuloSrvc.getArticulosDePOS().subscribe((res: any) => {
-      if (res) {
-        this.categorias = res.categorias;
-        this.subCategorias = res.subcategorias;
-        this.articulos = res.articulos;
-        this.fullListArticulos = JSON.parse(JSON.stringify(this.articulos));
-      }
-    });
+    this.endSubs.add(
+      this.articuloSrvc.getArticulosDePOS().subscribe((res: any) => {
+        if (res) {
+          this.categorias = res.categorias;
+          this.subCategorias = res.subcategorias;
+          this.articulos = res.articulos;
+          this.fullListArticulos = JSON.parse(JSON.stringify(this.articulos));
+        }
+      })
+    );
   }
 
   loadSubcategorias = (cat: any, subcat: any = null, idx: number = 0) => {

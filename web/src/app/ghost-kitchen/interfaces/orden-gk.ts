@@ -1,5 +1,6 @@
 import { Corporacion, Sede } from '../../admin/interfaces/sede';
 import { ComandaOrigen } from '../../admin/interfaces/comanda-origen';
+import { FormaPago } from '../../admin/interfaces/forma-pago';
 import { EstatusOrdenGk } from '../interfaces/estatus-orden-gk';
 
 export interface OrdenGk {
@@ -28,9 +29,35 @@ export interface articulo_gk {
     total: number;
 }
 
+export interface DatosEntregaGK {
+    nombre: string;
+    direccion1: string;
+    direccion2: string;
+    pais: string;
+    departamento: string;
+    municipio: string;
+    telefono: string;
+    email: string;
+}
+
+export interface DatosFacturaGK {
+    nit: string;
+    nombre: string;
+    direccion: string;
+    email: string;
+}
+
 export interface OrdenRT {
     numero_orden: string;
-    total_orden: number;    
+    total_orden: number;
+    total_descuento: number;
+    comanda_origen: number;
+    total_propina?: number;
+    completa: boolean;
+    pendiente: string;
+    datos_entrega: DatosEntregaGK;
+    formas_pago: FormaPago[];
+    datos_factura: DatosFacturaGK;
     articulos: articulo_gk[];
 }
 

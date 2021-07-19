@@ -316,6 +316,15 @@ $config['menu'] = [
 						'link' => '/admin/vdt'
 					]
 				]
+			],
+			3 => [
+				'nombre' => 'Reportes',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Distribución de propinas',
+						'link' => '/gk/repdistprop'
+					]
+				]
 			]
 		]
 	]

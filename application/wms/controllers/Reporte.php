@@ -416,8 +416,8 @@ class Reporte extends CI_Controller {
 			foreach ($ingresos as $row) {
 				$art = new Articulo_model($row->articulo);
 				$receta = $art->getReceta();
-				if (count($receta) == 0 || $art->produccion) {
-					$art->actualizarExistencia($_GET);
+				if (count($receta) == 0 || $art->produccion) {					
+					$art->actualizarExistencia($_POST);
 					$pres = $art->getPresentacionReporte();
 					$art->existencias = $art->existencias/$pres->cantidad;
 

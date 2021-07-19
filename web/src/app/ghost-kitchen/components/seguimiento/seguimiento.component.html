@@ -49,6 +49,9 @@
                         </button>                        
                         <button mat-mini-fab (click)="enviarVendors(element)" color="accent" [disabled]="cargando || +element.estatus_orden_gk.estatus_orden_gk > 1">
                             <mat-icon style="font-size: 16pt !important;">send</mat-icon>
+                        </button>
+                        <button mat-mini-fab (click)="printOrdenGK(element)" color="accent">
+                            <mat-icon style="font-size: 16pt !important;">print</mat-icon>
                         </button>                        
                         <button mat-mini-fab (click)="openFormaPagoComandaOrigen(element)" color="warn" [disabled]="cargando" *ngIf="+element.estatus_orden_gk.estatus_orden_gk === 3">
                             <mat-icon style="font-size: 16pt !important;">payments</mat-icon>

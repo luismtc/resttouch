@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col m12 s12">
+        <mat-card class="mat-elevation-z4 fullWidth">
+            <mat-card-title>
+                <h4>
+                    Distribución de propinas
+                </h4>
+            </mat-card-title>
+            <mat-card-content>
+                <app-rpt-fechas [configuracion]="configuracion" [fdel]="params._fdel" [fal]="params._fal" (fdelChange)="params._fdel=$event" (falChange)="params._fal=$event"></app-rpt-fechas>
+                <mat-form-field class="fullWidth">
+                    <input matInput type="number" placeholder="% para el Expo" name="_porexpo" [(ngModel)]="params._porexpo" step="0.01" required>
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions>
+                <app-rpt-botones [configuracion]="confBotones" (excelClick)="getRptExcel()" (resetParamsClick)="resetParams()"></app-rpt-botones>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>

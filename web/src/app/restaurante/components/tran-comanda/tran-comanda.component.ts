@@ -116,7 +116,7 @@ export class TranComandaComponent implements OnInit {
       loopSubCategoria:
       for (const subcat of cat.categoria_grupo) {
         for (const art of subcat.articulo) {
-          if (+art.mostrar_pos === 1) {
+          if (+art.mostrar_pos === 1 && +art.debaja === 0) {
             subcat.mostrarEnPos = true;
             cat.mostrarEnPos = true;
             continue loopSubCategoria;
@@ -132,7 +132,7 @@ export class TranComandaComponent implements OnInit {
   buscarArticulo = () => {
     // console.log(`CODIGO BARRAS = ${this.codigoBarras}`);
     if (this.codigoBarras && this.codigoBarras.trim().length > 0) {
-      this.articuloSrvc.getArticulos({ codigo: this.codigoBarras.trim() }).subscribe((arts: Articulo[]) => {
+      this.articuloSrvc.getArticulos({ codigo: this.codigoBarras.trim(), debaja: 0 }).subscribe((arts: Articulo[]) => {
         if (arts && arts.length > 0) {
           const art = arts[0];
           const obj: NodoProducto = {
@@ -143,7 +143,8 @@ export class TranComandaComponent implements OnInit {
             presentacion: art.presentacion,
             codigo: art.codigo,
             combo: art.combo,
-            multiple: art.multiple
+            multiple: art.multiple,
+            debaja: art.debaja
           };
           this.agregarProductos(obj);
         }
