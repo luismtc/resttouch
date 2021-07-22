@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
 import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service';
@@ -9,6 +9,7 @@ import { ConfiguracionBotones } from '../../../../shared/interfaces/config-repor
 import { saveAs } from 'file-saver';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-existencias',
@@ -16,7 +17,7 @@ import * as moment from 'moment';
   styleUrls: ['./existencias.component.css']
 })
 
-export class ExistenciasComponent implements OnInit {
+export class ExistenciasComponent implements OnInit, OnDestroy {
 
   public bodegas: Bodega[] = [];
   public sedes: UsuarioSede[] = [];
@@ -27,8 +28,10 @@ export class ExistenciasComponent implements OnInit {
     showPdf: true, showHtml: false, showExcel: true
   };
 
+  private endSubs = new Subscription();
+
   constructor(
-  	private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
     private sedeSrvc: AccesoUsuarioService,
     private bodegaSrvc: BodegaService
@@ -36,56 +39,58 @@ export class ExistenciasComponent implements OnInit {
 
   ngOnInit() {
     this.params.fecha = moment().format(GLOBAL.dbDateFormat);
-  	this.getSede();
-  	//this.getBodega();
+    this.getSede();
+    //this.getBodega();
+  }
+
+  ngOnDestroy(): void {
+    this.endSubs.unsubscribe();
   }
 
   getSede = (params: any = {}) => {
-    this.sedeSrvc.getSedes(params).subscribe(res => {
-      this.sedes = res;
-    });
+    this.endSubs.add(
+      this.sedeSrvc.getSedes(params).subscribe(res => {
+        this.sedes = res;
+      })
+    );
   }
 
   getBodega = (params: any = {}) => {
-    this.bodegaSrvc.get(params).subscribe(res => {
-      this.bodegas = res;
-    });
+    this.endSubs.add(
+      this.bodegaSrvc.get(params).subscribe(res => {
+        this.bodegas = res;
+      })
+    );
   }
 
-  onSubmit() {
-    this.params._excel = 0;
-    this.cargando = true;
-  	this.pdfServicio.getReporteExistencia(this.params).subscribe(res => {
-      this.cargando = false;
-  		if (res) {
-	        const blob = new Blob([res], { type: 'application/pdf' });
-	        saveAs(blob, `${this.titulo}_${moment().format(GLOBAL.dateTimeFormatRptName)}.pdf`);
-	      } else {
-	        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
-	      }
-  	});
-  }
-
-  excelClick = () => {
-    this.params._excel = 1;
-    this.cargando = true;
-    this.pdfServicio.getReporteExistencia(this.params).subscribe(res => {
-      this.cargando = false;
-      if (res) {
-        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
-        saveAs(blob, `${this.titulo}_${moment().format(GLOBAL.dateTimeFormatRptName)}.xls`);
-      } else {
-        this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
-      }
-    });
+  onSubmit(esExcel = 0) {
+    if (this.params.sede && this.params.bodega && this.params.sede.length > 0 && this.params.bodega.length > 0 && this.params.fecha && moment(this.params.fecha).isValid()) {
+      this.params._excel = esExcel;
+      this.cargando = true;
+      this.endSubs.add(
+        this.pdfServicio.getReporteExistencia(this.params).subscribe(res => {
+          this.cargando = false;
+          if (res) {
+            const blob = new Blob([res], { type: (+esExcel === 0 ? 'application/pdf' : 'application/vnd.ms-excel') });
+            saveAs(blob, `${this.titulo}_${moment().format(GLOBAL.dateTimeFormatRptName)}.${+esExcel === 0 ? 'pdf' : 'xls'}`);
+          } else {
+            this.snackBar.open('No se pudo generar el reporte...', this.titulo, { duration: 3000 });
+          }
+        })
+      );
+    } else {
+      this.snackBar.open('Por favor ingrese todos los parámetros.', 'Existencias', { duration: 7000 })
+    }
   }
 
   onSedesSelected = (obj: any) => {
-    this.getBodega({sede: this.params.sede});
+    this.getBodega({ sede: this.params.sede });
   }
 
   resetParams = () => {
-    this.params = {};
+    this.params = {
+      fecha: moment().format(GLOBAL.dbDateFormat)
+    };
     this.cargando = false;
   }
 

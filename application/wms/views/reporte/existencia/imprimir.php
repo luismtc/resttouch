@@ -37,6 +37,9 @@
 				<tr>
 					<td colspan="9" class="titulo"><?php echo $obj->nombre; ?></td>
 				</tr>
+				<tr>
+					<td colspan="9" class="titulo"><?php echo $bodegas[$obj->getPK()]; ?></td>
+				</tr>
 				<?php 
 					foreach ($reg[$sede] as $key => $row): 
 						$art = new Articulo_model($row->articulo->articulo);

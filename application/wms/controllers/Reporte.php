@@ -33,7 +33,7 @@ class Reporte extends CI_Controller
 	public function existencia()
 	{
 		ini_set("pcre.backtrack_limit", "15000000");
-		$rpt = new Reporte_model();
+		// $rpt = new Reporte_model();
 		$data = [];
 		$_POST = json_decode(file_get_contents('php://input'), true);
 
@@ -49,9 +49,22 @@ class Reporte extends CI_Controller
 		$args = [
 			"cliente" => "",
 			"sub_cuenta" => "",
-			"fecha" => formatoFecha($this->input->get('fecha'), 2),
+			"fecha" => formatoFecha($_POST['fecha'], 2),
 			"sedes" => $_POST['sede']
 		];
+
+		foreach($_POST['sede'] as $s)
+		{
+			$nbodega = [];
+			foreach($_POST['bodega'] as $bode)
+			{
+				$bodega = new Bodega_model($bode);
+				if ((int)$s === (int)$bodega->sede) {
+					$nbodega[] = $bodega->descripcion;
+				}
+			}
+			$args['bodegas'][$s] = implode(', ', $nbodega);
+		}
 
 		foreach ($arts as $row) {
 			$art = new Articulo_model($row->articulo);
@@ -95,6 +108,9 @@ class Reporte extends CI_Controller
 			foreach ($args['sedes'] as $sede) {
 				$obj = new Sede_model($sede);
 				$hoja->setCellValue("A{$fila}", $obj->nombre);
+				$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
+				$fila++;
+				$hoja->setCellValue("A{$fila}", $args['bodegas'][$obj->getPK()]);
 				$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
 				$fila++;
 				foreach ($args["reg"][$sede] as $row) {
@@ -157,6 +173,8 @@ class Reporte extends CI_Controller
 			$pdf->WriteHTML($vista);
 			$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
 			$pdf->Output("Existencias_{$rand}.pdf", "D");
+
+			// $this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode($args));
 		}
 	}
 
