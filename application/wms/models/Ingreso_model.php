@@ -216,6 +216,108 @@ class Ingreso_model extends General_Model
 			->get("articulo a")
 			->result();
 	}
+
+	private function articulos_ingresos($args = [])
+	{
+		if (isset($args['sede'])) {
+			if (is_array($args['sede'])) {
+				$this->db->where_in('b.sede', $args['sede']);
+			} else {
+				$this->db->where('b.sede', $args['sede']);
+			}
+		}
+
+		if (isset($args['bodega'])) {
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('a.bodega', $args['bodega']);
+			} else {
+				$this->db->where('a.bodega', $args['bodega']);
+			}			
+		}
+
+		$ai = $this->db
+		->select("c.articulo, max(a.fecha) as fecha, 0 as precio_unitario")
+		->join("bodega b", "a.bodega = b.bodega")
+		->join("ingreso_detalle c", "a.ingreso = c.ingreso")
+		->join("articulo d", "c.articulo = d.articulo")
+		->join("presentacion e", "c.presentacion = e.presentacion")
+		->join("categoria_grupo f", "f.categoria_grupo = d.categoria_grupo")
+		->join("categoria g", "g.categoria = f.categoria")
+		->where("a.fecha <= '{$args['fecha']}'")
+		->where("d.mostrar_inventario", 1)
+		->group_by("c.articulo")
+		->order_by("g.descripcion, f.descripcion, d.descripcion")
+		->get("ingreso a")
+		->result();
+
+		$q1 = $this->db->last_query();
+
+		return $ai;
+	}
+
+	private function articulos_no_costo($args = [])
+	{
+		if (isset($args['sede'])) {
+			if (is_array($args['sede'])) {
+				$this->db->where_in('c.sede', $args['sede']);
+			} else {
+				$this->db->where('c.sede', $args['sede']);
+			}
+		}
+
+		if (isset($args['bodega'])) {
+			if (is_array($args['bodega'])) {
+				$this->db->where_in('b.bodega', $args['bodega']);
+			} else {
+				$this->db->where('b.bodega', $args['bodega']);
+			}			
+		}
+
+		$anc = $this->db
+			->select("a.articulo, NULL as fecha, NULL as precio_unitario", false)
+			->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
+			->join("categoria c", "c.categoria = b.categoria")
+			->join("bodega_articulo_costo d", "d.articulo = a.articulo", "left")
+			->where("a.mostrar_inventario", 1)
+			->where("d.bodega_articulo_costo is null")
+			->order_by("c.descripcion, b.descripcion, a.descripcion")
+			->get("articulo a")
+			->result();
+
+		$q1 = $this->db->last_query();
+
+		return $anc;
+	}
+
+	public function get_articulos_con_ingresos($args)
+	{
+
+		$arts_ing = $this->articulos_ingresos($args);
+		$arts_noc = $this->articulos_no_costo($args);
+
+		$cntArtsIng = count($arts_ing);
+		$cntArtsNoc = count($arts_noc);
+		$nuevo = array();
+
+		foreach($arts_noc as $k => $v)
+		{
+			$nuevo[$k] = clone $v;
+		}
+
+		for ($i = 0; $i < $cntArtsIng; $i++)
+		{
+			for ($j = 0; $j < $cntArtsNoc; $j++)
+			{
+				if ((int)$nuevo[$j]->articulo === (int)$arts_ing[$i]->articulo)
+				{
+					unset($arts_noc[$j]);
+				}
+			}
+		}
+
+		return array_merge($arts_ing, $arts_noc);
+	}
+
 }
 
 /* End of file Ingreso_model.php */

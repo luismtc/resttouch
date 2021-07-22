@@ -392,7 +392,7 @@ class Reporte extends CI_Controller {
 
 	}
 
-	public function valorizado()
+	public function valorizado_previous()
 	{
 		$req = json_decode(file_get_contents('php://input'), true);
 		$_POST = json_decode(file_get_contents('php://input'), true);
@@ -473,6 +473,7 @@ class Reporte extends CI_Controller {
 				"categoria_grupo_grupo" => null,
 				"_todo" => true
 			]);
+						
 			$row->categoria_grupo = $grupo;
 
 			$categorias[] = $row;
@@ -483,11 +484,30 @@ class Reporte extends CI_Controller {
 			foreach ($categorias as $row) {
 				$row->tmp = $row->categoria_grupo;
 				if ($row->sede == $bod->sede) {
-					$row->subcategoria = buscar_articulo($row->categoria_grupo, $detalle[$bodega]);
-					unset($row->categoria_grupo);
+					$row->subcategoria = buscar_articulo($row->categoria_grupo, (array)$detalle[$bodega]);
+					unset($row->categoria_grupo);				
+					
+					for($i = 0; $i < count($row->subcategoria); $i++)
+					{
+						if(count($row->subcategoria[$i]['articulos']) === 0)
+						{
+							unset($row->subcategoria[$i]);
+						}
+					}
+
+					$datos[$bodega][] = $row;		
+
 					$row->categoria_grupo = $row->tmp;
-					$datos[$bodega][] = $row;
 				}
+			}
+		}
+
+		foreach ($datos as $row)
+		{
+			foreach($row as $r)
+			{
+				unset($r->categoria_grupo);
+				unset($r->tmp);
 			}
 		}
 
@@ -647,7 +667,117 @@ class Reporte extends CI_Controller {
 			$writer->save("php://output");
 
 		} else {
-			$vista = $this->load->view('reporte/valorizado/imprimir', $data, true);
+			// $vista = $this->load->view('reporte/valorizado/imprimir', $data, true);
+
+			// $mpdf = new \Mpdf\Mpdf([
+			// 	'tempDir' => sys_get_temp_dir(), //Produccion
+			// 	'format' => 'Legal'
+			// ]);
+
+			// $mpdf->WriteHTML($vista);
+			// $mpdf->Output("valorizado.pdf", "D");
+
+			$this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode([
+				'data' => $data,
+				'categorias' => $categorias,
+				'detalle' => $detalle
+			]));
+		}	
+	}
+
+	public function valorizado()
+	{
+		$req = json_decode(file_get_contents('php://input'), true);
+
+		$articulos = $this->Ingreso_model->get_articulos_con_ingresos($req);
+
+		$data = [];
+		foreach($req['sede'] as $s)
+		{
+			$sede = new Sede_model($s);
+			$empresa = $sede->getEmpresa();
+			$data[] = (object)[
+				'empresa' => (object)[ 'empresa' => $empresa->getPK(), 'nombre' => $empresa->nombre, 'nombre_comercial' => $empresa->nombre_comercial ],
+				'sede' => $sede->getPK(),
+				'nombre' => $sede->nombre,
+				'bodegas' => []
+			];
+			$lastIdxSedes = count($data) - 1;
+			foreach ($req['bodega'] as $bode)
+			{
+				$bodega = new Bodega_model($bode);				
+				if ((int)$bodega->sede === (int)$s)
+				{
+					$data[$lastIdxSedes]->bodegas[] = (object)[
+						'bodega' => $bodega->getPK(),
+						'descripcion' => $bodega->descripcion,
+						'articulos' => []
+					];
+					$lastIdxBodegas = count($data[$lastIdxSedes]->bodegas) - 1;
+					foreach ($articulos as $row) {
+						$art = new Articulo_model($row->articulo);
+						$categoria = $art->get_categoria();
+						$pathSubcat = $art->get_path_subcategorias();
+						$receta = $art->getReceta();
+						if(count($receta) === 0 || (int)$art->produccion === 1)
+						{
+							$art->actualizarExistencia(['fecha' => $req['fecha'], 'sede' => $s, 'bodega' => $bode ]);
+							$pres = $art->getPresentacionReporte();
+							$art->existencias = (float)$art->existencias / (float)$pres->cantidad;
+
+							$bcosto = $this->BodegaArticuloCosto_model->buscar([
+								'bodega' => $bode, 
+								'articulo' => $row->articulo, 
+								'_uno' => true
+							]);
+
+							if ($bcosto) {
+								if ($empresa->metodo_costeo == 1) {
+									$row->precio_unitario = $bcosto->costo_ultima_compra;
+									
+								} else if ($empresa->metodo_costeo == 2) {
+									$row->precio_unitario = $bcosto->costo_promedio;
+								} else {
+									$row->precio_unitario = 0;
+								}
+							} else {
+								$row->precio_unitario = 0;
+							}
+
+							$row->precio_unitario = $row->precio_unitario * $pres->cantidad;
+
+							$obj = (object)[
+								"articulo" => $art->getPK(),
+								"presentacion" => $pres->descripcion,
+								"cantidad" => $art->existencias, 
+								"total" => (double) round($art->existencias, 2) * (double) round($row->precio_unitario, 2),
+								"descripcion" => $art->descripcion,
+								"precio_unitario" => $row->precio_unitario,
+								"ultima_compra" => isset($row->fecha) ? formatoFecha($row->fecha, 2) : '',
+								"categoria" => $categoria->descripcion,
+								"categoria_grupo" => $pathSubcat,
+								"full_name" => trim($categoria->descripcion).'-'.$pathSubcat.'-'.trim($art->descripcion)
+							];						
+
+							if(!in_array($obj, $data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos))
+							{
+								$data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos[] = $obj;
+							}
+						}						
+					}
+					$data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos = ordenar_array_objetos($data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos, 'full_name');
+				}
+			}
+		}
+
+		$datos = ['fecha' => formatoFecha($req['fecha'], 2), 'sedes' => $data];
+
+		if (verDato($req, "_excel"))
+		{
+
+		} else 
+		{
+			$vista = $this->load->view('reporte/valorizado/imprimir', $datos, true);
 
 			$mpdf = new \Mpdf\Mpdf([
 				'tempDir' => sys_get_temp_dir(), //Produccion
@@ -655,8 +785,10 @@ class Reporte extends CI_Controller {
 			]);
 
 			$mpdf->WriteHTML($vista);
-			$mpdf->Output("valorizado.pdf", "D");
-		}	
+			$mpdf->Output("valorizado.pdf", "D");			
+			// $this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode($datos));
+		}
+
 	}
 
 }

@@ -1,138 +1,153 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Categoria</title>
+	<title>Inventario Valorizado</title>
 </head>
 
 <body lang="es-GT" dir="ltr">
-	<div class="row">
-		<div class="col-sm-12">
-			<table class="tabla-contenido">
-				<tr>
-					<td><?php echo $empresa->nombre ?></td>
-				</tr>
-				<tr>
-					<td><?php echo $nsede ?></td>
-				</tr>
-			</table>
-		</div>
-	</div>
-	<br>
-
 	<table class="tabla-contenido">
 		<tr>
-			<td colspan="6" class="text-center"><h1>Reporte de Inventario Valorizado</h1></td>
-			<td colspan="2" class="text-center">Fecha <?php echo $fecha?></td>
+			<td colspan="8" class="text-center">
+				<h1>Inventario Valorizado</h1>
+			</td>
 		</tr>
 		<tr>
-			<th class="titulo" colspan="8">Bodega: <?php echo $nbodega ?> </th>
+			<td colspan="8" class="text-center">
+				<h2>Al <?php echo $fecha; ?></h2>
+			</td>
 		</tr>
 	</table>
-	<table class="tabla-contenido" style="padding: 5px; border: 1px solid black">
-		<thead>
+	<?php foreach ($sedes as $sede) : ?>
+		<?php $totalSede = 0; ?>
+		<table class="tabla-contenido">
 			<tr>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Descripción</th>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Presentación</th>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Existencia</th>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Fecha Última Compra</th>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Costo</th>
-				<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Valor</th>
+				<td colspan="8">
+					<h3>Empresa: <?php echo $sede->empresa->nombre; ?></h3>
+				</td>
 			</tr>
-		</thead>
-
-		<?php $granTotal = 0; ?>
-
-		<tbody>
-			<?php foreach ($bodega as $bodegas): ?>
-				<?php $bod = new Bodega_model($bodegas); ?>
+			<tr>
+				<td colspan="8">
+					<h4>Sede: <?php echo $sede->nombre; ?></h4>
+				</td>
+			</tr>
+		</table>
+		<?php $lastBodega = end($sede->bodegas); ?>
+		<?php foreach ($sede->bodegas as $bodega) : ?>
+			<table class="tabla-contenido">
+				<tr>
+					<td colspan="8">
+						<h5>Bodega: <?php echo $bodega->descripcion; ?></h5>
+					</td>
+				</tr>
+			</table>
+			<table class="tabla-contenido" style="padding: 5px; border: 1px solid black">
+				<thead>
 					<tr>
-						<td class="titulo" colspan="6"><?php echo $bod->descripcion ?></td>
+						<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Categoria</th>
+						<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Subcategoria</th>
+						<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Descripción</th>
+						<th class="titulo" style="border: 1px solid black;padding: 5px;" class="text-center">Presentación</th>
+						<th class="titulo" style="border: 1px solid black;padding: 5px; width: 7%;" class="text-center">Existencia</th>
+						<th class="titulo" style="border: 1px solid black;padding: 5px; width: 5%;" class="text-center">Última Compra</th>
+						<th class="titulo" style="border: 1px solid black;padding: 5px; width: 7%;" class="text-center">Costo</th>
+						<th class="titulo" style="border: 1px solid black;padding: 5px; width: 7%;" class="text-center">Valor</th>
 					</tr>
-			
-				<?php foreach ($detalle[$bodegas] as $det): ?>
-					<?php $totalCat = 0; ?>
-					<?php if (count($det->subcategoria) > 0): ?>
+				</thead>
+				<tbody>
+					<?php $totalBodega = 0; ?>
+					<?php foreach ($bodega->articulos as $articulo) : ?>
+						<tr>
+							<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $articulo->categoria; ?></td>
+							<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $articulo->categoria_grupo; ?></td>
+							<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $articulo->descripcion; ?></td>
+							<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $articulo->presentacion; ?></td>
+							<td style="border: 1px solid black;padding: 5px; width: 7%;" class="text-right"><?php echo number_format($articulo->cantidad, 2); ?></td>
+							<td style="border: 1px solid black;padding: 5px; width: 5%;" class="text-right"><?php echo $articulo->ultima_compra; ?></td>
+							<td style="border: 1px solid black;padding: 5px; width: 7%;" class="text-right"><?php echo number_format($articulo->precio_unitario, 2); ?></td>
+							<td style="border: 1px solid black;padding: 5px; width: 7%;" class="text-right"><?php echo number_format($articulo->total, 2); ?></td>
+						</tr>
+						<?php $totalBodega += $articulo->total;
+						$totalSede += $articulo->total; ?>
+					<?php endforeach; ?>
+				</tbody>
+				<tfoot>
 					<tr>
-						<td style="border: 1px solid black;padding: 5px;"><b><?php echo $det->descripcion ?></b></td>
-						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-						<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-					</tr>
-					<?php foreach ($det->subcategoria as $sub): ?>
-						<?php if (count($sub['articulos']) > 0): ?>
-							<tr>
-								<td style="border: 1px solid black;padding: 5px; margin-left: 5px;"><b><?php echo $sub['descripcion'] ?></b></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right"></td>
-							</tr>
-							<?php $total = 0 ?>
-							<?php foreach ($sub['articulos'] as $row): ?>
-								<tr>
-									<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->descripcion ?></td>
-									<td style="border: 1px solid black;padding: 5px; margin-left: 10px;"><?php echo $row->presentacion ?></td>
-									<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo number_format($row->cantidad, 2) ?></td>
-									<td style="border: 1px solid black;padding: 5px;" class="text-right">
-										<?php echo $row->ultima_compra ?></td>
-									<td style="border: 1px solid black;padding: 5px;" class="text-right">
-										<?php echo number_format($row->precio_unitario, 2) ?></td>
-									<td style="border: 1px solid black;padding: 5px;" class="text-right"><?php echo number_format($row->total, 2) ?></td>
-								</tr>	
-								<?php 
-									$total += $row->total;
-									$granTotal += $row->total;
-									$totalCat += $row->total;
-								?>	
-							<?php endforeach ?>
-							<tr>
-								<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total subcategoría <?php echo $sub['descripcion'] ?></b></td>
-								<td style="border: 1px solid black;padding: 5px;" class="text-right">
-									<?php echo number_format($total, 2) ?>
-								</td>
-							</tr>
-						<?php endif ?>
-					<?php endforeach ?>
-					<tr>
-						<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5"><b>Total Categoría <?php echo $det->descripcion ?></b></td>
-						<td style="border: 1px solid black;padding: 5px;" class="text-right">
-							<?php echo number_format($totalCat, 2) ?>
+						<td colspan="7" style="border: 1px solid black;padding: 5px;" class="totales">
+							Total de la bodega <?php echo $bodega->descripcion; ?>:
+						</td>
+						<td style="border: 1px solid black;padding: 5px; width: 7%;" class="totales">
+							<?php echo number_format($totalBodega, 2); ?>
 						</td>
 					</tr>
-					<?php endif ?>
-				<?php endforeach ?>
-			<?php endforeach ?>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td style="border: 1px solid black;padding: 5px; margin-left: 5px;" class="text-right" colspan="5">
-					<h4>TOTAL</h4>
-				</td>
-				<td style="border: 1px solid black;padding: 5px;" class="text-right">
-					<?php echo number_format($granTotal, 2) ?>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
-			
+					<?php if ((int)$bodega->bodega === (int)$lastBodega->bodega) : ?>
+						<tr>
+							<td colspan="7" style="border: 1px solid black;padding: 5px;" class="totales">
+								Total de la sede <?php echo $sede->nombre; ?>:
+							</td>
+							<td style="border: 1px solid black;padding: 5px; width: 7%;" class="totales">
+								<?php echo number_format($totalSede, 2); ?>
+							</td>
+						</tr>
+					<?php endif; ?>
+				</tfoot>
+			</table>
+			<div style="width: 100%; height: 10px;"></div>
+		<?php endforeach; ?>
+	<?php endforeach; ?>
 </body>
-</body>
+
 </html>
 <style type="text/css">
-	body {font-family: sans-serif;}
-	table {width: 100%; border-collapse: collapse; border: 0px solid black;}
-	td {width: auto; border-collapse: collapse; border: 0px solid black;}
+	body {
+		font-family: sans-serif;
+	}
 
-	.text-right {text-align: right;}
-	.text-center {text-align: center;}
-	.tabla-contenido {font-size: 0.65em;}
-	.tabla-firma {font-size: 0.90em;}
-	.tabla-firma-td {border: none; text-align:center;padding: 15px 1px 15 1px;}
-	.titulo {text-align: center; vertical-align: middle; background-color: #E5E5E5; font-weight: bold;}
-	.totales {text-align: right; background-color: #E5E5E5; }
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		border: 0px solid black;
+	}
+
+	td {
+		width: auto;
+		border-collapse: collapse;
+		border: 0px solid black;
+	}
+
+	.text-right {
+		text-align: right;
+	}
+
+	.text-center {
+		text-align: center;
+	}
+
+	.tabla-contenido {
+		font-size: 0.65em;
+	}
+
+	.tabla-firma {
+		font-size: 0.90em;
+	}
+
+	.tabla-firma-td {
+		border: none;
+		text-align: center;
+		padding: 15px 1px 15 1px;
+	}
+
+	.titulo {
+		text-align: center;
+		vertical-align: middle;
+		background-color: #E5E5E5;
+		font-weight: bold;
+	}
+
+	.totales {
+		text-align: right;
+		background-color: #E5E5E5;
+	}
 </style>

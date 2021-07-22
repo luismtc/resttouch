@@ -872,6 +872,31 @@ class Articulo_model extends General_model {
 		return null;
 	}
 
+
+	public function get_categoria()
+	{
+		return $this->db
+					->select("a.*")
+					->join("categoria_grupo b", "a.categoria = b.categoria")
+					->where("b.categoria_grupo", $this->categoria_grupo)
+					->get("categoria a")
+					->row();
+	}
+
+	public function get_path_subcategorias($idCategoriaGrupo = null, $antecesores = [])
+	{
+		$idCategoriaGrupo = !$idCategoriaGrupo ? (int)$this->categoria_grupo : (int)$idCategoriaGrupo;
+		$cg = $this->db->where("categoria_grupo", $idCategoriaGrupo)->get("categoria_grupo")->row();
+		if ($cg)
+		{
+			$antecesores[] = trim($cg->descripcion);
+			if ((int)$cg->categoria_grupo_grupo > 0)
+			{
+				$this->get_path_subcategorias($cg->categoria_grupo_grupo, $antecesores);
+			}
+		}		
+		return implode('-', array_reverse($antecesores));
+	}
 }
 
 /* End of file Articulo_model.php */
