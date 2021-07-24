@@ -78,7 +78,7 @@ export class ValorizadoComponent implements OnInit, OnDestroy {
         })
       );
     } else {
-      this.snackBar.open('Por favor ingrese todos los parámetros.', 'Inventario Valorizado', { duration: 7000 })
+      this.snackBar.open('Por favor ingrese todos los parámetros.', 'Inventario Valorizado', { duration: 7000 });
     }
   }
 

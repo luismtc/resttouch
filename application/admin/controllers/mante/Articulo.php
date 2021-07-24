@@ -285,6 +285,12 @@ class Articulo extends CI_Controller
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
 
+	public function get_articulos_sedes_codigo()
+	{
+		if(!isset($_GET['sede'])) { $_GET['sede'] = []; }
+		$datos = $this->Articulo_model->get_lista_articulos_sede_codigo($_GET['sede']);
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
+	}
 
 }
 

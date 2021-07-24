@@ -178,7 +178,7 @@ class Reporte extends CI_Controller
 		}
 	}
 
-	public function kardex()
+	public function kardex_previous()
 	{
 		$_POST = json_decode(file_get_contents('php://input'), true);
 		$datos = [];
@@ -394,6 +394,222 @@ class Reporte extends CI_Controller
 			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
 			$writer->save("php://output");
 		} else {
+			// $vista = $this->load->view('reporte/kardex/imprimir', $args, true);
+			// $pdf   = new \Mpdf\Mpdf([
+			// 	'tempDir' => sys_get_temp_dir(), //produccion
+			// 	"format" => "letter",
+			// 	"lands"
+			// ]);
+
+			// $pdf->AddPage("L");
+			// $pdf->WriteHTML($vista);
+			// $pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
+			// $pdf->Output("Kardex.pdf", "D");
+
+			$this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode($args));
+		}
+	}	
+
+	public function kardex()
+	{
+		$_POST = json_decode(file_get_contents('php://input'), true);		
+		$rpt = new Reporte_model();
+		
+		$datos = [];
+		$infoArticulo = new stdClass();
+
+		foreach($_POST['sede'] as $s) 
+		{
+			$art = $this->Articulo_model->buscarArticulo(['sede' => $s, 'codigo' => $_POST['articulo']]);
+			if($art) {
+				$articulo = new Articulo_model($art->articulo);				
+				$infoArticulo->codigo = $articulo->codigo;
+				$infoArticulo->descripcion = $articulo->descripcion;
+				if(count($articulo->getReceta()) === 0 || $articulo->produccion)
+				{					
+					$presentacionReporte = $articulo->getPresentacionReporte();
+					$sede = new Sede_model($s);				
+					$datos[] = (object)[
+						'sede' => (object)['sede' => $sede->getPK(), 'nombre' => $sede->nombre],
+						'presentacion' => $presentacionReporte->descripcion,
+						'bodegas' => []					
+					];
+					$lastIdxSedes = count($datos) - 1;
+					foreach ($_POST['bodega'] as $bode)
+					{
+						$bodega = new Bodega_model($bode);
+						if ((int)$bodega->sede === (int)$s)
+						{
+							$rpt->setTipo(2);
+							$paramsExist = ['sede' => $s, 'bodega' => $bodega->getPK(), 'articulo' => $articulo->getPK(), 'fdel' => $_POST['fdel'], 'fal' => $_POST['fal']];
+							$existencias = $rpt->getExistencias($paramsExist);
+							$existencia = new stdClass();
+							$existencia->existencia = 0;
+
+							if (count($existencias) > 0) 
+							{
+								$existencia = $existencias[0];
+								if ($existencia->existencia != 0) {
+									$existencia->existencia = (float)$presentacionReporte->cantidad !== 0 ? ((float)$existencia->existencia / (float)$presentacionReporte->cantidad) : 0;
+								} else {
+									$existencia->existencia = (float)$existencia->existencia;
+								}
+							}
+
+							$datos[$lastIdxSedes]->bodegas[] = (object)[
+								'bodega' => $bodega->getPK(), 'descripcion' => $bodega->descripcion, 'antiguedad' => $existencia->existencia,
+								'ingresos' => 0, 'salidas' => 0, 'egresos' => 0, 'comandas' => 0, 'facturas' => 0, 'detalle' => []
+							];
+							$lastIdxBodegas = count($datos[$lastIdxSedes]->bodegas) - 1;
+							$rpt->setTipo(3);
+							$existencias = $rpt->getExistencias($paramsExist);
+							foreach ($existencias as $row)
+							{
+								$row->cantidad = (float)$presentacionReporte->cantidad !== 0 ? ((float)$row->cantidad / (float)$presentacionReporte->cantidad) : 0;								
+
+								$datos[$lastIdxSedes]->bodegas[$lastIdxBodegas]->ingresos += ((int)$row->tipo === 1) ? (float)$row->cantidad : 0;
+								$datos[$lastIdxSedes]->bodegas[$lastIdxBodegas]->salidas += ((int)$row->tipo === 2) ? (float)$row->cantidad : 0;
+								$datos[$lastIdxSedes]->bodegas[$lastIdxBodegas]->egresos += ((int)$row->tipo_salida === 1) ? (float)$row->cantidad : 0;
+								$datos[$lastIdxSedes]->bodegas[$lastIdxBodegas]->comandas += ((int)$row->tipo_salida === 2) ? (float)$row->cantidad : 0;
+								$datos[$lastIdxSedes]->bodegas[$lastIdxBodegas]->facturas += ((int)$row->tipo_salida === 3) ? (float)$row->cantidad : 0;
+								$datos[$lastIdxSedes]->bodegas[$lastIdxBodegas]->detalle[] = (object)[
+									'id' => (int)$row->id,
+									'tipo' => (int)$row->tipo,
+									'cantidad' => (float)$row->cantidad,
+									'fecha' => $row->fecha,
+									'tipo_movimiento' => $row->tipo_movimiento,
+								];
+							}
+							usort($datos[$lastIdxSedes]->bodegas[$lastIdxBodegas]->detalle, function($a, $b){ return strtotime($b->fecha) < strtotime($a->fecha); });
+						}
+					}
+				}
+			}
+		}
+
+		$args = [
+			'fdel' => $_POST['fdel'],
+			'fal' => $_POST['fal'],
+			'articulo' => $infoArticulo,
+			'sedes' => $datos
+		];
+
+		if (verDato($_POST, "_excel"))
+		{
+			$args = (object)$args;
+			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+			$excel->getProperties()
+				->setCreator("Restouch")
+				->setTitle("Office 2007 xlsx Kardex")
+				->setSubject("Office 2007 xlsx Kardex")
+				->setKeywords("office 2007 openxml php");
+
+
+			$excel->setActiveSheetIndex(0);
+			$hoja = $excel->getActiveSheet();
+
+			$hoja->getStyle('A1:G4')->getFont()->setBold(true);
+			$hoja->mergeCells('A1:G1');
+			$hoja->mergeCells('A2:G2');
+			$hoja->mergeCells('A3:G3');
+			$hoja->mergeCells('A4:G4');
+
+			$hoja->setCellValue('A1', 'Kardex');
+			$hoja->setCellValue('A2', "Artículo: {$args->articulo->descripcion}");
+			$hoja->setCellValue('A3', "Código: {$args->articulo->codigo}");
+			$hoja->setCellValue('A4', 'Del '.formatoFecha($args->fdel, 2).' al '.formatoFecha($args->fal, 2));
+
+			$fila = 6;
+			foreach($args->sedes as $sede) 
+			{
+				$hoja->mergeCells("A{$fila}:G{$fila}");
+				$hoja->getStyle("A{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("A{$fila}:G{$fila}")->getFont()->setBold(true);
+				$hoja->setCellValue("A{$fila}", "Sede: {$sede->sede->nombre}");
+				$fila++;
+				$hoja->mergeCells("A{$fila}:G{$fila}");
+				$hoja->getStyle("A{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
+				$hoja->getStyle("A{$fila}:G{$fila}")->getFont()->setBold(true);
+				$hoja->setCellValue("A{$fila}", "Presentación: {$sede->presentacion}");
+				$fila++;
+				foreach ($sede->bodegas as $bodega)
+				{
+					$hoja->mergeCells("A{$fila}:G{$fila}");
+					$hoja->getStyle("A{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
+					$hoja->getStyle("A{$fila}:G{$fila}")->getFont()->setBold(true);
+					$hoja->setCellValue("A{$fila}", "Bodega: {$bodega->descripcion}");
+					$fila++;
+					$hoja->getStyle("A{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
+					$hoja->getStyle("A{$fila}:G{$fila}")->getFont()->setBold(true);
+					$hoja->setCellValue("A{$fila}", 'Saldo Anterior');
+					$hoja->setCellValue("B{$fila}", 'Ingresos');
+					$hoja->setCellValue("C{$fila}", 'Egresos');
+					$hoja->setCellValue("D{$fila}", 'Comandas');
+					$hoja->setCellValue("E{$fila}", 'Facturas Directas');
+					$hoja->setCellValue("F{$fila}", 'Total Egresos');
+					$hoja->setCellValue("G{$fila}", 'Saldo Actual');
+					$fila++;
+					$saldo = $bodega->antiguedad + $bodega->ingresos - $bodega->salidas;
+					$hoja->setCellValue("A{$fila}", $bodega->antiguedad);
+					$hoja->setCellValue("B{$fila}", $bodega->ingresos);
+					$hoja->setCellValue("C{$fila}", $bodega->egresos);
+					$hoja->setCellValue("D{$fila}", $bodega->comandas);
+					$hoja->setCellValue("E{$fila}", $bodega->facturas);
+					$hoja->setCellValue("F{$fila}", $bodega->salidas);
+					$hoja->setCellValue("G{$fila}", $saldo);
+					$hoja->getStyle("A{$fila}:G{$fila}")->getNumberFormat()->setFormatCode('0.00');
+					$fila++;
+					if(count($bodega->detalle) > 0)
+					{
+						$hoja->getStyle("C{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
+						$hoja->getStyle("C{$fila}:G{$fila}")->getFont()->setBold(true);
+						$hoja->setCellValue("C{$fila}", 'Fecha');
+						$hoja->setCellValue("D{$fila}", 'No.');
+						$hoja->setCellValue("E{$fila}", 'Tipo Movimiento');
+						$hoja->setCellValue("F{$fila}", 'Ingreso');
+						$hoja->setCellValue("G{$fila}", 'Salida');
+						$fila++;
+						foreach($bodega->detalle as $det)
+						{
+							$hoja->setCellValue("C{$fila}", formatoFecha($det->fecha, 2));
+							$hoja->setCellValue("D{$fila}", $det->id);
+							$hoja->setCellValue("E{$fila}", $det->tipo_movimiento);
+							$hoja->getStyle("C{$fila}:E{$fila}")->getAlignment()->setHorizontal('center');
+							$hoja->setCellValue("F{$fila}", ($det->tipo == 1) ? $det->cantidad : "0.00");
+							$hoja->setCellValue("G{$fila}", ($det->tipo == 2) ? $det->cantidad : "0.00");
+							$hoja->getStyle("F{$fila}:G{$fila}")->getNumberFormat()->setFormatCode('0.00');
+							$fila++;
+						}
+					} else
+					{
+						$hoja->mergeCells("A{$fila}:G{$fila}");
+						$hoja->getStyle("A{$fila}:G{$fila}")->getAlignment()->setHorizontal('center');
+						$hoja->getStyle("A{$fila}:G{$fila}")->getFont()->setBold(true);
+						$hoja->setCellValue("A{$fila}", "SIN MOVIMIENTOS EN LA BODEGA ".strtoupper($bodega->descripcion));
+						$fila++;
+					}
+					$fila++;
+				}
+			}
+
+			foreach (range('A', 'G') as $col) {
+				$hoja->getColumnDimension($col)->setAutoSize(true);
+			}
+
+
+			$hoja->setTitle("Kardex");
+
+			header("Content-Type: application/vnd.ms-excel");
+			header("Content-Disposition: attachment;filename=Kardex.xls");
+			header("Cache-Control: max-age=1");
+			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GTM");
+			header("Cache-Control: cache, must-revalidate");
+			header("Pragma: public");
+
+			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+			$writer->save("php://output");
+		} else {
 			$vista = $this->load->view('reporte/kardex/imprimir', $args, true);
 			$pdf   = new \Mpdf\Mpdf([
 				'tempDir' => sys_get_temp_dir(), //produccion
@@ -404,9 +620,11 @@ class Reporte extends CI_Controller
 			$pdf->AddPage("L");
 			$pdf->WriteHTML($vista);
 			$pdf->setFooter("Página {PAGENO} de {nb}  {DATE j/m/Y H:i:s}");
-			$pdf->Output("Kardex.pdf", "D");
+			$pdf->Output("Kardex.pdf", "D");			
+
+			// $this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode($args));
 		}
-	}	
+	}
 
 	public function valorizado()
 	{

@@ -5,7 +5,7 @@ import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Categoria } from '../interfaces/categoria';
 import { Impresora } from '../interfaces/impresora';
 import { CategoriaGrupo, CategoriaGrupoResponse, CategoriaGrupoImpresora } from '../interfaces/categoria-grupo';
-import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo, ArticuloResponse } from '../interfaces/articulo';
+import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo, ArticuloResponse, ArticuloCodigo } from '../interfaces/articulo';
 import { ArticuloDetalle } from '../interfaces/articulo-detalle';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -100,6 +100,12 @@ export class ArticuloService {
     return this.http.get<Articulo[]>(
       `${GLOBAL.urlCatalogos}/get_articulo_ingreso?${qs.stringify(fltr)}`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getArticulosSedeCodigo(fltr: any = {}): Observable<ArticuloCodigo[]> {
+    return this.http.get<ArticuloCodigo[]>(
+      `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/get_articulos_sedes_codigo?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
   }
 
   getArticulo(fltr: any = {}): Observable<ArticuloResponse[]> {

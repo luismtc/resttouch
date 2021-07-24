@@ -114,3 +114,8 @@ export interface ProductoSelected {
     combo?: number;
     esreceta?: number;
 }
+
+export interface ArticuloCodigo {
+    codigo: string;
+    descripcion: string;
+}

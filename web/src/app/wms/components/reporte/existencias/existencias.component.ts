@@ -79,7 +79,7 @@ export class ExistenciasComponent implements OnInit, OnDestroy {
         })
       );
     } else {
-      this.snackBar.open('Por favor ingrese todos los parámetros.', 'Existencias', { duration: 7000 })
+      this.snackBar.open('Por favor ingrese todos los parámetros.', 'Existencias', { duration: 7000 });
     }
   }
 

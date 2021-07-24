@@ -897,6 +897,26 @@ class Articulo_model extends General_model {
 		}		
 		return implode('-', array_reverse($antecesores));
 	}
+
+	public function get_lista_articulos_sede_codigo($sedes = [])
+	{
+		if(count($sedes) > 0)
+		{
+			$this->db->where_in('c.sede', $sedes);
+		}
+
+		return $this->db
+			->select('TRIM(a.codigo) AS codigo, TRIM(a.descripcion) AS descripcion', false)			
+			->join('categoria_grupo b', 'b.categoria_grupo = a.categoria_grupo')
+			->join('categoria c', 'c.categoria = b.categoria')
+			->join('sede d', 'd.sede = c.sede')
+			->where('a.codigo IS NOT NULL')
+			->where('a.mostrar_inventario', 1)
+			->group_by('1, 2')
+			->order_by('a.descripcion, a.codigo')
+			->get('articulo a')->result();
+	}
+
 }
 
 /* End of file Articulo_model.php */
