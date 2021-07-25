@@ -98,3 +98,11 @@ export interface ProductoSelected {
     combo?: number;
     esreceta?: number;
 }
+
+export interface ArticuloFastEdit {
+    articulo: number;
+    categoria: number;
+    categoria_grupo: number;
+    descripcion: string;
+    mostrar_pos: number;
+}

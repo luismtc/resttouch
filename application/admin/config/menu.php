@@ -87,6 +87,10 @@ $config['menu'] = [
 					20 => [
 						'nombre' => 'Bodegas',
 						'link' => '/admin/bodega'
+					],
+					21 => [
+						'nombre' => 'Edición rápida de artículos',
+						'link' => '/wms/qeprod'
 					]
 				]
 			],
