@@ -283,7 +283,7 @@ class Articulo extends CI_Controller
 
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
-
+	
 	public function tiene_movimientos($id = 0)
 	{
 		$datos = new stdClass();
@@ -306,6 +306,7 @@ class Articulo extends CI_Controller
 		$datos = $this->Articulo_model->get_lista_articulos_sede_codigo($_GET['sede']);
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
+
 	public function articulo_fast_edit()
 	{
 		$req = json_decode(file_get_contents('php://input'), true);
@@ -316,8 +317,6 @@ class Articulo extends CI_Controller
 		$datos->mensaje = $datos->exito ? 'Artículo actualizado con éxito.' : $articulo->getMensaje();
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
-
-
 }
 
 /* End of file Articulo.php */
