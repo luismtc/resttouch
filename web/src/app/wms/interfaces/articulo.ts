@@ -119,3 +119,11 @@ export interface ArticuloCodigo {
     codigo: string;
     descripcion: string;
 }
+
+export interface ArticuloFastEdit {
+    articulo: number;
+    categoria: number;
+    categoria_grupo: number;
+    descripcion: string;
+    mostrar_pos: number;
+}

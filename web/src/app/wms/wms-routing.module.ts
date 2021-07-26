@@ -12,6 +12,7 @@ import { ProduccionComponent } from './components/produccion/produccion.componen
 import { ValorizadoComponent } from './components/reporte/valorizado/valorizado.component';
 import { FisicoComponent } from './components/fisico/fisico/fisico.component';
 import { ReplicarASedesComponent } from './components/producto/replicar-a-sedes/replicar-a-sedes.component';
+import { QuickEditProductoComponent } from './components/producto/quick-edit-producto/quick-edit-producto.component';
 
 const routes: Routes = [
   { path: 'ingresos', component: IngresoComponent, canActivate: [AuthGuard] },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'rptvalorizado', component: ValorizadoComponent, canActivate: [AuthGuard] },
   { path: 'fisico', component: FisicoComponent, canActivate: [AuthGuard] },
   { path: 'replicar_articulos_sedes', component: ReplicarASedesComponent, canActivate: [AuthGuard] },
+  { path: 'qeprod', component: QuickEditProductoComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

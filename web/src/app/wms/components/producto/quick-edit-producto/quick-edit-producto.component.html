@@ -1,0 +1,43 @@
+<cdk-virtual-scroll-viewport [itemSize]="90">    
+    <table>
+        <caption>
+            <mat-form-field class="fullWidth">
+                <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>        
+        </caption>
+        <thead>
+            <tr>            
+                <th style="width: 36%;">Subcategoría</th>
+                <th style="width: 42%;">Artículo</th>
+                <th style="width: 12%; text-align: center;">Mostrar en POS</th>
+                <th style="width: 10%;">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *cdkVirtualFor="let articulo of lstArticulos">            
+                <td style="width: 36%;">
+                    <mat-form-field class="fullWidth">                    
+                        <mat-select name="categoria_grupo" [(ngModel)]="articulo.categoria_grupo">
+                            <mat-option *ngFor="let selCatGrp of categoriasGrupos" [value]="selCatGrp.categoria_grupo">
+                               {{selCatGrp.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>                
+                </td>
+                <td style="width: 42%;">                
+                    <mat-form-field class="fullWidth">                    
+                        <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" required>
+                    </mat-form-field>
+                </td>
+                <td style="width: 12%; text-align: center;">
+                    <mat-checkbox name="mostrar_pos" [(ngModel)]="+articulo.mostrar_pos"></mat-checkbox>
+                </td>
+                <td style="width: 10%; text-align: center;">
+                    <button mat-raised-button type="button" color="accent" (click)="updArticulo(articulo)" [disabled]="cargando || !articulo.categoria_grupo || !articulo.descripcion">
+                        Guardar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</cdk-virtual-scroll-viewport>
