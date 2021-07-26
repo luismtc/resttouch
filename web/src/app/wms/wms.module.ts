@@ -26,6 +26,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
@@ -91,7 +92,8 @@ import { QuickEditProductoComponent } from './components/producto/quick-edit-pro
     MatSidenavModule,
     MatTreeModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    ScrollingModule
   ],
   providers: [ ],
   exports: [
