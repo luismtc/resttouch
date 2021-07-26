@@ -41,7 +41,7 @@ class Articulo_model extends General_model {
 	public function getCategoriaGrupo()
 	{
 		return $this->db
-					->select("a.*, b.descripcion as ncategoria")
+					->select("a.*, b.descripcion as ncategoria, b.sede")
 					->where("categoria_grupo", $this->categoria_grupo)
 					->join("categoria b", "a.categoria = b.categoria")
 					->get("categoria_grupo a")

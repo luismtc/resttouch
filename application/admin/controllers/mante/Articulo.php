@@ -8,12 +8,16 @@ class Articulo extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model([
-			'Articulo_model', 
+			'Articulo_model',
 			'Receta_model',
 			'Presentacion_model'
 		]);
-		$this->output
-			->set_content_type("application/json", "UTF-8");
+
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
+
+		$this->output->set_content_type("application/json", "UTF-8");
 	}
 
 	public function chkCodigoExistente($codigo = '')
@@ -37,8 +41,8 @@ class Articulo extends CI_Controller
 			} else {
 				$req['existencias'] = $art->existencias;
 				$tmpArt = $this->Articulo_model->buscar(['articulo' => $id, '_uno' => true]);
-				if($tmpArt) {
-					if($req['codigo'] !== $tmpArt->codigo) {
+				if ($tmpArt) {
+					if ($req['codigo'] !== $tmpArt->codigo) {
 						$existeCodigo = $this->chkCodigoExistente($req['codigo']);
 					}
 				}
@@ -58,10 +62,10 @@ class Articulo extends CI_Controller
 						$datos['mensaje'] = $art->getMensaje();
 					}
 				} else {
-					$datos['mensaje'] = "Las unidades de medida no coinciden";		
+					$datos['mensaje'] = "Las unidades de medida no coinciden";
 				}
 			} else {
-				$datos['mensaje'] = 'El código '.$req['codigo'].' ya existe. Intente otro, por favor.';
+				$datos['mensaje'] = 'El código ' . $req['codigo'] . ' ya existe. Intente otro, por favor.';
 			}
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
@@ -82,22 +86,35 @@ class Articulo extends CI_Controller
 				$row->categoria_grupo = $art->getCategoriaGrupo();
 				$row->presentacion = $art->getPresentacion();
 				$row->presentacion_reporte = $art->getPresentacionReporte();
-				$datos[] = $row;
+
+				if (!isset($_GET['_sede'])) {
+					$datos[] = $row;
+				} else {
+					if ((int)$this->data->sede === (int)$row->categoria_grupo->sede) {
+						$datos[] = $row;
+					}
+				}
 			}
 		} else if (is_object($tmp)) {
 			$art = new Articulo_model($tmp->articulo);
 			$tmp->categoria_grupo = $art->getCategoriaGrupo();
 			$tmp->presentacion = $art->getPresentacion();
-			$datos = $tmp;
+
+			if (!isset($_GET['_sede'])) {
+				$datos = $tmp;
+			} else {
+				if ((int)$this->data->sede === (int)$tmp->categoria_grupo->sede) {
+					$datos = $tmp;
+				}
+			}
 		}
 
 		usort($datos, function ($a, $b) {
 			return strcmp($a->descripcion, $b->descripcion);
 		});
 
-		$this->output
-			->set_content_type("application/json")
-			->set_output(json_encode($datos));
+		// $this->output->set_content_type("application/json")->set_output(json_encode(array_slice($datos, 0, 25)));
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
 
 	public function guardar_receta($articulo, $id = '')
@@ -107,7 +124,7 @@ class Articulo extends CI_Controller
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
 			if ($req['cantidad'] > 0) {
-				if((int)$articulo !== (int)$req['articulo']) {
+				if ((int)$articulo !== (int)$req['articulo']) {
 					$rec = new Articulo_model($req['articulo']);
 					if ($art->combo == 1 && $rec->combo == 1) {
 						$datos['mensaje'] = "No es posible agregar un combo a un combo como detalle.";
@@ -123,7 +140,7 @@ class Articulo extends CI_Controller
 					}
 				} else {
 					$datos['mensaje'] = "No se puede agregar un producto a si mismo como parte de una receta/detalle.";
-				}				
+				}
 			} else {
 				$datos['mensaje'] = "La cantidad debe ser mayor a cero.";
 			}
@@ -173,7 +190,7 @@ class Articulo extends CI_Controller
 			'tempDir' => sys_get_temp_dir(),
 			'format' => 'Legal'
 		]);
-		
+
 		$mpdf->WriteHTML($this->load->view('reporte/receta', $datos, true));
 		$mpdf->Output("Receta.pdf", "D");
 	}
@@ -206,7 +223,6 @@ class Articulo extends CI_Controller
 						"_uno" => true
 					]);
 					$articulos[] = $tmp;
-					
 				} else {
 					$articulos = $this->Catalogo_model->getArticulo(["sede" => $data->sede]);
 				}
@@ -232,7 +248,6 @@ class Articulo extends CI_Controller
 			} else {
 				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
 			}
-
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
@@ -291,6 +306,17 @@ class Articulo extends CI_Controller
 		$datos = $this->Articulo_model->get_lista_articulos_sede_codigo($_GET['sede']);
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
+	public function articulo_fast_edit()
+	{
+		$req = json_decode(file_get_contents('php://input'), true);
+		$datos = new stdClass();
+		$datos->exito = false;
+		$articulo = new Articulo_model($req['articulo']);
+		$datos->exito = $articulo->guardar($req);
+		$datos->mensaje = $datos->exito ? 'Artículo actualizado con éxito.' : $articulo->getMensaje();
+		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
+	}
+
 
 }
 

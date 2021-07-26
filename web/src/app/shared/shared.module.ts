@@ -41,8 +41,8 @@ import { DialogComboComponent } from './components/dialog-combo/dialog-combo.com
 import { DialogElminarProductoComponent } from './components/dialog-elminar-producto/dialog-elminar-producto.component';
 import { TruncarPipe } from './pipes/truncar.pipe';
 
-const config: SocketIoConfig = { url: `${PROTOCOLO}//${ANFITRION}:8988`, options: {} }; // Dev
-// const config: SocketIoConfig = { url: `${PROTOCOLO}//restouch.c807.com:8988`, options: {} }; // Prod
+// const config: SocketIoConfig = { url: `${PROTOCOLO}//${ANFITRION}:8988`, options: {} }; // Dev
+const config: SocketIoConfig = { url: `${PROTOCOLO}//restouch.c807.com:8988`, options: {} }; // Prod
 
 @NgModule({
   declarations: [

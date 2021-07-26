@@ -26,6 +26,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
@@ -54,13 +55,14 @@ import { FormInventarioFisicoComponent } from './components/fisico/form-inventar
 import { ReplicarASedesComponent } from './components/producto/replicar-a-sedes/replicar-a-sedes.component';
 import { ReplicarASedesDialogComponent } from './components/producto/replicar-a-sedes-dialog/replicar-a-sedes-dialog.component';
 import { SubCategoriaProductoComponent } from './components/producto/sub-categoria-producto/sub-categoria-producto.component';
+import { QuickEditProductoComponent } from './components/producto/quick-edit-producto/quick-edit-producto.component';
 
 @NgModule({
   declarations: [
     ListaProductoComponent, ListaIngresoComponent, FormIngresoComponent, IngresoComponent, ProductoComponent, FormProductoComponent,
     CategoriaProductoComponent, EgresoComponent, ListaEgresoComponent, FormEgresoComponent, TransformacionComponent, ExistenciasComponent,
     KardexComponent, ListaProductoAltComponent, ProduccionComponent, ReporteComponent, ValorizadoComponent, FisicoComponent,
-    FormInventarioFisicoComponent, ReplicarASedesComponent, ReplicarASedesDialogComponent, SubCategoriaProductoComponent
+    FormInventarioFisicoComponent, ReplicarASedesComponent, ReplicarASedesDialogComponent, SubCategoriaProductoComponent, QuickEditProductoComponent
   ],
   imports: [
     CommonModule,
@@ -90,7 +92,8 @@ import { SubCategoriaProductoComponent } from './components/producto/sub-categor
     MatSidenavModule,
     MatTreeModule,
     MatAutocompleteModule,
-    MatChipsModule
+    MatChipsModule,
+    ScrollingModule
   ],
   providers: [ ],
   exports: [

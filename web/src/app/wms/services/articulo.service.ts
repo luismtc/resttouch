@@ -5,7 +5,7 @@ import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Categoria } from '../interfaces/categoria';
 import { Impresora } from '../interfaces/impresora';
 import { CategoriaGrupo, CategoriaGrupoResponse, CategoriaGrupoImpresora } from '../interfaces/categoria-grupo';
-import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo, ArticuloResponse, ArticuloCodigo } from '../interfaces/articulo';
+import { Articulo, ArbolArticulos, NodoProducto, ArbolCategoriaGrupo, ArticuloResponse, ArticuloCodigo, ArticuloFastEdit } from '../interfaces/articulo';
 import { ArticuloDetalle } from '../interfaces/articulo-detalle';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -193,6 +193,13 @@ export class ArticuloService {
 
   tieneMovimientos(idarticulo: number) {
     return this.http.get<any>(`${GLOBAL.urlMantenimientos}/${this.articuloUrl}/tiene_movimientos/${idarticulo}`).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+  
+  fastEdit(entidad: ArticuloFastEdit): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/articulo_fast_edit`,
+      entidad
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
   }
 
   getArticuloDetalle(idarticulo: number, fltr: any = {}): Observable<ArticuloDetalle[]> {
