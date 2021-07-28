@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSelectChange } from '@angular/material/select';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 import { Categoria } from '../../../interfaces/categoria';
-import { CategoriaGrupo } from '../../../interfaces/categoria-grupo';
-import { ArticuloResponse, Articulo, ArticuloFastEdit } from '../../../interfaces/articulo';
+import { ArticuloFastEdit } from '../../../interfaces/articulo';
 import { ArticuloService } from '../../../services/articulo.service';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL, MultiFiltro, OrdenarArrayObjetos } from '../../../../shared/global';
@@ -82,7 +80,8 @@ export class QuickEditProductoComponent implements OnInit, OnDestroy {
             categoria: r.categoria_grupo.categoria,
             categoria_grupo: +r.categoria_grupo.categoria_grupo,
             descripcion: r.descripcion,
-            mostrar_pos: r.mostrar_pos           
+            mostrar_pos: r.mostrar_pos,
+            precio: +r.precio
           });
         });
         this.lstArticulos = JSON.parse(JSON.stringify(this.lstArticulosFull));

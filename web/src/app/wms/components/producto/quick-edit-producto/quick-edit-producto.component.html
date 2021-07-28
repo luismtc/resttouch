@@ -7,15 +7,16 @@
         </caption>
         <thead>
             <tr>            
-                <th style="width: 36%;">Subcategoría</th>
-                <th style="width: 42%;">Artículo</th>
+                <th style="width: 31%;">Subcategoría</th>
+                <th style="width: 40%;">Artículo</th>
+                <th style="width: 7%;">Precio</th>
                 <th style="width: 12%; text-align: center;">Mostrar en POS</th>
                 <th style="width: 10%;">&nbsp;</th>
             </tr>
         </thead>
         <tbody>
             <tr *cdkVirtualFor="let articulo of lstArticulos">            
-                <td style="width: 36%;">
+                <td style="width: 31%;">
                     <mat-form-field class="fullWidth">                    
                         <mat-select name="categoria_grupo" [(ngModel)]="articulo.categoria_grupo">
                             <mat-option *ngFor="let selCatGrp of categoriasGrupos" [value]="selCatGrp.categoria_grupo">
@@ -24,9 +25,14 @@
                         </mat-select>
                     </mat-form-field>                
                 </td>
-                <td style="width: 42%;">                
+                <td style="width: 40%;">                
                     <mat-form-field class="fullWidth">                    
                         <input matInput type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" required>
+                    </mat-form-field>
+                </td>
+                <td style="width: 7%;">
+                    <mat-form-field class="fullWidth">                    
+                        <input matInput type="number" placeholder="Precio" name="precio" [(ngModel)]="articulo.precio" step="0.01" required>
                     </mat-form-field>
                 </td>
                 <td style="width: 12%; text-align: center;">

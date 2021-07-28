@@ -126,4 +126,5 @@ export interface ArticuloFastEdit {
     categoria_grupo: number;
     descripcion: string;
     mostrar_pos: number;
+    precio: number;
 }

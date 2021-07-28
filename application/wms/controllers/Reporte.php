@@ -178,7 +178,7 @@ class Reporte extends CI_Controller
 		}
 	}
 
-	public function kardex_previous()
+	/*public function kardex_previous()
 	{
 		$_POST = json_decode(file_get_contents('php://input'), true);
 		$datos = [];
@@ -290,8 +290,7 @@ class Reporte extends CI_Controller
 				"Facturas",
 				"Total Egresos",
 				"Saldo Actual"
-			];
-			/*Encabezado*/
+			];			
 			$hoja->setCellValue("B1", "Kardex");
 			$hoja->setCellValue("E1", "Del: " . formatoFecha($args['fdel'], 2));
 			$hoja->setCellValue("F1", "Al: " . formatoFecha($args['fal'], 2));
@@ -408,7 +407,7 @@ class Reporte extends CI_Controller
 
 			$this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode($args));
 		}
-	}	
+	}*/	
 
 	public function kardex()
 	{
@@ -655,48 +654,52 @@ class Reporte extends CI_Controller
 					foreach ($articulos as $row) {
 						$art = new Articulo_model($row->articulo);
 						$categoria = $art->get_categoria();
-						$pathSubcat = $art->get_path_subcategorias();
-						$receta = $art->getReceta();
-						if (count($receta) === 0 || (int)$art->produccion === 1) {
-							$art->actualizarExistencia(['fecha' => $req['fecha'], 'sede' => $s, 'bodega' => $bode]);
-							$pres = $art->getPresentacionReporte();
-							$art->existencias = (float)$art->existencias / (float)$pres->cantidad;
 
-							$bcosto = $this->BodegaArticuloCosto_model->buscar([
-								'bodega' => $bode,
-								'articulo' => $row->articulo,
-								'_uno' => true
-							]);
-
-							if ($bcosto) {
-								if ($empresa->metodo_costeo == 1) {
-									$row->precio_unitario = $bcosto->costo_ultima_compra;
-								} else if ($empresa->metodo_costeo == 2) {
-									$row->precio_unitario = $bcosto->costo_promedio;
+						if((int)$categoria->sede === (int)$s)
+						{
+							$pathSubcat = $art->get_path_subcategorias();
+							$receta = $art->getReceta();
+							if (count($receta) === 0 || (int)$art->produccion === 1) {
+								$art->actualizarExistencia(['fecha' => $req['fecha'], 'sede' => $s, 'bodega' => $bode]);
+								$pres = $art->getPresentacionReporte();
+								$art->existencias = (float)$art->existencias / (float)$pres->cantidad;
+	
+								$bcosto = $this->BodegaArticuloCosto_model->buscar([
+									'bodega' => $bode,
+									'articulo' => $row->articulo,
+									'_uno' => true
+								]);
+	
+								if ($bcosto) {
+									if ($empresa->metodo_costeo == 1) {
+										$row->precio_unitario = $bcosto->costo_ultima_compra;
+									} else if ($empresa->metodo_costeo == 2) {
+										$row->precio_unitario = $bcosto->costo_promedio;
+									} else {
+										$row->precio_unitario = 0;
+									}
 								} else {
 									$row->precio_unitario = 0;
 								}
-							} else {
-								$row->precio_unitario = 0;
-							}
-
-							$row->precio_unitario = $row->precio_unitario * $pres->cantidad;
-
-							$obj = (object)[
-								"articulo" => $art->getPK(),
-								"presentacion" => $pres->descripcion,
-								"cantidad" => $art->existencias,
-								"total" => (float) round($art->existencias, 2) * (float) round($row->precio_unitario, 2),
-								"descripcion" => $art->descripcion,
-								"precio_unitario" => $row->precio_unitario,
-								"ultima_compra" => isset($row->fecha) ? formatoFecha($row->fecha, 2) : '',
-								"categoria" => $categoria->descripcion,
-								"categoria_grupo" => $pathSubcat,
-								"full_name" => trim($categoria->descripcion) . '-' . $pathSubcat . '-' . trim($art->descripcion)
-							];
-
-							if (!in_array($obj, $data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos)) {
-								$data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos[] = $obj;
+	
+								$row->precio_unitario = $row->precio_unitario * $pres->cantidad;
+	
+								$obj = (object)[
+									"articulo" => $art->getPK(),
+									"presentacion" => $pres->descripcion,
+									"cantidad" => $art->existencias,
+									"total" => (float) round($art->existencias, 2) * (float) round($row->precio_unitario, 2),
+									"descripcion" => $art->descripcion,
+									"precio_unitario" => $row->precio_unitario,
+									"ultima_compra" => isset($row->fecha) ? formatoFecha($row->fecha, 2) : '',
+									"categoria" => $categoria->descripcion,
+									"categoria_grupo" => $pathSubcat,
+									"full_name" => trim($categoria->descripcion) . '-' . $pathSubcat . '-' . trim($art->descripcion)
+								];
+	
+								if (!in_array($obj, $data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos)) {
+									$data[$lastIdxSedes]->bodegas[$lastIdxBodegas]->articulos[] = $obj;
+								}
 							}
 						}
 					}
@@ -751,7 +754,7 @@ class Reporte extends CI_Controller
 						$hoja->setCellValue("C{$fila}", $bodega->descripcion);
 						$hoja->setCellValue("D{$fila}", $articulo->categoria);
 						$hoja->setCellValue("E{$fila}", $articulo->categoria_grupo);
-						$hoja->setCellValue("F{$fila}", $articulo->descripcion);
+						$hoja->setCellValue("F{$fila}", "{$articulo->articulo}-{$articulo->descripcion}");
 						$hoja->setCellValue("G{$fila}", $articulo->presentacion);
 						$hoja->setCellValue("H{$fila}", $articulo->cantidad);
 						$hoja->setCellValue("I{$fila}", $articulo->ultima_compra);
