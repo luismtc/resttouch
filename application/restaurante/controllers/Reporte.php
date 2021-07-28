@@ -264,7 +264,7 @@ class Reporte extends CI_Controller {
 						array_push($regs, round($rec, 2));
 
 						$clase = "";
-						$ing=$row->monto + $row->propina;
+						$ing = (isset($row->monto) ? $row->monto : 0.00) + (isset($row->propina) ? $row->propina : 0.00);
 						$dif = $ing - $rec;
 
 						array_push($regs, round($dif,2));
@@ -479,22 +479,27 @@ class Reporte extends CI_Controller {
 					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);
 					$fila++;
 
+					$hoja->mergeCells("A{$fila}:B{$fila}");
 					$hoja->setCellValue("A{$fila}", "Factura");
-					$hoja->setCellValue("B{$fila}", "Fecha");
-					$hoja->setCellValue("C{$fila}", "Documento");
-					$hoja->setCellValue("D{$fila}", "Monto");
+					$hoja->setCellValue("C{$fila}", "Fecha");
+					$hoja->setCellValue("D{$fila}", "Documento");
+					$hoja->setCellValue("E{$fila}", "Monto");
+					$hoja->setCellValue("F{$fila}", "Propina");
 					$hoja->getStyle("A{$fila}:F{$fila}")->getFont()->setBold(true);	
 					$fila++;
 
 					foreach ($row as $det) {
-						$hoja->setCellValue("A{$fila}", $det->numero_factura);
-						$hoja->getStyle("B{$fila}")->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
+						$hoja->setCellValue("A{$fila}", $det->serie_factura);
+						$hoja->setCellValue("B{$fila}", $det->numero_factura);
+						$hoja->getStyle("C{$fila}")->getNumberFormat()->setFormatCode(\PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DDMMYYYY);
 						$valFecha = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($det->fecha_factura);
-						$hoja->setCellValue("B{$fila}", $valFecha);
-						$hoja->setCellValue("C{$fila}", $det->documento);
-						$hoja->setCellValue("D{$fila}", round($det->monto,2));
+						$hoja->setCellValue("C{$fila}", $valFecha);
+						$hoja->setCellValue("D{$fila}", $det->documento);
+						$hoja->setCellValue("E{$fila}", round($det->monto, 2));
+						$hoja->setCellValue("F{$fila}", round($det->propina, 2));
 						$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
-						$hoja->getStyle("D{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
 						$fila++;
 					}
 				}
@@ -520,7 +525,7 @@ class Reporte extends CI_Controller {
 
 		} else {
 			$mpdf = new \Mpdf\Mpdf([
-				'tempDir' => sys_get_temp_dir(),
+				// 'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			$mpdf->WriteHTML($this->load->view('caja', $data, true));
