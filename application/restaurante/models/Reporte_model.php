@@ -74,7 +74,8 @@ class Reporte_model extends CI_Model {
 			ifnull(e.numero_factura, concat('Comanda ', h.comanda)) as numero_factura,
 			ifnull(e.fecha_factura, date(h.fhcreacion)) as fecha_factura,
 			h.sede,
-			j.nombre as nsede")
+			j.nombre as nsede,
+			ifnull(e.serie_factura, '') as serie_factura")
 		->from("cuenta_forma_pago a")
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta", "left")
@@ -98,7 +99,8 @@ class Reporte_model extends CI_Model {
 				a.fecha_factura,
 				a.numero_factura,
 				a.sede,
-				nsede
+				nsede,
+				a.serie_factura
 			from ( {$tmp} ) a
 			group by a.forma_pago {$group}")
 			->result();

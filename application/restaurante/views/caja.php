@@ -474,24 +474,27 @@
 				<table class="table table-bordered">
 					<?php foreach ($detalle as $key => $row): ?>
 						<tr>
-							<th colspan="3"><?php echo $key ?></th>
+							<th colspan="6"><?php echo $key ?></th>
 						</tr>
 						<tr>
-							<th class="text-center">Factura</th>
+							<th class="text-center" colspan="2">Factura</th>
 							<th class="text-center">Fecha</th>
 							<th class="text-center">Documento</th>
 							<th class="text-center">Monto</th>
+							<th class="text-center">Propina</th>
 						</tr>
 						<?php foreach ($row as $det): ?>
 							<tr>
+								<td><?php echo $det->serie_factura ?></td>
 								<td><?php echo $det->numero_factura ?></td>
 								<td><?php echo formatoFecha($det->fecha_factura, 2) ?></td>
 								<td><?php echo $det->documento ?></td>
 								<td class="text-right"><?php echo number_format($det->monto, 2) ?></td>
+								<td class="text-right"><?php echo number_format($det->propina, 2) ?></td>
 							</tr>
 						<?php endforeach ?>
 						<tr>
-							<td colspan="3"><p><br></p></td>
+							<td colspan="6"><p><br></p></td>
 						</tr>
 					<?php endforeach ?>
 				</table>
