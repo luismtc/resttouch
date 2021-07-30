@@ -28,6 +28,7 @@ import { ComandaService } from '../../services/comanda.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../../admin/services/configuracion.service';
 import { Cliente } from '../../../admin/interfaces/cliente';
+import { UsuarioService } from '../../../admin/services/usuario.service';
 import * as moment from 'moment';
 // import { saveAs } from 'file-saver';
 import { Base64 } from 'js-base64';
@@ -38,6 +39,10 @@ import { Base64 } from 'js-base64';
   styleUrls: ['./tran-comanda.component.css']
 })
 export class TranComandaComponent implements OnInit {
+
+  get esCajero() {    
+    return this.rolesUsuario.indexOf('cajero') > -1;
+  }
 
   @Input() mesaEnUso: ComandaGetResponse;
   @Input() clientePedido: Cliente = null;
@@ -58,7 +63,7 @@ export class TranComandaComponent implements OnInit {
   public detalleComanda: DetalleComanda;
   public categorias: ArbolArticulos[] = [];
   public bloqueoBotones = false;
-  public rolesUsuario: string[] = [];
+  public rolesUsuario = '';
   public impreso = 0;
   public usaCodigoBarras = false;
   public codigoBarras: string = null;
@@ -73,7 +78,8 @@ export class TranComandaComponent implements OnInit {
     private ls: LocalstorageService,
     private pdfServicio: ReportePdfService,
     private configSrvc: ConfiguracionService,
-    private articuloSrvc: ArticuloService
+    private articuloSrvc: ArticuloService,
+    private usuarioSrvc: UsuarioService
   ) { }
 
   ngOnInit() {
@@ -90,8 +96,11 @@ export class TranComandaComponent implements OnInit {
     }
     this.usaCodigoBarras = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_USA_CODIGO_BARRAS);
     this.imprimeRecetaEnComanda = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_RECETA_EN_COMANDA);
+    // this.loadRolesUsuario();
     // console.log('MESA EN USO = ', this.mesaEnUso);
   }
+
+  loadRolesUsuario = () => this.usuarioSrvc.getRolesTurno(this.ls.get(GLOBAL.usrTokenVar).idusr).subscribe(res => this.rolesUsuario = res.roles);
 
   resetMesaEnUso = () => this.mesaEnUso = {
     exito: true,
@@ -703,10 +712,7 @@ export class TranComandaComponent implements OnInit {
   cambiarEstatusCuenta = (obj: any) => {
     const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +obj.cuenta);
     this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada;
-  }
-
-  // esCajero = () => (this.rolesUsuario || []).find(r => r.trim().toLocaleLowerCase() === 'cajero') === undefined;
-  esCajero = () => false;
+  } 
 
   trasladoMesa = () => {
     const trasladoRef = this.dialog.open(TrasladoMesaComponent, {
@@ -767,5 +773,5 @@ export class TranComandaComponent implements OnInit {
         this.closeSideNavEv.emit();
       }
     });
-  }
+  }  
 }

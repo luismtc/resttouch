@@ -30,11 +30,17 @@ import { ReportePdfService } from '../services/reporte-pdf.service';
 import { ConfiguracionService } from '../../admin/services/configuracion.service';
 import { Cliente } from '../../admin/interfaces/cliente';
 import { Categoria } from '../../wms/interfaces/categoria';
+import { UsuarioService } from '../../admin/services/usuario.service';
 
 import { AccionesComandaComponent } from '../components/acciones-comanda/acciones-comanda.component';
 import { Base64 } from 'js-base64';
 
 export class TranComanda {
+
+    get esCajero() {
+        return this.rolesUsuario.indexOf('cajero') > -1;
+    }
+
     public mesaEnUso: ComandaGetResponse;
     public clientePedido: Cliente = null;
     public closeSideNavEv = new EventEmitter();
@@ -69,7 +75,8 @@ export class TranComanda {
         protected pdfServicio: ReportePdfService,
         protected configSrvc: ConfiguracionService,
         protected articuloSrvc: ArticuloService,
-        protected bsAccionesCmd: MatBottomSheet
+        protected bsAccionesCmd: MatBottomSheet,
+        protected usuarioSrvc: UsuarioService
     ) { }
 
     alIniciar = () => {
@@ -87,7 +94,10 @@ export class TranComanda {
         this.usaCodigoBarras = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_USA_CODIGO_BARRAS);
         this.imprimeRecetaEnComanda = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_IMPRIME_RECETA_EN_COMANDA);
         // console.log('MESA EN USO = ', this.mesaEnUso);
+        this.loadRolesUsuario();
     }
+
+    loadRolesUsuario = () => this.usuarioSrvc.getRolesTurno(this.ls.get(GLOBAL.usrTokenVar).idusr).subscribe(res => this.rolesUsuario = res.roles);
 
     resetMesaEnUso = () => this.mesaEnUso = {
         exito: true,
@@ -713,9 +723,6 @@ export class TranComanda {
         const idxCta = this.mesaEnUso.cuentas.findIndex(c => +c.cuenta === +obj.cuenta);
         this.mesaEnUso.cuentas[idxCta].cerrada = +obj.cerrada;
     }
-
-    // esCajero = () => (this.rolesUsuario || []).find(r => r.trim().toLocaleLowerCase() === 'cajero') === undefined;
-    esCajero = () => false;
 
     trasladoMesa = (dialogRef: MatDialogRef<TranComandaAltComponent> = null) => {
         const trasladoRef = this.dialog.open(TrasladoMesaComponent, {
