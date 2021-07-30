@@ -9,3 +9,24 @@ mat-grid-tile {
 .anulacion {
 	cursor: pointer;
 }
+
+mat-dialog-content {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.tblNominaciones > th, td {
+  padding: 2px !important;
+  margin-top: 1px !important;
+  margin-bottom: 1px !important;
+}
+
+.tblNominaciones::ng-deep .mat-input-element {  
+  border-bottom: 1px solid black;
+  text-align: right;
+}
+
+.suma-total {
+  border-top: solid 1px black;
+  border-bottom: double 3.5px black;
+}

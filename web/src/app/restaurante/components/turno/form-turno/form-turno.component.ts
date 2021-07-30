@@ -1,12 +1,14 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, OnDestroy, OnChanges } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { SeleccionaTurnoPrevioComponent } from '../selecciona-turno-previo/selecciona-turno-previo.component';
+import { CajacorteListaComponent } from '../../caja-corte/cajacorte-lista/cajacorte-lista.component';
 import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 
 import { TipoTurno } from '../../../interfaces/tipo-turno';
 import { TipoTurnoService } from '../../../services/tipo-turno.service';
@@ -23,10 +25,18 @@ import { UsuarioService } from '../../../../admin/services/usuario.service';
   templateUrl: './form-turno.component.html',
   styleUrls: ['./form-turno.component.css']
 })
-export class FormTurnoComponent implements OnInit {
+export class FormTurnoComponent implements OnInit, OnChanges, OnDestroy {
+
+  get descripcionCaja() {
+    if (+this.turno?.turno > 0 && this.turno?.inicio) {
+      return `Caja del turno ${moment(this.turno.inicio).format(GLOBAL.dateTimeFormat)}`;
+    }
+    return '';
+  }
 
   @Input() turno: Turno;
   @Output() turnoSavedEv = new EventEmitter();
+  @ViewChild('lstCajaCorte') lstCajaCorte: CajacorteListaComponent;
 
   public showTurnoForm = true;
   public showDetalleTurnoForm = true;
@@ -42,6 +52,7 @@ export class FormTurnoComponent implements OnInit {
   public comandas: any[] = [];
   public facturas: any[] = [];
   public pendientes = false;
+  private endSubs = new Subscription();
 
   constructor(
     private snackBar: MatSnackBar,
@@ -61,29 +72,47 @@ export class FormTurnoComponent implements OnInit {
     this.loadUsuarios();
   }
 
+  ngOnChanges(changes): void {
+    if (+changes.turno?.currentValue?.turno > 0) {
+      // console.log('CAMBIOS = ', changes.turno.currentValue);
+      this.lstCajaCorte.idTurno = +changes.turno.currentValue.turno;
+      this.lstCajaCorte.getCajascortes();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.endSubs.unsubscribe();
+  }
+
   loadTiposTurno = () => {
-    this.tipoTurnoSrvc.get().subscribe(res => {
-      if (res) {
-        this.tiposTurno = res;
-      }
-    });
+    this.endSubs.add(      
+      this.tipoTurnoSrvc.get().subscribe(res => {
+        if (res) {
+          this.tiposTurno = res;
+        }
+      })
+    );
   }
 
   loadTiposUsuario = () => {
-    this.usuarioTipoSrvc.get().subscribe(res => {
-      if (res) {
-        this.tiposUsuario = res;
-      }
-    });
+    this.endSubs.add(      
+      this.usuarioTipoSrvc.get().subscribe(res => {
+        if (res) {
+          this.tiposUsuario = res;
+        }
+      })
+    );
   }
 
   loadUsuarios = () => {
-    this.usuarioSrvc.get({ sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe(res => {
-      if (res) {
-        this.usuarios = res;
-      }
-    });
-  }
+    this.endSubs.add(      
+      this.usuarioSrvc.get({ sede: (this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe(res => {
+        if (res) {
+          this.usuarios = res;
+        }
+      })
+    );
+  }  
 
   resetTurno = () => {
     this.pendientes = false;
@@ -99,25 +128,24 @@ export class FormTurnoComponent implements OnInit {
 
   saveInfoTurno = () => {
     this.pendientes = false;
-    this.turnoSrvc.save(this.turno).subscribe(res => {
-      if (res.exito) {
-        this.turnoSavedEv.emit();
-        this.resetTurno();
-        this.turno = res.turno;
-        this.snackBar.open('Turno modificado con éxito...', 'Turno', { duration: 3000 });
-      } else {
-        // console.log(res.mensaje);
-        if (res.pendientes) {
-          this.snackBar.open(`ERROR: Error al cerrar el turno`, 'Turno', { duration: 3000 });
-          this.pendientes = true;
-          this.comandas = res.comandas;
-          this.facturas = res.facturas;
+    this.endSubs.add(      
+      this.turnoSrvc.save(this.turno).subscribe(res => {
+        if (res.exito) {
+          this.turnoSavedEv.emit();
+          this.resetTurno();
+          this.turno = res.turno;
+          this.snackBar.open('Turno modificado con éxito...', 'Turno', { duration: 3000 });
+        } else {
+          if (res.pendientes) {
+            this.snackBar.open(`ERROR: Error al cerrar el turno`, 'Turno', { duration: 3000 });
+            this.pendientes = true;
+            this.comandas = res.comandas;
+            this.facturas = res.facturas;
+          }  
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });  
         }
-
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
-
-      }
-    });
+      })
+    );
   }
 
   onSubmit = () => {
@@ -127,12 +155,13 @@ export class FormTurnoComponent implements OnInit {
         data: new ConfirmDialogModel('Cerrar turno', 'La fecha de finalización cerrará el turno. ¿Desea continuar?', 'Sí', 'No')
       });
 
-      dialogRef.afterClosed().subscribe(res => {
-        if (res) {
-          this.saveInfoTurno();
-        }
-      });
-
+      this.endSubs.add(        
+        dialogRef.afterClosed().subscribe(res => {
+          if (res) {
+            this.saveInfoTurno();
+          }
+        })
+      );
     } else {
       this.saveInfoTurno();
     }
@@ -141,44 +170,43 @@ export class FormTurnoComponent implements OnInit {
   resetDetalleTurno = () => this.detalleTurno = { turno: !!this.turno.turno ? this.turno.turno : null, usuario: null, usuario_tipo: null };
 
   loadDetalleTurno = (idturno: number = +this.turno.turno) => {
-    this.turnoSrvc.getDetalle(idturno, { turno: idturno }).subscribe(res => {
-      // console.log(res);
-      if (res) {
-        this.detallesTurno = res;
-        this.updateTableDataSource();
-      }
-    });
+    this.endSubs.add(      
+      this.turnoSrvc.getDetalle(idturno, { turno: idturno }).subscribe(res => {        
+        if (res) {
+          this.detallesTurno = res;
+          this.updateTableDataSource();
+        }
+      })
+    );
   }
 
   onSubmitDetail = () => {
-    this.detalleTurno.turno = this.turno.turno;
-    // console.log(this.detalleTurno); return;
-    this.turnoSrvc.saveDetalle(this.detalleTurno).subscribe(res => {
-      // console.log(res);
-      if (res.exito) {
-        this.loadDetalleTurno();
-        this.resetDetalleTurno();
-        this.snackBar.open('Usuario agregado al turno...', 'Turno', { duration: 3000 });
-      } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
-      }
-    });
+    this.detalleTurno.turno = this.turno.turno;    
+    this.endSubs.add(      
+      this.turnoSrvc.saveDetalle(this.detalleTurno).subscribe(res => {      
+        if (res.exito) {
+          this.loadDetalleTurno();
+          this.resetDetalleTurno();
+          this.snackBar.open('Usuario agregado al turno...', 'Turno', { duration: 3000 });
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
+        }
+      })
+    );
   }
 
-  anularDetalleTurno = (obj: any) => {
-    // console.log(obj);
-    this.turnoSrvc.anularDetalle({
-      turno: obj.turno, usuario: obj.usuario.usuario, usuario_tipo: obj.usuario_tipo.usuario_tipo
-    }).subscribe(res => {
-      // console.log(res);
-      if (res.exito) {
-        this.loadDetalleTurno();
-        this.resetDetalleTurno();
-        this.snackBar.open('Se quitó al usuario del turno...', 'Turno', { duration: 3000 });
-      } else {
-        this.snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
-      }
-    });
+  anularDetalleTurno = (obj: any) => {    
+    this.endSubs.add(      
+      this.turnoSrvc.anularDetalle({ turno: obj.turno, usuario: obj.usuario.usuario, usuario_tipo: obj.usuario_tipo.usuario_tipo }).subscribe(res => {      
+        if (res.exito) {
+          this.loadDetalleTurno();
+          this.resetDetalleTurno();
+          this.snackBar.open('Se quitó al usuario del turno...', 'Turno', { duration: 3000 });
+        } else {
+          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Turno', { duration: 3000 });
+        }
+      })
+    );
   }
 
   updateTableDataSource = () => this.dataSource = new MatTableDataSource(this.detallesTurno);
@@ -191,7 +219,8 @@ export class FormTurnoComponent implements OnInit {
       data: { turnoCopia: this.turno }
     });
 
-    dialogRef.afterClosed().subscribe(() =>  this.loadDetalleTurno(+this.turno.turno));
+    this.endSubs.add(
+      dialogRef.afterClosed().subscribe(() =>  this.loadDetalleTurno(+this.turno.turno))
+    );
   }
-
 }

@@ -11,6 +11,8 @@ export interface FormaPago {
     adjuntararchivo?: number;
     pedirautorizacion?: number;
     sinfactura?: number;
+    esefectivo?: number;
+    montocc?: number;
 }
 
 export interface FormaPagoComandaOrigen {

@@ -629,8 +629,8 @@ class Comanda extends CI_Controller {
 	public function validapwdgerenteturno() {
 		$res = ["exito" => false];
 		if ($this->input->method() == 'post') {
-			$data = json_decode(file_get_contents('php://input'), true);			
-			$res['esgerente'] = $this->Usuario_model->validaPwdGerenteTurno($data['pwd']);
+			$req = json_decode(file_get_contents('php://input'), true);			
+			$res['esgerente'] = $this->Usuario_model->validaPwdGerenteTurno($req['pwd'], $this->data->sede);
 			$res['exito'] = true;
 			$res['mensaje'] = 'Datos validados con éxito.';
 		}

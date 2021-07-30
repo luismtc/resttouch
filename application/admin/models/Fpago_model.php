@@ -13,6 +13,7 @@ class Fpago_model extends General_model {
 	public $adjuntararchivo = 0;
 	public $pedirautorizacion = 0;
 	public $sinfactura = 0;
+	public $esefectivo = 0;
 
 	public function __construct($id = "")
 	{

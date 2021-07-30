@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { ccGeneral, ccDetalle, ccTipo, ccNominacion } from '../interfaces/cajacorte';
-// import { LocalstorageService } from '../../admin/services/localstorage.service';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -14,89 +13,50 @@ import * as qs from 'qs';
 export class CajacorteService {
 
   private srvcErrHndl: ServiceErrorHandler;
-  private moduleUrl = 'cajacorte';
-  // private usrToken: string = null;
+  private moduleUrl = 'cajacorte';  
 
   constructor(
-    private http: HttpClient,
-    // private ls: LocalstorageService
+    private http: HttpClient
   ) {
-    this.srvcErrHndl = new ServiceErrorHandler();
-    // this.usrToken = this.ls.get(GLOBAL.usrTokenVar) ? this.ls.get(GLOBAL.usrTokenVar).token : null;
+    this.srvcErrHndl = new ServiceErrorHandler();    
   }
 
-  buscar(fltr: any = {}): Observable<ccGeneral[]> {
-    /*const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    };*/
+  buscar(fltr: any = {}): Observable<ccGeneral[]> {   
     return this.http.get<ccGeneral[]>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`
-      // , httpOptions
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/buscar?${qs.stringify(fltr)}`      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getCajaCorteTipo(fltr: any = {}): Observable<ccTipo[]> {
-    /*const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    };*/
+  getCajaCorteTipo(fltr: any = {}): Observable<ccTipo[]> {   
     return this.http.get<ccTipo[]>(
-      `${GLOBAL.urlCatalogos}/get_caja_corte_tipo?${qs.stringify(fltr)}`
-      // , httpOptions
+      `${GLOBAL.urlCatalogos}/get_caja_corte_tipo?${qs.stringify(fltr)}`      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getCajaCorteNominacion(fltr: any = {}): Observable<ccNominacion[]> {
-    /*const httpOptions = {
-      headers: new HttpHeaders({
-        Authorization: this.usrToken
-      })
-    };*/
+  getCajaCorteNominacion(fltr: any = {}): Observable<ccNominacion[]> {   
     return this.http.get<ccNominacion[]>(
-      `${GLOBAL.urlCatalogos}/get_caja_corte_nominacion?${qs.stringify(fltr)}`
-      // , httpOptions
+      `${GLOBAL.urlCatalogos}/get_caja_corte_nominacion?${qs.stringify(fltr)}`      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  guardar(entidad: ccGeneral): Observable<any> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
+  guardar(entidad: ccGeneral): Observable<any> {   
     return this.http.post<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`,
-      entidad
-      // , httpOptions
+      entidad      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  anularCorte(entidad: ccGeneral): Observable<any> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
+  anularCorte(entidad: ccGeneral): Observable<any> {   
     return this.http.post<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_caja`,
-      entidad
-      // , httpOptions
+      entidad      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  anularDetalle(entidad: ccDetalle): Observable<any> {
-    /* const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': this.usrToken
-      })
-    }; */
+  anularDetalle(entidad: ccDetalle): Observable<any> {   
     return this.http.post<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_caja_detalle`,
-      entidad
-      // , httpOptions
+      entidad      
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

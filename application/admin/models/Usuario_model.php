@@ -24,13 +24,16 @@ class Usuario_model extends General_model
         }
     }
 
-    function validaPwdGerenteTurno($pwd = null) {
+    function validaPwdGerenteTurno($pwd = null, $idsede = 0) {
         if($pwd){
             $dbusr = $this->db
                 ->select("c.contrasenia")
                 ->from("turno_has_usuario a")
                 ->join("usuario_tipo b", "b.usuario_tipo = a.usuario_tipo")
-                ->join("usuario c", "c.usuario = a.usuario")                 
+                ->join("usuario c", "c.usuario = a.usuario")
+                ->join("turno d", "d.turno = a.turno")
+                ->where("d.sede", $idsede)
+                ->where("d.fin IS NULL")
                 ->where("TRIM(LOWER(b.descripcion)) = 'gerente'")
                 ->get()
                 ->result();

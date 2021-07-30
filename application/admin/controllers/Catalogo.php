@@ -236,8 +236,7 @@ class Catalogo extends CI_Controller {
 
 	public function get_caja_corte_nominacion()
 	{
-		$this->output
-		->set_output(json_encode(
+		$this->output->set_output(json_encode(
 			$this->Catalogo_model->getCajaCorteNominacion($_GET)
 		));
 	}

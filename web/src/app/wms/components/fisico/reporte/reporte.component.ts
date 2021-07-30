@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
 import { SedeService } from '../../../../admin/services/sede.service';
@@ -10,16 +10,17 @@ import { ArticuloService } from '../../../services/articulo.service';
 import { FisicoService } from '../../../services/fisico.service';
 import { Sede } from '../../../../admin/interfaces/sede';
 import { saveAs } from 'file-saver';
-import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
+import { MatSelectChange } from '@angular/material/select';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-reporte',
   templateUrl: './reporte.component.html',
   styleUrls: ['./reporte.component.css']
 })
-export class ReporteComponent implements OnInit {
+export class ReporteComponent implements OnInit, OnDestroy {
 
   public bodegas: Bodega[] = [];
   public sedes: Sede[] = [];
@@ -31,87 +32,102 @@ export class ReporteComponent implements OnInit {
   public cargando = false;
   public showReporte = true;
 
+  private endSubs = new Subscription();
+
   constructor(
     private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
     private sedeSrvc: SedeService,
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
-    private fisicoSrvc: FisicoService,
-    private ls: LocalstorageService,
+    private fisicoSrvc: FisicoService    
   ) { }
 
   ngOnInit() {
-    this.getSede();
-    this.getBodega();
-    this.loadCategorias();
+    this.getSede();    
     this.params.fecha = moment().format(GLOBAL.dbDateFormat);
   }
 
+  ngOnDestroy(): void {
+    this.endSubs.unsubscribe();
+  }
+
   getSede = (params: any = {}) => {
-    this.sedeSrvc.get(params).subscribe(res => {
-      this.sedes = res;
-    });
+    this.endSubs.add(      
+      this.sedeSrvc.get(params).subscribe(res => {
+        this.sedes = res;
+      })
+    );
+  }
+
+  onSedeSelected = (obj: MatSelectChange) => {
+    this.getBodega({ sede: +obj.value });
+    this.loadCategorias({ sede: +obj.value });
   }
 
   getBodega = (params: any = {}) => {
-    this.bodegaSrvc.get(params).subscribe(res => {
-      this.bodegas = res;
-    });
+    this.endSubs.add(      
+      this.bodegaSrvc.get(params).subscribe(res => {
+        this.bodegas = res;
+      })
+    );
   }
 
-  loadCategorias = () => {
-    this.articuloSrvc.getCategorias({sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0)}).subscribe(res => {
-      //console.log(res);
-      if (res) {
+  loadCategorias = (params: any = {}) => {
+    this.endSubs.add(      
+      this.articuloSrvc.getCategorias(params).subscribe(res => {
         this.categorias = res;
-      }
-    });
+      })
+    );
   }
 
   onCategoriaSelected = (obj: any) => this.loadSubCategorias(+obj.value.categoria);
 
   loadSubCategorias = (idcategoria: number) => {
-    this.articuloSrvc.getCategoriasGrupos({ categoria: +idcategoria }).subscribe(res => {
-      if (res) {
-        this.categoriasGruposPadre = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
-        this.categoriasGrupos = this.categoriasGruposPadre;
-      }
-    });
+    this.endSubs.add(      
+      this.articuloSrvc.getCategoriasGrupos({ categoria: +idcategoria }).subscribe(res => {
+        if (res) {
+          this.categoriasGruposPadre = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
+          this.categoriasGrupos = this.categoriasGruposPadre;
+        }
+      })
+    );
   }
 
   onSubCategoriaPadreSelected = (obj: any) => this.loadSubCategoriasSubcategorias(+obj.value);
 
   loadSubCategoriasSubcategorias = (idsubcat: number) => {
-    this.articuloSrvc.getCategoriasGrupos({ categoria_grupo_grupo: idsubcat }).subscribe(res => {
-      if (res) {
-        this.categoriasGrupos = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
-      }
-    });
+    this.endSubs.add(      
+      this.articuloSrvc.getCategoriasGrupos({ categoria_grupo_grupo: idsubcat }).subscribe(res => {
+        if (res) {
+          this.categoriasGrupos = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
+        }
+      })
+    );
   }
 
   onSubmit() {
     this.cargando = true;
-    
-    this.fisicoSrvc.generarInventarioFisico(this.params).subscribe(res => {
-      this.cargando = false;
-      console.log(res)
-      if (res.exito) {
-        this.pdfServicio.imprimirInventarioFisico(res.inventario, this.params).subscribe(resImp => {
-          if (this.params._excel) {
-            const blob = new Blob([resImp], { type: 'application/vnd.ms-excel' });  
-            saveAs(blob, `${this.titulo}.xls`);
-          } else {
-            const blob = new Blob([resImp], { type: 'application/pdf' });
-            saveAs(blob, `${this.titulo}.pdf`);
-          }
-
-          
-        });
-      } else {
-        this.snackBar.open('No se pudo generar el reporte... '+res.mensaje, this.titulo, { duration: 3000 });
-      }
-    });
+    this.endSubs.add(      
+      this.fisicoSrvc.generarInventarioFisico(this.params).subscribe(res => {
+        this.cargando = false;      
+        if (res.exito) {
+          this.endSubs.add(          
+            this.pdfServicio.imprimirInventarioFisico(res.inventario, this.params).subscribe(resImp => {
+              if (this.params._excel) {
+                const blob = new Blob([resImp], { type: 'application/vnd.ms-excel' });
+                saveAs(blob, `${this.titulo}.xls`);
+              } else {
+                const blob = new Blob([resImp], { type: 'application/pdf' });
+                saveAs(blob, `${this.titulo}.pdf`);
+              }
+            })
+          );
+        } else {
+          this.snackBar.open('No se pudo generar el reporte... ' + res.mensaje, this.titulo, { duration: 3000 });
+        }
+      })
+    );
   }
 
 }
