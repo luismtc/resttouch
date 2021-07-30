@@ -112,4 +112,10 @@ export class UsuarioService {
     subModulos.forEach(sm => objMenu.push({ nombre: sm.nombre, link: null, hijos: sm.opciones }));
     return objMenu;
   }
+
+  getRolesTurno(idUsuario: number): Observable<any> {
+    return this.http.get<any>(
+      `${GLOBAL.url}/${this.moduleUrl}/get_rol_turno/${idUsuario}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
 }

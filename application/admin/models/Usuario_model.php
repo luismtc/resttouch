@@ -267,4 +267,31 @@ class Usuario_model extends General_model
 
         return $tmp->result();
     }
+
+    public function getRolesTurno()
+    {
+        $turno = $this->db->select('turno')->where('fin IS NULL')->where('sede', $this->sede)->get('turno')->row();
+        if($turno)
+        {
+            $roles = $this->db
+                ->select('b.descripcion')
+                ->join('usuario_tipo b', 'b.usuario_tipo = a.usuario_tipo')
+                ->where('a.anulado', 0)
+                ->where('a.turno', $turno->turno)
+                ->where('a.usuario', $this->getPK())
+                ->get('turno_has_usuario a')
+                ->result();
+            if ($roles) {
+                $tmp = [];
+                foreach($roles as $r) 
+                {
+                    $tmp[] = strtolower($r->descripcion);
+                }
+                return implode(',', $tmp);
+            } else {
+                return '';
+            }
+        }
+        return '';
+    }
 }

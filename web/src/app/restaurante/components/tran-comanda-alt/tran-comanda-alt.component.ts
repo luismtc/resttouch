@@ -22,6 +22,7 @@ import { ComandaService } from '../../services/comanda.service';
 import { ArticuloService } from '../../../wms/services/articulo.service';
 import { ReportePdfService } from '../../services/reporte-pdf.service';
 // import { Cliente } from '../../../admin/interfaces/cliente';
+import { UsuarioService } from '../../../admin/services/usuario.service';
 
 interface IDatosTranComanda {
   mesa: ComandaGetResponse;
@@ -57,9 +58,10 @@ export class TranComandaAltComponent extends TranComanda implements OnInit, OnDe
     protected pdfServicio: ReportePdfService,
     protected configSrvc: ConfiguracionService,
     protected articuloSrvc: ArticuloService,
-    protected bsAccionesCmd: MatBottomSheet
+    protected bsAccionesCmd: MatBottomSheet,
+    protected usuarioSrvc: UsuarioService
   ) {
-    super(dialog, snackBar, comandaSrvc, socket, ls, pdfServicio, configSrvc, articuloSrvc, bsAccionesCmd);
+    super(dialog, snackBar, comandaSrvc, socket, ls, pdfServicio, configSrvc, articuloSrvc, bsAccionesCmd, usuarioSrvc);
   }
 
   ngOnInit() {

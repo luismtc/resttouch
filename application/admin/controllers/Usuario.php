@@ -16,8 +16,7 @@ class Usuario extends CI_Controller
             'Catalogo_model'
         ]);
 
-        $this->output
-            ->set_content_type("application/json", "UTF-8");
+        $this->output->set_content_type("application/json", "UTF-8");
     }
 
     public function login()
@@ -186,5 +185,16 @@ class Usuario extends CI_Controller
     public function checktoken_get()
     {
         $this->output->set_output(json_encode(['valido' => true]));
+    }
+
+    public function get_rol_turno($idUsuario = null)
+    {
+        $roles = '';
+        if ($idUsuario)
+        {
+            $usr = new Usuario_model($idUsuario);
+            $roles = $usr->getRolesTurno();            
+        }
+        $this->output->set_output(json_encode(['roles' => $roles]));
     }
 }
