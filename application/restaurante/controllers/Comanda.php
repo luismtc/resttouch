@@ -596,7 +596,7 @@ class Comanda extends CI_Controller {
 						$det = $com->getDetalle();
 						$cntConCantidad = 0;
 						foreach($det as $d) {
-							if ((float)$d->cantidad > 0) {
+							if ((float)$d->cantidad > 0 && (int)$d->detalle_comanda_id === 0) {
 								$cntConCantidad++;
 							}
 						}

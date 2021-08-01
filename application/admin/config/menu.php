@@ -144,10 +144,6 @@ $config['menu'] = [
 						'nombre' => 'Comanda en línea',
 						'link' => '/restaurante/cmdonline'
 					],
-					5 => [
-						'nombre' => 'Corte de caja',
-						'link' => '/restaurante/cajacorte'
-					],
 					6 => [
 						'nombre' => 'Cocina',
 						'link' => '/restaurante/trancocina'

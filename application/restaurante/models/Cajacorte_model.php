@@ -3,11 +3,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Cajacorte_model extends General_Model {
 
-	public $caja_corte;
+	public $caja_corte;	
 	public $usuario;
 	public $turno;
+	public $confirmado = null;
 	public $anulado = 0;
 	public $caja_corte_tipo;
+	public $serie = null;
+	public $numero = null;
+	public $fecha = null;
+	public $total = 0;
 	
 	public function __construct($id='')
 	{
@@ -30,11 +35,11 @@ class Cajacorte_model extends General_Model {
 		}
 
 		return $this->db
-		->select('a.*,b.descripcion')
-		->from('caja_corte a')
+		->select('a.*')		
 		->join('caja_corte_tipo b','b.caja_corte_tipo = a.caja_corte_tipo')
-		->where('a.anulado',0)
-		->get()
+		->where('a.anulado', 0)
+		->order_by('a.creacion')
+		->get('caja_corte a')
 		->result();
 	}
 

@@ -1,37 +1,46 @@
 <mat-tab-group>
     <mat-tab label="Categorías">
-        <app-categoria-producto (categoriaGrupoSvd)="reloadCategoriasInSubcategoriasArticulos()" (onChangeSubCategoriaEv)="setArticuloCategoriaGrupo($event)"></app-categoria-producto>
+        <app-categoria-producto (categoriaGrupoSvd)="reloadCategoriasInSubcategoriasArticulos()"
+            (onChangeSubCategoriaEv)="setArticuloCategoriaGrupo($event)"></app-categoria-producto>
     </mat-tab>
     <mat-tab label="Sub-categorías">
         <app-sub-categoria-producto #frmSubcategoria></app-sub-categoria-producto>
     </mat-tab>
     <mat-tab label="Artículos">
-        <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start start">            
+        <div fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="start start">
             <div fxFlex="100%">
                 <mat-chip-list>
                     <mat-chip color="primary" (click)="verTodos()" selected>
                         Ver todos
                     </mat-chip>
-                    <mat-chip color="accent" *ngFor="let cat of categorias" (click)="!cargando && selectCategoria(cat)" selected>
+                    <mat-chip color="accent" *ngFor="let cat of categorias" (click)="!cargando && selectCategoria(cat)"
+                        selected>
                         {{cat.descripcion}}
                     </mat-chip>
                 </mat-chip-list>
                 <mat-chip-list *ngFor="let lcg of listasCategoriasGrupo" class="divSubCategorias">
-                    <mat-chip color="warn" *ngFor="let subcat of lcg" (click)="!cargando && selectSubcat(subcat)" selected>
+                    <mat-chip color="warn" *ngFor="let subcat of lcg" (click)="!cargando && selectSubcat(subcat)"
+                        selected>
                         {{subcat.descripcion}}
                     </mat-chip>
-                </mat-chip-list>                
+                </mat-chip-list>
             </div>
-            <div class="divArticulos" fxFlex="40%" fxFlex.xs="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="8px grid" fxLayoutAlign="start start">                
+            <div class="divArticulos" fxFlex="40%" fxFlex.xs="100%" fxFlex.sm="100%" fxLayout="row wrap" fxLayoutGap="8px grid" fxLayoutAlign="start start">
                 <mat-form-field class="fullWidth">
-                    <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro" [ngModelOptions]="{standalone: true}">
+                    <input matInput (keyup)="applyFilter()" placeholder="Buscar..." [(ngModel)]="txtFiltro"
+                        [ngModelOptions]="{standalone: true}">
                 </mat-form-field>
-                <mat-action-list>
-                    <button mat-list-item class="accion-comanda mat-elevation-z4" *ngFor="let producto of articulos" (click)="setArticulo(producto)">{{producto.descripcion | truncar:35}}</button>
-                </mat-action-list>
+                <cdk-virtual-scroll-viewport [itemSize]="20">
+                    <mat-action-list class="fullWidth">
+                        <button mat-list-item class="accion-comanda mat-elevation-z4"
+                            *cdkVirtualFor="let producto of articulos"
+                            (click)="setArticulo(producto)">{{producto.descripcion | truncar:35}}</button>
+                    </mat-action-list>
+                </cdk-virtual-scroll-viewport>
             </div>
             <div class="divArticulos" fxFlex="60%" fxFlex.xs="100%" fxFlex.sm="100%">
-                <app-form-producto #frmProducto [categoria]="categoria" [subcategoria]="categoriaGrupo" [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)">
+                <app-form-producto #frmProducto [categoria]="categoria" [subcategoria]="categoriaGrupo"
+                    [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)">
                 </app-form-producto>
             </div>
         </div>

@@ -77,7 +77,7 @@
   <button mat-raised-button (click)="cancelar()" color="warn" class="btnAccion">
       Cancelar
   </button>
-  <button mat-raised-button (click)="guardar()" color="accent" class="btnAccion">
+  <button mat-raised-button (click)="guardar()" color="accent" class="btnAccion" [disabled]="noGuardar">
     Guardar
 </button>
 </div>

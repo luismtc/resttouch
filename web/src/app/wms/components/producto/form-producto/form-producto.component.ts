@@ -29,6 +29,30 @@ import { Subscription } from 'rxjs';
 })
 export class FormProductoComponent implements OnInit, OnDestroy {
 
+  get disableEsReceta() {    
+    return (+this.articulo.combo === 1 || +this.articulo.multiple === 1 || +this.articulo.produccion === 1);
+  }
+
+  get articuloEsReceta() {
+    return +this.articulo.esreceta === 1;
+  }
+
+  get disableArticuloReceta() {
+    return (artSel: Articulo) => {
+      let dar = false;
+      if (
+        +artSel.articulo === +this.articulo.articulo || 
+        (+artSel.multiple === 1 && +this.articulo.multiple === 1) || 
+        (+artSel.combo === 1 && +this.articulo.combo === 1) ||
+        (+artSel.combo === 1 && +this.articulo.multiple === 1)
+        )
+      {
+        dar = true;
+      }
+      return dar;
+    }
+  }
+
   @Input() articulo: Articulo;
   @Input() categoria: Categoria = null;
   @Input() subcategoria: CategoriaGrupo = null;
@@ -359,13 +383,29 @@ export class FormProductoComponent implements OnInit, OnDestroy {
   setOpcMultOff = () => {
     if (+this.articulo.combo === 1) {
       this.articulo.multiple = 0;
+      this.articulo.esreceta = 0;
     }
   }
 
   setComboOff = () => {
     if (+this.articulo.multiple === 1) {
       this.articulo.combo = 0;
+      this.articulo.esreceta = 0;
     }
   }
+
+  setOpcComboOff = () => {
+    if (+this.articulo.esreceta === 1) {
+      this.articulo.combo = 0;
+      this.articulo.multiple = 0;
+    }
+  }
+
+  setEsRecetaOn = () => {
+    this.articulo.esreceta = +this.articulo.produccion;
+    if (+this.articulo.produccion === 1) {
+      this.setOpcComboOff();
+    }
+  };
 
 }

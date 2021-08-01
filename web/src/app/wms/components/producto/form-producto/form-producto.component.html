@@ -77,16 +77,16 @@
             </mat-form-field>
             <div class="row">
                 <div class="col m3 s3">
-                    <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion">¿Es producción?</mat-checkbox>
+                    <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion" (change)="setEsRecetaOn()">Producción</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
                     <mat-checkbox name="mostrar_pos" class="example-margin" [(ngModel)]="+articulo.mostrar_pos">Mostrar en POS</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
-                    <mat-checkbox name="combo" class="example-margin" [(ngModel)]="+articulo.combo" (change)="setOpcMultOff()">Combo</mat-checkbox>
+                    <mat-checkbox name="combo" class="example-margin" [(ngModel)]="+articulo.combo" (change)="setOpcMultOff()" [disabled]="articuloEsReceta">Combo</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
-                    <mat-checkbox name="multiple" class="example-margin" [(ngModel)]="+articulo.multiple" (change)="setComboOff()">Opción múltiple</mat-checkbox>
+                    <mat-checkbox name="multiple" class="example-margin" [(ngModel)]="+articulo.multiple" (change)="setComboOff()" [disabled]="articuloEsReceta">Opción múltiple</mat-checkbox>
                 </div>
             </div>
             <div class="row">
@@ -94,7 +94,7 @@
                     <mat-checkbox name="mostrar_inventario" class="example-margin" [(ngModel)]="+articulo.mostrar_inventario">Mostrar en Inventario</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
-                    <mat-checkbox name="esreceta" class="example-margin" [(ngModel)]="+articulo.esreceta">Es receta</mat-checkbox>
+                    <mat-checkbox name="esreceta" class="example-margin" [(ngModel)]="+articulo.esreceta" (change)="setOpcComboOff()" [disabled]="disableEsReceta">Es receta</mat-checkbox>
                 </div>
             </div>
             <div align="end">
@@ -132,13 +132,13 @@
                 <mat-label>Artículo</mat-label>                    
                 <input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}" placeholder="Artículo" matInput [matAutocomplete]="autoArticulos" (keyup)="filtrarArticulos(txtArticuloSelected)" required>
                 <mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo">
-                    <mat-option *ngFor="let a of filteredArticulos" [value]="a">
+                    <mat-option *ngFor="let a of filteredArticulos" [value]="a" [disabled]="disableArticuloReceta(a)">
                         {{a.descripcion}}{{ a.subcategoria && a.subcategoria.descripcion ? (' (' + a.subcategoria.descripcion + ')') : '' }}
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
             <mat-form-field class="fullWidth">
-                <input matInput placeholder="Cantidad" type="number" step="0.01" name="cantidad" [(ngModel)]="receta.cantidad" required>
+                <input matInput placeholder="Cantidad" type="number" step="0.01" name="cantidad" min="0" [(ngModel)]="receta.cantidad" required>
             </mat-form-field>            
             <mat-form-field class="fullWidth" *ngIf="receta.precio_extra && receta.precio_extra > 0">
                 <input matInput placeholder="Precio" name="precio" [(ngModel)]="receta.precio" required>
@@ -166,7 +166,7 @@
                 </div>
             </div>
             <div align="end">
-                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleArticulo.form.valid">
+                <button mat-raised-button type="submit" color="accent" class="btnAccion" [disabled]="!frmDetalleArticulo.form.valid || +receta.cantidad < 0">
                     Guardar
                 </button>
                 <button mat-raised-button type="button" color="accent" (click)="resetReceta()" *ngIf="receta.articulo_detalle">

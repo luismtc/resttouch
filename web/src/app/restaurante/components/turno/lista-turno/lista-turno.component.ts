@@ -61,7 +61,8 @@ export class ListaTurnoComponent implements OnInit {
       turno_tipo: obj.turno_tipo.turno_tipo,
       fecha: obj.fecha,
       inicio: obj.inicio,
-      fin: obj.fin
+      fin: obj.fin,
+      sede: obj.sede
     });
   }
 

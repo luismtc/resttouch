@@ -5,9 +5,11 @@ export interface ccGeneral {
 	turno: number;
 	confirmado: string;
 	anulado: number;
-	caja_corte_tipo: number;
-	descripcion: string;
-	detalle: ccDetalle[];
+	caja_corte_tipo: ccTipo;
+	serie: string;
+	numero: string;
+	fecha: string;
+	total: number;
 }
 
 export interface ccDetalle {
@@ -27,6 +29,7 @@ export interface ccTipo {
 	pedirautorizacion: number;
 	pedirdocumento: number;
 	conformaspago: number;
+	imprimecorte: number;
 }
 
 export interface ccNominacion {

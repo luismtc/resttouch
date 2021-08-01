@@ -18,6 +18,10 @@ import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/c
 })
 export class FormUsuarioComponent implements OnInit {
 
+  get disableSede() {
+    return (+this.ls.get(GLOBAL.usrTokenVar).idusr === +this.usuario.usuario);
+  }
+
   @Input() usuario: Usuario;
   @Output() usrSavedEv = new EventEmitter();
   public sedes: Sede[] = [];

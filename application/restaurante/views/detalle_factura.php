@@ -179,10 +179,10 @@
 										<?php else: ?>
 											<?php echo number_format(0, 2) ?>
 										<?php endif ?>
-										<td style="padding: 5px;"></td>
 										<td style="padding: 5px;" class="text-right">
 											<?php echo number_format($det->descuento+$det->valor_impuesto_especial,2) ?>
 										</td>
+										<td style="padding: 5px;"></td>
 										<td class="text-center">&nbsp;</td>
 										<?php  if (isset($_anuladas) && filter_var($_anuladas, FILTER_VALIDATE_BOOLEAN)): ?>
 											<td class="text-center">&nbsp;</td>

@@ -27,7 +27,7 @@
             </mat-form-field>
             <mat-form-field class="fullWidth">
                 <mat-label>Sede</mat-label>
-                <mat-select name="sede" [(ngModel)]="usuario.sede" required>
+                <mat-select name="sede" [(ngModel)]="usuario.sede" [disabled]="disableSede" required>
                     <mat-option *ngFor="let s of sedes" [value]="s.sede">
                         {{s.nombre}}
                     </mat-option>

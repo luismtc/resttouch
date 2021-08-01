@@ -19,6 +19,7 @@ class Empresa_model extends General_model {
     public $porcentaje_iva = 0.00;
     public $visa_merchant_id;
     public $visa_transaction_key;
+    public $codigo = null;
     public $metodo_costeo = 1;
     public $leyenda_isr;
 

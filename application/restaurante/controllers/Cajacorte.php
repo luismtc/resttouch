@@ -1,118 +1,99 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cajacorte extends CI_Controller {
+class Cajacorte extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
-		
+
 		$this->load->model([
 			'Cajacorte_model',
 			'Dcajacorte_model',
-			'Turno_model'
+			'Dcajacortefpago_model',
+			'Turno_model',
+			'Catalogo_model',
+			'Fpago_model'
 		]);
 
-		$this->output
-		->set_content_type("application/json", "UTF-8");
+		$this->load->helper(['jwt', 'authorization']);
+		$headers = $this->input->request_headers();
+		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
+
+		$this->output->set_content_type("application/json", "UTF-8");
 	}
 
-	public function guardar()
+	public function guardar($id = '')
 	{
-		$data = ['exito' => 0];
-
-		$datos = json_decode(file_get_contents("php://input"), true);
-
+		$data = ['exito' => false];
+		$mensajes = [];
 		if ($this->input->method() == "post") {
-			if (isset($datos['caja_corte_tipo']) && isset($datos['detalle'])) {
+			$req = json_decode(file_get_contents("php://input"));
 
-				$this->load->helper(['jwt', 'authorization']);
-				$headers = $this->input->request_headers();
-				$user = AUTHORIZATION::validateToken($headers['Authorization']);
+			$cc = new Cajacorte_model($id);
+			$cc->usuario = $this->data->idusuario;
+			$cc->turno = $req->turno;
+			$cc->caja_corte_tipo = $req->tipo->caja_corte_tipo;
+			$cc->total = (float)$req->total;
 
-				$continuar = true;
-				$detalle = $datos['detalle'];
-				unset($datos['detalle']);
-				unset($datos['descripcion']);
+			if ((int)$req->tipo->pedirdocumento === 1) {
+				$cc->serie = $req->documento->serie;
+				$cc->numero = $req->documento->numero;
+				$cc->fecha = $req->documento->fecha;
+			}
 
-				$cc = new Cajacorte_model();
-				if (isset($datos['caja_corte']) && $datos['caja_corte']) {
-					$cc->cargar($datos['caja_corte']);
-				} else {
-					$turno = $this->Turno_model->getTurno([
-						"sede" => $user->sede,
-						'abierto' => true, 
-						"_uno" => true
-					]);
+			$ccGuardado = $cc->guardar();
 
-					if ($turno) {
-						$datos['usuario'] = $user->idusuario;
-						$datos['turno'] = $turno->turno;
-					}else {
-						$continuar = false;
-						$data['mensaje'] = 'No existe un turno abierto.';
+			if ($ccGuardado) {
+				$this->Dcajacorte_model->eliminaDetalle($cc->getPK());
+				foreach ($req->efectivo as $efectivo) {
+					$ccd = new Dcajacorte_model();
+					$ccd->caja_corte = $cc->getPK();
+					$ccd->cantidad = !empty($efectivo->cantidad) ? (int)$efectivo->cantidad : 0;
+					$ccd->total = (float)$efectivo->total;
+					$ccd->caja_corte_nominacion = (int)$efectivo->caja_corte_nominacion;
+					if (!$ccd->guardar()) {
+						$mensajes[] = $ccd->getMensaje();
 					}
 				}
 
-				if ($continuar) {
-					$cc->guardar($datos);
-					if ($cc->getPk()) {
-						foreach ($detalle as $key => $row) {
-							$detalle = (array) $row;
-							unset($row['nombre']);
-
-							$detalle['caja_corte'] = $cc->getPk();
-
-							$ccd = new Dcajacorte_model();
-							if (isset($detalle['caja_corte_detalle']) && $detalle['caja_corte_detalle']) {
-								$ccd->cargar($detalle['caja_corte_detalle']);
-							}
-
-							$ccd->guardar($detalle);
+				if ((int)$req->tipo->conformaspago === 1) {
+					$this->Dcajacortefpago_model->eliminaDetalleFPago($cc->getPK());
+					foreach ($req->formas_pago as $fp) {
+						$ccdfp = new Dcajacortefpago_model();
+						$ccdfp->caja_corte = $cc->getPK();
+						$ccdfp->forma_pago = $fp->forma_pago;
+						$ccdfp->total = !empty($fp->montocc) ? (float)$fp->montocc : 0.00;
+						if (!$ccdfp->guardar()) {
+							$mensajes[] = $ccdfp->getMensaje();
 						}
-
-						$data['mensaje'] = 'Corte de caja procesada correctamente.';
-						$data['exito'] = 1;
-
-					} else {
-						$data['mensaje'] = 'No se guardó.';
 					}
+				}
+
+				if (count($mensajes) === 0) {
+					$data['exito'] = true;
+					$data['mensaje'] = "{$req->tipo->descripcion} guardado con éxito.";
+				} else {
+					$data['mensaje'] = implode('. ', $mensajes);
 				}
 			} else {
-				$data['mensaje'] = 'Debe seleccionar un tipo y agregar el detalle.';
+				$data['mensaje'] = $cc->getMensaje();
 			}
 		} else {
 			$data['mensaje'] = 'Método de envío incorrecto.';
 		}
 
-		$this->output
-		->set_output(json_encode($data));
+		$this->output->set_output(json_encode($data));
 	}
 
 	public function buscar()
 	{
-		$datos = [];
 		$cajas = $this->Cajacorte_model->getCajaCorte($_GET);
-		if ($cajas) {
-			foreach ($cajas as $key => $row) {
-				$cc = new Cajacorte_model($row->caja_corte);
-				$detalle = $cc->getDetalleCajaCorte();
-
-				$row->detalle = [];
- 				$row->total   = 0;
-
-				if ($detalle) {
- 					$row->detalle = $detalle;
- 					foreach ($detalle as $value) {
- 						$row->total += $value->total;
- 					}
- 				}
-
-				$datos[] = $row;
-			}
+		foreach ($cajas as $caja) {
+			$caja->caja_corte_tipo = $this->Catalogo_model->getCajaCorteTipo(['caja_corte_tipo' =>$caja->caja_corte_tipo, '_uno' => true]);
 		}
-		
-		$this->output->set_output(json_encode($datos));
+		$this->output->set_output(json_encode($cajas));
 	}
 
 	public function anular_caja()
@@ -158,6 +139,34 @@ class Cajacorte extends CI_Controller {
 
 		$this->output->set_output(json_encode($data));
 	}
+
+	public function get_detalle_caja($id = '')
+	{
+		$data = new stdClass();
+		$data->efectivo = (object)['total' => 0.00, 'detalle' => $this->Dcajacorte_model->buscar(['caja_corte' => $id, 'anulado' => 0])];
+		$data->formas_pago = (object)['total' => 0.00, 'detalle' => $this->Dcajacortefpago_model->buscar(['caja_corte' => $id])];
+
+		foreach($data->efectivo->detalle as $det)
+		{
+			$data->efectivo->total += (float)$det->total;
+		}
+
+		foreach($data->formas_pago->detalle as $det)
+		{
+			$data->formas_pago->total += (float)$det->total;
+			$det->forma_pago = $this->Fpago_model->buscar(['forma_pago' => $det->forma_pago, '_uno' => true]);
+		}
+
+		$fp_efectivo = $this->Fpago_model->buscar(['esefectivo' => 1, '_uno' => true]);
+		if ($fp_efectivo) {
+			array_unshift($data->formas_pago->detalle, (object)['caja_corte_detalle_forma_pago' => 0, 'caja_corte' => $id, 'forma_pago' => $fp_efectivo, 'total' => $data->efectivo->total]);
+			// $data->formas_pago->detalle[] = (object)['caja_corte_detalle_forma_pago' => 0, 'caja_corte' => $id, 'forma_pago' => $fp_efectivo, 'total' => $data->efectivo->total];
+		}
+
+		$this->output->set_output(json_encode($data));
+	}
+
+
 }
 
 /* End of file Cajacorte.php */

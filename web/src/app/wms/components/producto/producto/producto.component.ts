@@ -188,6 +188,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
     this.categoria = null;
     this.categoriaGrupo = null;
     this.frmProductoComponent.resetArticulo();
+    this.frmProductoComponent.articulo.categoria_grupo = null;
     this.categoriasGrupos = [];
     this.listasCategoriasGrupo = [];
     this.loadArticulos();
@@ -196,7 +197,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
   selectCategoria = (cat: Categoria) => {
     this.categoria = cat;
     this.categoriaGrupo = null;
-    this.frmProductoComponent.resetArticulo();
+    // this.frmProductoComponent.resetArticulo();
     this.articulos = [];
     this.loadSubCategorias(cat.categoria)    
   }

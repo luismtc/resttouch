@@ -39,7 +39,7 @@ export class CajacorteService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  guardar(entidad: ccGeneral): Observable<any> {   
+  guardar(entidad: any): Observable<any> {   
     return this.http.post<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/guardar`,
       entidad      
@@ -57,6 +57,12 @@ export class CajacorteService {
     return this.http.post<any>(
       `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_caja_detalle`,
       entidad      
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  getDetalleCaja(idCaja: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_detalle_caja/${idCaja}`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 }

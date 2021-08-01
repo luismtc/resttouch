@@ -3,6 +3,6 @@ table {
     margin-right: 10px;
 }
 
-cdk-virtual-scroll-viewport {
+cdk-virtual-scroll-viewport {    
     height: 720px;
-  }
+}

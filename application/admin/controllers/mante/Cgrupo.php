@@ -26,25 +26,36 @@ class Cgrupo extends CI_Controller
 
 	public function guardar($id = "")
 	{
-		$cat = new Cgrupo_model($id);
-		$req = json_decode(file_get_contents('php://input'), true);
 		$datos = ['exito' => false];
 		if ($this->input->method() == 'post') {
-			$datos['exito'] = $cat->guardar($req);;
+			$req = json_decode(file_get_contents('php://input'), true);
+			$cat = new Cgrupo_model($id);
+			$continuar = true;
 
-			if ($datos['exito']) {
-				$datos['mensaje'] = "Datos Actualizados con Exito";
-				$datos['categoria'] = $cat;
-			} else {
-				$datos['mensaje'] = $cat->getMensaje();
+			if ((int)$id > 0 && (int)$req['categoria_grupo_grupo'] > 0) {
+				$padre = new Cgrupo_model($req['categoria_grupo_grupo']);
+				if ((int)$id === (int)$padre->categoria_grupo_grupo)
+				{
+					$continuar = false;
+					$datos['mensaje'] = 'No puede anidar subcategorías de forma cíclica.';
+				}
+			}
+
+			if ($continuar) 
+			{
+				$datos['exito'] = $cat->guardar($req);
+	
+				if ($datos['exito']) {
+					$datos['mensaje'] = "Datos actualizados con éxito.";
+					$datos['categoria'] = $cat;
+				} else {
+					$datos['mensaje'] = $cat->getMensaje();
+				}
 			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
+			$datos['mensaje'] = "Parámetros inválidos.";
 		}
-
-
-		$this->output
-			->set_output(json_encode($datos));
+		$this->output->set_output(json_encode($datos));
 	}
 
 	public function buscar()

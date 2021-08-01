@@ -1,18 +1,19 @@
 import { Component, OnInit, Input, Output, EventEmitter, Inject, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
 import { GLOBAL } from '../../../../shared/global';
+import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
-import { ccGeneral, ccDetalle, ccTipo, ccNominacion, ccDocumentoRetiro } from '../../../interfaces/cajacorte';
+import { ccGeneral, ccTipo, ccNominacion, ccDocumentoRetiro } from '../../../interfaces/cajacorte';
 import { CajacorteService } from '../../../services/cajacorte.service';
 import { FormaPago } from '../../../../admin/interfaces/forma-pago';
 import { FpagoService } from '../../../../admin/services/fpago.service';
 import * as moment from 'moment';
 
-
-interface IDataCC {  
-  tipo: ccTipo
+interface IDataCC {
+  turno: number;
+  tipo: ccTipo;
 }
 
 @Component({
@@ -22,7 +23,7 @@ interface IDataCC {
 })
 export class CajacorteFormComponent implements OnInit, OnDestroy {
 
-  get totalEfectivo(){
+  get totalEfectivo() {
     let tot = 0.00
     this.ccorteNomi.forEach(ccn => tot += +ccn.total);
     return tot;
@@ -42,6 +43,16 @@ export class CajacorteFormComponent implements OnInit, OnDestroy {
     return +this.data.tipo.pedirdocumento === 1 && this.ccorteNomi.length > 0
   }
 
+  get noGuardar() {
+    let docCompleto = true;
+    if (+this.data.tipo.pedirdocumento === 1) {
+      if (!this.documento.numero || !moment(this.documento.fecha).isValid()) {
+        docCompleto = false;
+      }
+    }
+    return this.granTotal == 0 || !docCompleto;
+  }
+
   @Input() ccorte: ccGeneral;
   @Output() cajacorteSavedEv = new EventEmitter();
   public ccorteTipo: ccTipo[] = [];
@@ -57,27 +68,28 @@ export class CajacorteFormComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private cajacorteSrvc: CajacorteService,
     private fpagoSrvc: FpagoService,
+    public dialog: MatDialog,
     public dialogRef: MatDialogRef<CajacorteFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: IDataCC
-  ) {}
+  ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     this.loadNominaciones();
     this.loadFormasPago();
-  } 
+  }
 
   ngOnDestroy(): void {
     this.endSubs.unsubscribe();
   }
 
   loadNominaciones = () => {
-    this.endSubs.add(      
+    this.endSubs.add(
       this.cajacorteSrvc.getCajaCorteNominacion().subscribe(res => {
         this.ccorteNomi = res.map(r => {
           r.cantidad = null;
           r.total = 0;
           return r;
-        });        
+        });
         setTimeout(() => document.getElementById(`txtCantidad_${this.ccorteNomi[0].caja_corte_nominacion}`).focus());
       })
     );
@@ -86,24 +98,52 @@ export class CajacorteFormComponent implements OnInit, OnDestroy {
   loadFormasPago = () => {
     this.endSubs.add(
       this.fpagoSrvc.get({ activo: 1, esefectivo: 0 }).subscribe(res => {
-        this.formasPago = res.map( r => {
+        this.formasPago = res.map(r => {
           r.montocc = null;
           return r;
         });
       })
     );
-  }  
+  }
 
   guardar = () => {
-    const params = {
-      efectivo: this.ccorteNomi,
-      formas_pago: this.formasPago,
-      documento: this.documento
-    }
-    console.log(params);
+    const confRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel(
+        `CAJA ${this.data.tipo.descripcion.toUpperCase()}`,
+        'Una vez guardado los datos, necesitará la contraseña del gerente de turno para modificar. ¿Desea continuar?',
+        'Sí', 'No'
+      )
+    });
+
+    this.endSubs.add(
+      confRef.afterClosed().subscribe(cnf => {
+        if (cnf) {
+          const params = {            
+            turno: this.data.turno,
+            tipo: this.data.tipo,
+            efectivo: this.ccorteNomi,
+            formas_pago: this.formasPago,
+            documento: this.documento,
+            total: this.granTotal
+          };
+          // console.log(params);
+          this.endSubs.add(
+            this.cajacorteSrvc.guardar(params).subscribe(res => {
+              if (res.exito) {
+                this.snackBar.open(res.mensaje, 'Caja', { duration: 3000 });
+              } else {
+                this.snackBar.open(`ERROR: ${res.mensaje}`, 'Caja', { duration: 3000 });
+              }
+              this.dialogRef.close();
+            })
+          );
+        }
+      })
+    );
   }
 
   cancelar = () => this.dialogRef.close();
 
 }
-    
+

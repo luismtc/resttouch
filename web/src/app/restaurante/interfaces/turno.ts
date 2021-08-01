@@ -4,4 +4,5 @@ export interface Turno {
     fecha?: string;
     inicio: string;
     fin?: string;
+    sede?: number;
 }

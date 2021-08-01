@@ -790,7 +790,7 @@ class Reporte extends CI_Controller
 			$vista = $this->load->view('reporte/valorizado/imprimir', $datos, true);
 
 			$mpdf = new \Mpdf\Mpdf([
-				'tempDir' => sys_get_temp_dir(), //Produccion
+				// 'tempDir' => sys_get_temp_dir(), //Produccion
 				'format' => 'Legal'
 			]);
 

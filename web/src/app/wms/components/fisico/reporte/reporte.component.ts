@@ -1,14 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReportePdfService } from '../../../../restaurante/services/reporte-pdf.service';
-import { SedeService } from '../../../../admin/services/sede.service';
+// import { SedeService } from '../../../../admin/services/sede.service';
+import { AccesoUsuarioService } from '../../../../admin/services/acceso-usuario.service';
 import { Bodega } from '../../../interfaces/bodega';
 import { BodegaService } from '../../../services/bodega.service';
 import { Categoria } from '../../../interfaces/categoria';
 import { CategoriaGrupo } from '../../../interfaces/categoria-grupo';
 import { ArticuloService } from '../../../services/articulo.service';
 import { FisicoService } from '../../../services/fisico.service';
-import { Sede } from '../../../../admin/interfaces/sede';
+// import { Sede } from '../../../../admin/interfaces/sede';
+import { UsuarioSede } from '../../../../admin/interfaces/acceso';
 import { saveAs } from 'file-saver';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
@@ -23,7 +25,7 @@ import { Subscription } from 'rxjs';
 export class ReporteComponent implements OnInit, OnDestroy {
 
   public bodegas: Bodega[] = [];
-  public sedes: Sede[] = [];
+  public sedes: UsuarioSede[] = [];
   public params: any = {};
   public categorias: Categoria[] = [];
   public categoriasGruposPadre: CategoriaGrupo[] = [];
@@ -37,7 +39,7 @@ export class ReporteComponent implements OnInit, OnDestroy {
   constructor(
     private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
-    private sedeSrvc: SedeService,
+    private sedeSrvc: AccesoUsuarioService,
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
     private fisicoSrvc: FisicoService    
@@ -54,13 +56,19 @@ export class ReporteComponent implements OnInit, OnDestroy {
 
   getSede = (params: any = {}) => {
     this.endSubs.add(      
-      this.sedeSrvc.get(params).subscribe(res => {
+      this.sedeSrvc.getSedes(params).subscribe(res => {
         this.sedes = res;
       })
     );
   }
 
   onSedeSelected = (obj: MatSelectChange) => {
+    this.bodegas = [];
+    this.params.bodega = null;    
+    this.categorias = [];
+    this.categoriasGruposPadre = [];
+    this.categoriasGrupos = [];
+    this.params.categoria_grupo_grupo = null;
     this.getBodega({ sede: +obj.value });
     this.loadCategorias({ sede: +obj.value });
   }

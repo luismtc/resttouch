@@ -76,6 +76,7 @@ export class FormTurnoComponent implements OnInit, OnChanges, OnDestroy {
     if (+changes.turno?.currentValue?.turno > 0) {
       // console.log('CAMBIOS = ', changes.turno.currentValue);
       this.lstCajaCorte.idTurno = +changes.turno.currentValue.turno;
+      this.lstCajaCorte.turno = changes.turno.currentValue;
       this.lstCajaCorte.getCajascortes();
     }
   }

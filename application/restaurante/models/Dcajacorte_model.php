@@ -20,6 +20,11 @@ class Dcajacorte_model extends General_model {
 		}
 	}
 
+	public function eliminaDetalle($idCajaCorte)
+	{
+		$this->db->where('caja_corte', $idCajaCorte)->delete('caja_corte_detalle');
+	}
+
 }
 
 /* End of file Dcajacorte_model.php */

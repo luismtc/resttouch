@@ -21,8 +21,8 @@
           <mat-form-field class="fullWidth">
             <mat-label>Sede</mat-label>
             <mat-select name="sede" [(ngModel)]="params.sede" (selectionChange)="onSedeSelected($event)" required>
-              <mat-option *ngFor="let sede of sedes" [value]="sede.sede">
-                {{sede.nombre}}
+              <mat-option *ngFor="let sede of sedes" [value]="sede.sede.sede">
+                {{sede.sede.nombre}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -35,8 +35,6 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-
-
 
           <mat-form-field class="fullWidth">
             <mat-label>Categoría</mat-label>
@@ -61,7 +59,7 @@
           <mat-checkbox name="excel" class="fullWidth" [(ngModel)]="+params._excel">Generar en Excel
           </mat-checkbox>
           <div align="end">
-            <button mat-button color="accent" type="submit" [disabled]="!frmFisicoReporte.form.valid">GENERAR</button>
+            <button mat-raised-button color="accent" type="submit" [disabled]="!frmFisicoReporte.form.valid">GENERAR</button>
           </div>
         </form>
         <app-cargando *ngIf="cargando"></app-cargando>

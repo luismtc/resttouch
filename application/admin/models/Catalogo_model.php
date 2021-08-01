@@ -570,8 +570,12 @@ class Catalogo_model extends CI_Model {
 
 	public function getCajaCorteTipo($args=[])
 	{
+		if (isset($args['caja_corte_tipo']))
+		{
+			$this->db->where('caja_corte_tipo', $args['caja_corte_tipo']);
+		}
+
 		$qry = $this->db
-		// ->order_by("descripcion")
 		->get("caja_corte_tipo");
 
 		return $this->getCatalogo($qry, $args);
