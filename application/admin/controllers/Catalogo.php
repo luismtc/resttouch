@@ -116,6 +116,9 @@ class Catalogo extends CI_Controller {
 	{
 		$this->load->model('Categoria_model');
 		$_GET['sede'] = $sede;
+
+		if (!isset($_GET['_activos'])) { $_GET['debaja'] = 0; }
+
 		$cat = $this->Categoria_model->buscar($_GET);		
 		$datos = [];
 		foreach ($cat as $row) {
@@ -126,6 +129,8 @@ class Catalogo extends CI_Controller {
 			if (isset($_GET["_todo"])) {
 				$data['_todo'] = true;
 			}
+
+			if (!isset($_GET['_activos'])) { $data['debaja'] = 0; }
 
 			$grupo = $this->Catalogo_model->getCategoriaGrupo($data);
 			$row->categoria_grupo = $grupo;

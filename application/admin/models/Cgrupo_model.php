@@ -26,6 +26,17 @@ class Cgrupo_model extends General_model {
 		}
 	}
 
+	public function dar_de_baja_articulos()
+	{
+		return $this->db
+			->where('categoria_grupo', $this->getPK())
+			->update('articulo', [
+				'debaja' => 1,
+				'fechabaja' => $this->fechabaja,
+				'usuariobaja' => $this->usuariobaja
+			]);
+	}
+
 }
 
 /* End of file Cgrupo_model.php */

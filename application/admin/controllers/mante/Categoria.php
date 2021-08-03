@@ -42,6 +42,9 @@ class Categoria extends CI_Controller {
 	public function buscar()
 	{
 		$_GET['sede'] = $this->data->sede;
+
+		if(!isset($_GET['_activos'])) { $_GET['debaja'] = 0; }
+
 		$datos = $this->Categoria_model->buscar($_GET);		
 
 		$datos = ordenar_array_objetos($datos, 'descripcion');
@@ -49,6 +52,30 @@ class Categoria extends CI_Controller {
 		$this->output
 		->set_content_type("application/json")
 		->set_output(json_encode($datos));
+	}
+
+	public function dar_de_baja($id)
+	{
+		$datos = new stdClass();
+		$datos->exito = false;
+
+		$cat = new Categoria_model($id);
+		$cat->debaja = 1;
+		$cat->usuariobaja = $this->data->idusuario;
+		$cat->fechabaja = date('Y-m-d');
+		$datos->exito = $cat->guardar();
+
+		if ($datos->exito)
+		{
+			$cat->dar_de_baja_subcategorias_articulos();
+			$datos->mensaje = 'Categoría dada de baja con éxito.';
+		} else {
+			$datos->mensaje = $cat->getMensaje();
+		}
+		
+		$datos->categoria = $cat;
+		
+		$this->output->set_output(json_encode($datos));
 	}
 }
 

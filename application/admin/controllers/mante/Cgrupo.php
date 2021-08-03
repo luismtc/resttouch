@@ -64,6 +64,9 @@ class Cgrupo extends CI_Controller
 		if (count($_GET) == 0) {
 			$_GET['categoria_grupo_grupo'] = null;
 		}
+		
+		if (!isset($_GET['_activos'])) { $_GET['debaja'] = 0; }
+
 		$tmp = $this->Cgrupo_model->buscar($_GET);
 
 		if (is_array($tmp)) {
@@ -112,9 +115,8 @@ class Cgrupo extends CI_Controller
 
 	public function get_categoria_grupo()
 	{
-		if (!isset($_GET['categoria_grupo_grupo'])) {
-			$_GET['categoria_grupo_grupo'] = null;
-		}
+		if (!isset($_GET['categoria_grupo_grupo'])) { $_GET['categoria_grupo_grupo'] = null; }
+		if (!isset($_GET['_activos'])) { $_GET['debaja'] = 0; }
 
 		$datos = $this->Cgrupo_model->buscar($_GET);
 
@@ -128,6 +130,33 @@ class Cgrupo extends CI_Controller
 
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
+
+	public function dar_de_baja($id)
+	{
+		$datos = new stdClass();
+		$datos->exito = false;
+
+		$cgrupo = new Cgrupo_model($id);
+		$cgrupo->debaja = 1;
+		$cgrupo->usuariobaja = $this->data->idusuario;
+		$cgrupo->fechabaja = date('Y-m-d');
+		$datos->exito = $cgrupo->guardar();
+
+		if ($datos->exito)
+		{
+			$cgrupo->dar_de_baja_articulos();
+			$datos->mensaje = 'Subcategoría dada de baja con éxito.';
+		} else {
+			$datos->mensaje = $cgrupo->getMensaje();
+		}
+
+		
+		$datos->subcategoria = $cgrupo;
+		
+		$this->output->set_output(json_encode($datos));
+	}
+
+
 }
 
 /* End of file Cgrupo.php */

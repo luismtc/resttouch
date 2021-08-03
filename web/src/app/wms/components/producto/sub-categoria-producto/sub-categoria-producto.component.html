@@ -54,8 +54,11 @@
             </mat-form-field>
 
             <div align="end">
-                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="onSubmitSubCategoria()" [disabled]="!frmCategoriaGrupo.form.valid">
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="onSubmitSubCategoria()" [disabled]="!frmCategoriaGrupo.form.valid || +categoriaGrupo.debaja === 1">
                     Guardar
+                </button>
+                <button mat-raised-button type="button" color="warn" class="btnAccion" (click)="darDeBaja()" *ngIf="+categoriaGrupo.categoria_grupo > 0" [disabled]="+categoriaGrupo.debaja === 1">
+                    Dar de baja
                 </button>
                 <button mat-raised-button type="button" color="warn" (click)="resetCategoriaGrupo()">
                     Cancelar
@@ -64,7 +67,7 @@
         </form>
         <hr />
         <mat-chip-list>
-            <mat-chip color="accent" *ngFor="let cat of categorias" (click)="categoria = cat; loadSubCategorias(cat.categoria)" selected>
+            <mat-chip color="accent" *ngFor="let cat of categorias" (click)="+cat.debaja === 0 && selectCategoria(cat)" selected>
                 {{cat.descripcion}}
             </mat-chip>
         </mat-chip-list>

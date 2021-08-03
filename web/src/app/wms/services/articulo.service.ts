@@ -72,7 +72,10 @@ export class ArticuloService {
       descuento: item.descuento,
       bodega: item.bodega,
       cuenta_contable: item.cuenta_contable,
-      antecesores: null
+      antecesores: null,
+      debaja: item.debaja,
+      fechabaja: item.fechabaja,
+      usuariobaja: item.usuariobaja
     }));
     return lst;
   }
@@ -227,4 +230,23 @@ export class ArticuloService {
       `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/articulos_de_pos`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  darDeBajaArticulo(idArticulo: number): Observable<any> {    
+    return this.http.get<any>(
+      `${GLOBAL.urlMantenimientos}/${this.articuloUrl}/dar_de_baja/${idArticulo}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  darDeBajaSubCategoria(idSubcat: number): Observable<any> {
+    return this.http.get<any>(
+      `${GLOBAL.urlMantenimientos}/${this.categoriaGrupoUrl}/dar_de_baja/${idSubcat}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  darDeBajaCategoria(idCat: number): Observable<any> {    
+    return this.http.get<any>(
+      `${GLOBAL.urlMantenimientos}/${this.categoriaUrl}/dar_de_baja/${idCat}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
 }

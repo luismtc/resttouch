@@ -10,7 +10,8 @@ class Articulo extends CI_Controller
 		$this->load->model([
 			'Articulo_model',
 			'Receta_model',
-			'Presentacion_model'
+			'Presentacion_model',
+			'Usuario_model'
 		]);
 
 		$this->load->helper(['jwt', 'authorization']);
@@ -75,10 +76,10 @@ class Articulo extends CI_Controller
 			->set_output(json_encode($datos));
 	}
 
-	public function buscar()
+	private function search_product($args = [])
 	{
 		$datos = [];
-		$tmp = $this->Articulo_model->buscar($_GET);
+		$tmp = $this->Articulo_model->buscar($args);
 
 		if (is_array($tmp)) {
 			foreach ($tmp as $row) {
@@ -86,8 +87,13 @@ class Articulo extends CI_Controller
 				$row->categoria_grupo = $art->getCategoriaGrupo();
 				$row->presentacion = $art->getPresentacion();
 				$row->presentacion_reporte = $art->getPresentacionReporte();
+				$row->usuariobaja = !empty($row->usuariobaja) ? $this->Usuario_model->buscar(['usuario' => $row->usuariobaja, '_uno' => true]) : $row->usuariobaja;
 
-				if (!isset($_GET['_sede'])) {
+				if($row->usuariobaja && isset($row->usuariobaja->contrasenia)) {
+					unset($row->usuariobaja->contrasenia);
+				}
+
+				if (!isset($args['_sede'])) {
 					$datos[] = $row;
 				} else {
 					if ((int)$this->data->sede === (int)$row->categoria_grupo->sede) {
@@ -99,8 +105,14 @@ class Articulo extends CI_Controller
 			$art = new Articulo_model($tmp->articulo);
 			$tmp->categoria_grupo = $art->getCategoriaGrupo();
 			$tmp->presentacion = $art->getPresentacion();
+			$tmp->presentacion_reporte = $art->getPresentacionReporte();
+			$tmp->usuariobaja = !empty($tmp->usuariobaja) ? $this->Usuario_model->buscar(['usuario' => $tmp->usuariobaja, '_uno' => true]) : $tmp->usuariobaja;
 
-			if (!isset($_GET['_sede'])) {
+			if($tmp->usuariobaja && isset($tmp->usuariobaja->contrasenia)) {
+				unset($tmp->usuariobaja->contrasenia);
+			}
+
+			if (!isset($args['_sede'])) {
 				$datos = $tmp;
 			} else {
 				if ((int)$this->data->sede === (int)$tmp->categoria_grupo->sede) {
@@ -113,8 +125,12 @@ class Articulo extends CI_Controller
 			return strcmp($a->descripcion, $b->descripcion);
 		});
 
-		// $this->output->set_content_type("application/json")->set_output(json_encode(array_slice($datos, 0, 25)));
-		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
+		return $datos;
+	}
+
+	public function buscar()
+	{		
+		$this->output->set_content_type("application/json")->set_output(json_encode($this->search_product($_GET)));
 	}
 
 	public function guardar_receta($articulo, $id = '')
@@ -316,6 +332,24 @@ class Articulo extends CI_Controller
 		$datos->exito = $articulo->guardar($req);
 		$datos->mensaje = $datos->exito ? 'Artículo actualizado con éxito.' : $articulo->getMensaje();
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
+	}
+
+	public function dar_de_baja($id)
+	{
+		$datos = new stdClass();
+		$datos->exito = false;
+
+		$articulo = new Articulo_model($id);
+		$articulo->debaja = 1;
+		$articulo->usuariobaja = $this->data->idusuario;
+		$articulo->fechabaja = date('Y-m-d');
+		$datos->exito = $articulo->guardar();
+
+		$datos->mensaje = $datos->exito ? 'Artículo dado de baja con éxito.' : $articulo->getMensaje();
+		
+		$datos->articulo = $articulo;
+		
+		$this->output->set_output(json_encode($datos));		
 	}
 }
 

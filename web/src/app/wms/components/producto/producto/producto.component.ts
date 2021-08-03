@@ -40,7 +40,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
   ) {
     this.articulo = {
       articulo: null, categoria_grupo: null, presentacion: null, descripcion: null, precio: null, bien_servicio: 'B',
-      produccion: 0, presentacion_reporte: null, mostrar_pos: 0, impuesto_especial: null, rendimiento: 1, mostrar_inventario: 0
+      produccion: 0, presentacion_reporte: null, mostrar_pos: 0, impuesto_especial: null, rendimiento: 1, mostrar_inventario: 0, debaja: 0, usuariobaja: null, fechabaja: null
     };
   }
   ngOnInit() {
@@ -83,7 +83,8 @@ export class ProductoComponent implements OnInit, OnDestroy {
             combo: obj.combo,
             rendimiento: obj.rendimiento,
             mostrar_inventario: obj.mostrar_inventario,
-            esreceta: obj.esreceta
+            esreceta: obj.esreceta,
+            debaja: obj.debaja
           };
   
           this.categoria = this.categorias.find(c => +c.categoria === +obj.categoria_grupo.categoria);
@@ -96,6 +97,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
             impresora: +obj.categoria_grupo.impresora,
             descuento: +obj.categoria_grupo.descuento
           };
+          this.frmProductoComponent.articulo = this.articulo;
           this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
           this.frmProductoComponent.resetReceta();
           this.frmProductoComponent.filtrarPresentaciones(this.articulo);
@@ -115,7 +117,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
 
   loadCategorias = () => {
     this.endSubs.add(      
-      this.articuloSrvc.getCategorias({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0) }).subscribe((res: Categoria[]) => {
+      this.articuloSrvc.getCategorias({ sede: (+this.ls.get(GLOBAL.usrTokenVar).sede || 0), _activos: true }).subscribe((res: Categoria[]) => {
         if (res) {
           this.categorias = res;
         }
@@ -129,6 +131,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
     this.cargando = true;
 
     const fltr: any = {
+      _activos: true,
       categoria: +idcategoria,
       categoria_grupo_grupo: null
     };
@@ -160,7 +163,7 @@ export class ProductoComponent implements OnInit, OnDestroy {
 
   loadArticulos = (idsubcat: number = null) => {
 
-    const fltr: any = { categoria_grupo: null };
+    const fltr: any = { categoria_grupo: null, _activos: true };
 
     if (idsubcat) {
       fltr.categoria_grupo = idsubcat;

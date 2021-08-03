@@ -119,8 +119,13 @@ export class FormProductoComponent implements OnInit, OnDestroy {
       cantidad_maxima: 1,
       combo: 0,
       rendimiento: 0.00,
-      mostrar_inventario: 0
+      mostrar_inventario: 0,
+      debaja: 0,
+      usuariobaja: null,
+      fechabaja: null
     };
+    this.categoria = null;
+    this.subcategoria = null;
     this.recetas = [];
     this.resetReceta();
     this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));
@@ -407,5 +412,32 @@ export class FormProductoComponent implements OnInit, OnDestroy {
       this.setOpcComboOff();
     }
   };
+
+  darDeBaja = () => {
+    const confirmRef = this.dialog.open(ConfirmDialogComponent, {
+      maxWidth: '400px',
+      data: new ConfirmDialogModel(
+        this.articulo.descripcion,
+        `Esto dará de baja el artículo en TODAS las listas. Ya no podrá usarlo. ¿Desea continuar?`,
+        'Sí',
+        'No'
+      )
+    });
+
+    this.endSubs.add(      
+      confirmRef.afterClosed().subscribe((conf: boolean) => {
+        if (conf) {
+          this.endSubs.add(
+            this.articuloSrvc.darDeBajaArticulo(+this.articulo.articulo).subscribe(res => {
+              if (res.exito && res.articulo) {
+                this.articulo = res.articulo;
+              }
+              this.snackBar.open(`${res.exito ? '': 'ERROR:'} ${res.mensaje}`, 'Artículo', { duration: 5000 });
+            })
+          );
+        }
+      })
+    );    
+  }
 
 }

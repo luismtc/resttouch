@@ -11,8 +11,11 @@
 
             <div align="end">
                 <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="onSubmitCategoria()"
-                    [disabled]="!frmCategoria.form.valid">
+                    [disabled]="!frmCategoria.form.valid || +categoria.debaja === 1">
                     Guardar
+                </button>
+                <button mat-raised-button type="button" color="warn" class="btnAccion" (click)="darDeBaja()" *ngIf="+categoria.categoria > 0" [disabled]="+categoria.debaja === 1">
+                    Dar de baja
                 </button>
                 <button mat-raised-button type="button" color="warn" (click)="resetCategoria()">
                     Cancelar
@@ -21,7 +24,7 @@
         </form>
         <hr/>
         <mat-chip-list>
-            <mat-chip color="accent" *ngFor="let cat of categorias" (click)="categoria = cat" selected>
+            <mat-chip color="accent" *ngFor="let cat of categorias" (click)="selectCat(cat)" selected>
                 {{cat.descripcion}}
             </mat-chip>
         </mat-chip-list>

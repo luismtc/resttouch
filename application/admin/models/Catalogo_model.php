@@ -173,8 +173,10 @@ class Catalogo_model extends CI_Model {
 	{
 		$sede = isset($args['sede']) ? $args['sede'] : false;
 		$ingreso = isset($args['ingreso']) ? $args['ingreso'] : false;
+		$activos = isset($args['_activos']) ? true : false;
 		unset($args['ingreso']);
 		unset($args['sede']);
+		unset($args['_activos']);
 		if(count($args) > 0) {
 			foreach ($args as $key => $row) {
 				if ($key != '_uno') {
@@ -192,7 +194,11 @@ class Catalogo_model extends CI_Model {
 		}
 
 		if ($ingreso) {
-			$this->db->where("mostrar_inventario", 1);
+			$this->db->where("a.mostrar_inventario", 1);
+		}
+
+		if (!$activos) {
+			$this->db->where("a.debaja", 0);
 		}
 
 		$qry = $this->db
