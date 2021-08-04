@@ -32,7 +32,7 @@ export class RptVentasComponent implements OnInit {
   public tituloArticulo = 'Ventas por articulo';
   public cargando = false;
   public configBotones: ConfiguracionBotones = {
-    showPdf: true, showHtml: true, showExcel: true
+    showPdf: true, showHtml: false, showExcel: true
   };
 
   constructor(

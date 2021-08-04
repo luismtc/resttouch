@@ -7,7 +7,7 @@ import { GLOBAL } from '../../../../shared/global';
 import { saveAs } from 'file-saver';
 
 import { Categoria } from '../../../interfaces/categoria';
-import { CategoriaGrupo } from '../../../interfaces/categoria-grupo';
+import { CategoriaGrupo, CategoriaGrupoResponse } from '../../../interfaces/categoria-grupo';
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloDetalle } from '../../../interfaces/articulo-detalle';
 import { ArticuloService } from '../../../services/articulo.service';
@@ -54,8 +54,8 @@ export class FormProductoComponent implements OnInit, OnDestroy {
   }
 
   @Input() articulo: Articulo;
-  @Input() categoria: Categoria = null;
-  @Input() subcategoria: CategoriaGrupo = null;
+  // @Input() categoria: Categoria = null;
+  // @Input() subcategoria: CategoriaGrupo = null;
   @Output() articuloSvd = new EventEmitter();
   private titulo = 'Receta';
   public showArticuloForm = true;
@@ -74,6 +74,7 @@ export class FormProductoComponent implements OnInit, OnDestroy {
   public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
   public txtArticuloSelected: (Articulo | string) = undefined;
+  public lstSubCategorias: CategoriaGrupoResponse[] = [];
 
   private endSubs = new Subscription();
 
@@ -95,6 +96,7 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     this.loadArticulos();
     this.loadPresentaciones();
     this.loadImpuestosEspeciales();
+    this.loadSubCategorias();
   }
 
   ngOnDestroy() {
@@ -104,7 +106,7 @@ export class FormProductoComponent implements OnInit, OnDestroy {
   resetArticulo = () => {
     this.articulo = {
       articulo: null,
-      categoria_grupo: this.articulo.categoria_grupo,
+      categoria_grupo: null,
       presentacion: null,
       descripcion: null,
       precio: null,
@@ -124,8 +126,8 @@ export class FormProductoComponent implements OnInit, OnDestroy {
       usuariobaja: null,
       fechabaja: null
     };
-    this.categoria = null;
-    this.subcategoria = null;
+    // this.categoria = null;
+    // this.subcategoria = null;
     this.recetas = [];
     this.resetReceta();
     this.presentacionesFiltered = JSON.parse(JSON.stringify(this.presentaciones));
@@ -141,6 +143,7 @@ export class FormProductoComponent implements OnInit, OnDestroy {
         if (res.exito) {
           this.articuloSvd.emit();
           this.resetArticulo();
+          res.articulo.categoria_grupo = +res.articulo.categoria_grupo;
           this.articulo = res.articulo;
           this.loadRecetas(this.articulo.articulo);
           this.loadArticulos();
@@ -170,6 +173,17 @@ export class FormProductoComponent implements OnInit, OnDestroy {
           this.presentaciones = res;
           this.filtrarPresentaciones();
         }
+      })
+    );
+  }
+
+  loadSubCategorias = () => {
+    this.endSubs.add(      
+      this.articuloSrvc.getCategoriasGrupos({ _activos: true, _sede: this.ls.get(GLOBAL.usrTokenVar).sede }).subscribe(res => {
+        this.lstSubCategorias = res.map(r => {
+          r.categoria_grupo = +r.categoria_grupo;
+          return r;
+        });
       })
     );
   }

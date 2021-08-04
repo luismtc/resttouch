@@ -113,6 +113,7 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
           this.resetCategoriaGrupo();
           this.snackBar.open('Grabada con éxito.', 'Sub - Categoría', { duration: 5000 });
         } else {
+          this.categoriaGrupo.categoria_grupo_grupo = null;
           this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sub - Categoría', { duration: 5000 });
         }
       })

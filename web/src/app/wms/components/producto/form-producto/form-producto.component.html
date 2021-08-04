@@ -14,7 +14,7 @@
     </mat-card-title>
     <mat-card-content>
         <form #frmArticulo="ngForm" *ngIf="showArticuloForm" (ngSubmit)="frmArticulo.form.valid && onSubmit()" novalidate>
-            <mat-hint align="start" *ngIf="!categoria || !categoria.descripcion"><strong>Por favor seleccione un categoría.</strong></mat-hint><br *ngIf="!categoria || !categoria.descripcion"/>
+            <!-- <mat-hint align="start" *ngIf="!categoria || !categoria.descripcion"><strong>Por favor seleccione un categoría.</strong></mat-hint><br *ngIf="!categoria || !categoria.descripcion"/>
             <mat-hint align="start" *ngIf="!subcategoria || !subcategoria.descripcion"><strong>Por favor seleccione un sub-categoría.</strong></mat-hint>
             <mat-chip-list>
                 <mat-chip color="accent" class="catSubCat" *ngIf="categoria" selected>
@@ -23,8 +23,18 @@
                 <mat-chip color="warn" class="catSubCat" *ngIf="subcategoria" selected>
                     {{subcategoria.descripcion}}
                 </mat-chip>
-            </mat-chip-list>
+            </mat-chip-list> -->
+
             <mat-form-field class="fullWidth" style="margin-top: 10px;">
+                <mat-label>Sub-categoría</mat-label>
+                <mat-select name="categoria_grupo" [(ngModel)]="articulo.categoria_grupo" required>
+                    <mat-option *ngFor="let sc of lstSubCategorias" [value]="sc.categoria_grupo">
+                        {{sc.descripcion}} ({{sc.categoria.descripcion}})
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="fullWidth">
                 <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" minlength="1" maxlength="250" required>
                 <input matInput *ngIf="esMovil" type="text" placeholder="Descripción" name="descripcion" [(ngModel)]="articulo.descripcion" minlength="1" maxlength="250" required>
             </mat-form-field>

@@ -314,7 +314,7 @@ class Articulo_model extends General_model {
 		//}
 
 
-		return ($ingresos->total - ($egresos->total + $venta/$pres->cantidad)) * $pres->cantidad;
+		return ($pres && isset($pres->cantidad) && (float)$pres->cantidad > 0) ? ((float)$ingresos->total - ((float)$egresos->total + (float)$venta / (float)$pres->cantidad)) * (float)$pres->cantidad : 0;
 	}
 
 	function getIngresoEgreso($articulo, $args=[])

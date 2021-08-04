@@ -39,9 +39,8 @@
                 </cdk-virtual-scroll-viewport>
             </div>
             <div class="divArticulos" fxFlex="60%" fxFlex.xs="100%" fxFlex.sm="100%">
-                <app-form-producto #frmProducto [categoria]="categoria" [subcategoria]="categoriaGrupo"
-                    [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)">
-                </app-form-producto>
+                <!-- <app-form-producto #frmProducto [categoria]="categoria" [subcategoria]="categoriaGrupo" [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)"></app-form-producto> -->
+                <app-form-producto #frmProducto [articulo]="articulo" (articuloSvd)="refreshArticuloList($event)"></app-form-producto>
             </div>
         </div>
     </mat-tab>
