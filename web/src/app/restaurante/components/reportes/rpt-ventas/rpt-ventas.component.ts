@@ -28,8 +28,8 @@ export class RptVentasComponent implements OnInit {
   public tiposTurno: TipoTurno[] = [];
   public sedes: UsuarioSede[] = [];
   public grupos = GLOBAL.grupos;
-  public tituloCategoria = 'Ventas por categoria';
-  public tituloArticulo = 'Ventas por articulo';
+  public tituloCategoria = 'Ventas_Categoria';
+  public tituloArticulo = 'Ventas_Articulo';
   public cargando = false;
   public configBotones: ConfiguracionBotones = {
     showPdf: true, showHtml: false, showExcel: true
@@ -104,7 +104,7 @@ export class RptVentasComponent implements OnInit {
   getExcel = () => {
     switch (this.params.tipo_reporte) {
       case 1: this.getPorCategoriaExcel(); break;
-      case 2: this.getPorArticuloExcel(); break;
+      case 2: this.getPorArticuloPdf(1); break;
     }
   }
 
@@ -138,32 +138,17 @@ export class RptVentasComponent implements OnInit {
     });
   }
 
-  getPorArticuloPdf = () => {
-    this.paramsToSend._excel = 0;
+  getPorArticuloPdf = (esExcel = 0) => {
+    this.paramsToSend._excel = esExcel;
     this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porArticuloPdf(this.paramsToSend).subscribe(res => {
       this.cargando = false;
       if (res) {
-        const blob = new Blob([res], { type: 'application/pdf' });
-        saveAs(blob, `${this.tituloArticulo}.pdf`);
+        const blob = new Blob([res], { type: (+esExcel === 0 ? 'application/pdf' : 'application/vnd.ms-excel') });
+        saveAs(blob, `${this.tituloArticulo}_${moment().format(GLOBAL.dateTimeFormatRptName)}.${+esExcel === 0 ? 'pdf' : 'xls'}`);
       } else {
-        this.snackBar.open('No se pudo generar el reporte...', this.tituloArticulo, { duration: 3000 });
-      }
-    });
-  }
-
-  getPorArticuloExcel = () => {
-    this.paramsToSend._excel = 1;
-    this.cargando = true;
-    this.cleanParams();
-    this.rptVentasSrvc.porArticuloPdf(this.paramsToSend).subscribe(res => {
-      this.cargando = false;
-      if (res) {
-        const blob = new Blob([res], { type: 'application/vnd.ms-excel' });
-        saveAs(blob, `${this.tituloArticulo}.xls`);
-      } else {
-        this.snackBar.open('No se pudo generar el reporte...', this.tituloArticulo, { duration: 3000 });
+        this.snackBar.open('No se pudo generar el reporte...', 'Ventas por artículo', { duration: 3000 });
       }
     });
   }
