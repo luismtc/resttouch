@@ -26,6 +26,9 @@ class Dfactura_model extends General_model {
 	public $valor_impuesto_especial_ext = 0.0000000000;
 	public $detalle_factura_id;
 	public $bodega;
+	public $cantidad_gravable = 0.00;
+	public $precio_sugerido = 0.00;
+	public $precio_sugerido_ext = 0.0000000000;
 
 	public function __construct($id = '')
 	{

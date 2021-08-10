@@ -74,7 +74,9 @@ export class ProductoComponent implements OnInit {
           combo: obj.combo,
           rendimiento: obj.rendimiento,
           mostrar_inventario: obj.mostrar_inventario,
-          esreceta: obj.esreceta
+          esreceta: obj.esreceta,
+          cantidad_gravable: obj.cantidad_gravable,
+          precio_sugerido: obj.precio_sugerido
         };
         this.frmProductoComponent.loadRecetas(+this.articulo.articulo);
         this.frmProductoComponent.resetReceta();

@@ -24,6 +24,8 @@ class Articulo_model extends General_model {
 	public $costo = 0;
 	public $mostrar_inventario = 0;
 	public $esreceta = 0;
+	public $cantidad_gravable = 0.00;
+	public $precio_sugerido = 0.00;
 
 	public function __construct($id = "")
 	{

@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Api extends CI_Controller {
+class Api extends CI_Controller
+{
 
 	public function __construct()
 	{
@@ -10,9 +11,9 @@ class Api extends CI_Controller {
 		$this->load->add_package_path('application/facturacion');
 		$this->load->model([
 			"Configuracion_model",
-			"Comanda_model", 
-			"Dcomanda_model", 
-			"Cuenta_model", 
+			"Comanda_model",
+			"Dcomanda_model",
+			"Cuenta_model",
 			"Dcuenta_model",
 			"Usuario_model",
 			"Mesa_model",
@@ -27,7 +28,7 @@ class Api extends CI_Controller {
 		]);
 
 		$this->output
-		->set_content_type("application/json", "UTF-8");
+			->set_content_type("application/json", "UTF-8");
 	}
 
 	public function set_comanda()
@@ -42,12 +43,12 @@ class Api extends CI_Controller {
 				$datosDb = $this->Catalogo_model->getCredenciales([
 					"llave" => $_GET['key']
 				]);
-	            $conn = [
-	                'host' => $datosDb->db_hostname,
-	                'user' => $datosDb->db_username,
-	                'password' => $datosDb->db_password,
-	                'database' => $datosDb->db_database
-	            ];
+				$conn = [
+					'host' => $datosDb->db_hostname,
+					'user' => $datosDb->db_username,
+					'password' => $datosDb->db_password,
+					'database' => $datosDb->db_database
+				];
 				$db = conexion_db($conn);
 				$this->db = $this->load->database($db, true);
 				$config = $this->Configuracion_model->buscar();
@@ -67,11 +68,11 @@ class Api extends CI_Controller {
 						if ($dato) {
 							break;
 						}
-					}	
-				} 
-				
+					}
+				}
+
 				if (isset($req['billing_address'])) {
-					$datosCliente = $req['billing_address'];					
+					$datosCliente = $req['billing_address'];
 				} else if ($req['source_name'] == 'pos') {
 					$datosCliente = $req['customer']['default_address'];
 				}
@@ -80,7 +81,7 @@ class Api extends CI_Controller {
 
 					if ($rutas) {
 						if ($dato) {
-							$nit = $dato;	
+							$nit = $dato;
 						} else {
 							$nit = "CF";
 						}
@@ -92,10 +93,10 @@ class Api extends CI_Controller {
 						}
 					}
 
-					$nit = strtoupper(preg_replace("/[^0-9Kk?!]/",'', $nit));
+					$nit = strtoupper(preg_replace("/[^0-9Kk?!]/", '', $nit));
 
 					if (empty($nit)) {
-						$nit = "CF"	;
+						$nit = "CF";
 					}
 
 					$cliente = $this->Cliente_model->buscar([
@@ -135,10 +136,10 @@ class Api extends CI_Controller {
 
 				$datosCta = ['nombre' => $cuenta['nombre'], 'numero' => $req['order_number']];
 				$usu = $this->Usuario_model->find([
-					'usuario' => 1, 
+					'usuario' => 1,
 					"_uno" => true
 				]);
-				if($sede) {
+				if ($sede) {
 					if ($origen) {
 						if ($usu) {
 
@@ -152,17 +153,17 @@ class Api extends CI_Controller {
 								"moneda" => 1,
 								"correo_receptor" => $req['email']
 							];
-							
+
 							$turno = $this->Turno_model->getTurno([
 								"sede" => $sede->sede,
-								'abierto' => true, 
+								'abierto' => true,
 								"_uno" => true
 							]);
 							$comanda = new Comanda_model();
 							$datosComanda = [
-								'usuario' => $usu->usuario, 
-								'sede' => $sede->sede, 
-								'estatus' => 1, 
+								'usuario' => $usu->usuario,
+								'sede' => $sede->sede,
+								'estatus' => 1,
 								'domicilio' => 1,
 								'comanda_origen' => $origen->comanda_origen,
 								'comanda_origen_datos' => json_encode($req)
@@ -173,12 +174,12 @@ class Api extends CI_Controller {
 							$propinaMonto = 0;
 
 							$lineItems = $req['line_items'];
-							if(get_configuracion($config, 'RT_ORDER_ITEMS_FULLFILLED', 3)) {
+							if (get_configuracion($config, 'RT_ORDER_ITEMS_FULLFILLED', 3)) {
 								if (is_array($req['fulfillments'])) {
-									if(count($req['fulfillments']) > 0) {
+									if (count($req['fulfillments']) > 0) {
 										$lineItems = $req['fulfillments'][0]['line_items'];
 									}
-								}								
+								}
 							}
 
 							foreach ($lineItems as $row) {
@@ -186,27 +187,27 @@ class Api extends CI_Controller {
 									$art = $this->Articulo_model->buscar([
 										'shopify_id' => $row['variant_id'],
 										'_uno' => true
-									]);	
+									]);
 
 									if ($art) {
 										$insert = true;
 									}
-								}								
+								}
 							}
 							if ($insert) {
 								if ($turno) {
 									$datosComanda['turno'] = $turno->turno;
 									$datos['exito'] = $comanda->guardar($datosComanda);
-					
+
 									$cuenta = new Cuenta_model();
-									
+
 									if ($cuenta->cerrada == 0) {
 										$datosCta['comanda'] = $comanda->comanda;
-										$cuenta->guardar($datosCta);	
-									}		
-									$total = 0;		
-									$exito = true;		
-									$descuentoArticulo = []	;
+										$cuenta->guardar($datosCta);
+									}
+									$total = 0;
+									$exito = true;
+									$descuentoArticulo = [];
 									foreach ($lineItems as $row) {
 										$art = $this->Articulo_model->buscar([
 											'shopify_id' => $row['variant_id'],
@@ -216,12 +217,7 @@ class Api extends CI_Controller {
 											if ($art) {
 												$shop_money = $row['total_discount_set']['shop_money'];
 												$datosDcomanda = [
-													'articulo' => $art->articulo
-													,'cantidad' => $row['quantity']
-													,'precio' => $row['price']
-													,'impreso' => 0
-													,'total' => $row['price'] * $row['quantity']
-													,'notas' => ''
+													'articulo' => $art->articulo, 'cantidad' => $row['quantity'], 'precio' => $row['price'], 'impreso' => 0, 'total' => $row['price'] * $row['quantity'], 'notas' => ''
 												];
 												$total += ($row['price'] * $row['quantity']);
 												$det = $comanda->guardarDetalle($datosDcomanda);
@@ -235,15 +231,14 @@ class Api extends CI_Controller {
 													}
 													$cuenta->guardarDetalle([
 														'detalle_comanda' => $det->detalle_comanda
-													]);	
-													
+													]);
 												} else {
 													$exito = false;
 													$datos['mensaje'] .= implode("\n", $comanda->getMensaje());
-												}	
+												}
 											} else {
 												$exito = false;
-												$datos['mensaje'] .= "\nOcurrio un error al guardar el articulo {$row['title']} Id {$row['variant_id']}";	
+												$datos['mensaje'] .= "\nOcurrio un error al guardar el articulo {$row['title']} Id {$row['variant_id']}";
 											}
 										} else {
 											$propina = true;
@@ -251,21 +246,16 @@ class Api extends CI_Controller {
 											$cuenta->guardar([
 												"propina_monto" => $row['price']
 											]);
-										}		
+										}
 									}
-									
+
 									if ($propina) {
 										$art = $this->Articulo_model->buscar([
 											'descripcion' => 'Propina',
 											'_uno' => true
 										]);
 										$datosDcomanda = [
-											'articulo' => $art->articulo
-											,'cantidad' => 1
-											,'precio' => $propinaMonto
-											,'impreso' => 0
-											,'total' => $propinaMonto
-											,'notas' => ''
+											'articulo' => $art->articulo, 'cantidad' => 1, 'precio' => $propinaMonto, 'impreso' => 0, 'total' => $propinaMonto, 'notas' => ''
 										];
 										$total += $propinaMonto;
 										$det = $comanda->guardarDetalle($datosDcomanda);
@@ -273,11 +263,11 @@ class Api extends CI_Controller {
 										if ($det) {
 											$cuenta->guardarDetalle([
 												'detalle_comanda' => $det->detalle_comanda
-											]);											
+											]);
 										} else {
 											$exito = false;
 											$datos['mensaje'] .= "\nOcurrio un error al guardar la propina";
-										}	
+										}
 									}
 
 									if (isset($req['total_shipping_price_set']) && isset($req['total_shipping_price_set']['shop_money']) && $req['source_name'] != "pos") {
@@ -288,12 +278,7 @@ class Api extends CI_Controller {
 										]);
 
 										$datosDcomanda = [
-											'articulo' => $art->articulo
-											,'cantidad' => 1
-											,'precio' => $row['amount']
-											,'impreso' => 0
-											,'total' => $row['amount']
-											,'notas' => ''
+											'articulo' => $art->articulo, 'cantidad' => 1, 'precio' => $row['amount'], 'impreso' => 0, 'total' => $row['amount'], 'notas' => ''
 										];
 										$total += ($row['amount']);
 										$det = $comanda->guardarDetalle($datosDcomanda);
@@ -301,39 +286,39 @@ class Api extends CI_Controller {
 										if ($det) {
 											$cuenta->guardarDetalle([
 												'detalle_comanda' => $det->detalle_comanda
-											]);	
+											]);
 											$datos['exito'] = true;
 										} else {
-											$datos['exito'] = false;						
+											$datos['exito'] = false;
 										}
 									}
 
 									$datos['exito'] = $exito;
 									if ($datos['exito']) {
-										$pagos = [];						
+										$pagos = [];
 										$descuento = 0;
 										$pdescuento = 0;
-	
+
 										if (count($descuentoArticulo) == 0) {
 											if (isset($req['discount_applications']) && is_array($req['discount_applications'])) {
-												$totalProd = $total-$propinaMonto;
-												if(count($req['discount_applications']) > 0) {
+												$totalProd = $total - $propinaMonto;
+												if (count($req['discount_applications']) > 0) {
 													foreach ($req['discount_applications'] as $desc) {
 														$targetType = isset($desc['target_type']) ? strtolower($desc['target_type']) : '';
 														if (strtolower($desc['value_type']) == 'percentage' && $targetType !== 'shipping_line') {
-															$descuento += ($totalProd * $desc['value'] /100);
+															$descuento += ($totalProd * $desc['value'] / 100);
 															$pdescuento += $desc['value'];
 														}
 													}
-		
+
 													//Inicia fix para los descuentos que son por monto fijo. JA 20/08/2020.
-													if(isset($req['discount_codes']) && is_array($req['discount_codes'])) {
-														foreach($req['discount_codes'] as $desc) {
+													if (isset($req['discount_codes']) && is_array($req['discount_codes'])) {
+														foreach ($req['discount_codes'] as $desc) {
 															$tipos = ['fixed_amount', 'shipping'];
 															if (in_array(strtolower($desc['type']), $tipos)) {
 																$descuento += $desc['amount'];
 																//$pdescuento += $desc['amount'];
-															}													
+															}
 														}
 													}
 
@@ -348,31 +333,32 @@ class Api extends CI_Controller {
 
 										if ((float) $descuento > 0) {
 											$pagos[] = [
-												"forma_pago" => 3, 
+												"forma_pago" => 3,
 												"monto" => $descuento
 											];
 										}
-										
-											
+
+
 										array_push($pagos, [
-											"forma_pago" => 1, 
+											"forma_pago" => 1,
 											"monto" => $total - $descuento
 										]);
 
 										foreach ($pagos as $pago) {
-											$exito = $cuenta->cobrar((object) $pago);	
+											$exito = $cuenta->cobrar((object) $pago);
 										}
-										
-										if($exito) {
+
+										if ($exito) {
 											$cuenta->guardar(["cerrada" => 1]);
 											if ($idCliente) {
 												$fac = new Factura_model();
 												$fac->guardar($datosFac);
 												$fac->cargarEmpresa();
-												$pimpuesto = $fac->empresa->porcentaje_iva +1;
+												$pimpuesto = $fac->empresa->porcentaje_iva + 1;
 												foreach ($cuenta->getDetalle() as $det) {
 													$det->bien_servicio = $det->articulo->bien_servicio;
 													$det->articulo = $det->articulo->articulo;
+													$artTmp = new Articulo_model($det->articulo);
 													$det->total_ext = $det->total;
 
 													if (count($descuentoArticulo) == 0) {
@@ -381,16 +367,15 @@ class Api extends CI_Controller {
 													} else {
 														$det->descuento = 0;
 														foreach ($descuentoArticulo as $desc) {
-															if ($det->detalle_comanda == $desc["detalle"]) 
-															{
+															if ($det->detalle_comanda == $desc["detalle"]) {
 																$det->descuento += $desc["descuento"];
 																$det->descuento_ext += $desc["descuento"];
 															}
 														}
-													}
-													
+													}													
+
 													$det->precio_unitario = $det->precio;
-													$det->precio_unitario_ext = $det->precio;													
+													$det->precio_unitario_ext = $det->precio;
 													$total = $det->total - $det->descuento;
 													$total_ext = $det->total_ext - $det->descuento_ext;
 													if ($fac->exenta) {
@@ -400,7 +385,24 @@ class Api extends CI_Controller {
 														$det->monto_base = $total / $pimpuesto;
 														$det->monto_base_ext = $total_ext / $pimpuesto;
 													}
-													
+
+													$impuesto_especial = $artTmp->getImpuestoEspecial();
+													if ($impuesto_especial) {
+														$det->impuesto_especial = $impuesto_especial->impuesto_especial;
+														$det->porcentaje_impuesto_especial = $impuesto_especial->porcentaje;
+
+														if ((float)$artTmp->cantidad_gravable > 0 && (float)$artTmp->precio_sugerido > 0) {
+															$det->cantidad_gravable = $artTmp->cantidad_gravable;
+															$det->precio_sugerido = $artTmp->precio_sugerido;
+															$det->precio_sugerido_ext = $artTmp->precio_sugerido;
+															$det->valor_impuesto_especial = (float)$artTmp->cantidad_gravable * (float)$artTmp->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
+															$det->valor_impuesto_especial_ext = (float)$artTmp->cantidad_gravable * (float)$artTmp->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
+														} else {
+															$det->valor_impuesto_especial = $det->monto_base * ((float)$impuesto_especial->porcentaje / 100);
+															$det->valor_impuesto_especial_ext = $det->monto_base_ext * ((float)$impuesto_especial->porcentaje / 100);
+														}
+													}
+
 													$det->monto_iva = $total - $det->monto_base;
 													$det->monto_iva_ext = $total_ext - $det->monto_base_ext;
 													$fac->setDetalle((array) $det);
@@ -421,21 +423,20 @@ class Api extends CI_Controller {
 												$datos['exito'] = false;
 												$datos['mensaje'] .= "\nHacen falta datos para facturacion";
 											}
-											
 										}
-										$datos['comanda'] = $comanda->getComanda();	
-									} 							
-										
-									if($datos['exito']) {
+										$datos['comanda'] = $comanda->getComanda();
+									}
+
+									if ($datos['exito']) {
 										$datos['mensaje'] = "Datos Actualizados con Exito";
-										$datos['comanda'] = $comanda->getComanda();	
+										$datos['comanda'] = $comanda->getComanda();
 										$comanda->envioMail();
-									} 
+									}
 								} else {
 									$datos['mensaje'] = "No existe ningun turno abierto";
-								}	
+								}
 							} else {
-								$datos['mensaje'] = "No existen productos";	
+								$datos['mensaje'] = "No existen productos";
 							}
 						} else {
 							$datos['mensaje'] = "Mesero Invalido";
@@ -451,10 +452,10 @@ class Api extends CI_Controller {
 			}
 		} else {
 			$datos['mensaje'] = "Hacen falta datos obligatorios para continuar";
-		}	
+		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function guardar_comanda()
@@ -462,7 +463,7 @@ class Api extends CI_Controller {
 		ini_set('display_errors', 1);
 		ini_set('display_startup_errors', 1);
 		error_reporting(E_ALL);
-		
+
 		$req = json_decode(file_get_contents('php://input'), true);
 
 		$datos = ["exito" => false, 'mensaje' => ''];
@@ -473,12 +474,12 @@ class Api extends CI_Controller {
 				$datosDb = $this->Catalogo_model->getCredenciales([
 					"llave" => $_GET['key']
 				]);
-	            $conn = [
-	                'host' => $datosDb->db_hostname,
-	                'user' => $datosDb->db_username,
-	                'password' => $datosDb->db_password,
-	                'database' => $datosDb->db_database
-	            ];
+				$conn = [
+					'host' => $datosDb->db_hostname,
+					'user' => $datosDb->db_username,
+					'password' => $datosDb->db_password,
+					'database' => $datosDb->db_database
+				];
 				$db = conexion_db($conn);
 				$this->db = $this->load->database($db, true);
 
@@ -502,10 +503,10 @@ class Api extends CI_Controller {
 				$datosCliente = $req['cliente'];
 
 				if ($datosCliente) {
-					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['nit']);
+					$nit = preg_replace("/[^0-9?!]/", '', $datosCliente['nit']);
 
 					if (empty($nit)) {
-						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['nit']));
+						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/", '', $datosCliente['nit']));
 					}
 
 					$datosCliente['nit'] = $nit;
@@ -523,7 +524,7 @@ class Api extends CI_Controller {
 					if (!$cliente) {
 						$cliente = new Cliente_model();
 						$cliente->guardar([
-							"nombre" => $datosCliente['nombre'].' '.$datosCliente['apellidos'],
+							"nombre" => $datosCliente['nombre'] . ' ' . $datosCliente['apellidos'],
 							"direccion" => ($datosCliente['direccion'] ?? 'CIUDAD'),
 							"correo" => $datosCliente['correo'],
 							"telefono" => $datosCliente['telefono'],
@@ -538,7 +539,7 @@ class Api extends CI_Controller {
 				}
 
 				$datosCta = [
-					'nombre' => $datosCliente['nombre'], 
+					'nombre' => $datosCliente['nombre'],
 					'numero' => $req['numero_orden']
 				];
 
@@ -553,16 +554,16 @@ class Api extends CI_Controller {
 					"correo_receptor" => $correoReceptor
 				];
 				$usu = $this->Usuario_model->find([
-					'usuario' => 1, 
+					'usuario' => 1,
 					"_uno" => true
 				]);
 
-				if($sede) {
+				if ($sede) {
 					if ($origen) {
 						if ($usu) {
 							$turno = $this->Turno_model->getTurno([
 								"sede" => $sede->sede,
-								'abierto' => true, 
+								'abierto' => true,
 								"_uno" => true
 							]);
 
@@ -582,9 +583,9 @@ class Api extends CI_Controller {
 							}
 
 							$datosComanda = [
-								'usuario' => $usu->usuario, 
-								'sede' => $sede->sede, 
-								'estatus' => 1, 
+								'usuario' => $usu->usuario,
+								'sede' => $sede->sede,
+								'estatus' => 1,
 								'domicilio' => 1,
 								'comanda_origen' => $origen->comanda_origen,
 								'comanda_origen_datos' => json_encode($req)
@@ -594,18 +595,18 @@ class Api extends CI_Controller {
 							$insert = false;
 							$propinaMonto = 0;
 							$menu = $this->Catalogo_model->getModulo([
-								"modulo" => 4, 
+								"modulo" => 4,
 								"_uno" => true
 							]);
-							
+
 							$existencia = true;
 							foreach ($req['detalle'] as $row) {
-								
+
 								$art = $this->Articulo_model->buscarArticulo([
 									'codigo' => $row['codigo'],
 									'sede' => $sede->sede,
 									'_uno' => true
-								]);	
+								]);
 
 								if ($art) {
 									$insert = true;
@@ -617,7 +618,6 @@ class Api extends CI_Controller {
 										}
 									}
 								}
-																
 							}
 							if ($insert) {
 								if ($existencia) {
@@ -632,11 +632,11 @@ class Api extends CI_Controller {
 										$cuenta = new Cuenta_model();
 										if ($cuenta->cerrada == 0) {
 											$datosCta['comanda'] = $comanda->comanda;
-											$cuenta->guardar($datosCta);	
+											$cuenta->guardar($datosCta);
 										}
-										
-										$total = 0;	
-										$total_ext = 0;	
+
+										$total = 0;
+										$total_ext = 0;
 										$exito = true;
 										foreach ($req['detalle'] as $row) {
 											$art = $this->Articulo_model->buscarArticulo([
@@ -644,33 +644,28 @@ class Api extends CI_Controller {
 												'sede' => $sede->sede,
 												'_uno' => true
 											]);
-											
+
 											if ($art) {
 												$datosDcomanda = [
-													'articulo' => $art->articulo
-													,'cantidad' => $row['cantidad']
-													,'precio' => $row['precio']
-													,'impreso' => 0
-													,'total' => $row['total']
-													,'notas' => ($row['nota'] ?? '')
+													'articulo' => $art->articulo, 'cantidad' => $row['cantidad'], 'precio' => $row['precio'], 'impreso' => 0, 'total' => $row['total'], 'notas' => ($row['nota'] ?? '')
 												];
-												
+
 												$total += $row['total'];
 												$total_ext += $row['total'];
-												
+
 												$det = $comanda->guardarDetalle($datosDcomanda);
 												$id = '';
 												if ($det) {
 													$cuenta->guardarDetalle([
 														'detalle_comanda' => $det->detalle_comanda
-													]);	
+													]);
 												} else {
 													$exito = false;
-													$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
+													$datos['mensaje'] .= implode("\n", $comanda->getMensaje());
 												}
 											} else {
 												$exito = false;
-												$datos['mensaje'] .= "\nArtículo no entrado.";	
+												$datos['mensaje'] .= "\nArtículo no entrado.";
 											}
 										}
 
@@ -682,19 +677,18 @@ class Api extends CI_Controller {
 											if (isset($req['descuento']) && is_array($req['descuento'])) {
 
 												foreach ($req['descuento'] as $desc) {
-													$descuento += ($total * $desc['valor'] /100);
-													$descuento_ext += ($total_ext * $desc['valor'] /100);
-													
+													$descuento += ($total * $desc['valor'] / 100);
+													$descuento_ext += ($total_ext * $desc['valor'] / 100);
 												}
 												$pagos[] = [
-													"forma_pago" => 3, 
+													"forma_pago" => 3,
 													"monto" => $descuento
-												];	
+												];
 											}
 
 											$tmpCobro = [
 												"forma_pago" => $req['metodo_pago']['codigo'],
-												"monto" => $total-$descuento
+												"monto" => $total - $descuento
 											];
 
 											if (isset($req['transferencia']) && !empty($req['transferencia'])) {
@@ -704,7 +698,7 @@ class Api extends CI_Controller {
 													$tmpCobro["observaciones"] = $req['transferencia']["observaciones"];
 												}
 											}
-											
+
 											array_push($pagos, $tmpCobro);
 
 											if (isset($tmpTarjeta['numero']) && !empty($tmpTarjeta['numero'])) {
@@ -741,7 +735,7 @@ class Api extends CI_Controller {
 													$tmpPago = [
 														"monto" => $fpago->monto,
 														"documento" => $fpago->documento,
-														"forma_pago" => $fpago->forma_pago, 
+														"forma_pago" => $fpago->forma_pago,
 														"observaciones" => $fpago->observaciones
 													];
 
@@ -751,11 +745,11 @@ class Api extends CI_Controller {
 
 													$datos['pagos'][] = $tmpPago;
 												}
-												
+
 												$fac = new Factura_model();
 												$fac->guardar($datosFac);
 												$fac->cargarEmpresa();
-												$pimpuesto = $fac->empresa->porcentaje_iva +1;
+												$pimpuesto = $fac->empresa->porcentaje_iva + 1;
 												$detalle = $cuenta->getDetalle([
 													"descuento" => 1
 												]);
@@ -789,8 +783,8 @@ class Api extends CI_Controller {
 											} else {
 												$datos['mensaje'] = implode("\n", $cuenta->getMensaje());
 											}
-										} 							
-											
+										}
+
 										if ($datos['exito']) {
 											$datos['mensaje'] = "Datos Actualizados con Exito";
 											$datos['comanda'] = $comanda->getComanda();
@@ -808,15 +802,15 @@ class Api extends CI_Controller {
 													"nit" => $emp->nit
 												]
 											];
-										} 
+										}
 									} else {
 										$datos['mensaje'] = "No existe ningun turno abierto";
-									}	
-								}else {
+									}
+								} else {
 									$datos['mensaje'] = "No hay existencia suficiente";
 								}
 							} else {
-								$datos['mensaje'] = "No existen productos";	
+								$datos['mensaje'] = "No existen productos";
 							}
 						} else {
 							$datos['mensaje'] = "Mesero Invalido";
@@ -832,10 +826,10 @@ class Api extends CI_Controller {
 			}
 		} else {
 			$datos['mensaje'] = "Hacen falta datos obligatorios para continuar";
-		}	
+		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function comanda()
@@ -843,7 +837,7 @@ class Api extends CI_Controller {
 		ini_set('display_errors', 1);
 		ini_set('display_startup_errors', 1);
 		error_reporting(E_ALL);
-		
+
 		$req = json_decode(file_get_contents('php://input'), true);
 
 		$datos = ["exito" => false, 'mensaje' => ''];
@@ -854,21 +848,21 @@ class Api extends CI_Controller {
 				$datosDb = $this->Catalogo_model->getCredenciales([
 					"llave" => $req['key']
 				]);
-	            $conn = [
-	                'host' => $datosDb->db_hostname,
-	                'user' => $datosDb->db_username,
-	                'password' => $datosDb->db_password,
-	                'database' => $datosDb->db_database
-	            ];
+				$conn = [
+					'host' => $datosDb->db_hostname,
+					'user' => $datosDb->db_username,
+					'password' => $datosDb->db_password,
+					'database' => $datosDb->db_database
+				];
 				$db = conexion_db($conn);
 				$this->db = $this->load->database($db, true);
 
-				
+
 				$sede = $this->Catalogo_model->getSede([
 					"sede" => $req["sede"],
 					"_uno" => true
 				]);
-				
+
 
 				$moneda = $this->Catalogo_model->getMoneda([
 					'codigo' => $req['moneda'],
@@ -878,10 +872,10 @@ class Api extends CI_Controller {
 				$datosCliente = $req['cliente'];
 
 				if ($datosCliente) {
-					$nit = preg_replace("/[^0-9?!]/",'', $datosCliente['nit']);
+					$nit = preg_replace("/[^0-9?!]/", '', $datosCliente['nit']);
 
 					if (empty($nit)) {
-						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/",'',$datosCliente['nit']));
+						$nit = strtoupper(preg_replace("/[^A-Za-z?!]/", '', $datosCliente['nit']));
 					}
 
 					$datosCliente['nit'] = $nit;
@@ -899,7 +893,7 @@ class Api extends CI_Controller {
 					if (!$cliente) {
 						$cliente = new Cliente_model();
 						$cliente->guardar([
-							"nombre" => $datosCliente['nombre'].' '.$datosCliente['apellidos'],
+							"nombre" => $datosCliente['nombre'] . ' ' . $datosCliente['apellidos'],
 							"direccion" => ($datosCliente['direccion'] ?? 'CIUDAD'),
 							"correo" => $datosCliente['correo'],
 							"telefono" => $datosCliente['telefono'],
@@ -914,7 +908,7 @@ class Api extends CI_Controller {
 				}
 
 				$datosCta = [
-					'nombre' => $datosCliente['nombre'], 
+					'nombre' => $datosCliente['nombre'],
 					'numero' => $req['numero_orden']
 				];
 
@@ -929,25 +923,25 @@ class Api extends CI_Controller {
 					"correo_receptor" => $correoReceptor
 				];
 				$usu = $this->Usuario_model->find([
-					'usuario' => 1, 
+					'usuario' => 1,
 					"_uno" => true
 				]);
 
-				if($sede) {
+				if ($sede) {
 					if ($origen) {
 						if ($usu) {
 							$turno = $this->Turno_model->getTurno([
 								"sede" => $sede->sede,
-								'abierto' => true, 
+								'abierto' => true,
 								"_uno" => true
 							]);
 
 							$comanda = new Comanda_model();
 
 							$datosComanda = [
-								'usuario' => $usu->usuario, 
-								'sede' => $sede->sede, 
-								'estatus' => 1, 
+								'usuario' => $usu->usuario,
+								'sede' => $sede->sede,
+								'estatus' => 1,
 								'domicilio' => 1,
 								'comanda_origen' => $origen->comanda_origen,
 								'comanda_origen_datos' => json_encode($req),
@@ -958,18 +952,18 @@ class Api extends CI_Controller {
 							$insert = false;
 							$propinaMonto = 0;
 							$menu = $this->Catalogo_model->getModulo([
-								"modulo" => 4, 
+								"modulo" => 4,
 								"_uno" => true
 							]);
-							
+
 							$existencia = true;
 							foreach ($req['detalle'] as $row) {
-								
+
 								$art = $this->Articulo_model->buscarArticulo([
 									'codigo' => $row['codigo'],
 									'sede' => $sede->sede,
 									'_uno' => true
-								]);	
+								]);
 
 								if ($art) {
 									$insert = true;
@@ -981,7 +975,6 @@ class Api extends CI_Controller {
 										}
 									}
 								}
-																
 							}
 							if ($insert) {
 								if ($existencia) {
@@ -996,10 +989,10 @@ class Api extends CI_Controller {
 										$cuenta = new Cuenta_model();
 										if ($cuenta->cerrada == 0) {
 											$datosCta['comanda'] = $comanda->comanda;
-											$cuenta->guardar($datosCta);	
+											$cuenta->guardar($datosCta);
 										}
-										
-										$total = 0;		
+
+										$total = 0;
 										$exito = true;
 										foreach ($req['detalle'] as $row) {
 											$art = $this->Articulo_model->buscarArticulo([
@@ -1007,18 +1000,12 @@ class Api extends CI_Controller {
 												'sede' => $sede->sede,
 												'_uno' => true
 											]);
-											
+
 											if ($art) {
 												$datosDcomanda = [
-													'articulo' => $art->articulo
-													,'cantidad' => $row['cantidad']
-													,'precio' => $row['precio']
-													,'impreso' => 0
-													,'total' => $row['total']
-													,'notas' => ($row['nota'] ?? '')
-													,'receta' => verDato($row, "receta")
+													'articulo' => $art->articulo, 'cantidad' => $row['cantidad'], 'precio' => $row['precio'], 'impreso' => 0, 'total' => $row['total'], 'notas' => ($row['nota'] ?? ''), 'receta' => verDato($row, "receta")
 												];
-												
+
 												$total += $row['total'];
 												if (verDato($row, "combo")) {
 													$det = $comanda->guardarDetalleCombo($datosDcomanda, $cuenta->getPK());
@@ -1028,15 +1015,15 @@ class Api extends CI_Controller {
 													if ($det) {
 														$cuenta->guardarDetalle([
 															'detalle_comanda' => $det->detalle_comanda
-														]);	
+														]);
 													} else {
 														$exito = false;
-														$datos['mensaje'] .= implode("\n", $comanda->getMensaje());	
+														$datos['mensaje'] .= implode("\n", $comanda->getMensaje());
 													}
 												}
 											} else {
 												$exito = false;
-												$datos['mensaje'] .= "\nArtículo no entrado.";	
+												$datos['mensaje'] .= "\nArtículo no entrado.";
 											}
 										}
 
@@ -1047,13 +1034,12 @@ class Api extends CI_Controller {
 											if (isset($req['descuento']) && is_array($req['descuento'])) {
 
 												foreach ($req['descuento'] as $desc) {
-													$descuento += ($total * $desc['valor'] /100);
-													
+													$descuento += ($total * $desc['valor'] / 100);
 												}
 												$pagos[] = [
-													"forma_pago" => 3, 
+													"forma_pago" => 3,
 													"monto" => $descuento
-												];	
+												];
 											}
 											$tmpCobro = [];
 											foreach ($req['metodo_pago'] as $mpago) {
@@ -1062,11 +1048,11 @@ class Api extends CI_Controller {
 													"monto" => $mpago['monto']
 												];
 											}
-											
+
 											$pagos = array_merge($pagos, $tmpCobro);
 
 											$pagosContador = 0;
-											
+
 											foreach ($pagos as $pago) {
 												if ($cuenta->cobrar((object) $pago)) {
 													$pagosContador++;
@@ -1074,16 +1060,16 @@ class Api extends CI_Controller {
 													break;
 												}
 											}
-											
+
 											$datos['exito'] = count($pagos) == $pagosContador;
 
 											if ($datos['exito']) {
 												$cuenta->guardar(["cerrada" => 1]);
-												
+
 												$fac = new Factura_model();
 												$fac->guardar($datosFac);
 												$fac->cargarEmpresa();
-												$pimpuesto = $fac->empresa->porcentaje_iva +1;
+												$pimpuesto = $fac->empresa->porcentaje_iva + 1;
 												$detalle = $cuenta->getDetalle([
 													"descuento" => 1
 												]);
@@ -1117,20 +1103,20 @@ class Api extends CI_Controller {
 											} else {
 												$datos['mensaje'] = implode("\n", $cuenta->getMensaje());
 											}
-										} 							
-											
+										}
+
 										if ($datos['exito']) {
 											$datos['mensaje'] = "Datos Actualizados con Exito";
 											$datos['comanda'] = $comanda->getComanda();
-										} 
+										}
 									} else {
 										$datos['mensaje'] = "No existe ningun turno abierto";
-									}	
-								}else {
+									}
+								} else {
 									$datos['mensaje'] = "No hay existencia suficiente";
 								}
 							} else {
-								$datos['mensaje'] = "No existen productos";	
+								$datos['mensaje'] = "No existen productos";
 							}
 						} else {
 							$datos['mensaje'] = "Mesero Invalido";
@@ -1146,10 +1132,10 @@ class Api extends CI_Controller {
 			}
 		} else {
 			$datos['mensaje'] = "Hacen falta datos obligatorios para continuar";
-		}	
+		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function set_producto()
@@ -1169,13 +1155,13 @@ class Api extends CI_Controller {
 					"llave" => $_GET['key']
 				]);
 
-	            $conn = [
-	                'host' => $datosDb->db_hostname,
-	                'user' => $datosDb->db_username,
-	                'password' => $datosDb->db_password,
-	                'database' => $datosDb->db_database
-	            ];
-	            
+				$conn = [
+					'host' => $datosDb->db_hostname,
+					'user' => $datosDb->db_username,
+					'password' => $datosDb->db_password,
+					'database' => $datosDb->db_database
+				];
+
 				$db = conexion_db($conn);
 				$this->db = $this->load->database($db, true);
 
@@ -1225,7 +1211,7 @@ class Api extends CI_Controller {
 							"categoria_grupo" => $cgrupo->getPK(),
 							"presentacion" => 1,
 							"descripcion" => $desc,
-							"precio" => $row['price'] ,
+							"precio" => $row['price'],
 							"bien_servicio" => "B",
 							"existencias" => 0,
 							"shopify_id" => $row['id']
@@ -1240,9 +1226,9 @@ class Api extends CI_Controller {
 						if ($tmpArt) {
 							$art->cargar($tmpArt->articulo);
 						}
-						
+
 						$datos['exito'] = $art->guardar($args);
-					}	
+					}
 				}
 
 				if ($datos['exito']) {
@@ -1258,15 +1244,15 @@ class Api extends CI_Controller {
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function test()
 	{
 		$nit = "CF";
-		$nit = strtoupper(preg_replace("/[CF]!|[^0-9Kk?!]/",'', $nit));
+		$nit = strtoupper(preg_replace("/[CF]!|[^0-9Kk?!]/", '', $nit));
 		echo "<pre>";
-		print_r ($nit);
+		print_r($nit);
 		echo "</pre>";
 	}
 }

@@ -24,6 +24,8 @@ export interface Articulo {
     costo?: number;
     mostrar_inventario?: number;
     esreceta?: number;
+    cantidad_gravable?: number;
+    precio_sugerido?: number;
 }
 
 export interface ArticuloResponse {
@@ -45,6 +47,8 @@ export interface ArticuloResponse {
     rendimiento?: number;
     mostrar_inventario?: number;
     esreceta?: number;
+    cantidad_gravable?: number;
+    precio_sugerido?: number;
 }
 
 export interface ArbolCategoriaGrupo {
@@ -97,6 +101,8 @@ export interface ProductoSelected {
     multiple?: number;
     combo?: number;
     esreceta?: number;
+    cantidad_gravable?: number;
+    precio_sugerido?: number;
 }
 
 export interface ArticuloFastEdit {
