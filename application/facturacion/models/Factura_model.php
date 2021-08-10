@@ -589,7 +589,7 @@ class Factura_model extends General_model
 
 				$impuesto = $this->crearElemento('dte:Impuesto');
 				$impuesto->appendChild($this->crearElemento('dte:NombreCorto', $imp->descripcion));
-				$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : 1)));
+				$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : (isset($imp->codigo_sat) && !empty($imp->codigo_sat) ? $imp->codigo_sat : 1))));
 
 				$valorImp = $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
 
@@ -599,9 +599,15 @@ class Factura_model extends General_model
 					$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
 				}
 
-				$row->total += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
-
-				$impuesto->appendChild($this->crearElemento('dte:MontoGravable', $valorBase));
+				$row->total += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;				
+				
+				$impuesto->appendChild($this->crearElemento('dte:MontoGravable', (isset($row->precio_sugerido) && (float)$row->precio_sugerido > 0 ? ($redondeaMontos ? $row->precio_sugerido : $row->precio_sugerido_ext) : $valorBase)));
+				
+				if (isset($row->cantidad_gravable) && (float)$row->cantidad_gravable > 0)
+				{
+					$impuesto->appendChild($this->crearElemento('dte:CantidadUnidadesGravables', $row->cantidad_gravable));
+				}
+				
 				$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
 				$impuestos->appendChild($impuesto);
 				if (isset($impuestosEsp[$row->impuesto_especial])) {

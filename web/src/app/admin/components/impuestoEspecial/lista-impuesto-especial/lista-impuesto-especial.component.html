@@ -7,7 +7,8 @@
         <mat-nav-list>
             <mat-list-item *ngFor="let element of lstImpuestosEspecialesPaged" (click)="getImpuestoEspecial(element)">
                 <mat-icon mat-list-icon>request_quote</mat-icon>
-                <h5 mat-line>{{element.descripcion}} ({{element.porcentaje | number:'1.2-2'}}%)</h5>
+                <h5 mat-line>{{element.descripcion_interna}} ({{element.porcentaje | number:'1.2-2'}}%)</h5>
+                <h6 mat-line>{{element.descripcion}}{{element.codigo_sat ? (' (' + element.codigo_sat + ')') : ''}}</h6>
             </mat-list-item>
         </mat-nav-list>
         <mat-paginator #paginador [length]="length" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="pageChange($event)" showFirstLastButtons>

@@ -67,15 +67,7 @@
                 <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Shopify ID" name="shopify_id" [(ngModel)]="articulo.shopify_id" minlength="1" maxlength="25">
                 <input matInput *ngIf="esMovil" type="text" placeholder="Shopify ID" name="shopify_id" [(ngModel)]="articulo.shopify_id" minlength="1" maxlength="25">
             </mat-form-field>
-            
-            <mat-form-field class="fullWidth">
-                <mat-label>Impuesto Especial</mat-label>
-                <mat-select name="impuesto_especial" [(ngModel)]="articulo.impuesto_especial">
-                    <mat-option *ngFor="let impesp of impuestosEspeciales" [value]="impesp.impuesto_especial">
-                        {{impesp.descripcion}} ({{impesp.porcentaje | number:'1.2-2'}}%)
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+
             <mat-form-field class="fullWidth" *ngIf = "+articulo.produccion == 1">
                 <input matInput type="number" step="0.05" placeholder="Rendimiento" name="rendimiento" [(ngModel)]="articulo.rendimiento" required>
             </mat-form-field>
@@ -85,6 +77,24 @@
             <mat-form-field class="fullWidth" *ngIf = "+articulo.multiple == 1 || +articulo.combo">
                 <input matInput type="number" step="1" placeholder="Cantidad maxima" name="maxima" [(ngModel)]="articulo.cantidad_maxima" required>
             </mat-form-field>
+
+            <mat-form-field class="fullWidth">
+                <mat-label>Impuesto Especial</mat-label>
+                <mat-select name="impuesto_especial" [(ngModel)]="articulo.impuesto_especial">
+                    <mat-option *ngFor="let impesp of impuestosEspeciales" [value]="impesp.impuesto_especial">
+                        {{impesp.descripcion_interna}} ({{impesp.porcentaje | number:'1.2-2'}}%)
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="fullWidth" *ngIf="articulo.impuesto_especial">
+                <input matInput type="number" placeholder="Cantidad gravable" name="cantidad_gravable" [(ngModel)]="articulo.cantidad_gravable">
+            </mat-form-field>
+            
+            <mat-form-field class="fullWidth" *ngIf="articulo.impuesto_especial">
+                <input matInput type="number" placeholder="Precio sugerido" name="precio_sugerido" [(ngModel)]="articulo.precio_sugerido">
+            </mat-form-field>
+
             <div class="row">
                 <div class="col m3 s3">
                     <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion" (change)="setEsRecetaOn()">Producción</mat-checkbox>

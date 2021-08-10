@@ -28,6 +28,8 @@ export interface Articulo {
     debaja?: number;
     fechabaja?: string;
     usuariobaja?: number;
+    cantidad_gravable?: number;
+    precio_sugerido?: number;
 }
 
 export interface ArticuloResponse {
@@ -52,6 +54,8 @@ export interface ArticuloResponse {
     debaja?: number;
     fechabaja?: string;
     usuariobaja?: number;
+    cantidad_gravable?: number;
+    precio_sugerido?: number;
 }
 
 export interface ArbolCategoriaGrupo {
@@ -113,6 +117,8 @@ export interface ProductoSelected {
     multiple?: number;
     combo?: number;
     esreceta?: number;
+    cantidad_gravable?: number;
+    precio_sugerido?: number;
 }
 
 export interface ArticuloCodigo {

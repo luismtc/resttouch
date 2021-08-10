@@ -29,7 +29,7 @@ export class FormImpuestoEspecialComponent implements OnInit {
   }
 
   resetImpuestoEspecial() {
-    this.impuestoEspecial = { impuesto_especial: null, descripcion: null, porcentaje: null };
+    this.impuestoEspecial = { impuesto_especial: null, descripcion: null, porcentaje: null, descripcion_interna: null, codigo_sat: null };
   }
 
   onSubmit() {

@@ -15,7 +15,7 @@ export class ImpuestoEspecialComponent implements OnInit {
   @ViewChild('lstImpuestoEspecial') lstImpuestoEspecial: ListaImpuestoEspecialComponent;
 
   constructor() {
-    this.impuestoEspecial = { impuesto_especial: null, descripcion: null, porcentaje: null };
+    this.impuestoEspecial = { impuesto_especial: null, descripcion: null, porcentaje: null, descripcion_interna: null, codigo_sat: null };
   }
 
   ngOnInit() {

@@ -27,6 +27,8 @@ class Articulo_model extends General_model {
 	public $debaja = 0;
 	public $fechabaja = null;
 	public $usuariobaja = null;
+	public $cantidad_gravable = 0.00;
+	public $precio_sugerido = 0.00;
 
 	public function __construct($id = "")
 	{
