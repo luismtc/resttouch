@@ -100,11 +100,11 @@ class Factura extends CI_Controller
 
 					if ((float)$art->cantidad_gravable > 0 && (float)$art->precio_sugerido > 0) 
 					{
-						$req['cantidad_gravable'] = $art->cantidad_gravable;
+						$req['cantidad_gravable'] = (float)$art->cantidad_gravable * (float)$req['cantidad'];
 						$req['precio_sugerido'] = $art->precio_sugerido;
 						$req['precio_sugerido_ext'] = $art->precio_sugerido;
-						$req['valor_impuesto_especial'] = (float)$art->cantidad_gravable * (float)$art->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
-						$req['valor_impuesto_especial_ext'] = (float)$art->cantidad_gravable * (float)$art->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
+						$req['valor_impuesto_especial'] = $req['cantidad_gravable'] * (float)$art->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
+						$req['valor_impuesto_especial_ext'] = $req['cantidad_gravable'] * (float)$art->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
 					} else {
 						$req['valor_impuesto_especial'] = $req['monto_base'] * ((float)$impuesto_especial->porcentaje / 100);
 						$req['valor_impuesto_especial_ext'] = $req['monto_base_ext'] * ((float)$impuesto_especial->porcentaje / 100);
