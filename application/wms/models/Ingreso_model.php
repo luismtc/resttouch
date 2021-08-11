@@ -144,7 +144,7 @@ class Ingreso_model extends General_Model
 						max(c.ingreso_detalle) ingreso_detalle, 
 						c.articulo, 
 						(c.precio_unitario / e.cantidad) as precio_unitario, 
-						a.fecha")
+						max(a.fecha) as fecha")
 			->join("bodega b", "a.bodega = b.bodega")
 			->join("ingreso_detalle c", "a.ingreso = c.ingreso")
 			->join("articulo d", "c.articulo = d.articulo")
