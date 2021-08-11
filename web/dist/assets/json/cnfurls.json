@@ -1,4 +1,0 @@
-{
-    "api": "http://localhost/resttouch",
-    "socketio": "http://localhost:8988"
-}
