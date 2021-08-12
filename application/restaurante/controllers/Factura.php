@@ -106,6 +106,18 @@ class Factura extends CI_Controller {
 										$det->precio_sugerido_ext = $art->precio_sugerido;
 										$det->valor_impuesto_especial = $det->cantidad_gravable * (float)$art->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
 										$det->valor_impuesto_especial_ext = $det->cantidad_gravable * (float)$art->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
+
+										$det->precio_unitario = (float)$det->precio_unitario - ((float)$det->valor_impuesto_especial / (float)$det->cantidad);
+										$det->precio_unitario_ext = $det->precio_unitario;
+
+										$det->total = $det->precio_unitario * (float)$det->cantidad;
+										$det->total_ext = $det->total;
+										$total = $det->total;
+										$total_ext = $det->total_ext;
+
+										$det->monto_base = $total / $pimpuesto;
+										$det->monto_base_ext = $total_ext / $pimpuesto;
+
 									} else {
 										$det->valor_impuesto_especial = $det->monto_base * ((float)$impuesto_especial->porcentaje / 100);
 										$det->valor_impuesto_especial_ext = $det->monto_base_ext * ((float)$impuesto_especial->porcentaje / 100);

@@ -391,12 +391,24 @@ class Api extends CI_Controller
 														$det->impuesto_especial = $impuesto_especial->impuesto_especial;
 														$det->porcentaje_impuesto_especial = $impuesto_especial->porcentaje;
 
-														if ((float)$artTmp->cantidad_gravable > 0 && (float)$artTmp->precio_sugerido > 0) {
+														if ((float)$artTmp->cantidad_gravable > 0 && (float)$artTmp->precio_sugerido > 0) {															
 															$det->cantidad_gravable = (float)$artTmp->cantidad_gravable * (float)$det->cantidad;
 															$det->precio_sugerido = $artTmp->precio_sugerido;
 															$det->precio_sugerido_ext = $artTmp->precio_sugerido;
 															$det->valor_impuesto_especial = $det->cantidad_gravable * (float)$artTmp->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
 															$det->valor_impuesto_especial_ext = $det->cantidad_gravable * (float)$artTmp->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
+																														
+															$det->precio_unitario = (float)$det->precio_unitario - ((float)$det->valor_impuesto_especial / (float)$det->cantidad);
+															$det->precio_unitario_ext = $det->precio_unitario;
+															
+															$det->total = $det->precio_unitario * (float)$det->cantidad;
+															$det->total_ext = $det->total;
+															$total = $det->total;
+															$total_ext = $det->total_ext;
+
+															$det->monto_base = $total / $pimpuesto;
+															$det->monto_base_ext = $total_ext / $pimpuesto;
+															
 														} else {
 															$det->valor_impuesto_especial = $det->monto_base * ((float)$impuesto_especial->porcentaje / 100);
 															$det->valor_impuesto_especial_ext = $det->monto_base_ext * ((float)$impuesto_especial->porcentaje / 100);
