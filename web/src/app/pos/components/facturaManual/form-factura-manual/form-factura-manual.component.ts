@@ -295,6 +295,8 @@ export class FormFacturaManualComponent implements OnInit {
           Impresora: this.impresoraPorDefecto
         };
 
+        console.log(`${JSON.stringify(datosAImprimir)}`);
+
         if (this.impresoraPorDefecto) {
           if (+this.impresoraPorDefecto.bluetooth === 0) {
             this.socket.emit(`print:factura`, `${JSON.stringify(datosAImprimir)}`);
