@@ -38,13 +38,13 @@ class Factura_model extends General_model
 	public function getDetalleImpuestos()
 	{
 		return $this->db
-					->select("b.descripcion, sum(a.valor_impuesto_especial) as total")
-					->from("detalle_factura a")
-					->join("impuesto_especial b", "b.impuesto_especial = a.impuesto_especial")
-					->where("a.factura", $this->getPK())
-					->group_by("b.impuesto_especial")
-					->get()
-					->result();
+			->select("b.descripcion, sum(a.valor_impuesto_especial) as total")
+			->from("detalle_factura a")
+			->join("impuesto_especial b", "b.impuesto_especial = a.impuesto_especial")
+			->where("a.factura", $this->getPK())
+			->group_by("b.impuesto_especial")
+			->get()
+			->result();
 	}
 
 	public function setDetalle($args, $id = "")
@@ -118,7 +118,7 @@ class Factura_model extends General_model
 					$detr->guardar($dato);
 				}
 			}
-			
+
 			if ($det->getPK() && $art->combo == 0 && $art->multiple == 0) {
 				$det->actualizarCantidadHijos();
 			}
@@ -183,10 +183,10 @@ class Factura_model extends General_model
 			$row->total = $redondeaMontos ? ($row->total - $row->descuento) : ($row->total_ext - $row->descuento_ext);
 			if ($row->impuesto_especial) {
 				$imp = $this->db
-							->where("impuesto_especial", $row->impuesto_especial)
-							->get("impuesto_especial")
-							->row();
-							
+					->where("impuesto_especial", $row->impuesto_especial)
+					->get("impuesto_especial")
+					->row();
+
 				$row->impuesto = $imp;
 			}
 			$datos[] = $row;
@@ -437,11 +437,10 @@ class Factura_model extends General_model
 		$doc->encabezado = (array) $enca;
 		$doc->detalle = (array) $det->cuenta;
 
-		if (!$raw) 
-		{
+		if (!$raw) {
 			$requestDOM = new DOMDocument('1.0');
 			$requestDOM->loadXML(arrayToXml((array)$doc, "<documento/>"));
-	
+
 			return $requestDOM->saveXML();
 		} else {
 			return $doc;
@@ -584,7 +583,7 @@ class Factura_model extends General_model
 			if ($row->impuesto_especial) {
 				$imp = $this->ImpuestoEspecial_model->buscar([
 					"impuesto_especial" => $row->impuesto_especial,
-					"_uno" =>true
+					"_uno" => true
 				]);
 
 				$impuesto = $this->crearElemento('dte:Impuesto');
@@ -599,15 +598,14 @@ class Factura_model extends General_model
 					$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
 				}
 
-				$row->total += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;				
-				
+				$row->total += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
+
 				$impuesto->appendChild($this->crearElemento('dte:MontoGravable', (isset($row->precio_sugerido) && (float)$row->precio_sugerido > 0 ? ($redondeaMontos ? $row->precio_sugerido : $row->precio_sugerido_ext) : $valorBase)));
-				
-				if (isset($row->cantidad_gravable) && (float)$row->cantidad_gravable > 0)
-				{
+
+				if (isset($row->cantidad_gravable) && (float)$row->cantidad_gravable > 0) {
 					$impuesto->appendChild($this->crearElemento('dte:CantidadUnidadesGravables', $row->cantidad_gravable));
 				}
-				
+
 				$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
 				$impuestos->appendChild($impuesto);
 				if (isset($impuestosEsp[$row->impuesto_especial])) {
@@ -753,11 +751,15 @@ class Factura_model extends General_model
 
 	public function enviar($args = array())
 	{
+		$secs = 600;
+		set_time_limit($secs + 30);
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->certificador->vinculo_firma);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); //Agregado el 15/08/2021 15:53.
+		curl_setopt($ch, CURLOPT_TIMEOUT, $secs); //Agregado el 15/08/2021 15:53.
 		$datos = array(
 			"llave" => $this->certificador->firma_llave,
 			"archivo" => base64_encode(html_entity_decode($this->xml->saveXML())),
@@ -768,7 +770,17 @@ class Factura_model extends General_model
 
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($datos));
 
-		$jsonFirma = json_decode(curl_exec($ch));
+		$respuesta = curl_exec($ch);
+
+		// $jsonFirma = json_decode(curl_exec($ch));
+		$jsonFirma = null;
+		$error_curl = '';
+		if ($respuesta === false) {
+			$error_curl = curl_error($ch);
+		} else {
+			$jsonFirma = json_decode($respuesta);
+		}
+
 		curl_close($ch);
 		# para imprimir errores
 
@@ -796,13 +808,23 @@ class Factura_model extends General_model
 					"identificador: " . $identificador
 				));
 
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); //Agregado el 15/08/2021 15:53.
+				curl_setopt($ch, CURLOPT_TIMEOUT, $secs); //Agregado el 15/08/2021 15:53.
+
 				$query = curl_exec($ch);
+
+				if ($query === false) {
+					if ($error_curl !== '') {
+						$error_curl .= '; ';
+					}
+					$error_curl = curl_error($ch);
+				}
 
 				curl_close($ch);
 
 				$res = json_decode($query);
 
-				if ($res->resultado) {
+				if (isset($res->resultado) && $res->resultado) {
 					if ($this->esAnulacion === 'S') {
 						$this->fel_uuid_anulacion = $res->uuid;
 					} else {
@@ -812,11 +834,13 @@ class Factura_model extends General_model
 					}
 
 					$this->guardar();
-				} else {
+				} else if (isset($res->descripcion_errores)) {
 					foreach ($res->descripcion_errores as $row) {
 						$error = explode('|', $row->mensaje_error);
 						$this->setMensaje($error[count($error) - 1]);
 					}
+				} else {
+					$this->setMensaje("No se obtuvo respuesta del certificador INFILE. Intente nuevamente, por favor. {$error_curl}");
 				}
 
 				return $res;
@@ -824,7 +848,7 @@ class Factura_model extends General_model
 				$this->setMensaje($jsonFirma->descripcion);
 			}
 		} else {
-			$this->setMensaje("Error al firmar documento. Intente nuevamente.");
+			$this->setMensaje("Error al firmar documento. Intente nuevamente. {$error_curl}");
 		}
 
 		return null;
@@ -882,7 +906,7 @@ class Factura_model extends General_model
 		);
 
 		$client = new SoapClient($link);
-		
+
 		$res = $client->RequestTransaction($datos);
 		$res = $res->RequestTransactionResult;
 
@@ -913,12 +937,12 @@ class Factura_model extends General_model
 					$this->numero_factura = $data->serial;
 					$this->serie_factura = $data->batch;
 					$this->fel_uuid = $data->uuid;
-				} 
+				}
 			} else if ($res->Response->Result == 1) {
 				if ($this->esAnulacion === 'N') {
 					$this->numero_factura = $res->Response->Identifier->Serial;
 					$this->serie_factura = $res->Response->Identifier->Batch;
-					$this->fel_uuid = $res->Response->Identifier->DocumentGUID;	
+					$this->fel_uuid = $res->Response->Identifier->DocumentGUID;
 				} else {
 					$this->fel_uuid_anulacion = $this->fel_uuid;
 				}
@@ -1025,7 +1049,7 @@ class Factura_model extends General_model
 			"Password" => $this->certificador->llave
 		);
 
-		$jsonToken = json_decode(post_request($link, json_encode($datos)));		
+		$jsonToken = json_decode(post_request($link, json_encode($datos)));
 
 		if (isset($jsonToken->Token)) {
 			$link = $this->certificador->vinculo_grafo . "&NIT=$nit&GUID=" . $this->fel_uuid;
@@ -1058,16 +1082,15 @@ class Factura_model extends General_model
 		);
 
 		$client = new SoapClient($link);
-		
+
 		$res = $client->RequestTransaction($datos);
 		$res = $res->RequestTransactionResult;
 		if ($res->Response->Result == 1) {
-			
+
 			return [
 				'documento' => $res->ResponseData->ResponseData3,
 				'tipo' => 'pdf'
 			];
-			
 		}
 	}
 
@@ -1104,9 +1127,9 @@ class Factura_model extends General_model
 	public function getRazonAnulacion()
 	{
 		return $this->db
-					->where("razon_anulacion", $this->razon_anulacion)
-					->get("razon_anulacion")
-					->row();
+			->where("razon_anulacion", $this->razon_anulacion)
+			->get("razon_anulacion")
+			->row();
 	}
 
 	public function setBitacoraFel($args = [])
@@ -1133,7 +1156,7 @@ class Factura_model extends General_model
 
 			if ((isset($json->resultado) && $json->resultado) || (isset($json->Codigo) && $json->Codigo == 1)) {
 				return $json;
-			} 
+			}
 		}
 
 		return null;
@@ -1241,11 +1264,11 @@ class Factura_model extends General_model
 			$this->db->where('a.fel_uuid IS NULL AND fel_uuid_anulacion IS NULL');
 		}
 
-		if(isset($args['_fdel'])) {
+		if (isset($args['_fdel'])) {
 			$this->db->where('a.fecha_factura >=', $args['_fdel']);
 		}
 
-		if(isset($args['_fal'])) {
+		if (isset($args['_fal'])) {
 			$this->db->where('a.fecha_factura <=', $args['_fal']);
 		}
 
@@ -1287,10 +1310,83 @@ class Factura_model extends General_model
 		$this->cargarSede();
 		$this->cargarCertificadorFel();
 		$this->procesar_factura($redondeaMontos);
-		
+
 		$funcion = $this->getCertificador()->metodo_factura;
 		$resp = $this->$funcion();
 		$this->setBitacoraFel(['resultado' => json_encode($resp)]);
+	}
+
+	public function enviarInfile($args = array())
+	{
+		$secs = 600;
+		set_time_limit($secs + 30);
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $this->certificador->vinculo_firma);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_ENCODING, '');
+		curl_setopt($ch, CURLOPT_MAXREDIRS, 10);
+		curl_setopt($ch, CURLOPT_TIMEOUT, $secs);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+		curl_setopt($ch, CURLOPT_POSTFIELDS, html_entity_decode($this->xml->saveXML()));
+
+		$prefijo = $this->esAnulacion === 'S' ? 'AN' : 'VT';
+		$identificador = "{$prefijo}-{$this->factura}";
+
+		curl_setopt(
+			$ch,
+			CURLOPT_HTTPHEADER,
+			array(
+				'Content-Type: application/xml',
+				"UsuarioFirma: {$this->certificador->usuario}",
+				"LlaveFirma: {$this->certificador->firma_llave}",
+				"UsuarioApi: {$this->certificador->usuario}",
+				"LlaveApi: {$this->certificador->llave}",
+				"identificador: {$identificador}"
+			)
+		);
+
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);		
+
+		$respuesta = curl_exec($ch);
+
+		// $jsonFirma = json_decode(curl_exec($ch));
+		$jsonFirma = null;
+		$error_curl = '';
+		if ($respuesta === false) {
+			$error_curl = curl_error($ch);
+		} else {
+			$jsonFirma = json_decode($respuesta);
+		}
+
+		curl_close($ch);
+
+		if (is_object($jsonFirma)) {
+			$res = $jsonFirma;
+			if (isset($res->resultado) && $res->resultado) {
+				if ($this->esAnulacion === 'S') {
+					$this->fel_uuid_anulacion = $res->uuid;
+				} else {
+					$this->numero_factura = $res->numero;
+					$this->serie_factura = $res->serie;
+					$this->fel_uuid = $res->uuid;
+				}
+
+				$this->guardar();
+			} else if (isset($res->descripcion_errores)) {
+				foreach ($res->descripcion_errores as $row) {
+					$error = explode('|', $row->mensaje_error);
+					$this->setMensaje($error[count($error) - 1]);
+				}
+			} else {
+				$this->setMensaje("No se obtuvo respuesta del certificador INFILE. Intente nuevamente, por favor. {$error_curl}");
+			}
+			return $res;
+		} else {
+			$this->setMensaje("Error al firmar documento. Intente nuevamente. {$error_curl}");
+		}
+		return null;
 	}
 }
 
