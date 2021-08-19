@@ -18,6 +18,7 @@ import { PropinaComponent } from './components/propina/propina/propina.component
 import { AutoconsultaComponent } from './components/reportes/autoconsulta/autoconsulta.component';
 import { CajacorteComponent } from './components/caja-corte/cajacorte/cajacorte.component';
 import { TranCocinaComponent } from './components/tran-cocina/tran-cocina.component';
+import { TranAnulaComandaComponent } from './components/tran-anula-comanda/tran-anula-comanda.component';
 
 const routes: Routes = [
   { path: 'mantareas', component: AreaComponent, canActivate: [AuthGuard] },
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'autoconsulta', component: AutoconsultaComponent, canActivate: [AuthGuard] },
   { path: 'cajacorte', component: CajacorteComponent, canActivate: [AuthGuard] },
   { path: 'trancocina', component: TranCocinaComponent, canActivate: [AuthGuard] },
+  { path: 'anulacomanda', component: TranAnulaComandaComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '/admin/dashboard', pathMatch: 'full' }
 ];
 

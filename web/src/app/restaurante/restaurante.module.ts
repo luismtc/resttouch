@@ -82,6 +82,7 @@ import { NuevaCuentaComponent } from './components/nueva-cuenta/nueva-cuenta.com
 import { DistribuirProductosCuentasComponent } from './components/distribuir-productos-cuentas/distribuir-productos-cuentas.component';
 import { AccionesComandaComponent } from './components/acciones-comanda/acciones-comanda.component';
 import { SeleccionaTurnoPrevioComponent } from './components/turno/selecciona-turno-previo/selecciona-turno-previo.component';
+import { TranAnulaComandaComponent } from './components/tran-anula-comanda/tran-anula-comanda.component';
 
 
 @NgModule({
@@ -95,7 +96,8 @@ import { SeleccionaTurnoPrevioComponent } from './components/turno/selecciona-tu
     ConfiguraMesaComponent, TranCocinaComponent, TranComandaAltComponent, NotasGeneralesComandaComponent, NuevaCuentaComponent,
     DistribuirProductosCuentasComponent,
     AccionesComandaComponent,
-    SeleccionaTurnoPrevioComponent
+    SeleccionaTurnoPrevioComponent,
+    TranAnulaComandaComponent
   ],
   imports: [
     CommonModule,

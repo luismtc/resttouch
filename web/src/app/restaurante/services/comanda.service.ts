@@ -153,7 +153,19 @@ export class ComandaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getComandasOnLine_Test(): any[] {
+  listaComandas(fltr: any = {}): Observable<any[]> {
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/lista_comandas?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  anularComanda(idComanda: number): Observable<any> {
+    return this.http.get<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_comanda/${idComanda}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  /*getComandasOnLine_Test(): any[] {
     const comandasOnLine: any[] = [
       {
         comanda: 37,
@@ -343,6 +355,6 @@ export class ComandaService {
       }
     ];
     return comandasOnLine;
-  }
+  }*/
 
 }
