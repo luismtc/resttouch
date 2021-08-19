@@ -30,21 +30,16 @@ class Categoria_model extends General_Model
 			->row();
 
 		if ($subcategorias) {
-			$this->db
-				->where("categoria_grupo IN({$subcategorias->subcategorias})")
-				->update('articulo', [
-					'debaja' => 1,
-					'fechabaja' => $this->fechabaja,
-					'usuariobaja' => $this->usuariobaja
-				]);
-
-			return $this->db
-				->where('categoria', $this->getPK())
-				->update('categoria_grupo', [
-					'debaja' => 1,
-					'fechabaja' => $this->fechabaja,
-					'usuariobaja' => $this->usuariobaja
-				]);
+			$this->load->model('Cgrupo_model');
+			$subcats = explode(',', $subcategorias->subcategorias);
+			foreach($subcats as $sc) {
+				$tmpSc = new Cgrupo_model($sc);
+				$tmpSc->dar_de_baja_articulos($this->usuariobaja);
+				$tmpSc->debaja = 1;
+				$tmpSc->fechabaja = $this->fechabaja;
+				$tmpSc->usuariobaja = $this->usuariobaja;
+				$tmpSc->guardar();
+			}			
 		}
 	}
 }

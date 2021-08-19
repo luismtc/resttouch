@@ -148,6 +148,10 @@ class Catalogo_model extends CI_Model {
 			$uno = true;
 		}
 
+		if (isset($args['debaja'])) {
+			$this->db->where('debaja', $args['debaja']);
+		}
+
 		$datos = [];
 
 		$tmp = $this->db
@@ -199,6 +203,12 @@ class Catalogo_model extends CI_Model {
 
 		if (!$activos) {
 			$this->db->where("a.debaja", 0);
+		}
+
+		if(isset($args['produccion']) && (int)$args['produccion'] === 1) {
+			$this->db->join('articulo_detalle d', 'a.articulo = d.receta');
+			$this->db->where('d.anulado', 0);
+			$this->db->group_by('a.articulo');
 		}
 
 		$qry = $this->db

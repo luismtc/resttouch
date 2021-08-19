@@ -144,7 +144,7 @@ class Cgrupo extends CI_Controller
 
 		if ($datos->exito)
 		{
-			$cgrupo->dar_de_baja_articulos();
+			$cgrupo->dar_de_baja_articulos($this->data->idusuario);
 			$datos->mensaje = 'Subcategoría dada de baja con éxito.';
 		} else {
 			$datos->mensaje = $cgrupo->getMensaje();

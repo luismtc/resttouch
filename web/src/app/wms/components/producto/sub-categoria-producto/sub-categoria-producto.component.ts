@@ -9,6 +9,7 @@ import { ArticuloService } from '../../../services/articulo.service';
 import { LocalstorageService } from '../../../../admin/services/localstorage.service';
 import { GLOBAL } from '../../../../shared/global';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { CheckPasswordComponent, ConfigCheckPasswordModel } from '../../../../shared/components/check-password/check-password.component';
 
 import { Bodega } from '../../../interfaces/bodega';
 import { BodegaService } from '../../../services/bodega.service';
@@ -31,6 +32,7 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
   public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public esMovil = false;
   public bodegas: Bodega[] = [];
+  public cargando = false;
 
   private endSubs = new Subscription();
 
@@ -82,10 +84,12 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
   loadSubCategorias = (idcategoria: number) => {
     this.resetCategoriaGrupo();
     this.categoriaGrupo.categoria = idcategoria;
+    this.cargando = true;
     this.endSubs.add(      
       this.articuloSrvc.getCategoriasGrupos({ categoria: +idcategoria, _activos: true }).subscribe(res => {
         this.categoriasGruposPadre = this.articuloSrvc.adaptCategoriaGrupoResponse(res);
-        this.categoriasGrupos = JSON.parse(JSON.stringify(this.categoriasGruposPadre));                        
+        this.categoriasGrupos = JSON.parse(JSON.stringify(this.categoriasGruposPadre)); 
+        this.cargando = false;                       
       })
     );
   }
@@ -106,6 +110,7 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
   }
 
   onSubmitSubCategoria = () => {
+    this.cargando = true;
     this.endSubs.add(      
       this.articuloSrvc.saveCategoriaGrupo(this.categoriaGrupo).subscribe(res => {
         if (res.exito) {
@@ -116,6 +121,7 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
           this.categoriaGrupo.categoria_grupo_grupo = null;
           this.snackBar.open(`ERROR: ${res.mensaje}`, 'Sub - Categoría', { duration: 5000 });
         }
+        this.cargando = false;
       })
     );
   }
@@ -129,12 +135,30 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
     this.loadSubCategorias(cat.categoria);
   }
 
+  darDeBajaChkPass = () => {
+    const dialogChkPass = this.dialog.open(CheckPasswordComponent, {
+      width: '40%',
+      disableClose: true,
+      data: new ConfigCheckPasswordModel(1)
+    });
+
+    this.endSubs.add(
+      dialogChkPass.afterClosed().subscribe(res => {          
+        if (res) {
+          this.darDeBaja();
+        } else {
+          this.snackBar.open('La contraseña no es correcta.', 'Sub-categoría', { duration: 7000 });
+        }        
+      })
+    );        
+  }
+
   darDeBaja = () => {
     const confirmRef = this.dialog.open(ConfirmDialogComponent, {
       maxWidth: '400px',
       data: new ConfirmDialogModel(
         this.categoriaGrupo.descripcion,
-        `Esto dará de baja la subcategoría y sus artículos en TODAS las listas. Ya no podrá usarlos. ¿Desea continuar?`,
+        `Esto dará de baja la subcategoría y sus artículos en TODOS los procesos y ya NO podrá usarlos. ¿Desea continuar?`,
         'Sí',
         'No'
       )
@@ -143,6 +167,7 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
     this.endSubs.add(      
       confirmRef.afterClosed().subscribe((conf: boolean) => {
         if (conf) {
+          this.cargando = true;
           this.endSubs.add(
             this.articuloSrvc.darDeBajaSubCategoria(+this.categoriaGrupo.categoria_grupo).subscribe(res => {
               if (res.exito && res.subcategoria) {
@@ -150,6 +175,7 @@ export class SubCategoriaProductoComponent implements OnInit, OnDestroy {
                 this.loadSubCategorias(+this.categoriaGrupo.categoria);
               }
               this.snackBar.open(`${res.exito ? '': 'ERROR:'} ${res.mensaje}`, 'Sub-categoría', { duration: 5000 });
+              this.cargando = false;
             })
           );
         }

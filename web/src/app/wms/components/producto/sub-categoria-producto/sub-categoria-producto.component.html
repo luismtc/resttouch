@@ -54,26 +54,27 @@
             </mat-form-field>
 
             <div align="end">
-                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="onSubmitSubCategoria()" [disabled]="!frmCategoriaGrupo.form.valid || +categoriaGrupo.debaja === 1">
+                <button mat-raised-button type="button" color="accent" class="btnAccion" (click)="onSubmitSubCategoria()" [disabled]="!frmCategoriaGrupo.form.valid || +categoriaGrupo.debaja === 1 || cargando">
                     Guardar
                 </button>
-                <button mat-raised-button type="button" color="warn" class="btnAccion" (click)="darDeBaja()" *ngIf="+categoriaGrupo.categoria_grupo > 0" [disabled]="+categoriaGrupo.debaja === 1">
+                <button mat-raised-button type="button" color="warn" class="btnAccion" (click)="darDeBajaChkPass()" *ngIf="+categoriaGrupo.categoria_grupo > 0" [disabled]="+categoriaGrupo.debaja === 1 || cargando">
                     Dar de baja
                 </button>
-                <button mat-raised-button type="button" color="warn" (click)="resetCategoriaGrupo()">
+                <button mat-raised-button type="button" color="warn" (click)="resetCategoriaGrupo()" [disabled]="cargando">
                     Cancelar
                 </button>
             </div>
         </form>
+        <app-cargando *ngIf="cargando"></app-cargando>
         <hr />
         <mat-chip-list>
-            <mat-chip color="accent" *ngFor="let cat of categorias" (click)="+cat.debaja === 0 && selectCategoria(cat)" selected>
+            <mat-chip color="accent" *ngFor="let cat of categorias" (click)="!cargando && +cat.debaja === 0 && selectCategoria(cat)" selected>
                 {{cat.descripcion}}
             </mat-chip>
         </mat-chip-list>
 
         <mat-chip-list>
-            <mat-chip color="warn" *ngFor="let catGrupo of categoriasGrupos" (click)="setCatGrp(catGrupo)" selected>
+            <mat-chip color="warn" *ngFor="let catGrupo of categoriasGrupos" (click)="!cargando && setCatGrp(catGrupo)" selected>
                 {{catGrupo.descripcion}}
             </mat-chip>
         </mat-chip-list>

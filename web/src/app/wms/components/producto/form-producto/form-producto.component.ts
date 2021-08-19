@@ -6,8 +6,9 @@ import { LocalstorageService } from '../../../../admin/services/localstorage.ser
 import { GLOBAL } from '../../../../shared/global';
 import { saveAs } from 'file-saver';
 
-import { Categoria } from '../../../interfaces/categoria';
-import { CategoriaGrupo, CategoriaGrupoResponse } from '../../../interfaces/categoria-grupo';
+// import { Categoria } from '../../../interfaces/categoria';
+// import { CategoriaGrupo, CategoriaGrupoResponse } from '../../../interfaces/categoria-grupo';
+import { CategoriaGrupoResponse } from '../../../interfaces/categoria-grupo';
 import { Articulo } from '../../../interfaces/articulo';
 import { ArticuloDetalle } from '../../../interfaces/articulo-detalle';
 import { ArticuloService } from '../../../services/articulo.service';
@@ -432,7 +433,7 @@ export class FormProductoComponent implements OnInit, OnDestroy {
       maxWidth: '400px',
       data: new ConfirmDialogModel(
         this.articulo.descripcion,
-        `Esto dará de baja el artículo en TODAS las listas. Ya no podrá usarlo. ¿Desea continuar?`,
+        `Esto hará que ya NO se pueda usar el artículo en ningún proceso. ¿Desea continuar?`,
         'Sí',
         'No'
       )
@@ -444,6 +445,7 @@ export class FormProductoComponent implements OnInit, OnDestroy {
           this.endSubs.add(
             this.articuloSrvc.darDeBajaArticulo(+this.articulo.articulo).subscribe(res => {
               if (res.exito && res.articulo) {
+                res.articulo.categoria_grupo = +res.articulo.categoria_grupo;
                 this.articulo = res.articulo;
               }
               this.snackBar.open(`${res.exito ? '': 'ERROR:'} ${res.mensaje}`, 'Artículo', { duration: 5000 });

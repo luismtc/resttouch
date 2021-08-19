@@ -89,7 +89,7 @@ class Articulo extends CI_Controller
 				$row->presentacion_reporte = $art->getPresentacionReporte();
 				$row->usuariobaja = !empty($row->usuariobaja) ? $this->Usuario_model->buscar(['usuario' => $row->usuariobaja, '_uno' => true]) : $row->usuariobaja;
 
-				if($row->usuariobaja && isset($row->usuariobaja->contrasenia)) {
+				if ($row->usuariobaja && isset($row->usuariobaja->contrasenia)) {
 					unset($row->usuariobaja->contrasenia);
 				}
 
@@ -108,7 +108,7 @@ class Articulo extends CI_Controller
 			$tmp->presentacion_reporte = $art->getPresentacionReporte();
 			$tmp->usuariobaja = !empty($tmp->usuariobaja) ? $this->Usuario_model->buscar(['usuario' => $tmp->usuariobaja, '_uno' => true]) : $tmp->usuariobaja;
 
-			if($tmp->usuariobaja && isset($tmp->usuariobaja->contrasenia)) {
+			if ($tmp->usuariobaja && isset($tmp->usuariobaja->contrasenia)) {
 				unset($tmp->usuariobaja->contrasenia);
 			}
 
@@ -129,7 +129,7 @@ class Articulo extends CI_Controller
 	}
 
 	public function buscar()
-	{		
+	{
 		$this->output->set_content_type("application/json")->set_output(json_encode($this->search_product($_GET)));
 	}
 
@@ -236,6 +236,7 @@ class Articulo extends CI_Controller
 				if (verDato($req, "articulo")) {
 					$tmp = $this->Articulo_model->buscar([
 						"articulo" => $req['articulo'],
+						'debaja' => 0,
 						"_uno" => true
 					]);
 					$articulos[] = $tmp;
@@ -299,7 +300,7 @@ class Articulo extends CI_Controller
 
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
-	
+
 	public function tiene_movimientos($id = 0)
 	{
 		$datos = new stdClass();
@@ -308,17 +309,19 @@ class Articulo extends CI_Controller
 			$art = new Articulo_model($id);
 			$datos->tiene_movimientos = $art->tiene_movimientos();
 			$datos->exito = true;
-			$datos->mensaje = 'El artículo '.($datos->tiene_movimientos ? 'SÍ' : 'NO'). ' tiene movimientos.';
+			$datos->mensaje = 'El artículo ' . ($datos->tiene_movimientos ? 'SÍ' : 'NO') . ' tiene movimientos.';
 		} else {
 			$datos->tiene_movimientos = null;
 			$datos->mensaje = 'Parámetros inválidos.';
-		}		
+		}
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
 
 	public function get_articulos_sedes_codigo()
 	{
-		if(!isset($_GET['sede'])) { $_GET['sede'] = []; }
+		if (!isset($_GET['sede'])) {
+			$_GET['sede'] = [];
+		}
 		$datos = $this->Articulo_model->get_lista_articulos_sede_codigo($_GET['sede']);
 		$this->output->set_content_type("application/json")->set_output(json_encode($datos));
 	}
@@ -340,16 +343,10 @@ class Articulo extends CI_Controller
 		$datos->exito = false;
 
 		$articulo = new Articulo_model($id);
-		$articulo->debaja = 1;
-		$articulo->usuariobaja = $this->data->idusuario;
-		$articulo->fechabaja = date('Y-m-d');
-		$datos->exito = $articulo->guardar();
 
-		$datos->mensaje = $datos->exito ? 'Artículo dado de baja con éxito.' : $articulo->getMensaje();
-		
-		$datos->articulo = $articulo;
-		
-		$this->output->set_output(json_encode($datos));		
+		$datos = $articulo->dar_de_baja($this->data->idusuario);		
+
+		$this->output->set_output(json_encode($datos));
 	}
 }
 

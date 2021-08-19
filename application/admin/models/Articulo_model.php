@@ -486,6 +486,10 @@ class Articulo_model extends General_model {
 			$this->db->where('c.sede', $args['sede']);
 		}
 
+		if(isset($args['debaja'])){
+			$this->db->where('a.debaja', $args['debaja']);
+		}
+
 		$tmp = $this->db
 					->select("a.*")
 					->from("articulo a")
@@ -630,7 +634,8 @@ class Articulo_model extends General_model {
 		$art = new Articulo_model();
 		$tmp = $this->buscarArticulo([
 			"sede" => $sede,
-			"codigo" => $this->codigo
+			"codigo" => $this->codigo,
+			'debaja' => 0
 		]);
 		if ($tmp) {
 			$art->cargar($tmp->articulo);
@@ -697,9 +702,11 @@ class Articulo_model extends General_model {
 			"cantidad_minima" => $this->cantidad_minima,
 			"cantidad_maxima" => $this->cantidad_maxima,
 			"rendimiento" => $this->rendimiento,
-			"costo" => $this->costo,
+			"costo" => 0,
 			"mostrar_inventario" => $this->mostrar_inventario,
-			"esreceta" => $this->esreceta
+			"esreceta" => $this->esreceta,
+			"cantidad_gravable" => $this->cantidad_gravable,
+			"precio_sugerido" => $this->precio_sugerido
 		];
 
 		$art->guardar($datos);
@@ -710,7 +717,8 @@ class Articulo_model extends General_model {
 		$receta = $this->getReceta();
 		$articulo = $this->buscarArticulo([
 			"sede" => $sede,
-			"codigo" => $this->codigo
+			"codigo" => $this->codigo,
+			'debaja' => 0
 		]);
 
 		if ($articulo) {
@@ -720,14 +728,16 @@ class Articulo_model extends General_model {
 			foreach ($receta as $row) {
 				$detalle = $this->buscarArticulo([
 					"sede" => $sede,
-					"codigo" => $row->articulo->codigo
+					"codigo" => $row->articulo->codigo,
+					'debaja' => 0
 				]);
 				if (!$detalle) {
 					$rec = new Articulo_model($row->articulo->articulo);
 					$rec->copiar($sede);
 					$detalle = $this->buscarArticulo([
 						"sede" => $sede,
-						"codigo" => $rec->codigo
+						"codigo" => $rec->codigo,
+						'debaja' => 0
 					]);
 				}
 
@@ -918,6 +928,48 @@ class Articulo_model extends General_model {
 			->order_by('a.descripcion, a.codigo')
 			->get('articulo a')->result();
 	}
+
+	public function dar_de_baja($idUsuarioBaja)
+	{
+		$this->load->model('Receta_model');
+		$id = $this->getPK();
+		$datos = new stdClass();
+		$datos->exito = false;	
+
+		// Dar de baja a los combos que lo tengan como detalle único o anularlo de los que tienen más cosas en el combo.
+		$detalles = $this->Receta_model->buscar(['articulo' => $id, 'anulado' => 0]);
+		foreach ($detalles as $det) {
+			$cmb = new Articulo_model($det->receta);
+			$esCombo = (int)$cmb->combo === 1;			
+			$opciones = $this->Receta_model->buscar(['receta' => $cmb->getPK(), 'anulado' => 0]);
+			if($opciones) {
+				$esUnicoDetalle = count($opciones) === 1;
+				if ($esUnicoDetalle && $esCombo) {
+					$cmb->mostrar_pos = 0;
+					$cmb->guardar();
+				}
+				foreach($opciones as $opc) {
+					if((int)$opc->articulo === (int)$this->getPK()){
+						$tmpOpc = new Receta_model($opc->articulo_detalle);
+						$tmpOpc->anulado = 1;
+						$tmpOpc->guardar();
+					}
+				}
+			}			
+		}
+
+		$this->debaja = 1;
+		$this->usuariobaja = $idUsuarioBaja;
+		$this->fechabaja = date('Y-m-d');
+		$datos->exito = $this->guardar();
+
+		$datos->mensaje = $datos->exito ? 'Artículo dado de baja con éxito.' : $this->getMensaje();
+
+		$datos->articulo = $this;
+
+		return $datos;
+	}
+
 
 }
 

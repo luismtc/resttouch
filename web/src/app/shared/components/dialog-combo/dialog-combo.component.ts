@@ -61,7 +61,7 @@ export class DialogComboComponent implements OnInit {
   }
 
   getArticulos = () => {
-    const fltr: any = { articulo: this.producto.id };
+    const fltr: any = { articulo: this.producto.id, debaja: 0 };
     this.articuloSvr.getArticuloCombo(fltr).subscribe((res) => {
       let multiple = 0;
       this.combo = res;

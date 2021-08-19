@@ -26,15 +26,15 @@ class Cgrupo_model extends General_model {
 		}
 	}
 
-	public function dar_de_baja_articulos()
+	public function dar_de_baja_articulos($idUsuarioBaja)
 	{
-		return $this->db
-			->where('categoria_grupo', $this->getPK())
-			->update('articulo', [
-				'debaja' => 1,
-				'fechabaja' => $this->fechabaja,
-				'usuariobaja' => $this->usuariobaja
-			]);
+		$this->load->model('Articulo_model');
+		$articulos = $this->Articulo_model->buscar(['categoria_grupo' => $this->getPK(), 'debaja' => 0]);
+		foreach($articulos as $art)
+		{
+			$tmpArt = new Articulo_model($art->articulo);
+			$tmpArt->dar_de_baja($idUsuarioBaja);
+		}		
 	}
 
 }
