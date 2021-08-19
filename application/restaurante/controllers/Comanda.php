@@ -1,18 +1,19 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Comanda extends CI_Controller {
+class Comanda extends CI_Controller
+{
 
 	public function __construct()
 	{
 		parent::__construct();
 		//$this->datos = [];
-		$this->load->add_package_path('application/facturacion');		
+		$this->load->add_package_path('application/facturacion');
 
 		$this->load->model([
-			"Comanda_model", 
-			"Dcomanda_model", 
-			"Cuenta_model", 
+			"Comanda_model",
+			"Dcomanda_model",
+			"Cuenta_model",
 			"Dcuenta_model",
 			"Usuario_model",
 			"Mesa_model",
@@ -34,7 +35,7 @@ class Comanda extends CI_Controller {
 		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
 
 		$this->output
-		->set_content_type("application/json", "UTF-8");
+			->set_content_type("application/json", "UTF-8");
 	}
 
 
@@ -57,24 +58,25 @@ class Comanda extends CI_Controller {
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
-	public function guardar_notas_generales($comanda) {
+	public function guardar_notas_generales($comanda)
+	{
 		$datos = ["exito" => false];
 		if ($this->input->method() == 'post') {
 			$req = json_decode(file_get_contents('php://input'), true);
-			if(isset($req['notas_generales'])) {
-				if(trim($req['notas_generales']) !== '') {
+			if (isset($req['notas_generales'])) {
+				if (trim($req['notas_generales']) !== '') {
 					$com = new Comanda_model($comanda);
 					$datos['exito'] = $com->guardar($req);
-					if($datos['exito']) {
+					if ($datos['exito']) {
 						$datos['mensaje'] = 'Notas generales actualizadas con éxito.';
 					} else {
 						$datos['mensaje'] = implode("<br>", $com->getMensaje());;
 					}
 				}
-			}						
+			}
 		}
 		$this->output->set_output(json_encode($datos));
 	}
@@ -95,26 +97,27 @@ class Comanda extends CI_Controller {
 
 		$datos = ["exito" => false];
 		$com = new Comanda_model($comanda);
-		if($com->cierra_estacion($comanda)) {
+		if ($com->cierra_estacion($comanda)) {
 			$datos['exito'] = true;
-			$datos['mensaje'] = "Datos actualizados con exito";			
+			$datos['mensaje'] = "Datos actualizados con exito";
 		} else {
 			$datos['mensaje'] = "No se pudo habilitar la comanda $comanda. Por favor comuníquese con el administrador del sistema.";
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
-	public function unir_cuentas($cuentaDe, $cuentaA) {
+	public function unir_cuentas($cuentaDe, $cuentaA)
+	{
 		$deCuenta = new Cuenta_model($cuentaDe);
 		$aCuenta = new Cuenta_model($cuentaA);
 		$datos = ['exito' => false];
-		if ($deCuenta->cerrada == 0) {			
+		if ($deCuenta->cerrada == 0) {
 			if ($aCuenta->cerrada == 0) {
-				$detOrigen = $deCuenta->getDetalle();				
+				$detOrigen = $deCuenta->getDetalle();
 				if (count($detOrigen) > 0) {
-					foreach($detOrigen as $do) {
+					foreach ($detOrigen as $do) {
 						$deCuenta->guardarDetalle(['cuenta_cuenta' => $cuentaA], $do->detalle_cuenta, true);
 					}
 					$datos['cuenta_origen'] = $deCuenta->guardarCuenta(['cerrada' => 1]);
@@ -132,7 +135,8 @@ class Comanda extends CI_Controller {
 		$this->output->set_output(json_encode($datos));
 	}
 
-	public function trasladar_mesa($comanda, $origen, $destino) {
+	public function trasladar_mesa($comanda, $origen, $destino)
+	{
 		$cmd = new Comanda_model($comanda);
 		$mesaOrigen = new Mesa_model($origen);
 		$mesaDestino = new Mesa_model($destino);
@@ -155,12 +159,11 @@ class Comanda extends CI_Controller {
 			if ($mesa->estatus == 2) {
 				if ($cuenta->cerrada == 0) {
 					$val = validarCantidades($req);
-					if($val['exito']){
+					if ($val['exito']) {
 						$comanda->guardarDetalleCombo($req, $cuenta->getPK());
 
 						$datos['exito'] = true;
-						$datos['comanda'] = $comanda->getComanda();	
-						
+						$datos['comanda'] = $comanda->getComanda();
 					} else {
 						$datos['mensaje'] = $val['mensaje'];
 					}
@@ -175,7 +178,7 @@ class Comanda extends CI_Controller {
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function guardar_detalle($com, $cuenta)
@@ -213,14 +216,14 @@ class Comanda extends CI_Controller {
 						if ($det) {
 							$cuenta->guardarDetalle([
 								'detalle_comanda' => $det->detalle_comanda
-							], $id);	
+							], $id);
 							$datos['exito'] = true;
 						} else {
-							$datos['exito'] = false;						
+							$datos['exito'] = false;
 						}
 
 						if ($datos['exito']) {
-							$datos['comanda'] = $comanda->getComanda();	
+							$datos['comanda'] = $comanda->getComanda();
 						} else {
 							$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
 						}
@@ -236,7 +239,7 @@ class Comanda extends CI_Controller {
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
 	public function distribuir_cuentas()
@@ -245,7 +248,7 @@ class Comanda extends CI_Controller {
 		$datos = ["exito" => false];
 
 		if ($this->input->method() == 'post') {
-			
+
 
 			foreach ($req as $row) {
 				$det = new Dcomanda_model($row['detalle_comanda']);
@@ -254,37 +257,37 @@ class Comanda extends CI_Controller {
 
 				if (!$datos['exito']) {
 					$datos['mensaje'] = implode("<br>", $det->getMensaje());
-				}	
-			}				
-			
+				}
+			}
+
 			if ($datos['exito']) {
 				$datos['mensaje'] = "Datos Actualizados con exito";
 			}
 
 			$datos['exito'] = true;
-
 		} else {
 			$datos['mensaje'] = "Parametros Invalidos";
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
-	public function guardar_notas_producto($dcomanda) {
+	public function guardar_notas_producto($dcomanda)
+	{
 		$datos = ["exito" => false];
 		if ($this->input->method() == 'post') {
 			$req = json_decode(file_get_contents('php://input'), true);
-			if(isset($req['notas'])) {
+			if (isset($req['notas'])) {
 				$dcom = new Dcomanda_model($dcomanda);
 				$req['notas'] = trim($req['notas']) !== '' ? trim($req['notas']) : null;
 				$datos['exito'] = $dcom->guardar($req);
-				if($datos['exito']) {
+				if ($datos['exito']) {
 					$datos['mensaje'] = 'Notas de producto actualizadas con éxito.';
 				} else {
 					$datos['mensaje'] = implode("<br>", $dcom->getMensaje());
 				}
-			}						
+			}
 		}
 		$this->output->set_output(json_encode($datos));
 	}
@@ -316,10 +319,10 @@ class Comanda extends CI_Controller {
 						if ($det) {
 							$cuenta->guardarDetalle([
 								'detalle_comanda' => $det->detalle_comanda
-							], $id);	
+							], $id);
 							$datos['exito'] = true;
 						} else {
-							$datos['exito'] = false;						
+							$datos['exito'] = false;
 						}
 					} else {
 						$datos['mensaje'] = "Producto no encontrado en restaurante, por favor comuníquese con el mesero de turno.";
@@ -328,12 +331,11 @@ class Comanda extends CI_Controller {
 
 				if ($datos['exito']) {
 					$datos['mensaje'] = "Productos agregados con éxito.";
-					$datos['comanda'] = $comanda->getComanda();	
-					$datos['mensaje'] = 'Detalle cuenta cargada correctamente.';	
+					$datos['comanda'] = $comanda->getComanda();
+					$datos['mensaje'] = 'Detalle cuenta cargada correctamente.';
 				} else {
 					$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
 				}
-
 			} else {
 				$datos['mensaje'] = "La cuenta ya esta cerrada";
 			}
@@ -342,19 +344,20 @@ class Comanda extends CI_Controller {
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
 
-	function get_comanda($mesa=''){
+	function get_comanda($mesa = '')
+	{
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
 
 		$datos = [];
 
-		if (empty($mesa)) {			
+		if (empty($mesa)) {
 			$tmp = $this->Comanda_model->getComandas([
-				'domicilio' => 1, 
+				'domicilio' => 1,
 				'sede' => $data->sede
 			]);
 
@@ -372,7 +375,7 @@ class Comanda extends CI_Controller {
 
 				$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
 				$datos->exito = true;
-			} else if($this->input->get('qr')) {
+			} else if ($this->input->get('qr')) {
 				$com = new Comanda_model();
 				$config = $this->Configuracion_model->buscar();
 				$mesero = get_configuracion($config, "RT_MESERO_POR_DEFECTO", 1);
@@ -396,15 +399,15 @@ class Comanda extends CI_Controller {
 					$updlst = json_decode(get_request('https://restouch.c807.com:8988/api/updlstareas', []));
 					$datos->msgws = $updlst;
 				}
-				
 			}
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
-	}	
+			->set_output(json_encode($datos));
+	}
 
-	public function get_comanda_cocina() {
+	public function get_comanda_cocina()
+	{
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
@@ -415,7 +418,7 @@ class Comanda extends CI_Controller {
 
 		$turno = $this->Turno_model->getTurno([
 			"sede" => $data->sede,
-			'abierto' => true, 
+			'abierto' => true,
 			"_uno" => true
 		]);
 
@@ -429,22 +432,22 @@ class Comanda extends CI_Controller {
 					$grupos = $this->Tipo_usuario_cgrupo_model->buscar([
 						"usuario_tipo" => $row->usuario_tipo->usuario_tipo,
 						"debaja" => 0
-					]);	
+					]);
 
 					$tmp = array_result($grupos, "categoria_grupo");
 
 					$cgrupo = array_merge($cgrupo, $tmp);
 				}
-				
+
 				$tmp = $this->Comanda_model->getComandas([
-					'sede' => $data->sede, 
+					'sede' => $data->sede,
 					'cocinado' => 0,
 					'categoria_grupo' => $cgrupo,
 					'order_by' => "fecha_impresion"
 				]);
 
 				$enProceso = $this->Comanda_model->getComandas([
-					'sede' => $data->sede, 
+					'sede' => $data->sede,
 					'cocinado' => 1,
 					'categoria_grupo' => $cgrupo,
 					'order_by' => "fecha_proceso"
@@ -453,7 +456,7 @@ class Comanda extends CI_Controller {
 				foreach ($tmp as $row) {
 					$comanda = new Comanda_model($row->comanda);
 					$datos['pendientes'][] = $comanda->getComanda([
-						"_usuario" => $data->idusuario, 
+						"_usuario" => $data->idusuario,
 						'cocinado' => 0,
 						'_numero' => $row->numero,
 						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
@@ -463,31 +466,32 @@ class Comanda extends CI_Controller {
 				foreach ($enProceso as $row) {
 					$comanda = new Comanda_model($row->comanda);
 					$datos['enproceso'][] = $comanda->getComanda([
-						"_usuario" => $data->idusuario, 
+						"_usuario" => $data->idusuario,
 						'cocinado' => 1,
 						'_numero' => $row->numero,
 						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
 					]);
-				}		
+				}
 			}
 		}
 
 		$this->output->set_output(json_encode($datos));
 	}
 
-	public function set_cocinado($idcomanda) {
+	public function set_cocinado($idcomanda)
+	{
 		$datos = ['exito' => true];
 		$errores = '';
 		$data = json_decode(file_get_contents('php://input'), true);
 		if (isset($data['tiempo'])) {
-			if ((int)$data['tiempo'] >= 0 && (int)$data['tiempo']<60) {
+			if ((int)$data['tiempo'] >= 0 && (int)$data['tiempo'] < 60) {
 				$com = new Comanda_model($idcomanda);
 				$detalle = $com->getDetalle([
 					'cocinado' => ((int)$data['estatus'] === 1 ? 0 : 1),
 					"numero" => $data['numero']
-				]);		
+				]);
 
-				foreach($detalle as $det) {
+				foreach ($detalle as $det) {
 					$ld = new Dcomanda_model($det->detalle_comanda);
 					$args = [
 						"cocinado" => $data['estatus']
@@ -495,7 +499,7 @@ class Comanda extends CI_Controller {
 
 					if ($data['estatus'] == 1) {
 						if ((int)$data['tiempo'] < 10) {
-							$data['tiempo'] = "0".$data['tiempo'];
+							$data['tiempo'] = "0" . $data['tiempo'];
 						}
 
 						if (isset($data['tiempo'])) {
@@ -503,27 +507,26 @@ class Comanda extends CI_Controller {
 						}
 
 						$args['fecha_proceso'] = Hoy(3);
-					} 
+					}
 
 					$exito = $ld->guardar($args);
 					if (!$exito) {
-						$datos['exito'] = false;				
+						$datos['exito'] = false;
 						if ($errores !== '') {
 							$errores .= '; ';
-						}				
+						}
 						$errores .= implode('; ', $ld->getMensaje());
 					}
 				}
 				$datos['mensaje'] = $datos['exito'] ? 'Datos actualizados con éxito.' : $errores;
 			} else {
-				$datos['mensaje'] = "El tiempo debe estar entre 1 y 59 minutos";	
+				$datos['mensaje'] = "El tiempo debe estar entre 1 y 59 minutos";
 			}
-
 		} else {
 			$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
 		}
-		
-		
+
+
 		$this->output->set_output(json_encode($datos));
 	}
 
@@ -532,9 +535,9 @@ class Comanda extends CI_Controller {
 		$cta = new Cuenta_model($idCta);
 		$com = new Comanda_model($cta->comanda);
 		$req = json_decode(file_get_contents('php://input'), true);
-		
+
 		$datos = [
-			'exito' => true, 
+			'exito' => true,
 			'mensaje' => 'Datos Actualizados con exito'
 		];
 
@@ -552,31 +555,30 @@ class Comanda extends CI_Controller {
 			$det = 0;
 			foreach ($datos['comanda']->cuentas as $cta) {
 				foreach ($cta->productos as $prod) {
-					$det+=1;
+					$det += 1;
 					if (isset($prod->detalle)) {
-						$det+=count($prod->detalle);
+						$det += count($prod->detalle);
 					}
 					if (!empty($prod->notas)) {
-						$det+=1;
+						$det += 1;
 					}
 				}
 			}
 		}
 
 		if ($pdf == 1) {
-				
+
 			$mpdf = new \Mpdf\Mpdf([
 				'mode' => 'utf-8',
 				'tempDir' => sys_get_temp_dir(), //produccion
-				'format' => [80,100+$det*2]
+				'format' => [80, 100 + $det * 2]
 			]);
 
 			$mpdf->WriteHTML($this->load->view('impresion/comanda', $datos, true));
 			$mpdf->Output("Detalle de Comandas.pdf", "D");
 		} else {
 			$this->output
-			->set_output(json_encode($datos));
-			
+				->set_output(json_encode($datos));
 		}
 	}
 
@@ -595,7 +597,7 @@ class Comanda extends CI_Controller {
 						$com = new Comanda_model($comanda->comanda);
 						$det = $com->getDetalle();
 						$cntConCantidad = 0;
-						foreach($det as $d) {
+						foreach ($det as $d) {
 							if ((float)$d->cantidad > 0 && (int)$d->detalle_comanda_id === 0) {
 								$cntConCantidad++;
 							}
@@ -622,14 +624,15 @@ class Comanda extends CI_Controller {
 		}
 
 		$this->output
-			 ->set_content_type('application/json')
-			 ->set_output(json_encode($res));
+			->set_content_type('application/json')
+			->set_output(json_encode($res));
 	}
 
-	public function validapwdgerenteturno() {
+	public function validapwdgerenteturno()
+	{
 		$res = ["exito" => false];
 		if ($this->input->method() == 'post') {
-			$req = json_decode(file_get_contents('php://input'), true);			
+			$req = json_decode(file_get_contents('php://input'), true);
 			$res['esgerente'] = $this->Usuario_model->validaPwdGerenteTurno($req['pwd'], $this->data->sede);
 			$res['exito'] = true;
 			$res['mensaje'] = 'Datos validados con éxito.';
@@ -640,7 +643,7 @@ class Comanda extends CI_Controller {
 	public function anular_pedido($comanda = null)
 	{
 		$datos = ["exito" => false];
-		
+
 		if ($this->input->method() == 'post') {
 			if ($comanda !== null) {
 				$com = new Comanda_model($comanda);
@@ -654,7 +657,7 @@ class Comanda extends CI_Controller {
 						"descripcion" => "Modificacion",
 						"_uno" => true
 					]);
-					
+
 					$comentario = "Anulación: El usuario {$usu->nombres} {$usu->apellidos} anuló la comanda {$comanda} Motivo: {$req['comentario']}";
 
 					$bitComanda->guardar([
@@ -673,7 +676,7 @@ class Comanda extends CI_Controller {
 							"fel_uuid" => "***PEDIDO CANCELADO***",
 							"fel_uuid_anulacion" => "***PEDIDO CANCELADO***"
 						]);
-						
+
 						$comentario = "Anulación: El usuario {$usu->nombres} {$usu->apellidos} anuló la factura {$fac->numero_factura} Serie {$fac->serie_factura} Motivo: {$req['comentario']}";
 
 						$bitFac->guardar([
@@ -688,7 +691,7 @@ class Comanda extends CI_Controller {
 						$datos['mensaje'] = "Datos actualizados con exito";
 					}
 				} else {
-					$datos['mensaje'] = "No existe ninguna comanda con este numero {$comanda}";	
+					$datos['mensaje'] = "No existe ninguna comanda con este numero {$comanda}";
 				}
 			} else {
 				$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
@@ -698,8 +701,70 @@ class Comanda extends CI_Controller {
 		}
 
 		$this->output
-		->set_output(json_encode($datos));
+			->set_output(json_encode($datos));
 	}
+
+	public function lista_comandas()
+	{
+		if (!isset($_GET['sede'])) {
+			$_GET['sede'] = $this->data->sede;
+		}
+		$datos = $this->Comanda_model->getComandas($_GET);
+
+		$datos = ordenar_array_objetos($datos, 'comanda', 1);
+
+		foreach ($datos as $comanda) {
+			unset($comanda->origen_datos);
+			$cmd = new Comanda_model($comanda->comanda);
+			$mesero = $this->Usuario_model->buscar(['usuario' => $comanda->mesero, '_uno' => true]);
+			$comanda->mesero = (object)[
+				'usuario' => $mesero->usuario,
+				'nombre' => $mesero->nombres,
+				'apellidos' => $mesero->apellidos,
+				'usrname' => $mesero->usrname
+			];
+			$comanda->detalle = $cmd->getDetalle();
+			$comanda->total = 0;
+			foreach($comanda->detalle as $det) {
+				$comanda->total += (float)$det->total;
+			}
+		}
+
+		$this->output->set_output(json_encode($datos));
+	}
+
+	public function anular_comanda($comanda)
+	{
+		$datos = new stdClass();
+		$datos->exito = false;
+		if($comanda) {
+			$cmd = new Comanda_model($comanda);			
+			$factura = $cmd->getFactura();
+			$tieneFactura = $factura && !empty($factura->fel_uuid) && empty($factura->fel_uuid_anulacion);			
+			if (!$tieneFactura) {				
+				$detComanda = $cmd->getDetalle();
+				foreach($detComanda as $det) {
+					$dc = new Dcomanda_model($det->detalle_comanda);
+					$dc->cantidad = 0;
+					$dc->total = 0;
+					$dc->guardar();
+				}
+				$cmd->notas_generales = "Comanda anulada el ".date('d/m/Y')." por el usuario {$this->data->usuario}.";
+				$cmd->estatus = 3;
+				$datos->exito = $cmd->guardar();
+				$datos->mensaje = $datos->exito ? "La comanda {$comanda} fue anulada con éxito." : $cmd->getMensaje();				
+			} else {
+				$datos->mensaje = "La comanda {$comanda} tiene la factura '{$factura->serie_factura}-{$factura->numero_factura}' vigente. Debe anular primero la factura.";
+			}
+		} else {
+			$datos->mensaje = 'Debe mandar el número de comanda para que sea anulada.';
+		}
+
+		$this->output->set_output(json_encode($datos));
+	}
+
+
+
 }
 
 /* End of file Comanda.php */

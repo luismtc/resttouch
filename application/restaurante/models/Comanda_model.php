@@ -373,6 +373,14 @@ class Comanda_model extends General_Model
 				->where('t.fin <= ', $args['fal']);
 		}
 
+		if(isset($args['turno'])) {
+			$this->db->where('t.turno', $args['turno']);
+		}
+
+		if(isset($args['estatus'])) {
+			$this->db->where('a.estatus', $args['estatus']);
+		}
+
 		$this->db
 			->select("a.comanda")
 			->from("comanda a")

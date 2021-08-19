@@ -117,6 +117,10 @@ $config['menu'] = [
 					1 => [
 						'nombre' => 'Replicar artículos a sedes',
 						'link' => '/wms/replicar_articulos_sedes'
+					],
+					2 => [
+						'nombre' => 'Anular comandas',
+						'link' => '/restaurante/anulacomanda'
 					]
 				]
 			]
