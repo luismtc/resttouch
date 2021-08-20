@@ -11,7 +11,8 @@ class Inicio
 			'/api/set_comanda',
 			'/api/guardar_comanda',
 			'/api/set_producto',
-			'/api/comanda'
+			'/api/comanda',
+			'/api/lista_comandas'
 		];
 		
 	}
