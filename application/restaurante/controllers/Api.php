@@ -24,11 +24,11 @@ class Api extends CI_Controller
 			"Factura_model",
 			"Dfactura_model",
 			"Cliente_model",
-			"Receta_model"
+			"Receta_model",
+			"Sede_model"
 		]);
 
-		$this->output
-			->set_content_type("application/json", "UTF-8");
+		$this->output->set_content_type("application/json", "UTF-8");
 	}
 
 	public function set_comanda()
@@ -372,7 +372,7 @@ class Api extends CI_Controller
 																$det->descuento_ext += $desc["descuento"];
 															}
 														}
-													}													
+													}
 
 													$det->precio_unitario = $det->precio;
 													$det->precio_unitario_ext = $det->precio;
@@ -391,16 +391,16 @@ class Api extends CI_Controller
 														$det->impuesto_especial = $impuesto_especial->impuesto_especial;
 														$det->porcentaje_impuesto_especial = $impuesto_especial->porcentaje;
 
-														if ((float)$artTmp->cantidad_gravable > 0 && (float)$artTmp->precio_sugerido > 0) {															
+														if ((float)$artTmp->cantidad_gravable > 0 && (float)$artTmp->precio_sugerido > 0) {
 															$det->cantidad_gravable = (float)$artTmp->cantidad_gravable * (float)$det->cantidad;
 															$det->precio_sugerido = $artTmp->precio_sugerido;
 															$det->precio_sugerido_ext = $artTmp->precio_sugerido;
 															$det->valor_impuesto_especial = $det->cantidad_gravable * (float)$artTmp->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
 															$det->valor_impuesto_especial_ext = $det->cantidad_gravable * (float)$artTmp->precio_sugerido * ((float)$impuesto_especial->porcentaje / 100);
-																														
+
 															$det->precio_unitario = (float)$det->precio_unitario - ((float)$det->valor_impuesto_especial / (float)$det->cantidad);
 															$det->precio_unitario_ext = $det->precio_unitario;
-															
+
 															$det->total = $det->precio_unitario * (float)$det->cantidad;
 															$det->total_ext = $det->total;
 															$total = $det->total;
@@ -408,7 +408,6 @@ class Api extends CI_Controller
 
 															$det->monto_base = $total / $pimpuesto;
 															$det->monto_base_ext = $total_ext / $pimpuesto;
-															
 														} else {
 															$det->valor_impuesto_especial = $det->monto_base * ((float)$impuesto_especial->porcentaje / 100);
 															$det->valor_impuesto_especial_ext = $det->monto_base_ext * ((float)$impuesto_especial->porcentaje / 100);
@@ -1266,6 +1265,80 @@ class Api extends CI_Controller
 		echo "<pre>";
 		print_r($nit);
 		echo "</pre>";
+	}
+
+	public function lista_comandas()
+	{
+		$datos = new stdClass();
+		$html = "<html><header><style> th, td { border: solid 1px black; }</style></header><body>";
+
+		if (isset($_GET['key'])) {
+			$llave = $_GET['key'];
+			unset($_GET['key']);
+			$datosDb = $this->Catalogo_model->getCredenciales(["llave" => $llave]);
+			$conn = [
+				'host' => $datosDb->db_hostname,
+				'user' => $datosDb->db_username,
+				'password' => $datosDb->db_password,
+				'database' => $datosDb->db_database
+			];
+			$db = conexion_db($conn);
+			$this->db = $this->load->database($db, true);
+
+			$datos->comandas = $this->Comanda_model->buscar($_GET);
+			foreach ($datos->comandas as $comanda) {
+				$cmd = new Comanda_model($comanda->comanda);
+				$comanda->sede = $this->Sede_model->buscar(['sede' => $comanda->sede, '_uno' => true]);
+				$usuario = $this->Usuario_model->buscar(['usuario' => $comanda->usuario, '_uno' => true]);
+				$comanda->usuario = (object)[
+					'usuario' => $usuario->usuario,
+					'nombres' => $usuario->nombres,
+					'apellidos' => $usuario->apellidos,
+					'usrname' => $usuario->usrname
+				];
+				$mesero = $this->Usuario_model->buscar(['usuario' => $comanda->mesero, '_uno' => true]);
+				$comanda->mesero = (object)[
+					'usuario' => $mesero->usuario,
+					'nombres' => $mesero->nombres,
+					'apellidos' => $mesero->apellidos,
+					'usrname' => $mesero->usrname
+				];
+				$detalle = $cmd->getDetalle();
+				$comanda->detalle = [];
+				foreach($detalle as $det) {
+					if ((float)$det->cantidad > 0 && (float)$det->total > 0) {
+						$comanda->detalle[] = $det;
+					}
+				}
+
+				$html .= "<h3>Sede: {$comanda->sede->nombre}</h3>";
+				$html .= "<h4>Comanda #{$comanda->comanda}<br/>";
+				$html .= "Mesero: {$comanda->mesero->nombres} {$comanda->mesero->apellidos} ({$comanda->mesero->usrname})</h4>";
+				$html .= "<table style='border: solid 1px black; border-collapse: collapse; width: 50%;'>";
+				$html.= "<caption><b>Detalle</b></caption><thead><tr>";
+				$html.= "<th>Cantidad</th><th style='text-align: left;'>Artículo</th><th style='text-align: right;'>Precio</th><th style='text-align: right;'>Total</th>";
+				$html.= "</tr></thead><tbody>";
+				$totComanda = 0;
+				foreach($comanda->detalle as $det) {
+					$html .= "<tr>";
+					$html .= "<td style='text-align: center;'>{$det->cantidad}</td>";
+					$html .= "<td>{$det->articulo->descripcion}</td>";
+					$html .= "<td style='text-align: right;'>".number_format((float)$det->precio, 2)."</td>";
+					$html .= "<td style='text-align: right;'>".number_format((float)$det->total, 2)."</td>";
+					$html .= "</tr>";
+					$totComanda += (float)$det->total;
+				}
+				$html .= "<tfoot><tr>";
+				$html .= "<td colspan='3' style='text-align: right;'><b>Total:</b></td>";
+				$html .= "<td style='text-align: right;'><b>".number_format($totComanda, 2)."</b></td>";
+				$html .= "</tr></tfoot>";
+				$html .= "</tbody></table>";
+			}
+		} else {
+			$html .= '<h3>Por favor incluya el UUID (key) del cliente.</h3>';
+		}
+		$html .= "</body></html>";
+		$this->output->set_content_type("text/html", "UTF-8")->set_output($html);
 	}
 }
 
