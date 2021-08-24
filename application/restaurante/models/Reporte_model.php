@@ -21,6 +21,8 @@ class Reporte_model extends CI_Model {
 
 		if (isset($args['detalle'])) {
 			$group .= ", a.factura";
+		} else {
+			$this->db->where('h.estatus <>', 3);
 		}
 
 		if (isset($args['_grupo']) && $args['_grupo'] == 2) {
@@ -75,7 +77,7 @@ class Reporte_model extends CI_Model {
 			ifnull(e.fecha_factura, date(h.fhcreacion)) as fecha_factura,
 			h.sede,
 			j.nombre as nsede,
-			ifnull(e.serie_factura, '') as serie_factura")
+			ifnull(e.serie_factura, '') as serie_factura, h.estatus as estatus_comanda")
 		->from("cuenta_forma_pago a")
 		->join("detalle_cuenta b", "a.cuenta = b.cuenta_cuenta")
 		->join("detalle_factura_detalle_cuenta c", "b.detalle_cuenta = c.detalle_cuenta", "left")
@@ -100,7 +102,7 @@ class Reporte_model extends CI_Model {
 				a.numero_factura,
 				a.sede,
 				nsede,
-				a.serie_factura
+				a.serie_factura, a.estatus_comanda
 			from ( {$tmp} ) a
 			group by a.forma_pago {$group}")
 			->result();

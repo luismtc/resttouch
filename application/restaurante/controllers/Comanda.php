@@ -738,23 +738,45 @@ class Comanda extends CI_Controller
 		$datos = new stdClass();
 		$datos->exito = false;
 		if($comanda) {
-			$cmd = new Comanda_model($comanda);			
-			$factura = $cmd->getFactura();
-			$tieneFactura = $factura && !empty($factura->fel_uuid) && empty($factura->fel_uuid_anulacion);			
-			if (!$tieneFactura) {				
-				$detComanda = $cmd->getDetalle();
-				foreach($detComanda as $det) {
-					$dc = new Dcomanda_model($det->detalle_comanda);
-					$dc->cantidad = 0;
-					$dc->total = 0;
-					$dc->guardar();
+			$req = json_decode(file_get_contents('php://input'));
+			if(isset($req->razon_anulacion) && (int)$req->razon_anulacion > 0)
+			{
+				$cmd = new Comanda_model($comanda);			
+				$factura = $cmd->getFactura();
+				$tieneFactura = $factura && !empty($factura->fel_uuid) && empty($factura->fel_uuid_anulacion);			
+				if (!$tieneFactura) {				
+					$detComanda = $cmd->getDetalle();
+					foreach($detComanda as $det) {
+						$dc = new Dcomanda_model($det->detalle_comanda);
+						$dc->cantidad = 0;
+						$dc->total = 0;
+						$dc->guardar();
+					}
+					$cmd->notas_generales = "Comanda anulada el ".date('d/m/Y')." por el usuario {$this->data->usuario}.";
+					$cmd->notas_generales .= isset($req->comentario_anulacion) && !empty($req->comentario_anulacion) ? (' '.trim($req->comentario_anulacion)) : '';
+					$cmd->estatus = 3;
+					$cmd->razon_anulacion = $req->razon_anulacion;
+
+					$bitComanda = new Bitacora_model();
+					$acc = $this->Accion_model->buscar([
+						"descripcion" => "Modificacion",
+						"_uno" => true
+					]);
+					$bitComanda->guardar([
+						"accion" => $acc->accion,
+						"usuario" => $this->data->idusuario,
+						"tabla" => "comanda",
+						"registro" => $cmd->getPK(),
+						"comentario" => $cmd->notas_generales
+					]);
+
+					$datos->exito = $cmd->guardar();
+					$datos->mensaje = $datos->exito ? "La comanda {$comanda} fue anulada con éxito." : $cmd->getMensaje();				
+				} else {
+					$datos->mensaje = "La comanda {$comanda} tiene la factura '{$factura->serie_factura}-{$factura->numero_factura}' vigente. Debe anular primero la factura.";
 				}
-				$cmd->notas_generales = "Comanda anulada el ".date('d/m/Y')." por el usuario {$this->data->usuario}.";
-				$cmd->estatus = 3;
-				$datos->exito = $cmd->guardar();
-				$datos->mensaje = $datos->exito ? "La comanda {$comanda} fue anulada con éxito." : $cmd->getMensaje();				
 			} else {
-				$datos->mensaje = "La comanda {$comanda} tiene la factura '{$factura->serie_factura}-{$factura->numero_factura}' vigente. Debe anular primero la factura.";
+				$datos->mensaje = 'Por favor seleccione una razón de anulación.';
 			}
 		} else {
 			$datos->mensaje = 'Debe mandar el número de comanda para que sea anulada.';

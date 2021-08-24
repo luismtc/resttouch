@@ -485,12 +485,12 @@
 						</tr>
 						<?php foreach ($row as $det): ?>
 							<tr>
-								<td><?php echo $det->serie_factura ?></td>
-								<td><?php echo $det->numero_factura ?></td>
-								<td><?php echo formatoFecha($det->fecha_factura, 2) ?></td>
-								<td><?php echo $det->documento ?></td>
-								<td class="text-right"><?php echo number_format($det->monto, 2) ?></td>
-								<td class="text-right"><?php echo number_format($det->propina, 2) ?></td>
+								<td <?php echo (int)$det->estatus_comanda === 3 ? "style='color: red;'" : '' ?> ><?php echo $det->serie_factura ?></td>
+								<td <?php echo (int)$det->estatus_comanda === 3 ? "style='color: red;'" : '' ?> ><?php echo $det->numero_factura ?></td>
+								<td <?php echo (int)$det->estatus_comanda === 3 ? "style='color: red;'" : '' ?> ><?php echo formatoFecha($det->fecha_factura, 2) ?></td>
+								<td <?php echo (int)$det->estatus_comanda === 3 ? "style='color: red;'" : '' ?> ><?php echo $det->documento ?></td>
+								<td <?php echo (int)$det->estatus_comanda === 3 ? "style='color: red;'" : '' ?> class="text-right"><?php echo number_format($det->monto, 2) ?></td>
+								<td <?php echo (int)$det->estatus_comanda === 3 ? "style='color: red;'" : '' ?> class="text-right"><?php echo number_format($det->propina, 2) ?></td>
 							</tr>
 						<?php endforeach ?>
 						<tr>

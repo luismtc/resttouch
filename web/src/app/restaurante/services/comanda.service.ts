@@ -159,9 +159,10 @@ export class ComandaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  anularComanda(idComanda: number): Observable<any> {
-    return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_comanda/${idComanda}`
+  anularComanda(params: any): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/anular_comanda/${params.comanda}`,
+      params
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 

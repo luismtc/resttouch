@@ -18,6 +18,7 @@ class Comanda_model extends General_Model
 	public $numero_pedido;
 	public $notas_generales;
 	public $orden_gk = null;
+	public $razon_anulacion = null;
 
 	public function __construct($id = '')
 	{

@@ -10,6 +10,8 @@ import { Turno } from '../../interfaces/turno';
 import { TurnoService } from '../../services/turno.service';
 import { ComandaService } from '../../services/comanda.service';
 import { UsuarioService } from '../../../admin/services/usuario.service';
+import { RazonAnulacion } from '../../../admin/interfaces/razon-anulacion';
+import { AnulacionService } from '../../../admin/services/anulacion.service';
 
 import { CheckPasswordComponent, ConfigCheckPasswordModel } from '../../../shared/components/check-password/check-password.component';
 import { ConfirmDialogComponent, ConfirmDialogModel } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -42,6 +44,7 @@ export class TranAnulaComandaComponent implements OnInit, OnDestroy {
   public columnsToDisplay = ['comanda', 'fhcreacion', 'mesero', 'total', 'acciones'];
   public expandedElement: any | null;
   public cargando = false;
+  public razonesAnulacion: RazonAnulacion[] = [];
 
   private endSubs = new Subscription();
 
@@ -51,12 +54,14 @@ export class TranAnulaComandaComponent implements OnInit, OnDestroy {
     private comandaSrvc: ComandaService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private usuarioSrvc: UsuarioService
+    private usuarioSrvc: UsuarioService,
+    private anulacionSrvc: AnulacionService
   ) { }
 
   ngOnInit(): void {
     this.loadRolesUsuario();
-    this.loadTurnos();    
+    this.loadTurnos();
+    this.loadRazonesAnulacion();
   }
 
   ngOnDestroy(): void {
@@ -81,6 +86,14 @@ export class TranAnulaComandaComponent implements OnInit, OnDestroy {
       this.comandaSrvc.listaComandas(this.params).subscribe((lst: any[]) => {
         this.lstComandas = lst;
         this.cargando = false;
+      })
+    );
+  }
+
+  loadRazonesAnulacion = () => {
+    this.endSubs.add(
+      this.anulacionSrvc.get().subscribe(res => {
+        this.razonesAnulacion = res;
       })
     );
   }
@@ -113,16 +126,44 @@ export class TranAnulaComandaComponent implements OnInit, OnDestroy {
         `Anular comanda #${idComanda}`,
         `Esto anulará la comanda. ¿Desea continuar?`,
         'Sí',
-        'No'
+        'No',
+        {
+          input: [
+            {
+              select: true,
+              label: 'Motivo',
+              datos: this.razonesAnulacion,
+              valor: null,
+              id: 'razon_anulacion',
+              descripcion: 'descripcion',
+              requerido: true
+            },
+            {
+              select: false,
+              label: 'Comentario',
+              valor: null,
+              id: 'comentario_anulacion',
+              requerido: false
+            }
+          ]
+        }
       )
     });
 
     this.endSubs.add(
-      confirmRef.afterClosed().subscribe((conf: boolean) => {
-        if (conf) {
+      confirmRef.afterClosed().subscribe((conf: any) => {
+        if (conf.resultado) {
           this.cargando = true;
+          const params = {
+            comanda: idComanda            
+          };
+          for (let i = 0; i < conf.config.input.length; i++) {
+            const input = conf.config.input[i];
+            params[input.id] = input.valor;
+          }
+          console.log(params); this.cargando = false; return;
           this.endSubs.add(
-            this.comandaSrvc.anularComanda(idComanda).subscribe(res => {
+            this.comandaSrvc.anularComanda(params).subscribe(res => {
               if (res.exito) {
                 this.snackBar.open(res.mensaje, 'Anular comanda', { duration: 3000 });
                 this.loadComandasDeTurno();
@@ -135,7 +176,7 @@ export class TranAnulaComandaComponent implements OnInit, OnDestroy {
         }
         this.cargando = false;
       })
-    );    
+    );
   }
 
 }
