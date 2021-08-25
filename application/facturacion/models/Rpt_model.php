@@ -69,7 +69,10 @@ class Rpt_model extends General_model
             ->row();
 
         if ($sinfactura && $sinfactura->comandas) {
-            $comandas .= ', ' . $sinfactura->comandas;
+            if ($comandas !== '') {
+                $comandas .= ', ';
+            }
+            $comandas .= $sinfactura->comandas;
         }
 
         return $comandas;

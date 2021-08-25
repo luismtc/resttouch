@@ -500,6 +500,9 @@ class Reporte extends CI_Controller {
 						$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('left');
 						$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
 						$hoja->getStyle("F{$fila}")->getNumberFormat()->setFormatCode('0.00');
+						if ((int)$det->estatus_comanda === 3) {
+							$hoja->getStyle("A{$fila}:F{$fila}")->applyFromArray(array('font' => array('color' => array('rgb' => 'FF0000'))));
+						}
 						$fila++;
 					}
 				}

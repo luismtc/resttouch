@@ -8,6 +8,7 @@ import { GLOBAL } from '../../../shared/global';
 import * as moment from 'moment';
 import { ConfirmDialogModel, ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { DesktopNotificationService } from '../../../shared/services/desktop-notification.service';
+import { NotasGeneralesComandaComponent } from '../notas-generales-comanda/notas-generales-comanda.component';
 
 import { ProductoSelected } from '../../../wms/interfaces/articulo';
 import { ComandaService } from '../../services/comanda.service';
@@ -31,7 +32,7 @@ import { OrdenGkService } from '../../../ghost-kitchen/services/orden-gk.service
 export class ComandaEnLineaComponent implements OnInit, OnDestroy {
 
   public dataSource: any[] = [];
-  public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'imprimir', 'cancelar', 'facturar'];
+  public columnsToDisplay = ['comanda', 'orden', 'fechahora', 'nombre', 'total', 'notas', 'imprimir', 'cancelar', 'facturar'];
   public expandedElement: any | null;
   public comandasEnLinea: any[] = [];
   // public intervalId: any;
@@ -379,6 +380,28 @@ export class ComandaEnLineaComponent implements OnInit, OnDestroy {
         this.socket.emit('gk:updEstatusOrden', `${JSON.stringify({ orden_gk: params.orden_gk, estatus_orden_gk: res.estatus_orden_gk, sede_uuid: this.ls.get(GLOBAL.usrTokenVar).sede_uuid })}`);
       } else {
         this.snackBar.open(`ERROR:${res.mensaje}`, 'Orden de Ghost Kitchen', { duration: 7000 });          
+      }
+    });
+  }
+
+  getNotasGenerales = (obj: any) => {
+    // console.log(obj); return;
+    const ngenDialog = this.dialog.open(NotasGeneralesComandaComponent, {
+      width: '50%',
+      data: { notasGenerales: (obj.notas_generales || '') }
+    });
+    ngenDialog.afterClosed().subscribe((notasGen: string) => {
+      if (notasGen !== null) {
+        if (notasGen.trim().length > 0) {
+          this.comandaSrvc.saveNotasGenerales({ comanda: obj.comanda, notas_generales: notasGen }).subscribe(res => {
+            if (res.exito) {
+              obj.notas_generales = notasGen;
+              this.snackBar.open(res.mensaje, 'Comanda', { duration: 3000 });
+            } else {
+              this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 7000 });
+            }
+          });
+        }
       }
     });
   }

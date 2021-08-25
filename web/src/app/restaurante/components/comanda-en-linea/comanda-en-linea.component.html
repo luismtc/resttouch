@@ -35,17 +35,15 @@
             <ng-container matColumnDef="total">
                 <th mat-header-cell *matHeaderCellDef>Total</th>
                 <td mat-cell *matCellDef="let element">{{element.total | number: '1.2-2'}}</td>
-            </ng-container>
-            <!--
-            <ng-container matColumnDef="pdf">
-                <th mat-header-cell *matHeaderCellDef style="width: 10%;">PDF</th>
+            </ng-container>            
+            <ng-container matColumnDef="notas">
+                <th mat-header-cell *matHeaderCellDef style="width: 10%;">Notas</th>
                 <td mat-cell *matCellDef="let element" class="tamanioAmigable" style="width: 10%;">
-                    <button mat-flat-button type="button" class="btnCelSize" color="accent" (click)="getPdf(element)">
-                        PDF
+                    <button mat-flat-button type="button" class="btnCelSize" color="accent" (click)="getNotasGenerales(element)">
+                        Notas
                     </button>
                 </td>
-            </ng-container>
-            -->
+            </ng-container>            
             <ng-container matColumnDef="imprimir">
                 <th mat-header-cell *matHeaderCellDef style="width: 10%;">Imprimir</th>
                 <td mat-cell *matCellDef="let element" class="tamanioAmigable" style="width: 10%;">
