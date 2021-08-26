@@ -175,6 +175,17 @@ class Cuenta_model extends General_Model {
 			$tmp = $det->getDescripcionCombo();
 			$row->detalle = explode("|", $tmp);
 			$row->monto_extra = $det->getPrecioExtraCombo();
+			$row->detalle_impresion = (int)$row->articulo->combo === 0 ? [] : $det->getDetalleImpresionCombo();
+			$row->impresoras_combo = [];
+
+			foreach($row->detalle_impresion as $detimp)
+			{				
+				if (!in_array($detimp->Impresora, $row->impresoras_combo)) {
+					$row->impresoras_combo[] = $detimp->Impresora;
+				}
+			}
+
+
 			if (isset($args['_categoria_grupo'])) {
 				if (is_array($args["_categoria_grupo"])) {
 					if (in_array($row->articulo->categoria_grupo, $args['_categoria_grupo'])) {

@@ -785,6 +785,14 @@ class Comanda extends CI_Controller
 		$this->output->set_output(json_encode($datos));
 	}
 
+	public function ver_comanda($idcomanda)
+	{
+		$com = new Comanda_model($idcomanda);
+		$datos = new stdClass();
+		$datos->comanda = $com->getComanda();
+		$this->output->set_output(json_encode($datos->comanda->cuentas));
+	}
+
 
 
 }

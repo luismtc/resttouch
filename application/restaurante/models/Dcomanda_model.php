@@ -201,6 +201,49 @@ class Dcomanda_model extends General_Model {
 
 		return true;
 	}
+
+	public function getDetalleImpresionCombo($path = '')
+	{
+		$this->load->model('Impresora_model');
+		if ($path !== '') {
+			$path .= '|';
+		}
+		$articulosImpresion = [];
+		$tmp = $this->db
+					->select("a.detalle_comanda, b.descripcion, a.cantidad, b.multiple, b.esreceta, b.articulo, c.impresora, a.notas")
+					->join("articulo b", "a.articulo = b.articulo")
+					->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+					->where("a.detalle_comanda_id", $this->getPK())
+					->get("detalle_comanda a")
+					->result();
+
+		foreach ($tmp as $row) {
+			$det = new Dcomanda_model($row->detalle_comanda);
+			if ($row->multiple == 0 && !empty($row->impresora)) {
+				$articulosImpresion[] = (object)[
+					'Id' => $row->articulo,
+					'Nombre' => $path.$row->descripcion,
+					'Cantidad' => $row->cantidad,
+					'Total' => 0,
+					'Notas' => !empty($row->notas) ? $row->notas : '',
+					'Detalle' => [],
+					'Impresora' => $this->Impresora_model->buscar(['impresora' => $row->impresora, '_uno' => true])
+				];
+				// $path = '';
+			} else if ((int)$row->multiple === 1) {				
+				$path .= $row->descripcion;
+			}
+
+			if ((int)$row->esreceta === 0) {
+				$articulosImpresion = array_merge($articulosImpresion, $det->getDetalleImpresionCombo($path));
+				$path = '';
+			}
+		}
+
+		return $articulosImpresion;
+	}
+
+
 }
 
 /* End of file Dcomanda_model.php */

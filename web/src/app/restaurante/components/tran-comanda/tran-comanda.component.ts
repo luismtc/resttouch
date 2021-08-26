@@ -190,7 +190,11 @@ export class TranComandaComponent implements OnInit {
           monto_extra: +p.monto_extra || 0.00,
           multiple: +p.articulo.multiple,
           combo: +p.articulo.combo,
-          esreceta: +p.articulo.esreceta || 0
+          esreceta: +p.articulo.esreceta || 0,
+          cantidad_gravable: +p.articulo.cantidad_gravable || 0.00,
+          precio_sugerido: +p.articulo.precio_sugerido || 0.00,
+          impresoras_combo: p.impresoras_combo || [],
+          detalle_impresion: p.detalle_impresion || []
         });
       }
     }
@@ -384,6 +388,48 @@ export class TranComandaComponent implements OnInit {
     }
   }
 
+  procesarProductosAImprimir = (prods: ProductoSelected[]) => {
+
+    var lista: ProductoSelected[] = [];
+
+    for(const p of prods) {
+
+      if (p.combo === 0) {
+        lista.push(p);
+      } else {
+        if (p.impresoras_combo.length > 0 && p.detalle_impresion.length > 0) {
+          for(const imp of p.impresoras_combo) {
+            const obj: ProductoSelected = {
+              id: p.id,
+              nombre: p.nombre,
+              cantidad: p.cantidad,
+              total: p.total,
+              notas: p.notas,
+              detalle: [],
+              impresora: imp,
+              impreso: p.impreso,
+              showInputNotas: p.showInputNotas,
+              itemListHeight: p.itemListHeight
+            }
+
+            for(const detimp of p.detalle_impresion) {
+              if (+imp.impresora === +detimp.Impresora.impresora) {
+                const detalles = detimp.Nombre.split('|');
+                detalles.forEach((d, i) => {                  
+                  obj.detalle.push(`${i != 1 ? '' : detimp.Cantidad} ${d}`.trim());                  
+                })
+              }
+            }
+            lista.push(obj);
+          }
+        } else {
+          lista.push(p);
+        }
+      }
+    }
+    return lista;
+  }
+
   printComanda(toPdf = false) {
     // solicitar numero de pedido
 
@@ -399,7 +445,10 @@ export class TranComandaComponent implements OnInit {
 
       const lstProductosDeCuenta = this.lstProductosSeleccionados.filter(p => +p.cuenta === +this.cuentaActiva.numero);
 
-      const lstProductosAImprimir = lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0);
+      const lstProductosAImprimir = this.procesarProductosAImprimir(lstProductosDeCuenta.filter(p => +p.impreso === 0 && +p.cantidad > 0));
+
+      // console.log(lstProductosAImprimir); return;
+
       if (lstProductosAImprimir.length > 0) {
         lstProductosDeCuenta.map(p => p.impreso = 1);
         this.noComanda = meu.comanda;
