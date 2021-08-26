@@ -327,6 +327,38 @@ EOT;
 
 		return [];
 	}
+
+	public function getIngresoDetalle($args=[])
+	{
+		if (isset($args["fdel"]) && isset($args["fal"])) {
+			$this->db
+				 ->where("b.fecha >=", $args["fdel"])
+				 ->where("b.fecha <=", $args["fal"]);
+		}
+
+		$tmp = $this->db
+					->select("
+						b.fecha, 
+						b.comentario as num_documento, 
+						c.descripcion as bodega,
+						d.descripcion as producto,
+						a.cantidad, 
+						a.precio_unitario as costo
+					")
+					->from("ingreso_detalle a")
+					->join("ingreso b", "b.ingreso = a.ingreso")
+					->join("bodega c", "c.bodega = b.bodega")
+					->join("articulo d", "d.articulo = a.articulo")
+					->order_by("b.fecha", "desc")
+					->order_by("b.comentario", "ASC")
+					->get();
+
+		if ($tmp->num_rows() > 0) {
+			return $tmp->result();
+		}
+
+		return [];
+	}
 }
 
 /* End of file Reporte_model.php */
