@@ -190,7 +190,13 @@ export class TranComanda {
                     detalle: p.detalle,
                     monto_extra: +p.monto_extra || 0.00,
                     multiple: +p.articulo.multiple,
-                    combo: +p.articulo.combo
+                    combo: +p.articulo.combo,
+                    esreceta: +p.articulo.esreceta || 0,
+                    cantidad_gravable: +p.articulo.cantidad_gravable || 0.00,
+                    precio_sugerido: +p.articulo.precio_sugerido || 0.00,
+                    impresoras_combo: p.impresoras_combo || [],
+                    detalle_impresion: p.detalle_impresion || [],
+                    cobro_mas_caro: p.cobro_mas_caro
                 });
             }
         }

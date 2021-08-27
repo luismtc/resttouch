@@ -158,7 +158,7 @@ $config['menu'] = [
 				'nombre' => 'Reportes',
 				'opciones' => [
 					1 => [
-						'nombre' => 'Ventas por categoría',
+						'nombre' => 'Ventas',
 						'link' => '/restaurante/rptvtascat'
 					],
 					2 => [

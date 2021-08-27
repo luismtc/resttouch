@@ -216,6 +216,23 @@ class Venta extends CI_Controller
 			$datos = ["grupo" => 2, "datos" => array_values($tmp)];
 		}
 
+		$cntCategorias = count($datos);
+		$quitar = [];
+		for ($i = 0; $i < $cntCategorias; $i++) {			
+			$cntSubcats = count($datos[$i]->subcategoria);
+			$sumaSubcats = 0;
+			for ($j = 0; $j < $cntSubcats; $j++) {
+				$sumaSubcats += (float)$datos[$i]->subcategoria[$j]['total'];
+			}
+			if ($sumaSubcats == 0) {
+				$quitar[] = $i;
+			}
+		}
+
+		foreach($quitar as $quita){
+			unset($datos[$quita]);
+		}
+
 		$data = [
 			"detalle" => $datos
 		];
@@ -400,12 +417,14 @@ class Venta extends CI_Controller
 			$vista = $this->load->view('reporte/venta/categoria', array_merge($data, $req), true);
 
 			$mpdf = new \Mpdf\Mpdf([
-				//'tempDir' => sys_get_temp_dir(), //Produccion
+				'tempDir' => sys_get_temp_dir(), //Produccion
 				'format' => 'Legal'
 			]);
 
 			$mpdf->WriteHTML($vista);
 			$mpdf->Output("Ventas_categoria.pdf", "D");
+
+			// $this->output->set_content_type("application/json")->set_output(json_encode(['data' => $data, 'req' => $req]));
 		}
 	}
 

@@ -89,6 +89,7 @@ class Rpt_model extends General_model
             ->where('b.combo', 1)
             ->where('a.cantidad >', 0)
             ->group_by('a.articulo, b.descripcion')
+            // ->get_compiled_select('detalle_comanda a');
             ->get('detalle_comanda a')
             ->result();
 
@@ -100,6 +101,7 @@ class Rpt_model extends General_model
             ->where('b.combo', 0)
             ->where('a.total', 0)
             ->group_by('a.articulo, b.descripcion')
+            // ->get_compiled_select('detalle_comanda a');
             ->get('detalle_comanda a')
             ->result();
 
@@ -112,6 +114,7 @@ class Rpt_model extends General_model
             ->where('a.total >', 0)
             ->where('a.cantidad >', 0)
             ->group_by('a.articulo, b.descripcion')
+            // ->get_compiled_select('detalle_comanda a');
             ->get('detalle_comanda a')
             ->result();
 

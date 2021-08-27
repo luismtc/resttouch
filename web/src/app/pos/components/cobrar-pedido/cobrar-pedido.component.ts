@@ -253,12 +253,13 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
                   this.endSubs.add(                
                     confirmRef.afterClosed().subscribe((confirma: boolean) => {
                       if (confirma) {
-                        this.printFactura(resFact.factura);
+                        this.printFactura(resFact.factura, res.cuenta);
+                      } else {
+                        this.dialogRef.close(res.cuenta);
                       }
                       this.resetFactReq();
                       this.snackBar.open('Factura', `${resFact.mensaje}`, { duration: 3000 });
                       this.facturando = false;
-                      this.dialogRef.close(res.cuenta);
                       this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
                     })
                   );
@@ -360,7 +361,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
     return suma;
   }
 
-  printFactura = (factura: any) => {
+  printFactura = (factura: any, cuenta: any = null) => {
     // console.log('FACTURA = ', factura);
     this.endSubs.add(      
       this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
@@ -404,6 +405,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
             `Imprimiendo factura ${res.factura.serie_factura}-${res.factura.numero_factura}`,
             'Impresión', { duration: 3000 }
           );
+          this.dialogRef.close(cuenta);
         } else {
           this.snackBar.open(`ERROR: ${res.mensaje}`, 'Impresión', { duration: 7000 });
         }
