@@ -125,7 +125,8 @@ export class FormProductoComponent implements OnInit, OnDestroy {
       mostrar_inventario: 0,
       debaja: 0,
       usuariobaja: null,
-      fechabaja: null
+      fechabaja: null,
+      cobro_mas_caro: 0
     };
     // this.categoria = null;
     // this.subcategoria = null;
@@ -354,6 +355,9 @@ export class FormProductoComponent implements OnInit, OnDestroy {
           if (res.exito) {
             this.loadRecetas();
             this.resetReceta();
+            if (res.precio && +res.precio > 0) {
+              this.articulo.precio = +res.precio;
+            }
           } else {
             this.snackBar.open(`ERROR: ${res.mensaje}`, 'Artículo', { duration: 3000 });
           }
@@ -404,6 +408,8 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     if (+this.articulo.combo === 1) {
       this.articulo.multiple = 0;
       this.articulo.esreceta = 0;
+    } else {
+      this.articulo.cobro_mas_caro = 0;
     }
   }
 
@@ -455,5 +461,10 @@ export class FormProductoComponent implements OnInit, OnDestroy {
       })
     );    
   }
-
+  
+  esCobroMasCaro = () => {
+    if (+this.articulo.cobro_mas_caro === 1) {
+      this.articulo.precio = 0;
+    }
+  }
 }

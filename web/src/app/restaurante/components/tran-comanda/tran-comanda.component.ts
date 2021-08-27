@@ -194,7 +194,8 @@ export class TranComandaComponent implements OnInit {
           cantidad_gravable: +p.articulo.cantidad_gravable || 0.00,
           precio_sugerido: +p.articulo.precio_sugerido || 0.00,
           impresoras_combo: p.impresoras_combo || [],
-          detalle_impresion: p.detalle_impresion || []
+          detalle_impresion: p.detalle_impresion || [],
+          cobro_mas_caro: p.cobro_mas_caro
         });
       }
     }
