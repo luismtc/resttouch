@@ -32,7 +32,7 @@
 			<?php $total = 0; ?>
 			<?php foreach ($lista as $row): ?>
 				<tr>
-					<td><?php echo formatoFecha($row->fecha, 1); ?></td>
+					<td><?php echo formatoFecha($row->fecha, 2); ?></td>
 					<td><?php echo $row->num_documento; ?></td>
 					<td><?php echo $row->bodega; ?> </td>
 					<td><?php echo $row->producto; ?></td>

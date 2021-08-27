@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 ini_set('memory_limit', -1);
+ini_set('pcre.backtrack_limit', 100000000);
 set_time_limit(0);
 
 class Ingreso extends CI_Controller {
@@ -14,27 +15,25 @@ class Ingreso extends CI_Controller {
 	public function generar_detalle()
 	{
 		$data["exito"] = false;
+		$_GET = json_decode(file_get_contents("php://input"), true);
 
-		$headerTipo = $this->input->get_request_header("Content-Type");
+		$headerTipo = $this->input->get_request_header("Accept");
 
 		if (!empty($headerTipo)) {
 			$tipo = str_replace("application/", "", strtolower($headerTipo));
 			$this->lista = $this->Reporte_model->getIngresoDetalle($_GET);
+			if (isset($_GET["_excel"])) {
 
-			switch ($tipo) {
-				case "json":
-					$data["exito"] = true;
-					$data["lista"] = $this->lista;
-					break;
-				case "pdf":
-					$this->generarPdf();
-					break;
-				case "xls":
+				if ($_GET["_excel"]) {
 					$this->generarXls();
-					break;
-				default;
-					$data["mensaje"] = "Formato de respuesta inválido.";
-					break;
+					die;
+				} else {
+					$this->generarPdf();
+					die;
+				}
+			}else{
+				$data["exito"] = true;
+				$data["lista"] = $this->lista;
 			}
 
 		} else {
@@ -100,7 +99,7 @@ class Ingreso extends CI_Controller {
 			$total = 0;
 			foreach($this->lista as $row) 
 			{
-				$hoja->setCellValue("A{$fila}", formatoFecha($row->fecha, 1));
+				$hoja->setCellValue("A{$fila}", formatoFecha($row->fecha, 2));
 				$hoja->setCellValue("B{$fila}", $row->num_documento);
 				$hoja->setCellValue("C{$fila}", $row->bodega);
 				$hoja->setCellValue("D{$fila}", $row->producto);
@@ -136,7 +135,6 @@ class Ingreso extends CI_Controller {
 
 		$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
 		$writer->save("php://output");
-		die;
 	}
 }
 

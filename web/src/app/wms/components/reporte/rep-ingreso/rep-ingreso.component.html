@@ -1,0 +1,49 @@
+<div class="row">
+	<div class="col m12 s12">
+		<mat-card class="mat-elevation-z4 fullWidth">
+			<mat-card-title>
+				<h4>Ingreso</h4>
+			</mat-card-title>
+			<mat-card-content>
+				<form novalidate>
+					<mat-form-field class="fullWidth">
+						<input matInput type="date" placeholder="Del" [(ngModel)]="params.fdel"
+						[ngModelOptions]="{standalone: true}" required>
+					</mat-form-field>
+
+					<mat-form-field class="fullWidth">
+						<input matInput type="date" placeholder="Al" [(ngModel)]="params.fal" [ngModelOptions]="{standalone: true}"
+						required>
+					</mat-form-field>
+
+					<mat-form-field class="fullWidth">
+						<mat-label>Bodega</mat-label>
+						<mat-select name="bodega" multiple [(ngModel)]="params.bodega" required>
+							<mat-option *ngFor="let bod of bodegas" [value]="bod.bodega">
+								{{bod.descripcion}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+
+					<mat-form-field class="fullWidth">
+						<mat-label>Artículo</mat-label>
+						<input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}"
+						placeholder="Artículo" matInput [matAutocomplete]="autoArticulos"
+						(keyup)="filtrarArticulos(txtArticuloSelected)" required>
+						<mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo">
+							<mat-option *ngFor="let a of filteredArticulos" [value]="a">
+							{{a.descripcion}} ({{a.codigo}})
+							</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
+
+					<div align="end">
+						<app-rpt-botones [configuracion]="configBotones" (excelClick)="onSubmit(1)" (pdfClick)="onSubmit()"
+						(resetParamsClick)="resetParams()"></app-rpt-botones>
+					</div>
+				</form>
+			<app-cargando *ngIf="cargando"></app-cargando>
+		</mat-card-content>
+	</mat-card>
+</div>
+</div>

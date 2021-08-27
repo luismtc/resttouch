@@ -336,6 +336,14 @@ EOT;
 				 ->where("b.fecha <=", $args["fal"]);
 		}
 
+		if (isset($args["bodega"])) {
+			$this->db->where_in("b.bodega", $args["bodega"]);
+		}
+
+		if (isset($args["articulo"])) {
+			$this->db->where_in("a.articulo", $args["articulo"]);
+		}
+
 		$tmp = $this->db
 					->select("
 						b.fecha, 
