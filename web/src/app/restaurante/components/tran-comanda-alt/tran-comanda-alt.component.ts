@@ -61,7 +61,7 @@ export class TranComandaAltComponent extends TranComanda implements OnInit, OnDe
   }
 
   ngOnDestroy() {
-    this.endSubs.unsubscribe();
+    // this.endSubs.unsubscribe();
   }
 
   setDatos = () => {

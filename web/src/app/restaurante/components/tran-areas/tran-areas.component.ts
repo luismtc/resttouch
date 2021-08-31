@@ -78,7 +78,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.endSubs.unsubscribe();
+    // this.endSubs.unsubscribe();
   }
 
   actualizar = () => {
