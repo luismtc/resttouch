@@ -18,7 +18,7 @@
 
 					<mat-form-field class="fullWidth">
 						<mat-label>Bodega</mat-label>
-						<mat-select name="bodega" multiple [(ngModel)]="params.bodega" required>
+						<mat-select name="bodega" multiple [(ngModel)]="params.bodega">
 							<mat-option *ngFor="let bod of bodegas" [value]="bod.bodega">
 								{{bod.descripcion}}
 							</mat-option>
@@ -29,13 +29,19 @@
 						<mat-label>Artículo</mat-label>
 						<input type="text" [(ngModel)]="txtArticuloSelected" [ngModelOptions]="{standalone: true}"
 						placeholder="Artículo" matInput [matAutocomplete]="autoArticulos"
-						(keyup)="filtrarArticulos(txtArticuloSelected)" required>
+						(keyup)="filtrarArticulos(txtArticuloSelected)">
 						<mat-autocomplete #autoArticulos="matAutocomplete" [displayWith]="displayArticulo">
 							<mat-option *ngFor="let a of filteredArticulos" [value]="a">
 							{{a.descripcion}} ({{a.codigo}})
 							</mat-option>
 						</mat-autocomplete>
 					</mat-form-field>
+
+
+
+					<mat-checkbox class="fullWidth btnAccion" name="ds" [(ngModel)]="params.ds">
+						Desviación estandar
+					</mat-checkbox>
 
 					<div align="end">
 						<app-rpt-botones [configuracion]="configBotones" (excelClick)="onSubmit(1)" (pdfClick)="onSubmit()"

@@ -330,36 +330,54 @@ EOT;
 
 	public function getIngresoDetalle($args=[])
 	{
-		if (isset($args["fdel"]) && isset($args["fal"])) {
+		if (isset($args->fdel) && isset($args->fal)) {
 			$this->db
-				 ->where("b.fecha >=", $args["fdel"])
-				 ->where("b.fecha <=", $args["fal"]);
+				 ->where("b.fecha >=", $args->fdel)
+				 ->where("b.fecha <=", $args->fal);
 		}
 
-		if (isset($args["bodega"])) {
-			$this->db->where_in("b.bodega", $args["bodega"]);
+		if (isset($args->bodega) && $args->bodega) {
+			$this->db->where_in("b.bodega", $args->bodega);
 		}
 
-		if (isset($args["articulo"])) {
-			$this->db->where_in("a.articulo", $args["articulo"]);
+		if (isset($args->articulo) && $args->articulo) {
+			$this->db->where_in("a.articulo", $args->articulo);
 		}
 
-		$tmp = $this->db
-					->select("
-						b.fecha, 
-						b.comentario as num_documento, 
-						c.descripcion as bodega,
-						d.descripcion as producto,
-						a.cantidad, 
-						a.precio_unitario as costo
-					")
-					->from("ingreso_detalle a")
-					->join("ingreso b", "b.ingreso = a.ingreso")
-					->join("bodega c", "c.bodega = b.bodega")
-					->join("articulo d", "d.articulo = a.articulo")
-					->order_by("b.fecha", "desc")
-					->order_by("b.comentario", "ASC")
-					->get();
+		if (isset($args->ds) && $args->ds) {
+			$this->db
+				 ->select("
+					sum(a.cantidad) as cantidad, 
+					avg(a.precio_unitario) as costo,
+					ifnull(stddev_samp(a.precio_unitario),0) as desviacion
+				 ");
+		} else {
+			$this->db
+				 ->select("
+					a.cantidad, 
+					a.precio_unitario as costo
+				 ");
+		}
+
+		$this->db
+				->select("
+					d.descripcion as producto,
+					b.fecha, 
+					b.comentario as num_documento, 
+					c.descripcion as bodega
+				")
+				->from("ingreso_detalle a")
+				->join("ingreso b", "b.ingreso = a.ingreso")
+				->join("bodega c", "c.bodega = b.bodega")
+				->join("articulo d", "d.articulo = a.articulo")
+				->order_by("b.fecha", "desc")
+				->order_by("b.comentario", "ASC");
+
+		if (isset($args->ds) && $args->ds) {
+			$this->db->group_by("a.articulo");
+		}
+		
+		$tmp = $this->db->get();
 
 		if ($tmp->num_rows() > 0) {
 			return $tmp->result();

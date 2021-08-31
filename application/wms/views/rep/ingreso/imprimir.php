@@ -17,7 +17,7 @@
 </head>
 <body>
 	<h3 class="text-center">Detalle de ingreso</h3>
-	<div class="text-center"><b>Del</b> <?php echo formatoFecha($args["fdel"], 2)?> <b>al</b> <?php echo formatoFecha($args["fal"], 2)?> </div>
+	<div class="text-center"><b>Del</b> <?php echo formatoFecha($args->fdel, 2)?> <b>al</b> <?php echo formatoFecha($args->fal, 2)?> </div>
 	<table class="tabla-contenido">
 		<tr>
 			<td class="titulo">Fecha</td>
@@ -25,9 +25,14 @@
 			<td class="titulo">Bodega </td>
 			<td class="titulo">Producto</td>
 			<td class="titulo">Cantidad</td>
-			<td class="titulo">Costo</td>
+			<td class="titulo">Costo <?php echo(isset($args->ds) && $args->ds) ? " promedio": "" ?></td>
 			<td class="titulo">Total</td>
+
+			<?php if (isset($args->ds) && $args->ds): ?>
+				<td class="titulo">Desviación Estandar</td>
+			<?php endif ?>
 		</tr>
+
 		<?php if ($lista): ?>
 			<?php $total = 0; ?>
 			<?php foreach ($lista as $row): ?>
@@ -39,6 +44,9 @@
 					<td class="text-right"><?php echo number_format($row->cantidad, 2); ?></td>
 					<td class="text-right"><?php echo number_format($row->costo, 2); ?></td>
 					<td class="text-right"><?php echo number_format($row->cantidad * $row->costo, 2); ?></td>
+					<?php if (isset($args->ds) && $args->ds): ?>
+						<td class="text-right"><?php echo number_format($row->desviacion, 2); ?></td>
+					<?php endif ?>
 				</tr>
 				<?php $total += $row->cantidad * $row->costo; ?>
 			<?php endforeach ?>
