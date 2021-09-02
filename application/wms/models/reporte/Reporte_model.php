@@ -344,34 +344,56 @@ EOT;
 			$this->db->where_in("a.articulo", $args->articulo);
 		}
 
-		if (isset($args->ds) && $args->ds) {
+		if (isset($args->tipo_ingreso) && $args->tipo_ingreso) {
+			$this->db->where_in("b.tipo_movimiento", $args->tipo_ingreso);
+		}
+
+		if ($args->reporte == 1) {
+			$this->db->order_by("e.razon_social", "asc");
+		} else if($args->reporte == 2) {
+			$this->db->order_by("d.descripcion", "asc");
+		}
+
+		if($args->reporte == 3) {
 			$this->db
 				 ->select("
-					sum(a.cantidad) as cantidad, 
-					avg(a.precio_unitario) as costo,
-					ifnull(stddev_samp(a.precio_unitario),0) as desviacion
-				 ");
+				 	f.descripcion as subcategoria,
+				 	g.descripcion as categoria,
+				 	a.articulo as producto,
+				 	a.precio_unitario as ultimo_costo,
+				 	avg(a.precio_unitario) as costo_promedio,
+				 	ifnull(stddev_samp(a.precio_unitario),0) as desviacion
+				 ")
+				 ->order_by("g.descripcion, f.descripcion, a.articulo")
+				 ->group_by("a.articulo");
+
+			if (isset($args->variacion) && $args->variacion) {
+				$this->db->having("ifnull(stddev_samp(a.precio_unitario),0) >= ", $args->variacion);
+			}
+
 		} else {
-			$this->db
-				 ->select("
-					a.cantidad, 
-					a.precio_unitario as costo
-				 ");
+			$this->db->select("
+				b.fecha, 
+				b.ingreso as num_documento, 
+				c.descripcion as bodega,
+				d.descripcion as producto,
+				a.cantidad, 
+				a.precio_unitario as costo,
+				e.razon_social as nproveedor
+			");
 		}
 
 		$this->db
-				->select("
-					d.descripcion as producto,
-					b.fecha, 
-					b.comentario as num_documento, 
-					c.descripcion as bodega
-				")
-				->from("ingreso_detalle a")
-				->join("ingreso b", "b.ingreso = a.ingreso")
-				->join("bodega c", "c.bodega = b.bodega")
-				->join("articulo d", "d.articulo = a.articulo")
-				->order_by("b.fecha", "desc")
-				->order_by("b.comentario", "ASC");
+			->from("ingreso_detalle a")
+			->join("ingreso b", "b.ingreso = a.ingreso")
+			->join("bodega c", "c.bodega = b.bodega")
+			->join("articulo d", "d.articulo = a.articulo")
+			->join("proveedor e", "e.proveedor = b.proveedor")
+			->join("categoria_grupo f", "f.categoria_grupo = d.categoria_grupo")
+			->join("categoria g", "g.categoria = f.categoria");
+
+		$this->db->order_by("b.fecha", "desc")
+				->order_by("b.ingreso", "desc");
 
 		if (isset($args->ds) && $args->ds) {
 			$this->db->group_by("a.articulo");

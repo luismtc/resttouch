@@ -7,6 +7,8 @@ import { Articulo, ArticuloCodigo } from '../../../interfaces/articulo';
 import { BodegaService } from '../../../services/bodega.service';
 import { ArticuloService } from '../../../services/articulo.service';
 import { ConfiguracionBotones } from '../../../../shared/interfaces/config-reportes';
+import { TipoMovimiento } from '../../../interfaces/tipo-movimiento';
+import { TipoMovimientoService } from '../../../services/tipo-movimiento.service';
 import { saveAs } from 'file-saver';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
@@ -29,6 +31,13 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
   public configBotones: ConfiguracionBotones = {
     showPdf: true, showHtml: false, showExcel: true
   };
+  public tiposMovimiento: TipoMovimiento[] = [];
+
+  public reportes = [
+    {id: 1, descripcion: "Por proveedor"},
+    {id: 2, descripcion: "Por producto"},
+    {id: 3, descripcion: "Variación de precio"}
+  ];
 
   private endSubs = new Subscription();
 
@@ -36,12 +45,14 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private pdfServicio: ReportePdfService,
     private bodegaSrvc: BodegaService,
-    private articuloSrvc: ArticuloService
+    private articuloSrvc: ArticuloService,
+    private tipoMovimientoSrvc: TipoMovimientoService,
   ) { }
 
   ngOnInit() {
     
     this.getBodega();
+    this.loadTiposMovimiento();
     this.getArticulo({
       ingreso: 1,
       _activos: 1
@@ -54,6 +65,14 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.endSubs.unsubscribe();
+  }
+
+  loadTiposMovimiento = () => {
+    this.tipoMovimientoSrvc.get({ ingreso: 1 }).subscribe(res => {
+      if (res) {
+        this.tiposMovimiento = res;
+      }
+    });
   }
 
   getBodega = (params: any = {}) => {
@@ -93,7 +112,8 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
     // console.log(this.params); return;
     if (
       this.params.fdel && moment(this.params.fdel).isValid() && 
-      this.params.fal && moment(this.params.fal).isValid()
+      this.params.fal && moment(this.params.fal).isValid() &&
+      this.params.reporte
     ) {
       this.params._excel = esExcel;
       this.cargando = true;
@@ -116,7 +136,10 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
   resetParams = () => {
     this.params = {
       fdel: moment().startOf('month').format(GLOBAL.dbDateFormat),
-      fal: moment().format(GLOBAL.dbDateFormat)
+      fal: moment().format(GLOBAL.dbDateFormat),
+      reporte: undefined,
+      tipo_ingreso: undefined,
+      variacion: undefined
     };
     this.txtArticuloSelected = undefined;
     this.filteredArticulos = [];

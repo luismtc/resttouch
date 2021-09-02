@@ -255,7 +255,7 @@ $config['menu'] = [
 						'nombre' => 'Inventario Valorizado',
 						'link' => '/wms/rptvalorizado'
 					],
-					3 => [
+					4 => [
 						'nombre' => 'Ingreso',
 						'link' => '/wms/rptingreso'
 					]

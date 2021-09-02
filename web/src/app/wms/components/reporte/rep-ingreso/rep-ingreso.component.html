@@ -7,6 +7,14 @@
 			<mat-card-content>
 				<form novalidate>
 					<mat-form-field class="fullWidth">
+						<mat-label>Reporte</mat-label>
+						<mat-select name="reporte" [(ngModel)]="params.reporte" required>
+							<mat-option *ngFor="let rep of reportes" [value]="rep.id">
+								{{ rep.descripcion }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
+					<mat-form-field class="fullWidth">
 						<input matInput type="date" placeholder="Del" [(ngModel)]="params.fdel"
 						[ngModelOptions]="{standalone: true}" required>
 					</mat-form-field>
@@ -37,11 +45,18 @@
 						</mat-autocomplete>
 					</mat-form-field>
 
+					<mat-form-field class="fullWidth">
+                        <mat-label>Tipo de ingreso</mat-label>
+                        <mat-select name="tipo_ingreso" multiple [(ngModel)]="params.tipo_ingreso">
+                            <mat-option *ngFor="let ti of tiposMovimiento" [value]="ti.tipo_movimiento">
+                                {{ti.descripcion}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
 
-
-					<mat-checkbox class="fullWidth btnAccion" name="ds" [(ngModel)]="params.ds">
-						Desviación estandar
-					</mat-checkbox>
+                    <mat-form-field class="fullWidth" *ngIf="params.reporte == 3">
+                        <input matInput type="number" step="0.00001" placeholder="Variacion" name="variacion" [(ngModel)]="params.variacion">
+                    </mat-form-field>
 
 					<div align="end">
 						<app-rpt-botones [configuracion]="configBotones" (excelClick)="onSubmit(1)" (pdfClick)="onSubmit()"
