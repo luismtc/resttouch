@@ -28,7 +28,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
 import { FilterPipe } from './pipes/filter.pipe';
-import { LOCALHOST, PROTOCOLO, ANFITRION } from './global';
+import { PROTOCOLO, ANFITRION } from './global';
 import { WindowComponent } from './components/window/window.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { RptFechasComponent } from './components/rpt-fechas/rpt-fechas.component';
@@ -41,7 +41,8 @@ import { DialogComboComponent } from './components/dialog-combo/dialog-combo.com
 import { DialogElminarProductoComponent } from './components/dialog-elminar-producto/dialog-elminar-producto.component';
 import { TruncarPipe } from './pipes/truncar.pipe';
 
-const config: SocketIoConfig = { url: `${PROTOCOLO}//${LOCALHOST.indexOf(ANFITRION) < 0 ? 'restouch.c807.com' : ANFITRION}:8988`, options: {} };
+const LOCAL_DEV_HOST = ['localhost', '127.0.0.1', '192.168.18.241'];
+const config: SocketIoConfig = { url: `${PROTOCOLO}//${LOCAL_DEV_HOST.indexOf(ANFITRION) < 0 ? 'restouch.c807.com' : ANFITRION}:8988`, options: {} };
 
 @NgModule({
   declarations: [

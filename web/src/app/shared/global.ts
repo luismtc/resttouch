@@ -1,4 +1,4 @@
-export const LOCALHOST = ['localhost', '127.0.0.1', '192.168.18.241'];
+const LOCALHOST = ['localhost', '127.0.0.1'];
 export const PROTOCOLO = window.location.protocol;
 export const ANFITRION = window.location.hostname;
 const urlBase = `${PROTOCOLO}//${ANFITRION}/${LOCALHOST.indexOf(ANFITRION) < 0 ? 'api' : 'resttouch'}`;
