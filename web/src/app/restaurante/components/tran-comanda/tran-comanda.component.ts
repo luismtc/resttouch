@@ -720,6 +720,7 @@ export class TranComandaComponent implements OnInit {
               if (resAC === 'closePanel') {
                 this.closeSideNavEv.emit();
               }
+              // this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
             }
           });
         } else {

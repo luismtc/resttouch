@@ -326,14 +326,14 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
     // console.log('PEDIDO = ', obj);
     this.endSubs.add(      
       this.comandaSrvc.enviarPedido(+this.data.mesaenuso.comanda, obj).subscribe(res => {
+        this.facturando = false;
+        // this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
         if (res.exito) {
           this.snackBar.open('Pedido', `#${res.pedido}. ${res.mensaje}`, { duration: 3000 });
           this.dialogRef.close('closePanel');
         } else {
           this.snackBar.open('Pedido', `ERROR: ${res.mensaje}`, { duration: 7000 });
         }
-        this.facturando = false;
-        this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
       })
     );
   }

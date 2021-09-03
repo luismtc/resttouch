@@ -142,6 +142,8 @@ if( ! function_exists('url_base')){
 	function url_base($url) {
 		if (in_array($_SERVER["HTTP_HOST"], ["localhost", "127.0.0.1"])) {
 			return base_url("resttouch/{$url}");
+		} else if (in_array($_SERVER["HTTP_HOST"], ["192.168.18.241"])) {
+			return ("http://192.168.18.241/api/{$url}");
 		}
 		
 		// return base_url($url);
