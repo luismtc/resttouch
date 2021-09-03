@@ -90,7 +90,10 @@ class Callcenter extends CI_Controller {
 									$updlst = json_decode(get_request('http://localhost:8988/api/updlstpedidos', []));
 									// $updlst = json_decode(get_request('http://192.168.18.241:8988/api/updlstpedidos', []));
 									// $updlst = json_decode(get_request('https://restouch.c807.com:8988/api/updlstpedidos', []));
-									$datos['msgws'] = $updlst;
+									$updmesas = json_decode(get_request('http://localhost:8988/api/updlstareas', []));
+									// $updmesas = json_decode(get_request('http://192.168.18.241:8988/api/updlstareas', []));
+									// $updmesas = json_decode(get_request('https://restouch.c807.com:8988/api/updlstareas', []));
+									$datos['msgws'] = [$updlst, $updmesas];
 								} else {
 									$datos['mensaje'] = $facturar->mensaje;
 								}

@@ -9,7 +9,7 @@ class Tipo_direccion_model extends General_model {
 	public function __construct($id = "")
 	{
 		parent::__construct();
-		$this->setTabla("telefono");
+		$this->setTabla("tipo_direccion");
 		if (!empty($id)) {
 			$this->cargar($id);
 		}
