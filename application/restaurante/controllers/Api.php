@@ -1285,6 +1285,14 @@ class Api extends CI_Controller
 			$db = conexion_db($conn);
 			$this->db = $this->load->database($db, true);
 
+			if (isset($_GET['_fdel'])) {
+                $_GET['_fdel'] = ['DATE(fhcreacion)' => $_GET['_fdel']];
+            }
+
+            if (isset($_GET['_fal'])) {
+                $_GET['_fal'] = ['DATE(fhcreacion)' => $_GET['_fal']];
+            }
+
 			$datos->comandas = $this->Comanda_model->buscar($_GET);
 			foreach ($datos->comandas as $comanda) {
 				$cmd = new Comanda_model($comanda->comanda);
@@ -1306,9 +1314,9 @@ class Api extends CI_Controller
 				$detalle = $cmd->getDetalle();
 				$comanda->detalle = [];
 				foreach($detalle as $det) {
-					if ((float)$det->cantidad > 0 && (float)$det->total > 0) {
+					// if ((float)$det->cantidad > 0 && (float)$det->total > 0) {
 						$comanda->detalle[] = $det;
-					}
+					// }
 				}
 
 				$html .= "<h3>Sede: {$comanda->sede->nombre}</h3>";
@@ -1322,7 +1330,18 @@ class Api extends CI_Controller
 				foreach($comanda->detalle as $det) {
 					$html .= "<tr>";
 					$html .= "<td style='text-align: center;'>{$det->cantidad}</td>";
-					$html .= "<td>{$det->articulo->descripcion}</td>";
+					$html .= "<td>";
+
+					if (empty($det->detalle_comanda_id)) {
+						$html .= '';
+					} else {
+						$html .= '&nbsp;&nbsp;&nbsp;';
+						if ((int)$det->articulo->multiple === 0) {
+							$html .= '&nbsp;&nbsp;&nbsp;';
+						}
+					}
+
+					$html .= "{$det->articulo->descripcion}</td>";
 					$html .= "<td style='text-align: right;'>".number_format((float)$det->precio, 2)."</td>";
 					$html .= "<td style='text-align: right;'>".number_format((float)$det->total, 2)."</td>";
 					$html .= "</tr>";
