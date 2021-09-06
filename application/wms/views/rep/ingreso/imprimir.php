@@ -13,6 +13,7 @@
 		.text-center {text-align: center;}
 		.tabla-contenido {font-size: 0.65em;}
 		.titulo {text-align: center; vertical-align: middle; background-color: #E5E5E5; font-weight: bold;}
+		.subtitulo {text-align: left; vertical-align: middle; background-color: #E5E5E5; font-weight: bold;}
 		.num { width: 14.28%; }
 	</style>
 </head>
@@ -52,14 +53,14 @@
 				<?php if ($categoria != $row->categoria): ?>
 					<?php $categoria = $row->categoria; ?>
 					<tr>
-						<td colspan="4" class="titulo text-center"><?php echo $categoria ?></td>
+						<td colspan="4" class="subtitulo"><?php echo $categoria ?></td>
 					</tr>
 				<?php endif; ?>
 
 				<?php if ($subcategoria != $row->subcategoria): ?>
 					<?php $subcategoria = $row->subcategoria; ?>
 					<tr>
-						<td colspan="4" class="text-left"><?php echo $subcategoria ?></td>
+						<td colspan="4" class="text-left"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $subcategoria ?></b></td>
 					</tr>
 				<?php endif; ?>
 

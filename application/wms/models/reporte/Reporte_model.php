@@ -348,6 +348,10 @@ EOT;
 			$this->db->where_in("b.tipo_movimiento", $args->tipo_ingreso);
 		}
 
+		if (isset($args->proveedor) && $args->proveedor) {
+			$this->db->where_in("e.proveedor", $args->proveedor);
+		}
+
 		if ($args->reporte == 1) {
 			$this->db->order_by("e.razon_social", "asc");
 		} else if($args->reporte == 2) {
@@ -359,7 +363,7 @@ EOT;
 				 ->select("
 				 	f.descripcion as subcategoria,
 				 	g.descripcion as categoria,
-				 	a.articulo as producto,
+				 	d.descripcion as producto,
 				 	a.precio_unitario as ultimo_costo,
 				 	avg(a.precio_unitario) as costo_promedio,
 				 	ifnull(stddev_samp(a.precio_unitario),0) as desviacion
@@ -392,10 +396,10 @@ EOT;
 			->join("categoria_grupo f", "f.categoria_grupo = d.categoria_grupo")
 			->join("categoria g", "g.categoria = f.categoria");
 
-		$this->db->order_by("b.fecha", "desc")
+		$this->db->order_by("b.fecha", "asc")
 				->order_by("b.ingreso", "desc");
 
-		if (isset($args->ds) && $args->ds) {
+		if ($args->reporte == 3) {
 			$this->db->group_by("a.articulo");
 		}
 		

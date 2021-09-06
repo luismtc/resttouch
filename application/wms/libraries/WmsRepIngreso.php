@@ -131,7 +131,7 @@ class WmsRepIngreso
 					$categoria = $row->categoria;
 					$hoja->mergeCells("A{$fila}:D{$fila}");
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
-					$hoja->getStyle("A{$fila}:D{$fila}")->getAlignment()->setHorizontal("center");
+					$hoja->getStyle("A{$fila}:D{$fila}")->getAlignment()->setHorizontal("left");
 					$hoja->setCellValue("A{$fila}", $categoria);
 					$fila++;
 				}
@@ -141,7 +141,7 @@ class WmsRepIngreso
 					$hoja->mergeCells("A{$fila}:D{$fila}");
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("A{$fila}:D{$fila}")->getAlignment()->setHorizontal("left");
-					$hoja->setCellValue("A{$fila}", $subcategoria);
+					$hoja->setCellValue("A{$fila}", "      ".$subcategoria);
 					$fila++;
 				}
 

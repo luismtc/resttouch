@@ -13,6 +13,8 @@ import { saveAs } from 'file-saver';
 import { GLOBAL } from '../../../../shared/global';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { Proveedor } from '../../../interfaces/proveedor';
+import { ProveedorService } from '../../../services/proveedor.service';
 
 @Component({
   selector: 'app-rep-ingreso',
@@ -40,6 +42,9 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
   ];
 
   private endSubs = new Subscription();
+  public proveedores: Proveedor[] = [];
+  public filteredProveedores: Proveedor[] = [];
+  public txtProveedorSelected: (Proveedor | string) = undefined;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -47,12 +52,14 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
     private tipoMovimientoSrvc: TipoMovimientoService,
+    private proveedorSrvc: ProveedorService
   ) { }
 
   ngOnInit() {
     
     this.getBodega();
     this.loadTiposMovimiento();
+    this.loadProveedores();
     this.getArticulo({
       ingreso: 1,
       _activos: 1
@@ -91,7 +98,16 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
     );
   }
 
+  loadProveedores = () => {
+    this.proveedorSrvc.get().subscribe(res => {
+      if (res) {
+        this.proveedores = res;
+      }
+    });
+  }
+
   filtrarArticulos = (value: (Articulo | string)) => {
+    this.params.articulo = undefined
     if (value && (typeof value === 'string')) {
       const filterValue = value.toLowerCase();
       this.filteredArticulos = this.articulos.filter(a => a.descripcion.toLowerCase().includes(filterValue));
@@ -107,6 +123,27 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
     }
     return undefined;
   }
+
+  filtrarProveedores = (value: (Proveedor | string)) => {
+    this.params.proveedor = undefined
+    if (value && (typeof value === 'string')) {
+      const filterValue = value.toLowerCase();
+      this.filteredProveedores =
+        this.proveedores.filter(a => a.razon_social.toLowerCase().includes(filterValue) || a.nit.toLowerCase().includes(filterValue));
+    } else {
+      this.filteredProveedores = this.proveedores;
+    }
+  }
+
+  displayProveedor = (p: Proveedor) => {
+    if (p) {
+      this.params.proveedor = p.proveedor;
+      return `(${p.nit}) ${p.razon_social}`;
+    }
+    return undefined;
+  }
+
+  setProveedor = (idProveedor: number) => this.txtProveedorSelected = this.proveedores.find(p => +p.proveedor === idProveedor);
 
   onSubmit(esExcel = 0) {
     // console.log(this.params); return;
