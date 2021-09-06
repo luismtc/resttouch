@@ -187,7 +187,7 @@ class WmsRepIngreso
 				$t = $row->producto;
 		
 				if ($this->args->reporte == 2) {
-					$t = $row->producto;
+					$t = $row->nproveedor;
 				}
 
 				$hoja->setCellValue("D{$fila}", $t);

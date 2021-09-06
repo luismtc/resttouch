@@ -52,14 +52,14 @@
 				<?php if ($categoria != $row->categoria): ?>
 					<?php $categoria = $row->categoria; ?>
 					<tr>
-						<td colspan="100%" class="titulo text-center"><?php echo $categoria ?></td>
+						<td colspan="4" class="titulo text-center"><?php echo $categoria ?></td>
 					</tr>
 				<?php endif; ?>
 
 				<?php if ($subcategoria != $row->subcategoria): ?>
 					<?php $subcategoria = $row->subcategoria; ?>
 					<tr>
-						<td colspan="100%" class="text-left"><?php echo $subcategoria ?></td>
+						<td colspan="4" class="text-left"><?php echo $subcategoria ?></td>
 					</tr>
 				<?php endif; ?>
 
@@ -78,7 +78,7 @@
 					<?php if ($row->nproveedor != $proveedor): ?>
 						<?php $proveedor = $row->nproveedor; ?>
 						<tr>
-							<td colspan="100%" class="titulo text-left"><?php echo $proveedor ?></td>
+							<td colspan="6" class="titulo text-left"><?php echo $proveedor ?></td>
 						</tr>
 					<?php endif ?>
 				<?php endif ?>
@@ -86,7 +86,7 @@
 					<?php if ($row->producto != $producto): ?>
 						<?php $producto = $row->producto; ?>
 						<tr>
-							<td colspan="100%" class="titulo text-left"><?php echo $producto ?></td>
+							<td colspan="6" class="titulo text-left"><?php echo $producto ?></td>
 						</tr>
 					<?php endif ?>
 				<?php endif ?>
@@ -98,7 +98,7 @@
 						$val = $row->producto;
 				
 						if ($args->reporte == 2) {
-							$val = $row->producto;
+							$val = $row->nproveedor;
 						}
 					?>
 					<td><?php echo $val; ?></td>
