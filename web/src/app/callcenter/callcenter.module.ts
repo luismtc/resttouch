@@ -33,10 +33,13 @@ import { MatBadgeModule } from '@angular/material/badge';
 
 import { CallcenterRoutingModule } from './callcenter-routing.module';
 import { PideTelefonoDialogComponent } from './components/pide-telefono-dialog/pide-telefono-dialog.component';
+import { TipoDireccionComponent } from './components/tipo-direccion/tipo-direccion/tipo-direccion.component';
+import { ListaTipoDireccionComponent } from './components/tipo-direccion/lista-tipo-direccion/lista-tipo-direccion.component';
+import { FormTipoDireccionComponent } from './components/tipo-direccion/form-tipo-direccion/form-tipo-direccion.component';
 
 
 @NgModule({
-  declarations: [PideTelefonoDialogComponent],
+  declarations: [PideTelefonoDialogComponent, TipoDireccionComponent, ListaTipoDireccionComponent, FormTipoDireccionComponent],
   imports: [
     CommonModule,
     CallcenterRoutingModule,

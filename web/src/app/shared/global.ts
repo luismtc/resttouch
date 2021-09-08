@@ -21,6 +21,7 @@ export const GLOBAL = {
     urlWms: `${urlBase}/wms.php`,
     urlFacturacion: `${urlBase}/facturacion.php`,
     urlGhostKitchen: `${urlBase}/ghost_kitchen.php`,
+    urlCallCenter: `${urlBase}/call_center.php`,
     usrTokenVar: 'rttoken',
     usrUnlockVar: 'rtunlock',
     rtClientePedido: 'rt_cliente_pedido',

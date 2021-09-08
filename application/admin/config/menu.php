@@ -289,8 +289,17 @@ $config['menu'] = [
 				'nombre' => 'Transacción',
 				'opciones' => [
 					1 => [
-						'nombre' => 'N/A',
+						'nombre' => 'Seguimiento',
 						'link' => '/admin/dashboard'
+					]
+				]
+					],
+			2 => [
+				'nombre' => 'Mantenimiento',
+				'opciones' => [
+					1 => [
+						'nombre' => 'Tipos de dirección',
+						'link' => '/callcenter/tipo_direccion'
 					]
 				]
 			]
