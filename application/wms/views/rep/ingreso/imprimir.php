@@ -79,7 +79,7 @@
 					<?php if ($row->nproveedor != $proveedor): ?>
 						<?php $proveedor = $row->nproveedor; ?>
 						<tr>
-							<td colspan="6" class="titulo text-left"><?php echo $proveedor ?></td>
+							<td colspan="7" class="titulo text-left"><?php echo $proveedor ?></td>
 						</tr>
 					<?php endif ?>
 				<?php endif ?>
@@ -87,7 +87,7 @@
 					<?php if ($row->producto != $producto): ?>
 						<?php $producto = $row->producto; ?>
 						<tr>
-							<td colspan="6" class="titulo text-left"><?php echo $producto ?></td>
+							<td colspan="7" class="titulo text-left"><?php echo $producto ?></td>
 						</tr>
 					<?php endif ?>
 				<?php endif ?>

@@ -336,12 +336,16 @@ EOT;
 				 ->where("b.fecha <=", $args->fal);
 		}
 
+		if (isset($args->sede) && $args->sede) {
+			$this->db->where_in("c.sede", $args->sede);
+		}
+
 		if (isset($args->bodega) && $args->bodega) {
 			$this->db->where_in("b.bodega", $args->bodega);
 		}
 
 		if (isset($args->articulo) && $args->articulo) {
-			$this->db->where_in("a.articulo", $args->articulo);
+			$this->db->where_in("d.codigo", $args->articulo);
 		}
 
 		if (isset($args->tipo_ingreso) && $args->tipo_ingreso) {
@@ -369,7 +373,7 @@ EOT;
 				 	ifnull(stddev_samp(a.precio_unitario),0) as desviacion
 				 ")
 				 ->order_by("g.descripcion, f.descripcion, a.articulo")
-				 ->group_by("a.articulo");
+				 ->group_by("d.codigo");
 
 			if (isset($args->variacion) && $args->variacion) {
 				$this->db->having("ifnull(stddev_samp(a.precio_unitario),0) >= ", $args->variacion);
@@ -398,10 +402,6 @@ EOT;
 
 		$this->db->order_by("b.fecha", "asc")
 				->order_by("b.ingreso", "desc");
-
-		if ($args->reporte == 3) {
-			$this->db->group_by("a.articulo");
-		}
 		
 		$tmp = $this->db->get();
 

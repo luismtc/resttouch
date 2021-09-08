@@ -15,6 +15,7 @@ import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { Proveedor } from '../../../interfaces/proveedor';
 import { ProveedorService } from '../../../services/proveedor.service';
+import { UsuarioSede } from '../../../../admin/interfaces/acceso';
 
 @Component({
   selector: 'app-rep-ingreso',
@@ -45,6 +46,7 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
   public proveedores: Proveedor[] = [];
   public filteredProveedores: Proveedor[] = [];
   public txtProveedorSelected: (Proveedor | string) = undefined;
+  public sedes: UsuarioSede[] = [];
 
   constructor(
     private snackBar: MatSnackBar,
@@ -52,18 +54,16 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
     private bodegaSrvc: BodegaService,
     private articuloSrvc: ArticuloService,
     private tipoMovimientoSrvc: TipoMovimientoService,
-    private proveedorSrvc: ProveedorService
+    private proveedorSrvc: ProveedorService,
+    private sedeSrvc: AccesoUsuarioService,
+
   ) { }
 
   ngOnInit() {
-    
-    this.getBodega();
+    this.getSede();
+    // this.getBodega();
     this.loadTiposMovimiento();
     this.loadProveedores();
-    this.getArticulo({
-      ingreso: 1,
-      _activos: 1
-    });
     
     this.txtArticuloSelected = undefined;
     this.params.fdel = moment().startOf('month').format(GLOBAL.dbDateFormat);
@@ -72,6 +72,14 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.endSubs.unsubscribe();
+  }
+
+  getSede = (params: any = {}) => {
+    this.endSubs.add(
+      this.sedeSrvc.getSedes(params).subscribe(res => {
+        this.sedes = res;
+      })
+    );
   }
 
   loadTiposMovimiento = () => {
@@ -118,7 +126,7 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
 
   displayArticulo = (art: Articulo) => {
     if (art) {
-      this.params.articulo = art.articulo;
+      this.params.articulo = art.codigo;
       return `${art.descripcion} (${art.codigo})`;
     }
     return undefined;
@@ -145,12 +153,23 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
 
   setProveedor = (idProveedor: number) => this.txtProveedorSelected = this.proveedores.find(p => +p.proveedor === idProveedor);
 
+  onSedesSelected = (obj: any) => {
+    this.getBodega({ sede: this.params.sede });
+    this.getArticulo({
+      sede: this.params.sede,
+      ingreso: 1,
+      _activos: 1
+    });
+    this.params.articulo = undefined
+    this.params.bodega = undefined
+  }
+
   onSubmit(esExcel = 0) {
     // console.log(this.params); return;
     if (
       this.params.fdel && moment(this.params.fdel).isValid() && 
       this.params.fal && moment(this.params.fal).isValid() &&
-      this.params.reporte
+      this.params.reporte && this.params.sede
     ) {
       this.params._excel = esExcel;
       this.cargando = true;
@@ -176,7 +195,9 @@ export class RepIngresoComponent implements OnInit, OnDestroy {
       fal: moment().format(GLOBAL.dbDateFormat),
       reporte: undefined,
       tipo_ingreso: undefined,
-      variacion: undefined
+      variacion: undefined,
+      proveedor: undefined,
+      articulo: undefined
     };
     this.txtArticuloSelected = undefined;
     this.filteredArticulos = [];
