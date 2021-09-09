@@ -927,7 +927,8 @@ class Reporte extends CI_Controller {
 		$facts = $this->Factura_model->get_facturas($_GET);
 		$distProp = $this->Propina_model->buscar([
 			"sede" => $this->data->sede,
-			"grupal" => 1
+			"grupal" => 1,
+			"anulado" => 0
 		]);
 
 		$grupos = array_result($distProp, "usuario_tipo");
@@ -956,12 +957,14 @@ class Reporte extends CI_Controller {
 					if (isset($datos['datos'][$tusuario->usuario_tipo])) {
 						$datos['datos'][$tusuario->usuario_tipo]['facturas'][] = $fac;
 						$datos['datos'][$tusuario->usuario_tipo]['propina'] += $propina * $prop->porcentaje / 100;
+						$datos['datos'][$tusuario->usuario_tipo]['grupal'] = (int)$prop->grupal;
 					} else {
 						$datos['datos'][$tusuario->usuario_tipo] = [
 							"descripcion" => $tusuario->descripcion,
 							"facturas" => [$fac],
 							"porcentaje" => $prop->porcentaje,
-							"propina" => $propina * $prop->porcentaje / 100
+							"propina" => $propina * $prop->porcentaje / 100,
+							"grupal" => (int)$prop->grupal
 						];
 					}
 				}
@@ -970,6 +973,7 @@ class Reporte extends CI_Controller {
 					$dist = $this->Propina_model->buscar([
 						"sede" => $this->data->sede,
 						"usuario_tipo" => $usu->usuario_tipo->usuario_tipo,
+						"anulado" => 0,
 						"_uno" => true
 					]);
 
@@ -1014,6 +1018,17 @@ class Reporte extends CI_Controller {
 								];
 							}
 						}
+					}
+				}
+			}
+		}		
+
+		foreach($datos['datos'] as $i => $tusuario){
+			if(isset($tusuario['grupal']) && $tusuario['grupal'] === 1) {
+				if(isset($tusuario['usuario']) && is_array($tusuario['usuario'])) {
+					$cntUsuarios = count($tusuario['usuario']);
+					foreach($tusuario['usuario'] as $j => $usr) {
+						$datos['datos'][$i]['usuario'][$j]['propina'] = $datos['datos'][$i]['usuario'][$j]['propina'] / $cntUsuarios;						
 					}
 				}
 			}
@@ -1079,6 +1094,7 @@ class Reporte extends CI_Controller {
 					$hoja->getStyle("A{$fila}")->getFont()->setBold(true);
 					$fila++;
 					if (verDato($row, "usuario")) {
+						$cntUsuarios = count($row['usuario']);
 						foreach ($row["usuario"] as $key => $usu) {
 							$hoja->setCellValue("A{$fila}", $usu['nombre']);
 							$fila++;
@@ -1090,7 +1106,7 @@ class Reporte extends CI_Controller {
 									$fac->fecha_factura,
 									$fac->getComanda()->comanda,
 									$fac->numero_factura,
-									round($fac->propina * $row['porcentaje']/100,2)
+									round(($fac->propina * $row['porcentaje'] / 100) / $cntUsuarios, 2)
 								];
 
 								$hoja->fromArray($reg, null, "A{$fila}");
@@ -1198,6 +1214,7 @@ class Reporte extends CI_Controller {
 			
 			$mpdf->WriteHTML($this->load->view('propina', $datos, true));
 			$mpdf->Output("Distribucion de Propina.pdf", "D");
+			// $this->output->set_content_type("application/json", "UTF-8")->set_output(json_encode($datos));
 		}
 	}
 
