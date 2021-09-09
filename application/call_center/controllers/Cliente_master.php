@@ -26,7 +26,7 @@ class Cliente_master extends CI_Controller
         $this->output->set_content_type("application/json", "UTF-8");
     }
 
-    public function get_cliente_master()
+    public function buscar()
     {
         if (isset($_GET['_parecido'])) {
             $_GET['_sin_escape'] = true;
@@ -37,6 +37,7 @@ class Cliente_master extends CI_Controller
             }
         }
         $datos = $this->Cliente_master_model->buscar($_GET);
+        $datos = ordenar_array_objetos($datos, 'nombre');
         $this->output->set_output(json_encode($datos));
     }
 
@@ -59,7 +60,7 @@ class Cliente_master extends CI_Controller
         $this->output->set_output(json_encode($datos));
     }
 
-    public function get_cliente_master_nota()
+    public function buscar_cliente_master_nota()
     {
         $datos = $this->Cliente_master_nota_model->buscar($_GET);
         $this->output->set_output(json_encode($datos));

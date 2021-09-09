@@ -300,6 +300,10 @@ $config['menu'] = [
 					1 => [
 						'nombre' => 'Tipos de dirección',
 						'link' => '/callcenter/tipo_direccion'
+					],
+					2 => [
+						'nombre' => 'Clientes',
+						'link' => '/callcenter/cliente_master'
 					]
 				]
 			]
