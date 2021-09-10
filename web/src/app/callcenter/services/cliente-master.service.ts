@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
-import { ClienteMaster } from '../interfaces/cliente-master';
+import { ClienteMaster, ClienteMasterTelefono } from '../interfaces/cliente-master';
+import { Telefono } from '../interfaces/telefono';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -32,6 +33,31 @@ export class ClienteMasterService {
       `${GLOBAL.urlCallCenter}/${this.moduleUrl}/guardar${!!entidad.cliente_master ? ('/' + entidad.cliente_master) : ''}`,
       entidad
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  buscarTelefono(fltr: any = {}): Observable<Telefono[]> {
+    return this.http.get<Telefono[]>(
+      `${GLOBAL.urlCallCenter}/${this.moduleUrl}/buscar_telefono?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
+  }
+
+  getTelefonosClienteMaster(fltr: any = {}): Observable<ClienteMasterTelefono[]> {
+    return this.http.get<ClienteMasterTelefono[]>(
+      `${GLOBAL.urlCallCenter}/${this.moduleUrl}/buscar_telefono_cliente_master?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
+  }
+
+  saveTelefonosClienteMaster(entidad: any): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlCallCenter}/${this.moduleUrl}/guardar_telefono`,
+      entidad
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));        
+  }
+
+  desasociarTelefonoClienteMaster(idClienteMasterTelefono: number): Observable<any> {
+    return this.http.get<any>(
+      `${GLOBAL.urlCallCenter}/${this.moduleUrl}/desasociar_telefono_cliente_master/${idClienteMasterTelefono}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));        
   }
 
 }

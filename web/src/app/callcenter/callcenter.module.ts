@@ -40,10 +40,12 @@ import { FormTipoDireccionComponent } from './components/tipo-direccion/form-tip
 import { ClienteMasterComponent } from './components/cliente-master/cliente-master/cliente-master.component';
 import { ClienteMasterDialogComponent } from './components/cliente-master/cliente-master-dialog/cliente-master-dialog.component';
 import { FormClienteMasterComponent } from './components/cliente-master/form-cliente-master/form-cliente-master.component';
+import { ClienteMasterTelefonoComponent } from './components/cliente-master/cliente-master-telefono/cliente-master-telefono.component';
+import { SeleccionaTelefonoComponent } from './components/cliente-master/selecciona-telefono/selecciona-telefono.component';
 
 
 @NgModule({
-  declarations: [PideTelefonoDialogComponent, TipoDireccionComponent, ListaTipoDireccionComponent, FormTipoDireccionComponent, ClienteMasterComponent, ClienteMasterDialogComponent, FormClienteMasterComponent],
+  declarations: [PideTelefonoDialogComponent, TipoDireccionComponent, ListaTipoDireccionComponent, FormTipoDireccionComponent, ClienteMasterComponent, ClienteMasterDialogComponent, FormClienteMasterComponent, ClienteMasterTelefonoComponent, SeleccionaTelefonoComponent],
   imports: [
     CommonModule,
     CallcenterRoutingModule,

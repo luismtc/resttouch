@@ -110,7 +110,7 @@ class Cliente_master extends CI_Controller
         $datos = ['exito' => false];
         if ($this->input->method() == 'post') {
             if (isset($req['numero'])) {
-                $req['numero'] = strtoupper(preg_replace("/[^0-9?!]/", '', $req['numero']));
+                $req['numero'] = preg_replace("/[^0-9?!]/", '', $req['numero']);
                 $telefono = $this->Telefono_model->buscar(['numero' => $req['numero'], '_uno' => true]);
                 if ($telefono) {
                     $req['telefono'] = $telefono->telefono;
@@ -135,11 +135,39 @@ class Cliente_master extends CI_Controller
                     $datos['mensaje'] = $cmt->getMensaje();
                 }
             } else {
-                $datos['exito'] = true;
-                $datos['mensaje'] = 'Este cliente ya tiene asociado este número de teléfono.';
+                if((int)$srch->desasociado === 1) {
+                    $cmt = new Cliente_master_telefono_model($srch->cliente_master_telefono);
+                    $datos['exito'] = $cmt->guardar(['desasociado' => 0]);
+                    if ($datos['exito']) {
+                        $datos['mensaje'] = 'Teléfono asociado al cliente con éxito.';
+                    } else {
+                        $datos['mensaje'] = $cmt->getMensaje();
+                    }
+                } else {
+                    $datos['exito'] = true;
+                    $datos['mensaje'] = 'Este cliente ya tiene asociado este número de teléfono.';
+                }
             }
         } else {
             $datos['mensaje'] = "Parámetros inválidos.";
+        }
+        $this->output->set_output(json_encode($datos));
+    }
+
+    public function buscar_telefono_cliente_master()
+    {
+        $this->output->set_output(json_encode($this->Cliente_master_telefono_model->get_lista_telefonos($_GET)));        
+    }
+
+    public function desasociar_telefono_cliente_master($id)
+    {
+        $datos = ['exito' => false];
+        $cmt = new Cliente_master_telefono_model($id);        
+        $datos['exito'] = $cmt->guardar(['desasociado' => 1]);
+        if ($datos['exito']) {
+            $datos['mensaje'] = 'Telefono desasociado del cliente con éxito.';
+        } else {
+            $datos['mensaje'] = $cmt->getMensaje();
         }
         $this->output->set_output(json_encode($datos));
     }

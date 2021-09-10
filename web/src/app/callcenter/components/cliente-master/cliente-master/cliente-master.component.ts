@@ -59,12 +59,11 @@ export class ClienteMasterComponent implements OnInit, OnDestroy {
     );
   }
 
-  addEditClienteMaster = (clienteMaster: ClienteMaster = null) => {
-    
+  addEditClienteMaster = (clienteMaster: ClienteMaster = null) => {    
     if (!clienteMaster) {
       clienteMaster = { cliente_master: null, nombre: null, correo: null, fecha_nacimiento: null };
     }
-    
+
     const cmdRef = this.dialog.open(ClienteMasterDialogComponent, {
       maxWidth: '100vw', maxHeight: '85vh', width: '99vw', height: '85vh',
       disableClose: true,
@@ -73,7 +72,9 @@ export class ClienteMasterComponent implements OnInit, OnDestroy {
 
     this.endSubs.add(
       cmdRef.afterClosed().subscribe(res => {
-        console.log(res);
+        if (res) {
+          console.log(res);
+        }
       })
     );
 

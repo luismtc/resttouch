@@ -1,7 +1,8 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ClienteMaster } from '../../../interfaces/cliente-master';
+import { FormClienteMasterComponent } from '../form-cliente-master/form-cliente-master.component';
 
 interface IDataClienteMasterDialog {
   clienteMaster: ClienteMaster
@@ -15,6 +16,7 @@ interface IDataClienteMasterDialog {
 })
 export class ClienteMasterDialogComponent implements OnInit {
 
+  @ViewChild('frmClienteMaster') frmClienteMaster: FormClienteMasterComponent;
   public clienteMaster: ClienteMaster;
 
   constructor(
