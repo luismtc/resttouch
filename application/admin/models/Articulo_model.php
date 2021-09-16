@@ -251,7 +251,7 @@ class Articulo_model extends General_model {
 				$this->db->where('f.bodega', $args['bodega']);
 			}
 		} else {
-			$this->db->where("f.merma", 0);
+			$this->db->where('f.merma', 0);
 		}
 
 		if (verDato($args, 'fecha')) {
@@ -259,20 +259,19 @@ class Articulo_model extends General_model {
 		}
 
 		$ingresos = $this->db
-						 ->select("
-						 	round(sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2))/pr.cantidad, 2) as total")
-						 ->join("articulo b", "a.articulo = b.articulo")
-						 ->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
-						 ->join("categoria d", "d.categoria = c.categoria")
-						 ->join("ingreso e", "e.ingreso = a.ingreso")
-						 ->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
-						 ->join("presentacion p", "a.presentacion = p.presentacion")
-						 ->join("presentacion pr", "b.presentacion_reporte = pr.presentacion")
-						 ->where("a.articulo", $articulo)
-						 ->get("ingreso_detalle a")
+						 ->select('round(sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2))/pr.cantidad, 2) as total')
+						 ->join('articulo b', 'a.articulo = b.articulo')
+						 ->join('categoria_grupo c', 'c.categoria_grupo = b.categoria_grupo')
+						 ->join('categoria d', 'd.categoria = c.categoria')
+						 ->join('ingreso e', 'e.ingreso = a.ingreso')
+						 ->join('bodega f', 'f.bodega = e.bodega and f.sede = d.sede')
+						 ->join('presentacion p', 'a.presentacion = p.presentacion')
+						 ->join('presentacion pr', 'b.presentacion_reporte = pr.presentacion')
+						 ->where('a.articulo', $articulo)
+						 ->get('ingreso_detalle a')
 						 ->row(); //total ingresos
 		
-		$qi = $this->db->last_query();
+		// $qi = $this->db->last_query();
 
 		if (isset($args['sede'])) {
 			if (is_array($args['sede'])) {
@@ -295,19 +294,19 @@ class Articulo_model extends General_model {
 		}
 
 		$egresos = $this->db
-						->select("round(sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2))/pr.cantidad, 2) as total")
-						->join("articulo b", "a.articulo = b.articulo")
-						->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
-						->join("categoria d", "d.categoria = c.categoria")
-						->join("egreso e", "e.egreso = a.egreso")
-						->join("bodega f", "f.bodega = e.bodega and f.sede = d.sede")
-						->join("presentacion p", "a.presentacion = p.presentacion")
-						->join("presentacion pr", "b.presentacion_reporte = pr.presentacion")
-						->where("a.articulo", $articulo)
-						->get("egreso_detalle a")
+						->select('round(sum(round(ifnull(a.cantidad, 0) * p.cantidad, 2))/pr.cantidad, 2) as total')
+						->join('articulo b', 'a.articulo = b.articulo')
+						->join('categoria_grupo c', 'c.categoria_grupo = b.categoria_grupo')
+						->join('categoria d', 'd.categoria = c.categoria')
+						->join('egreso e', 'e.egreso = a.egreso')
+						->join('bodega f', 'f.bodega = e.bodega and f.sede = d.sede')
+						->join('presentacion p', 'a.presentacion = p.presentacion')
+						->join('presentacion pr', 'b.presentacion_reporte = pr.presentacion')
+						->where('a.articulo', $articulo)
+						->get('egreso_detalle a')
 						->row();//total egresos wms
 		
-		$qe = $this->db->last_query();
+		// $qe = $this->db->last_query();
 
 		//if (!$receta) {
 		$venta = $this->getVentaReceta(null, $args);

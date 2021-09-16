@@ -93,6 +93,7 @@ class Comanda_model extends General_Model
 
 	public function guardarDetalleCombo($args = [], $cuenta)
 	{
+		set_time_limit(600);
 		$art = new Articulo_model($args['articulo']);
 		if (!isset($args['cantidad'])) {
 			$args['cantidad'] = 1;
@@ -129,11 +130,11 @@ class Comanda_model extends General_Model
 	public function guardarDetalle(array $args)
 	{
 		$config = $this->Configuracion_model->buscar();
-		$vnegativo = get_configuracion($config, "RT_VENDE_NEGATIVO", 3);
+		$vnegativo = get_configuracion($config, 'RT_VENDE_NEGATIVO', 3);
 		$id = isset($args['detalle_comanda']) ? $args['detalle_comanda'] : '';
 		$det = new Dcomanda_model($id);
 		$args['comanda'] = $this->comanda;
-		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
+		$menu = $this->Catalogo_model->getModulo(['modulo' => 4, '_uno' => true]);
 		$validar = true;
 		$cantidad = 0;
 		$articulo = $det->articulo;
@@ -163,29 +164,29 @@ class Comanda_model extends General_Model
 		$args['bodega'] = $bodega ? $bodega->bodega : null;
 		$cantPres = ($pres) ? $pres->cantidad : 0;
 		$oldart = new Articulo_model($det->articulo);
-		$art->actualizarExistencia([
-			"bodega" => $args['bodega']
-		]);
+		
+		if (!empty($menu)) { $art->actualizarExistencia(['bodega' => $args['bodega']]); }
+
 		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
 			$nuevo = ($det->getPK() == null);
 			$result = $det->guardar($args);
 			$idx = $det->getPK();
 			$receta = $art->getReceta();
 
-			if (count($receta) > 0 && $art->combo == 0 && $art->multiple == 0 && $nuevo && !$art->produccion) {
+			if (count($receta) > 0 && (int)$art->combo === 0 && (int)$art->multiple === 0 && $nuevo && (int)$art->produccion === 0) {
 				foreach ($receta as $rec) {
 					$presR = $this->Presentacion_model->buscar([
-						"medida" => $rec->medida->medida,
-						"cantidad" => 1,
-						"_uno" => true
+						'medida' => $rec->medida->medida,
+						'cantidad' => 1,
+						'_uno' => true
 					]);
 
 					if (!$presR) {
 						$presR = new Presentacion_model();
 						$presR->guardar([
-							"medida" => $rec->medida->medida,
-							"descripcion" => $rec->medida->descripcion,
-							"cantidad" => 1
+							'medida' => $rec->medida->medida,
+							'descripcion' => $rec->medida->descripcion,
+							'cantidad' => 1
 						]);
 
 						$presR->presentacion = $presR->getPK();
@@ -196,27 +197,27 @@ class Comanda_model extends General_Model
 
 					$detr = new Dcomanda_model();
 					$dato = [
-						"comanda" => $this->getPK(),
-						"articulo" => $rec->articulo->articulo,
-						"cantidad" => $rec->cantidad,
-						"precio" => 0,
-						"total" => 0,
-						"impreso" => 0,
-						"presentacion" => $presR->presentacion,
-						"detalle_comanda_id" => $idx,
-						"bodega" => $bodegaR ? $bodegaR->bodega : null
+						'comanda' => $this->getPK(),
+						'articulo' => $rec->articulo->articulo,
+						'cantidad' => $rec->cantidad,
+						'precio' => 0,
+						'total' => 0,
+						'impreso' => 0,
+						'presentacion' => $presR->presentacion,
+						'detalle_comanda_id' => $idx,
+						'bodega' => $bodegaR ? $bodegaR->bodega : null
 					];
 					$detr->guardar($dato);
 				}
 			}
-			if ($det->getPK() && $art->combo == 0 && $art->multiple == 0) {
+			if ($det->getPK() && (int)$art->combo === 0 && (int)$art->multiple === 0) {
 				$det->actualizarCantidadHijos();
 			}
-			if ($result) {
-				$art->actualizarExistencia();
+			if ($result) {				
+				if(!empty($menu)){ $art->actualizarExistencia(['bodega' => $args['bodega']]); }
 				if (isset($args['articulo'])) {
-					if ($oldart->articulo) {
-						$oldart->actualizarExistencia();
+					if ($oldart->articulo) {						
+						if(!empty($menu)){ $oldart->actualizarExistencia(['bodega' => $args['bodega']]); }
 					}
 				}
 				return $det;
