@@ -172,16 +172,32 @@ class Cliente_master extends CI_Controller
         $this->output->set_output(json_encode($datos));
     }
 
+    private function get_direccion_completa($dir)
+    {
+        $dc = trim($dir->direccion1);        
+        if(!empty(trim($dir->direccion2))) { $dc .= ', '.trim($dir->direccion2); }
+        if((int)$dir->zona > 0) { $dc .= ", zona {$dir->zona}"; }
+        if(!empty(trim($dir->codigo_postal))) { $dc .= ', código postal '.trim($dir->codigo_postal); }        
+        if(!empty(trim($dir->municipio))) { $dc .= ', '.trim($dir->municipio); }
+        if(!empty(trim($dir->departamento))) { $dc .= ', '.trim($dir->departamento); }
+        if(!empty(trim($dir->pais))) { $dc .= ', '.trim($dir->pais); }
+        return "{$dc}.";
+    }
+
     public function buscar_direccion()
     {
         $datos = $this->Cliente_master_direccion_model->buscar($_GET);
 
         if (is_array($datos)) {
             foreach ($datos as $row) {
+                $row->cliente_master = $this->Cliente_master_model->buscar(['cliente_master' => $row->cliente_master, '_uno' => true]);
                 $row->tipo_direccion = $this->Tipo_direccion_model->buscar(['tipo_direccion' => $row->tipo_direccion, '_uno' => true]);
+                $row->direccion_completa = $this->get_direccion_completa($row);
             }
         } else if (is_object($datos)) {
+            $datos->cliente_master = $this->Cliente_master_model->buscar(['cliente_master' => $datos->cliente_master, '_uno' => true]);
             $datos->tipo_direccion = $this->Tipo_direccion_model->buscar(['tipo_direccion' => $datos->tipo_direccion, '_uno' => true]);
+            $datos->direccion_completa = $this->get_direccion_completa($datos);
         }
 
         $this->output->set_output(json_encode($datos));
@@ -196,7 +212,7 @@ class Cliente_master extends CI_Controller
             $datos['exito'] = $cltDir->guardar($req);
             if ($datos['exito']) {
                 $datos['mensaje'] = "Datos actualizados con éxito.";
-                $datos['cliente_master'] = $cltDir;
+                $datos['cliente_master_direccion'] = $cltDir;
             } else {
                 $datos['mensaje'] = $cltDir->getMensaje();
             }
@@ -204,7 +220,7 @@ class Cliente_master extends CI_Controller
             $datos['mensaje'] = "Parámetros inválidos.";
         }
         $this->output->set_output(json_encode($datos));
-    }
+    }    
 
     private function srch_datos_facturacion($args = []) {
         if (isset($args['nit']) && !empty(trim($args['nit']))) {

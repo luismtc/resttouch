@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
-import { ClienteMaster, ClienteMasterTelefono } from '../interfaces/cliente-master';
+import { ClienteMaster, ClienteMasterTelefono, ClienteMasterDireccion, ClienteMasterDireccionResponse } from '../interfaces/cliente-master';
 import { Telefono } from '../interfaces/telefono';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
@@ -58,6 +58,19 @@ export class ClienteMasterService {
     return this.http.get<any>(
       `${GLOBAL.urlCallCenter}/${this.moduleUrl}/desasociar_telefono_cliente_master/${idClienteMasterTelefono}`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));        
+  }
+
+  buscarDireccion(fltr: any = {}): Observable<ClienteMasterDireccionResponse[]> {
+    return this.http.get<ClienteMasterDireccionResponse[]>(
+      `${GLOBAL.urlCallCenter}/${this.moduleUrl}/buscar_direccion?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  guardarDireccion(entidad: ClienteMasterDireccion): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlCallCenter}/${this.moduleUrl}/guardar_direccion${!!entidad.cliente_master_direccion ? ('/' + entidad.cliente_master_direccion) : ''}`,
+      entidad
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
   }
 
 }

@@ -2,7 +2,7 @@
 <table>
     <caption style="text-align: left;">
         <form #frmTelefono="ngForm" (ngSubmit)="frmTelefono.form.valid && checkTelefono()" novalidate>
-            <mat-form-field style="width: 85%; padding-right: 5px;">
+            <mat-form-field style="width: 75%; padding-right: 5px;">
                 <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="telefono.numero" (keypress)="validatePhone($event)" minlength="8" maxlength="25" required>
                 <input matInput *ngIf="esMovil" type="text" placeholder="Teléfono" name="telefono" [(ngModel)]="telefono.numero" (keypress)="validatePhone($event)" minlength="8" maxlength="25" required>
             </mat-form-field>
