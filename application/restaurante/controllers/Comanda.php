@@ -149,7 +149,7 @@ class Comanda extends CI_Controller
 
 	public function guardar_detalle_combo($com, $cuenta)
 	{
-		set_time_limit(600);
+		// set_time_limit(600);
 		$comanda = new Comanda_model($com);
 		$mesa = $comanda->getMesas();
 		$cuenta = new Cuenta_model($cuenta);

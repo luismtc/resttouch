@@ -93,7 +93,7 @@ class Comanda_model extends General_Model
 
 	public function guardarDetalleCombo($args = [], $cuenta)
 	{
-		set_time_limit(600);
+		// set_time_limit(600);
 		$art = new Articulo_model($args['articulo']);
 		if (!isset($args['cantidad'])) {
 			$args['cantidad'] = 1;
@@ -138,6 +138,7 @@ class Comanda_model extends General_Model
 		$validar = true;
 		$cantidad = 0;
 		$articulo = $det->articulo;
+		$factor = 0;
 		if (empty($id)) {
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
@@ -148,9 +149,11 @@ class Comanda_model extends General_Model
 				if ($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']) {
 					$articulo = $det->articulo;
 					$cantidad = $args['cantidad'] - $det->cantidad;
+					$factor -= (float)$det->cantidad;
 				} else if ($det->articulo != $args['articulo']) {
 					$articulo = $args['articulo'];
 					$cantidad = $args['cantidad'];
+					$factor = (float)$args['cantidad'];
 				} else {
 					$articulo = $args['articulo'];
 					$validar = false;
@@ -163,11 +166,15 @@ class Comanda_model extends General_Model
 		$bodega = $art->getBodega();
 		$args['bodega'] = $bodega ? $bodega->bodega : null;
 		$cantPres = ($pres) ? $pres->cantidad : 0;
+		$factor *= $cantPres;
 		$oldart = new Articulo_model($det->articulo);
 		
-		if (!empty($menu)) { $art->actualizarExistencia(['bodega' => $args['bodega']]); }
+		if (!empty($menu)) {
+			$art->actualizarExistencia(['bodega' => $args['bodega']]);
+			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
+		}
 
-		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
+		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {			
 			$nuevo = ($det->getPK() == null);
 			$result = $det->guardar($args);
 			$idx = $det->getPK();
@@ -214,10 +221,24 @@ class Comanda_model extends General_Model
 				$det->actualizarCantidadHijos();
 			}
 			if ($result) {				
-				if(!empty($menu)){ $art->actualizarExistencia(['bodega' => $args['bodega']]); }
+				if(!empty($menu)){ 
+					$art->actualizarExistencia(['bodega' => $args['bodega']]);
+					// $art->existencias += $factor;					
+					// $art->guardar();
+					// $art->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+				}
 				if (isset($args['articulo'])) {
 					if ($oldart->articulo) {						
-						if(!empty($menu)){ $oldart->actualizarExistencia(['bodega' => $args['bodega']]); }
+						if(!empty($menu)){ 
+							$oldart->actualizarExistencia(['bodega' => $args['bodega']]); 
+							// if ($factor > 0) {
+							// 	$oldart->existencias += $factor;
+							// } else if ($factor < 0) {
+							// 	$oldart->existencias -= $factor;
+							// }
+							// $oldart->guardar();
+							// $oldart->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+						}
 					}
 				}
 				return $det;

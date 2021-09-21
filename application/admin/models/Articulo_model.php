@@ -479,7 +479,7 @@ class Articulo_model extends General_model {
 	public function buscarArticulo($args = [])
 	{
 		if (isset($args['codigo'])) {
-			$this->db->where('a.codigo', $args['codigo']);
+			$this->db->where('TRIM(a.codigo)', $args['codigo']);
 		}
 
 		if(isset($args['sede'])){
@@ -490,14 +490,28 @@ class Articulo_model extends General_model {
 			$this->db->where('a.debaja', $args['debaja']);
 		}
 
+		if(isset($args['categoria'])){
+			$this->db->where('c.categoria', $args['categoria']);
+		}
+
+		if(isset($args['categoria_grupo'])){
+			$this->db->where('b.categoria_grupo', $args['categoria_grupo']);
+		}
+
+		if(isset($args['articulo'])){
+			$this->db->where('a.articulo', $args['articulo']);
+		}
+
 		$tmp = $this->db
-					->select("a.*")
-					->from("articulo a")
-					->join("categoria_grupo b", "a.categoria_grupo = b.categoria_grupo")
-					->join("categoria c","b.categoria = c.categoria")
-					->get();
+					->select('a.*')					
+					->join('categoria_grupo b', 'a.categoria_grupo = b.categoria_grupo')
+					->join('categoria c','b.categoria = c.categoria')
+					->get('articulo a');
 
 		if ($tmp && $tmp->num_rows() > 0) {
+			if (isset($args['_todos']) && $args['_todos']) {
+				return $tmp->result();
+			}
 			return $tmp->row();
 		}
 
@@ -973,7 +987,43 @@ class Articulo_model extends General_model {
 		return $datos;
 	}
 
+	public function actualiza_existencia_bodega_articulo_costo($idbodega)
+	{
+		$bac = $this->db->where('articulo', $this->_pk)->where('bodega', $idbodega)->get('bodega_articulo_costo')->row();
+		if ($bac) {
+			$this->db
+				->where('bodega_articulo_costo', $bac->bodega_articulo_costo)
+				->update('bodega_articulo_costo', ['existencia' => $this->existencias]);
+		} else {
+			$this->db->insert('bodega_articulo_costo', [
+				'bodega' => $idbodega,
+				'articulo' => $this->_pk,
+				'existencia' => $this->existencias
+			]);
+		}
+		return $this->db->affected_rows() > 0;
+	}
 
+	public function get_existencia_bodega($args = [])
+	{
+		if (isset($args['bodega']) && (int)$args['bodega'] > 0) {
+			$this->db->where('bodega', $args['bodega']);
+		}
+		
+		$idArticulo = $this->getPK();
+		if (isset($args['articulo']) && (int)$args['articulo'] > 0) {
+			$idArticulo = $args['articulo'];
+		}
+
+		if ((int)$idArticulo > 0) {
+			return $this->db
+				->select_sum('existencia', 'existencia')
+				->where('articulo', $idArticulo)
+				->get('bodega_articulo_costo')
+				->row();
+		}
+		return (object)['existencia' => '0'];
+	}	
 }
 
 /* End of file Articulo_model.php */
