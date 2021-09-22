@@ -55,7 +55,7 @@ class Cuenta_model extends General_Model {
 	public function imprimirDetalle()
 	{
 		$com = new Comanda_model($this->comanda);
-		$det = $this->getDetalle();
+		$det = $this->getDetalle(['impreso' => 0, '_for_print' => true]);
 		$numero = $this->getNumeroDetalle($com->getPK());
 		foreach ($det as $row) {
 			$args = [
@@ -65,7 +65,7 @@ class Cuenta_model extends General_Model {
 
 			if ($row->impreso == 0) {
 				$args['numero'] = $numero;
-				$args["fecha_impresion"] = Hoy(3);
+				$args['fecha_impresion'] = Hoy(3);
 			}
 
 			$com->guardarDetalle($args);
@@ -140,6 +140,90 @@ class Cuenta_model extends General_Model {
 			$this->db->where('d.descuento', $args['descuento']);
 		}
 
+		if (isset($args['impreso'])) {
+			$this->db->where('b.impreso', $args['impreso']);
+		}
+
+		if (isset($args["cocinado"])) {
+			$this->db->where('b.cocinado', $args['cocinado']);
+		}
+
+		if (!isset($args['_totalCero'])) {
+			$this->db->where("b.total >", 0);
+		}
+
+		if (isset($args['numero'])) {
+			$this->db->where("b.numero", $args['numero']);
+		}
+
+		if (isset($args['articulo'])) {
+			$this->db->where("b.articulo", $args['articulo']);
+		}
+
+		if (isset($args['detalle_comanda'])) {
+			$this->db->where("b.detalle_comanda", $args['detalle_comanda']);
+		}		
+
+		$tmp = $this->db
+		->select('b.*, d.descuento, a.detalle_cuenta, a.cuenta_cuenta')
+		->join('detalle_comanda b', 'a.detalle_comanda = b.detalle_comanda')
+		->join('articulo c', 'b.articulo = c.articulo')
+		->join('categoria_grupo d', 'd.categoria_grupo = c.categoria_grupo')
+		->where('a.cuenta_cuenta', $this->cuenta)
+		->where('c.mostrar_pos', 1)
+		->where('b.cantidad >', 0)
+		->where('b.detalle_comanda_id is null')
+		->get('detalle_cuenta a')
+		->result();
+
+		// $q1 = $this->db->last_query();
+
+		if (isset($args['_for_print'])) {
+			return $tmp;
+		}
+
+		foreach ($tmp as $row) {
+			$row->numero_cuenta = $this->numero;
+			$det = new Dcomanda_model($row->detalle_comanda);
+			$row->articulo = $det->getArticulo();
+			// $tmp = $det->getDescripcionCombo();
+			$row->detalle = (int)$row->articulo->combo === 0 ? [] : explode('|', $det->getDescripcionCombo());
+			$row->monto_extra = $det->getPrecioExtraCombo();
+			$row->detalle_impresion = (int)$row->articulo->combo === 0 ? [] : $det->getDetalleImpresionCombo();
+			$row->impresoras_combo = [];
+
+			foreach($row->detalle_impresion as $detimp)
+			{				
+				if (!in_array($detimp->Impresora, $row->impresoras_combo)) {
+					$row->impresoras_combo[] = $detimp->Impresora;
+				}
+			}
+
+
+			if (isset($args['_categoria_grupo'])) {
+				if (is_array($args['_categoria_grupo'])) {
+					if (in_array($row->articulo->categoria_grupo, $args['_categoria_grupo'])) {
+						$datos[] = $row;
+					}	
+				} else if($row->articulo->categoria_grupo == $args['_categoria_grupo']){
+					$datos[] = $row;
+				}
+			} else {
+				$datos[] = $row;
+			}
+		}
+
+		return $datos;
+	}
+
+	public function getDetalleSimplified($args = [])
+	{
+		$datos = [];
+
+		if (isset($args['descuento'])) {
+			$this->db->where('d.descuento', $args['descuento']);
+		}
+
 		if (isset($args["impreso"])) {
 			$this->db->where('b.impreso', $args['impreso']);
 		}
@@ -156,26 +240,39 @@ class Cuenta_model extends General_Model {
 			$this->db->where("b.numero", $args['numero']);
 		}
 
+		if (isset($args['articulo'])) {
+			$this->db->where("b.articulo", $args['articulo']);
+		}
+
+		if (isset($args['detalle_comanda'])) {
+			$this->db->where("b.detalle_comanda", $args['detalle_comanda']);
+		}
+
 		$tmp = $this->db
-		->select("b.*, d.descuento, a.*")
-		->join("detalle_comanda b", "a.detalle_comanda = b.detalle_comanda")
-		->join("articulo c", "b.articulo = c.articulo")
-		->join("categoria_grupo d", "d.categoria_grupo = c.categoria_grupo")
-		->where("a.cuenta_cuenta", $this->cuenta)
-		->where("c.mostrar_pos", 1)
-		->where("b.cantidad >", 0)
-		->where("b.detalle_comanda_id is null")
-		->get("detalle_cuenta a")
+		->select('b.*, d.descuento, a.detalle_cuenta, a.cuenta_cuenta, c.combo, c.categoria_grupo')
+		->join('detalle_comanda b', 'a.detalle_comanda = b.detalle_comanda')
+		->join('articulo c', 'b.articulo = c.articulo')
+		->join('categoria_grupo d', 'd.categoria_grupo = c.categoria_grupo')
+		->where('a.cuenta_cuenta', $this->cuenta)
+		->where('c.mostrar_pos', 1)
+		->where('b.cantidad >', 0)
+		->where('b.detalle_comanda_id is null')
+		->get('detalle_cuenta a')
 		->result();
+
+		// $q1 = $this->db->last_query();
+
+		if (isset($args['_for_print'])) {
+			return $tmp;
+		}
 
 		foreach ($tmp as $row) {
 			$row->numero_cuenta = $this->numero;
 			$det = new Dcomanda_model($row->detalle_comanda);
 			$row->articulo = $det->getArticulo();
-			$tmp = $det->getDescripcionCombo();
-			$row->detalle = explode("|", $tmp);
+			$row->detalle = (int)$row->combo === 0 ? [] : explode('|', $det->getDescripcionCombo());
 			$row->monto_extra = $det->getPrecioExtraCombo();
-			$row->detalle_impresion = (int)$row->articulo->combo === 0 ? [] : $det->getDetalleImpresionCombo();
+			$row->detalle_impresion = (int)$row->combo === 0 ? [] : $det->getDetalleImpresionCombo();
 			$row->impresoras_combo = [];
 
 			foreach($row->detalle_impresion as $detimp)
@@ -187,11 +284,11 @@ class Cuenta_model extends General_Model {
 
 
 			if (isset($args['_categoria_grupo'])) {
-				if (is_array($args["_categoria_grupo"])) {
-					if (in_array($row->articulo->categoria_grupo, $args['_categoria_grupo'])) {
+				if (is_array($args['_categoria_grupo'])) {
+					if (in_array($row->categoria_grupo, $args['_categoria_grupo'])) {
 						$datos[] = $row;
 					}	
-				} else if($row->articulo->categoria_grupo == $args["_categoria_grupo"]){
+				} else if($row->categoria_grupo == $args['_categoria_grupo']){
 					$datos[] = $row;
 				}
 			} else {

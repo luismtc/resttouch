@@ -76,6 +76,14 @@ class Articulo_model extends General_model {
 			->get()->row();
 	}
 
+	public function getDataForDetalleComanda() {
+		return $this->db->select('b.cantidad as cant_pres_reporte, c.bodega')
+			->join('presentacion b', 'b.presentacion = a.presentacion_reporte')
+			->join('categoria_grupo c', 'c.categoria_grupo = a.categoria_grupo')
+			->where('a.articulo', $this->articulo)
+			->get('articulo a')->row();
+	}
+
 	public function guardarReceta(Array $args, $id = '')
 	{
 		$rec = new Receta_model($id);
@@ -99,21 +107,23 @@ class Articulo_model extends General_model {
 			$args['receta'] = $this->articulo;
 		}
 		$args['anulado'] = 0;
-		$rec = new Receta_model();
-		$det = $rec->buscar($args);
+		// $rec = new Receta_model();
+		$det = $this->Receta_model->buscar($args);
 		$datos = [] ;
-		if(is_array($det)) {
-			foreach ($det as $row) {
-				$detalle = new Receta_model($row->articulo_detalle);
-				$row->articulo = $detalle->getArticulo();
-				$row->medida = $detalle->getMedida();
-				$datos[] = $row;
+		if ($det) {
+			if(is_array($det)) {
+				foreach ($det as $row) {
+					$detalle = new Receta_model($row->articulo_detalle);
+					$row->articulo = $detalle->getArticulo();
+					$row->medida = $detalle->getMedida();
+					$datos[] = $row;
+				}
+			} else {
+				$detalle = new Receta_model($det->articulo_detalle);
+				$det->articulo = $detalle->getArticulo();
+				$det->medida = $detalle->getMedida();
+				$datos[] = $det;
 			}
-		} else if($det) {
-			$detalle = new Receta_model($det->articulo_detalle);
-			$det->articulo = $detalle->getArticulo();
-			$det->medida = $detalle->getMedida();
-			$datos[] = $det;
 		}
 
 		return $datos;

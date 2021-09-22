@@ -39,7 +39,8 @@ export class NuevaCuentaComponent implements OnInit {
         dividirCuentasPorSillas: 1,
         comanda: +meu.comanda,
         cuentas: meu.cuentas,
-        replaceUnica: false
+        replaceUnica: false,
+        _no_get_comanda: true
       };
       this.nuevaCuenta = {
         cuenta: 0,

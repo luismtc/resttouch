@@ -425,7 +425,7 @@ class Articulo extends CI_Controller
 		$datos->minutos_transcurridos = $transcurrido;
 		if (count($errores) > 0) {
 			$datos->exito = false;
-			$datos->mensaje = implode('. ', $errores);
+			$datos->mensaje = $errores;
 		}
 
 

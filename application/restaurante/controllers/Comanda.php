@@ -161,10 +161,16 @@ class Comanda extends CI_Controller
 				if ($cuenta->cerrada == 0) {
 					$val = validarCantidades($req);
 					if ($val['exito']) {
-						$comanda->guardarDetalleCombo($req, $cuenta->getPK());
-
-						$datos['exito'] = true;
-						$datos['comanda'] = $comanda->getComanda();
+						$det = $comanda->guardarDetalleCombo($req, $cuenta->getPK());
+						if($det) {
+							$datos['exito'] = true;
+							$datos['comanda'] = $comanda->getComanda([
+								'_cuenta' => $cuenta->cuenta, 'articulo' => $det->articulo, 'detalle_comanda' => $det->detalle_comanda
+							]);
+						} else {
+							$datos['exito'] = false;
+							$datos['mensaje'] = $comanda->getMensaje();
+						}
 					} else {
 						$datos['mensaje'] = $val['mensaje'];
 					}
@@ -183,36 +189,43 @@ class Comanda extends CI_Controller
 	}
 
 	public function guardar_detalle($com, $cuenta)
-	{
+	{		
 		$comanda = new Comanda_model($com);
 		$mesa = $comanda->getMesas();
 		$cuenta = new Cuenta_model($cuenta);
 		$req = json_decode(file_get_contents('php://input'), true);
-		$menu = $this->Catalogo_model->getModulo(["modulo" => 4, "_uno" => true]);
-		$datos = ["exito" => false];
+		// $menu = $this->Catalogo_model->getModulo(['modulo' => 4, '_uno' => true]);
+		$datos = ['exito' => false];
 
 		if ($this->input->method() == 'post') {
-			if ($mesa->estatus == 2) {
-				if ($cuenta->cerrada == 0) {
-					if (isset($req["detalle_comanda"])) {
-						$dcom = new Dcomanda_model($req["detalle_comanda"]);
-						$datos["exito"] = $dcom->impreso == 0;
+			if ((int)$mesa->estatus === 2) {
+				if ((int)$cuenta->cerrada === 0) {
+					$datos['exito'] = true;
+					if (isset($req['detalle_comanda'])) {
+						$dcom = new Dcomanda_model($req['detalle_comanda']);
+						$datos['exito'] = $dcom->impreso == 0;
 
 						if ($dcom->impreso == 1) {
-							if (isset($req["autorizado"]) && $req["autorizado"] == true) {
-								$datos["exito"] = true;
+							if (isset($req['autorizado']) && $req['autorizado'] == true) {
+								$datos['exito'] = true;
 							} else {
-								$datos['mensaje'] = "El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.";
+								$datos['mensaje'] = 'El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.';
 							}
 
-							unset($req["autorizado"]);
+							unset($req['autorizado']);
 						}
-					} else {
-						$datos["exito"] = true;
 					}
 
-					if ($datos["exito"]) {
-						$det = $comanda->guardarDetalle($req);
+					if ($datos['exito']) {
+						// $det = $comanda->guardarDetalle($req);
+						// $inicia = time();
+						$det = $comanda->guardarDetalleMejorado($req);
+						// $finaliza = time();
+
+						// $datos['inicia'] = $inicia;
+						// $datos['finaliza'] = $finaliza;
+						// $datos['segundos'] = $finaliza - $inicia;
+
 						$id = isset($req['detalle_cuenta']) ? $req['detalle_cuenta'] : '';
 						if ($det) {
 							$cuenta->guardarDetalle([
@@ -224,23 +237,24 @@ class Comanda extends CI_Controller
 						}
 
 						if ($datos['exito']) {
-							$datos['comanda'] = $comanda->getComanda();
+							$datos['comanda'] = $comanda->getComanda([
+								'_cuenta' => $cuenta->cuenta, 'articulo' => $det->articulo, 'detalle_comanda' => $det->detalle_comanda
+							]);
 						} else {
-							$datos['mensaje'] = implode("<br>", $comanda->getMensaje());
+							$datos['mensaje'] = implode('<br>', $comanda->getMensaje());
 						}
 					}
 				} else {
-					$datos['mensaje'] = "La cuenta ya esta cerrada";
+					$datos['mensaje'] = 'La cuenta ya esta cerrada';
 				}
 			} else {
-				$datos['mensaje'] = "La mesa debe estar en estatus abierto";
+				$datos['mensaje'] = 'La mesa debe estar en estatus abierto';
 			}
 		} else {
-			$datos['mensaje'] = "Parametros Invalidos";
-		}
-
-		$this->output
-			->set_output(json_encode($datos));
+			$datos['mensaje'] = 'Parametros Invalidos';
+		}	
+		
+		$this->output->set_output(json_encode($datos));
 	}
 
 	public function distribuir_cuentas()
@@ -531,7 +545,7 @@ class Comanda extends CI_Controller
 		$this->output->set_output(json_encode($datos));
 	}
 
-	public function imprimir($idCta, $pdf = 0)
+	public function imprimir($idCta, $pdf = 0, $no_get_comanda = 0)
 	{
 		$cta = new Cuenta_model($idCta);
 		$com = new Comanda_model($cta->comanda);
@@ -542,15 +556,15 @@ class Comanda extends CI_Controller
 			'mensaje' => 'Datos Actualizados con exito'
 		];
 
-		if ($pdf === 0) {
+		if ((int)$pdf === 0) {
 			if ($pdf != 2) {
 				$cta->imprimirDetalle();
 			}
-			$datos["comanda"] = $com->getComanda();
+			$datos['comanda'] = (int)$no_get_comanda === 0 ? $com->getComanda() : (object)[];
 		} else {
-			$datos["comanda"] = $com->getComanda([
-				'impreso' => "0",
-				"_cuenta" => $cta->getPK()
+			$datos['comanda'] = $com->getComanda([
+				'impreso' => '0',
+				'_cuenta' => $cta->getPK()
 			]);
 			$cta->imprimirDetalle();
 			$det = 0;
@@ -567,7 +581,7 @@ class Comanda extends CI_Controller
 			}
 		}
 
-		if ($pdf == 1) {
+		if ((int)$pdf === 1) {
 
 			$mpdf = new \Mpdf\Mpdf([
 				'mode' => 'utf-8',
@@ -576,7 +590,7 @@ class Comanda extends CI_Controller
 			]);
 
 			$mpdf->WriteHTML($this->load->view('impresion/comanda', $datos, true));
-			$mpdf->Output("Detalle de Comandas.pdf", "D");
+			$mpdf->Output('Detalle de Comandas.pdf', 'D');
 		} else {
 			$this->output
 				->set_output(json_encode($datos));
@@ -790,7 +804,7 @@ class Comanda extends CI_Controller
 	{
 		$com = new Comanda_model($idcomanda);
 		$datos = new stdClass();
-		$datos->comanda = $com->getComanda();
+		$datos->comanda = $com->getComanda($_GET);
 		$this->output->set_output(json_encode($datos->comanda->cuentas));
 	}
 

@@ -35,7 +35,7 @@ class Comanda_model extends General_Model
 	public function getMesas()
 	{
 		return $this->db
-			->select("
+			->select('
 			b.mesa,
 			b.area,
 			b.numero,
@@ -44,11 +44,11 @@ class Comanda_model extends General_Model
 			b.tamanio,
 			b.estatus, b.esmostrador, b.etiqueta, b.escallcenter,
 			b.impresora,
-			c.nombre as narea")
-			->join("mesa b", "a.mesa = b.mesa")
-			->join("area c", "b.area = c.area")
-			->where("a.comanda", $this->comanda)
-			->get("comanda_has_mesa a")
+			c.nombre as narea')
+			->join('mesa b', 'b.mesa = a.mesa')
+			->join('area c', 'c.area = b.area')
+			->where('a.comanda', $this->comanda)
+			->get('comanda_has_mesa a')
 			->row();
 	}
 
@@ -124,7 +124,9 @@ class Comanda_model extends General_Model
 					$selec = $this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $precio, (float)$seleccion['cantidad'] * (float)$recetaSelec[0]->cantidad);
 				}
 			}
+			return $combo;
 		}
+		return false;
 	}
 
 	public function guardarDetalle(array $args)
@@ -168,13 +170,13 @@ class Comanda_model extends General_Model
 		$cantPres = ($pres) ? $pres->cantidad : 0;
 		$factor *= $cantPres;
 		$oldart = new Articulo_model($det->articulo);
-		
+
 		if (!empty($menu)) {
 			$art->actualizarExistencia(['bodega' => $args['bodega']]);
 			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
 		}
 
-		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {			
+		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
 			$nuevo = ($det->getPK() == null);
 			$result = $det->guardar($args);
 			$idx = $det->getPK();
@@ -220,17 +222,17 @@ class Comanda_model extends General_Model
 			if ($det->getPK() && (int)$art->combo === 0 && (int)$art->multiple === 0) {
 				$det->actualizarCantidadHijos();
 			}
-			if ($result) {				
-				if(!empty($menu)){ 
+			if ($result) {
+				if (!empty($menu)) {
 					$art->actualizarExistencia(['bodega' => $args['bodega']]);
 					// $art->existencias += $factor;					
 					// $art->guardar();
 					// $art->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
 				}
 				if (isset($args['articulo'])) {
-					if ($oldart->articulo) {						
-						if(!empty($menu)){ 
-							$oldart->actualizarExistencia(['bodega' => $args['bodega']]); 
+					if ($oldart->articulo) {
+						if (!empty($menu)) {
+							$oldart->actualizarExistencia(['bodega' => $args['bodega']]);
 							// if ($factor > 0) {
 							// 	$oldart->existencias += $factor;
 							// } else if ($factor < 0) {
@@ -245,6 +247,138 @@ class Comanda_model extends General_Model
 			}
 			$this->mensaje = $det->getMensaje();
 
+			return $result;
+		} else {
+			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
+		}
+	}
+
+	public function guardarDetalleMejorado(array $args)
+	{
+		// $inicia = time();
+		$config = $this->Configuracion_model->buscar();
+		$vnegativo = get_configuracion($config, 'RT_VENDE_NEGATIVO', 3);
+		$id = isset($args['detalle_comanda']) ? $args['detalle_comanda'] : '';
+		$det = new Dcomanda_model($id);
+		$args['comanda'] = $this->comanda;
+		$menu = $this->Catalogo_model->getModulo(['modulo' => 4, '_uno' => true]);
+		$validar = true;
+		$cantidad = 0;
+		$articulo = $det->articulo;
+		// $factor = 0;
+		$oldart = null;
+		if (empty($id)) {
+			$articulo = $args['articulo'];
+			$cantidad = $args['cantidad'];
+			$args['fecha'] = Hoy(3);
+		} else {
+			$args['fecha'] = $det->fecha;
+			if (isset($args['articulo'])) {
+				if ((int)$det->articulo === (int)$args['articulo'] && (float)$det->cantidad < (float)$args['cantidad']) {
+					$articulo = $det->articulo;
+					$cantidad = $args['cantidad'] - $det->cantidad;
+					// $factor -= (float)$det->cantidad;
+				} else if ($det->articulo != $args['articulo']) {
+					$oldart = new Articulo_model($det->articulo);
+					$articulo = $args['articulo'];
+					$cantidad = $args['cantidad'];
+					// $factor = (float)$args['cantidad'];
+				} else {
+					$articulo = $args['articulo'];
+					$validar = false;
+				}
+			}
+		}
+		$art = new Articulo_model($articulo);
+		// $pres = $art->getPresentacion();
+		$dataForDC = $art->getDataForDetalleComanda();
+		$args['presentacion'] = $art->presentacion;
+		// $bodega = $art->getBodega();
+		$args['bodega'] = $dataForDC ? $dataForDC->bodega : null;
+		$cantPres = ($dataForDC) ? $dataForDC->cant_pres_reporte : 0;
+		// $factor *= $cantPres;
+
+		// $oldart = null;
+		// if (!empty($id)) {
+		// 	$oldart = new Articulo_model($det->articulo);
+		// }
+
+		if (!empty($menu)) {
+			$art->actualizarExistencia(['bodega' => $args['bodega']]);
+			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
+		}
+
+		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
+			$nuevo = ($det->getPK() == null);
+			$result = $det->guardar($args);
+			$idx = $det->getPK();
+			$receta = $art->getReceta();
+
+			if (count($receta) > 0 && (int)$art->combo === 0 && (int)$art->multiple === 0 && $nuevo && (int)$art->produccion === 0) {
+				foreach ($receta as $rec) {
+					$presR = $this->Presentacion_model->buscar([
+						'medida' => $rec->medida->medida,
+						'cantidad' => 1,
+						'_uno' => true
+					]);
+
+					if (!$presR) {
+						$presR = new Presentacion_model();
+						$presR->guardar([
+							'medida' => $rec->medida->medida,
+							'descripcion' => $rec->medida->descripcion,
+							'cantidad' => 1
+						]);
+
+						$presR->presentacion = $presR->getPK();
+					}
+
+					$artR = new Articulo_model($rec->articulo->articulo);
+					$bodegaR = $artR->getBodega();
+
+					$detr = new Dcomanda_model();
+					$dato = [
+						'comanda' => $this->getPK(),
+						'articulo' => $rec->articulo->articulo,
+						'cantidad' => $rec->cantidad,
+						'precio' => 0,
+						'total' => 0,
+						'impreso' => 0,
+						'presentacion' => $presR->presentacion,
+						'detalle_comanda_id' => $idx,
+						'bodega' => $bodegaR ? $bodegaR->bodega : null
+					];
+					$detr->guardar($dato);
+				}
+			}
+			if ($det->getPK() && (int)$art->combo === 0 && (int)$art->multiple === 0) {
+				$det->actualizarCantidadHijos();
+			}
+			if ($result) {
+				if (!empty($menu)) {
+					$art->actualizarExistencia(['bodega' => $args['bodega']]);
+					// $art->existencias += $factor;					
+					// $art->guardar();
+					// $art->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+				}
+
+				if ($oldart && isset($oldart->articulo) && !empty($menu)) {
+					$oldart->actualizarExistencia(['bodega' => $args['bodega']]);
+					// if ($factor > 0) {
+					// 	$oldart->existencias += $factor;
+					// } else if ($factor < 0) {
+					// 	$oldart->existencias -= $factor;
+					// }
+					// $oldart->guardar();
+					// $oldart->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+				}
+				return $det;
+			}
+			$this->mensaje = $det->getMensaje();
+
+			// $finaliza = time();
+			// $tiempo = $finaliza - $inicia;
+			// printf("{$finaliza} - {$inicia} = {$tiempo}");
 			return $result;
 		} else {
 			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
@@ -300,7 +434,8 @@ class Comanda_model extends General_Model
 				$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
 			}
 
-			$row->productos = $cta->getDetalle($buscar);
+			// $row->productos = $cta->getDetalle($buscar);
+			$row->productos = $cta->getDetalleSimplified($buscar);
 			$cuentas[] = $row;
 		}
 
@@ -396,11 +531,11 @@ class Comanda_model extends General_Model
 				->where('t.fin <= ', $args['fal']);
 		}
 
-		if(isset($args['turno'])) {
+		if (isset($args['turno'])) {
 			$this->db->where('t.turno', $args['turno']);
 		}
 
-		if(isset($args['estatus'])) {
+		if (isset($args['estatus'])) {
 			$this->db->where('a.estatus', $args['estatus']);
 		}
 

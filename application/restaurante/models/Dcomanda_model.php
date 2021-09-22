@@ -93,18 +93,18 @@ class Dcomanda_model extends General_Model {
 	public function actualizarCantidadHijos()
 	{
 		$tmp = $this->db
-					->select("a.detalle_comanda, b.articulo")
-					->join("articulo b", "a.articulo = b.articulo")
-					->where("a.detalle_comanda_id", $this->getPK())
-					->get("detalle_comanda a")
+					->select('a.detalle_comanda, b.articulo')
+					->join('articulo b', 'b.articulo = a.articulo')
+					->where('a.detalle_comanda_id', $this->getPK())
+					->get('detalle_comanda a')
 					->result();
 
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
 			$art = new Articulo_model($this->articulo);
 			$rec = $art->getReceta([
-				"articulo" => $row->articulo,
-				"_uno" => true
+				'articulo' => $row->articulo,
+				'_uno' => true
 			]);
 			$det->guardar(['cantidad' => $this->cantidad * $rec[0]->cantidad]);
 			$det->actualizarCantidadHijos();

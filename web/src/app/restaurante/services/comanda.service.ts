@@ -78,7 +78,7 @@ export class ComandaService {
 
   setProductoImpreso(idcuenta: number = 0) {
     return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/imprimir/${idcuenta}`
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/imprimir/${idcuenta}/0/1`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
