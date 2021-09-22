@@ -857,6 +857,20 @@ class Comanda_model extends General_Model
 			->get("comanda a")
 			->result();
 	}
+
+	public function get_articulos_pendientes()
+	{
+		return $this->db
+			->select('a.*')
+			->join('detalle_cuenta b', 'a.detalle_comanda = b.detalle_comanda', 'left')
+			->join('cuenta c', 'c.cuenta = b.cuenta_cuenta', 'left')
+			->where('a.comanda', $this->getPK())
+			->where('a.cantidad >', 0)
+			->where('a.detalle_comanda_id IS NULL', null, false)
+			->where('(c.cerrada = 0 OR c.cerrada IS NULL)', null, false)
+			->get('detalle_comanda a')
+			->result();
+	}
 }
 
 /* End of file Comanda_model.php */

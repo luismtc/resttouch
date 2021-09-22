@@ -611,14 +611,13 @@ class Comanda extends CI_Controller
 				if ($_mesa->estatus == 2) {
 					$comanda = $_mesa->get_comanda(["estatus" => 1, 'sede' => $data->sede]);
 					if ($comanda) {
-						$com = new Comanda_model($comanda->comanda);
-						$det = $com->getDetalle();
+						$com = new Comanda_model($comanda->comanda);						
+						$det = $com->get_articulos_pendientes();
 						$cntConCantidad = 0;
-						foreach ($det as $d) {
-							if ((float)$d->cantidad > 0 && (int)$d->detalle_comanda_id === 0) {
-								$cntConCantidad++;
-							}
+						if ($det) {
+							$cntConCantidad = count($det);
 						}
+												
 						if ($cntConCantidad == 0) {
 							$_mesa->guardar(["estatus" => 1]);
 							$com->guardar(["estatus" => 2]);
@@ -640,9 +639,7 @@ class Comanda extends CI_Controller
 			$res['mensaje'] = "Metodo de envío invalido";
 		}
 
-		$this->output
-			->set_content_type('application/json')
-			->set_output(json_encode($res));
+		$this->output->set_content_type('application/json')->set_output(json_encode($res));
 	}
 
 	public function validapwdgerenteturno()

@@ -282,18 +282,24 @@ export class TranComanda {
         );
     }
 
-    setSelectedCuenta(noCuenta: number) {
-        // this.bloqueoBotones = true;
-        // this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +noCuenta);
-        // this.setLstProductosDeCuenta();
-        // this.bloqueoBotones = false;
+    refreshLstProdSeleccionadosDeCuenta = (idcuenta: number) => {
+        const indices: number[] = [];
+        this.lstProductosSeleccionados.forEach((ps, i) => {
+            if (+ps.idcuenta === +idcuenta) {
+                indices.push(i);
+            }
+        });
+        indices.forEach(i => this.lstProductosSeleccionados.splice(i, 1));
+    }
+
+    setSelectedCuenta(noCuenta: number) {        
         this.bloqueoBotones = true;
-        const idx = this.mesaEnUso.cuentas.findIndex((c: Cuenta) => +c.numero === +noCuenta);
-        // this.cuentaActiva = this.mesaEnUso.cuentas.find((c: Cuenta) => +c.numero === +noCuenta);
+        const idx = this.mesaEnUso.cuentas.findIndex((c: Cuenta) => +c.numero === +noCuenta);        
         this.cuentaActiva = this.mesaEnUso.cuentas[idx];
         if (this.cuentaActiva.productos.length === 0) {
             this.endSubs.add(
                 this.comandaSrvc.getDetalleCuenta(this.cuentaActiva.cuenta).subscribe(res => {
+                    this.refreshLstProdSeleccionadosDeCuenta(+this.cuentaActiva.cuenta);
                     this.mesaEnUso.cuentas[idx].productos = res;
                     this.mesaEnUso.cuentas[idx].productos.forEach(p => this.actualizaProductosSeleccionados(+this.cuentaActiva.cuenta, p));
                     this.setLstProductosDeCuenta();
