@@ -382,13 +382,16 @@ class Comanda extends CI_Controller
 			}
 		} else {
 			$mesa = new Mesa_model($mesa);
-			$tmp = $mesa->get_comanda(["estatus" => 1, 'sede' => $data->sede]);
+			$tmp = $mesa->get_comanda(['estatus' => 1, 'sede' => $data->sede]);
 
 			if ($tmp) {
 				$comanda = new Comanda_model($tmp->comanda);
 				$comanda->comandaenuso = 0;
 
-				$datos = $comanda->getComanda(["_usuario" => $data->idusuario]);
+				$_GET['_usuario'] = $data->idusuario;
+
+				// $datos = $comanda->getComanda(['_usuario' => $data->idusuario]);
+				$datos = $comanda->getComanda($_GET);
 				$datos->exito = true;
 			} else if ($this->input->get('qr')) {
 				$com = new Comanda_model();
@@ -417,8 +420,7 @@ class Comanda extends CI_Controller
 			}
 		}
 
-		$this->output
-			->set_output(json_encode($datos));
+		$this->output->set_output(json_encode($datos));
 	}
 
 	public function get_comanda_cocina()

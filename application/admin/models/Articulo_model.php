@@ -512,6 +512,10 @@ class Articulo_model extends General_model {
 			$this->db->where('a.articulo', $args['articulo']);
 		}
 
+		if(isset($args['descripcion'])){
+			$this->db->where('TRIM(a.descripcion)', trim($args['descripcion']));
+		}
+
 		$tmp = $this->db
 					->select('a.*')					
 					->join('categoria_grupo b', 'a.categoria_grupo = b.categoria_grupo')

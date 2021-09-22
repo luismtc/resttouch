@@ -179,14 +179,29 @@ class Cuenta_model extends General_Model {
 		// $q1 = $this->db->last_query();
 
 		if (isset($args['_for_print'])) {
-			return $tmp;
+			foreach ($tmp as $row) {				
+				$det = new Dcomanda_model($row->detalle_comanda);				
+				$row->monto_extra = $det->getPrecioExtraCombo();
+				$datos[] = $row;
+			}
+			return $datos;
+		}
+
+		if(isset($args['_for_prnt_recibo'])) {
+			foreach ($tmp as $row) {
+				$row->numero_cuenta = $this->numero;
+				$det = new Dcomanda_model($row->detalle_comanda);
+				$row->articulo = $det->getArticulo();
+				$row->monto_extra = $det->getPrecioExtraCombo();
+				$datos[] = $row;				
+			}
+			return $datos;
 		}
 
 		foreach ($tmp as $row) {
 			$row->numero_cuenta = $this->numero;
 			$det = new Dcomanda_model($row->detalle_comanda);
-			$row->articulo = $det->getArticulo();
-			// $tmp = $det->getDescripcionCombo();
+			$row->articulo = $det->getArticulo();			
 			$row->detalle = (int)$row->articulo->combo === 0 ? [] : explode('|', $det->getDescripcionCombo());
 			$row->monto_extra = $det->getPrecioExtraCombo();
 			$row->detalle_impresion = (int)$row->articulo->combo === 0 ? [] : $det->getDetalleImpresionCombo();

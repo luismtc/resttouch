@@ -412,6 +412,32 @@ class Comanda_model extends General_Model
 		return $datos;
 	}
 
+	public function getDetalleComandaSimplified() {
+		$args['comanda'] = $this->comanda;
+		$det = $this->Dcomanda_model->buscar($args);
+		// $datos = [];
+		// if (is_array($det)) {
+		// 	foreach ($det as $row) {
+		// 		$detalle = new Dcomanda_model($row->detalle_comanda);
+		// 		$row->articulo = $detalle->getArticulo();
+		// 		if (isset($args['_categoria_grupo'])) {
+
+		// 			if (in_array($row->articulo->categoria_grupo, $args['_categoria_grupo'])) {
+		// 				$datos[] = $row;
+		// 			}
+		// 		} else {
+		// 			$datos[] = $row;
+		// 		}
+		// 	}
+		// } else if ($det) {
+		// 	$detalle = new Dcomanda_model($det->detalle_comanda);
+		// 	$det->articulo = $detalle->getArticulo();
+		// 	$datos[] = $det;
+		// }
+
+		return $det;		
+	}
+
 	public function getCuentas($args = [])
 	{
 		if (isset($args['_cuenta'])) {
@@ -435,7 +461,8 @@ class Comanda_model extends General_Model
 			}
 
 			// $row->productos = $cta->getDetalle($buscar);
-			$row->productos = $cta->getDetalleSimplified($buscar);
+			// if(!isset($args['_sin_detalle'])) { }
+			$row->productos = isset($args['_sin_detalle']) ? [] : $cta->getDetalleSimplified($buscar);
 			$cuentas[] = $row;
 		}
 
@@ -481,7 +508,8 @@ class Comanda_model extends General_Model
 		if (isset($args['_categoria_grupo'])) {
 			$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
 		}
-		$det = $this->getDetalle($buscar);
+		// $det = $this->getDetalle($buscar); 
+		$det = $this->getDetalleComandaSimplified($buscar);		
 
 		if (count($det) > 0) {
 			$tmp->tiempo_preparacion = $det[0]->tiempo_preparacion;

@@ -370,7 +370,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.cargando = true;
     this.endSubs.add(      
-      this.comandaSrvc.getComandaDeMesa(obj.mesa).subscribe((res: ComandaGetResponse) => {
+      this.comandaSrvc.getComandaDeMesa(obj.mesa, false).subscribe((res: ComandaGetResponse) => {
         // console.log('RESPUESTA DE GET COMANDA = ', res);
         // this.cargando = false;
         if (res.exito) {
