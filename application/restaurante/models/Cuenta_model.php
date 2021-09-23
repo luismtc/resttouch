@@ -281,6 +281,18 @@ class Cuenta_model extends General_Model {
 			return $tmp;
 		}
 
+		if(isset($args['_for_prnt_recibo'])) {
+			foreach ($tmp as $row) {
+				$row->numero_cuenta = $this->numero;
+				$det = new Dcomanda_model($row->detalle_comanda);
+				$row->articulo = $det->getArticulo();
+				$row->detalle = (int)$row->combo === 0 ? [] : explode('|', $det->getDescripcionCombo());
+				$row->monto_extra = $det->getPrecioExtraCombo();
+				$datos[] = $row;				
+			}
+			return $datos;
+		}
+
 		foreach ($tmp as $row) {
 			$row->numero_cuenta = $this->numero;
 			$det = new Dcomanda_model($row->detalle_comanda);

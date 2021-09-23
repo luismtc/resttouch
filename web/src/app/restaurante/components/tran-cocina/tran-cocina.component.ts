@@ -34,8 +34,12 @@ export class TranCocinaComponent implements OnInit {
     if (!!this.ls.get(GLOBAL.usrTokenVar).sede_uuid) {
       this.socket.emit('joinRestaurant', this.ls.get(GLOBAL.usrTokenVar).sede_uuid);
 
-      this.socket.on('refrescar:listaCocina', () => {
-        this.loadComandasCocina();
+      this.socket.on('refrescar:listaCocina', (obj: any) => {
+        if (obj && obj.mesaenuso && obj.mesaenuso.comanda) {
+          this.loadComandasCocina(obj.mesaenuso.comanda);
+        } else {
+          this.loadComandasCocina();          
+        }
         this.notificarUsuario();
       });
 
@@ -56,11 +60,19 @@ export class TranCocinaComponent implements OnInit {
     this.dns.createNotification('Rest-Touch Pro', 10000, opciones);
   }
 
-  loadComandasCocina = () => this.comandaSrvc.getComandasCocina().subscribe(res => {
-    this.lstComandasCocina = res.pendientes;
-    this.lstComandasCocinaEnProceso = res.enproceso;
-    this.setTiempo();
-  })
+  loadComandasCocina = (idcomanda: number = 0) => {
+    const fltr: any = {};
+
+    if(+idcomanda > 0) {
+      fltr.comanda = +idcomanda;
+    }
+
+    this.comandaSrvc.getComandasCocina(fltr).subscribe(res => {
+      this.lstComandasCocina = res.pendientes;
+      this.lstComandasCocinaEnProceso = res.enproceso;
+      this.setTiempo();
+    });
+  }
 
   setTiempo = () => {
     if (this.lstComandasCocinaEnProceso) {
@@ -121,7 +133,7 @@ export class TranCocinaComponent implements OnInit {
     return date > cmd.fin_proceso;
   }
 
-  setCocinado = (cmd: any, estatus = 2) => {
+  setCocinado = (cmd: any, estatus = 2, idx: number) => {
     const res: DialogCocina = { respuesta: false, tiempo: '' };
     const confirmRef = this.dialog.open(DialogCocinaComponent, {
       maxWidth: '400px',
@@ -144,13 +156,18 @@ export class TranCocinaComponent implements OnInit {
           tiempo: conf.tiempo
         };
 
+        if (estatus === 1) {
+          this.lstComandasCocinaEnProceso.push(this.lstComandasCocina[idx]);
+          this.lstComandasCocina.splice(idx, 1);
+        }
+
         this.comandaSrvc.setComandaCocinada(+cmd.comanda, datos).subscribe((respuesta: any) => {
           if (respuesta.exito) {
             this.snackBar.open(respuesta.mensaje, 'Cocina', { duration: 3000 });
           } else {
             this.snackBar.open(`ERROR: ${respuesta.mensaje}`, 'Cocina', { duration: 7000 });
           }
-          this.loadComandasCocina();
+          // this.loadComandasCocina();
         });
       }
     });

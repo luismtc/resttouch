@@ -69,7 +69,10 @@ export class TranComandaAltComponent extends TranComanda implements OnInit, OnDe
       if (this.data.mesa) {
         this.mesaEnUso = this.data.mesa;
         this.alIniciar();
-        this.setSelectedCuenta(this.mesaEnUso.cuentas[0].numero);
+        const ctaAbierta = this.mesaEnUso.cuentas.find(c => +c.cerrada === 0);
+        if(ctaAbierta) {
+          this.setSelectedCuenta(ctaAbierta.numero);
+        }
         // console.log('CTA = ', this.cuentaActiva);
         // console.log(this.mesaEnUso);
       }

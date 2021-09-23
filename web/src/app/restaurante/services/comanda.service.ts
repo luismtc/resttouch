@@ -128,9 +128,9 @@ export class ComandaService {
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 
-  getComandasCocina(): Observable<any> {
+  getComandasCocina(fltr: any = {}): Observable<any> {
     return this.http.get<any>(
-      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda_cocina`
+      `${GLOBAL.urlAppRestaurante}/${this.moduleUrl}/get_comanda_cocina?${qs.stringify(fltr)}`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 

@@ -456,19 +456,21 @@ class Comanda extends CI_Controller
 					$cgrupo = array_merge($cgrupo, $tmp);
 				}
 
-				$tmp = $this->Comanda_model->getComandas([
+				$filtro = [
 					'sede' => $data->sede,
 					'cocinado' => 0,
 					'categoria_grupo' => $cgrupo,
 					'order_by' => 'fecha_impresion'
-				]);
+				];
+				
+				if(isset($_GET['comanda'])) { $filtro['comanda'] = $_GET['comanda']; }
+				
+				$tmp = $this->Comanda_model->getComandas($filtro);
 
-				$enProceso = $this->Comanda_model->getComandas([
-					'sede' => $data->sede,
-					'cocinado' => 1,
-					'categoria_grupo' => $cgrupo,
-					'order_by' => 'fecha_proceso'
-				]);
+				$filtro['cocinado'] = 1;
+				$filtro['order_by'] = 'fecha_proceso';
+
+				$enProceso = $this->Comanda_model->getComandas($filtro);
 
 				foreach ($tmp as $row) {
 					$comanda = new Comanda_model($row->comanda);
@@ -476,7 +478,8 @@ class Comanda extends CI_Controller
 						'_usuario' => $data->idusuario,
 						'cocinado' => 0,
 						'_numero' => $row->numero,
-						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
+						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null,
+						'_for_prnt_recibo' => true
 					]);
 				}
 
@@ -486,7 +489,8 @@ class Comanda extends CI_Controller
 						'_usuario' => $data->idusuario,
 						'cocinado' => 1,
 						'_numero' => $row->numero,
-						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null
+						'_categoria_grupo' => count($cgrupo) > 0 ? $cgrupo : null,
+						'_for_prnt_recibo' => true
 					]);
 				}
 			}

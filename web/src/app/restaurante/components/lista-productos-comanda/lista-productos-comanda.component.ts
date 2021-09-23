@@ -48,8 +48,6 @@ export class ListaProductosComandaComponent implements OnInit {
   public esMovil = false;
   public keyboardLayout = GLOBAL.IDIOMA_TECLADO;
   public detalleComanda: DetalleComanda;
-  // public totalDeProductos = 0.00;
-  // public cantidadDeProductos = 0;
 
   constructor(
     private snackBar: MatSnackBar,
@@ -62,12 +60,6 @@ export class ListaProductosComandaComponent implements OnInit {
   ngOnInit() {
     this.esMovil = this.ls.get(GLOBAL.usrTokenVar).enmovil || false;
   }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (this.listaProductos && this.listaProductos.length > 0) {
-  //     this.getTotalProductos();
-  //   }
-  // }
 
   removeProducto = (p: ProductoSelected, idx: number, estaAutorizado = false, cantidad?: number) => {
     this.bloqueoBotones = true;
@@ -158,15 +150,4 @@ export class ListaProductosComandaComponent implements OnInit {
   doAction(ev: string) {
     console.log(ev);
   }
-
-  // getTotalProductos = () => {
-  //   console.log(this.listaProductos);
-  //   this.totalDeProductos = 0.00;
-  //   this.cantidadDeProductos = 0;
-  //   for (const p of this.listaProductos) {
-  //     this.totalDeProductos += ((p.cantidad * p.precio) + p.monto_extra);
-  //     this.cantidadDeProductos += p.cantidad;
-  //   }
-  // }
-
 }

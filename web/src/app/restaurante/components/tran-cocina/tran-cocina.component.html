@@ -4,7 +4,7 @@
             <div fxFlex="100%" fxLayoutAlign="center start">
                 <h4>Pendientes</h4>
             </div>
-            <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" *ngFor="let cmd of lstComandasCocina">
+            <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%" *ngFor="let cmd of lstComandasCocina; index as i">
                 <mat-card class="mat-elevation-z4">
                     <mat-card-header>
                         <mat-card-title>Comanda #{{cmd.comanda}} - {{cmd.numero}}</mat-card-title>
@@ -34,7 +34,7 @@
                     </mat-card-content>
                     <mat-card-actions align="end">
                         <button mat-raised-button color="accent" type="button"
-                            (click)="setCocinado(cmd, 1)">Vista</button>
+                            (click)="setCocinado(cmd, 1, i)">Vista</button>
                     </mat-card-actions>
                 </mat-card>
             </div>
@@ -46,7 +46,7 @@
                 <h4>En Proceso</h4>
             </div>
             <div fxFlex="33%" fxFlex.xs="100%" fxFlex.sm="100%" fxFlex.md="50%"
-                *ngFor="let cmdEnProceso of lstComandasCocinaEnProceso">
+                *ngFor="let cmdEnProceso of lstComandasCocinaEnProceso; index as j">
                 <mat-card class="mat-elevation-z4">
                     <mat-card-header>
                         <mat-card-title>Comanda #{{cmdEnProceso.comanda}} - {{cmdEnProceso.numero}}</mat-card-title>
@@ -81,7 +81,7 @@
                     </mat-card-content>
                     <mat-card-actions align="end">
                         <button mat-raised-button color="accent" type="button"
-                            (click)="setCocinado(cmdEnProceso)">Cocinado</button>
+                            (click)="setCocinado(cmdEnProceso, 2, j)">Cocinado</button>
                     </mat-card-actions>
                 </mat-card>
             </div>

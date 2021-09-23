@@ -567,6 +567,10 @@ class Comanda_model extends General_Model
 			$this->db->where('a.estatus', $args['estatus']);
 		}
 
+		if (isset($args['comanda'])) {
+			$this->db->where('a.comanda', $args['comanda']);
+		}
+
 		$this->db
 			->select("a.comanda")
 			->from("comanda a")
