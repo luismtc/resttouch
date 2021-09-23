@@ -798,10 +798,10 @@ class Venta extends CI_Controller
 				$sede->sede = $sedeObj->getPK();
 				$req['idsede'] = $sede->sede;
 				$sede->nombre = $sedeObj->nombre;
-				$comandas = $rpt->get_lista_comandas($req);
+				$obj = $rpt->get_lista_comandas($req);
 				$sede->ventas = [];
-				if (!empty($comandas)) {
-					$sede->ventas = $rpt->get_ventas_articulos($comandas);
+				if ($obj) {
+					$sede->ventas = $rpt->get_ventas_articulos($obj->comandas, $obj->facturas, $req);
 				}
 				$datos[] = $sede;
 			}
