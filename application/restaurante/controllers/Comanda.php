@@ -507,27 +507,24 @@ class Comanda extends CI_Controller
 		if (isset($data['tiempo'])) {
 			if ((int)$data['tiempo'] >= 0 && (int)$data['tiempo'] < 60) {
 				$com = new Comanda_model($idcomanda);
-				$detalle = $com->getDetalle([
+				$detalle = $com->getDetalleComandaSimplified([
 					'cocinado' => ((int)$data['estatus'] === 1 ? 0 : 1),
-					"numero" => $data['numero']
+					'numero' => $data['numero']
 				]);
 
 				foreach ($detalle as $det) {
 					$ld = new Dcomanda_model($det->detalle_comanda);
-					$args = [
-						"cocinado" => $data['estatus']
-					];
+					$args = ['cocinado' => $data['estatus']];
 
-					if ($data['estatus'] == 1) {
-						if ((int)$data['tiempo'] < 10) {
-							$data['tiempo'] = "0" . $data['tiempo'];
-						}
-
-						if (isset($data['tiempo'])) {
-							$args["tiempo_preparacion"] = "00:{$data['tiempo']}";
-						}
-
-						$args['fecha_proceso'] = Hoy(3);
+					if ((int)$data['estatus'] === 1) {
+						// if ((int)$data['tiempo'] < 10) {
+						// 	$data['tiempo'] = "0" . $data['tiempo'];
+						// }
+						// if (isset($data['tiempo'])) {
+						// 	$args['tiempo_preparacion'] = "00:{$data['tiempo']}";
+						// }
+						$args['tiempo_preparacion'] = "00:00";
+						$args['fecha_proceso'] = isset($data['fecha_proceso']) ? $data['fecha_proceso'] : Hoy(3);						
 					}
 
 					$exito = $ld->guardar($args);
@@ -541,10 +538,10 @@ class Comanda extends CI_Controller
 				}
 				$datos['mensaje'] = $datos['exito'] ? 'Datos actualizados con éxito.' : $errores;
 			} else {
-				$datos['mensaje'] = "El tiempo debe estar entre 1 y 59 minutos";
+				$datos['mensaje'] = 'El tiempo debe estar entre 0 y 59 minutos.';
 			}
 		} else {
-			$datos['mensaje'] = "Hacen falta datos obligatorios para poder continuar";
+			$datos['mensaje'] = 'Hacen falta datos obligatorios para poder continuar.';
 		}
 
 
