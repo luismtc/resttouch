@@ -18,6 +18,15 @@ import { ConfiguracionBotones } from '../../../../shared/interfaces/config-repor
   styleUrls: ['./rpt-ventas.component.css']
 })
 export class RptVentasComponent implements OnInit {
+  
+  get configBotones() {
+    const deshabilitar = !moment(this.params.fdel).isValid() || !moment(this.params.fal).isValid() || !this.params.tipo_reporte;
+    return {
+      showPdf: true, showHtml: false, showExcel: true,
+      isPdfDisabled: deshabilitar,
+      isExcelDisabled: deshabilitar
+    }
+  };
 
   public tiposReporte: any[] = [];
   public params: any = {};
@@ -31,9 +40,6 @@ export class RptVentasComponent implements OnInit {
   public tituloCategoria = 'Ventas_Categoria';
   public tituloArticulo = 'Ventas_Articulo';
   public cargando = false;
-  public configBotones: ConfiguracionBotones = {
-    showPdf: true, showHtml: false, showExcel: true
-  };
 
   constructor(
     private snackBar: MatSnackBar,

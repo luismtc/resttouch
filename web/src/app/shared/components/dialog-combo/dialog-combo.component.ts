@@ -9,7 +9,8 @@ export class ConfirmDialogComboModel {
   constructor(
     public producto: any,
     public lblBtnConfirm: string,
-    public lblBtnDeny: string
+    public lblBtnDeny: string,
+    public sinInputCantidad?: boolean
   ) { }
 }
 
@@ -127,20 +128,7 @@ export class DialogComboComponent implements OnInit {
           const prod = inp.seleccion;
           this.seleccion.receta[idx].receta.push(prod);
         }
-      }
-      /*for (let i = 0; i < multi.length; i++) {
-        const element = multi[i];
-        this.seleccion.receta.push({
-          articulo: element.articulo,
-          descripcion: element.descripcion,
-          receta: []
-        });
-        const idx = this.seleccion.receta.findIndex(p => +p.articulo === +element.articulo);
-        for (let j = 0; j < element.input.length; j++) {
-          const prod = element.input[j].seleccion;
-          this.seleccion.receta[idx].receta.push(prod);
-        }
-      }*/
+      }      
       this.datos.respuesta = true;
       this.datos.seleccion = this.seleccion;
       this.dialogRef.close(this.datos);

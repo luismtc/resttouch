@@ -83,6 +83,7 @@ import { DistribuirProductosCuentasComponent } from './components/distribuir-pro
 import { AccionesComandaComponent } from './components/acciones-comanda/acciones-comanda.component';
 import { SeleccionaTurnoPrevioComponent } from './components/turno/selecciona-turno-previo/selecciona-turno-previo.component';
 import { TranAnulaComandaComponent } from './components/tran-anula-comanda/tran-anula-comanda.component';
+import { CantidadCombosDialogComponent } from './components/cantidad-combos-dialog/cantidad-combos-dialog.component';
 
 
 @NgModule({
@@ -97,7 +98,8 @@ import { TranAnulaComandaComponent } from './components/tran-anula-comanda/tran-
     DistribuirProductosCuentasComponent,
     AccionesComandaComponent,
     SeleccionaTurnoPrevioComponent,
-    TranAnulaComandaComponent
+    TranAnulaComandaComponent,
+    CantidadCombosDialogComponent
   ],
   imports: [
     CommonModule,

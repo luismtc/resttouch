@@ -17,6 +17,7 @@ import { ConfirmDialogComboModel, DialogComboComponent } from '../../../shared/c
 import { NotasGeneralesComandaComponent } from '../notas-generales-comanda/notas-generales-comanda.component';
 import { NuevaCuentaComponent } from '../nueva-cuenta/nueva-cuenta.component';
 import { DistribuirProductosCuentasComponent } from '../distribuir-productos-cuentas/distribuir-productos-cuentas.component';
+import { CantidadCombosDialogComponent } from '../cantidad-combos-dialog/cantidad-combos-dialog.component';
 
 import { Cuenta, DetalleCuentaResponse } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
@@ -332,18 +333,16 @@ export class TranComandaComponent implements OnInit, OnDestroy {
     // console.log(this.lstProductosDeCuenta);
   }
 
-  agregarProductos(producto: any) {
-    // console.log(producto);
-    if (+producto.combo === 1 || +producto.multiple === 1) {
-      this.bloqueoBotones = true;
+  agregaCombo = (producto: any, sinInputCantidad = false) => {
+    return new Promise((resolve, reject) => {
       const confirmRef = this.dialog.open(DialogComboComponent, {
         maxWidth: '50%',
         data: new ConfirmDialogComboModel(
           producto,
-          'Sí', 'No'
+          'Sí', 'No', sinInputCantidad
         )
       });
-
+  
       confirmRef.afterClosed().subscribe((res: any) => {
         // console.log(res);
         if (res && res.respuesta && res.seleccion.receta.length > 0) {
@@ -364,7 +363,32 @@ export class TranComandaComponent implements OnInit, OnDestroy {
           this.bloqueoBotones = false;
           this.snackBar.open('Error, Debe seleccionar los productos del combo', 'Comanda', { duration: 7000 });
         }
+        resolve(true);
       });
+    });
+  }
+
+  agregarProductos(producto: any) {
+    // console.log(producto);
+    if (+producto.combo === 1 || +producto.multiple === 1) {
+      this.bloqueoBotones = true;
+      const esCiclico = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_COMBOS_CICLICOS);
+      if(esCiclico) {
+        const cantCombosDialog = this.dialog.open(CantidadCombosDialogComponent, { maxWidth: '50%' });
+    
+        cantCombosDialog.afterClosed().subscribe(async(cant: number) => {
+          // console.log(cant);
+          if (cant > 0) {
+            for(let i = 0; i < cant; i++) {
+              await this.agregaCombo(producto, true);
+            }
+          }
+        });
+
+        this.bloqueoBotones = false;
+      } else {
+        this.agregaCombo(producto);
+      }
     } else {
       this.addProductoSelected(producto);
     }

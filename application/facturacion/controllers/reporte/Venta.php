@@ -127,7 +127,7 @@ class Venta extends CI_Controller
 		if (!$this->input->get('sede')) {
 			$req['sede'] = [$this->data->sede];
 		}
-		$req["_vivas"] = true;
+		$req['_vivas'] = true;
 		$req['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
 		$facts = $this->Factura_model->get_facturas($req);
 		$comandas = $this->Comanda_model->get_sin_factura($req);
@@ -141,14 +141,14 @@ class Venta extends CI_Controller
 				$art = new Articulo_model($det->articulo->articulo);
 
 				if (isset($detalle[$art->articulo])) {
-					$detalle[$art->articulo]["cantidad"] += $det->cantidad;
-					$detalle[$art->articulo]["total"] += $det->total;
+					$detalle[$art->articulo]['cantidad'] += $det->cantidad;
+					$detalle[$art->articulo]['total'] += $det->total;
 				} else {
 					$detalle[$art->articulo] = [
-						"cantidad" => $det->cantidad,
-						"total" => $det->total,
-						"descripcion" => $art->descripcion,
-						"precio_unitario" => $det->precio_unitario
+						'cantidad' => $det->cantidad,
+						'total' => $det->total,
+						'descripcion' => $art->descripcion,
+						'precio_unitario' => $det->precio_unitario
 					];
 				}
 			}
@@ -175,7 +175,8 @@ class Venta extends CI_Controller
 		}
 
 		$cat = [];
-		foreach ($_GET['sede'] as $row) {
+		// foreach ($_GET['sede'] as $row) {
+		foreach ($req['sede'] as $row) {
 			$tmp = $this->Categoria_model->buscar(["sede" => $row]);
 			$cat = array_merge($cat, $tmp);
 		}
