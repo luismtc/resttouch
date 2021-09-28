@@ -18,6 +18,14 @@ import { ComandaService } from '../../services/comanda.service';
 })
 export class TranCocinaComponent implements OnInit {
 
+  get sumaCantidadProductos() {
+    return (obj: any) => {      
+      let cantProd = 0;
+      obj.cuentas.forEach(cta => cantProd += cta.productos.length);
+      return cantProd;
+    }
+  }
+
   public lstComandasCocina: any[] = [];
   public lstComandasCocinaEnProceso: any[] = [];
 
@@ -71,8 +79,8 @@ export class TranCocinaComponent implements OnInit {
       if (+idcomanda > 0) {
         this.lstComandasCocina = this.lstComandasCocina.filter(c => +c.comanda !== +idcomanda);
         this.lstComandasCocinaEnProceso = this.lstComandasCocinaEnProceso.filter(c => +c.comanda !== +idcomanda);
-        res.pendientes.forEach(p => this.lstComandasCocina.unshift(p));
-        res.enproceso.forEach(p => this.lstComandasCocinaEnProceso.unshift(p));
+        res.pendientes.forEach(p => this.lstComandasCocina.push(p));
+        res.enproceso.forEach(p => this.lstComandasCocinaEnProceso.push(p));
       } else {
         this.lstComandasCocina = res.pendientes;
         this.lstComandasCocinaEnProceso = res.enproceso;
@@ -140,23 +148,7 @@ export class TranCocinaComponent implements OnInit {
     return date > cmd.fin_proceso;
   }
 
-  setCocinado = (cmd: any, estatus = 2, idx: number) => {
-    // const res: DialogCocina = { respuesta: false, tiempo: '' };
-    // const confirmRef = this.dialog.open(DialogCocinaComponent, {
-    //   maxWidth: '400px',
-    //   data: new ConfirmDialogModel(
-    //     'Cocina',
-    //     `¿Seguro de marcar como '${+estatus === 1 ? 'vista' : 'cocinada'}' la comanda #${cmd.comanda}?`,
-    //     'Sí', 'No',
-    //     res,
-    //     +estatus === 1 ? true : false
-    //   )
-    // });
-
-    // confirmRef.afterClosed().subscribe((conf: DialogCocina) => {
-
-    // if (conf && conf.respuesta && conf.tiempo) {
-    // console.log(conf);
+  setCocinado = (cmd: any, estatus = 2, idx: number) => {    
     const datos: any = {
       numero: +cmd.numero,
       estatus: estatus,
@@ -174,16 +166,7 @@ export class TranCocinaComponent implements OnInit {
       this.lstComandasCocinaEnProceso.splice(idx, 1);      
     }
 
-    this.comandaSrvc.setComandaCocinada(+cmd.comanda, datos).subscribe((respuesta: any) => {
-      this.snackBar.open('Datos actualizados con éxito.', 'Cocina', { duration: 3000 });
-      // if (respuesta.exito) {
-      // } else {
-      //   this.snackBar.open(`ERROR: ${respuesta.mensaje}`, 'Cocina', { duration: 7000 });
-      // }
-      // this.loadComandasCocina();
-    });
-    // }
-    // });
+    this.comandaSrvc.setComandaCocinada(+cmd.comanda, datos).subscribe((respuesta: any) => this.snackBar.open('Datos actualizados con éxito.', 'Cocina', { duration: 3000 }));
   }
 
 }

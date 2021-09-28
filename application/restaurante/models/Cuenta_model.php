@@ -162,7 +162,11 @@ class Cuenta_model extends General_Model {
 
 		if (isset($args['detalle_comanda'])) {
 			$this->db->where("b.detalle_comanda", $args['detalle_comanda']);
-		}		
+		}
+
+		if (isset($args['_categoria_grupo'])) {
+			$this->db->where("c.categoria_grupo", $args['_categoria_grupo']);
+		}
 
 		$tmp = $this->db
 		->select('b.*, d.descuento, a.detalle_cuenta, a.cuenta_cuenta')
@@ -261,6 +265,10 @@ class Cuenta_model extends General_Model {
 
 		if (isset($args['detalle_comanda'])) {
 			$this->db->where("b.detalle_comanda", $args['detalle_comanda']);
+		}
+		
+		if (isset($args['_categoria_grupo'])) {
+			$this->db->where("c.categoria_grupo IN({$args['_categoria_grupo']})");
 		}
 
 		$tmp = $this->db

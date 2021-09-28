@@ -412,9 +412,10 @@ class Comanda_model extends General_Model
 		return $datos;
 	}
 
-	public function getDetalleComandaSimplified() {
+	public function getDetalleComandaSimplified($args = []) {
 		$args['comanda'] = $this->comanda;
-		$det = $this->Dcomanda_model->buscar($args);
+		// $det = $this->Dcomanda_model->buscar($args);
+		$det = $this->Dcomanda_model->get_detalle($args);
 		// $datos = [];
 		// if (is_array($det)) {
 		// 	foreach ($det as $row) {
@@ -456,12 +457,15 @@ class Comanda_model extends General_Model
 				$buscar['numero'] = $args['_numero'];
 			}
 
-			if (isset($args["_categoria_grupo"])) {
-				$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
+			if (isset($args['_categoria_grupo'])) {
+				if (is_array($args['_categoria_grupo'])) {
+					$buscar['_categoria_grupo'] = implode(',', $args['_categoria_grupo']);
+				} else if (is_string($args['_categoria_grupo'])) {
+					$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
+				}
 			}
 
-			// $row->productos = $cta->getDetalle($buscar);
-			// if(!isset($args['_sin_detalle'])) { }
+			// $row->productos = $cta->getDetalle($buscar);			
 			$row->productos = isset($args['_sin_detalle']) ? [] : $cta->getDetalleSimplified($buscar);
 			$cuentas[] = $row;
 		}
@@ -506,7 +510,11 @@ class Comanda_model extends General_Model
 		}
 
 		if (isset($args['_categoria_grupo'])) {
-			$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
+			if (is_array($args['_categoria_grupo'])) {
+				$buscar['_categoria_grupo'] = implode(',', $args['_categoria_grupo']);
+			} else if (is_string($args['_categoria_grupo'])) {
+				$buscar['_categoria_grupo'] = $args['_categoria_grupo'];
+			}
 		}
 		// $det = $this->getDetalle($buscar); 
 		$det = $this->getDetalleComandaSimplified($buscar);		

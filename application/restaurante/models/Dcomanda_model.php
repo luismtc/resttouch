@@ -243,6 +243,27 @@ class Dcomanda_model extends General_Model {
 		return $articulosImpresion;
 	}
 
+	public function get_detalle($args = [])
+	{
+		if (isset($args['_categoria_grupo'])) {
+			$this->db->where("b.categoria_grupo IN({$args['_categoria_grupo']})");
+		}
+
+		if (isset($args['articulo'])) {
+			$this->db->where('a.articulo', $args['articulo']);
+		}
+
+		if (isset($args['numero'])) {
+			$this->db->where('a.numero', $args['numero']);
+		}
+
+		return $this->db
+			->select('a.*')
+			->join('articulo b', 'b.articulo = a.articulo')
+			->where('a.comanda', $args['comanda'])
+			->get('detalle_comanda a')
+			->result();
+	}
 
 }
 
