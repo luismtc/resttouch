@@ -1152,7 +1152,7 @@ class Api extends CI_Controller
 
 	public function set_producto()
 	{
-		$this->load->model(['Categoria_model', 'Cgrupo_model']);
+		$this->load->model(['Categoria_model', 'Cgrupo_model', 'Impresora_model', 'Bodega_model']);
 
 		$datos = ["exito" => false, 'mensaje' => ''];
 
@@ -1184,7 +1184,7 @@ class Api extends CI_Controller
 
 				$tmpcat = $this->Categoria_model->buscar([
 					'descripcion' => $req['vendor'],
-					"sede" => $sede->sede,
+					'sede' => $sede->sede,
 					'_uno' => true
 				]);
 
@@ -1206,9 +1206,13 @@ class Api extends CI_Controller
 				if ($grupo) {
 					$cgrupo->cargar($grupo->categoria_grupo);
 				} else {
+					$impresora = $this->Impresora_model->buscar(['sede' => $sede->sede, 'pordefecto' => 1, '_uno' => true]);
+					$bodega = $this->Bodega_model->buscar(['sede' => $sede->sede, 'pordefecto' => 1, '_uno' => true]);
 					$cgrupo->guardar([
-						"categoria" => $cat->getPK(),
-						"descripcion" => $req['tags']
+						'categoria' => $cat->getPK(),
+						'descripcion' => $req['tags'],
+						'impresora' => $impresora ? $impresora->impresora : null,
+						'bodega' => $bodega ? $bodega->bodega : null,
 					]);
 				}
 
