@@ -18,6 +18,7 @@ import { NotasGeneralesComandaComponent } from '../components/notas-generales-co
 import { NuevaCuentaComponent } from '../components/nueva-cuenta/nueva-cuenta.component';
 import { DistribuirProductosCuentasComponent } from '../components/distribuir-productos-cuentas/distribuir-productos-cuentas.component';
 import { TranComandaAltComponent } from '../components/tran-comanda-alt/tran-comanda-alt.component';
+import { CantidadCombosDialogComponent } from '../components/cantidad-combos-dialog/cantidad-combos-dialog.component';
 
 import { Cuenta } from '../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../interfaces/comanda';
@@ -292,9 +293,9 @@ export class TranComanda {
         indices.forEach(i => this.lstProductosSeleccionados.splice(i, 1));
     }
 
-    setSelectedCuenta(noCuenta: number) {        
+    setSelectedCuenta(noCuenta: number) {
         this.bloqueoBotones = true;
-        const idx = this.mesaEnUso.cuentas.findIndex((c: Cuenta) => +c.numero === +noCuenta);        
+        const idx = this.mesaEnUso.cuentas.findIndex((c: Cuenta) => +c.numero === +noCuenta);
         this.cuentaActiva = this.mesaEnUso.cuentas[idx];
         if (this.cuentaActiva.productos.length === 0) {
             this.endSubs.add(
@@ -326,46 +327,62 @@ export class TranComanda {
         // console.log(this.lstProductosDeCuenta);
     }
 
-    agregarProductos(producto: any) {
-        // console.log(producto);
-        if (+producto.combo === 1 || +producto.multiple === 1) {
-            this.bloqueoBotones = true;
+    agregaCombo = (producto: any, sinInputCantidad = false) => {
+        return new Promise((resolve, reject) => {
             const confirmRef = this.dialog.open(DialogComboComponent, {
                 maxWidth: '50%',
                 data: new ConfirmDialogComboModel(
                     producto,
-                    'Sí', 'No'
+                    'Sí', 'No', sinInputCantidad
                 )
             });
 
-            this.endSubs.add(
-                confirmRef.afterClosed().subscribe((res: any) => {
-                    // console.log(res);
-                    if (res && res.respuesta && res.seleccion.receta.length > 0) {
-                        // console.log(res.seleccion); // this.bloqueoBotones = false; return;
-                        this.endSubs.add(
-                            this.comandaSrvc.saveDetalleCombo(
-                                this.mesaEnUso.comanda,
-                                this.cuentaActiva.cuenta, res.seleccion
-                            ).subscribe(resSaveDetCmb => {
-                                // console.log('NUEVO DETALLE COMANDA = ', res);
-                                if (resSaveDetCmb.exito) {
-                                    // this.mesaEnUso = resSaveDetCmb.comanda;
-                                    // this.llenaProductosSeleccionados(this.mesaEnUso);
-                                    this.actualizaProductosSeleccionados(+resSaveDetCmb.comanda.cuentas[0].cuenta, resSaveDetCmb.comanda.cuentas[0].productos[0]);
-                                    this.setSelectedCuenta(+this.cuentaActiva.numero);
-                                } else {
-                                    this.snackBar.open(`ERROR:${resSaveDetCmb.mensaje}`, 'Comanda', { duration: 3000 });
-                                }
-                                this.bloqueoBotones = false;
-                            })
-                        );
-                    } else {
+            confirmRef.afterClosed().subscribe((res: any) => {
+                // console.log(res);
+                if (res && res.respuesta && res.seleccion.receta.length > 0) {
+                    // console.log(res.seleccion); // this.bloqueoBotones = false; return;
+                    this.comandaSrvc.saveDetalleCombo(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, res.seleccion).subscribe(resSaveDetCmb => {
+                        // console.log('NUEVO DETALLE COMANDA = ', res);
+                        if (resSaveDetCmb.exito) {
+                            // this.mesaEnUso = resSaveDetCmb.comanda;
+                            // this.llenaProductosSeleccionados(this.mesaEnUso);
+                            this.actualizaProductosSeleccionados(+resSaveDetCmb.comanda.cuentas[0].cuenta, resSaveDetCmb.comanda.cuentas[0].productos[0]);
+                            this.setSelectedCuenta(+this.cuentaActiva.numero);
+                        } else {
+                            this.snackBar.open(`ERROR:${resSaveDetCmb.mensaje}`, 'Comanda', { duration: 3000 });
+                        }
                         this.bloqueoBotones = false;
-                        this.snackBar.open('Error, Debe seleccionar los productos del combo', 'Comanda', { duration: 7000 });
+                    });
+                } else {
+                    this.bloqueoBotones = false;
+                    this.snackBar.open('Error, Debe seleccionar los productos del combo', 'Comanda', { duration: 7000 });
+                }
+                resolve(true);
+            });
+        });
+    }
+
+    agregarProductos(producto: any) {
+        // console.log(producto);
+        if (+producto.combo === 1 || +producto.multiple === 1) {
+            this.bloqueoBotones = true;
+            const esCiclico = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_COMBOS_CICLICOS);
+            if (esCiclico) {
+                const cantCombosDialog = this.dialog.open(CantidadCombosDialogComponent, { maxWidth: '50%' });
+
+                cantCombosDialog.afterClosed().subscribe(async (cant: number) => {
+                    // console.log(cant);
+                    if (cant > 0) {
+                        for (let i = 0; i < cant; i++) {
+                            await this.agregaCombo(producto, true);
+                        }
                     }
-                })
-            );
+                });
+
+                this.bloqueoBotones = false;
+            } else {
+                this.agregaCombo(producto);
+            }
         } else {
             this.addProductoSelected(producto);
         }
@@ -526,7 +543,7 @@ export class TranComanda {
                             if (+imp.impresora === +detimp.Impresora.impresora) {
                                 const detalles = detimp.Nombre.split('|');
                                 detalles.forEach((d, i) => {
-                                    obj.detalle.push(`${i != 1 ? '' : detimp.Cantidad} ${d}`.trim());
+                                    obj.detalle.push(`${i != 1 ? '' : (+detimp.Cantidad > 1 ? detimp.Cantidad : '')} ${d}`.trim());
                                 })
                             }
                         }

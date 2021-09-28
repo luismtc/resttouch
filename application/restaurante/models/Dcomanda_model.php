@@ -1,7 +1,8 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Dcomanda_model extends General_Model {
+class Dcomanda_model extends General_Model
+{
 
 	public $detalle_comanda;
 	public $comanda;
@@ -26,45 +27,49 @@ class Dcomanda_model extends General_Model {
 		parent::__construct();
 		$this->setTabla("detalle_comanda");
 
-		if(!empty($id)) {
+		if (!empty($id)) {
 			$this->cargar($id);
 		}
 	}
 
-	public function getArticulo() {
+	public function getArticulo()
+	{
 		$datos = [];
 		$tmp = $this->db
-					->where("articulo", $this->articulo)
-					->get("articulo")
-					->row();
+			->where("articulo", $this->articulo)
+			->get("articulo")
+			->row();
 		$tmp->impresora = $this->db
-		->select("b.*")
-		->join("impresora b", "b.impresora = a.impresora")
-		->where("a.categoria_grupo", $tmp->categoria_grupo)
-		->get("categoria_grupo a")
-		->row();
+			->select("b.*")
+			->join("impresora b", "b.impresora = a.impresora")
+			->where("a.categoria_grupo", $tmp->categoria_grupo)
+			->get("categoria_grupo a")
+			->row();
 
 		return $tmp;
 	}
 
-	public function getDescripcionCombo()
+	public function getDescripcionCombo($iddetcomanda = '')
 	{
+		$iddetcomanda = !empty($iddetcomanda) ? $iddetcomanda : $this->getPK();
 		$descripcion = "";
 		$tmp = $this->db
-					->select("a.detalle_comanda, b.descripcion, a.cantidad, b.multiple, b.esreceta")
-					->join("articulo b", "a.articulo = b.articulo")
-					->where("a.detalle_comanda_id", $this->getPK())
-					->get("detalle_comanda a")
-					->result();
+			->select("a.detalle_comanda, b.descripcion, a.cantidad, b.multiple, b.esreceta")
+			->join("articulo b", "a.articulo = b.articulo")
+			// ->where("a.detalle_comanda_id", $this->getPK())
+			->where("a.detalle_comanda_id", $iddetcomanda)
+			->get("detalle_comanda a")
+			->result();
 
 		foreach ($tmp as $row) {
-			$det = new Dcomanda_model($row->detalle_comanda);
-			if ($row->multiple == 0) {
+			// $det = new Dcomanda_model($row->detalle_comanda);
+			if ($row->multiple == 0 && (float)$row->cantidad > 1) {
 				$descripcion .= " {$row->cantidad}";
 			}
 			$descripcion .= " {$row->descripcion} |";
 			if ((int)$row->esreceta === 0) {
-				$descripcion.=$det->getDescripcionCombo();
+				// $descripcion.=$det->getDescripcionCombo();
+				$descripcion .= $this->getDescripcionCombo($row->detalle_comanda);
 			}
 		}
 
@@ -75,11 +80,11 @@ class Dcomanda_model extends General_Model {
 	{
 		$montoExtra = 0.00;
 		$tmp = $this->db
-					->select("a.detalle_comanda, a.precio, a.cantidad")
-					->join("articulo b", "a.articulo = b.articulo")
-					->where("a.detalle_comanda_id", $this->getPK())
-					->get("detalle_comanda a")
-					->result();
+			->select("a.detalle_comanda, a.precio, a.cantidad")
+			->join("articulo b", "a.articulo = b.articulo")
+			->where("a.detalle_comanda_id", $this->getPK())
+			->get("detalle_comanda a")
+			->result();
 
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
@@ -93,11 +98,11 @@ class Dcomanda_model extends General_Model {
 	public function actualizarCantidadHijos()
 	{
 		$tmp = $this->db
-					->select('a.detalle_comanda, b.articulo')
-					->join('articulo b', 'b.articulo = a.articulo')
-					->where('a.detalle_comanda_id', $this->getPK())
-					->get('detalle_comanda a')
-					->result();
+			->select('a.detalle_comanda, b.articulo')
+			->join('articulo b', 'b.articulo = a.articulo')
+			->where('a.detalle_comanda_id', $this->getPK())
+			->get('detalle_comanda a')
+			->result();
 
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
@@ -115,16 +120,16 @@ class Dcomanda_model extends General_Model {
 	{
 		if (verDato($args, "cuenta")) {
 			$tmp = $this->db
-						->where("detalle_comanda", $this->getPK())
-						->get("detalle_cuenta")
-						->row();
-			if($tmp){
+				->where("detalle_comanda", $this->getPK())
+				->get("detalle_cuenta")
+				->row();
+			if ($tmp) {
 				$dcta = new Dcuenta_model($tmp->detalle_cuenta);
 
 				if ($args['cantidad'] == $this->cantidad) {
 					$exito = $dcta->guardar([
 						"cuenta_cuenta" => $args['cuenta']
-					]); 	
+					]);
 				} else {
 					$det = new Dcomanda_model();
 					$cta = new Dcuenta_model();
@@ -159,14 +164,14 @@ class Dcomanda_model extends General_Model {
 						"total" => $this->precio * ($this->cantidad - $args['cantidad'])
 					]);
 				}
-				
+
 				if ($exito) {
 					$tmp = $this->db
-								->select("a.detalle_comanda, b.articulo, a.cantidad")
-								->join("articulo b", "a.articulo = b.articulo")
-								->where("a.detalle_comanda_id", $this->getPK())
-								->get("detalle_comanda a")
-								->result();
+						->select("a.detalle_comanda, b.articulo, a.cantidad")
+						->join("articulo b", "a.articulo = b.articulo")
+						->where("a.detalle_comanda_id", $this->getPK())
+						->get("detalle_comanda a")
+						->result();
 
 					foreach ($tmp as $row) {
 						$param = $args;
@@ -182,7 +187,7 @@ class Dcomanda_model extends General_Model {
 								$param['cantidad'] = $args['cantidad'] * $rec[0]->cantidad;
 							}
 						}
-						
+
 						$det = new Dcomanda_model($row->detalle_comanda);
 						$exito = $det->distribuir_cuenta($param);
 						if (!$exito) {
@@ -190,7 +195,7 @@ class Dcomanda_model extends General_Model {
 						}
 					}
 
-					return $exito;	
+					return $exito;
 				} else {
 					$this->setMensaje("Nada que actualizar");
 				}
@@ -210,19 +215,19 @@ class Dcomanda_model extends General_Model {
 		}
 		$articulosImpresion = [];
 		$tmp = $this->db
-					->select("a.detalle_comanda, b.descripcion, a.cantidad, b.multiple, b.esreceta, b.articulo, c.impresora, a.notas")
-					->join("articulo b", "a.articulo = b.articulo")
-					->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
-					->where("a.detalle_comanda_id", $this->getPK())
-					->get("detalle_comanda a")
-					->result();
+			->select("a.detalle_comanda, b.descripcion, a.cantidad, b.multiple, b.esreceta, b.articulo, c.impresora, a.notas")
+			->join("articulo b", "a.articulo = b.articulo")
+			->join("categoria_grupo c", "c.categoria_grupo = b.categoria_grupo")
+			->where("a.detalle_comanda_id", $this->getPK())
+			->get("detalle_comanda a")
+			->result();
 
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
 			if ($row->multiple == 0 && !empty($row->impresora)) {
 				$articulosImpresion[] = (object)[
 					'Id' => $row->articulo,
-					'Nombre' => $path.$row->descripcion,
+					'Nombre' => $path . $row->descripcion,
 					'Cantidad' => $row->cantidad,
 					'Total' => 0,
 					'Notas' => !empty($row->notas) ? $row->notas : '',
@@ -230,7 +235,7 @@ class Dcomanda_model extends General_Model {
 					'Impresora' => $this->Impresora_model->buscar(['impresora' => $row->impresora, '_uno' => true])
 				];
 				// $path = '';
-			} else if ((int)$row->multiple === 1) {				
+			} else if ((int)$row->multiple === 1) {
 				$path .= $row->descripcion;
 			}
 
@@ -264,7 +269,6 @@ class Dcomanda_model extends General_Model {
 			->get('detalle_comanda a')
 			->result();
 	}
-
 }
 
 /* End of file Dcomanda_model.php */
