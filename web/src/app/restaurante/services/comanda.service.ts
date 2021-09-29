@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { GLOBAL } from '../../shared/global';
 import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Comanda, ComandaGetResponse } from '../interfaces/comanda';
+import { Cuenta } from '../interfaces/cuenta';
 import { DetalleComanda } from '../interfaces/detalle-comanda';
 import { DetalleCuentaResponse } from '../interfaces/cuenta';
 import { Observable } from 'rxjs';
@@ -113,6 +114,13 @@ export class ComandaService {
   getCuenta(idcuenta: number, fltr: any = {}): Observable<any> {
     return this.http.get<any>(
       `${GLOBAL.urlAppRestaurante}/${this.ctaModuleUrl}/get_cuenta/${idcuenta}?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
+
+  nueva_cuenta(cta: Cuenta): Observable<any> {
+    return this.http.post<any>(
+      `${GLOBAL.urlAppRestaurante}/${this.ctaModuleUrl}/crear_nueva`,
+      cta
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
 

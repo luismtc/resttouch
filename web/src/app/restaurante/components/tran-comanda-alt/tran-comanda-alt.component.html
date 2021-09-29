@@ -24,7 +24,7 @@
                 [disabled]="+cta.cerrada === 1 || bloqueoBotones" (click)="+cta.cerrada === 0 && !bloqueoBotones && setSelectedCuenta(cta.numero)" [selected]="+cta.cerrada === 0">
                 {{cta.nombre}}
             </mat-chip>
-            <mat-chip (click)="nuevaCuenta(dialogRef)" *ngIf="+mesaEnUso.mesa.esmostrador === 0 && +mesaEnUso.mesa.escallcenter === 0">
+            <mat-chip (click)="nuevaCuenta(dialogRef)" *ngIf="+mesaEnUso.mesa.esmostrador === 0 && +mesaEnUso.mesa.escallcenter === 0" [disabled]="bloqueoBotones">
                 Nueva
             </mat-chip>
         </mat-chip-list>

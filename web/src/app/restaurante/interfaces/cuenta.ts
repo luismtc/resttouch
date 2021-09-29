@@ -3,10 +3,13 @@ import { Articulo, ArticuloImpresion } from '../../wms/interfaces/articulo';
 
 export interface Cuenta {
     cuenta: number;
-    numero: number;
+    comanda?: number;
     nombre: string;
+    numero: number;
+    propina_monto?: number;
+    propina_porcentaje?: number;
     cerrada?: number;
-    productos: DetalleCuentaResponse[];
+    productos?: DetalleCuentaResponse[];
 }
 
 export interface DetalleCuentaResponse {

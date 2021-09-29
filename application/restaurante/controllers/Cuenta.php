@@ -21,7 +21,24 @@ class Cuenta extends CI_Controller
 
 	public function index()
 	{
-		die('Forbidden');		
+		die('Forbidden');
+	}
+
+	public function crear_nueva()
+	{
+		$req =  json_decode(file_get_contents('php://input'), true);
+		$datos = ['exito' => false];
+		if ($this->input->method() == 'post') {
+			$datos['exito'] = $this->Cuenta_model->guardarCuenta($req);
+			if ($datos['exito']) {
+				$datos['mensaje'] = "Cuenta {$req['nombre']} creada con éxito.";
+			} else {
+				$datos['mensaje'] = "Error al crear la cuenta {$req['nombre']}.";
+			}
+		} else {
+			$datos['mensaje'] = 'Parámetros inválidos';
+		}
+		$this->output->set_output(json_encode($datos));
 	}
 
 	public function cobrar($cuenta)
@@ -36,7 +53,7 @@ class Cuenta extends CI_Controller
 
 				if (count($pagos) === 0) {
 					$datos['facturada'] = $cta->facturada();
-					
+
 					if ($cta->cerrada == 0) {
 						$det = $cta->getDetalle(['impreso' => 1, '_for_print' => true]);
 						$total = 0;
@@ -136,8 +153,7 @@ class Cuenta extends CI_Controller
 		$sede = new Sede_model($empresa->sede);
 
 		$propina = 0.00;
-		foreach($formas_pago as $fp)
-		{
+		foreach ($formas_pago as $fp) {
 			$propina += (float)$fp->propina;
 		}
 

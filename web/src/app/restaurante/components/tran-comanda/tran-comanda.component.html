@@ -27,7 +27,7 @@
                 (click)="setSelectedCuenta(cta.numero)">
                 {{cta.nombre}}
             </button>
-            <button mat-raised-button type="button" class="btnAccion" (click)="nuevaCuenta()" *ngIf="mesaEnUso && +mesaEnUso.mesa.esmostrador === 0 && +mesaEnUso.mesa.escallcenter === 0">
+            <button mat-raised-button type="button" class="btnAccion" (click)="nuevaCuenta()" *ngIf="mesaEnUso && +mesaEnUso.mesa.esmostrador === 0 && +mesaEnUso.mesa.escallcenter === 0" [disabled]="bloqueoBotones">
                 Nueva
             </button>
         </div>
@@ -93,7 +93,7 @@
                             Trasladar
                         </button>
                         <button mat-mini-fab type="button" color="warn" class="btnAccionComanda" (click)="cerrarMesa()"
-                            *ngIf="mesaEnUso && lstProductosSeleccionados.length <= 0">
+                            *ngIf="mesaEnUso && lstProductosSeleccionados.length <= 0" [disabled]="bloqueoBotones">
                             Cerrar {{+mesaEnUso.mesa.esmostrador === 0 ? 'Mesa' : (+mesaEnUso.mesa.escallcenter === 0 ? 'Mostrador' : 'Pedido')}}
                         </button>
                     </eco-fab-speed-dial-actions>
