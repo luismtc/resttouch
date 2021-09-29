@@ -283,7 +283,7 @@ class Cuenta_model extends General_Model {
 		->get('detalle_cuenta a')
 		->result();
 
-		// $q1 = $this->db->last_query();
+		$q1 = $this->db->last_query();
 
 		if (isset($args['_for_print'])) {
 			return $tmp;
@@ -436,6 +436,46 @@ class Cuenta_model extends General_Model {
 		->get("cuenta_forma_pago a")
 		->result();
 	}
+
+	public function obtener_detalle($args = [])
+	{
+		if(!isset($args['cuenta'])) {
+			$this->db->where('a.cuenta_cuenta', $this->getPK());
+		} else {
+			$this->db->where('a.cuenta_cuenta', $args['cuenta']);
+		}
+
+		if(!isset($args['detalle_comanda_id'])) {
+			$this->db->select('b.detalle_comanda, b.articulo, d.descuento, a.detalle_cuenta, a.cuenta_cuenta, b.cantidad, b.impreso, b.precio, b.total, b.notas, c.combo, c.categoria_grupo, c.descripcion, c.multiple, c.combo, c.esreceta, c.cantidad_gravable, c.precio_sugerido, c.cobro_mas_caro, e.cuenta, e.numero as numero_cuenta, b.detalle_comanda_id, f.impresora, f.sede, f.nombre, f.direccion_ip, f.ubicacion, f.bluetooth, f.bluetooth_mac_address, f.modelo, f.pordefecto');
+			$this->db->where('b.total >', 0)->where('c.mostrar_pos', 1)->where('b.detalle_comanda_id IS NULL');
+		} else {
+			$this->db->select('b.detalle_comanda, b.cantidad, b.precio, b.total, b.notas, c.combo, c.descripcion, c.multiple, f.impresora, f.sede, f.nombre, f.direccion_ip, f.ubicacion, f.bluetooth, f.bluetooth_mac_address, f.modelo, f.pordefecto');
+			$this->db->where('b.detalle_comanda_id', $args['detalle_comanda_id']);
+		}
+
+		$detalles = $this->db		
+		->join('detalle_comanda b', 'a.detalle_comanda = b.detalle_comanda')
+		->join('articulo c', 'c.articulo = b.articulo')
+		->join('categoria_grupo d', 'd.categoria_grupo = c.categoria_grupo')
+		->join('cuenta e', 'e.cuenta = a.cuenta_cuenta')
+		->join('impresora f', 'f.impresora = d.impresora', 'left')
+		->where('b.cantidad >', 0)
+		->get('detalle_cuenta a')
+		->result();
+
+		foreach($detalles as $detalle)
+		{
+			$detalle->detalle = [];
+			if((int)$detalle->combo === 1 || (int)$detalle->multiple === 1) {
+				$args['detalle_comanda_id'] = $detalle->detalle_comanda;
+				$detalle->detalle = $this->obtener_detalle($args);
+			}
+		}
+
+		return $detalles;
+	}
+
+
 }
 
 /* End of file Cuenta_model.php */

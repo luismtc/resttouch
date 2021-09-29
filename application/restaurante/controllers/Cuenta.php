@@ -177,6 +177,12 @@ class Cuenta extends CI_Controller
 		$detalle = $cuenta->getDetalleSimplified($_GET);
 		$this->output->set_output(json_encode($detalle));
 	}
+
+	public function obtener_detalle_cuenta()
+	{
+		$detalle = $this->Cuenta_model->obtener_detalle($_GET);
+		$this->output->set_output(json_encode($detalle));
+	}
 }
 
 /* End of file Cuenta.php */

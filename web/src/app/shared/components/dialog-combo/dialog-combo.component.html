@@ -38,7 +38,7 @@
 
     <div class="row text-right" align="right">
         <div class="col m12 s12">
-            <button mat-raised-button class="btnAccion" color="accent" (click)="onDismiss()">
+            <button mat-raised-button class="btnAccion" color="accent" (click)="onDismiss()" *ngIf="!data.sinInputCantidad">
                 Cancelar
             </button>
             <button mat-raised-button class="btnAccion" color="accent" (click)="onConfirm()">
