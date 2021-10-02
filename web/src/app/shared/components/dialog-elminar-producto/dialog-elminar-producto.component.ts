@@ -1,11 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProductoSelected } from '../../../wms/interfaces/articulo';
 import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { ProductoSelected } from '../../../wms/interfaces/articulo';
+import { DetalleCuentaSimplified } from '../../../restaurante/interfaces/cuenta';
 
 export class ElminarProductoModel {
   constructor(
-    public producto: ProductoSelected
+    public producto: (DetalleCuentaSimplified | ProductoSelected)
   ) { }
 }
 
@@ -16,7 +18,7 @@ export class ElminarProductoModel {
 })
 export class DialogElminarProductoComponent implements OnInit {
 
-  public prod: ProductoSelected
+  public prod: (DetalleCuentaSimplified | ProductoSelected)
   public datos: any = {};
   public cantidad;
   

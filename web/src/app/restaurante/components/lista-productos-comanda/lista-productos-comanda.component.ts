@@ -129,7 +129,7 @@ export class ListaProductosComandaComponent implements OnInit {
   }
 
   toggleShowInputNotas(p: ProductoSelected) {
-    console.log('ARTICULO = ', p);
+    // console.log('ARTICULO = ', p);
     p.showInputNotas = !p.showInputNotas;
     if (p.showInputNotas) {
       p.itemListHeight = '140px';

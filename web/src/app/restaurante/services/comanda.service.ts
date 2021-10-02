@@ -5,7 +5,7 @@ import { ServiceErrorHandler } from '../../shared/error-handler';
 import { Comanda, ComandaGetResponse } from '../interfaces/comanda';
 import { Cuenta } from '../interfaces/cuenta';
 import { DetalleComanda } from '../interfaces/detalle-comanda';
-import { DetalleCuentaResponse } from '../interfaces/cuenta';
+import { DetalleCuentaResponse, DetalleCuentaSimplified } from '../interfaces/cuenta';
 import { Observable } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
 import * as qs from 'qs';
@@ -179,6 +179,12 @@ export class ComandaService {
   getDetalleCuenta(idcuenta: number, fltr = {}): Observable<DetalleCuentaResponse[]> {
     return this.http.get<DetalleCuentaResponse[]>(
       `${GLOBAL.urlAppRestaurante}/${this.ctaModuleUrl}/get_detalle_cuenta/${idcuenta}?${qs.stringify(fltr)}`
+    ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
+  }
+
+  obtenerDetalleCuenta(fltr: any = {}): Observable<DetalleCuentaSimplified[]> {
+    return this.http.get<DetalleCuentaSimplified[]>(
+      `${GLOBAL.urlAppRestaurante}/${this.ctaModuleUrl}/obtener_detalle_cuenta?${qs.stringify(fltr)}`
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));    
   }
 

@@ -20,7 +20,7 @@ import { DistribuirProductosCuentasComponent } from '../components/distribuir-pr
 import { TranComandaAltComponent } from '../components/tran-comanda-alt/tran-comanda-alt.component';
 import { CantidadCombosDialogComponent } from '../components/cantidad-combos-dialog/cantidad-combos-dialog.component';
 
-import { Cuenta } from '../interfaces/cuenta';
+import { Cuenta, DetalleCuentaSimplified } from '../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../interfaces/comanda';
 import { DetalleComanda } from '../interfaces/detalle-comanda';
 import { Articulo, ArbolArticulos, ProductoSelected, NodoProducto } from '../../wms/interfaces/articulo';
@@ -67,6 +67,7 @@ export class TranComanda {
     public usaCodigoBarras = false;
     public codigoBarras: string = null;
     public imprimeRecetaEnComanda = true;
+    public lstProductosCuentaAlt: DetalleCuentaSimplified[] = [];
 
     protected endSubs = new Subscription();
 
@@ -299,11 +300,15 @@ export class TranComanda {
         this.cuentaActiva = this.mesaEnUso.cuentas[idx];
         if (this.cuentaActiva.productos.length === 0) {
             this.endSubs.add(
-                this.comandaSrvc.getDetalleCuenta(this.cuentaActiva.cuenta).subscribe(res => {
-                    this.refreshLstProdSeleccionadosDeCuenta(+this.cuentaActiva.cuenta);
-                    this.mesaEnUso.cuentas[idx].productos = res;
-                    this.mesaEnUso.cuentas[idx].productos.forEach(p => this.actualizaProductosSeleccionados(+this.cuentaActiva.cuenta, p));
-                    this.setLstProductosDeCuenta();
+                // this.comandaSrvc.getDetalleCuenta(this.cuentaActiva.cuenta).subscribe(res => {
+                //     this.refreshLstProdSeleccionadosDeCuenta(+this.cuentaActiva.cuenta);
+                //     this.mesaEnUso.cuentas[idx].productos = res;
+                //     this.mesaEnUso.cuentas[idx].productos.forEach(p => this.actualizaProductosSeleccionados(+this.cuentaActiva.cuenta, p));
+                //     this.setLstProductosDeCuenta();
+                //     this.bloqueoBotones = false;
+                // })
+                this.comandaSrvc.obtenerDetalleCuenta({ cuenta: +this.cuentaActiva.cuenta }).subscribe((res: DetalleCuentaSimplified[]) => {
+                    this.lstProductosCuentaAlt = res;
                     this.bloqueoBotones = false;
                 })
             );
@@ -346,7 +351,7 @@ export class TranComanda {
                         if (resSaveDetCmb.exito) {
                             // this.mesaEnUso = resSaveDetCmb.comanda;
                             // this.llenaProductosSeleccionados(this.mesaEnUso);
-                            this.actualizaProductosSeleccionados(+resSaveDetCmb.comanda.cuentas[0].cuenta, resSaveDetCmb.comanda.cuentas[0].productos[0]);
+                            // this.actualizaProductosSeleccionados(+resSaveDetCmb.comanda.cuentas[0].cuenta, resSaveDetCmb.comanda.cuentas[0].productos[0]);
                             this.setSelectedCuenta(+this.cuentaActiva.numero);
                         } else {
                             this.snackBar.open(`ERROR:${resSaveDetCmb.mensaje}`, 'Comanda', { duration: 3000 });
@@ -406,7 +411,7 @@ export class TranComanda {
                         if (res.exito) {
                             // this.mesaEnUso = res.comanda;
                             // this.llenaProductosSeleccionados(this.mesaEnUso);
-                            this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0]);
+                            // this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0]);
                             this.setSelectedCuenta(+this.cuentaActiva.numero);
                         } else {
                             this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
@@ -427,7 +432,7 @@ export class TranComanda {
                         if (res.exito) {
                             // this.mesaEnUso = res.comanda;
                             // this.llenaProductosSeleccionados(this.mesaEnUso);
-                            this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0], idx);
+                            // this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0], idx);
                             this.setSelectedCuenta(+this.cuentaActiva.numero);
                         } else {
                             this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });

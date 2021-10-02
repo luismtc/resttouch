@@ -19,7 +19,7 @@ import { NuevaCuentaComponent } from '../nueva-cuenta/nueva-cuenta.component';
 import { DistribuirProductosCuentasComponent } from '../distribuir-productos-cuentas/distribuir-productos-cuentas.component';
 import { CantidadCombosDialogComponent } from '../cantidad-combos-dialog/cantidad-combos-dialog.component';
 
-import { Cuenta, DetalleCuentaResponse } from '../../interfaces/cuenta';
+import { Cuenta, DetalleCuentaResponse, DetalleCuentaSimplified } from '../../interfaces/cuenta';
 import { Comanda, ComandaGetResponse } from '../../interfaces/comanda';
 import { DetalleComanda } from '../../interfaces/detalle-comanda';
 import { Articulo, ArbolArticulos, ProductoSelected, NodoProducto } from '../../../wms/interfaces/articulo';
@@ -71,6 +71,7 @@ export class TranComandaComponent implements OnInit, OnDestroy {
   public usaCodigoBarras = false;
   public codigoBarras: string = null;
   public imprimeRecetaEnComanda = true;
+  public lstProductosCuentaAlt: DetalleCuentaSimplified[] = [];
 
   private endSubs = new Subscription();
 
@@ -304,11 +305,15 @@ export class TranComandaComponent implements OnInit, OnDestroy {
     this.cuentaActiva = this.mesaEnUso.cuentas[idx];
     if (this.cuentaActiva.productos.length === 0) {
       this.endSubs.add(
-        this.comandaSrvc.getDetalleCuenta(this.cuentaActiva.cuenta).subscribe(res => {
-          this.refreshLstProdSeleccionadosDeCuenta(+this.cuentaActiva.cuenta);
-          this.mesaEnUso.cuentas[idx].productos = res;
-          this.mesaEnUso.cuentas[idx].productos.forEach(p => this.actualizaProductosSeleccionados(+this.cuentaActiva.cuenta, p));          
-          this.setLstProductosDeCuenta();
+        // this.comandaSrvc.getDetalleCuenta(this.cuentaActiva.cuenta).subscribe(res => {
+        //   this.refreshLstProdSeleccionadosDeCuenta(+this.cuentaActiva.cuenta);
+        //   this.mesaEnUso.cuentas[idx].productos = res;
+        //   this.mesaEnUso.cuentas[idx].productos.forEach(p => this.actualizaProductosSeleccionados(+this.cuentaActiva.cuenta, p));          
+        //   this.setLstProductosDeCuenta();
+        //   this.bloqueoBotones = false;
+        // })
+        this.comandaSrvc.obtenerDetalleCuenta({cuenta: +this.cuentaActiva.cuenta}).subscribe((res: DetalleCuentaSimplified[]) => {
+          this.lstProductosCuentaAlt = res;
           this.bloqueoBotones = false;
         })
       );
@@ -352,7 +357,7 @@ export class TranComandaComponent implements OnInit, OnDestroy {
             if (resSaveDetCmb.exito) {
               // this.mesaEnUso = resSaveDetCmb.comanda;
               // this.llenaProductosSeleccionados(this.mesaEnUso);
-              this.actualizaProductosSeleccionados(+resSaveDetCmb.comanda.cuentas[0].cuenta, resSaveDetCmb.comanda.cuentas[0].productos[0]);
+              // this.actualizaProductosSeleccionados(+resSaveDetCmb.comanda.cuentas[0].cuenta, resSaveDetCmb.comanda.cuentas[0].productos[0]);
               this.setSelectedCuenta(+this.cuentaActiva.numero);
             } else {
               this.snackBar.open(`ERROR:${resSaveDetCmb.mensaje}`, 'Comanda', { duration: 3000 });
@@ -411,7 +416,7 @@ export class TranComandaComponent implements OnInit, OnDestroy {
           if (res.exito) {
             // this.mesaEnUso = res.comanda;
             // this.llenaProductosSeleccionados(this.mesaEnUso);
-            this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0]);
+            // this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0]);
             this.setSelectedCuenta(+this.cuentaActiva.numero);
           } else {
             this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
@@ -429,7 +434,7 @@ export class TranComandaComponent implements OnInit, OnDestroy {
           if (res.exito) {
             // this.mesaEnUso = res.comanda;
             // this.llenaProductosSeleccionados(this.mesaEnUso);
-            this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0], idx);
+            // this.actualizaProductosSeleccionados(+res.comanda.cuentas[0].cuenta, res.comanda.cuentas[0].productos[0], idx);
             this.setSelectedCuenta(+this.cuentaActiva.numero);
           } else {
             this.snackBar.open(`ERROR:${res.mensaje}`, 'Comanda', { duration: 3000 });
@@ -558,14 +563,14 @@ export class TranComandaComponent implements OnInit, OnDestroy {
   }
 
   printComanda(toPdf = false) {
-    // solicitar numero de pedido
 
-    const meu = JSON.parse(JSON.stringify(this.mesaEnUso));
-    const tmpCuentaActiva = JSON.parse(JSON.stringify(this.cuentaActiva));
+    const meu: ComandaGetResponse = JSON.parse(JSON.stringify(this.mesaEnUso));
+    const tmpCuentaActiva: Cuenta = JSON.parse(JSON.stringify(this.cuentaActiva));
 
     this.bloqueoBotones = true;
     this.impreso = 0;
     const modoComanda = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_MODO_COMANDA) || 1;
+    meu.cuentas = meu.cuentas.filter(cta => +cta.cerrada === 0);
     for (let i = 0; i < meu.cuentas.length; i++) {
       const cuenta = meu.cuentas[i];
       // console.log(cuenta);
@@ -715,7 +720,23 @@ export class TranComandaComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.cuentaActiva = tmpCuentaActiva;
+    this.cuentaActiva = JSON.parse(JSON.stringify(tmpCuentaActiva));
+  }
+
+  prntCmd = () => {
+    const meu: ComandaGetResponse = JSON.parse(JSON.stringify(this.mesaEnUso));
+    const tmpCuentaActiva: Cuenta = JSON.parse(JSON.stringify(this.cuentaActiva));
+
+    this.bloqueoBotones = true;
+    this.impreso = 0;
+    const modoComanda = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_MODO_COMANDA) || 1;
+    meu.cuentas = meu.cuentas.filter(cta => +cta.cerrada === 0);
+
+    
+
+
+
+    this.cuentaActiva = JSON.parse(JSON.stringify(tmpCuentaActiva));
   }
 
   printToBT = (msgToPrint: string = '') => {
@@ -911,7 +932,10 @@ export class TranComandaComponent implements OnInit, OnDestroy {
   getNotasGenerales = () => {
     const ngenDialog = this.dialog.open(NotasGeneralesComandaComponent, {
       width: '50%',
-      data: { notasGenerales: (this.mesaEnUso.notas_generales || '') }
+      data: { 
+        titulo: `comanda ${this.mesaEnUso.comanda}`,
+        notasGenerales: (this.mesaEnUso.notas_generales || '')
+      }
     });
     ngenDialog.afterClosed().subscribe((notasGen: string) => {
       if (notasGen !== null) {

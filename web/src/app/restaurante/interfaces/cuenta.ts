@@ -41,3 +41,37 @@ export interface DetalleCuentaResponse {
     detalle_impresion?: ArticuloImpresion[];
     impresoras_combo?: Impresora[];
 }
+
+export interface DetalleCuentaSimplified {
+    comanda: number;
+    detalle_comanda: number;
+    articulo: number;
+    descuento: number;
+    detalle_cuenta: number;
+    cuenta_cuenta: number;
+    cantidad: number;
+    impreso: number;
+    precio: number;
+    total: number;
+    notas: string;
+    combo: number;
+    categoria_grupo: number;
+    descripcion: string;
+    multiple: number;
+    esreceta: number;
+    cantidad_gravable: number;
+    precio_sugerido: number;
+    cobro_mas_caro: number;    
+    numero_cuenta: number;
+    detalle_comanda_id?: number;
+    impresora: number;
+    sede: number;
+    nombre: string;
+    direccion_ip?: string;
+    ubicacion?: string;
+    bluetooth: number;
+    bluetooth_mac_address?: string;
+    modelo?: string;
+    pordefecto: number;
+    detalle: DetalleCuentaSimplified[];
+}
