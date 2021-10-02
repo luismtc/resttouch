@@ -2,6 +2,7 @@ const LOCALHOST = ['localhost', '127.0.0.1'];
 export const PROTOCOLO = window.location.protocol;
 export const ANFITRION = window.location.hostname;
 const urlBase = `${PROTOCOLO}//${ANFITRION}/${LOCALHOST.indexOf(ANFITRION) < 0 ? 'api' : 'resttouch'}`;
+import * as moment from 'moment';
 
 export const GLOBAL = {
     dbDateFormat: 'YYYY-MM-DD',
@@ -122,6 +123,18 @@ export const MultiFiltro = (array: any[], filtro: any) => {
 export const OrdenarArrayObjetos = (objs: any[], campo: string, tipo = 2) => {
     if (tipo === 2) {
         return objs.sort((a, b) => a[campo].localeCompare(b[campo]));
+    } else if (tipo === 3) {
+        return objs.sort((a, b) => {
+            const f1 = moment(a[campo]);
+            const f2 = moment(b[campo]);
+            if (f1.isAfter(f2)) {
+                return 1;
+            } else if (f2.isAfter(f1)) {
+                return -1;
+            } else {
+                return 0
+            }
+        });
     } else {
         return objs.sort((a, b) => (a[campo] > b[campo]) ? 1 : ((b[campo] > a[campo]) ? -1 : 0));
     }

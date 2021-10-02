@@ -3,7 +3,7 @@ import { Socket } from 'ngx-socket-io';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { LocalstorageService } from '../../../admin/services/localstorage.service';
-import { GLOBAL } from '../../../shared/global';
+import { GLOBAL, OrdenarArrayObjetos } from '../../../shared/global';
 // import { DialogCocina } from '../../../shared/interfaces/config-reportes';
 import { DesktopNotificationService } from '../../../shared/services/desktop-notification.service';
 // import { ConfirmDialogModel, DialogCocinaComponent } from '../../../shared/components/dialog-cocina/dialog-cocina.component';
@@ -79,8 +79,9 @@ export class TranCocinaComponent implements OnInit {
       if (+idcomanda > 0) {
         this.lstComandasCocina = this.lstComandasCocina.filter(c => +c.comanda !== +idcomanda);
         this.lstComandasCocinaEnProceso = this.lstComandasCocinaEnProceso.filter(c => +c.comanda !== +idcomanda);
-        res.pendientes.forEach(p => this.lstComandasCocina.push(p));
+        res.pendientes.forEach(p => this.lstComandasCocina.push(p));        
         res.enproceso.forEach(p => this.lstComandasCocinaEnProceso.push(p));
+        this.lstComandasCocinaEnProceso = OrdenarArrayObjetos(this.lstComandasCocinaEnProceso, 'fecha_proceso', 3);
       } else {
         this.lstComandasCocina = res.pendientes;
         this.lstComandasCocinaEnProceso = res.enproceso;
