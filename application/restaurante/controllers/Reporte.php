@@ -942,7 +942,7 @@ class Reporte extends CI_Controller {
 			$fac = new Factura_model($row->factura);
 			$propina = suma_field($fac->getPropina(), "propina_monto");
 			$comanda = $fac->getComanda();
-			$fac->propina = $propina;
+			$fac->propina = $propina / 1.12;
 			
 			if ($comanda->getPK() && $fac->propina > 0) {
 				$tmp = $comanda->getTurno();
@@ -956,14 +956,14 @@ class Reporte extends CI_Controller {
 
 					if (isset($datos['datos'][$tusuario->usuario_tipo])) {
 						$datos['datos'][$tusuario->usuario_tipo]['facturas'][] = $fac;
-						$datos['datos'][$tusuario->usuario_tipo]['propina'] += $propina * $prop->porcentaje / 100;
+						$datos['datos'][$tusuario->usuario_tipo]['propina'] += ($propina * $prop->porcentaje / 100) / 1.12;
 						$datos['datos'][$tusuario->usuario_tipo]['grupal'] = (int)$prop->grupal;
 					} else {
 						$datos['datos'][$tusuario->usuario_tipo] = [
 							"descripcion" => $tusuario->descripcion,
 							"facturas" => [$fac],
 							"porcentaje" => $prop->porcentaje,
-							"propina" => $propina * $prop->porcentaje / 100,
+							"propina" => ($propina * $prop->porcentaje / 100) / 1.12,
 							"grupal" => (int)$prop->grupal
 						];
 					}
@@ -989,12 +989,12 @@ class Reporte extends CI_Controller {
 								}
 								if (isset($datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario])) {
 									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $fac;
-									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += $propina*$dist->porcentaje / 100;
+									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += ($propina*$dist->porcentaje / 100) / 1.12;
 								} else {
 									$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario] = [
 										"nombre" => $usu->usuario->nombres." ".$usu->usuario->apellidos,
 										"facturas" => [$fac],
-										"propina" => $propina * $dist->porcentaje / 100
+										"propina" => ($propina * $dist->porcentaje / 100) / 1.12
 									];
 								}
 							}
@@ -1009,12 +1009,12 @@ class Reporte extends CI_Controller {
 
 							if (isset($datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario])) {
 								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['facturas'][] = $fac;
-								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += $propina*$dist->porcentaje / 100;
+								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario]['propina'] += ($propina*$dist->porcentaje / 100) / 1.12;
 							} else {
 								$datos['datos'][$usu->usuario_tipo->usuario_tipo]['usuario'][$usu->usuario->usuario] = [
 									"nombre" => $usu->usuario->nombres." ".$usu->usuario->apellidos,
 									"facturas" => [$fac],
-									"propina" => $propina * $dist->porcentaje / 100
+									"propina" => ($propina * $dist->porcentaje / 100) / 1.12
 								];
 							}
 						}
