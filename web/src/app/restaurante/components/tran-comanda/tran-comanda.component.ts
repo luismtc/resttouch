@@ -400,12 +400,12 @@ export class TranComandaComponent implements OnInit, OnDestroy {
   }
 
   addProductoSelected(producto: any) {
-    // console.log('PRODUCTO = ', producto);
-    // return;
+    // console.log('PRODUCTO = ', producto); return;
     this.bloqueoBotones = true;
     if (+this.cuentaActiva.numero) {
-      const idx = this.lstProductosSeleccionados
-        .findIndex(p => +p.id === +producto.id && +p.cuenta === +this.cuentaActiva.numero && +p.impreso === 0);
+      const prodsSel: ProductoSelected[] = this.lstProductosCuentaAlt.map(p => this.convertToProductoSelected(p));
+      // const idx = this.lstProductosSeleccionados.findIndex(p => +p.id === +producto.id && +p.cuenta === +this.cuentaActiva.numero && +p.impreso === 0);
+      const idx = prodsSel.findIndex(p => +p.id === +producto.id && +p.cuenta === +this.cuentaActiva.numero && +p.impreso === 0);
 
       if (idx < 0) {
         this.detalleComanda = {
@@ -424,7 +424,8 @@ export class TranComandaComponent implements OnInit, OnDestroy {
           this.bloqueoBotones = false;
         });
       } else {
-        const tmp: ProductoSelected = this.lstProductosSeleccionados[idx];
+        // const tmp: ProductoSelected = this.lstProductosSeleccionados[idx];
+        const tmp: ProductoSelected = prodsSel[idx];
         this.detalleComanda = {
           detalle_cuenta: tmp.detalle_cuenta, detalle_comanda: tmp.detalle_comanda, articulo: tmp.id, cantidad: (+tmp.cantidad) + 1,
           precio: +tmp.precio, total: ((+tmp.cantidad) + 1) * (+tmp.precio), notas: tmp.notas
