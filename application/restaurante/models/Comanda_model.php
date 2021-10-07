@@ -883,6 +883,60 @@ class Comanda_model extends General_Model
 			->get('detalle_comanda a')
 			->result();
 	}
+
+	public function trasladar_cuentas_a_comanda($cmdDestino)
+	{
+		$ctasDeOrigen = $this->db
+			->select('cuenta')
+			->where('comanda', $this->getPK())
+			->where('cerrada', 0)
+			->get('cuenta')
+			->result();
+		
+		if($ctasDeOrigen) {
+
+			$unicasDestino = $this->db
+				->select('COUNT(cuenta) + 1 AS contunicas')
+				->where('comanda', $cmdDestino)
+				->like('nombre', 'única', 'after')
+				->get('cuenta')
+				->row();
+
+			$numCtasDestino = $this->db
+				->select('IFNULL(MAX(numero) + 1, 1) AS nocuenta')
+				->where('comanda', $cmdDestino)
+				->get('cuenta')
+				->row();
+
+			$this->load->model('Cuenta_model');
+			$errores = [];
+			$cntUnicas = $unicasDestino ? (int)$unicasDestino->contunicas : 1;
+			$noCta = $numCtasDestino ? (int)$numCtasDestino->nocuenta : 1;
+			foreach($ctasDeOrigen as $ctaOrigen) {
+				$cta = new Cuenta_model($ctaOrigen->cuenta);
+				$campos = ['comanda' => $cmdDestino, 'numero' => $noCta];
+				if (strcasecmp(strtolower(trim($cta->nombre)), 'Única') === 0) {
+					$campos['nombre'] = "{$cta->nombre} ({$cntUnicas})";
+					$cntUnicas++;
+				}
+				$exito = $cta->guardar($campos);				
+				if (!$exito) {
+					$errores[] = implode(';', $cta->getMensaje());
+				}
+				$noCta++;
+			}
+			if(empty($errores)) {
+				return true;
+			} else {
+				$this->mensaje[] = implode(';', $errores);
+			}
+		} else {
+			$this->mensaje[] = 'No hay cuentas abiertas para trasladar.';
+		}
+
+		return false;
+	}
+
 }
 
 /* End of file Comanda_model.php */

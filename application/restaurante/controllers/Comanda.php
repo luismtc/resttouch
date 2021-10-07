@@ -34,8 +34,7 @@ class Comanda extends CI_Controller
 		$headers = $this->input->request_headers();
 		$this->data = AUTHORIZATION::validateToken($headers['Authorization']);
 
-		$this->output
-			->set_content_type('application/json', 'UTF-8');
+		$this->output->set_content_type('application/json', 'UTF-8');
 	}
 
 
@@ -140,10 +139,27 @@ class Comanda extends CI_Controller
 		$cmd = new Comanda_model($comanda);
 		$mesaOrigen = new Mesa_model($origen);
 		$mesaDestino = new Mesa_model($destino);
-		$mesaDestino->guardar(['estatus' => 2]);
-		$cmd->trasladar_mesa($destino, $comanda);
-		$mesaOrigen->guardar(['estatus' => 1]);
+		
 		$datos = ['exito' => true, 'mensaje' => 'Mesa trasladada con éxito.'];
+		if((int)$mesaDestino->estatus === 1) {
+			$mesaDestino->guardar(['estatus' => 2]);
+			$cmd->trasladar_mesa($destino, $comanda);
+			$mesaOrigen->guardar(['estatus' => 1]);
+		} else {
+			$cmdDestino = $mesaDestino->get_comanda(['estatus' => 1, 'sede' => $this->data->sede]);
+			if($cmdDestino) {
+				$datos['exito'] = $cmd->trasladar_cuentas_a_comanda($cmdDestino->comanda);
+				if ($datos['exito']) {
+					$cmd->guardar(['estatus' => 2]);
+					$mesaOrigen->guardar(['estatus' => 1]);
+				} else {
+					$datos['mensaje'] = $cmd->getMensaje();
+				}
+			} else {
+				$datos['exito'] = false;
+				$datos['mensaje'] = 'La comanda de la mesa destino ya fue cerrada, no puede realizarse el traslado de cuentas.';
+			}
+		}
 		$this->output->set_output(json_encode($datos));
 	}
 

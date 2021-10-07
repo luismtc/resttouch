@@ -799,7 +799,7 @@ export class TranComanda {
             cuenta: +p.numero_cuenta,
             idcuenta: +p.cuenta_cuenta,
             cantidad: +p.cantidad,
-            total: +p.total + montExt,
+            total: +p.total,
             notas: p.notas,
             detalle: p.detalle.length === 0 ? [] : (this.getDetalle(p.detalle) as string[]),
             monto_extra: montExt,
