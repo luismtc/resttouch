@@ -908,7 +908,7 @@ class Comanda_model extends General_Model
 				->get('cuenta')
 				->row();
 
-			$this->load->model('Cuenta_model');
+			$this->load->model(['Cuenta_model', 'Dcomanda_model']);
 			$errores = [];
 			$cntUnicas = $unicasDestino ? (int)$unicasDestino->contunicas : 1;
 			$noCta = $numCtasDestino ? (int)$numCtasDestino->nocuenta : 1;
@@ -919,9 +919,25 @@ class Comanda_model extends General_Model
 					$campos['nombre'] = "{$cta->nombre} ({$cntUnicas})";
 					$cntUnicas++;
 				}
-				$exito = $cta->guardar($campos);				
+				$exito = $cta->guardar($campos);
 				if (!$exito) {
 					$errores[] = implode(';', $cta->getMensaje());
+				} else {
+					$detsComanda = $this->db
+						->select('b.detalle_comanda')
+						->join('detalle_comanda b', 'b.detalle_comanda = a.detalle_comanda')
+						->where('a.cuenta_cuenta', $ctaOrigen->cuenta)
+						->get('detalle_cuenta a')
+						->result();
+					if ($detsComanda) {
+						foreach($detsComanda as $detc) {
+							$det = new Dcomanda_model($detc->detalle_comanda);
+							$exito = $det->guardar(['comanda' => $cmdDestino]);
+							if(!$exito) {
+								$errores[] = implode(';', $cta->getMensaje());								
+							}
+						}
+					}
 				}
 				$noCta++;
 			}
