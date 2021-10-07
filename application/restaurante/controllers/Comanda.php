@@ -114,7 +114,8 @@ class Comanda extends CI_Controller
 		$datos = ['exito' => false];
 		if ($deCuenta->cerrada == 0) {
 			if ($aCuenta->cerrada == 0) {
-				$detOrigen = $deCuenta->getDetalle(['_es_unificacion' => true, '_for_print' => true, '_totalCero' => true]);
+				// $detOrigen = $deCuenta->getDetalle(['_es_unificacion' => true, '_for_print' => true, '_totalCero' => true]);
+				$detOrigen = $deCuenta->get_plain_detalle_cuenta();
 				if (count($detOrigen) > 0) {
 					foreach ($detOrigen as $do) {
 						$deCuenta->guardarDetalle(['cuenta_cuenta' => $cuentaA], $do->detalle_cuenta, true);

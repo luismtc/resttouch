@@ -59,9 +59,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div align="center">
-                                <h6 [ngClass]="{'text-danger': comparaFecha(cmdEnProceso)}">
-                                    {{cmdEnProceso.tiempo_transcurrido | date: 'HH:mm:ss'}}
-                                </h6>
+                                <h6>{{cmdEnProceso.tiempo_transcurrido | date: 'HH:mm:ss'}}</h6>
                             </div>
                             <ng-container *ngFor="let cta of cmdEnProceso.cuentas">
                                 <table *ngIf="cta.productos.length > 0">

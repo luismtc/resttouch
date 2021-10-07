@@ -490,6 +490,17 @@ class Cuenta_model extends General_Model
 
 		return $detalles;
 	}
+
+	public function get_plain_detalle_cuenta($args = [])
+	{
+		if (!isset($args['cuenta'])) {
+			$this->db->where('a.cuenta_cuenta', $this->getPK());
+		} else {
+			$this->db->where('a.cuenta_cuenta', $args['cuenta']);
+		}
+
+		return $this->db->get('detalle_cuenta a')->result();
+	}
 }
 
 /* End of file Cuenta_model.php */
