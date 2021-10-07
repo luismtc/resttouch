@@ -1,19 +1,23 @@
 <div class="fullWidth" [style.height]="listHeight">
     <div *ngIf="detalleCuenta.length > 0">
         <span class="lineaDeTotal">
-            {{cantidadDeProductos}} artículo{{cantidadDeProductos > 1 ? 's' : ''}} por {{totalDeProductos() | number: '1.2-2'}}
+            {{cantidadDeProductos}} artículo{{cantidadDeProductos > 1 ? 's' : ''}} por {{totalDeProductos() | number:
+            '1.2-2'}}
         </span>
     </div>
     <mat-divider></mat-divider>
     <ng-container *ngFor="let p of detalleCuenta; let i = index;">
+        <!-- <div>{{p | json}}</div> -->
         <div class="wrapper" [ngClass]="{'noImpreso': +p.impreso === 0}">
             <div class="first product-margin" *ngIf="+p.cantidad > 0">
-                <span>{{p.cantidad | number: '1.0-0'}} {{p.descripcion}}</span>
-                <span>{{ ((p.cantidad * p.precio) + p.monto_extra) | number: '1.2-2' }}</span>&nbsp;
+                <span>{{p.cantidad | number: '1.0-0'}} {{p.descripcion}}</span>                
                 <br *ngIf="p.detalle.length > 0" />
                 <app-producto-comanda-alt *ngIf="p.detalle.length > 0" [detalle]="p.detalle"></app-producto-comanda-alt>
             </div>
             <div class="second product-margin" align="right">
+                <span class="span-monto-producto">
+                    {{((+p.cantidad * +p.precio) + totalDeProductos(p.detalle)) | number: '1.2-2'}}
+                </span>
                 <eco-fab-speed-dial direction="left">
                     <eco-fab-speed-dial-trigger>
                         <button mat-fab>
