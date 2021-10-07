@@ -169,15 +169,19 @@ class Cuenta_model extends General_Model
 			$this->db->where("c.categoria_grupo", $args['_categoria_grupo']);
 		}
 
+		if (!isset($args['_es_unificacion'])) {
+			$this->db
+				->where('c.mostrar_pos', 1)
+				->where('b.cantidad >', 0)
+				->where('b.detalle_comanda_id is null');
+		}
+
 		$tmp = $this->db
 			->select('b.*, d.descuento, a.detalle_cuenta, a.cuenta_cuenta')
 			->join('detalle_comanda b', 'a.detalle_comanda = b.detalle_comanda')
 			->join('articulo c', 'b.articulo = c.articulo')
 			->join('categoria_grupo d', 'd.categoria_grupo = c.categoria_grupo')
 			->where('a.cuenta_cuenta', $this->cuenta)
-			->where('c.mostrar_pos', 1)
-			->where('b.cantidad >', 0)
-			->where('b.detalle_comanda_id is null')
 			->get('detalle_cuenta a')
 			->result();
 
@@ -438,17 +442,26 @@ class Cuenta_model extends General_Model
 
 	public function obtener_detalle($args = [])
 	{
-		if (!isset($args['cuenta'])) {
-			$this->db->where('a.cuenta_cuenta', $this->getPK());
+		if (!isset($args['comanda'])) {
+			if (!isset($args['cuenta'])) {
+				$this->db->where('a.cuenta_cuenta', $this->getPK());
+			} else {
+				$this->db->where('a.cuenta_cuenta', $args['cuenta']);
+			}
 		} else {
-			$this->db->where('a.cuenta_cuenta', $args['cuenta']);
+			$this->db->where('b.comanda', $args['comanda']);
+			$this->db->order_by('a.cuenta_cuenta, b.fecha');
 		}
 
-		if (!isset($args['detalle_comanda_id'])) {			
+		if (!isset($args['detalle_comanda_id'])) {
 			$this->db->where('b.total >', 0)->where('c.mostrar_pos', 1)->where('b.detalle_comanda_id IS NULL');
 			$this->db->order_by('b.impreso, b.fecha');
-		} else {			
+		} else {
 			$this->db->where('b.detalle_comanda_id', $args['detalle_comanda_id']);
+		}
+
+		if (isset($args['impreso'])) {
+			$this->db->where('b.impreso', $args['impreso']);
 		}
 
 		$detalles = $this->db

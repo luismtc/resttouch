@@ -66,7 +66,7 @@ export interface DetalleCuentaSimplified {
     detalle_comanda_id?: number;
     impresora: number;
     sede: number;
-    nombre: string;
+    nombre_impresora: string;
     direccion_ip?: string;
     ubicacion?: string;
     bluetooth: number;

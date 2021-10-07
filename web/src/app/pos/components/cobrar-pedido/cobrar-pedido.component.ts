@@ -99,6 +99,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
     }
 
     // console.log('MESA = ', this.data.mesaenuso);
+    // console.log(this.inputData.productosACobrar);
 
     this.inputData.totalDeCuenta = 0.00;
     this.inputData.productosACobrar.forEach((item: any) => {

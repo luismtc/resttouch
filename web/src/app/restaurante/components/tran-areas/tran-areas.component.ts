@@ -286,6 +286,7 @@ export class TranAreasComponent implements OnInit, AfterViewInit, OnDestroy {
           // console.log(`TOGGLE SIDE NAV ${moment().format(GLOBAL.dateTimeFormatMilli)}`);
           this.cargando = false;
         }
+        this.snTrancomanda.lstProductosCuentaAlt = [];
       } else if (res === 'open') {
         // console.log('MESA SELECTED: ', this.mesaSeleccionada);
         if (this.mesaSeleccionada.cuentas.length === 1) {
