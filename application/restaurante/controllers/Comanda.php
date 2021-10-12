@@ -140,15 +140,15 @@ class Comanda extends CI_Controller
 		$cmd = new Comanda_model($comanda);
 		$mesaOrigen = new Mesa_model($origen);
 		$mesaDestino = new Mesa_model($destino);
-		
+
 		$datos = ['exito' => true, 'mensaje' => 'Mesa trasladada con éxito.'];
-		if((int)$mesaDestino->estatus === 1) {
+		if ((int)$mesaDestino->estatus === 1) {
 			$mesaDestino->guardar(['estatus' => 2]);
 			$cmd->trasladar_mesa($destino, $comanda);
 			$mesaOrigen->guardar(['estatus' => 1]);
 		} else {
 			$cmdDestino = $mesaDestino->get_comanda(['estatus' => 1, 'sede' => $this->data->sede]);
-			if($cmdDestino) {
+			if ($cmdDestino) {
 				$datos['exito'] = $cmd->trasladar_cuentas_a_comanda($cmdDestino->comanda);
 				if ($datos['exito']) {
 					$cmd->guardar(['estatus' => 2]);
@@ -179,7 +179,7 @@ class Comanda extends CI_Controller
 					$val = validarCantidades($req);
 					if ($val['exito']) {
 						$det = $comanda->guardarDetalleCombo($req, $cuenta->getPK());
-						if($det) {
+						if ($det) {
 							$datos['exito'] = true;
 							$datos['comanda'] = $comanda->getComanda([
 								'_cuenta' => $cuenta->cuenta, 'articulo' => $det->articulo, 'detalle_comanda' => $det->detalle_comanda
@@ -205,8 +205,25 @@ class Comanda extends CI_Controller
 			->set_output(json_encode($datos));
 	}
 
+	private function add_bitacora_elimina_detalle_comanda($dcom, $gerente)
+	{
+		$articuloAEliminar = new Articulo_model($dcom->articulo);
+		$usuarioElimino = new Usuario_model($this->data->idusuario);
+		$usuarioAutoriza = new Usuario_model($gerente);
+		$comentarioBitacora = "{$usuarioElimino->apellidos}, {$usuarioElimino->nombres} eliminó el artículo {$articuloAEliminar->descripcion} después de comandar, autorizado por {$usuarioAutoriza->apellidos}, {$usuarioAutoriza->nombres}.";
+		$bitComanda = new Bitacora_model();
+		$acc = $this->Accion_model->buscar(['descripcion' => 'Modificacion', '_uno' => true]);
+		$bitComanda->guardar([
+			'accion' => $acc->accion,
+			'usuario' => $this->data->idusuario,
+			'tabla' => 'detalle_comanda',
+			'registro' => $dcom->getPK(),
+			'comentario' => "{$comentarioBitacora} Registro original: {$dcom}."
+		]);
+	}
+
 	public function guardar_detalle($com, $cuenta)
-	{		
+	{
 		$comanda = new Comanda_model($com);
 		$mesa = $comanda->getMesas();
 		$cuenta = new Cuenta_model($cuenta);
@@ -225,6 +242,7 @@ class Comanda extends CI_Controller
 						if ($dcom->impreso == 1) {
 							if (isset($req['autorizado']) && $req['autorizado'] == true) {
 								$datos['exito'] = true;
+								$this->add_bitacora_elimina_detalle_comanda($dcom, $req['gerente']);
 							} else {
 								$datos['mensaje'] = 'El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.';
 							}
@@ -269,8 +287,8 @@ class Comanda extends CI_Controller
 			}
 		} else {
 			$datos['mensaje'] = 'Parametros Invalidos';
-		}	
-		
+		}
+
 		$this->output->set_output(json_encode($datos));
 	}
 
@@ -479,9 +497,11 @@ class Comanda extends CI_Controller
 					'categoria_grupo' => $cgrupo,
 					'order_by' => 'fecha_impresion'
 				];
-				
-				if(isset($_GET['comanda'])) { $filtro['comanda'] = $_GET['comanda']; }
-				
+
+				if (isset($_GET['comanda'])) {
+					$filtro['comanda'] = $_GET['comanda'];
+				}
+
 				$tmp = $this->Comanda_model->getComandas($filtro);
 
 				$filtro['cocinado'] = 1;
@@ -541,7 +561,7 @@ class Comanda extends CI_Controller
 						// 	$args['tiempo_preparacion'] = "00:{$data['tiempo']}";
 						// }
 						$args['tiempo_preparacion'] = "00:00";
-						$args['fecha_proceso'] = isset($data['fecha_proceso']) ? $data['fecha_proceso'] : Hoy(3);						
+						$args['fecha_proceso'] = isset($data['fecha_proceso']) ? $data['fecha_proceso'] : Hoy(3);
 					}
 
 					$exito = $ld->guardar($args);
@@ -629,7 +649,7 @@ class Comanda extends CI_Controller
 				if ($_mesa->estatus == 2) {
 					$comanda = $_mesa->get_comanda(["estatus" => 1, 'sede' => $data->sede]);
 					if ($comanda) {
-						$com = new Comanda_model($comanda->comanda);						
+						$com = new Comanda_model($comanda->comanda);
 						$det = $com->get_articulos_pendientes();
 						$cntConCantidad = 0;
 						if ($det) {
@@ -665,7 +685,9 @@ class Comanda extends CI_Controller
 		$res = ["exito" => false];
 		if ($this->input->method() == 'post') {
 			$req = json_decode(file_get_contents('php://input'), true);
-			$res['esgerente'] = $this->Usuario_model->validaPwdGerenteTurno($req['pwd'], $this->data->sede);
+			$gerente = $this->Usuario_model->validaPwdGerenteTurno($req['pwd'], $this->data->sede);
+			$res['esgerente'] = $gerente->esgerente;
+			$res['gerente_turno'] = $gerente->usuario;
 			$res['exito'] = true;
 			$res['mensaje'] = 'Datos validados con éxito.';
 		}
@@ -757,7 +779,7 @@ class Comanda extends CI_Controller
 			];
 			$comanda->detalle = $cmd->getDetalle();
 			$comanda->total = 0;
-			foreach($comanda->detalle as $det) {
+			foreach ($comanda->detalle as $det) {
 				$comanda->total += (float)$det->total;
 			}
 		}
@@ -769,23 +791,22 @@ class Comanda extends CI_Controller
 	{
 		$datos = new stdClass();
 		$datos->exito = false;
-		if($comanda) {
+		if ($comanda) {
 			$req = json_decode(file_get_contents('php://input'));
-			if(isset($req->razon_anulacion) && (int)$req->razon_anulacion > 0)
-			{
-				$cmd = new Comanda_model($comanda);			
+			if (isset($req->razon_anulacion) && (int)$req->razon_anulacion > 0) {
+				$cmd = new Comanda_model($comanda);
 				$factura = $cmd->getFactura();
-				$tieneFactura = $factura && !empty($factura->fel_uuid) && empty($factura->fel_uuid_anulacion);			
-				if (!$tieneFactura) {				
+				$tieneFactura = $factura && !empty($factura->fel_uuid) && empty($factura->fel_uuid_anulacion);
+				if (!$tieneFactura) {
 					$detComanda = $cmd->getDetalle();
-					foreach($detComanda as $det) {
+					foreach ($detComanda as $det) {
 						$dc = new Dcomanda_model($det->detalle_comanda);
 						$dc->cantidad = 0;
 						$dc->total = 0;
 						$dc->guardar();
 					}
-					$cmd->notas_generales = "Comanda anulada el ".date('d/m/Y')." por el usuario {$this->data->usuario}.";
-					$cmd->notas_generales .= isset($req->comentario_anulacion) && !empty($req->comentario_anulacion) ? (' '.trim($req->comentario_anulacion)) : '';
+					$cmd->notas_generales = "Comanda anulada el " . date('d/m/Y') . " por el usuario {$this->data->usuario}.";
+					$cmd->notas_generales .= isset($req->comentario_anulacion) && !empty($req->comentario_anulacion) ? (' ' . trim($req->comentario_anulacion)) : '';
 					$cmd->estatus = 3;
 					$cmd->razon_anulacion = $req->razon_anulacion;
 
@@ -803,7 +824,7 @@ class Comanda extends CI_Controller
 					]);
 
 					$datos->exito = $cmd->guardar();
-					$datos->mensaje = $datos->exito ? "La comanda {$comanda} fue anulada con éxito." : $cmd->getMensaje();				
+					$datos->mensaje = $datos->exito ? "La comanda {$comanda} fue anulada con éxito." : $cmd->getMensaje();
 				} else {
 					$datos->mensaje = "La comanda {$comanda} tiene la factura '{$factura->serie_factura}-{$factura->numero_factura}' vigente. Debe anular primero la factura.";
 				}
@@ -825,8 +846,11 @@ class Comanda extends CI_Controller
 		$this->output->set_output(json_encode($datos->comanda->cuentas));
 	}
 
-
-
+	public function test($id = '')
+	{
+		$dcom = new Dcomanda_model($id);
+		$this->output->set_output(json_encode(['registro' => (string)$dcom]));
+	}
 }
 
 /* End of file Comanda.php */

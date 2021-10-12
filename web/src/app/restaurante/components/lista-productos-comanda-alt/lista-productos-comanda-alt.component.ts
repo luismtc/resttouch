@@ -98,7 +98,7 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
     );
   }
 
-  removeProducto = (p: DetalleCuentaSimplified, idx: number, estaAutorizado = false, cantidad?: number) => {
+  removeProducto = (p: DetalleCuentaSimplified, idx: number, estaAutorizado = false, cantidad?: number, gerente = 0) => {
     this.bloqueoBotones = true;
     this.detalleComanda = {
       detalle_cuenta: p.detalle_cuenta,
@@ -108,7 +108,8 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
       precio: +p.precio,
       total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
       notas: p.notas,
-      autorizado: estaAutorizado
+      autorizado: estaAutorizado,
+      gerente: gerente
     };
 
     if (cantidad) {
@@ -149,16 +150,16 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
     this.endSubs.add(
       dialogoRef.afterClosed().subscribe(res => {
         // console.log(res);
-        if (res) {
+        if (res.esgerente) {
           // this.autorizar = true;
           //this.deleteProductoFromList(p, idx, true);
           const dialogDelete = this.dialog.open(DialogElminarProductoComponent, {
             width: '40%', disableClose: true, data: new ElminarProductoModel(p)
           });          
           this.endSubs.add(            
-            dialogDelete.afterClosed().subscribe(res => {
-              if (res && res.respuesta){
-                this.removeProducto(res.producto, idx, true, res.producto.cantidad)
+            dialogDelete.afterClosed().subscribe(resDel => {
+              if (resDel && resDel.respuesta){
+                this.removeProducto(resDel.producto, idx, true, resDel.producto.cantidad, +res.gerente_turno)
                 this.snackBar.open('Se eliminará el producto seleccionado.', 'Comanda', { duration: 5000 });
               }
             })

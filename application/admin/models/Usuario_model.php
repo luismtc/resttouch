@@ -27,7 +27,7 @@ class Usuario_model extends General_model
     function validaPwdGerenteTurno($pwd = null, $idsede = 0) {
         if($pwd){
             $dbusr = $this->db
-                ->select("c.contrasenia")
+                ->select("c.contrasenia, c.usuario")
                 ->from("turno_has_usuario a")
                 ->join("usuario_tipo b", "b.usuario_tipo = a.usuario_tipo")
                 ->join("usuario c", "c.usuario = a.usuario")
@@ -40,11 +40,11 @@ class Usuario_model extends General_model
 
             foreach($dbusr as $usr) {
                 if (password_verify($pwd, $usr->contrasenia)) {
-                    return true;
+                    return (object)['usuario' => $usr->usuario,'esgerente' => true];
                 } 
             }
         }
-        return false;
+        return (object)['usuario' => null,'esgerente' => false];
     }
 
     function logIn($credenciales = null)
