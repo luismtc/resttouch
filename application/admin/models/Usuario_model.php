@@ -99,8 +99,7 @@ class Usuario_model extends General_model
                 if ($validado) {
                     $tokenData = array(
                         'idusuario' => $dbusr->usuario,
-                        'sede' => $dbusr->sede,
-                        //'usuario' => $credenciales['usr'],
+                        'sede' => $dbusr->sede,                        
                         'usuario' => $dbusr->usrname,
                         'inicia' => date('Y-m-d H:i:s'),
                         'hasta' => date('Y-m-d H:i:s', strtotime('+12 hours')),

@@ -30,6 +30,11 @@ class Bitacora_model extends General_model {
 		return $this->buscar($args);
 	}
 
+	public function get_tablas_bitacora() 
+	{
+		return $this->db->select('tabla')->group_by('tabla')->get('bitacora')->result();
+	}
+
 	public function reporte($args = [])
 	{
 		if (isset($args['comentario'])) {
@@ -73,7 +78,7 @@ class Bitacora_model extends General_model {
 		}
 
 		return $this->db
-			->select('a.bitacora, c.usrname, b.descripcion AS descripcion_accion, DATE_FORMAT(a.fecha, "%d/%m/%Y %H:%i:%s") as fecha, a.tabla, a.registro, a.comentario')
+			->select('a.bitacora, c.usrname AS usuario, b.descripcion AS accion, DATE_FORMAT(a.fecha, "%d/%m/%Y %H:%i:%s") as fecha, a.tabla, a.registro, a.comentario')
 			->join('accion b', 'b.accion = a.accion')
 			->join ('usuario c', 'c.usuario = a.usuario')
 			->order_by('a.fecha DESC')

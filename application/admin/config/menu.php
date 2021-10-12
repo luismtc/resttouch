@@ -108,6 +108,10 @@ $config['menu'] = [
 					3 => [
 						'nombre' => 'Caja',
 						'link' => '/restaurante/rptcaja'
+					],
+					4 => [
+						'nombre' => 'Bitácora',
+						'link' => '/admin/rptbitacora'
 					]
 				]
 			],
