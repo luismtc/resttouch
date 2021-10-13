@@ -395,6 +395,8 @@ if ( ! function_exists('Hoy')) {
 				return date('Y-m-d H:i:s');
 			case 4:
 				return date('H:i:s');
+			case 5:
+				return date('d/m/Y H:i:s');
 			default:
 				return date('Y-m-d');
 		}

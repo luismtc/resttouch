@@ -77,10 +77,15 @@ class Bitacora_model extends General_model {
 			$this->db->limit($args['ultimos']);
 		}
 
+		if (isset($args['sede'])) {
+			$this->db->where("d.sede IN({$args['sede']})");
+		}
+
 		return $this->db
-			->select('a.bitacora, c.usrname AS usuario, b.descripcion AS accion, DATE_FORMAT(a.fecha, "%d/%m/%Y %H:%i:%s") as fecha, a.tabla, a.registro, a.comentario')
+			->select('a.bitacora, d.nombre AS sede, c.usrname AS usuario, b.descripcion AS accion, DATE_FORMAT(a.fecha, "%d/%m/%Y %H:%i:%s") as fecha, a.tabla, a.registro, a.comentario')
 			->join('accion b', 'b.accion = a.accion')
-			->join ('usuario c', 'c.usuario = a.usuario')
+			->join('usuario c', 'c.usuario = a.usuario')
+			->join('sede d', 'd.sede = c.sede')			
 			->order_by('a.fecha DESC')
 			->get("{$this->_tabla} a")
 			->result();

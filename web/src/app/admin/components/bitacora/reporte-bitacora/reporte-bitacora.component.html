@@ -22,6 +22,15 @@
             </mat-form-field>
 
             <mat-form-field class="fullWidth">
+                <mat-label>Sede</mat-label>
+                <mat-select name="sede" multiple [(ngModel)]="params.sedes">
+                    <mat-option *ngFor="let sede of sedesUsuario" [value]="sede.sede.sede">
+                        {{sede.sede.nombre}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="fullWidth">
                 <input matInput type="text" placeholder="Usuario" name="usuario" [(ngModel)]="params.usrname" maxlength="15">
             </mat-form-field>
 

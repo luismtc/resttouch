@@ -28,12 +28,20 @@ class Bitacora extends CI_Controller
 
 	public function reporte()
 	{
-		$sede = new Sede_model($this->data->sede);
-		$emp = $sede->getEmpresa();
-
 		$_POST = json_decode(file_get_contents('php://input'), true);
-
+		if(!isset($_POST['sede'])) { $_POST['sede'] = $this->data->sede; }
+		
 		$datos = $this->Bitacora_model->reporte($_POST);
+
+		$lstSedes = explode(',', $_POST['sede']);
+		$nombreSedes = '';
+		foreach($lstSedes as $s) {
+			$sede = new Sede_model($s);
+			if($nombreSedes !== '') {
+				$nombreSedes .= ', ';
+			}
+			$nombreSedes .= $sede->nombre;
+		}		
 
 		$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 		$excel->getProperties()
@@ -45,10 +53,10 @@ class Bitacora extends CI_Controller
 		$excel->setActiveSheetIndex(0);
 		$hoja = $excel->getActiveSheet();
 
-		/*Encabezado*/
-		$hoja->setCellValue('A1', $emp->nombre);
-		$hoja->setCellValue('A2', $sede->nombre);
-		$hoja->setCellValue('A3', 'Bitácora');
+		/*Encabezado*/		
+		$hoja->setCellValue('A1', 'BITÁCORA');
+		$hoja->setCellValue('A2', 'FECHA: '.Hoy(5));
+		$hoja->setCellValue('A3', 'Sede'.(count($lstSedes) === 1 ? '' : 's').': '.$nombreSedes);
 
 		$parametros = '';
 		if (isset($_POST['fdel']) && !empty($_POST['fdel'])) {
@@ -89,38 +97,40 @@ class Bitacora extends CI_Controller
 
 		$hoja->getStyle('A1:C4')->getFont()->setBold(true);
 
-		$hoja->mergeCells('A1:G1');
-		$hoja->mergeCells('A2:G2');
-		$hoja->mergeCells('A3:G3');
-		$hoja->mergeCells('A4:G4');
+		$hoja->mergeCells('A1:H1');
+		$hoja->mergeCells('A2:H2');
+		$hoja->mergeCells('A3:H3');		
+		$hoja->mergeCells('A4:H4');
 
 		$hoja->setCellValue('A6', 'Bitácora');
-		$hoja->setCellValue('B6', 'Usuario');
-		$hoja->setCellValue('C6', 'Acción');
-		$hoja->setCellValue('D6', 'Fecha');
-		$hoja->setCellValue('E6', 'Tabla');
-		$hoja->setCellValue('F6', 'Registro');
-		$hoja->setCellValue('G6', 'Comentario');
+		$hoja->setCellValue('B6', 'Sede');
+		$hoja->setCellValue('C6', 'Usuario');
+		$hoja->setCellValue('D6', 'Acción');
+		$hoja->setCellValue('E6', 'Fecha');
+		$hoja->setCellValue('F6', 'Tabla');
+		$hoja->setCellValue('G6', 'Registro');
+		$hoja->setCellValue('H6', 'Comentario');
 
-		$hoja->getStyle('A6:G6')->getFont()->setBold(true);
+		$hoja->getStyle('A6:H6')->getFont()->setBold(true);
 
 		$fila = 7;
 		foreach($datos as $data) {
 			$hoja->setCellValue("A{$fila}", $data->bitacora);
-			$hoja->setCellValue("B{$fila}", $data->usuario);
-			$hoja->setCellValue("C{$fila}", $data->accion);
-			$hoja->setCellValue("D{$fila}", $data->fecha);
-			$hoja->setCellValue("E{$fila}", $data->tabla);
-			$hoja->setCellValue("F{$fila}", $data->registro);
-			$hoja->setCellValue("G{$fila}", $data->comentario);
+			$hoja->setCellValue("B{$fila}", $data->sede);
+			$hoja->setCellValue("C{$fila}", $data->usuario);
+			$hoja->setCellValue("D{$fila}", $data->accion);
+			$hoja->setCellValue("E{$fila}", $data->fecha);
+			$hoja->setCellValue("F{$fila}", $data->tabla);
+			$hoja->setCellValue("G{$fila}", $data->registro);
+			$hoja->setCellValue("H{$fila}", $data->comentario);
 			$fila++;
 		}		
 
-		foreach (range('A', 'G') as $col) {
+		foreach (range('A', 'H') as $col) {
 			$hoja->getColumnDimension($col)->setAutoSize(true);
 		}
 
-		$hoja->setAutoFilter('A6:G6');
+		$hoja->setAutoFilter('A6:H6');
 
 		header("Content-Type: application/vnd.ms-excel");
 		header("Content-Disposition: attachment;filename=Bitacora.xlsx");
