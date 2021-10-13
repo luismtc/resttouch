@@ -265,39 +265,39 @@ class Venta extends CI_Controller
 		}
 
 		if ($this->input->get('turno_tipo')) {
-			$data["turno"] = new TurnoTipo_model($_GET["turno_tipo"]);
+			$data['turno'] = new TurnoTipo_model($_GET['turno_tipo']);
 		}
 
-		if (verDato($req, "_excel")) {
+		if (verDato($req, '_excel')) {
 			$fdel = formatoFecha($_GET['fdel'], 2);
 			$fal = formatoFecha($_GET['fal'], 2);
 
 			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 			$excel->getProperties()
-				->setCreator("Restouch")
-				->setTitle("Office 2007 xlsx Ventas por Categoria")
-				->setSubject("Office 2007 xlsx Ventas por Categoria")
-				->setKeywords("office 2007 openxml php");
+				->setCreator('Restouch')
+				->setTitle('Office 2007 xlsx Ventas por Categoria')
+				->setSubject('Office 2007 xlsx Ventas por Categoria')
+				->setKeywords('office 2007 openxml php');
 
 			$excel->setActiveSheetIndex(0);
 			$hoja = $excel->getActiveSheet();
 			$nombres = [
-				"Descripcion",
-				"Cantidad",
-				"Porcentaje",
-				"Precio Unitario",
-				"Total"
+				'Descripción',
+				'Cantidad',
+				'Porcentaje',
+				'Precio Unitario',
+				'Total'
 			];
 			/*Encabezado*/
-			$hoja->setCellValue("A1", $data["empresa"]->nombre);
-			$hoja->setCellValue("A2", $data["nsede"]);
-			$hoja->setCellValue("A4", "Reporte de Ventas");
-			$hoja->setCellValue("A5", "Por Categoria");
-			$hoja->setCellValue("A6", "Del: {$fdel} al: {$fal}");
+			$hoja->setCellValue('A1', $data['empresa']->nombre);
+			$hoja->setCellValue('A2', $data['nsede']);
+			$hoja->setCellValue('A4', 'Reporte de Ventas');
+			$hoja->setCellValue('A5', 'Por Categoría');
+			$hoja->setCellValue('A6', "Del: {$fdel} al: {$fal}");
 
-			$hoja->fromArray($nombres, null, "A8");
-			$hoja->getStyle("A1:A6")->getFont()->setBold(true);
-			$hoja->getStyle("A8:E8")->getFont()->setBold(true);
+			$hoja->fromArray($nombres, null, 'A8');
+			$hoja->getStyle('A1:A6')->getFont()->setBold(true);
+			$hoja->getStyle('A8:E8')->getFont()->setBold(true);
 
 			$fila = 9;
 			$granTotal = 0;
@@ -328,7 +328,7 @@ class Venta extends CI_Controller
 								$fila++;
 							}
 
-							$hoja->setCellValue("D{$fila}", "Total Subcategoria");
+							$hoja->setCellValue("D{$fila}", 'Total Subcategoría');
 							$hoja->setCellValue("E{$fila}", $total);
 							$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 							$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
@@ -338,7 +338,7 @@ class Venta extends CI_Controller
 				}
 
 				$fila++;
-				$hoja->setCellValue("D{$fila}", "TOTAL");
+				$hoja->setCellValue("D{$fila}", 'TOTAL');
 				$hoja->setCellValue("E{$fila}", $granTotal);
 				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
@@ -375,7 +375,7 @@ class Venta extends CI_Controller
 									$fila++;
 								}
 
-								$hoja->setCellValue("D{$fila}", "Total Subcategoria");
+								$hoja->setCellValue("D{$fila}", 'Total Subcategoría');
 								$hoja->setCellValue("E{$fila}", $total);
 								$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 								$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
@@ -383,7 +383,7 @@ class Venta extends CI_Controller
 							}
 						}
 					}
-					$hoja->setCellValue("D{$fila}", "Total Sede");
+					$hoja->setCellValue("D{$fila}", 'Total Sede');
 					$hoja->setCellValue("E{$fila}", $totalSede);
 					$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
@@ -391,7 +391,7 @@ class Venta extends CI_Controller
 				}
 
 				$fila++;
-				$hoja->setCellValue("D{$fila}", "TOTAL");
+				$hoja->setCellValue("D{$fila}", 'TOTAL');
 				$hoja->setCellValue("E{$fila}", $granTotal);
 				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
@@ -402,18 +402,18 @@ class Venta extends CI_Controller
 			}
 
 			$fila++;
-			$hoja->setTitle("Ventas por Categoria");
+			$hoja->setTitle('Ventas por Categoría');
 
-			header("Content-Type: application/vnd.ms-excel");
-			header("Content-Disposition: attachment;filename=Ventas.xlsx");
-			header("Cache-Control: max-age=1");
-			header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
-			header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GTM");
-			header("Cache-Control: cache, must-revalidate");
-			header("Pragma: public");
+			header('Content-Type: application/vnd.ms-excel');
+			header('Content-Disposition: attachment;filename=Ventas.xlsx');
+			header('Cache-Control: max-age=1');
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GTM');
+			header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GTM');
+			header('Cache-Control: cache, must-revalidate');
+			header('Pragma: public');
 
 			$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
-			$writer->save("php://output");
+			$writer->save('php://output');
 		} else {
 			$vista = $this->load->view('reporte/venta/categoria', array_merge($data, $req), true);
 
@@ -423,7 +423,7 @@ class Venta extends CI_Controller
 			]);
 
 			$mpdf->WriteHTML($vista);
-			$mpdf->Output("Ventas_categoria.pdf", "D");
+			$mpdf->Output('Ventas_categoria.pdf', 'D');
 
 			// $this->output->set_content_type("application/json")->set_output(json_encode(['data' => $data, 'req' => $req]));
 		}

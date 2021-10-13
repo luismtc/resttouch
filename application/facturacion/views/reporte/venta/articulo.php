@@ -15,7 +15,7 @@
 			<?php if (isset($turno)) : ?>
 				<h4>Turno: <?php echo $turno->descripcion ?> </h4>
 			<?php endif ?>
-			<span>Por Articulo</span>
+			<span>Por Artículo</span>
 		</div>
 	</div>
 
@@ -33,7 +33,7 @@
 						<th colspan="3" style="padding: 5px;" class="text-center"><?php echo $sede->nombre ?></th>
 					</tr>
 					<tr>
-						<th style="padding: 5px;" class="text-center">Descripcion</th>
+						<th style="padding: 5px;" class="text-center">Descripción</th>
 						<th style="padding: 5px;" class="text-right">Cantidad</th>
 						<th style="padding: 5px;" class="text-right">Total</th>
 					</tr>

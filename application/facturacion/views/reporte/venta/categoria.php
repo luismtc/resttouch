@@ -26,7 +26,7 @@
 			<?php if (isset($turno)): ?>
 				<h4>Turno: <?php echo $turno->descripcion ?> </h4>
 			<?php endif ?>
-			<span>Por Categoria</span>
+			<span>Por Categoría</span>
 		</div>
 	</div>
 	
@@ -45,7 +45,7 @@
 					<table class="table table-bordered" style="padding: 5px">
 						<thead>
 							<tr>
-								<th style="padding: 5px;" class="text-center">Descripcion</th>
+								<th style="padding: 5px;" class="text-center">Descripción</th>
 								<th style="padding: 5px;" class="text-center">Cantidad</th>
 								<th style="padding: 5px;" class="text-center">Porcentaje</th>
 								<th style="padding: 5px;" class="text-center">Precio Unitario</th>
@@ -88,7 +88,7 @@
 											?>	
 										<?php endforeach ?>
 										<tr>
-											<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoria</b></td>
+											<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoría</b></td>
 											<td style="padding: 5px;" class="text-right">
 												<?php echo number_format($total, 2) ?>
 											</td>
@@ -112,7 +112,7 @@
 					<table class="table table-bordered" style="padding: 5px">
 						<thead>
 							<tr>
-								<th style="padding: 5px;" class="text-center">Descripcion</th>
+								<th style="padding: 5px;" class="text-center">Descripción</th>
 								<th style="padding: 5px;" class="text-center">Cantidad</th>
 								<th style="padding: 5px;" class="text-center">Porcentaje</th>
 								<th style="padding: 5px;" class="text-center">Precio Unitario</th>
@@ -163,7 +163,7 @@
 											<?php endforeach ?>
 											<?php $totalSede += $total; ?>
 											<tr>
-												<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoria</b></td>
+												<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4"><b>Total subcategoría</b></td>
 												<td style="padding: 5px;" class="text-right">
 													<?php echo number_format($total, 2) ?>
 												</td>
