@@ -124,13 +124,18 @@ class Bitacora extends CI_Controller
 			$hoja->setCellValue("G{$fila}", $data->registro);
 			$hoja->setCellValue("H{$fila}", $data->comentario);
 			$fila++;
-		}		
+		}
+		$fila--;
 
-		foreach (range('A', 'H') as $col) {
+		foreach (range('A', 'G') as $col) {
 			$hoja->getColumnDimension($col)->setAutoSize(true);
 		}
-
-		$hoja->setAutoFilter('A6:H6');
+		
+		$hoja->setAutoFilter('B6:F6');
+		$hoja->getStyle("A6:H{$fila}")->getAlignment()->setVertical('top');
+		$hoja->getColumnDimension('H')->setAutoSize(false);
+		$hoja->getColumnDimension('H')->setWidth(85);
+		$hoja->getStyle("H6:H{$fila}")->getAlignment()->setWrapText(true);
 
 		header("Content-Type: application/vnd.ms-excel");
 		header("Content-Disposition: attachment;filename=Bitacora.xlsx");

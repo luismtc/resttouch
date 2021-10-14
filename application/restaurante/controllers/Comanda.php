@@ -205,11 +205,11 @@ class Comanda extends CI_Controller
 			->set_output(json_encode($datos));
 	}
 
-	private function add_bitacora_elimina_detalle_comanda($dcom, $gerente)
+	private function add_bitacora_elimina_detalle_comanda($dcom, $req)
 	{
 		$articuloAEliminar = new Articulo_model($dcom->articulo);
 		$usuarioElimino = new Usuario_model($this->data->idusuario);
-		$usuarioAutoriza = new Usuario_model($gerente);
+		$usuarioAutoriza = new Usuario_model($req['gerente']);
 		$comentarioBitacora = "{$usuarioElimino->apellidos}, {$usuarioElimino->nombres} eliminó el artículo {$articuloAEliminar->descripcion} después de comandar, autorizado por {$usuarioAutoriza->apellidos}, {$usuarioAutoriza->nombres}.";
 		$bitComanda = new Bitacora_model();
 		$acc = $this->Accion_model->buscar(['descripcion' => 'Modificacion', '_uno' => true]);
@@ -218,7 +218,7 @@ class Comanda extends CI_Controller
 			'usuario' => $this->data->idusuario,
 			'tabla' => 'detalle_comanda',
 			'registro' => $dcom->getPK(),
-			'comentario' => "{$comentarioBitacora} Registro original: {$dcom}."
+			'comentario' => "{$comentarioBitacora} Se eliminaron ".number_format((float)$req['cantidad'], 2)." y originalmente habían ".number_format((float)$dcom->cantidad, 2).". Precio unitario: ".number_format((float)$dcom->precio, 2)."."
 		]);
 	}
 
@@ -242,7 +242,7 @@ class Comanda extends CI_Controller
 						if ($dcom->impreso == 1) {
 							if (isset($req['autorizado']) && $req['autorizado'] == true) {
 								$datos['exito'] = true;
-								$this->add_bitacora_elimina_detalle_comanda($dcom, $req['gerente']);
+								$this->add_bitacora_elimina_detalle_comanda($dcom, $req);
 							} else {
 								$datos['mensaje'] = 'El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.';
 							}
