@@ -217,8 +217,8 @@ class Comanda extends CI_Controller
 			'accion' => $acc->accion,
 			'usuario' => $this->data->idusuario,
 			'tabla' => 'detalle_comanda',
-			'registro' => $dcom->getPK(),
-			'comentario' => "{$comentarioBitacora} Se eliminaron ".number_format((float)$req['cantidad'], 2)." y originalmente habían ".number_format((float)$dcom->cantidad, 2).". Precio unitario: ".number_format((float)$dcom->precio, 2)."."
+			'registro' => $dcom->detalle_comanda,
+			'comentario' => "{$comentarioBitacora} Quedaron " . number_format((float)$req['cantidad'], 2) . " y originalmente habían " . number_format((float)$dcom->cantidad, 2) . ". Precio unitario: " . number_format((float)$dcom->precio, 2) . "."
 		]);
 	}
 
@@ -846,10 +846,73 @@ class Comanda extends CI_Controller
 		$this->output->set_output(json_encode($datos->comanda->cuentas));
 	}
 
-	public function test($id = '')
+	private function eliminar_linea_detalle($detalle, $req)
 	{
-		$dcom = new Dcomanda_model($id);
-		$this->output->set_output(json_encode(['registro' => (string)$dcom]));
+		$dc = new Dcomanda_model($detalle->detalle_comanda);
+		$dc->cantidad = (float)$req['cantidad'];
+		$dc->total = (float)$req['total'];
+
+		if($req['regresa_inventario'] || (int)$detalle->mostrar_inventario === 0) {
+			$dc->cantidad_inventario = (float)$req['cantidad'];
+		}
+
+		$exito = $dc->guardar();
+		// $exito = true;
+
+		if ($exito) {
+			return (object)['exito' => true, 'mensaje' => null];
+		} else {
+			return (object)['exito' => false, 'mensaje' => implode(', ', $dc->getMensaje())];
+		}
+		return (object)['exito' => true, 'mensaje' => null];
+	}
+
+	public function eliminar_detalle()
+	{
+		$req = json_decode(file_get_contents('php://input'), true);
+		$detalle = $this->Dcomanda_model->get_detalle_comanda_and_childs(['detalle_comanda' => $req['detalle_comanda']]);
+		$datos = ['exito' => false];
+		$errores = [];
+
+		if(count($detalle) > 0) {
+			$pasa = true;
+			if ((int)$detalle[0]->impreso === 1) {
+				if (isset($req['autorizado']) && $req['autorizado'] == true) {					
+					$this->add_bitacora_elimina_detalle_comanda((object)$detalle[0], $req);
+				} else {
+					$pasa = false;
+					$errores[] = 'El producto ya ha sido impreso, por favor cierre el panel y vuelva a entrar.';
+				}				
+			} else {
+				$req['regresa_inventario'] = true;
+			}
+
+			if ($pasa) {
+				foreach ($detalle as $det) {
+					$res = $this->eliminar_linea_detalle($det, $req);
+					if (!$res->exito) {
+						$errores[] = $res->mensaje;
+					}
+				}
+			}
+		} else {
+			$errores[] = 'No se encontró ningún detalle con esos parámetros.';
+		}
+
+		if(count($errores) === 0) {
+			$datos['exito'] = true;
+			$datos['mensaje'] = 'Producto eliminado con éxito.';
+		} else {
+			$datos['mensaje'] = implode(',', $errores);
+		}
+
+		$this->output->set_output(json_encode($datos));
+	}
+
+	public function test()
+	{
+		$detalle = $this->Dcomanda_model->get_detalle_comanda_and_childs($_GET);
+		$this->output->set_output(json_encode($detalle));
 	}
 }
 

@@ -171,9 +171,13 @@ class Comanda_model extends General_Model
 		$factor *= $cantPres;
 		$oldart = new Articulo_model($det->articulo);
 
-		if (!empty($menu)) {
+		if (!empty($menu) && !$vnegativo) {
 			$art->actualizarExistencia(['bodega' => $args['bodega']]);
 			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
+		}
+
+		if(isset($args['cantidad'])) {
+			$args['cantidad_inventario'] = $args['cantidad'];
 		}
 
 		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
@@ -214,7 +218,8 @@ class Comanda_model extends General_Model
 						'impreso' => 0,
 						'presentacion' => $presR->presentacion,
 						'detalle_comanda_id' => $idx,
-						'bodega' => $bodegaR ? $bodegaR->bodega : null
+						'bodega' => $bodegaR ? $bodegaR->bodega : null,
+						'cantidad_inventario' => $rec->cantidad
 					];
 					$detr->guardar($dato);
 				}
@@ -223,7 +228,7 @@ class Comanda_model extends General_Model
 				$det->actualizarCantidadHijos();
 			}
 			if ($result) {
-				if (!empty($menu)) {
+				if (!empty($menu) && !$vnegativo) {
 					$art->actualizarExistencia(['bodega' => $args['bodega']]);
 					// $art->existencias += $factor;					
 					// $art->guardar();
@@ -231,7 +236,7 @@ class Comanda_model extends General_Model
 				}
 				if (isset($args['articulo'])) {
 					if ($oldart->articulo) {
-						if (!empty($menu)) {
+						if (!empty($menu) && !$vnegativo) {
 							$oldart->actualizarExistencia(['bodega' => $args['bodega']]);
 							// if ($factor > 0) {
 							// 	$oldart->existencias += $factor;
@@ -303,7 +308,11 @@ class Comanda_model extends General_Model
 		// 	$oldart = new Articulo_model($det->articulo);
 		// }
 
-		if (!empty($menu)) {
+		if(isset($args['cantidad'])) {
+			$args['cantidad_inventario'] = $args['cantidad'];
+		}
+		
+		if (!empty($menu) && !$vnegativo) {
 			$art->actualizarExistencia(['bodega' => $args['bodega']]);
 			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
 		}
@@ -346,7 +355,8 @@ class Comanda_model extends General_Model
 						'impreso' => 0,
 						'presentacion' => $presR->presentacion,
 						'detalle_comanda_id' => $idx,
-						'bodega' => $bodegaR ? $bodegaR->bodega : null
+						'bodega' => $bodegaR ? $bodegaR->bodega : null,
+						'cantidad_inventario' => $rec->cantidad
 					];
 					$detr->guardar($dato);
 				}
@@ -355,14 +365,14 @@ class Comanda_model extends General_Model
 				$det->actualizarCantidadHijos();
 			}
 			if ($result) {
-				if (!empty($menu)) {
+				if (!empty($menu) && !$vnegativo) {
 					$art->actualizarExistencia(['bodega' => $args['bodega']]);
 					// $art->existencias += $factor;					
 					// $art->guardar();
 					// $art->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
 				}
 
-				if ($oldart && isset($oldart->articulo) && !empty($menu)) {
+				if ($oldart && isset($oldart->articulo) && !empty($menu) && !$vnegativo) {
 					$oldart->actualizarExistencia(['bodega' => $args['bodega']]);
 					// if ($factor > 0) {
 					// 	$oldart->existencias += $factor;

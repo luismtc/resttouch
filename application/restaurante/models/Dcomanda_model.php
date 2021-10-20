@@ -21,6 +21,7 @@ class Dcomanda_model extends General_Model
 	public $fecha_proceso;
 	public $detalle_comanda_id;
 	public $bodega;
+	public $cantidad_inventario = null;
 
 	public function __construct($id = '')
 	{
@@ -250,6 +251,8 @@ class Dcomanda_model extends General_Model
 
 	public function get_detalle($args = [])
 	{
+		$campos = $this->getCampos(false, 'a.');
+
 		if (isset($args['_categoria_grupo'])) {
 			$this->db->where("b.categoria_grupo IN({$args['_categoria_grupo']})");
 		}
@@ -262,13 +265,34 @@ class Dcomanda_model extends General_Model
 			$this->db->where('a.numero', $args['numero']);
 		}
 
+		if (isset($args['detalle_comanda'])) {
+			$this->db->where('a.detalle_comanda', $args['detalle_comanda']);
+		}
+
+		if (isset($args['detalle_comanda_id'])) {
+			$this->db->where('a.detalle_comanda_id', $args['detalle_comanda_id']);
+		}
+
+		if (isset($args['comanda'])) {
+			$this->db->where('a.comanda', $args['comanda']);
+		}
+
 		return $this->db
-			->select('a.*')
+			->select("{$campos}, b.mostrar_inventario")
 			->join('articulo b', 'b.articulo = a.articulo')
-			->where('a.comanda', $args['comanda'])
 			->get('detalle_comanda a')
 			->result();
 	}
+
+	public function get_detalle_comanda_and_childs($args)
+	{
+		$detalle = $this->get_detalle($args);
+		foreach($detalle as $det) {
+			$detalle = array_merge($detalle, $this->get_detalle_comanda_and_childs(['detalle_comanda_id' => $det->detalle_comanda]));
+		}		
+		return $detalle;
+	}
+
 }
 
 /* End of file Dcomanda_model.php */

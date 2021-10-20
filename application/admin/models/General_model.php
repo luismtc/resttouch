@@ -168,24 +168,43 @@ class General_model extends CI_Model
 		return $tmp->result();
 	}
 
-	public function __toString()
+	public function getCampos($asArray = true, $prefijo = '')
 	{
-		$columnas = $this->db
+		$campos = $this->db
 			->select('column_name AS campo')
 			->where('table_schema', $this->db->database)
 			->where('table_name', $this->_tabla)
 			->order_by('ordinal_position')
 			->get('information_schema.columns')
 			->result();
+		
+		if($asArray) {
+			return $campos;
+		} else {
+			$lista = '';
+			$prefijo = trim($prefijo);
+			foreach($campos as $valor) {
+				if ($lista !== '') {
+					$lista .= ', ';
+				}				
+				$lista .= "{$prefijo}{$valor->campo}";
+			}
+			return $lista;
+		}
+	}
+
+	public function __toString()
+	{
+		$columnas = $this->getCampos();
 
 		if ($columnas) {
 			$registro = '';
 			foreach ($columnas as $valor) {
 				if (property_exists($this, $valor->campo)) {
-					if($registro !== '') {
+					if ($registro !== '') {
 						$registro .= ', ';
 					}
-					$registro .= "{$valor->campo}: ".(!empty($this->{$valor->campo}) ? $this->{$valor->campo} : 'null');
+					$registro .= "{$valor->campo}: " . (!empty($this->{$valor->campo}) ? $this->{$valor->campo} : 'null');
 				}
 			}
 			return $registro;
