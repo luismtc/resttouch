@@ -254,7 +254,7 @@ class Comanda_model extends General_Model
 
 			return $result;
 		} else {
-			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
+			$this->setMensaje('No hay existencias suficientes para este articulo');
 		}
 	}
 
@@ -391,7 +391,7 @@ class Comanda_model extends General_Model
 			// printf("{$finaliza} - {$inicia} = {$tiempo}");
 			return $result;
 		} else {
-			$this->setMensaje("No hay existencias suficientes para este articulo, existencia {$art->existencias}");
+			$this->setMensaje('No hay existencias suficientes para este articulo');
 		}
 	}
 
