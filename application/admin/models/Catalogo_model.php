@@ -408,6 +408,32 @@ class Catalogo_model extends CI_Model
 		return $this->getCatalogo($qry, $args);
 	}
 
+	public function getSedeForAPI($args = [])
+	{
+
+		if (isset($args['sede'])) {
+			$this->db->where('sede', $args['sede']);
+		}
+
+		if (isset($args['empresa'])) {
+			$this->db->where('empresa', $args['empresa']);
+		}
+
+		if (isset($args['admin_llave'])) {
+			$this->db
+				->join("empresa b", "a.empresa = b.empresa")
+				->join("corporacion c", "b.corporacion = c.corporacion")
+				->where("c.admin_llave", $args['admin_llave']);
+		}
+
+		$qry = $this->db
+			->select("a.*")
+			->order_by("a.sede")
+			->get("sede a");
+
+		return $this->getCatalogo($qry, $args);
+	}	
+
 	public function getTipoUsuario($args = [])
 	{
 		if (count($args) > 0) {

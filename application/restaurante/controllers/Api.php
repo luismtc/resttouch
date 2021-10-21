@@ -53,7 +53,7 @@ class Api extends CI_Controller
 				$this->db = $this->load->database($db, true);
 				$config = $this->Configuracion_model->buscar();
 
-				$sede = $this->Catalogo_model->getSede([
+				$sede = $this->Catalogo_model->getSedeForAPI([
 					"admin_llave" => $_GET['key'],
 					"_uno" => true
 				]);
