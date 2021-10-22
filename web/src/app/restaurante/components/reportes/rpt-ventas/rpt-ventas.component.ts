@@ -109,7 +109,7 @@ export class RptVentasComponent implements OnInit {
 
   getExcel = () => {
     switch (this.params.tipo_reporte) {
-      case 1: this.getPorCategoriaExcel(); break;
+      case 1: this.getPorCategoriaPdf(1); break;
       case 2: this.getPorArticuloPdf(1); break;
     }
   }
@@ -129,17 +129,17 @@ export class RptVentasComponent implements OnInit {
     });
   }
 
-  getPorCategoriaPdf = () => {
-    this.paramsToSend._excel = 0;
+  getPorCategoriaPdf = (esExcel = 0) => {
+    this.paramsToSend._excel = esExcel;
     this.cargando = true;
     this.cleanParams();
     this.rptVentasSrvc.porCategoriaPdf(this.paramsToSend).subscribe(res => {
       this.cargando = false;
       if (res) {
-        const blob = new Blob([res], { type: 'application/pdf' });
-        saveAs(blob, `${this.tituloCategoria}.pdf`);
+        const blob = new Blob([res], { type: (+esExcel === 0 ? 'application/pdf' : 'application/vnd.ms-excel') });
+        saveAs(blob, `${this.tituloCategoria}_${moment().format(GLOBAL.dateTimeFormatRptName)}.${+esExcel === 0 ? 'pdf' : 'xls'}`);
       } else {
-        this.snackBar.open('No se pudo generar el reporte...', this.tituloCategoria, { duration: 3000 });
+        this.snackBar.open('No se pudo generar el reporte...', 'Ventas por categoría', { duration: 3000 });
       }
     });
   }

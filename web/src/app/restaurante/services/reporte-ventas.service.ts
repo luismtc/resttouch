@@ -42,8 +42,9 @@ export class ReporteVentasService {
       responseType: 'blob' as 'json'
     };
 
-    return this.http.get<string>(
-      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/categoriapdf/1?${qs.stringify(params)}`,
+    return this.http.post<string>(
+      `${GLOBAL.urlFacturacion}/${this.moduleUrl}/ventas_articulos_categoria`,
+      params,
       httpOptions
     ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }

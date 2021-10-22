@@ -219,7 +219,7 @@ class Venta extends CI_Controller
 
 		$cntCategorias = count($datos);
 		$quitar = [];
-		for ($i = 0; $i < $cntCategorias; $i++) {			
+		for ($i = 0; $i < $cntCategorias; $i++) {
 			$cntSubcats = count($datos[$i]->subcategoria);
 			$sumaSubcats = 0;
 			for ($j = 0; $j < $cntSubcats; $j++) {
@@ -230,7 +230,7 @@ class Venta extends CI_Controller
 			}
 		}
 
-		foreach($quitar as $quita){
+		foreach ($quitar as $quita) {
 			unset($datos[$quita]);
 		}
 
@@ -825,10 +825,10 @@ class Venta extends CI_Controller
 
 				$excel->setActiveSheetIndex(0);
 				$hoja = $excel->getActiveSheet();
-				
-				$hoja->setCellValue('A1', 'Reporte de ventas');				
-				$hoja->setCellValue('A2', isset($data->turno) ? "Turno: {$data->turno->descripcion}" : '');				
-				$hoja->setCellValue('A3', 'Por artículo');				
+
+				$hoja->setCellValue('A1', 'Reporte de ventas');
+				$hoja->setCellValue('A2', isset($data->turno) ? "Turno: {$data->turno->descripcion}" : '');
+				$hoja->setCellValue('A3', 'Por artículo');
 				$hoja->setCellValue('A4', 'Del: ' . formatoFecha($data->fdel, 2) . ' al: ' . formatoFecha($data->fal, 2));
 
 				$hoja->setCellValue('A6', 'Sede');
@@ -889,6 +889,276 @@ class Venta extends CI_Controller
 				$mpdf->Output("Ventas_articulo.pdf", "D");
 
 				// $this->output->set_content_type("application/json")->set_output(json_encode($data));
+			}
+		}
+	}
+
+	private function get_idx($datos, $campo, $id)
+	{
+		$cntDatos = count($datos);
+		for ($i = 0; $i < $cntDatos; $i++) {
+			if ((int)$datos[$i]->{$campo} === (int)$id) {
+				return $i;
+			}
+		}
+		return -1;
+	}
+
+	public function ventas_articulos_categoria()
+	{
+		set_time_limit(1800);
+		ini_set('memory_limit', '512M');
+		$datos = [];
+
+		if ($this->input->method() == 'post') {
+			$req = json_decode(file_get_contents('php://input'), true);
+			$req['_rango_turno'] = $this->getEsRangoPorFechaDeTurno();
+			if (!isset($req['sede']) || count($req['sede']) === 0) {
+				$req['sede'] = [$this->data->sede];
+			}
+			if (!isset($req['fdel'])) {
+				$req['fdel'] = date('Y-m-d');
+			}
+			if (!isset($req['fal'])) {
+				$req['fal'] = date('Y-m-d');
+			}
+			$rpt = new Rpt_model();
+
+			foreach ($req['sede'] as $s) {
+				$sedeObj = new Sede_model($s);
+				$sede = new stdClass();
+
+				$sede->sede = $sedeObj->getPK();
+				$req['idsede'] = $sede->sede;
+				$sede->nombre = $sedeObj->nombre;
+				$obj = $rpt->get_lista_comandas($req);
+				$sede->ventas = [];
+				$sede->cantidad = 0;
+				$sede->total = 0;
+				if ($obj) {
+					$rawVentas = $rpt->get_ventas_categorias($obj->comandas, $obj->facturas, $req);
+					$ventas = [];
+					foreach ($rawVentas as $rv) {
+
+						$idxCategoria = $this->get_idx($ventas, 'idcat', $rv->idcat);
+						if ($idxCategoria < 0) {
+							$ventas[] = (object)[
+								'idcat' => (int)$rv->idcat,
+								'categoria' => trim($rv->categoria),
+								'cantidad' => 0,
+								'total' => 0,
+								'subcategorias' => []
+							];
+							$idxCategoria = count($ventas) - 1;
+						}
+
+						$idxSubCategoria = $this->get_idx($ventas[$idxCategoria]->subcategorias, 'idsubcat', $rv->idsubcat);
+						if ($idxSubCategoria < 0) {
+							$ventas[$idxCategoria]->subcategorias[] = (object)[
+								'idsubcat' => (int)$rv->idsubcat,
+								'subcategoria' => trim($rv->subcategoria),
+								'cantidad' => 0,
+								'total' => 0,
+								'articulos' => []
+							];
+							$idxSubCategoria = count($ventas[$idxCategoria]->subcategorias) - 1;
+						}
+
+						$idxArticulo = $this->get_idx($ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos, 'idarticulo', $rv->idarticulo);
+						if ($idxArticulo < 0) {
+							$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[] = (object)[
+								'idarticulo' => (int)$rv->idarticulo,
+								'articulo' => trim($rv->articulo),
+								'cantidad' => 0,
+								'total' => 0,
+								'precio' => (float)$rv->precio,
+								'detalle_comanda' => '',
+								'opciones' => []
+							];
+							$idxArticulo = count($ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos) - 1;
+						}
+
+						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->cantidad += (float)$rv->cantidad;
+						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->total += (float)$rv->total;
+						if ($ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->detalle_comanda !== '') {
+							$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->detalle_comanda .= ',';
+						}
+						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->detalle_comanda .= $rv->detalle_comanda;
+					}
+
+					$ventas = ordenar_array_objetos($ventas, 'categoria');
+					$cntVentas = count($ventas);
+					for ($i = 0; $i < $cntVentas; $i++) {
+						$ventas[$i]->subcategorias = ordenar_array_objetos($ventas[$i]->subcategorias, 'subcategoria');
+						$cntSubcats = count($ventas[$i]->subcategorias);
+						$sumCantCat = 0;
+						$sumTotCat = 0;
+						for ($j = 0; $j < $cntSubcats; $j++) {
+							$ventas[$i]->subcategorias[$j]->articulos = ordenar_array_objetos($ventas[$i]->subcategorias[$j]->articulos, 'cantidad', 1, 'desc');
+							$cntArticulos = count($ventas[$i]->subcategorias[$j]->articulos);
+							$sumCantSubcat = 0;
+							$sumTotSubcat = 0;
+							for ($k = 0; $k < $cntArticulos; $k++) {
+								$articulo = $ventas[$i]->subcategorias[$j]->articulos[$k];
+								$detalles_comanda = explode(',', $articulo->detalle_comanda);
+								$lineasDetalle = [];
+								foreach ($detalles_comanda as $dc) {
+									$lineasDetalle = array_merge($lineasDetalle, $this->Dcomanda_model->get_detalle_comanda_and_childs(['detalle_comanda' => $dc]));
+								}
+								$opciones = [];
+								foreach ($lineasDetalle as $ld) {
+									if ((int)$ld->multiple === 0 && (int)$ld->detalle_comanda_id > 0) {
+										$idxOpcion = $this->get_idx($opciones, 'idopcion', $ld->articulo);
+										if ($idxOpcion < 0) {
+											$opciones[] = (object)[
+												'idopcion' => (int)$ld->articulo,
+												'opcion' => trim($ld->descripcion),
+												'cantidad' => 0,
+												'total' => 0,
+												'precio' => $ld->precio
+											];
+											$idxOpcion = count($opciones) - 1;
+										}
+										$opciones[$idxOpcion]->cantidad += (float)$ld->cantidad;
+										$opciones[$idxOpcion]->total += (float)$ld->precio;
+										$articulo->total += (float)$ld->precio;
+									}
+								}
+								$opciones = ordenar_array_objetos($opciones, 'cantidad', 1, 'desc');
+								$articulo->opciones = $opciones;
+								$sumCantSubcat += $articulo->cantidad;
+								$sumTotSubcat += $articulo->total;
+							}
+							$sumCantCat += $sumCantSubcat;
+							$sumTotCat += $sumTotSubcat;
+							$ventas[$i]->subcategorias[$j]->cantidad = $sumCantSubcat;
+							$ventas[$i]->subcategorias[$j]->total = $sumTotSubcat;
+						}
+						$ventas[$i]->cantidad = $sumCantCat;
+						$ventas[$i]->total = $sumTotCat;
+
+						$sede->cantidad += $sumCantCat;
+						$sede->total += $sumTotCat;
+					}
+
+					$sede->ventas = $ventas;
+				}
+				$datos[] = $sede;
+			}
+
+			$data = [
+				'fdel' => $req['fdel'],
+				'fal' => $req['fal'],
+				'turno' => isset($req['turno_tipo']) && (int)$req['turno_tipo'] > 0 ? new TurnoTipo_model($req['turno_tipo']) : null,
+				'sedes' => $datos
+			];
+
+			if (verDato($req, '_excel')) {
+				$data = (object)$data;
+				$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
+				$excel->getProperties()
+					->setCreator("Restouch")
+					->setTitle("Office 2007 xlsx Ventas por categoría")
+					->setSubject("Office 2007 xlsx Ventas por categoría")
+					->setKeywords("office 2007 openxml php");
+
+				$excel->setActiveSheetIndex(0);
+				$hoja = $excel->getActiveSheet();
+
+				$hoja->setCellValue('A1', 'Reporte de ventas');
+				$hoja->setCellValue('A2', isset($data->turno) ? "Turno: {$data->turno->descripcion}" : '');
+				$hoja->setCellValue('A3', 'Por categoría');
+				$hoja->setCellValue('A4', 'Del: ' . formatoFecha($data->fdel, 2) . ' al: ' . formatoFecha($data->fal, 2));
+				$hoja->getStyle('A1:D4')->getFont()->setBold(true);
+
+				$fila = 6;
+				foreach ($data->sedes as $s) {
+					$hoja->setCellValue("A{$fila}", $s->nombre);
+					$hoja->mergeCells("A{$fila}:D{$fila}");
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", 'Descripción');
+					$hoja->setCellValue("B{$fila}", 'Cantidad');
+					$hoja->setCellValue("C{$fila}", 'Precio Unitario');
+					$hoja->setCellValue("D{$fila}", 'Total');					
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+					$hoja->getStyle("B{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
+					$fila++;
+					foreach ($s->ventas as $cat) {
+						$hoja->setCellValue("A{$fila}", $cat->categoria);
+						$hoja->setCellValue("B{$fila}", $cat->cantidad);
+						$hoja->setCellValue("D{$fila}", $cat->total);
+						$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+						$fila++;
+						foreach ($cat->subcategorias as $subcat) {
+							$hoja->setCellValue("A{$fila}", "   {$subcat->subcategoria}");
+							$hoja->setCellValue("B{$fila}", $subcat->cantidad);
+							$hoja->setCellValue("D{$fila}", $subcat->total);
+							$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+							$fila++;
+							foreach ($subcat->articulos as $art) {
+								$hoja->setCellValue("A{$fila}", "      {$art->articulo}");
+								$hoja->setCellValue("B{$fila}", $art->cantidad);
+								$hoja->setCellValue("C{$fila}", $art->precio);
+								$hoja->setCellValue("D{$fila}", $art->total);
+								$fila++;
+								if (count($art->opciones) > 0) {
+									foreach ($art->opciones as $opc) {
+										$hoja->setCellValue("A{$fila}", "         {$opc->opcion}");
+										$hoja->setCellValue("B{$fila}", $opc->cantidad);
+										$hoja->setCellValue("C{$fila}", $opc->precio == 0 ? '' : $opc->precio);
+										$hoja->setCellValue("D{$fila}", $opc->total == 0 ? '' : $opc->total);
+										$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setItalic(true);
+										$fila++;
+									}
+								}
+							}
+						}
+					}
+					$hoja->setCellValue("A{$fila}", "Totales de {$s->nombre}:");
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->setCellValue("B{$fila}", $s->cantidad);
+					$hoja->setCellValue("D{$fila}", $s->total);
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila += 2;
+				}
+
+				$fila -= 2;
+				$hoja->getStyle("B8:D{$fila}")->getNumberFormat()->setFormatCode('0.00');
+
+				foreach (range('A', 'D') as $col) {
+					$hoja->getColumnDimension($col)->setAutoSize(true);
+				}
+
+				$hoja->mergeCells('A1:D1');
+				$hoja->mergeCells('A2:D2');
+				$hoja->mergeCells('A3:D3');
+				$hoja->mergeCells('A4:D4');
+
+				$hoja->setTitle("Ventas por categoría");
+
+				header("Content-Type: application/vnd.ms-excel");
+				header("Content-Disposition: attachment;filename=Ventas_Articulo.xls");
+				header("Cache-Control: max-age=1");
+				header("Expires: Mon, 26 Jul 1997 05:00:00 GTM");
+				header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GTM");
+				header("Cache-Control: cache, must-revalidate");
+				header("Pragma: public");
+
+				$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
+				$writer->save("php://output");
+			} else {
+				$vista = $this->load->view('reporte/venta/categoria', array_merge($data, $req), true);
+
+				$mpdf = new \Mpdf\Mpdf([
+					'tempDir' => sys_get_temp_dir(), //Produccion
+					'format' => 'Letter'
+				]);
+
+				$mpdf->WriteHTML($vista);
+				$mpdf->Output('Ventas_categoria.pdf', 'D');
+
+				// $this->output->set_content_type("application/json")->set_output(json_encode(array_merge($data, $req)));				
 			}
 		}
 	}
