@@ -145,6 +145,9 @@ class Comanda_model extends General_Model
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
 			$args['fecha'] = Hoy(3);
+			if(isset($args['cantidad'])) {
+				$args['cantidad_inventario'] = $args['cantidad'];
+			}
 		} else {
 			$args['fecha'] = $det->fecha;
 			if (isset($args['articulo'])) {
@@ -152,13 +155,20 @@ class Comanda_model extends General_Model
 					$articulo = $det->articulo;
 					$cantidad = $args['cantidad'] - $det->cantidad;
 					$factor -= (float)$det->cantidad;
+					if(isset($args['cantidad'])) {
+						$args['cantidad_inventario'] = $args['cantidad'];
+					}
 				} else if ($det->articulo != $args['articulo']) {
 					$articulo = $args['articulo'];
 					$cantidad = $args['cantidad'];
 					$factor = (float)$args['cantidad'];
+					$args['cantidad_inventario'] = $cantidad;
 				} else {
 					$articulo = $args['articulo'];
 					$validar = false;
+					if(isset($args['regresa_inventario']) && $args['regresa_inventario']) {
+						$args['cantidad_inventario'] = $args['cantidad'];
+					}
 				}
 			}
 		}
@@ -174,11 +184,7 @@ class Comanda_model extends General_Model
 		if (!empty($menu) && !$vnegativo) {
 			$art->actualizarExistencia(['bodega' => $args['bodega']]);
 			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
-		}
-
-		if(isset($args['cantidad'])) {
-			$args['cantidad_inventario'] = $args['cantidad'];
-		}
+		}	
 
 		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
 			$nuevo = ($det->getPK() == null);
@@ -225,7 +231,7 @@ class Comanda_model extends General_Model
 				}
 			}
 			if ($det->getPK() && (int)$art->combo === 0 && (int)$art->multiple === 0) {
-				$det->actualizarCantidadHijos();
+				$det->actualizarCantidadHijos(isset($args['regresa_inventario']) ? $args['regresa_inventario'] : true);
 			}
 			if ($result) {
 				if (!empty($menu) && !$vnegativo) {
@@ -276,6 +282,9 @@ class Comanda_model extends General_Model
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
 			$args['fecha'] = Hoy(3);
+			if(isset($args['cantidad'])) {
+				$args['cantidad_inventario'] = $args['cantidad'];
+			}
 		} else {
 			$args['fecha'] = $det->fecha;
 			if (isset($args['articulo'])) {
@@ -283,14 +292,21 @@ class Comanda_model extends General_Model
 					$articulo = $det->articulo;
 					$cantidad = $args['cantidad'] - $det->cantidad;
 					// $factor -= (float)$det->cantidad;
+					if(isset($args['cantidad'])) {
+						$args['cantidad_inventario'] = $args['cantidad'];
+					}
 				} else if ($det->articulo != $args['articulo']) {
 					$oldart = new Articulo_model($det->articulo);
 					$articulo = $args['articulo'];
 					$cantidad = $args['cantidad'];
 					// $factor = (float)$args['cantidad'];
+					$args['cantidad_inventario'] = $cantidad;
 				} else {
 					$articulo = $args['articulo'];
 					$validar = false;
+					if(isset($args['regresa_inventario']) && $args['regresa_inventario']) {
+						$args['cantidad_inventario'] = $args['cantidad'];
+					}
 				}
 			}
 		}
@@ -306,11 +322,7 @@ class Comanda_model extends General_Model
 		// $oldart = null;
 		// if (!empty($id)) {
 		// 	$oldart = new Articulo_model($det->articulo);
-		// }
-
-		if(isset($args['cantidad'])) {
-			$args['cantidad_inventario'] = $args['cantidad'];
-		}
+		// }		
 		
 		if (!empty($menu) && !$vnegativo) {
 			$art->actualizarExistencia(['bodega' => $args['bodega']]);
@@ -362,7 +374,7 @@ class Comanda_model extends General_Model
 				}
 			}
 			if ($det->getPK() && (int)$art->combo === 0 && (int)$art->multiple === 0) {
-				$det->actualizarCantidadHijos();
+				$det->actualizarCantidadHijos(isset($args['regresa_inventario']) ? $args['regresa_inventario'] : true);
 			}
 			if ($result) {
 				if (!empty($menu) && !$vnegativo) {

@@ -8,4 +8,5 @@ export interface DetalleComanda {
     notas: string;
     autorizado?: boolean;
     gerente?: number;
+    regresa_inventario?: boolean;
 }

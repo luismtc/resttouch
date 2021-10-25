@@ -96,7 +96,7 @@ class Dcomanda_model extends General_Model
 		return $montoExtra;
 	}
 
-	public function actualizarCantidadHijos()
+	public function actualizarCantidadHijos($regresa_inventario = true)
 	{
 		$tmp = $this->db
 			->select('a.detalle_comanda, b.articulo')
@@ -108,11 +108,16 @@ class Dcomanda_model extends General_Model
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
 			$art = new Articulo_model($this->articulo);
-			$rec = $art->getReceta([
-				'articulo' => $row->articulo,
-				'_uno' => true
-			]);
-			$det->guardar(['cantidad' => $this->cantidad * $rec[0]->cantidad]);
+			$rec = $art->getReceta(['articulo' => $row->articulo, '_uno' => true]);
+
+			$args = ['cantidad' => $this->cantidad * $rec[0]->cantidad];
+
+			if ($regresa_inventario) {
+				$args['cantidad_inventario'] = $this->cantidad * $rec[0]->cantidad;
+			}
+			
+			$det->guardar($args);
+
 			$det->actualizarCantidadHijos();
 		}
 	}
@@ -278,7 +283,7 @@ class Dcomanda_model extends General_Model
 		}
 
 		return $this->db
-			->select("{$campos}, b.mostrar_inventario, b.multiple, b.descripcion")
+			->select("{$campos}, b.mostrar_inventario, b.multiple, b.descripcion, b.combo")
 			->join('articulo b', 'b.articulo = a.articulo')
 			->get('detalle_comanda a')
 			->result();

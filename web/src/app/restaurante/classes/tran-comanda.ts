@@ -62,7 +62,8 @@ export class TranComanda {
     public detalleComanda: DetalleComanda;
     public categorias: (ArbolArticulos[] | Categoria[]) = [];
     public bloqueoBotones = false;
-    public rolesUsuario: string[] = [];
+    // public rolesUsuario: string[] = [];
+    public rolesUsuario = '';
     public impreso = 0;
     public usaCodigoBarras = false;
     public codigoBarras: string = null;

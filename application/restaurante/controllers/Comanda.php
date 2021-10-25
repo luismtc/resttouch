@@ -846,27 +846,6 @@ class Comanda extends CI_Controller
 		$this->output->set_output(json_encode($datos->comanda->cuentas));
 	}
 
-	private function eliminar_linea_detalle($detalle, $req)
-	{
-		$dc = new Dcomanda_model($detalle->detalle_comanda);
-		$dc->cantidad = (float)$req['cantidad'];
-		$dc->total = (float)$req['total'];
-
-		if($req['regresa_inventario'] || (int)$detalle->mostrar_inventario === 0) {
-			$dc->cantidad_inventario = (float)$req['cantidad'];
-		}
-
-		$exito = $dc->guardar();
-		// $exito = true;
-
-		if ($exito) {
-			return (object)['exito' => true, 'mensaje' => null];
-		} else {
-			return (object)['exito' => false, 'mensaje' => implode(', ', $dc->getMensaje())];
-		}
-		return (object)['exito' => true, 'mensaje' => null];
-	}
-
 	public function eliminar_detalle()
 	{
 		$req = json_decode(file_get_contents('php://input'), true);
@@ -889,10 +868,20 @@ class Comanda extends CI_Controller
 
 			if ($pasa) {
 				foreach ($detalle as $det) {
-					$res = $this->eliminar_linea_detalle($det, $req);
-					if (!$res->exito) {
-						$errores[] = $res->mensaje;
+					$dc = new Dcomanda_model($det->detalle_comanda);
+					$dc->cantidad = (float)$req['cantidad'];
+					$dc->total = (float)$req['total'];
+					if($req['regresa_inventario'] || (int)$det->mostrar_inventario === 0) {
+						$dc->cantidad_inventario = (float)$req['cantidad'];
 					}
+					$exito = $dc->guardar();
+					if(!$exito) {
+						$errores[] = implode('; ', $dc->getMensaje());
+					}
+
+					// if((int)$det->combo === 0 && (int)$det->multiple === 0) {
+					// 	$dc->actualizarCantidadHijos($req['regresa_inventario']);						
+					// }
 				}
 			}
 		} else {

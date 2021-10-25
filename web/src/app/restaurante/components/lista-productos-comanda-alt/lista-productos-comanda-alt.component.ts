@@ -35,7 +35,8 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
       let totProd = 0.00;
       let lst: DetalleCuentaSimplified[] = lista || this.detalleCuenta;
       for (const p of lst) {
-        totProd += ((p.cantidad * p.precio)) + this.totalDeProductos(p.detalle);
+        const cant = (lista === null || lista === undefined) ? p.cantidad : 1;
+        totProd += (cant * p.precio) + this.totalDeProductos(p.detalle);
       }
       return totProd;
     }
@@ -105,22 +106,24 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
 
   removeProducto = (p: DetalleCuentaSimplified, idx: number, estaAutorizado = false, cantidad?: number, gerente = 0, regresa_inventario = true) => {
     this.bloqueoBotones = true;
-    // this.detalleComanda = {
-    //   detalle_cuenta: p.detalle_cuenta,
-    //   detalle_comanda: p.detalle_comanda,
-    //   articulo: p.articulo,
-    //   cantidad: +p.cantidad > 1 ? (+p.cantidad) - 1 : 0,
-    //   precio: +p.precio,
-    //   total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
-    //   notas: p.notas,
-    //   autorizado: estaAutorizado,
-    //   gerente: gerente
-    // };
 
-    // if (cantidad) {
-    //   this.detalleComanda.cantidad = cantidad;
-    //   this.detalleComanda.total = (cantidad * this.detalleComanda.precio)
-    // }
+    this.detalleComanda = {
+      detalle_cuenta: p.detalle_cuenta,
+      detalle_comanda: p.detalle_comanda,
+      articulo: p.articulo,
+      cantidad: +p.cantidad > 1 ? (+p.cantidad) - 1 : 0,
+      precio: +p.precio,
+      total: +p.cantidad > 1 ? ((+p.cantidad) - 1) * (+p.precio) : 0,
+      notas: p.notas,
+      autorizado: estaAutorizado,
+      gerente,
+      regresa_inventario
+    };
+
+    if (cantidad) {
+      this.detalleComanda.cantidad = +p.cantidad - +cantidad;
+      this.detalleComanda.total = (this.detalleComanda.cantidad * this.detalleComanda.precio)
+    }
 
     const params = {
       detalle_comanda: p.detalle_comanda,
@@ -131,15 +134,29 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
       regresa_inventario
     };
 
-    if (cantidad) {
+    if ((+p.cantidad - +cantidad) === 0) {
       params.cantidad = +p.cantidad - cantidad;
       params.total = (params.cantidad * +p.precio);
-    }
-
-    this.endSubs.add(
-      this.comandaSrvc.eliminarDetalleComanda(params).subscribe(res => {
+      this.endSubs.add(
+        this.comandaSrvc.eliminarDetalleComanda(params).subscribe(res => {
+          if (res.exito) {
+            // p.cantidad = this.detalleComanda.cantidad;
+            // this.productoRemovedEv.emit({ listaProductos: this.detalleCuenta, comanda: res.comanda });
+            this.productoRemovedEv.emit(+p.numero_cuenta);
+            if (+p.cantidad === 0) {
+              this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+              this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
+            }
+          } else {
+            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
+          }
+          this.bloqueoBotones = false;
+        })
+      );
+    } else {
+      this.comandaSrvc.saveDetalle(p.comanda, p.cuenta_cuenta, this.detalleComanda).subscribe(res => {
         if (res.exito) {
-          // p.cantidad = this.detalleComanda.cantidad;
+          p.cantidad = this.detalleComanda.cantidad;
           // this.productoRemovedEv.emit({ listaProductos: this.detalleCuenta, comanda: res.comanda });
           this.productoRemovedEv.emit(+p.numero_cuenta);
           if (+p.cantidad === 0) {
@@ -151,21 +168,7 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
         }
         this.bloqueoBotones = false;
       })
-    );
-    // this.comandaSrvc.saveDetalle(p.comanda, p.cuenta_cuenta, this.detalleComanda).subscribe(res => {
-    //   if (res.exito) {
-    //     p.cantidad = this.detalleComanda.cantidad;
-    //     // this.productoRemovedEv.emit({ listaProductos: this.detalleCuenta, comanda: res.comanda });
-    //     this.productoRemovedEv.emit(+p.numero_cuenta);
-    //     if (+p.cantidad === 0) {
-    //       this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
-    //       this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
-    //     }
-    //   } else {
-    //     this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
-    //   }
-    //   this.bloqueoBotones = false;
-    // })
+    }
   }
 
   deleteProductoFromList = (p: DetalleCuentaSimplified, idx: number, estaAutorizado = false) => {
