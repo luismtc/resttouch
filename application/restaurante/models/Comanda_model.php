@@ -156,7 +156,7 @@ class Comanda_model extends General_Model
 					$cantidad = $args['cantidad'] - $det->cantidad;
 					$factor -= (float)$det->cantidad;
 					if(isset($args['cantidad'])) {
-						$args['cantidad_inventario'] = $args['cantidad'];
+						$args['cantidad_inventario'] = $args['cantidad'];						
 					}
 				} else if ($det->articulo != $args['articulo']) {
 					$articulo = $args['articulo'];
@@ -167,7 +167,8 @@ class Comanda_model extends General_Model
 					$articulo = $args['articulo'];
 					$validar = false;
 					if(isset($args['regresa_inventario']) && $args['regresa_inventario']) {
-						$args['cantidad_inventario'] = $args['cantidad'];
+						$cantResta = (float)$det->cantidad - (float)$args['cantidad'];
+						$args['cantidad_inventario'] = (float)$det->cantidad_inventario - $cantResta;
 					}
 				}
 			}
@@ -293,7 +294,7 @@ class Comanda_model extends General_Model
 					$cantidad = $args['cantidad'] - $det->cantidad;
 					// $factor -= (float)$det->cantidad;
 					if(isset($args['cantidad'])) {
-						$args['cantidad_inventario'] = $args['cantidad'];
+						$args['cantidad_inventario'] = $args['cantidad'];						
 					}
 				} else if ($det->articulo != $args['articulo']) {
 					$oldart = new Articulo_model($det->articulo);
@@ -305,7 +306,8 @@ class Comanda_model extends General_Model
 					$articulo = $args['articulo'];
 					$validar = false;
 					if(isset($args['regresa_inventario']) && $args['regresa_inventario']) {
-						$args['cantidad_inventario'] = $args['cantidad'];
+						$cantResta = (float)$det->cantidad - (float)$args['cantidad'];
+						$args['cantidad_inventario'] = (float)$det->cantidad_inventario - $cantResta;
 					}
 				}
 			}
