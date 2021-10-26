@@ -218,7 +218,7 @@ class Comanda extends CI_Controller
 			'usuario' => $this->data->idusuario,
 			'tabla' => 'detalle_comanda',
 			'registro' => $dcom->detalle_comanda,
-			'comentario' => "{$comentarioBitacora} Quedaron " . number_format((float)$req['cantidad'], 2) . " y originalmente habían " . number_format((float)$dcom->cantidad, 2) . ". Precio unitario: " . number_format((float)$dcom->precio, 2) . "."
+			'comentario' => "{$comentarioBitacora} Quedaron " . number_format((float)$req['cantidad'], 2) . " y originalmente habían " . number_format((float)$dcom->cantidad, 2) . ". Precio unitario: " . number_format((float)$dcom->precio, 2) . ".".(isset($req['regresa_inventario']) && $req['regresa_inventario'] ? ' Se reversó el inventario.' : '')
 		]);
 	}
 
