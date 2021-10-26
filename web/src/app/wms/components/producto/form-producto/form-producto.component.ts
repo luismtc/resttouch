@@ -58,6 +58,10 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     }
   }
 
+  get articuloEsOpcionMultiple() {
+    return +this.articulo.multiple === 1;
+  }
+
   @Input() articulo: Articulo;
   // @Input() categoria: Categoria = null;
   // @Input() subcategoria: CategoriaGrupo = null;
@@ -421,6 +425,7 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     if (+this.articulo.multiple === 1) {
       this.articulo.combo = 0;
       this.articulo.esreceta = 0;
+      this.articulo.mostrar_pos = 0;
     }
   }
 

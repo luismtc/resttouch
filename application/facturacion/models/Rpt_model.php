@@ -130,23 +130,25 @@ class Rpt_model extends General_model
 
         $facturas_manuales = [];
 
-        if(!empty($facturas)) {            
-            $this->db->where("b.factura NOT IN({$facturas})");
+        if(!isset($args['turno_tipo'])) {
+            if(!empty($facturas)) {            
+                $this->db->where("b.factura NOT IN({$facturas})");
+            }
+    
+            $facturas_manuales = $this->db
+                ->select('a.articulo, c.descripcion, SUM(a.cantidad) AS cantidad, SUM(a.total) AS total')
+                ->join('factura b', 'b.factura = a.factura')
+                ->join('articulo c', 'c.articulo = a.articulo')            
+                ->where('b.sede', $args['idsede'])
+                ->where('b.numero_factura IS NOT NULL')
+                ->where('b.fel_uuid_anulacion IS NULL')
+                ->where('b.fecha_factura >=', $args['fdel'])
+                ->where('b.fecha_factura <=', $args['fal'])
+                ->group_by('a.articulo, c.descripcion')
+                // ->get_compiled_select('detalle_factura a');
+                ->get('detalle_factura a')
+                ->result();
         }
-
-        $facturas_manuales = $this->db
-            ->select('a.articulo, c.descripcion, SUM(a.cantidad) AS cantidad, SUM(a.total) AS total')
-            ->join('factura b', 'b.factura = a.factura')
-            ->join('articulo c', 'c.articulo = a.articulo')            
-            ->where('b.sede', $args['idsede'])
-            ->where('b.numero_factura IS NOT NULL')
-            ->where('b.fel_uuid_anulacion IS NULL')
-            ->where('b.fecha_factura >=', $args['fdel'])
-            ->where('b.fecha_factura <=', $args['fal'])
-            ->group_by('a.articulo, c.descripcion')
-            // ->get_compiled_select('detalle_factura a');
-            ->get('detalle_factura a')
-            ->result();
 
         $articulos = array_merge($combos, $multiples, $directos, $facturas_manuales);
         if (!empty($articulos)) {
@@ -192,24 +194,26 @@ class Rpt_model extends General_model
 
         $facturas_manuales = [];
 
-        if(!empty($facturas)) {            
-            $this->db->where("b.factura NOT IN({$facturas})");
+        if(!isset($args['turno_tipo'])) {
+            if(!empty($facturas)) {            
+                $this->db->where("b.factura NOT IN({$facturas})");
+            }
+    
+            $facturas_manuales = $this->db
+                ->select('0 AS detalle_comanda, e.categoria AS idcat, e.descripcion AS categoria, d.categoria_grupo AS idsubcat, d.descripcion AS subcategoria, c.articulo AS idarticulo, c.descripcion AS articulo, a.cantidad, a.total, a.precio_unitario AS precio', false)
+                ->join('factura b', 'b.factura = a.factura')
+                ->join('articulo c', 'c.articulo = a.articulo')
+                ->join('categoria_grupo d', 'd.categoria_grupo = c.categoria_grupo')
+                ->join('categoria e', 'e.categoria = d.categoria')
+                ->where('b.sede', $args['idsede'])
+                ->where('b.numero_factura IS NOT NULL')
+                ->where('b.fel_uuid_anulacion IS NULL')
+                ->where('b.fecha_factura >=', $args['fdel'])
+                ->where('b.fecha_factura <=', $args['fal'])
+                ->order_by('e.descripcion, d.descripcion, c.descripcion')            
+                ->get('detalle_factura a')
+                ->result();
         }
-
-        $facturas_manuales = $this->db
-            ->select('0 AS detalle_comanda, e.categoria AS idcat, e.descripcion AS categoria, d.categoria_grupo AS idsubcat, d.descripcion AS subcategoria, c.articulo AS idarticulo, c.descripcion AS articulo, a.cantidad, a.total, a.precio_unitario AS precio', false)
-            ->join('factura b', 'b.factura = a.factura')
-            ->join('articulo c', 'c.articulo = a.articulo')
-            ->join('categoria_grupo d', 'd.categoria_grupo = c.categoria_grupo')
-            ->join('categoria e', 'e.categoria = d.categoria')
-            ->where('b.sede', $args['idsede'])
-            ->where('b.numero_factura IS NOT NULL')
-            ->where('b.fel_uuid_anulacion IS NULL')
-            ->where('b.fecha_factura >=', $args['fdel'])
-            ->where('b.fecha_factura <=', $args['fal'])
-            ->order_by('e.descripcion, d.descripcion, c.descripcion')            
-            ->get('detalle_factura a')
-            ->result();
 
         $articulos = array_merge($combos, $directos, $facturas_manuales);
 
