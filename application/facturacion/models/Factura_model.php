@@ -24,6 +24,8 @@ class Factura_model extends General_model
 	private $certificador;
 	public $razon_anulacion;
 	public $comentario_anulacion;
+	public $enviar_descripcion_unica = 0;
+	public $descripcion_unica = null;
 
 	public function __construct($id = '')
 	{

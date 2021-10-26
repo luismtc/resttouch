@@ -134,7 +134,24 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
       regresa_inventario
     };
 
-    if ((+p.cantidad - +cantidad) === 0) {
+    if (+p.combo === 0) {
+      this.endSubs.add(
+        this.comandaSrvc.saveDetalle(p.comanda, p.cuenta_cuenta, this.detalleComanda).subscribe(res => {
+          if (res.exito) {
+            p.cantidad = this.detalleComanda.cantidad;
+            // this.productoRemovedEv.emit({ listaProductos: this.detalleCuenta, comanda: res.comanda });
+            this.productoRemovedEv.emit(+p.numero_cuenta);
+            if (+p.cantidad === 0) {
+              this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
+              this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
+            }
+          } else {
+            this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
+          }
+          this.bloqueoBotones = false;
+        })
+      );
+    } else {
       params.cantidad = +p.cantidad - cantidad;
       params.total = (params.cantidad * +p.precio);
       this.endSubs.add(
@@ -153,22 +170,7 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
           this.bloqueoBotones = false;
         })
       );
-    } else {
-      this.comandaSrvc.saveDetalle(p.comanda, p.cuenta_cuenta, this.detalleComanda).subscribe(res => {
-        if (res.exito) {
-          p.cantidad = this.detalleComanda.cantidad;
-          // this.productoRemovedEv.emit({ listaProductos: this.detalleCuenta, comanda: res.comanda });
-          this.productoRemovedEv.emit(+p.numero_cuenta);
-          if (+p.cantidad === 0) {
-            this.socket.emit('refrescar:mesa', { mesaenuso: this.mesaEnUso });
-            this.socket.emit('refrescar:listaCocina', { mesaenuso: this.mesaEnUso });
-          }
-        } else {
-          this.snackBar.open(`ERROR: ${res.mensaje}`, 'Comanda', { duration: 3000 });
-        }
-        this.bloqueoBotones = false;
-      })
-    }
+    }    
   }
 
   deleteProductoFromList = (p: DetalleCuentaSimplified, idx: number, estaAutorizado = false) => {

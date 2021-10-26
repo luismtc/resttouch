@@ -113,7 +113,7 @@ class Dcomanda_model extends General_Model
 			$args = ['cantidad' => $this->cantidad * $rec[0]->cantidad];
 
 			if ($regresa_inventario) {
-				$args['cantidad_inventario'] = $this->cantidad * $rec[0]->cantidad;
+				$args['cantidad_inventario'] = $this->cantidad_inventario * $rec[0]->cantidad;
 			}
 			
 			$det->guardar($args);
