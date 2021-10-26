@@ -550,7 +550,7 @@ class Reporte extends CI_Controller {
 		$data['facturas'] = [];
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);
-			$fac->mesa = $fac->getMesa();
+			$fac->mesa = $fac->getMesa(false);
 			$fac->cargarReceptor();
 			$prop = $fac->getPropina();
 			$det = $fac->getDetalle();

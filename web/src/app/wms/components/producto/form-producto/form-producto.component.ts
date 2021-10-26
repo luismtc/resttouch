@@ -38,6 +38,10 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     return +this.articulo.esreceta === 1;
   }
 
+  get articuloMostrarPOS() {
+    return +this.articulo.mostrar_pos === 1;
+  }
+
   get disableArticuloReceta() {
     return (artSel: Articulo) => {
       let dar = false;
@@ -433,6 +437,12 @@ export class FormProductoComponent implements OnInit, OnDestroy {
       this.setOpcComboOff();
     }
   };
+
+  setMultipleOff = () => {
+    if (+this.articulo.mostrar_pos === 1) {      
+      this.articulo.multiple = 0;
+    }
+  }
 
   darDeBaja = () => {
     const confirmRef = this.dialog.open(ConfirmDialogComponent, {

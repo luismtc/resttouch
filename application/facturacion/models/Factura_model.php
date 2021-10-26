@@ -230,10 +230,15 @@ class Factura_model extends General_model
 		}
 	}
 
-	public function getMesa()
+	public function getMesa($sinEtiqueta = true)
 	{
-		$tmp = $this->db
-			->select("g.numero as mesa")
+		if ($sinEtiqueta) {
+			$this->db->select('g.numero as mesa');
+		} else {
+			$this->db->select('IFNULL(g.etiqueta, g.numero) as mesa');
+		}
+
+		$tmp = $this->db			
 			->join("detalle_factura b", "a.factura = b.factura")
 			->join("detalle_factura_detalle_cuenta c", "c.detalle_factura = b.detalle_factura")
 			->join("detalle_cuenta d", "c.detalle_cuenta = d.detalle_cuenta")

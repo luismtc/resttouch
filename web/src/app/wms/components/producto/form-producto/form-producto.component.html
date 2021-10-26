@@ -100,7 +100,7 @@
                     <mat-checkbox name="produccion" class="example-margin" [(ngModel)]="+articulo.produccion" (change)="setEsRecetaOn()">Producción</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
-                    <mat-checkbox name="mostrar_pos" class="example-margin" [(ngModel)]="+articulo.mostrar_pos">De POS</mat-checkbox>
+                    <mat-checkbox name="mostrar_pos" class="example-margin" [(ngModel)]="+articulo.mostrar_pos" (change)="setMultipleOff()">De POS</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
                     <mat-checkbox name="combo" class="example-margin" [(ngModel)]="+articulo.combo" (change)="setOpcMultOff()" [disabled]="articuloEsReceta">Combo</mat-checkbox>
@@ -108,7 +108,7 @@
             </div>
             <div class="row">
                 <div class="col m3 s3">
-                    <mat-checkbox name="multiple" class="example-margin" [(ngModel)]="+articulo.multiple" (change)="setComboOff()" [disabled]="articuloEsReceta">Opción múltiple</mat-checkbox>
+                    <mat-checkbox name="multiple" class="example-margin" [(ngModel)]="+articulo.multiple" (change)="setComboOff()" [disabled]="articuloEsReceta || articuloMostrarPOS">Opción múltiple</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
                     <mat-checkbox name="mostrar_inventario" class="example-margin" [(ngModel)]="+articulo.mostrar_inventario">De inventario</mat-checkbox>
