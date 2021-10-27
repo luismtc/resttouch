@@ -62,6 +62,14 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     return +this.articulo.multiple === 1;
   }
 
+  get articuloEsCombo() {
+    return +this.articulo.combo === 1;
+  }
+
+  get articuloMostrarInventario() {
+    return +this.articulo.mostrar_inventario === 1;
+  }
+
   @Input() articulo: Articulo;
   // @Input() categoria: Categoria = null;
   // @Input() subcategoria: CategoriaGrupo = null;
@@ -416,6 +424,8 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     if (+this.articulo.combo === 1) {
       this.articulo.multiple = 0;
       this.articulo.esreceta = 0;
+      this.articulo.mostrar_inventario = 0;
+      this.articulo.produccion = 0;
     } else {
       this.articulo.cobro_mas_caro = 0;
     }
@@ -429,10 +439,17 @@ export class FormProductoComponent implements OnInit, OnDestroy {
     }
   }
 
+  apagaCombo = () => {
+    if (+this.articulo.mostrar_inventario === 1) {
+      this.articulo.combo = 0;
+      this.articulo.multiple = 0;      
+    }
+  }
+
   setOpcComboOff = () => {
     if (+this.articulo.esreceta === 1) {
       this.articulo.combo = 0;
-      this.articulo.multiple = 0;
+      this.articulo.multiple = 0;      
     }
   }
 
