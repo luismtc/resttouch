@@ -52,6 +52,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   public sedes: Sede[] = [];
   public sede: Sede;
   public datosPedido: DatosPedido = { sede: null, direccion_entrega: null, telefono: null, nombre: null, cliente: null };
+  public descripcionUnica = { enviar_descripcion_unica: 0, descripcion_unica: null };
 
   private endSubs = new Subscription();
 
@@ -465,5 +466,11 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  vaciaDescripcionUnica = () => {
+    if (+this.descripcionUnica.enviar_descripcion_unica === 0) {
+      this.descripcionUnica.descripcion_unica = null;
+    } else {
+      this.descripcionUnica.descripcion_unica = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_DETALLE_FACTURA_PERSONALIZADO) || 'Por consumo.';
+    }
+  }
 }

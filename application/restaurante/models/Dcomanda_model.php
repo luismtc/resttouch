@@ -89,7 +89,8 @@ class Dcomanda_model extends General_Model
 
 		foreach ($tmp as $row) {
 			$det = new Dcomanda_model($row->detalle_comanda);
-			$montoExtra += $row->precio ? (float)$row->precio * $row->cantidad : 0.00;
+			// $montoExtra += $row->precio ? (float)$row->precio * $row->cantidad : 0.00;
+			$montoExtra += $row->precio ? (float)$row->precio * (float)$this->cantidad : 0.00;
 			$montoExtra += $det->getPrecioExtraCombo();
 		}
 

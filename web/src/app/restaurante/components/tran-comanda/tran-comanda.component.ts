@@ -729,7 +729,8 @@ export class TranComandaComponent implements OnInit, OnDestroy {
   getMontoExtra = (dcs: DetalleCuentaSimplified[]): number => {
     let montoExtra = 0.00;
     for (const det of dcs) {
-      montoExtra += (+det.cantidad * +det.precio) + this.getMontoExtra(det.detalle);
+      const cant = (dcs === null || dcs === undefined) ? +det.cantidad : 1;
+      montoExtra += (cant * +det.precio) + this.getMontoExtra(det.detalle);
     }
     return montoExtra;
   }
@@ -1051,8 +1052,8 @@ export class TranComandaComponent implements OnInit, OnDestroy {
           this.lstProductosDeCuenta = this.lstProductosCuentaAlt.map(p => this.convertToProductoSelected(p));
           const productosACobrar = this.lstProductosDeCuenta.filter(p => +p.impreso === 1);
           if (productosACobrar.length > 0) {
-            const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {
-              width: '95%',
+            const cobrarCtaRef = this.dialog.open(CobrarPedidoComponent, {              
+              maxWidth: '100vw', maxHeight: '90vh', width: '97vw', height: '90vh',
               data: {
                 mesaenuso: this.mesaEnUso,
                 cuenta: this.cuentaActiva.nombre,

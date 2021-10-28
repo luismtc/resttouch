@@ -103,12 +103,14 @@ class Rpt_model extends General_model
                 ->result();
     
             $multiples = $this->db
-                ->select('a.articulo, b.descripcion, COUNT(a.articulo) AS cantidad, 0.00 AS total', false)
+                ->select('a.articulo, b.descripcion, COUNT(a.articulo) AS cantidad, COUNT(a.articulo) * a.precio AS total', false)
                 ->join('articulo b', 'b.articulo = a.articulo')
                 ->where("a.comanda IN({$comandas})")
+                ->where('a.detalle_comanda_id IS NOT NULL')
                 ->where('b.multiple', 0)
                 ->where('b.combo', 0)
-                ->where('a.total', 0)
+                // ->where('a.total', 0)
+                ->where('a.cantidad >', 0)
                 ->group_by('a.articulo, b.descripcion')
                 // ->get_compiled_select('detalle_comanda a');
                 ->get('detalle_comanda a')
@@ -118,6 +120,7 @@ class Rpt_model extends General_model
                 ->select('a.articulo, b.descripcion, SUM(a.cantidad) AS cantidad, SUM(a.total) AS total')
                 ->join('articulo b', 'b.articulo = a.articulo')
                 ->where("a.comanda IN({$comandas})")
+                ->where('a.detalle_comanda_id IS NULL')
                 ->where('b.multiple', 0)
                 ->where('b.combo', 0)
                 ->where('a.total >', 0)
@@ -183,6 +186,7 @@ class Rpt_model extends General_model
                 ->join('categoria_grupo c', 'c.categoria_grupo = b.categoria_grupo')
                 ->join('categoria d', 'd.categoria = c.categoria')
                 ->where("a.comanda IN({$comandas})")
+                ->where('a.detalle_comanda_id IS NULL')
                 ->where('b.multiple', 0)
                 ->where('b.combo', 0)
                 ->where('a.total >', 0)

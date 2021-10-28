@@ -8,7 +8,7 @@
 }
 
 .colHeight {
-    height: 400px;
+    height: 375px;
 }
 
 .saldo-pendiente {
@@ -28,4 +28,11 @@
 
 .propina {
     font-style: italic;
+}
+
+.contenido {
+    max-height: 71vh !important;
+    height: 100%;
+    overflow-y: auto;
+    padding: 0 5px;
 }

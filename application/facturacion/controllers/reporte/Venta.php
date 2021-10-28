@@ -845,17 +845,24 @@ class Venta extends CI_Controller
 					foreach ($sede->ventas as $venta) {
 						$hoja->setCellValue("A{$fila}", $sede->nombre);
 						$hoja->setCellValue("B{$fila}", $venta->descripcion);
-						$hoja->setCellValue("C{$fila}", number_format($venta->cantidad, 2));
-						$hoja->setCellValue("D{$fila}", number_format($venta->total, 2));
+						$hoja->setCellValue("C{$fila}", (float)$venta->cantidad);
+						$hoja->setCellValue("D{$fila}", (float)$venta->total);
 						$fila++;
 					}
 				}
 				$fila--;
-				$hoja->getStyle("C7:D{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$SUMRANGE = "D7:D{$fila}";
+				$fila++;				
+				$hoja->getStyle("C7:D{$fila}")->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2);
 				$hoja->getStyle("A6:D{$fila}")->getBorders()->getAllBorders()
-					->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
-					->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('Black'));
-
+				->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
+				->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('Black'));
+				
+				$hoja->setCellValue("C{$fila}", "TOTAL:");
+				$hoja->setCellValue("D{$fila}", "=SUM({$SUMRANGE})");
+				$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
+				$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
+				
 				foreach (range('A', 'D') as $col) {
 					$hoja->getColumnDimension($col)->setAutoSize(true);
 				}
@@ -992,7 +999,7 @@ class Venta extends CI_Controller
 						$ventas[$i]->subcategorias = ordenar_array_objetos($ventas[$i]->subcategorias, 'subcategoria');
 						$cntSubcats = count($ventas[$i]->subcategorias);
 						$sumCantCat = 0;
-						$sumTotCat = 0;
+						$sumTotCat = 0;						
 						for ($j = 0; $j < $cntSubcats; $j++) {
 							$ventas[$i]->subcategorias[$j]->articulos = ordenar_array_objetos($ventas[$i]->subcategorias[$j]->articulos, 'cantidad', 1, 'desc');
 							$cntArticulos = count($ventas[$i]->subcategorias[$j]->articulos);
@@ -1006,6 +1013,7 @@ class Venta extends CI_Controller
 									$lineasDetalle = array_merge($lineasDetalle, $this->Dcomanda_model->get_detalle_comanda_and_childs(['detalle_comanda' => $dc]));
 								}
 								$opciones = [];
+								$sumExtrasSubcat = 0;
 								foreach ($lineasDetalle as $ld) {
 									if ((int)$ld->multiple === 0 && (int)$ld->detalle_comanda_id > 0) {
 										$idxOpcion = $this->get_idx($opciones, 'idopcion', $ld->articulo);
@@ -1019,15 +1027,16 @@ class Venta extends CI_Controller
 											];
 											$idxOpcion = count($opciones) - 1;
 										}
-										$opciones[$idxOpcion]->cantidad += (float)$ld->cantidad;
+										$opciones[$idxOpcion]->cantidad++;
 										$opciones[$idxOpcion]->total += (float)$ld->precio;
-										$articulo->total += (float)$ld->precio;
+										// $articulo->total += (float)$ld->precio;
+										$sumExtrasSubcat += (float)$ld->precio;
 									}
 								}
 								$opciones = ordenar_array_objetos($opciones, 'cantidad', 1, 'desc');
 								$articulo->opciones = $opciones;
 								$sumCantSubcat += $articulo->cantidad;
-								$sumTotSubcat += $articulo->total;
+								$sumTotSubcat += $articulo->total + $sumExtrasSubcat;								
 							}
 							$sumCantCat += $sumCantSubcat;
 							$sumTotCat += $sumTotSubcat;
@@ -1124,7 +1133,8 @@ class Venta extends CI_Controller
 				}
 
 				$fila -= 2;
-				$hoja->getStyle("B8:D{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				// $hoja->getStyle("B8:D{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$hoja->getStyle("B8:D{$fila}")->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2);				
 
 				foreach (range('A', 'D') as $col) {
 					$hoja->getColumnDimension($col)->setAutoSize(true);

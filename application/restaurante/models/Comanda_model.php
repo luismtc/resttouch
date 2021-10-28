@@ -62,7 +62,7 @@ class Comanda_model extends General_Model
 		return $this->db->affected_rows() > 0;
 	}
 
-	public function setDetalle($articulo, $idcta, $padre = null, $precio = null, $cantidad = 1)
+	public function setDetalle($articulo, $idcta, $padre = null, $precio = null, $cantidad = 1, $cantidadPadre = null)
 	{
 		$cuenta = new Cuenta_model($idcta);
 		$combo = new Articulo_model($articulo);
@@ -74,7 +74,7 @@ class Comanda_model extends General_Model
 			"cantidad" => $cantidad,
 			"notas" => "",
 			"precio" => $precio,
-			"total" => (float)$precio * $cantidad,
+			"total" => is_null($cantidadPadre) ? (float)$precio * $cantidad : (float)$precio * (float)$cantidadPadre,
 			"detalle_comanda_id" => $padre,
 			"bodega" => $bodega ? $bodega->bodega : null
 		];
@@ -103,25 +103,20 @@ class Comanda_model extends General_Model
 
 		if ($combo) {
 			foreach ($args['receta'] as $rec) {
-				$receta = $art->getReceta([
-					"articulo" => $rec['articulo'],
-					"_uno" => true
-				]);
+				$receta = $art->getReceta(["articulo" => $rec['articulo'], "_uno" => true]);
 
 				$artMulti = new Articulo_model($rec['articulo']);
 				$multi = $this->setDetalle($rec['articulo'], $cuenta, $combo->detalle_comanda, $receta[0]->precio, (float)$args['cantidad'] * (float)$receta[0]->cantidad);
 
 				$rec['receta'] = get_unicos($rec['receta']);
 				foreach ($rec['receta'] as $seleccion) {
-					$recetaSelec = $artMulti->getReceta([
-						"articulo" => $seleccion['articulo'],
-						"_uno" => true
-					]);
+					$recetaSelec = $artMulti->getReceta(["articulo" => $seleccion['articulo'], "_uno" => true]);
 
 					// $precio = $recetaSelec[0]->precio * (float)$seleccion['cantidad'];
 					$precio = $recetaSelec[0]->precio;
 
-					$selec = $this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $precio, (float)$seleccion['cantidad'] * (float)$recetaSelec[0]->cantidad);
+					// setDetalle($articulo, $idcta, $padre = null, $precio = null, $cantidad = 1, $cantidadPadre = null)
+					$this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $precio, (float)$seleccion['cantidad'] * (float)$recetaSelec[0]->cantidad, $multi->cantidad);
 				}
 			}
 			return $combo;
