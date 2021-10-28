@@ -33,10 +33,9 @@ export class ListaProductosComandaAltComponent implements OnInit, OnDestroy {
   get totalDeProductos() {
     return (lista: DetalleCuentaSimplified[] = null) => {
       let totProd = 0.00;
-      let lst: DetalleCuentaSimplified[] = lista || this.detalleCuenta;
-      for (const p of lst) {
-        const cant = (lista === null || lista === undefined) ? p.cantidad : 1;
-        totProd += (cant * p.precio) + this.totalDeProductos(p.detalle);
+      let lst: DetalleCuentaSimplified[] = lista || this.detalleCuenta;      
+      for (const p of lst) {          
+        totProd += +p.total + this.totalDeProductos(p.detalle);
       }
       return totProd;
     }

@@ -728,9 +728,8 @@ export class TranComandaComponent implements OnInit, OnDestroy {
 
   getMontoExtra = (dcs: DetalleCuentaSimplified[]): number => {
     let montoExtra = 0.00;
-    for (const det of dcs) {
-      const cant = (dcs === null || dcs === undefined) ? +det.cantidad : 1;
-      montoExtra += (cant * +det.precio) + this.getMontoExtra(det.detalle);
+    for (const det of dcs) {      
+      montoExtra += +det.total + this.getMontoExtra(det.detalle);
     }
     return montoExtra;
   }

@@ -734,8 +734,7 @@ export class TranComanda {
     getMontoExtra = (dcs: DetalleCuentaSimplified[]): number => {
         let montoExtra = 0.00;
         for (const det of dcs) {
-          const cant = (dcs === null || dcs === undefined) ? +det.cantidad : 1;
-          montoExtra += (cant * +det.precio) + this.getMontoExtra(det.detalle);
+            montoExtra += +det.total + this.getMontoExtra(det.detalle);
         }
         return montoExtra;
     }
