@@ -545,6 +545,87 @@ class Factura_model extends General_model
 		$direccionReceptor->appendChild($this->crearElemento('dte:Pais', 'GT'));
 	}
 
+	private function add_detalle_xml(&$items, $row, $key, $redondeaMontos, &$montoIva, &$montoTotal, &$impuestosEsp)
+	{
+		$item = $this->crearElemento('dte:Item', '', array(
+			'BienOServicio' => $row->bien_servicio,
+			'NumeroLinea'   => $key + 1
+		));
+
+		$item->appendChild($this->crearElemento('dte:Cantidad', $row->cantidad));
+		$item->appendChild($this->crearElemento('dte:UnidadMedida', 'PZA'));
+		$item->appendChild($this->crearElemento('dte:Descripcion', $row->articulo->descripcion, array(), true));
+		$item->appendChild($this->crearElemento('dte:PrecioUnitario', $redondeaMontos ? round(($row->precio_unitario), 6) : $row->precio_unitario_ext));
+		$item->appendChild($this->crearElemento('dte:Precio', $row->subtotal));
+		$item->appendChild($this->crearElemento('dte:Descuento', $redondeaMontos ? $row->descuento : $row->descuento_ext));
+
+		$impuestos = $this->crearElemento('dte:Impuestos');
+		$impuesto = $this->crearElemento('dte:Impuesto');
+		$impuesto->appendChild($this->crearElemento('dte:NombreCorto', 'IVA'));
+		$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : 1)));
+
+
+		if ($this->exenta) {
+			$valorBase = $row->total;
+			$valorIva = 0;
+		} else {
+			$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
+			$valorIva = $redondeaMontos ?  $row->monto_iva : $row->monto_iva_ext;
+		}
+
+		$montoIva += $valorIva;
+
+		$impuesto->appendChild($this->crearElemento('dte:MontoGravable', $valorBase));
+		$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorIva));
+
+		$impuestos->appendChild($impuesto);
+
+		foreach ($row->impuesto_especial as $rie) {
+			$imp = $this->ImpuestoEspecial_model->buscar([
+				"impuesto_especial" => $rie->impuesto_especial,
+				"_uno" => true
+			]);
+
+			$impuesto = $this->crearElemento('dte:Impuesto');
+			$impuesto->appendChild($this->crearElemento('dte:NombreCorto', $imp->descripcion));
+			$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : (isset($imp->codigo_sat) && !empty($imp->codigo_sat) ? $imp->codigo_sat : 1))));
+
+			$valorImp = $redondeaMontos ? $rie->valor_impuesto_especial : $rie->valor_impuesto_especial_ext;
+
+			if ($this->exenta) {
+				$valorBase = $row->total;
+			} else {
+				$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
+			}
+
+			$row->total += $redondeaMontos ? $rie->valor_impuesto_especial : $rie->valor_impuesto_especial_ext;
+
+			$impuesto->appendChild($this->crearElemento('dte:MontoGravable', (isset($rie->precio_sugerido) && (float)$rie->precio_sugerido > 0 ? ($redondeaMontos ? $rie->precio_sugerido : $rie->precio_sugerido_ext) : $valorBase)));
+
+			if (isset($rie->cantidad_gravable) && (float)$rie->cantidad_gravable > 0) {
+				$impuesto->appendChild($this->crearElemento('dte:CantidadUnidadesGravables', $rie->cantidad_gravable));
+			}
+
+			$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
+			$impuestos->appendChild($impuesto);
+			if (isset($impuestosEsp[$rie->impuesto_especial])) {
+				$impuestosEsp[$rie->impuesto_especial]['monto'] += $redondeaMontos ? $rie->valor_impuesto_especial : $rie->valor_impuesto_especial_ext;
+			} else {
+				$impuestosEsp[$rie->impuesto_especial] = [
+					"descripcion" => $imp->descripcion,
+					"monto" => $redondeaMontos ? $rie->valor_impuesto_especial : $rie->valor_impuesto_especial_ext
+				];
+			}
+		}
+
+
+		$item->appendChild($impuestos);
+
+		$item->appendChild($this->crearElemento('dte:Total', $row->total));
+		$items->appendChild($item);
+		$montoTotal += $row->total;
+	}
+
 	public function set_servicios_propios($args = array(), $redondeaMontos = true)
 	{
 		$items = $this->xml->getElementsByTagName('Items')->item(0);
@@ -552,86 +633,161 @@ class Factura_model extends General_model
 		$montoIva = 0;
 		$montoTotal = 0;
 		$impuestosEsp = [];
+		$detFactura = $this->getDetalle([], $redondeaMontos);
 
+		if ((int)$this->enviar_descripcion_unica === 1 && !is_null($this->descripcion_unica) && trim($this->descripcion_unica) !== '') {
+			
+			$row = (object)[
+				'bien_servicio' => 'B',
+				'cantidad' => 1,
+				'articulo' => (object)['descripcion' => $this->descripcion_unica],
+				'precio_unitario' => 0.00,
+				'precio_unitario_ext' => 0.00,
+				'subtotal' => 0.00,
+				'descuento' => 0.00,
+				'descuento_ext' => 0.00,
+				'total' => 0.00,
+				'monto_base' => 0.00,
+				'monto_base_ext' => 0.00,
+				'monto_iva' => 0.00,
+				'monto_iva_ext' => 0.00,
+				'impuesto_especial' => []
+			];
 
-		foreach ($this->getDetalle([], $redondeaMontos) as $key => $row) {
-			$item = $this->crearElemento('dte:Item', '', array(
-				'BienOServicio' => $row->bien_servicio,
-				'NumeroLinea'   => $key + 1
-			));
+			foreach($detFactura as $det) {
+				$row->precio_unitario += $det->subtotal;
+				$row->precio_unitario_ext += $det->subtotal;
+				$row->subtotal += $det->subtotal;
+				$row->descuento += $det->descuento;
+				$row->descuento_ext += $det->descuento_ext;
+				$row->total += $det->total;
+				$row->monto_base += $det->monto_base;
+				$row->monto_base_ext += $det->monto_base_ext;
+				$row->monto_iva += $det->monto_iva;
+				$row->monto_iva_ext += $det->monto_iva_ext;
+				if (!is_null($det->impuesto_especial) && (int)$det->impuesto_especial > 0) {
+					$cntImpEsp = count($row->impuesto_especial);
+					$idx = -1;
+					for($i = 0; $i < $cntImpEsp; $i++) {
+						if ((int)$row->impuesto_especial[$i]->impuesto_especial === (int)$det->impuesto_especial) {
+							$idx = $i;
+							break;
+						}
+					}
 
-			$item->appendChild($this->crearElemento('dte:Cantidad', $row->cantidad));
-			$item->appendChild($this->crearElemento('dte:UnidadMedida', 'PZA'));
-			$item->appendChild($this->crearElemento('dte:Descripcion', $row->articulo->descripcion, array(), true));
-			$item->appendChild($this->crearElemento('dte:PrecioUnitario', $redondeaMontos ? round(($row->precio_unitario), 6) : $row->precio_unitario_ext));
-			$item->appendChild($this->crearElemento('dte:Precio', $row->subtotal));
-			$item->appendChild($this->crearElemento('dte:Descuento', $redondeaMontos ? $row->descuento : $row->descuento_ext));
-
-			$impuestos = $this->crearElemento('dte:Impuestos');
-			$impuesto = $this->crearElemento('dte:Impuesto');
-			$impuesto->appendChild($this->crearElemento('dte:NombreCorto', 'IVA'));
-			$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : 1)));
-
-
-			if ($this->exenta) {
-				$valorBase = $row->total;
-				$valorIva = 0;
-			} else {
-				$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
-				$valorIva = $redondeaMontos ?  $row->monto_iva : $row->monto_iva_ext;
+					if($idx < 0) {
+						$row->impuesto_especial[] = (object)[
+							'impuesto_especial' => $det->impuesto_especial,
+							'valor_impuesto_especial' => (float)$det->valor_impuesto_especial,
+							'valor_impuesto_especial_ext' => (float)$det->valor_impuesto_especial_ext,
+							'precio_sugerido' => (float)$det->precio_sugerido,
+							'precio_sugerido_ext' => (float)$det->precio_sugerido_ext,
+							'cantidad_gravable' => (float)$det->cantidad_gravable,
+						];
+					} else {
+						$row->impuesto_especial[$idx]->valor_impuesto_especial += $det->valor_impuesto_especial;
+						$row->impuesto_especial[$idx]->valor_impuesto_especial_ext += $det->valor_impuesto_especial_ext;
+						$row->impuesto_especial[$idx]->cantidad_gravable += $det->cantidad_gravable;
+					}
+				}
 			}
-
-			$montoIva += $valorIva;
-
-			$impuesto->appendChild($this->crearElemento('dte:MontoGravable', $valorBase));
-			$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorIva));
-
-			$impuestos->appendChild($impuesto);
-			if ($row->impuesto_especial) {
-				$imp = $this->ImpuestoEspecial_model->buscar([
-					"impuesto_especial" => $row->impuesto_especial,
-					"_uno" => true
-				]);
-
-				$impuesto = $this->crearElemento('dte:Impuesto');
-				$impuesto->appendChild($this->crearElemento('dte:NombreCorto', $imp->descripcion));
-				$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : (isset($imp->codigo_sat) && !empty($imp->codigo_sat) ? $imp->codigo_sat : 1))));
-
-				$valorImp = $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
-
-				if ($this->exenta) {
-					$valorBase = $row->total;
-				} else {
-					$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
-				}
-
-				$row->total += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
-
-				$impuesto->appendChild($this->crearElemento('dte:MontoGravable', (isset($row->precio_sugerido) && (float)$row->precio_sugerido > 0 ? ($redondeaMontos ? $row->precio_sugerido : $row->precio_sugerido_ext) : $valorBase)));
-
-				if (isset($row->cantidad_gravable) && (float)$row->cantidad_gravable > 0) {
-					$impuesto->appendChild($this->crearElemento('dte:CantidadUnidadesGravables', $row->cantidad_gravable));
-				}
-
-				$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
-				$impuestos->appendChild($impuesto);
-				if (isset($impuestosEsp[$row->impuesto_especial])) {
-					$impuestosEsp[$row->impuesto_especial]['monto'] += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
-				} else {
-					$impuestosEsp[$row->impuesto_especial] = [
-						"descripcion" => $imp->descripcion,
-						"monto" => $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext
+			
+			$this->add_detalle_xml($items, $row, 0, $redondeaMontos, $montoIva, $montoTotal, $impuestosEsp);
+			
+		} else {
+			foreach ($detFactura as $key => $row) {
+				if ($row->impuesto_especial) {
+					$ie = $row->impuesto_especial;
+					$row->impuesto_especial = [];
+					$row->impuesto_especial[] = (object)[
+						'impuesto_especial' => $ie,
+						'valor_impuesto_especial' => (float)$row->valor_impuesto_especial,
+						'valor_impuesto_especial_ext' => (float)$row->valor_impuesto_especial_ext,
+						'precio_sugerido' => (float)$row->precio_sugerido,
+						'precio_sugerido_ext' => (float)$row->precio_sugerido_ext,
+						'cantidad_gravable' => (float)$row->cantidad_gravable,
 					];
 				}
-			}
-
-
-			$item->appendChild($impuestos);
-
-			$item->appendChild($this->crearElemento('dte:Total', $row->total));
-			$items->appendChild($item);
-			$montoTotal += $row->total;
+				$this->add_detalle_xml($items, $row, $key, $redondeaMontos, $montoIva, $montoTotal, $impuestosEsp);
+				// $item = $this->crearElemento('dte:Item', '', array(
+				// 	'BienOServicio' => $row->bien_servicio,
+				// 	'NumeroLinea'   => $key + 1
+				// ));
+	
+				// $item->appendChild($this->crearElemento('dte:Cantidad', $row->cantidad));
+				// $item->appendChild($this->crearElemento('dte:UnidadMedida', 'PZA'));
+				// $item->appendChild($this->crearElemento('dte:Descripcion', $row->articulo->descripcion, array(), true));
+				// $item->appendChild($this->crearElemento('dte:PrecioUnitario', $redondeaMontos ? round(($row->precio_unitario), 6) : $row->precio_unitario_ext));
+				// $item->appendChild($this->crearElemento('dte:Precio', $row->subtotal));
+				// $item->appendChild($this->crearElemento('dte:Descuento', $redondeaMontos ? $row->descuento : $row->descuento_ext));
+	
+				// $impuestos = $this->crearElemento('dte:Impuestos');
+				// $impuesto = $this->crearElemento('dte:Impuesto');
+				// $impuesto->appendChild($this->crearElemento('dte:NombreCorto', 'IVA'));
+				// $impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : 1)));
+	
+	
+				// if ($this->exenta) {
+				// 	$valorBase = $row->total;
+				// 	$valorIva = 0;
+				// } else {
+				// 	$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
+				// 	$valorIva = $redondeaMontos ?  $row->monto_iva : $row->monto_iva_ext;
+				// }
+	
+				// $montoIva += $valorIva;
+	
+				// $impuesto->appendChild($this->crearElemento('dte:MontoGravable', $valorBase));
+				// $impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorIva));
+	
+				// $impuestos->appendChild($impuesto);
+				// if ($row->impuesto_especial) {
+				// 	$imp = $this->ImpuestoEspecial_model->buscar([
+				// 		"impuesto_especial" => $row->impuesto_especial,
+				// 		"_uno" => true
+				// 	]);
+	
+				// 	$impuesto = $this->crearElemento('dte:Impuesto');
+				// 	$impuesto->appendChild($this->crearElemento('dte:NombreCorto', $imp->descripcion));
+				// 	$impuesto->appendChild($this->crearElemento('dte:CodigoUnidadGravable', ($this->exenta == 1 ? 2 : (isset($imp->codigo_sat) && !empty($imp->codigo_sat) ? $imp->codigo_sat : 1))));
+	
+				// 	$valorImp = $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
+	
+				// 	if ($this->exenta) {
+				// 		$valorBase = $row->total;
+				// 	} else {
+				// 		$valorBase = $redondeaMontos ? $row->monto_base : $row->monto_base_ext;
+				// 	}
+	
+				// 	$row->total += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
+	
+				// 	$impuesto->appendChild($this->crearElemento('dte:MontoGravable', (isset($row->precio_sugerido) && (float)$row->precio_sugerido > 0 ? ($redondeaMontos ? $row->precio_sugerido : $row->precio_sugerido_ext) : $valorBase)));
+	
+				// 	if (isset($row->cantidad_gravable) && (float)$row->cantidad_gravable > 0) {
+				// 		$impuesto->appendChild($this->crearElemento('dte:CantidadUnidadesGravables', $row->cantidad_gravable));
+				// 	}
+	
+				// 	$impuesto->appendChild($this->crearElemento('dte:MontoImpuesto', $valorImp));
+				// 	$impuestos->appendChild($impuesto);
+				// 	if (isset($impuestosEsp[$row->impuesto_especial])) {
+				// 		$impuestosEsp[$row->impuesto_especial]['monto'] += $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext;
+				// 	} else {
+				// 		$impuestosEsp[$row->impuesto_especial] = [
+				// 			"descripcion" => $imp->descripcion,
+				// 			"monto" => $redondeaMontos ? $row->valor_impuesto_especial : $row->valor_impuesto_especial_ext
+				// 		];
+				// 	}
+				// }
+	
+	
+				// $item->appendChild($impuestos);
+	
+				// $item->appendChild($this->crearElemento('dte:Total', $row->total));
+				// $items->appendChild($item);
+				// $montoTotal += $row->total;
+			} // Fin de for de detalle cuando sí es detallada la factura.
 		}
+
 		$totalImpuestos = $this->xml->getElementsByTagName('TotalImpuestos')->item(0);
 		$totalIva = $this->xml->getElementsByTagName('TotalImpuesto')->item(0);
 		$totalIva->setAttribute('NombreCorto', 'IVA');

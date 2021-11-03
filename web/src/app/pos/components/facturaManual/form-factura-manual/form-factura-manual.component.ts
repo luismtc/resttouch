@@ -157,7 +157,7 @@ export class FormFacturaManualComponent implements OnInit {
     this.factura = {
       factura: null, factura_serie: null, cliente: null,
       fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: null, exenta: 0, notas: null,
-      fel_uuid: null, fel_uuid_anulacion: null
+      fel_uuid: null, fel_uuid_anulacion: null, enviar_descripcion_unica: 0, descripcion_unica: null
     };
     this.clienteSelected = undefined;
     this.resetDetalleFactura();
@@ -188,7 +188,9 @@ export class FormFacturaManualComponent implements OnInit {
             moneda: res.factura.moneda,
             exenta: +res.factura.exenta,
             notas: res.factura.notas,
-            fel_uuid: res.factura.fel_uuid
+            fel_uuid: res.factura.fel_uuid,
+            enviar_descripcion_unica: +res.factura.enviar_descripcion_unica,
+            descripcion_unica: res.factura.descripcion_unica
           };
           this.snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
         }
@@ -206,7 +208,9 @@ export class FormFacturaManualComponent implements OnInit {
             moneda: res.factura.moneda,
             exenta: +res.factura.exenta,
             notas: res.factura.notas,
-            fel_uuid: res.factura.fel_uuid
+            fel_uuid: res.factura.fel_uuid,
+            enviar_descripcion_unica: +res.factura.enviar_descripcion_unica,
+            descripcion_unica: res.factura.descripcion_unica
           }
           this.snackBar.open('Factura manual agregada...', 'Factura', { duration: 3000 });
         }
@@ -489,6 +493,14 @@ export class FormFacturaManualComponent implements OnInit {
         '"></iframe>');
     } catch(e) {
       this.snackBar.open('No se pudo abrir la ventana emergente para ver la representación gráfica. Revise la configuración de su explorador, por favor.', 'PDF', { duration: 7000 });
+    }
+  }
+
+  vaciaDescripcionUnica = () => {
+    if (+this.factura.enviar_descripcion_unica === 0) {
+      this.factura.descripcion_unica = null;
+    } else {
+      this.factura.descripcion_unica = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_DETALLE_FACTURA_PERSONALIZADO) || 'Por consumo.';
     }
   }
 }

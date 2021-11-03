@@ -89,7 +89,9 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   }
 
   resetFactReq = () => {
-    this.factReq = { cuentas: [], factura_serie: 1, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: 1 };
+    this.factReq = { 
+      cuentas: [], factura_serie: 1, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: 1, enviar_descripcion_unica: 0, descripcion_unica: null
+    };
   }
 
   processData = () => {
@@ -243,6 +245,8 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
         if (res.exito && !res.facturada) {
           this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
           if (res.facturar) {
+            this.factReq.enviar_descripcion_unica = this.descripcionUnica.enviar_descripcion_unica;
+            this.factReq.descripcion_unica = this.descripcionUnica.descripcion_unica;
             this.endSubs.add(
               this.facturaSrvc.facturar(this.factReq).subscribe(resFact => {
                 // console.log('RESPUESTA DE FACTURAR = ', resFact);

@@ -90,7 +90,7 @@
       <table class="table table-sm table-borderless">
         <tbody>
           <!-- Inicia fila para descripción única -->
-          <!-- <tr>
+          <tr>
             <td>
               <mat-checkbox name="enviar_descripcion_unica" [(ngModel)]="+descripcionUnica.enviar_descripcion_unica"
                 [ngModelOptions]="{standalone: true}" (change)="vaciaDescripcionUnica()">
@@ -102,7 +102,7 @@
                 <input matInput placeholder="Descripción" [(ngModel)]="descripcionUnica.descripcion_unica" [ngModelOptions]="{standalone: true}" minlength="1" maxlength="5000" [disabled]="+descripcionUnica.enviar_descripcion_unica === 0" [required]="+descripcionUnica.enviar_descripcion_unica === 1"/>
               </mat-form-field>
             </td>
-          </tr> -->
+          </tr>
           <!-- Finaliza fila para descripción única -->
           <ng-container *ngIf="+data.mesaenuso.mesa.escallcenter === 1">
             <tr>
