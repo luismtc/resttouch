@@ -344,14 +344,29 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
     );
   }
 
-  procesaDetalleFactura = (detalle: any[]) => {
+  procesaDetalleFactura = (detalle: any[], edu = 0, descripcionUnica: string = null) => {
     const detFact: any[] = [];
-    detalle.forEach(d => detFact.push({
-      Cantidad: parseInt(d.cantidad),
-      Descripcion: d.articulo.descripcion,
-      Total: +d.total,
-      PrecioUnitario: !!d.precio_unitario ? +d.precio_unitario : +d.precio
-    }));
+
+    if (edu === 1 && descripcionUnica) {
+      let total = 0;
+      for(const det of detalle) {
+        total += +det.total;
+      }
+      detFact.push({
+        Cantidad: 1,
+        Descripcion: descripcionUnica,
+        Total: total,
+        PrecioUnitario: total
+      });
+    } else {
+      detalle.forEach(d => detFact.push({
+        Cantidad: parseInt(d.cantidad),
+        Descripcion: d.articulo.descripcion,
+        Total: +d.total,
+        PrecioUnitario: !!d.precio_unitario ? +d.precio_unitario : +d.precio
+      }));
+    }
+
     return detFact;
   }
 
@@ -391,7 +406,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
             FechaDeAutorizacion: res.factura.fecha_autorizacion,
             NoOrdenEnLinea: '',
             FormaDePago: '',
-            DetalleFactura: this.procesaDetalleFactura(res.factura.detalle),
+            DetalleFactura: this.procesaDetalleFactura(res.factura.detalle, +res.factura.enviar_descripcion_unica, res.factura.descripcion_unica),
             Impresora: this.data.impresora,
             ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
           };

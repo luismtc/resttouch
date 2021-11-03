@@ -692,7 +692,7 @@ class Factura_model extends General_model
 				}
 			}
 			
-			$this->add_detalle_xml($items, $row, 0, $redondeaMontos, $montoIva, $montoTotal, $impuestosEsp);
+			$this->add_detalle_xml($items, $row, 0, false, $montoIva, $montoTotal, $impuestosEsp);
 			
 		} else {
 			foreach ($detFactura as $key => $row) {
