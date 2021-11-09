@@ -124,7 +124,8 @@ class Usuario_model extends General_model
                             "visa_merchant_id" => $dbusr->visa_merchant_id,
                             "nombre" => $dbusr->empresa_nombre,
                             "nit" => $dbusr->empresa_nit
-                        ]
+                        ],
+                        'dominio' => $credenciales['dominio']
                     );
                 } else {
                     return array(

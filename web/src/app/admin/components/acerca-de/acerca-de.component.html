@@ -2,7 +2,11 @@
     <img mat-card-image src="/assets/img/logo.svg" alt="Rest-Touch Pro">
 </h1>
 <div mat-dialog-content align="center">
-    <p>{{sedeUuid}}</p>
+    <p>
+        <strong>Sede UUID:</strong> {{sedeUuid}}<br/>
+        <strong>Dominio:</strong> {{dominio}}<br/>
+        <strong>Versión: </strong>{{rtVersion}}
+    </p>    
 </div>
 <div mat-dialog-actions align="end">
     <button mat-raised-button type="button" color="accent" (click)="cerrar()">
