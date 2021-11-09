@@ -707,6 +707,8 @@ class Factura_model extends General_model
 						'precio_sugerido_ext' => (float)$row->precio_sugerido_ext,
 						'cantidad_gravable' => (float)$row->cantidad_gravable,
 					];
+				} else {
+					$row->impuesto_especial = [];
 				}
 				$this->add_detalle_xml($items, $row, $key, $redondeaMontos, $montoIva, $montoTotal, $impuestosEsp);
 				// $item = $this->crearElemento('dte:Item', '', array(

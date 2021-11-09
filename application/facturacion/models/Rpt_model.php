@@ -38,9 +38,7 @@ class Rpt_model extends General_model
             ->where('f.numero_factura IS NOT NULL')
             ->where('f.fel_uuid_anulacion IS NULL')
             ->where('f.sede', $args['idsede'])
-            ->where('a.sede', $args['idsede'])
-            // ->where('b.articulo', 241) //Solo para efectos de rastreo de reporte
-            // ->get_compiled_select('comanda a');
+            ->where('a.sede', $args['idsede'])                        
             ->get('comanda a')
             ->row();
 
@@ -67,11 +65,9 @@ class Rpt_model extends General_model
             ->join('cuenta b', 'a.comanda = b.cuenta')
             ->join('cuenta_forma_pago c', 'b.cuenta = c.cuenta')
             ->join('forma_pago d', 'd.forma_pago = c.forma_pago')
-            ->join('turno e', 'e.turno = a.turno')
-            // ->join('detalle_comanda f', 'a.comanda = f.comanda') //Solo para efectos de rastreo de reporte
+            ->join('turno e', 'e.turno = a.turno')            
             ->where('a.sede', $args['idsede'])
-            ->where('d.sinfactura', 1)
-            // ->where('f.articulo', 241) //Solo para efectos de rastreo de reporte
+            ->where('d.sinfactura', 1)            
             ->get('comanda a')
             ->row();
 
@@ -105,8 +101,7 @@ class Rpt_model extends General_model
                 ->where('a.cantidad >', 0)
                 ->where('DATE(c.fhcreacion) >=', $args['fdel'])
                 ->where('DATE(c.fhcreacion) <=', $args['fal'])
-                ->group_by('a.articulo, b.descripcion')
-                // ->get_compiled_select('detalle_comanda a');
+                ->group_by('a.articulo, b.descripcion')                
                 ->get('detalle_comanda a')
                 ->result();
     
@@ -117,13 +112,11 @@ class Rpt_model extends General_model
                 ->where("a.comanda IN({$comandas})")
                 ->where('a.detalle_comanda_id IS NOT NULL')
                 ->where('b.multiple', 0)
-                ->where('b.combo', 0)
-                // ->where('a.total', 0)
+                ->where('b.combo', 0)                
                 ->where('a.cantidad >', 0)
                 ->where('DATE(c.fhcreacion) >=', $args['fdel'])
                 ->where('DATE(c.fhcreacion) <=', $args['fal'])
-                ->group_by('a.articulo, b.descripcion')
-                // ->get_compiled_select('detalle_comanda a');
+                ->group_by('a.articulo, b.descripcion')                
                 ->get('detalle_comanda a')
                 ->result();
     
@@ -139,8 +132,7 @@ class Rpt_model extends General_model
                 ->where('a.cantidad >', 0)
                 ->where('DATE(c.fhcreacion) >=', $args['fdel'])
                 ->where('DATE(c.fhcreacion) <=', $args['fal'])
-                ->group_by('a.articulo, b.descripcion')
-                // ->get_compiled_select('detalle_comanda a');
+                ->group_by('a.articulo, b.descripcion')                
                 ->get('detalle_comanda a')
                 ->result();
         }

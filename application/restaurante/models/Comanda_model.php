@@ -134,8 +134,7 @@ class Comanda_model extends General_Model
 		$menu = $this->Catalogo_model->getModulo(['modulo' => 4, '_uno' => true]);
 		$validar = true;
 		$cantidad = 0;
-		$articulo = $det->articulo;
-		$factor = 0;
+		$articulo = $det->articulo;		
 		if (empty($id)) {
 			$articulo = $args['articulo'];
 			$cantidad = $args['cantidad'];
@@ -148,15 +147,13 @@ class Comanda_model extends General_Model
 			if (isset($args['articulo'])) {
 				if ($det->articulo == $args['articulo'] && $det->cantidad < $args['cantidad']) {
 					$articulo = $det->articulo;
-					$cantidad = $args['cantidad'] - $det->cantidad;
-					$factor -= (float)$det->cantidad;
+					$cantidad = $args['cantidad'] - $det->cantidad;					
 					if(isset($args['cantidad'])) {
 						$args['cantidad_inventario'] = $args['cantidad'];						
 					}
 				} else if ($det->articulo != $args['articulo']) {
 					$articulo = $args['articulo'];
-					$cantidad = $args['cantidad'];
-					$factor = (float)$args['cantidad'];
+					$cantidad = $args['cantidad'];					
 					$args['cantidad_inventario'] = $cantidad;
 				} else {
 					$articulo = $args['articulo'];
@@ -174,7 +171,7 @@ class Comanda_model extends General_Model
 		$bodega = $art->getBodega();
 		$args['bodega'] = $bodega ? $bodega->bodega : null;
 		$cantPres = ($pres) ? $pres->cantidad : 0;
-		$factor *= $cantPres;
+		
 		$oldart = new Articulo_model($det->articulo);
 
 		if (!empty($menu) && !$vnegativo) {
@@ -182,11 +179,17 @@ class Comanda_model extends General_Model
 			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
 		}	
 
-		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
+		if ($vnegativo || empty($menu) || (!$validar || (float)$art->existencias >= ((float)$cantidad * (float)$cantPres))) {
 			$nuevo = ($det->getPK() == null);
 			$result = $det->guardar($args);
 			$idx = $det->getPK();
 			$receta = $art->getReceta();
+
+			// if(!empty($menu) && (int)$art->mostrar_inventario === 1) {
+			// 	$art->existencias = (float)$art->existencias - ((float)$cantidad * (float)$cantPres);
+			// 	$art->guardar();
+			// 	$art->actualiza_existencia_bodega_articulo_costo($args['bodega']);
+			// }
 
 			if (count($receta) > 0 && (int)$art->combo === 0 && (int)$art->multiple === 0 && $nuevo && (int)$art->produccion === 0) {
 				foreach ($receta as $rec) {
@@ -231,22 +234,12 @@ class Comanda_model extends General_Model
 			}
 			if ($result) {
 				if (!empty($menu) && !$vnegativo) {
-					$art->actualizarExistencia(['bodega' => $args['bodega']]);
-					// $art->existencias += $factor;					
-					// $art->guardar();
-					// $art->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+					$art->actualizarExistencia(['bodega' => $args['bodega']]);					
 				}
 				if (isset($args['articulo'])) {
 					if ($oldart->articulo) {
 						if (!empty($menu) && !$vnegativo) {
-							$oldart->actualizarExistencia(['bodega' => $args['bodega']]);
-							// if ($factor > 0) {
-							// 	$oldart->existencias += $factor;
-							// } else if ($factor < 0) {
-							// 	$oldart->existencias -= $factor;
-							// }
-							// $oldart->guardar();
-							// $oldart->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+							$oldart->actualizarExistencia(['bodega' => $args['bodega']]);							
 						}
 					}
 				}
@@ -271,8 +264,7 @@ class Comanda_model extends General_Model
 		$menu = $this->Catalogo_model->getModulo(['modulo' => 4, '_uno' => true]);
 		$validar = true;
 		$cantidad = 0;
-		$articulo = $det->articulo;
-		// $factor = 0;
+		$articulo = $det->articulo;		
 		$oldart = null;
 		if (empty($id)) {
 			$articulo = $args['articulo'];
@@ -286,16 +278,14 @@ class Comanda_model extends General_Model
 			if (isset($args['articulo'])) {
 				if ((int)$det->articulo === (int)$args['articulo'] && (float)$det->cantidad < (float)$args['cantidad']) {
 					$articulo = $det->articulo;
-					$cantidad = $args['cantidad'] - $det->cantidad;
-					// $factor -= (float)$det->cantidad;
+					$cantidad = $args['cantidad'] - $det->cantidad;					
 					if(isset($args['cantidad'])) {
 						$args['cantidad_inventario'] = $args['cantidad'];						
 					}
 				} else if ($det->articulo != $args['articulo']) {
 					$oldart = new Articulo_model($det->articulo);
 					$articulo = $args['articulo'];
-					$cantidad = $args['cantidad'];
-					// $factor = (float)$args['cantidad'];
+					$cantidad = $args['cantidad'];					
 					$args['cantidad_inventario'] = $cantidad;
 				} else {
 					$articulo = $args['articulo'];
@@ -314,16 +304,9 @@ class Comanda_model extends General_Model
 		// $bodega = $art->getBodega();
 		$args['bodega'] = $dataForDC ? $dataForDC->bodega : null;
 		$cantPres = ($dataForDC) ? $dataForDC->cant_pres_reporte : 0;
-		// $factor *= $cantPres;
-
-		// $oldart = null;
-		// if (!empty($id)) {
-		// 	$oldart = new Articulo_model($det->articulo);
-		// }		
 		
 		if (!empty($menu) && !$vnegativo) {
 			$art->actualizarExistencia(['bodega' => $args['bodega']]);
-			// $art->existencias = $art->get_existencia_bodega(['bodega' => $args['bodega']]);
 		}
 
 		if ($vnegativo || empty($menu) || (!$validar || $art->existencias >= ($cantidad * $cantPres))) {
@@ -375,29 +358,15 @@ class Comanda_model extends General_Model
 			}
 			if ($result) {
 				if (!empty($menu) && !$vnegativo) {
-					$art->actualizarExistencia(['bodega' => $args['bodega']]);
-					// $art->existencias += $factor;					
-					// $art->guardar();
-					// $art->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+					$art->actualizarExistencia(['bodega' => $args['bodega']]);					
 				}
 
 				if ($oldart && isset($oldart->articulo) && !empty($menu) && !$vnegativo) {
-					$oldart->actualizarExistencia(['bodega' => $args['bodega']]);
-					// if ($factor > 0) {
-					// 	$oldart->existencias += $factor;
-					// } else if ($factor < 0) {
-					// 	$oldart->existencias -= $factor;
-					// }
-					// $oldart->guardar();
-					// $oldart->actualiza_existencia_bodega_articulo_costo(['bodega' => $args['bodega']]);
+					$oldart->actualizarExistencia(['bodega' => $args['bodega']]);					
 				}
 				return $det;
 			}
-			$this->mensaje = $det->getMensaje();
-
-			// $finaliza = time();
-			// $tiempo = $finaliza - $inicia;
-			// printf("{$finaliza} - {$inicia} = {$tiempo}");
+			$this->mensaje = $det->getMensaje();			
 			return $result;
 		} else {
 			$this->setMensaje('No hay existencias suficientes para este articulo');

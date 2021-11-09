@@ -28,6 +28,10 @@ export class RptVentasComponent implements OnInit {
     }
   };
 
+  get placeHolderFechaDel() {
+    return +this.params.tipo_reporte === 3 ? 'Fecha' : 'Del';
+  }
+
   public tiposReporte: any[] = [];
   public params: any = {};
   public paramsToSend: any = {};
@@ -74,7 +78,8 @@ export class RptVentasComponent implements OnInit {
   loadTiposReporte = () => {
     this.tiposReporte = [
       { tipo_reporte: 1, descripcion: 'Por categoría' },
-      { tipo_reporte: 2, descripcion: 'Por artículo' }
+      { tipo_reporte: 2, descripcion: 'Por artículo' },
+      { tipo_reporte: 3, descripcion: 'Por categoría agrupado por combo' }
     ];
   }
 
@@ -91,6 +96,9 @@ export class RptVentasComponent implements OnInit {
   }
 
   getReporte = (tipo: number = 1) => {
+    if(+this.params.tipo_reporte === 3) {
+      this.params.fal = this.params.fdel;
+    }
     this.paramsToSend = JSON.parse(JSON.stringify(this.params));
     this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
     switch (tipo) {
@@ -104,6 +112,7 @@ export class RptVentasComponent implements OnInit {
     switch (this.params.tipo_reporte) {
       case 1: this.getPorCategoriaPdf(); break;
       case 2: this.getPorArticuloPdf(); break;
+      case 3: this.getPorCatAgrupadoCombo(); break;
     }
   }
 
@@ -111,6 +120,7 @@ export class RptVentasComponent implements OnInit {
     switch (this.params.tipo_reporte) {
       case 1: this.getPorCategoriaPdf(1); break;
       case 2: this.getPorArticuloPdf(1); break;
+      case 3: this.getPorCatAgrupadoCombo(1); break;
     }
   }
 
@@ -155,6 +165,21 @@ export class RptVentasComponent implements OnInit {
         saveAs(blob, `${this.tituloArticulo}_${moment().format(GLOBAL.dateTimeFormatRptName)}.${+esExcel === 0 ? 'pdf' : 'xls'}`);
       } else {
         this.snackBar.open('No se pudo generar el reporte...', 'Ventas por artículo', { duration: 3000 });
+      }
+    });
+  }
+
+  getPorCatAgrupadoCombo = (esExcel = 0) => {
+    this.paramsToSend._excel = esExcel;
+    this.cargando = true;
+    this.cleanParams();
+    this.rptVentasSrvc.porCategoriaPorCombo(this.paramsToSend).subscribe(res => {
+      this.cargando = false;
+      if (res) {
+        const blob = new Blob([res], { type: (+esExcel === 0 ? 'application/pdf' : 'application/vnd.ms-excel') });
+        saveAs(blob, `${this.tituloCategoria}_${moment().format(GLOBAL.dateTimeFormatRptName)}.${+esExcel === 0 ? 'pdf' : 'xls'}`);
+      } else {
+        this.snackBar.open('No se pudo generar el reporte...', 'Ventas por categoría', { duration: 3000 });
       }
     });
   }

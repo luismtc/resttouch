@@ -1327,9 +1327,11 @@ class Api extends CI_Controller
 				$html .= "<h4>Comanda #{$comanda->comanda}<br/>";
 				$html .= "Mesero: {$comanda->mesero->nombres} {$comanda->mesero->apellidos} ({$comanda->mesero->usrname})</h4>";
 				$html .= "<table style='border: solid 1px black; border-collapse: collapse; width: 50%;'>";
-				$html.= "<caption><b>Detalle</b></caption><thead><tr>";
+				$html.= "<caption><b>Detalle</b></caption>";
+				$html.= "<thead><tr>";
 				$html.= "<th>Cantidad</th><th style='text-align: left;'>Artículo</th><th style='text-align: right;'>Precio</th><th style='text-align: right;'>Total</th>";
-				$html.= "</tr></thead><tbody>";
+				$html.= "</tr></thead>";
+				$html.= "<tbody>";
 				$totComanda = 0;
 				foreach($comanda->detalle as $det) {
 					$html .= "<tr>";

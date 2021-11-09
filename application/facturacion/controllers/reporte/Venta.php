@@ -120,10 +120,12 @@ class Venta extends CI_Controller
 
 	public function categoriapdf($pdf = 0)
 	{
+		set_time_limit(1800);
 		$this->load->helper(['jwt', 'authorization']);
 		$headers = $this->input->request_headers();
 		$data = AUTHORIZATION::validateToken($headers['Authorization']);
-		$req = $_GET;
+		// $req = $_GET;
+		$req = json_decode(file_get_contents('php://input'), true);
 		if (!$this->input->get('sede')) {
 			$req['sede'] = [$this->data->sede];
 		}
@@ -269,8 +271,8 @@ class Venta extends CI_Controller
 		}
 
 		if (verDato($req, '_excel')) {
-			$fdel = formatoFecha($_GET['fdel'], 2);
-			$fal = formatoFecha($_GET['fal'], 2);
+			$fdel = formatoFecha($req['fdel'], 2);
+			$fal = formatoFecha($req['fal'], 2);
 
 			$excel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
 			$excel->getProperties()
@@ -915,6 +917,7 @@ class Venta extends CI_Controller
 	{
 		set_time_limit(1800);
 		ini_set('memory_limit', '512M');
+		// $memBefore = round(memory_get_usage() / 1048576, 2);
 		$datos = [];
 
 		if ($this->input->method() == 'post') {
@@ -993,6 +996,8 @@ class Venta extends CI_Controller
 						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->detalle_comanda .= $rv->detalle_comanda;
 					}
 
+					// $memMiddle = round(memory_get_usage() / 1048576, 2);
+
 					$ventas = ordenar_array_objetos($ventas, 'categoria');
 					$cntVentas = count($ventas);
 					for ($i = 0; $i < $cntVentas; $i++) {
@@ -1028,6 +1033,7 @@ class Venta extends CI_Controller
 											$idxOpcion = count($opciones) - 1;
 										}
 										$opciones[$idxOpcion]->cantidad++;
+										// $opciones[$idxOpcion]->cantidad += (float)$ld->cantidad;
 										$opciones[$idxOpcion]->total += (float)$ld->precio;
 										// $articulo->total += (float)$ld->precio;
 										$sumExtrasSubcat += (float)$ld->precio;
@@ -1061,6 +1067,8 @@ class Venta extends CI_Controller
 				'turno' => isset($req['turno_tipo']) && (int)$req['turno_tipo'] > 0 ? new TurnoTipo_model($req['turno_tipo']) : null,
 				'sedes' => $datos
 			];
+
+			// $memAfter = round(memory_get_usage() / 1048576, 2);
 
 			if (verDato($req, '_excel')) {
 				$data = (object)$data;
@@ -1144,6 +1152,14 @@ class Venta extends CI_Controller
 				$hoja->mergeCells('A2:D2');
 				$hoja->mergeCells('A3:D3');
 				$hoja->mergeCells('A4:D4');
+				
+				// $memAfterExcel = round(memory_get_usage() / 1048576, 2);
+				
+				// $fila += 4;
+				// $hoja->setCellValue("A{$fila}", "Mem antes: {$memBefore}MB");
+				// $hoja->setCellValue("B{$fila}", "Mem mitad: {$memMiddle}MB");				
+				// $hoja->setCellValue("C{$fila}", "Mem datos: {$memAfter}MB");
+				// $hoja->setCellValue("D{$fila}", "Mem excel: {$memAfterExcel}MB");
 
 				$hoja->setTitle("Ventas por categoría");
 
@@ -1158,7 +1174,7 @@ class Venta extends CI_Controller
 				$writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($excel);
 				$writer->save("php://output");
 			} else {
-				$vista = $this->load->view('reporte/venta/categoria', array_merge($data, $req), true);
+				$vista = $this->load->view('reporte/venta/categoria_combo', array_merge($data, $req), true);
 
 				$mpdf = new \Mpdf\Mpdf([
 					'tempDir' => sys_get_temp_dir(), //Produccion
