@@ -802,9 +802,15 @@ class Venta extends CI_Controller
 				$req['idsede'] = $sede->sede;
 				$sede->nombre = $sedeObj->nombre;
 				$obj = $rpt->get_lista_comandas($req);
-				$sede->ventas = [];
+				$sede->ventas = [];				
+				$sede->suma_propinas = 0;
+				$sede->suma_descuentos = 0;
 				if ($obj) {
 					$sede->ventas = $rpt->get_ventas_articulos($obj->comandas, $obj->facturas, $req);
+					if($obj->comandas && trim($obj->comandas) !== '') {
+						$sede->suma_propinas = $rpt->get_suma_propinas($obj->comandas);
+						$sede->suma_descuentos = $rpt->get_suma_descuentos($obj->comandas);
+					}
 				}
 				$datos[] = $sede;
 			}
@@ -844,26 +850,55 @@ class Venta extends CI_Controller
 
 				$fila = 7;
 				foreach ($data->sedes as $sede) {
+					$totalSede = 0;
 					foreach ($sede->ventas as $venta) {
 						$hoja->setCellValue("A{$fila}", $sede->nombre);
 						$hoja->setCellValue("B{$fila}", $venta->descripcion);
 						$hoja->setCellValue("C{$fila}", (float)$venta->cantidad);
 						$hoja->setCellValue("D{$fila}", (float)$venta->total);
+						$totalSede += (float)$venta->total;
 						$fila++;
 					}
+					$hoja->setCellValue("A{$fila}", $sede->nombre);
+					$hoja->setCellValue("C{$fila}", 'Sub-total (sin descuentos):');
+					$hoja->setCellValue("D{$fila}", $totalSede);
+					$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", $sede->nombre);
+					$hoja->setCellValue("C{$fila}", 'Descuentos:');
+					$hoja->setCellValue("D{$fila}", $sede->suma_descuentos);
+					$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", $sede->nombre);
+					$hoja->setCellValue("C{$fila}", 'Sub-total (con descuentos):');
+					$hoja->setCellValue("D{$fila}", $totalSede - $sede->suma_descuentos);
+					$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", $sede->nombre);
+					$hoja->setCellValue("C{$fila}", 'Propinas:');
+					$hoja->setCellValue("D{$fila}", $totalSede - $sede->suma_descuentos);
+					$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", $sede->nombre);
+					$hoja->setCellValue("C{$fila}", 'Total:');
+					$hoja->setCellValue("D{$fila}", $totalSede - $sede->suma_descuentos + $sede->suma_propinas);
+					$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
+					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
 				}
 				$fila--;
-				$SUMRANGE = "D7:D{$fila}";
-				$fila++;				
+				// $SUMRANGE = "D7:D{$fila}";
+				// $fila++;				
 				$hoja->getStyle("C7:D{$fila}")->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2);
 				$hoja->getStyle("A6:D{$fila}")->getBorders()->getAllBorders()
 				->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
 				->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('Black'));
 				
-				$hoja->setCellValue("C{$fila}", "TOTAL:");
-				$hoja->setCellValue("D{$fila}", "=SUM({$SUMRANGE})");
-				$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
-				$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
+				
 				
 				foreach (range('A', 'D') as $col) {
 					$hoja->getColumnDimension($col)->setAutoSize(true);
@@ -944,8 +979,14 @@ class Venta extends CI_Controller
 				$obj = $rpt->get_lista_comandas($req);
 				$sede->ventas = [];
 				$sede->cantidad = 0;
-				$sede->total = 0;
+				$sede->total = 0;				
+				$sede->suma_propinas = 0;
+				$sede->suma_descuentos = 0;
 				if ($obj) {
+					if($obj->comandas && trim($obj->comandas) !== '') {
+						$sede->suma_propinas = $rpt->get_suma_propinas($obj->comandas);
+						$sede->suma_descuentos = $rpt->get_suma_descuentos($obj->comandas);
+					}
 					$rawVentas = $rpt->get_ventas_categorias($obj->comandas, $obj->facturas, $req);
 					$ventas = [];
 					foreach ($rawVentas as $rv) {
@@ -1132,11 +1173,31 @@ class Venta extends CI_Controller
 							}
 						}
 					}
-					$hoja->setCellValue("A{$fila}", "Totales de {$s->nombre}:");
+					$hoja->setCellValue("A{$fila}", "Sub-total de {$s->nombre} (sin descuentos):");
 					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->setCellValue("B{$fila}", $s->cantidad);
 					$hoja->setCellValue("D{$fila}", $s->total);
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", "Descuentos de {$s->nombre}:");
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->setCellValue("D{$fila}", $s->suma_descuentos);
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", "Sub-total de {$s->nombre} (con descuentos):");
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->setCellValue("D{$fila}", $s->total - $s->suma_descuentos);
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", "Propinas de {$s->nombre}:");
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->setCellValue("D{$fila}", $s->suma_propinas);
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
+					$fila++;
+					$hoja->setCellValue("A{$fila}", "Total de {$s->nombre}:");
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->setCellValue("D{$fila}", $s->total - $s->suma_descuentos + $s->suma_propinas);
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);					
 					$fila += 2;
 				}
 
@@ -1184,7 +1245,8 @@ class Venta extends CI_Controller
 				$mpdf->WriteHTML($vista);
 				$mpdf->Output('Ventas_categoria.pdf', 'D');
 
-				// $this->output->set_content_type("application/json")->set_output(json_encode(array_merge($data, $req)));				
+				$this->output->set_content_type("application/json")->set_output(json_encode(array_merge($data, $req)));
+				// $this->output->set_content_type("application/json")->set_output(json_encode($data));
 			}
 		}
 	}

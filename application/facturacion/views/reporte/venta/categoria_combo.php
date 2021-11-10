@@ -80,10 +80,34 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Totales de <?php echo $s->nombre ?>:</td>
+								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Sub-total de <?php echo $s->nombre ?> (sin descuentos):</td>
 								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format($s->cantidad, 2) ?></td>
 								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
 								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format($s->total, 2) ?></td>
+							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Descuentos de <?php echo $s->nombre ?>:</td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format($s->suma_descuentos, 2) ?></td>
+							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Sub-total de <?php echo $s->nombre ?> (con descuentos):</td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format((float)$s->total - (float)$s->suma_descuentos, 2) ?></td>
+							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Propinas de <?php echo $s->nombre ?>:</td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format($s->suma_propinas, 2) ?></td>
+							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Total de <?php echo $s->nombre ?>:</td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
+								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format((float)$s->total - (float)$s->suma_descuentos + (float)$s->suma_propinas, 2) ?></td>
 							</tr>
 						</tfoot>
 					</table>

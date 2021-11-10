@@ -61,7 +61,7 @@ class Rpt_model extends General_model
         }
 
         $sinfactura = $this->db
-            ->select("GROUP_CONCAT(DISTINCT a.comanda ORDER BY a.comanda SEPARATOR ', ') AS comandas")
+            ->select("GROUP_CONCAT(DISTINCT a.comanda ORDER BY a.comanda SEPARATOR ',') AS comandas")
             ->join('cuenta b', 'a.comanda = b.cuenta')
             ->join('cuenta_forma_pago c', 'b.cuenta = c.cuenta')
             ->join('forma_pago d', 'd.forma_pago = c.forma_pago')
@@ -252,5 +252,36 @@ class Rpt_model extends General_model
         $articulos = array_merge($combos, $directos, $facturas_manuales);
 
         return $articulos;
+    }
+
+    public function get_suma_descuentos($comandas) 
+    {
+        $descuentos = 0;
+        $mnt = $this->db->select_sum('a.monto')
+            ->join('forma_pago b', 'b.forma_pago = a.forma_pago')
+            ->where('b.descuento', 1)
+            ->where("cuenta IN(SELECT cuenta FROM cuenta WHERE comanda IN({$comandas}))", NULL, FALSE)
+            ->get('cuenta_forma_pago a')
+            ->row();
+        
+        if ($mnt) {
+            $descuentos = (float)$mnt->monto;
+        }
+        return $descuentos;
+    }
+
+    public function get_suma_propinas($comandas)
+    {
+        $propina = 0;
+        $mnt = $this->db->select_sum('propina')
+            ->where("cuenta IN(SELECT cuenta FROM cuenta WHERE comanda IN({$comandas}))", NULL, FALSE)
+            ->get('cuenta_forma_pago')
+            ->row();
+        
+        if ($mnt) {
+            $propina = (float)$mnt->propina;
+        }
+        return $propina;        
+
     }
 }
