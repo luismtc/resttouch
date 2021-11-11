@@ -345,7 +345,7 @@ class Venta extends CI_Controller
 
 				$fila++;
 				$hoja->setCellValue("D{$fila}", 'TOTAL');
-				$hoja->setCellValue("E{$fila}", $granTotal);
+				$hoja->setCellValue("E{$fila}", (float)$granTotal - (float)$montoDescuento);
 				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
 			} else {
