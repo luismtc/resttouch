@@ -103,7 +103,7 @@
 									<h4>TOTAL</h4>
 								</td>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo number_format($granTotal, 2) ?>
+									<?php echo number_format($granTotal - $monto_descuento, 2) ?>
 								</td>
 							</tr>
 						</tfoot>
@@ -188,7 +188,7 @@
 									<h4>TOTAL</h4>
 								</td>
 								<td style="padding: 5px;" class="text-right">
-									<?php echo number_format($granTotal, 2) ?>
+									<?php echo number_format($granTotal - $monto_descuento, 2) ?>
 								</td>
 							</tr>
 						</tfoot>

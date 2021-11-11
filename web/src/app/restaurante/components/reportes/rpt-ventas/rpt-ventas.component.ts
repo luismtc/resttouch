@@ -28,9 +28,9 @@ export class RptVentasComponent implements OnInit {
     }
   };
 
-  get placeHolderFechaDel() {
-    return +this.params.tipo_reporte === 3 ? 'Fecha' : 'Del';
-  }
+  // get placeHolderFechaDel() {
+  //   return +this.params.tipo_reporte === 3 ? 'Fecha' : 'Del';
+  // }
 
   public tiposReporte: any[] = [];
   public params: any = {};
@@ -96,9 +96,9 @@ export class RptVentasComponent implements OnInit {
   }
 
   getReporte = (tipo: number = 1) => {
-    if(+this.params.tipo_reporte === 3) {
-      this.params.fal = this.params.fdel;
-    }
+    // if(+this.params.tipo_reporte === 3) {
+    //   this.params.fal = this.params.fdel;
+    // }
     this.paramsToSend = JSON.parse(JSON.stringify(this.params));
     this.msgGenerandoReporte = 'GENERANDO REPORTE EN ';
     switch (tipo) {

@@ -528,7 +528,7 @@ class Reporte extends CI_Controller {
 
 		} else {
 			$mpdf = new \Mpdf\Mpdf([
-				// 'tempDir' => sys_get_temp_dir(),
+				'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			$mpdf->WriteHTML($this->load->view('caja', $data, true));
@@ -696,7 +696,8 @@ class Reporte extends CI_Controller {
 				$total += $imp;
 				$totalPropina += $row->propina;
 				$totalDescuento += $desc;
-				$totalFactura += ($total - $desc);
+				// $totalFactura += ($total - $desc);
+				$totalFactura += $total;
 
 				$reg = [
 					$row->numero_factura,
@@ -823,7 +824,7 @@ class Reporte extends CI_Controller {
 		} else {
 
 			$mpdf = new \Mpdf\Mpdf([
-				// 'tempDir' => sys_get_temp_dir(),
+				'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));

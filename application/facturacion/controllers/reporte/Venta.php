@@ -156,21 +156,24 @@ class Venta extends CI_Controller
 			}
 		}
 
+		$montoDescuento = 0;
 		foreach ($comandas as $row) {
-			$com = new Comanda_model($row->comanda);
+			$com = new Comanda_model($row->comanda);			
+			$montoDescuento += $com->get_total_descuento();
+			$detalleComanda = $com->getDetalle();			
 
-			foreach ($com->getDetalle() as $det) {
+			foreach ($detalleComanda as $det) {
 				$art = new Articulo_model($det->articulo->articulo);
 
 				if (isset($detalle[$art->articulo])) {
-					$detalle[$art->articulo]["cantidad"] += $det->cantidad;
-					$detalle[$art->articulo]["total"] += $det->total;
+					$detalle[$art->articulo]['cantidad'] += $det->cantidad;
+					$detalle[$art->articulo]['total'] += $det->total;
 				} else {
 					$detalle[$art->articulo] = [
-						"cantidad" => $det->cantidad,
-						"total" => $det->total,
-						"descripcion" => $art->descripcion,
-						"precio_unitario" => $det->precio
+						'cantidad' => $det->cantidad,
+						'total' => $det->total,						
+						'descripcion' => $art->descripcion,
+						'precio_unitario' => $det->precio
 					];
 				}
 			}
@@ -236,13 +239,14 @@ class Venta extends CI_Controller
 			unset($datos[$quita]);
 		}
 
-		$data = [
-			"detalle" => $datos
+		$data = [			
+			'detalle' => $datos,
+			'monto_descuento' => $montoDescuento
 		];
 
 		$sede = $this->Catalogo_model->getSede([
 			'sede' => $this->data->sede,
-			"_uno" => true
+			'_uno' => true
 		]);
 
 		$tmp = [];
@@ -802,12 +806,12 @@ class Venta extends CI_Controller
 				$req['idsede'] = $sede->sede;
 				$sede->nombre = $sedeObj->nombre;
 				$obj = $rpt->get_lista_comandas($req);
-				$sede->ventas = [];				
+				$sede->ventas = [];
 				$sede->suma_propinas = 0;
 				$sede->suma_descuentos = 0;
 				if ($obj) {
 					$sede->ventas = $rpt->get_ventas_articulos($obj->comandas, $obj->facturas, $req);
-					if($obj->comandas && trim($obj->comandas) !== '') {
+					if ($obj->comandas && trim($obj->comandas) !== '') {
 						$sede->suma_propinas = $rpt->get_suma_propinas($obj->comandas);
 						$sede->suma_descuentos = $rpt->get_suma_descuentos($obj->comandas);
 					}
@@ -895,11 +899,11 @@ class Venta extends CI_Controller
 				// $fila++;				
 				$hoja->getStyle("C7:D{$fila}")->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2);
 				$hoja->getStyle("A6:D{$fila}")->getBorders()->getAllBorders()
-				->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
-				->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('Black'));
-				
-				
-				
+					->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN)
+					->setColor(new \PhpOffice\PhpSpreadsheet\Style\Color('Black'));
+
+
+
 				foreach (range('A', 'D') as $col) {
 					$hoja->getColumnDimension($col)->setAutoSize(true);
 				}
@@ -979,11 +983,11 @@ class Venta extends CI_Controller
 				$obj = $rpt->get_lista_comandas($req);
 				$sede->ventas = [];
 				$sede->cantidad = 0;
-				$sede->total = 0;				
+				$sede->total = 0;
 				$sede->suma_propinas = 0;
 				$sede->suma_descuentos = 0;
 				if ($obj) {
-					if($obj->comandas && trim($obj->comandas) !== '') {
+					if ($obj->comandas && trim($obj->comandas) !== '') {
 						$sede->suma_propinas = $rpt->get_suma_propinas($obj->comandas);
 						$sede->suma_descuentos = $rpt->get_suma_descuentos($obj->comandas);
 					}
@@ -1023,7 +1027,6 @@ class Venta extends CI_Controller
 								'cantidad' => 0,
 								'total' => 0,
 								'precio' => (float)$rv->precio,
-								'detalle_comanda' => '',
 								'opciones' => []
 							];
 							$idxArticulo = count($ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos) - 1;
@@ -1031,72 +1034,52 @@ class Venta extends CI_Controller
 
 						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->cantidad += (float)$rv->cantidad;
 						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->total += (float)$rv->total;
-						if ($ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->detalle_comanda !== '') {
-							$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->detalle_comanda .= ',';
+
+						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->cantidad += (float)$rv->cantidad;
+						$ventas[$idxCategoria]->cantidad += (float)$rv->cantidad;
+						$sede->cantidad += (float)$rv->cantidad;
+						
+						$opciones = $ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->opciones;
+						$sumExtrasSubcat = 0;						
+						$lineasDetalle = [];
+
+						if((int)$rv->combo === 1) {
+							$lineasDetalle = array_merge($lineasDetalle, $this->Dcomanda_model->get_detalle_comanda_and_childs(['detalle_comanda' => $rv->detalle_comanda]));
+							foreach ($lineasDetalle as $ld) {
+								if ((int)$ld->multiple === 0 && (int)$ld->detalle_comanda_id > 0) {
+									$idxOpcion = $this->get_idx($opciones, 'idopcion', $ld->articulo);
+									if ($idxOpcion < 0) {
+										$opciones[] = (object)[
+											'idopcion' => (int)$ld->articulo,
+											'opcion' => trim($ld->descripcion),
+											'cantidad' => 0,
+											'total' => 0,
+											'precio' => $ld->precio
+										];
+										$idxOpcion = count($opciones) - 1;
+									}
+									$opciones[$idxOpcion]->cantidad++;
+									// $opciones[$idxOpcion]->cantidad += (float)$ld->cantidad;
+									$opciones[$idxOpcion]->total += (float)$ld->precio;									
+									$sumExtrasSubcat += (float)$ld->precio;
+								}
+							}
 						}
-						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->detalle_comanda .= $rv->detalle_comanda;
+						
+						$opciones = ordenar_array_objetos($opciones, 'cantidad', 1, 'desc');
+						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos[$idxArticulo]->opciones = $opciones;
+
+						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->total += (float)$rv->total + $sumExtrasSubcat;
+						$ventas[$idxCategoria]->total += (float)$rv->total + $sumExtrasSubcat;
+						$sede->total += (float)$rv->total + $sumExtrasSubcat;
+
+						$ventas = ordenar_array_objetos($ventas, 'categoria');
+						$ventas[$idxCategoria]->subcategorias = ordenar_array_objetos($ventas[$idxCategoria]->subcategorias, 'subcategoria');
+						$ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos = ordenar_array_objetos($ventas[$idxCategoria]->subcategorias[$idxSubCategoria]->articulos, 'cantidad', 1, 'desc');
 					}
 
 					// $memMiddle = round(memory_get_usage() / 1048576, 2);
-
-					$ventas = ordenar_array_objetos($ventas, 'categoria');
-					$cntVentas = count($ventas);
-					for ($i = 0; $i < $cntVentas; $i++) {
-						$ventas[$i]->subcategorias = ordenar_array_objetos($ventas[$i]->subcategorias, 'subcategoria');
-						$cntSubcats = count($ventas[$i]->subcategorias);
-						$sumCantCat = 0;
-						$sumTotCat = 0;						
-						for ($j = 0; $j < $cntSubcats; $j++) {
-							$ventas[$i]->subcategorias[$j]->articulos = ordenar_array_objetos($ventas[$i]->subcategorias[$j]->articulos, 'cantidad', 1, 'desc');
-							$cntArticulos = count($ventas[$i]->subcategorias[$j]->articulos);
-							$sumCantSubcat = 0;
-							$sumTotSubcat = 0;
-							for ($k = 0; $k < $cntArticulos; $k++) {
-								$articulo = $ventas[$i]->subcategorias[$j]->articulos[$k];
-								$detalles_comanda = explode(',', $articulo->detalle_comanda);
-								$lineasDetalle = [];
-								foreach ($detalles_comanda as $dc) {
-									$lineasDetalle = array_merge($lineasDetalle, $this->Dcomanda_model->get_detalle_comanda_and_childs(['detalle_comanda' => $dc]));
-								}
-								$opciones = [];
-								$sumExtrasSubcat = 0;
-								foreach ($lineasDetalle as $ld) {
-									if ((int)$ld->multiple === 0 && (int)$ld->detalle_comanda_id > 0) {
-										$idxOpcion = $this->get_idx($opciones, 'idopcion', $ld->articulo);
-										if ($idxOpcion < 0) {
-											$opciones[] = (object)[
-												'idopcion' => (int)$ld->articulo,
-												'opcion' => trim($ld->descripcion),
-												'cantidad' => 0,
-												'total' => 0,
-												'precio' => $ld->precio
-											];
-											$idxOpcion = count($opciones) - 1;
-										}
-										$opciones[$idxOpcion]->cantidad++;
-										// $opciones[$idxOpcion]->cantidad += (float)$ld->cantidad;
-										$opciones[$idxOpcion]->total += (float)$ld->precio;
-										// $articulo->total += (float)$ld->precio;
-										$sumExtrasSubcat += (float)$ld->precio;
-									}
-								}
-								$opciones = ordenar_array_objetos($opciones, 'cantidad', 1, 'desc');
-								$articulo->opciones = $opciones;
-								$sumCantSubcat += $articulo->cantidad;
-								$sumTotSubcat += $articulo->total + $sumExtrasSubcat;								
-							}
-							$sumCantCat += $sumCantSubcat;
-							$sumTotCat += $sumTotSubcat;
-							$ventas[$i]->subcategorias[$j]->cantidad = $sumCantSubcat;
-							$ventas[$i]->subcategorias[$j]->total = $sumTotSubcat;
-						}
-						$ventas[$i]->cantidad = $sumCantCat;
-						$ventas[$i]->total = $sumTotCat;
-
-						$sede->cantidad += $sumCantCat;
-						$sede->total += $sumTotCat;
-					}
-
+					
 					$sede->ventas = $ventas;
 				}
 				$datos[] = $sede;
@@ -1138,7 +1121,7 @@ class Venta extends CI_Controller
 					$hoja->setCellValue("A{$fila}", 'Descripción');
 					$hoja->setCellValue("B{$fila}", 'Cantidad');
 					$hoja->setCellValue("C{$fila}", 'Precio Unitario');
-					$hoja->setCellValue("D{$fila}", 'Total');					
+					$hoja->setCellValue("D{$fila}", 'Total');
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("B{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
 					$fila++;
@@ -1180,30 +1163,30 @@ class Venta extends CI_Controller
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila++;
 					$hoja->setCellValue("A{$fila}", "Descuentos de {$s->nombre}:");
-					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->setCellValue("D{$fila}", $s->suma_descuentos);
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila++;
 					$hoja->setCellValue("A{$fila}", "Sub-total de {$s->nombre} (con descuentos):");
-					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->setCellValue("D{$fila}", $s->total - $s->suma_descuentos);
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila++;
 					$hoja->setCellValue("A{$fila}", "Propinas de {$s->nombre}:");
-					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->setCellValue("D{$fila}", $s->suma_propinas);
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila++;
 					$hoja->setCellValue("A{$fila}", "Total de {$s->nombre}:");
-					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');					
+					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->setCellValue("D{$fila}", $s->total - $s->suma_descuentos + $s->suma_propinas);
-					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);					
+					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila += 2;
 				}
 
 				$fila -= 2;
 				// $hoja->getStyle("B8:D{$fila}")->getNumberFormat()->setFormatCode('0.00');
-				$hoja->getStyle("B8:D{$fila}")->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2);				
+				$hoja->getStyle("B8:D{$fila}")->getNumberFormat()->setFormatCode(PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2);
 
 				foreach (range('A', 'D') as $col) {
 					$hoja->getColumnDimension($col)->setAutoSize(true);
@@ -1213,9 +1196,9 @@ class Venta extends CI_Controller
 				$hoja->mergeCells('A2:D2');
 				$hoja->mergeCells('A3:D3');
 				$hoja->mergeCells('A4:D4');
-				
+
 				// $memAfterExcel = round(memory_get_usage() / 1048576, 2);
-				
+
 				// $fila += 4;
 				// $hoja->setCellValue("A{$fila}", "Mem antes: {$memBefore}MB");
 				// $hoja->setCellValue("B{$fila}", "Mem mitad: {$memMiddle}MB");				

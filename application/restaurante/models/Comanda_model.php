@@ -941,6 +941,26 @@ class Comanda_model extends General_Model
 		return false;
 	}
 
+	public function get_total_descuento($comanda = 0) 
+	{
+		if ((int)$comanda === 0) {
+			$comanda = $this->getPK();
+		}
+
+		$descuentos = 0;
+        $mnt = $this->db->select_sum('a.monto')
+            ->join('forma_pago b', 'b.forma_pago = a.forma_pago')
+            ->where('b.descuento', 1)
+            ->where("cuenta IN(SELECT cuenta FROM cuenta WHERE comanda = {$comanda})", NULL, FALSE)
+            ->get('cuenta_forma_pago a')
+            ->row();
+        
+        if ($mnt) {
+            $descuentos = (float)$mnt->monto;
+        }
+        return $descuentos;		
+	}
+
 }
 
 /* End of file Comanda_model.php */

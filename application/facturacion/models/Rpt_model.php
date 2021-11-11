@@ -190,7 +190,7 @@ class Rpt_model extends General_model
 
         if (!empty($comandas)) {
             $combos = $this->db
-                ->select('a.detalle_comanda, d.categoria AS idcat, d.descripcion AS categoria, c.categoria_grupo AS idsubcat, c.descripcion AS subcategoria, b.articulo AS idarticulo, b.descripcion AS articulo, a.cantidad, a.total, a.precio')
+                ->select('a.detalle_comanda, d.categoria AS idcat, d.descripcion AS categoria, c.categoria_grupo AS idsubcat, c.descripcion AS subcategoria, b.articulo AS idarticulo, b.descripcion AS articulo, a.cantidad, a.total, a.precio, b.combo')
                 ->join('articulo b', 'b.articulo = a.articulo')
                 ->join('categoria_grupo c', 'c.categoria_grupo = b.categoria_grupo')
                 ->join('categoria d', 'd.categoria = c.categoria')
@@ -206,7 +206,7 @@ class Rpt_model extends General_model
                 ->result();
 
             $directos = $this->db
-                ->select('a.detalle_comanda, d.categoria AS idcat, d.descripcion AS categoria, c.categoria_grupo AS idsubcat, c.descripcion AS subcategoria, b.articulo AS idarticulo, b.descripcion AS articulo, a.cantidad, a.total, a.precio')
+                ->select('a.detalle_comanda, d.categoria AS idcat, d.descripcion AS categoria, c.categoria_grupo AS idsubcat, c.descripcion AS subcategoria, b.articulo AS idarticulo, b.descripcion AS articulo, a.cantidad, a.total, a.precio, b.combo')
                 ->join('articulo b', 'b.articulo = a.articulo')
                 ->join('categoria_grupo c', 'c.categoria_grupo = b.categoria_grupo')
                 ->join('categoria d', 'd.categoria = c.categoria')

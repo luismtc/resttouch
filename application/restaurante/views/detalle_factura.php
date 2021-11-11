@@ -129,7 +129,8 @@
 										echo number_format($desc, 2);
 										if (empty($row->fel_uuid_anulacion)) {
 											$totalDescuento += $desc;
-											$totalFactura += ($total - $desc);
+											// $totalFactura += ($total - $desc);
+											$totalFactura += $total;
 										}
 									 ?>
 								</td>

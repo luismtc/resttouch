@@ -29,10 +29,10 @@
                     </mat-form-field>
 
                     <mat-form-field class="fullWidth">
-                        <input type="date" matInput [placeholder]="placeHolderFechaDel" name="fdel" [(ngModel)]="params.fdel" required>
+                        <input type="date" matInput placeholder="Del" name="fdel" [(ngModel)]="params.fdel" required>
                     </mat-form-field>
 
-                    <mat-form-field class="fullWidth" *ngIf="+params.tipo_reporte !== 3">
+                    <mat-form-field class="fullWidth">
                         <input type="date" matInput placeholder="Al" name="fal" [(ngModel)]="params.fal" required>
                     </mat-form-field>
 
