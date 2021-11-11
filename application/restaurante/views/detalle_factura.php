@@ -207,7 +207,7 @@
 							}
 						 ?>
 						<tr>
-							<td colspan="<?php echo $col ?>" style="padding: 5px;" class="text-right">Total:</td>
+							<td colspan="<?php echo $col ?>" style="padding: 5px;" class="text-right">Total (con desct., con propina):</td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalPropina,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalDescuento, 2) ?></td>

@@ -796,7 +796,7 @@ class Reporte extends CI_Controller {
 				$total[$i] = "";
 			}
 
-			array_push($total, "Total");
+			array_push($total, "Total (con desct., con propina)");
 			array_push($total, round($totalFactura,2));
 			array_push($total, round($totalPropina,2));
 			array_push($total, round($totalDescuento, 2));

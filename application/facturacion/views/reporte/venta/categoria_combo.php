@@ -39,7 +39,7 @@
 								<th style="padding: 5px;" class="text-center">Descripción</th>
 								<th style="padding: 5px;" class="text-center">Cantidad</th>
 								<th style="padding: 5px;" class="text-center">Precio Unitario</th>
-								<th style="padding: 5px;" class="text-center">Total</th>
+								<th style="padding: 5px;" class="text-center">Total (con desct., sin propina)</th>
 							</tr>
 						</thead>
 						<tbody>

@@ -344,7 +344,7 @@ class Venta extends CI_Controller
 				}
 
 				$fila++;
-				$hoja->setCellValue("D{$fila}", 'TOTAL');
+				$hoja->setCellValue("D{$fila}", 'Total (con desct., sin propina)');
 				$hoja->setCellValue("E{$fila}", (float)$granTotal - (float)$montoDescuento);
 				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
@@ -846,7 +846,7 @@ class Venta extends CI_Controller
 				$hoja->setCellValue('A6', 'Sede');
 				$hoja->setCellValue('B6', 'Descripción');
 				$hoja->setCellValue('C6', 'Cantidad');
-				$hoja->setCellValue('D6', 'Total');
+				$hoja->setCellValue('D6', 'Total (sin desct., sin propina)');
 				$hoja->getStyle('A6:B6')->getAlignment()->setHorizontal('center');
 				$hoja->getStyle('C6:D6')->getAlignment()->setHorizontal('right');
 				$hoja->getStyle('A6:D6')->getFont()->setBold(true);
@@ -883,7 +883,7 @@ class Venta extends CI_Controller
 					$fila++;
 					$hoja->setCellValue("A{$fila}", $sede->nombre);
 					$hoja->setCellValue("C{$fila}", 'Propinas:');
-					$hoja->setCellValue("D{$fila}", $totalSede - $sede->suma_descuentos);
+					$hoja->setCellValue("D{$fila}", $sede->suma_propinas);
 					$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila++;
@@ -1121,7 +1121,7 @@ class Venta extends CI_Controller
 					$hoja->setCellValue("A{$fila}", 'Descripción');
 					$hoja->setCellValue("B{$fila}", 'Cantidad');
 					$hoja->setCellValue("C{$fila}", 'Precio Unitario');
-					$hoja->setCellValue("D{$fila}", 'Total');
+					$hoja->setCellValue("D{$fila}", 'Total (con desct., sin propina)');
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("B{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
 					$fila++;

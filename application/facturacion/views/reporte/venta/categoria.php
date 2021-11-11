@@ -100,7 +100,7 @@
 						<tfoot>
 							<tr>
 								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
-									<h4>TOTAL</h4>
+									<h4>Total (con desct., sin propina)</h4>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php echo number_format($granTotal - $monto_descuento, 2) ?>
@@ -185,7 +185,7 @@
 						<tfoot>
 							<tr>
 								<td style="padding: 5px; margin-left: 5px;font-weight: bold;" class="text-right" colspan="4">
-									<h4>TOTAL</h4>
+									<h4>Total (con desct., sin propina)</h4>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php echo number_format($granTotal - $monto_descuento, 2) ?>

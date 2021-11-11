@@ -35,7 +35,7 @@
 					<tr>
 						<th style="padding: 5px;" class="text-center">Descripción</th>
 						<th style="padding: 5px;" class="text-right">Cantidad</th>
-						<th style="padding: 5px;" class="text-right">Total</th>
+						<th style="padding: 5px;" class="text-right">Total (sin desct., sin propina)</th>
 					</tr>
 				</thead>
 				<tbody>
