@@ -549,8 +549,8 @@ if( ! function_exists('get_url_websocket')){
 		$url_ws = "{$_SERVER['REQUEST_SCHEME']}://";
 		if (in_array($_SERVER["HTTP_HOST"], ["localhost", "127.0.0.1", "192.168.18.241"])) {
 			$url_ws .= $_SERVER["HTTP_HOST"];
-		} else {
-			$url_ws .= 'restouch.c807.com' ;
+		} else {			
+			$url_ws .= 'resttouch.c807.com' ;
 		}
 		$url_ws .= ':8988';
 		return $url_ws;

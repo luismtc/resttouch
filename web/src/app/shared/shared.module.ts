@@ -41,8 +41,7 @@ import { DialogComboComponent } from './components/dialog-combo/dialog-combo.com
 import { DialogElminarProductoComponent } from './components/dialog-elminar-producto/dialog-elminar-producto.component';
 import { TruncarPipe } from './pipes/truncar.pipe';
 
-const LOCAL_DEV_HOST = ['localhost', '127.0.0.1', '192.168.18.241'];
-const config: SocketIoConfig = { url: `${PROTOCOLO}//${LOCAL_DEV_HOST.indexOf(ANFITRION) < 0 ? 'restouch.c807.com' : ANFITRION}:8988`, options: {} };
+const config: SocketIoConfig = { url: `${PROTOCOLO}//${ANFITRION}:8988`, options: {} };
 
 @NgModule({
   declarations: [
