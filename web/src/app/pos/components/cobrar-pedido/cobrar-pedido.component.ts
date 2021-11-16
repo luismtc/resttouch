@@ -53,6 +53,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   public sede: Sede;
   public datosPedido: DatosPedido = { sede: null, direccion_entrega: null, telefono: null, nombre: null, cliente: null };
   public descripcionUnica = { enviar_descripcion_unica: 0, descripcion_unica: null };
+  public isTipExceeded = false;
 
   private endSubs = new Subscription();
 
@@ -89,7 +90,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   }
 
   resetFactReq = () => {
-    this.factReq = { 
+    this.factReq = {
       cuentas: [], factura_serie: 1, cliente: null, fecha_factura: moment().format(GLOBAL.dbDateFormat), moneda: 1, enviar_descripcion_unica: 0, descripcion_unica: null
     };
   }
@@ -119,7 +120,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   }
 
   loadSedes = () => {
-    this.endSubs.add(      
+    this.endSubs.add(
       this.sedeSrvc.get().subscribe(res => {
         if (res) {
           this.sedes = res;
@@ -139,7 +140,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   }
 
   loadFormasPago = () => {
-    this.endSubs.add(      
+    this.endSubs.add(
       this.formaPagoSrvc.get({ activo: 1 }).subscribe((res: any) => {
         if (!!res && res.length > 0) {
           this.lstFormasPago = res;
@@ -157,7 +158,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
         data: new ConfigCheckPasswordModel(1)
       });
 
-      this.endSubs.add(        
+      this.endSubs.add(
         vpgtRef.afterClosed().subscribe(res => {
           if (res) {
             this.agregaFormaPago(fp);
@@ -240,7 +241,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
     }
 
     this.factReq.cuentas.push({ cuenta: +this.inputData.idcuenta });
-    this.endSubs.add(      
+    this.endSubs.add(
       this.cobroSrvc.save(objCobro).subscribe(res => {
         if (res.exito && !res.facturada) {
           this.snackBar.open('Cobro', `${res.mensaje}`, { duration: 3000 });
@@ -255,8 +256,8 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
                     maxWidth: '400px',
                     data: new ConfirmDialogModel('Imprimir factura', '¿Desea imprimir la factura?', 'Sí', 'No')
                   });
-    
-                  this.endSubs.add(                
+
+                  this.endSubs.add(
                     confirmRef.afterClosed().subscribe((confirma: boolean) => {
                       if (confirma) {
                         this.printFactura(resFact.factura, res.cuenta);
@@ -290,7 +291,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
                 this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
                 this.dialogRef.close(res.cuenta);
               })
-            );            
+            );
           }
         } else {
           this.facturando = false;
@@ -330,7 +331,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
     };
 
     // console.log('PEDIDO = ', obj);
-    this.endSubs.add(      
+    this.endSubs.add(
       this.comandaSrvc.enviarPedido(+this.data.mesaenuso.comanda, obj).subscribe(res => {
         this.facturando = false;
         // this.socket.emit('refrescar:mesa', { mesaenuso: this.data.mesaenuso });
@@ -384,10 +385,10 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
 
   printFactura = (factura: any, cuenta: any = null) => {
     // console.log('FACTURA = ', factura);
-    this.endSubs.add(      
+    this.endSubs.add(
       this.facturaSrvc.imprimir(+factura.factura).subscribe(res => {
         if (res.factura) {
-  
+
           const msgToPrint = {
             NombreEmpresa: res.factura.empresa.nombre,
             NitEmpresa: res.factura.empresa.nit,
@@ -410,7 +411,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
             Impresora: this.data.impresora,
             ImpuestosAdicionales: (res.factura.impuestos_adicionales || [])
           };
-  
+
           if (!!this.data.impresora) {
             if (+this.data.impresora.bluetooth === 0) {
               this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
@@ -421,7 +422,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
           } else {
             this.socket.emit(`print:factura`, `${JSON.stringify(msgToPrint)}`);
           }
-  
+
           this.snackBar.open(
             `Imprimiendo factura ${res.factura.serie_factura}-${res.factura.numero_factura}`,
             'Impresión', { duration: 3000 }
@@ -441,13 +442,13 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
       NitEmpresa: entidad.empresa.nit,
       SedeEmpresa: entidad.sede.nombre,
       DireccionEmpresa: entidad.sede.direccion,
-      Fecha: moment().format(GLOBAL.dateFormat),      
+      Fecha: moment().format(GLOBAL.dateFormat),
       Nombre: this.clienteSelected.nombre || entidad.nombre,
       Numero: `${entidad.comanda}-${entidad.numero}`,
       Total: this.getTotalDetalle(entidad.detalle) + +entidad.propina,
       Propina: +entidad.propina,
       DetalleRecibo: this.procesaDetalleFactura(entidad.detalle),
-      Impresora: this.data.impresora      
+      Impresora: this.data.impresora
     };
 
     // console.log(JSON.stringify(msgToPrint));
@@ -467,12 +468,12 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   }
 
   printToBT = (msgToPrint: string = '') => {
-    const convertir = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_ENVIA_COMO_BASE64);    
+    const convertir = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_ENVIA_COMO_BASE64);
     const data = convertir ? Base64.encode(msgToPrint, true) : msgToPrint;
     // const AppHref = `${GLOBAL.DEEP_LINK_ANDROID}${data}`;
     const AppHref = GLOBAL.DEEP_LINK_ANDROID.replace('__INFOBASE64__', data);
     try {
-      window.location.href = AppHref; 
+      window.location.href = AppHref;
     } catch(error) {
       this.snackBar.open('No se pudo conectar con la aplicación de impresión', 'Comanda', { duration: 3000 });
     }
