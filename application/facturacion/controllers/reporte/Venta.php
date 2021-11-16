@@ -1121,7 +1121,7 @@ class Venta extends CI_Controller
 					$hoja->setCellValue("A{$fila}", 'Descripción');
 					$hoja->setCellValue("B{$fila}", 'Cantidad');
 					$hoja->setCellValue("C{$fila}", 'Precio Unitario');
-					$hoja->setCellValue("D{$fila}", 'Total (con desct., sin propina)');
+					$hoja->setCellValue("D{$fila}", 'Total (sin desct., sin propina)');
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("B{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
 					$fila++;
