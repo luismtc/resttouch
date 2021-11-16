@@ -45,7 +45,7 @@
             [(ngModel)]="formaPago.propina">
           <input matInput *ngIf="esMovil" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
            <!-- Warning Icon ,Tip Quantity Exceed -->
-          <mat-icon *ngIf="!esMovil" style="color:orange;" matSuffix>warning</mat-icon>
+          <mat-icon *ngIf="isTipExceeded" style="color:orange;" matSuffix>warning</mat-icon>
         </mat-form-field>
         <!--Fin de input de propina por forma de pago-->
         <!-- Inicia input de documento -->

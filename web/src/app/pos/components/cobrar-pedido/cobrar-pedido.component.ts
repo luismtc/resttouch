@@ -53,7 +53,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   public sede: Sede;
   public datosPedido: DatosPedido = { sede: null, direccion_entrega: null, telefono: null, nombre: null, cliente: null };
   public descripcionUnica = { enviar_descripcion_unica: 0, descripcion_unica: null };
-  public isTipExceeded = false;
+  public isTipExceeded = true;
 
   private endSubs = new Subscription();
 
