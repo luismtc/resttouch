@@ -1,4 +1,4 @@
-import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, NgModule, OnDestroy, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSelectChange} from '@angular/material/select';
@@ -61,6 +61,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
   public descripcionUnica = {enviar_descripcion_unica: 0, descripcion_unica: null};
   public isTipExceeded = false;
   public porcentajeMaximoPropina = 0;
+  public MaxTooltTipMessage = 'Se ha sobrepasado el máximo de propina.';
 
   private endSubs = new Subscription();
 
@@ -193,8 +194,7 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
    * It itetares over formasDePago
    */
   calcTipExceeded = () => {
-    const porcentaje = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_PORCENTAJE_MAXIMO_PROPINA);
-    const tipPorcentaje = porcentaje / 100;
+    const tipPorcentaje = this.porcentajeMaximoPropina / 100;
     const tipLimit = this.inputData.totalDeCuenta * tipPorcentaje;
     let amount = (Number(this.formaPago.propina) || 0.00);
 
