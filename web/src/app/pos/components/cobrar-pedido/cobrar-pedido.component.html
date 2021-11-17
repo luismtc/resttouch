@@ -42,8 +42,8 @@
         <!--Inicia input de propina por forma de pago-->
         <mat-form-field class="fullWidth">
           <input matInput *ngIf="!esMovil" [matKeyboard]="keyboardLayout" placeholder="Propina" name="propina"
-            [(ngModel)]="formaPago.propina">
-          <input matInput *ngIf="esMovil" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
+            [(ngModel)]="formaPago.propina" (input)="onPropinaInputChage()">
+          <input matInput *ngIf="esMovil" (input)="onPropinaInputChage()" placeholder="Propina" name="propina" [(ngModel)]="formaPago.propina">
            <!-- Warning Icon ,Tip Quantity Exceed -->
           <mat-icon *ngIf="isTipExceeded" style="color:orange;" matSuffix>warning</mat-icon>
         </mat-form-field>
@@ -69,7 +69,9 @@
           <tr>
             <th class="text-left">FP</th>
             <th class="text-right">Mon</th>
-            <th class="text-right">Prop</th>
+            <th class="text-right">Prop
+              <mat-icon *ngIf="isTipExceeded" style="color:orange;" matSuffix>warning</mat-icon>
+            </th>
           </tr>
         </thead>
         <tbody>
