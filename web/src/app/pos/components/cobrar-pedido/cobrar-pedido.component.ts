@@ -193,7 +193,9 @@ export class CobrarPedidoComponent implements OnInit, OnDestroy {
    * It itetares over formasDePago
    */
   calcTipExceeded = () => {
-    const tipLimit = this.inputData.totalDeCuenta * 0.10;
+    const porcentaje = this.configSrvc.getConfig(GLOBAL.CONSTANTES.RT_PORCENTAJE_MAXIMO_PROPINA);
+    const tipPorcentaje = porcentaje / 100;
+    const tipLimit = this.inputData.totalDeCuenta * tipPorcentaje;
     let amount = (Number(this.formaPago.propina) || 0.00);
 
     this.formasPagoDeCuenta.forEach((forP, index) => {
