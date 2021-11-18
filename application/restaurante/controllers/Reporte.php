@@ -586,8 +586,8 @@ class Reporte extends CI_Controller
 			$fac->cargarReceptor();
 			$prop = $fac->getPropina();
 			$det = $fac->getDetalle();
-			$fac->total = number_format(suma_field($det, "total"), 2);
-			$fac->propina = number_format(suma_field($prop, "propina_monto"), 2);
+			$fac->total = suma_field($det, "total");
+			$fac->propina = suma_field($prop, "propina_monto");
 			$data['facturas'][] = $fac;
 			if (isset($_GET['_anuladas']) && filter_var($_GET['_anuladas'], FILTER_VALIDATE_BOOLEAN)) {
 				$bit = $this->Bitacora_model->buscarBitacora([
@@ -884,7 +884,7 @@ class Reporte extends CI_Controller
 		} else {
 
 			$mpdf = new \Mpdf\Mpdf([
-				'tempDir' => sys_get_temp_dir(),
+				// 'tempDir' => sys_get_temp_dir(),
 				'format' => 'Legal'
 			]);
 			$mpdf->WriteHTML($this->load->view('detalle_factura', $data, true));
