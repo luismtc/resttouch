@@ -212,14 +212,7 @@
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalPropina,2) ?></td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalDescuento, 2) ?></td>
 							<td style="padding: 5px;" class="text-center">&nbsp;</td>
-						</tr>
-						<tr>
-							<td colspan="<?php echo $col ?>" style="padding: 5px;" class="text-right">Total (con desct., sin propina):</td>
-							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura - $totalPropina, 2) ?></td>
-							<td style="padding: 5px;" class="text-right">&nbsp;</td>
-							<td style="padding: 5px;" class="text-right">&nbsp;</td>
-							<td style="padding: 5px;" class="text-center">&nbsp;</td>
-						</tr>
+						</tr>						
 						<tr>
 							<td colspan="<?php echo $col ?>" style="padding: 5px;" class="text-right">Ventas sin factura:</td>
 							<td style="padding: 5px;" class="text-right"><?php echo number_format($ventas_sin_factura, 2) ?></td>
@@ -229,7 +222,7 @@
 						</tr>
 						<tr>
 							<td colspan="<?php echo $col ?>" style="padding: 5px;" class="text-right">Total ingresos (con desct.):</td>
-							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura - $totalPropina + $ventas_sin_factura, 2) ?></td>
+							<td style="padding: 5px;" class="text-right"><?php echo number_format($totalFactura + $ventas_sin_factura, 2) ?></td>
 							<td style="padding: 5px;" class="text-right">&nbsp;</td>
 							<td style="padding: 5px;" class="text-right">&nbsp;</td>
 							<td style="padding: 5px;" class="text-center">&nbsp;</td>

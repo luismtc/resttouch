@@ -838,14 +838,14 @@ class Reporte extends CI_Controller
 			$hoja->fromArray($total, null, "A{$fila}");
 			$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
 
-			array_push($total2, "Total (con desct., sin propina):");
-			array_push($total2, round($totalFactura - $totalPropina, 2));
-			array_push($total2, '');
-			array_push($total2, '');
+			// array_push($total2, "Total (con desct., sin propina):");
+			// array_push($total2, round($totalFactura - $totalPropina, 2));
+			// array_push($total2, '');
+			// array_push($total2, '');
 
-			$fila++;
-			$hoja->fromArray($total2, null, "A{$fila}");
-			$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
+			// $fila++;
+			// $hoja->fromArray($total2, null, "A{$fila}");
+			// $hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
 			
 			array_push($total3, "Ventas sin factura:");
 			array_push($total3, round($data['ventas_sin_factura'], 2));
@@ -857,7 +857,7 @@ class Reporte extends CI_Controller
 			$hoja->getStyle("A{$fila}:L{$fila}")->getFont()->setBold(true);
 
 			array_push($total4, "Total ingresos (con desct.):");
-			array_push($total4, round($totalFactura - $totalPropina + $data['ventas_sin_factura'], 2));
+			array_push($total4, round($totalFactura + $data['ventas_sin_factura'], 2));
 			array_push($total4, '');
 			array_push($total4, '');
 
