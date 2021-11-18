@@ -299,6 +299,28 @@ class Dcomanda_model extends General_Model
 		return $detalle;
 	}
 
+	public function get_detalle_comanda($args = [])
+	{
+		if(!isset($args['_solo_sin_factura'])) {
+			return $this->buscar($args);
+		} else {
+			if (isset($args['comanda']) && (int)$args['comanda'] > 0) {
+				$this->db->where('a.comanda', $args['comanda']);
+			}
+			return $this->db
+				->select('a.*')
+				->join('detalle_cuenta b', 'a.detalle_comanda = b.detalle_comanda')
+				->join('cuenta_forma_pago c', 'c.cuenta = b.cuenta_cuenta')
+				->join('forma_pago d', 'd.forma_pago = c.forma_pago')
+				->where('d.sinfactura', 1)
+				->group_by('a.detalle_comanda')
+				->get("{$this->_tabla} a")
+				->result();
+		}
+
+	}
+
+
 }
 
 /* End of file Dcomanda_model.php */

@@ -170,7 +170,7 @@ class Venta extends CI_Controller
 			if ($listaDeComandas !== ''){ $listaDeComandas.= ','; }
 			$listaDeComandas.= $row->comanda;
 			$montoDescuento += $com->get_total_descuento();
-			$detalleComanda = $com->getDetalle();			
+			$detalleComanda = $com->getDetalle(['_solo_sin_factura' => true]);			
 
 			foreach ($detalleComanda as $det) {
 				$art = new Articulo_model($det->articulo->articulo);
