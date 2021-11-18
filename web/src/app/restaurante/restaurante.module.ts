@@ -86,6 +86,7 @@ import { TranAnulaComandaComponent } from './components/tran-anula-comanda/tran-
 import { CantidadCombosDialogComponent } from './components/cantidad-combos-dialog/cantidad-combos-dialog.component';
 import { ListaProductosComandaAltComponent } from './components/lista-productos-comanda-alt/lista-productos-comanda-alt.component';
 import { ProductoComandaAltComponent } from './components/producto-comanda-alt/producto-comanda-alt.component';
+import { ComandaComponent } from './components/reportes/comanda/comanda.component';
 
 
 @NgModule({
@@ -97,13 +98,8 @@ import { ProductoComandaAltComponent } from './components/producto-comanda-alt/p
     TurnoTipoComponent, PropinaComponent, FormPropinaComponent, ListaPropinaComponent, AutoconsultaComponent,
     CajacorteComponent, CajacorteListaComponent, CajacorteFormComponent, ValidaPwdGerenteTurnoComponent, TrasladoMesaComponent,
     ConfiguraMesaComponent, TranCocinaComponent, TranComandaAltComponent, NotasGeneralesComandaComponent, NuevaCuentaComponent,
-    DistribuirProductosCuentasComponent,
-    AccionesComandaComponent,
-    SeleccionaTurnoPrevioComponent,
-    TranAnulaComandaComponent,
-    CantidadCombosDialogComponent,
-    ListaProductosComandaAltComponent,
-    ProductoComandaAltComponent
+    DistribuirProductosCuentasComponent, AccionesComandaComponent, SeleccionaTurnoPrevioComponent, TranAnulaComandaComponent, CantidadCombosDialogComponent,
+    ListaProductosComandaAltComponent, ProductoComandaAltComponent, ComandaComponent
   ],
   imports: [
     CommonModule,

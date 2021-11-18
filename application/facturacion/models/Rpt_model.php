@@ -17,10 +17,12 @@ class Rpt_model extends General_model
             $this->db->where('DATE(g.fecha) >=', $args['fdel']);
             $this->db->where('DATE(g.fecha) <=', $args['fal']);
         } else {
-            $this->db->where('DATE(a.fhcreacion) >=', $args['fdel']);
-            $this->db->where('DATE(a.fhcreacion) <=', $args['fal']);
+            // $this->db->where('DATE(a.fhcreacion) >=', $args['fdel']);
+            // $this->db->where('DATE(a.fhcreacion) <=', $args['fal']);
             $this->db->where('f.fecha_factura >=', $args['fdel']);
             $this->db->where('f.fecha_factura <=', $args['fal']);
+            // $where = "((f.fecha_factura >= {$args['fdel']} AND f.fecha_factura <= {$args['fal']}) OR f.fecha_factura > {$args['fal']})";
+            // $this->db->where($where);
         }
 
         if (isset($args['turno_tipo'])) {
@@ -62,7 +64,7 @@ class Rpt_model extends General_model
 
         $sinfactura = $this->db
             ->select("GROUP_CONCAT(DISTINCT a.comanda ORDER BY a.comanda SEPARATOR ',') AS comandas")
-            ->join('cuenta b', 'a.comanda = b.cuenta')
+            ->join('cuenta b', 'a.comanda = b.comanda')
             ->join('cuenta_forma_pago c', 'b.cuenta = c.cuenta')
             ->join('forma_pago d', 'd.forma_pago = c.forma_pago')
             ->join('turno e', 'e.turno = a.turno')            
@@ -99,8 +101,8 @@ class Rpt_model extends General_model
                 ->where('b.multiple', 0)
                 ->where('b.combo', 1)
                 ->where('a.cantidad >', 0)
-                ->where('DATE(c.fhcreacion) >=', $args['fdel'])
-                ->where('DATE(c.fhcreacion) <=', $args['fal'])
+                // ->where('DATE(c.fhcreacion) >=', $args['fdel'])
+                // ->where('DATE(c.fhcreacion) <=', $args['fal'])
                 ->group_by('a.articulo, b.descripcion')                
                 ->get('detalle_comanda a')
                 ->result();
@@ -114,8 +116,8 @@ class Rpt_model extends General_model
                 ->where('b.multiple', 0)
                 ->where('b.combo', 0)                
                 ->where('a.cantidad >', 0)
-                ->where('DATE(c.fhcreacion) >=', $args['fdel'])
-                ->where('DATE(c.fhcreacion) <=', $args['fal'])
+                // ->where('DATE(c.fhcreacion) >=', $args['fdel'])
+                // ->where('DATE(c.fhcreacion) <=', $args['fal'])
                 ->group_by('a.articulo, b.descripcion')                
                 ->get('detalle_comanda a')
                 ->result();
@@ -130,8 +132,8 @@ class Rpt_model extends General_model
                 ->where('b.combo', 0)
                 ->where('a.total >', 0)
                 ->where('a.cantidad >', 0)
-                ->where('DATE(c.fhcreacion) >=', $args['fdel'])
-                ->where('DATE(c.fhcreacion) <=', $args['fal'])
+                // ->where('DATE(c.fhcreacion) >=', $args['fdel'])
+                // ->where('DATE(c.fhcreacion) <=', $args['fal'])
                 ->group_by('a.articulo, b.descripcion')                
                 ->get('detalle_comanda a')
                 ->result();
@@ -199,8 +201,8 @@ class Rpt_model extends General_model
                 ->where('b.multiple', 0)
                 ->where('b.combo', 1)
                 ->where('a.cantidad >', 0)
-                ->where('DATE(e.fhcreacion) >=', $args['fdel'])
-                ->where('DATE(e.fhcreacion) <=', $args['fal'])
+                // ->where('DATE(e.fhcreacion) >=', $args['fdel'])
+                // ->where('DATE(e.fhcreacion) <=', $args['fal'])
                 ->order_by('d.descripcion, c.descripcion, b.descripcion')
                 ->get('detalle_comanda a')
                 ->result();
@@ -217,8 +219,8 @@ class Rpt_model extends General_model
                 ->where('b.combo', 0)
                 ->where('a.total >', 0)
                 ->where('a.cantidad >', 0)
-                ->where('DATE(e.fhcreacion) >=', $args['fdel'])
-                ->where('DATE(e.fhcreacion) <=', $args['fal'])
+                // ->where('DATE(e.fhcreacion) >=', $args['fdel'])
+                // ->where('DATE(e.fhcreacion) <=', $args['fal'])
                 ->order_by('d.descripcion, c.descripcion, b.descripcion')
                 ->get('detalle_comanda a')
                 ->result();

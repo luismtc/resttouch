@@ -100,10 +100,26 @@
 						<tfoot>
 							<tr>
 								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
-									<h4>Total (con desct., sin propina)</h4>
+									<h4>Total (con desct., sin propina):</h4>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php echo number_format($granTotal - $monto_descuento, 2) ?>
+								</td>
+							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+									<h4>Propinas:</h4>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($monto_propinas, 2) ?>
+								</td>
+							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+									<h4>Total (Ingresos):</h4>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($granTotal - $monto_descuento + $monto_propinas, 2) ?>
 								</td>
 							</tr>
 						</tfoot>
@@ -185,12 +201,28 @@
 						<tfoot>
 							<tr>
 								<td style="padding: 5px; margin-left: 5px;font-weight: bold;" class="text-right" colspan="4">
-									<h4>Total (con desct., sin propina)</h4>
+									<h4>Total (con desct., sin propina):</h4>
 								</td>
 								<td style="padding: 5px;" class="text-right">
 									<?php echo number_format($granTotal - $monto_descuento, 2) ?>
 								</td>
 							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+									<h4>Propinas:</h4>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($monto_propinas, 2) ?>
+								</td>
+							</tr>
+							<tr>
+								<td style="padding: 5px; margin-left: 5px;" class="text-right" colspan="4">
+									<h4>Total (Ingresos):</h4>
+								</td>
+								<td style="padding: 5px;" class="text-right">
+									<?php echo number_format($granTotal - $monto_descuento + $monto_propinas, 2) ?>
+								</td>
+							</tr>							
 						</tfoot>
 					</table>
 				<?php endif ?>

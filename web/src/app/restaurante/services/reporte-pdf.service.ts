@@ -99,4 +99,12 @@ export class ReportePdfService {
         this.httpOptions
         ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
   }
+
+  getReporteComandas(params: Object) {
+    return this.http.post<string>(
+        `${GLOBAL.urlAppRestaurante}/reporte/rpt_detalle_comanda`,
+        params,
+        this.httpOptions
+        ).pipe(retry(GLOBAL.reintentos), catchError(this.srvcErrHndl.errorHandler));
+  }
 }

@@ -91,7 +91,7 @@
 					</tr>
 					<tr>
 						<td style="padding: 5px;font-weight: bold;" colspan="2" class="text-right">
-							<b>Total:</b>
+							<b>Total (Ingresos):</b>
 						</td>
 						<td style="padding: 5px;" class="text-right">
 							<?php echo number_format($totalSede - $sede->suma_descuentos + $sede->suma_propinas, 2) ?>
