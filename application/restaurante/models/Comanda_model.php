@@ -376,7 +376,8 @@ class Comanda_model extends General_Model
 	public function getDetalle($args = [])
 	{
 		$args['comanda'] = $this->comanda;
-		$det = $this->Dcomanda_model->buscar($args);
+		// $det = $this->Dcomanda_model->buscar($args);
+		$det = $this->Dcomanda_model->get_detalle_comanda($args);
 		$datos = [];
 		if (is_array($det)) {
 			foreach ($det as $row) {

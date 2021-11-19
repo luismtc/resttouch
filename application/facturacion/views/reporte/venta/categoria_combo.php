@@ -15,7 +15,7 @@
 			<?php if (isset($turno)) : ?>
 				<h4>Turno: <?php echo $turno->descripcion ?> </h4>
 			<?php endif ?>
-			<span>Por Categoría</span>
+			<span>Por categoría agrupado por combos</span>
 		</div>
 	</div>
 	<div class="row">
@@ -39,7 +39,7 @@
 								<th style="padding: 5px;" class="text-center">Descripción</th>
 								<th style="padding: 5px;" class="text-center">Cantidad</th>
 								<th style="padding: 5px;" class="text-center">Precio Unitario</th>
-								<th style="padding: 5px;" class="text-center">Total (con desct., sin propina)</th>
+								<th style="padding: 5px;" class="text-center">Total (sin desct., sin propina)</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -104,7 +104,7 @@
 								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format($s->suma_propinas, 2) ?></td>
 							</tr>
 							<tr>
-								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Total de <?php echo $s->nombre ?>:</td>
+								<td style="padding: 5px; margin-left: 5px; font-weight: bold" class="text-right">Total de <?php echo $s->nombre ?> (Ingresos):</td>
 								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
 								<td style="padding: 5px; font-weight: bold" class="text-right"></td>
 								<td style="padding: 5px; font-weight: bold" class="text-right"><?php echo number_format((float)$s->total - (float)$s->suma_descuentos + (float)$s->suma_propinas, 2) ?></td>

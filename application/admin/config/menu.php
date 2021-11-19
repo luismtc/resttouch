@@ -184,6 +184,10 @@ $config['menu'] = [
 					6 => [
 						'nombre' => 'Autoconsulta',
 						'link' => '/restaurante/autoconsulta'
+					],
+					7 => [
+						'nombre' => 'Comandas',
+						'link' => '/restaurante/rptcomanda'
 					]
 				]
 			],

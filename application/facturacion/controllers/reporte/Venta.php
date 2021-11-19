@@ -136,8 +136,16 @@ class Venta extends CI_Controller
 
 		$datos = [];
 		$detalle = [];
+		$listaDeComandas = '';
 		foreach ($facts as $row) {
 			$fac = new Factura_model($row->factura);
+
+			$laComanda = $fac->getComanda();
+			if ($laComanda && (int)$laComanda->getPK() > 0) {
+				if ($listaDeComandas !== ''){ $listaDeComandas.= ','; }
+				$listaDeComandas.= $laComanda->comanda;
+			}
+
 			$tmp = $fac->getDetalle();
 			foreach ($tmp as $det) {
 				$art = new Articulo_model($det->articulo->articulo);
@@ -158,9 +166,11 @@ class Venta extends CI_Controller
 
 		$montoDescuento = 0;
 		foreach ($comandas as $row) {
-			$com = new Comanda_model($row->comanda);			
+			$com = new Comanda_model($row->comanda);
+			if ($listaDeComandas !== ''){ $listaDeComandas.= ','; }
+			$listaDeComandas.= $row->comanda;
 			$montoDescuento += $com->get_total_descuento();
-			$detalleComanda = $com->getDetalle();			
+			$detalleComanda = $com->getDetalle(['_solo_sin_factura' => true]);			
 
 			foreach ($detalleComanda as $det) {
 				$art = new Articulo_model($det->articulo->articulo);
@@ -178,6 +188,8 @@ class Venta extends CI_Controller
 				}
 			}
 		}
+
+		$montoPropinas = $this->Rpt_model->get_suma_propinas($listaDeComandas);
 
 		$cat = [];
 		// foreach ($_GET['sede'] as $row) {
@@ -241,7 +253,8 @@ class Venta extends CI_Controller
 
 		$data = [			
 			'detalle' => $datos,
-			'monto_descuento' => $montoDescuento
+			'monto_descuento' => $montoDescuento,
+			'monto_propinas' => $montoPropinas
 		];
 
 		$sede = $this->Catalogo_model->getSede([
@@ -344,10 +357,21 @@ class Venta extends CI_Controller
 				}
 
 				$fila++;
-				$hoja->setCellValue("D{$fila}", 'Total (con desct., sin propina)');
+				$hoja->setCellValue("D{$fila}", 'Total (con desct., sin propina):');
 				$hoja->setCellValue("E{$fila}", (float)$granTotal - (float)$montoDescuento);
 				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+				$hoja->setCellValue("D{$fila}", 'Propina:');
+				$hoja->setCellValue("E{$fila}", (float)$montoPropinas);
+				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+				$hoja->setCellValue("D{$fila}", 'Total (Ingresos):');
+				$hoja->setCellValue("E{$fila}", (float)$granTotal - (float)$montoDescuento + (float)$montoPropinas);
+				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+
 			} else {
 				foreach ($data['detalle']['datos'] as $sede) {
 					$totalSede = 0;
@@ -397,8 +421,18 @@ class Venta extends CI_Controller
 				}
 
 				$fila++;
-				$hoja->setCellValue("D{$fila}", 'TOTAL');
-				$hoja->setCellValue("E{$fila}", $granTotal);
+				$hoja->setCellValue("D{$fila}", 'Total (con desct., sin propina):');
+				$hoja->setCellValue("E{$fila}", (float)$granTotal - (float)$montoDescuento);
+				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+				$hoja->setCellValue("D{$fila}", 'Propina:');
+				$hoja->setCellValue("E{$fila}", (float)$montoPropinas);
+				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
+				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
+				$fila++;
+				$hoja->setCellValue("D{$fila}", 'Total (Ingresos):');
+				$hoja->setCellValue("E{$fila}", (float)$granTotal - (float)$montoDescuento + (float)$montoPropinas);
 				$hoja->getStyle("D{$fila}:E{$fila}")->getFont()->setBold(true);
 				$hoja->getStyle("E{$fila}")->getNumberFormat()->setFormatCode('0.00');
 			}
@@ -888,7 +922,7 @@ class Venta extends CI_Controller
 					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila++;
 					$hoja->setCellValue("A{$fila}", $sede->nombre);
-					$hoja->setCellValue("C{$fila}", 'Total:');
+					$hoja->setCellValue("C{$fila}", 'Total (Ingresos):');
 					$hoja->setCellValue("D{$fila}", $totalSede - $sede->suma_descuentos + $sede->suma_propinas);
 					$hoja->getStyle("C{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->getStyle("C{$fila}:D{$fila}")->getFont()->setBold(true);
@@ -1108,7 +1142,7 @@ class Venta extends CI_Controller
 
 				$hoja->setCellValue('A1', 'Reporte de ventas');
 				$hoja->setCellValue('A2', isset($data->turno) ? "Turno: {$data->turno->descripcion}" : '');
-				$hoja->setCellValue('A3', 'Por categoría');
+				$hoja->setCellValue('A3', 'Por categoría agrupado por combos');
 				$hoja->setCellValue('A4', 'Del: ' . formatoFecha($data->fdel, 2) . ' al: ' . formatoFecha($data->fal, 2));
 				$hoja->getStyle('A1:D4')->getFont()->setBold(true);
 
@@ -1121,7 +1155,7 @@ class Venta extends CI_Controller
 					$hoja->setCellValue("A{$fila}", 'Descripción');
 					$hoja->setCellValue("B{$fila}", 'Cantidad');
 					$hoja->setCellValue("C{$fila}", 'Precio Unitario');
-					$hoja->setCellValue("D{$fila}", 'Total (con desct., sin propina)');
+					$hoja->setCellValue("D{$fila}", 'Total (sin desct., sin propina)');
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$hoja->getStyle("B{$fila}:D{$fila}")->getAlignment()->setHorizontal('right');
 					$fila++;
@@ -1177,7 +1211,7 @@ class Venta extends CI_Controller
 					$hoja->setCellValue("D{$fila}", $s->suma_propinas);
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);
 					$fila++;
-					$hoja->setCellValue("A{$fila}", "Total de {$s->nombre}:");
+					$hoja->setCellValue("A{$fila}", "Total de {$s->nombre} (Ingresos):");
 					$hoja->getStyle("A{$fila}")->getAlignment()->setHorizontal('right');
 					$hoja->setCellValue("D{$fila}", $s->total - $s->suma_descuentos + $s->suma_propinas);
 					$hoja->getStyle("A{$fila}:D{$fila}")->getFont()->setBold(true);

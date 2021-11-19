@@ -1400,6 +1400,32 @@ class Factura_model extends General_model
 			->result();
 	}
 
+	public function get_ventas_sin_factura($args = [])
+	{
+		if (isset($args['fdel'])) {
+			$this->db->where('DATE(d.fhcreacion) >=', $args['fdel']);				
+		}
+
+		if (isset($args['fal'])) {
+			$this->db->where('DATE(d.fhcreacion) <=', $args['fal']);				
+		}
+
+		$ventas = 0;
+		$mnt = $this->db->select_sum('a.monto')
+			->join('forma_pago b', 'b.forma_pago = a.forma_pago')
+			->join('cuenta c', 'c.cuenta = a.cuenta')
+			->join('comanda d', 'd.comanda = c.comanda')
+			->where('b.sinfactura', 1)
+			->where('d.razon_anulacion IS NULL')
+			->get('cuenta_forma_pago a')
+			->row();
+		
+		if ($mnt) {
+			$ventas = (float)$mnt->monto;
+		}
+		return $ventas;
+	}
+
 	public function getPropina()
 	{
 		return $this->db
