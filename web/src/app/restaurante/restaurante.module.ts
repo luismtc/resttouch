@@ -23,7 +23,6 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -88,8 +87,6 @@ import { CantidadCombosDialogComponent } from './components/cantidad-combos-dial
 import { ListaProductosComandaAltComponent } from './components/lista-productos-comanda-alt/lista-productos-comanda-alt.component';
 import { ProductoComandaAltComponent } from './components/producto-comanda-alt/producto-comanda-alt.component';
 
-
-
 @NgModule({
   declarations: [
     TranAreasComponent, MesaComponent, AbrirMesaComponent, TranComandaComponent, ListaProductosComandaComponent, UnirCuentaComponent,
@@ -144,8 +141,7 @@ import { ProductoComandaAltComponent } from './components/producto-comanda-alt/p
     MatBadgeModule,
     MatChipsModule,
     MatBottomSheetModule,
-    MatKeyboardModule,
-    MatTooltipModule
+    MatKeyboardModule
   ],
   providers: [
     MatNativeDateModule
