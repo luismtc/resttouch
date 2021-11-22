@@ -88,7 +88,8 @@ export class ProductoComponent implements OnInit, OnDestroy {
             debaja: obj.debaja,
             cantidad_gravable: obj.cantidad_gravable,
             precio_sugerido: obj.precio_sugerido,
-            cobro_mas_caro: obj.cobro_mas_caro
+            cobro_mas_caro: obj.cobro_mas_caro,
+            esextra: obj.esextra,
           };
   
           this.categoria = this.categorias.find(c => +c.categoria === +obj.categoria_grupo.categoria);

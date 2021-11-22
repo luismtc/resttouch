@@ -91,15 +91,14 @@ class Comanda_model extends General_Model
 		return false;
 	}
 
-	private function get_highest_price($articulo, $precio = 0.0)
-	{		
-		$art = new Articulo_model($articulo);
-		$detalle = $art->getReceta();
-		foreach ($detalle as $det) {
-			if ((float)$det->articulo->precio > (float)$precio) {
-				$precio = (float)$det->articulo->precio;
+	private function get_highest_price($opciones = [])
+	{
+		$precio = null;
+		foreach ($opciones as $seleccion) {
+			$recetaSelec = new Articulo_model($seleccion['articulo']);
+			if ((float)$recetaSelec->precio > (float)$precio) {
+				$precio = (float)$recetaSelec->precio;
 			}
-			$precio = $this->get_highest_price($det->articulo->articulo, $precio);
 		}
 		return $precio;
 	}
@@ -113,8 +112,8 @@ class Comanda_model extends General_Model
 		}
 		
 		$precioMasAlto = null;
-		if((int)$art->combo === 1 && (int)$art->cobro_mas_caro === 1) {
-			$precioMasAlto = $this->get_highest_price($art->getPK());
+		if((int)$art->combo === 1 && (int)$art->cobro_mas_caro === 1 && isset($args['receta']) && count($args['receta']) > 0) {
+			$precioMasAlto = $this->get_highest_price($args['receta']);
 		}
 
 		$combo = $this->setDetalle($args['articulo'], $cuenta, null, $precioMasAlto, (float)$args['cantidad']);

@@ -31,6 +31,7 @@ export interface Articulo {
     cantidad_gravable?: number;
     precio_sugerido?: number;
     cobro_mas_caro?: number;
+    esextra?: number;
 }
 
 export interface ArticuloResponse {
@@ -58,6 +59,7 @@ export interface ArticuloResponse {
     cantidad_gravable?: number;
     precio_sugerido?: number;
     cobro_mas_caro?: number;
+    esextra?: number;
 }
 
 export interface ArbolCategoriaGrupo {
@@ -72,6 +74,7 @@ export interface ArbolCategoriaGrupo {
     fechabaja?: string;
     usuariobaja?: number;
     cobro_mas_caro?: number;
+    esextra?: number;
 }
 
 export interface ArbolArticulos {
@@ -84,6 +87,7 @@ export interface ArbolArticulos {
     fechabaja?: string;
     usuariobaja?: number;
     cobro_mas_caro?: number;
+    esextra?: number;
 }
 
 export interface NodoProducto {
@@ -100,6 +104,7 @@ export interface NodoProducto {
     fechabaja?: string;
     usuariobaja?: number;
     cobro_mas_caro?: number;
+    esextra?: number;
 }
 
 export interface ProductoSelected {
@@ -127,6 +132,7 @@ export interface ProductoSelected {
     impresoras_combo?: Impresora[];
     detalle_impresion?: ArticuloImpresion[];
     cobro_mas_caro?: number;
+    esextra?: number;
 }
 
 export interface ArticuloCodigo {
