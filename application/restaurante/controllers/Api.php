@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use Phpml\Classification\KNearestNeighbors;
+
 class Api extends CI_Controller
 {
 
@@ -1264,11 +1266,13 @@ class Api extends CI_Controller
 
 	public function test()
 	{
-		$nit = "CF";
-		$nit = strtoupper(preg_replace("/[CF]!|[^0-9Kk?!]/", '', $nit));
-		echo "<pre>";
-		print_r($nit);
-		echo "</pre>";
+		$samples = [[1, 3], [1, 4], [2, 4], [3, 1], [4, 1], [4, 2]];
+		$labels = ['a', 'a', 'a', 'b', 'b', 'b'];
+
+		$classifier = new Phpml\Classification\KNearestNeighbors();
+		$classifier->train($samples, $labels);
+
+		$classifier->predict([3, 2]);
 	}
 
 	public function lista_comandas()
