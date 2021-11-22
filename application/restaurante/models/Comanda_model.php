@@ -91,7 +91,7 @@ class Comanda_model extends General_Model
 		return false;
 	}
 
-	private function get_highest_price($articulo, $precio = (float)0.0)
+	private function get_highest_price($articulo, $precio = 0.0)
 	{		
 		$art = new Articulo_model($articulo);
 		$detalle = $art->getReceta();
