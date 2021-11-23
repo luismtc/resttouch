@@ -40,7 +40,7 @@
             </mat-form-field>
             
             <mat-form-field class="fullWidth">
-                <input matInput type="number" placeholder="Precio" name="precio" [(ngModel)]="articulo.precio" [disabled]="+articulo.cobro_mas_caro === 1" required>
+                <input matInput type="number" placeholder="Precio" name="precio" [(ngModel)]="articulo.precio" required>
             </mat-form-field>
 
             <mat-form-field class="fullWidth">
@@ -119,7 +119,7 @@
             </div>
             <div class="row">
                 <div class="col m3 s3">
-                    <mat-checkbox name="cobro_mas_caro" class="example-margin" [(ngModel)]="+articulo.cobro_mas_caro" (change)="esCobroMasCaro()" [disabled]="+articulo.combo === 0">Cobrar el más caro</mat-checkbox>
+                    <mat-checkbox name="cobro_mas_caro" class="example-margin" [(ngModel)]="+articulo.cobro_mas_caro" [disabled]="+articulo.combo === 0">Cobrar el más caro</mat-checkbox>
                 </div>
                 <div class="col m3 s3">
                     <mat-checkbox name="esextra" class="example-margin" [(ngModel)]="+articulo.esextra" [disabled]="+articulo.combo === 1 || +articulo.multiple === 1">Usar como extra</mat-checkbox>

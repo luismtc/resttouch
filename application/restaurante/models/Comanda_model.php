@@ -96,8 +96,12 @@ class Comanda_model extends General_Model
 		$precio = null;
 		foreach ($opciones as $seleccion) {
 			$recetaSelec = new Articulo_model($seleccion['articulo']);
-			if ((float)$recetaSelec->precio > (float)$precio) {
-				$precio = (float)$recetaSelec->precio;
+			if ((int)$recetaSelec->multiple === 0){
+				if ((float)$recetaSelec->precio > (float)$precio) {
+					$precio = (float)$recetaSelec->precio;
+				}
+			} else {
+				$precio = $this->get_highest_price($seleccion['receta']);
 			}
 		}
 		return $precio;

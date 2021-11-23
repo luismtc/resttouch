@@ -49,7 +49,8 @@ export class FormProductoComponent implements OnInit, OnDestroy {
         +artSel.articulo === +this.articulo.articulo || 
         (+artSel.multiple === 1 && +this.articulo.multiple === 1) || 
         (+artSel.combo === 1 && +this.articulo.combo === 1) ||
-        (+artSel.combo === 1 && +this.articulo.multiple === 1)
+        (+artSel.combo === 1 && +this.articulo.multiple === 1) ||
+        (+this.articulo.cobro_mas_caro === 1 && +artSel.multiple === 1 && (+artSel.cantidad_minima !== 2 || +artSel.cantidad_maxima !== 2))
         )
       {
         dar = true;
@@ -492,11 +493,5 @@ export class FormProductoComponent implements OnInit, OnDestroy {
         }
       })
     );    
-  }
-  
-  esCobroMasCaro = () => {
-    if (+this.articulo.cobro_mas_caro === 1) {
-      this.articulo.precio = 0;
-    }
   }
 }
