@@ -336,7 +336,7 @@ export class TranComanda {
     agregaCombo = (producto: any, sinInputCantidad = false) => {
         return new Promise((resolve, reject) => {
             const confirmRef = this.dialog.open(DialogComboComponent, {
-                maxWidth: '50%',
+                maxWidth: '50vw', width: '50vw',
                 data: new ConfirmDialogComboModel(
                     producto,
                     'Sí', 'No', sinInputCantidad
