@@ -168,14 +168,21 @@ export class DialogComboComponent implements OnInit, OnDestroy {
     this.dialogRef.close(this.datos);
   }
 
-  seleccionarExtra = () => {
+  seleccionarExtra = (sc: any) => {
+    // console.log('Before = ', sc);
     const extrasRef = this.dialog.open(ExtraProductoComponent, {
-      maxWidth: '50%',      
+      maxWidth: '40vw', width: '40vw',
+      data: { extras: sc.seleccion.extras || [] }
     });
 
     this.endSubs.add(
       extrasRef.afterClosed().subscribe(resExt => {
-        
+        if (resExt && resExt.length > 0) {
+          // this.seleccion.receta.push(resExt);
+          // console.log(resExt);
+          sc.seleccion.extras = resExt;
+        }
+        // console.log('After = ', sc);
       })
     );
   }

@@ -138,7 +138,15 @@ class Comanda_model extends General_Model
 					$precio = $recetaSelec[0]->precio;
 
 					// setDetalle($articulo, $idcta, $padre = null, $precio = null, $cantidad = 1, $cantidadPadre = null)
-					$this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $precio, (float)$seleccion['cantidad'] * (float)$recetaSelec[0]->cantidad, $multi->cantidad);
+					$opcSelect = $this->setDetalle($seleccion['articulo'], $cuenta, $multi->detalle_comanda, $precio, (float)$seleccion['cantidad'] * (float)$recetaSelec[0]->cantidad, $multi->cantidad);
+
+					// Para agregar los extras de cada seleccion
+					if (isset($seleccion['extras']) && count($seleccion['extras']) > 0) {
+						foreach ($seleccion['extras'] as $extra) {
+							// $this->setDetalle($extra['articulo'], $cuenta, $opcSelect->detalle_comanda, $extra['precio'], (float)$opcSelect->cantidad * (float)$recetaSelec[0]->cantidad, $opcSelect->cantidad);
+							$this->setDetalle($extra['articulo'], $cuenta, $opcSelect->detalle_comanda, $extra['precio'], (float)$opcSelect->cantidad, $opcSelect->cantidad);
+						}
+					}
 				}
 			}
 			return $combo;

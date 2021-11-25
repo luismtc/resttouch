@@ -347,12 +347,8 @@ export class TranComanda {
                 // console.log(res);
                 if (res && res.respuesta && res.seleccion.receta.length > 0) {
                     // console.log(res.seleccion); // this.bloqueoBotones = false; return;
-                    this.comandaSrvc.saveDetalleCombo(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, res.seleccion).subscribe(resSaveDetCmb => {
-                        // console.log('NUEVO DETALLE COMANDA = ', res);
-                        if (resSaveDetCmb.exito) {
-                            // this.mesaEnUso = resSaveDetCmb.comanda;
-                            // this.llenaProductosSeleccionados(this.mesaEnUso);
-                            // this.actualizaProductosSeleccionados(+resSaveDetCmb.comanda.cuentas[0].cuenta, resSaveDetCmb.comanda.cuentas[0].productos[0]);
+                    this.comandaSrvc.saveDetalleCombo(this.mesaEnUso.comanda, this.cuentaActiva.cuenta, res.seleccion).subscribe(resSaveDetCmb => {                        
+                        if (resSaveDetCmb.exito) {                            
                             this.setSelectedCuenta(+this.cuentaActiva.numero);
                         } else {
                             this.snackBar.open(`ERROR:${resSaveDetCmb.mensaje}`, 'Comanda', { duration: 3000 });

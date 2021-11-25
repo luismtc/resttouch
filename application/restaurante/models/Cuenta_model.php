@@ -464,6 +464,10 @@ class Cuenta_model extends General_Model
 			$this->db->where('b.impreso', $args['impreso']);
 		}
 
+		if (isset($args['_extras'])) {
+			$this->db->where('c.esextra', 1);
+		}
+
 		$detalles = $this->db
 			->select(
 				'b.comanda, b.detalle_comanda, b.articulo, d.descuento, a.detalle_cuenta, a.cuenta_cuenta, b.cantidad, b.impreso, b.precio, b.total, b.notas, 
@@ -484,6 +488,10 @@ class Cuenta_model extends General_Model
 			$detalle->detalle = [];
 			if ((int)$detalle->combo === 1 || (int)$detalle->multiple === 1) {
 				$args['detalle_comanda_id'] = $detalle->detalle_comanda;
+				$detalle->detalle = $this->obtener_detalle($args);
+			} else {
+				$args['detalle_comanda_id'] = $detalle->detalle_comanda;
+				$args['_extras'] = true;
 				$detalle->detalle = $this->obtener_detalle($args);
 			}
 		}
